@@ -1,3 +1,4 @@
+import Logo from "@/components/Logo"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
@@ -8,9 +9,12 @@ import { FaDoorOpen } from "react-icons/fa"
 function Login() {
     return (
         <>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Inicio de sesión</CardTitle>
+            <Card className="w-full">
+                <CardHeader className="gap-5">
+                    <div className="flex justify-center">
+                        <Logo />
+                    </div>
+                    <CardTitle className="text-center text-2xl">Inicio de sesión</CardTitle>
                 </CardHeader>
 
                 <CardContent>
