@@ -6,7 +6,7 @@ function Header() {
             <div className="container py-5">
                 <div className="flex flex-row items-center justify-between">
                     <Logo />
-                    <div className="text-3xl font-black">
+                    <div className="text-3xl font-black text-center">
                         Inventario Informática
                     </div>
                     <Logo className="opacity-0" />

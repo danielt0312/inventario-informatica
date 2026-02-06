@@ -5,7 +5,7 @@ import Footer from "./Footer";
 
 function AuthLayout() {
     return (
-        <div className="bg-gray-200">
+        <div className="bg-gray-100 min-h-screen">
             <Header />
             <Navbar />
 

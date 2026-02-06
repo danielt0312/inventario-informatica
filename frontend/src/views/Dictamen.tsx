@@ -11,7 +11,7 @@ function Dictamen() {
                 </CardHeader>
 
                 <CardContent>
-                    
+
                 </CardContent>
             </Card>
         </>
