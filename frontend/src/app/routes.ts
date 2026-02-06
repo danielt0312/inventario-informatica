@@ -4,7 +4,7 @@ import GuestLayout from "@/components/GuestLayout"
 
 import Login from "@/views/Login";
 import AuthLayout from "@/components/AuthLayout";
-import Dictamen from "@/views/Dictamen";
+import Dictamen from "@/views/dictamen/index/Dictamen";
 
 const router = createBrowserRouter([
     {

@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "area_solicitante": "Dirección General de Asuntos Jurídicos",
+        "fecha_solicitud": "2025-05-31",
+        "estado": "Pendiente"
+    },
+    {
+        "id": 2,
+        "area_solicitante": "Finanzas",
+        "fecha_solicitud": "2025-05-31",
+        "estado": "Pendiente"
+    }
+]
