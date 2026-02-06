@@ -16,7 +16,7 @@ function GuestLayout() {
             />
 
             <div className="relative flex items-center h-screen justify-center">
-                <div className="w-full flex flex-col gap-4 container px-5">
+                <div className="w-full flex flex-col gap-4 container">
                     <Outlet />
                 </div>
             </div>
