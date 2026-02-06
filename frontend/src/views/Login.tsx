@@ -3,44 +3,48 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 
 import { FaDoorOpen } from "react-icons/fa"
 
 function Login() {
     return (
-        <>
-            <Card className="w-full">
-                <CardHeader className="gap-5">
-                    <div className="flex justify-center">
-                        <Logo />
-                    </div>
-                    <CardTitle className="text-center text-2xl">Inicio de sesión</CardTitle>
-                </CardHeader>
+        <Card className="w-full md:flex-row items-center py-10 md:py-20">
+            <CardHeader className="w-full flex justify-center items-center">
+                <Logo className="object-fill" />
+            </CardHeader>
 
-                <CardContent>
-                    <form>
-                        <FieldGroup>
-                            <Field>
-                                <FieldLabel>Usuario:</FieldLabel>
-                                <Input placeholder="Ingresa tu nombre de usuario" />
-                            </Field>
-                            <Field>
-                                <FieldLabel>Contraseña:</FieldLabel>
-                                <Input placeholder="Ingresa la contraseña" />
-                            </Field>
+            <div className="hidden md:block h-50">
+                <Separator orientation="vertical" />
+            </div>
+            <div className="md:hidden w-4/6">
+                <Separator orientation="horizontal" />
+            </div>
 
-                            <Field>
-                                <div className="flex justify-center items-center">
-                                    <Button>
-                                        <FaDoorOpen /> Ingresar
-                                    </Button>
-                                </div>
-                            </Field>
-                        </FieldGroup>
-                    </form>
-                </CardContent>
-            </Card>
-        </>
+            <CardContent className="w-full">
+                <form>
+                    <FieldGroup>
+                        <CardTitle className="text-center text-2xl font-black">Inicia Sesión</CardTitle>
+                        <Field>
+                            <FieldLabel>Usuario:</FieldLabel>
+                            <Input placeholder="Ingresa tu nombre de usuario" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Contraseña:</FieldLabel>
+                            <Input placeholder="Ingresa la contraseña" />
+                        </Field>
+
+                        <Field>
+                            <div className="flex justify-center items-center">
+                                <Button className="w-1/2">
+                                    <FaDoorOpen /> Ingresar
+                                </Button>
+                            </div>
+                        </Field>
+                    </FieldGroup>
+                </form>
+            </CardContent>
+        </Card>
     )
 }
 
