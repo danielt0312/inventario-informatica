@@ -1,7 +1,8 @@
-import { Outlet } from "react-router";
 import Header from "./Header";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+
+import { Outlet } from "@tanstack/react-router";
 
 function AuthLayout() {
     return (

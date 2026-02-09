@@ -1,4 +1,4 @@
-import { Outlet } from "react-router"
+import { Outlet } from "@tanstack/react-router"
 
 function GuestLayout() {
     return (
@@ -21,7 +21,6 @@ function GuestLayout() {
                 </div>
             </div>
         </div>
-
     )
 }
 
