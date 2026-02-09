@@ -2,13 +2,19 @@
     {
         "id": 1,
         "area_solicitante": "Dirección General de Asuntos Jurídicos",
-        "fecha_solicitud": "2025-05-31",
+        "fecha_solicitud": "2025-04-27",
         "estado": "Pendiente"
     },
     {
         "id": 2,
-        "area_solicitante": "Finanzas",
+        "area_solicitante": "Dirección General de Administración y Finanzas",
         "fecha_solicitud": "2025-05-31",
+        "estado": "Pendiente"
+    },
+    {
+        "id": 3,
+        "area_solicitante": "Secretaría Técnica",
+        "fecha_solicitud": "2025-09-05",
         "estado": "Pendiente"
     }
 ]

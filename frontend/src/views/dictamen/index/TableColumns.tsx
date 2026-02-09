@@ -1,6 +1,10 @@
-"use client"
+'use client'
 
+import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import type { ColumnDef } from "@tanstack/react-table"
+
+import { FaEllipsisV } from "react-icons/fa";
 
 export type Dictamen = {
     id: number
@@ -27,7 +31,28 @@ export const columns: ColumnDef<Dictamen>[] = [
         header: "Estado",
     },
     {
-        accessorKey: "acciones",
-        header: "Acciones",
+        id: "actions",
+        cell: ({ row }) => {
+            const dictamen = row.original
+
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant={"outline"}>
+                            <span className="sr-only">Open menu</span>
+                            <FaEllipsisV />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem>
+                            Revisar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            Editar
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )
+        }
     },
 ]
