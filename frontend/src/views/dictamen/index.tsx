@@ -1,14 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
-import { columns } from "./TableColumns";
 
 import { Button } from "@/components/ui/button";
 import { FaPlusCircle } from "react-icons/fa";
 
-import dictamen from "@/views/dictamen/dictamen.json"
+import dictamen from "@/views/dictamen/data.json"
 import { Link } from "@tanstack/react-router";
 
-import { Route as dictamenCreateRoute } from '@/routes/_auth/dictamen/create'
+import { Route as RouteCreate } from '@/routes/_auth/dictamen/create'
+import { columns } from "./index.table-cols";
 
 function Dictamen() {
     const data = dictamen;
@@ -19,7 +19,7 @@ function Dictamen() {
                 <CardTitle>
                     Dictámenes Tecnológicos
                 </CardTitle>
-                <Link to={dictamenCreateRoute.to}>
+                <Link to={RouteCreate.to}>
                     <Button>
                         <FaPlusCircle />
                         Crear

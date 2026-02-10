@@ -1,19 +1,18 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import type { ColumnDef } from "@tanstack/react-table"
-
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { FaEllipsisV } from "react-icons/fa";
 
-export type Dictamen = {
+type Dictamen = {
     id: number
     area_solicitante: string
     fecha_solicitud: string
     estado: string
 }
 
-export const columns: ColumnDef<Dictamen>[] = [
+const columns: ColumnDef<Dictamen>[] = [
     {
         accessorKey: "id",
         header: "Folio",
@@ -56,3 +55,8 @@ export const columns: ColumnDef<Dictamen>[] = [
         }
     },
 ]
+
+export {
+    type Dictamen,
+    columns
+}
