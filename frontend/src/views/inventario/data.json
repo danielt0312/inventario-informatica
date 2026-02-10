@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1,
+        "tipo_producto": "Computadora",
+        "numero_serie": "6ASD1245461AS",
+        "fecha_registro": "2025-10-01",
+        "estado": "En uso"
+    }
+]
