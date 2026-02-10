@@ -24,7 +24,7 @@ function Login() {
             <CardContent className="w-full">
                 <form>
                     <FieldGroup>
-                        <CardTitle className="text-center text-2xl font-black">Inicia Sesión</CardTitle>
+                        <CardTitle className="text-center text-2xl">Inicia Sesión</CardTitle>
                         <Field>
                             <FieldLabel>Usuario:</FieldLabel>
                             <Input placeholder="Ingresa tu nombre de usuario" />

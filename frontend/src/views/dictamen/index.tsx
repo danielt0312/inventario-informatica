@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { FaPlusCircle } from "react-icons/fa";
 
 import dictamen from "@/views/dictamen/dictamen.json"
+import { Link } from "@tanstack/react-router";
+
+import { Route as dictamenCreateRoute } from '@/routes/_auth/dictamen/create'
 
 function Dictamen() {
     const data = dictamen;
@@ -13,13 +16,15 @@ function Dictamen() {
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="uppercase font-black text-lg">
+                <CardTitle>
                     Dictámenes Tecnológicos
                 </CardTitle>
-                <Button>
-                    <FaPlusCircle />
-                    Crear
-                </Button>
+                <Link to={dictamenCreateRoute.to}>
+                    <Button>
+                        <FaPlusCircle />
+                        Crear
+                    </Button>
+                </Link>
             </CardHeader>
 
             <CardContent>

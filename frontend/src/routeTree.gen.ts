@@ -13,7 +13,8 @@ import { Route as GuestRouteImport } from './routes/_guest'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuestLoginRouteImport } from './routes/_guest/login'
-import { Route as AuthDictamenRouteRouteImport } from './routes/_auth/dictamen/route'
+import { Route as AuthDictamenIndexRouteImport } from './routes/_auth/dictamen/index'
+import { Route as AuthDictamenCreateRouteImport } from './routes/_auth/dictamen/create'
 
 const GuestRoute = GuestRouteImport.update({
   id: '/_guest',
@@ -33,42 +34,51 @@ const GuestLoginRoute = GuestLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => GuestRoute,
 } as any)
-const AuthDictamenRouteRoute = AuthDictamenRouteRouteImport.update({
-  id: '/dictamen',
-  path: '/dictamen',
+const AuthDictamenIndexRoute = AuthDictamenIndexRouteImport.update({
+  id: '/dictamen/',
+  path: '/dictamen/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthDictamenCreateRoute = AuthDictamenCreateRouteImport.update({
+  id: '/dictamen/create',
+  path: '/dictamen/create',
   getParentRoute: () => AuthRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dictamen': typeof AuthDictamenRouteRoute
   '/login': typeof GuestLoginRoute
+  '/dictamen/create': typeof AuthDictamenCreateRoute
+  '/dictamen/': typeof AuthDictamenIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dictamen': typeof AuthDictamenRouteRoute
   '/login': typeof GuestLoginRoute
+  '/dictamen/create': typeof AuthDictamenCreateRoute
+  '/dictamen': typeof AuthDictamenIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/_guest': typeof GuestRouteWithChildren
-  '/_auth/dictamen': typeof AuthDictamenRouteRoute
   '/_guest/login': typeof GuestLoginRoute
+  '/_auth/dictamen/create': typeof AuthDictamenCreateRoute
+  '/_auth/dictamen/': typeof AuthDictamenIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dictamen' | '/login'
+  fullPaths: '/' | '/login' | '/dictamen/create' | '/dictamen/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dictamen' | '/login'
+  to: '/' | '/login' | '/dictamen/create' | '/dictamen'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_guest'
-    | '/_auth/dictamen'
     | '/_guest/login'
+    | '/_auth/dictamen/create'
+    | '/_auth/dictamen/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -107,22 +117,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestLoginRouteImport
       parentRoute: typeof GuestRoute
     }
-    '/_auth/dictamen': {
-      id: '/_auth/dictamen'
+    '/_auth/dictamen/': {
+      id: '/_auth/dictamen/'
       path: '/dictamen'
-      fullPath: '/dictamen'
-      preLoaderRoute: typeof AuthDictamenRouteRouteImport
+      fullPath: '/dictamen/'
+      preLoaderRoute: typeof AuthDictamenIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/dictamen/create': {
+      id: '/_auth/dictamen/create'
+      path: '/dictamen/create'
+      fullPath: '/dictamen/create'
+      preLoaderRoute: typeof AuthDictamenCreateRouteImport
       parentRoute: typeof AuthRoute
     }
   }
 }
 
 interface AuthRouteChildren {
-  AuthDictamenRouteRoute: typeof AuthDictamenRouteRoute
+  AuthDictamenCreateRoute: typeof AuthDictamenCreateRoute
+  AuthDictamenIndexRoute: typeof AuthDictamenIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthDictamenRouteRoute: AuthDictamenRouteRoute,
+  AuthDictamenCreateRoute: AuthDictamenCreateRoute,
+  AuthDictamenIndexRoute: AuthDictamenIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
