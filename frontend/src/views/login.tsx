@@ -4,8 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { Link } from "@tanstack/react-router"
 
 import { FaDoorOpen } from "react-icons/fa"
+
+import { Route as RouteInventario } from "@/routes/_auth/inventario/index"
 
 function Login() {
     return (
@@ -22,7 +25,7 @@ function Login() {
             </div>
 
             <CardContent className="w-full">
-                <form>
+                {/* <form> */}
                     <FieldGroup>
                         <CardTitle className="text-center text-2xl">Inicia Sesión</CardTitle>
                         <Field>
@@ -36,13 +39,15 @@ function Login() {
 
                         <Field>
                             <div className="flex justify-center items-center">
-                                <Button className="w-1/2">
-                                    <FaDoorOpen /> Ingresar
-                                </Button>
+                                <Link to={RouteInventario.to} className="w-1/2 flex">
+                                    <Button className="flex-1">
+                                        <FaDoorOpen /> Ingresar
+                                    </Button>
+                                </Link>
                             </div>
                         </Field>
                     </FieldGroup>
-                </form>
+                {/* </form> */}
             </CardContent>
         </Card>
     )
