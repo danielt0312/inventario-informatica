@@ -1,5 +1,6 @@
 import Goback from "@/components/Goback"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import FormProducto from "./partials/forms/producto"
 
 function InventarioCreate() {
     return (
@@ -10,7 +11,7 @@ function InventarioCreate() {
                     <CardTitle>Registro de Artículo existente</CardTitle>
                 </CardHeader>
                 <CardContent>
-
+                    <FormProducto />
                 </CardContent>
             </Card>
         </>
