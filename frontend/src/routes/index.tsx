@@ -1,20 +1,23 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
+import { Route as RouteLogin } from './_guest/login'
+import { Route as RouteDictamen } from './_auth/dictamen/index'
+
 export const Route = createFileRoute('/')({
     loader: () => {
         if (! isUserAuth()) {
             throw redirect({
-                to: '/login'
+                to: RouteLogin.to
             })
         }
 
         throw redirect({
-            to: '/dictamen'
+            to: RouteDictamen.to
         })
     }
 })
 
 function isUserAuth() : boolean {
-    return false;
+    return true;
 }
 
