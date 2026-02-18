@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { Route as RouteLogin } from './_guest/login'
-import { Route as RouteDictamen } from './_auth/dictamen/index'
+import { Route as RouteInventario } from './_auth/inventario/index'
 
 export const Route = createFileRoute('/')({
     loader: () => {
@@ -12,12 +12,11 @@ export const Route = createFileRoute('/')({
         }
 
         throw redirect({
-            to: RouteDictamen.to
+            to: RouteInventario.to
         })
     }
 })
 
 function isUserAuth() : boolean {
-    return true;
+    return false;
 }
-
