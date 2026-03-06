@@ -5,6 +5,8 @@ services:
       - 5173:5173
     volumes:
       - ./frontend:/app
+    depends_on:
+      - backend
 
   backend:
     build: ./backend
@@ -12,3 +14,13 @@ services:
       - 8000:8000
     volumes:
       - ./backend:/var/www/html
+    depends_on:
+      - database
+
+  database:
+    image: mariadb:12.2.2
+    ports:
+      - 3306:3306
+    env_file:
+      - ./backend/.env
+

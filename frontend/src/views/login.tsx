@@ -4,13 +4,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Link } from "@tanstack/react-router"
+import api from "@/lib/axios"
 
 import { FaDoorOpen } from "react-icons/fa"
 
-import { Route as RouteInventario } from "@/routes/_auth/inventario/index"
-
 function Login() {
+    function handleSubmit(e: React.SubmitEvent) {
+        e.preventDefault();
+
+        api.get('sanctum/csrf-cookie').then(() => {
+            api.post('api/login', document.getElementById('login-form'))
+                .then(() => {
+
+                });
+        });
+    }
+
     return (
         <Card className="w-full md:flex-row items-center py-10 md:py-20">
             <CardHeader className="w-full flex justify-center items-center">
@@ -25,29 +34,27 @@ function Login() {
             </div>
 
             <CardContent className="w-full">
-                {/* <form> */}
+                <form onSubmit={handleSubmit} id="login-form">
                     <FieldGroup>
                         <CardTitle className="text-center text-2xl">Inicia Sesión</CardTitle>
                         <Field>
-                            <FieldLabel>Usuario:</FieldLabel>
-                            <Input placeholder="Ingresa tu nombre de usuario" />
+                            <FieldLabel aria-required>Email:</FieldLabel>
+                            <Input placeholder="Ingresa correo institucional" required type="email" />
                         </Field>
                         <Field>
                             <FieldLabel>Contraseña:</FieldLabel>
-                            <Input placeholder="Ingresa la contraseña" />
+                            <Input placeholder="Ingresa la contraseña" required type="password" />
                         </Field>
 
                         <Field>
                             <div className="flex justify-center items-center">
-                                <Link to={RouteInventario.to} className="w-1/2 flex">
-                                    <Button className="flex-1">
-                                        <FaDoorOpen /> Ingresar
-                                    </Button>
-                                </Link>
+                                <Button className="flex-1">
+                                    <FaDoorOpen /> Ingresar
+                                </Button>
                             </div>
                         </Field>
                     </FieldGroup>
-                {/* </form> */}
+                </form>
             </CardContent>
         </Card>
     )
