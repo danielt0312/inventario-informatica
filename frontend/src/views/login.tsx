@@ -4,18 +4,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import api from "@/lib/axios"
 
 import { FaDoorOpen } from "react-icons/fa"
 
+import api from "@/lib/axios"
+import { useNavigate } from "@tanstack/react-router"
+import { Route as RouteInventario } from "@/routes/_auth/inventario"
+
 function Login() {
+    const navigate = useNavigate();
+
     function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
 
         api.get('sanctum/csrf-cookie').then(() => {
-            api.post('api/login', document.getElementById('login-form'))
+            api.post('login', document.getElementById('login-form'))
                 .then(() => {
-
+                    return navigate({ to: RouteInventario.to })
                 });
         });
     }
@@ -34,16 +39,16 @@ function Login() {
             </div>
 
             <CardContent className="w-full">
+                <CardTitle className="text-center text-2xl">Inicia Sesión</CardTitle>
                 <form onSubmit={handleSubmit} id="login-form">
                     <FieldGroup>
-                        <CardTitle className="text-center text-2xl">Inicia Sesión</CardTitle>
                         <Field>
                             <FieldLabel aria-required>Email:</FieldLabel>
-                            <Input placeholder="Ingresa correo institucional" required type="email" />
+                            <Input name="email" type="email" required placeholder="Ingresa correo institucional" />
                         </Field>
                         <Field>
                             <FieldLabel>Contraseña:</FieldLabel>
-                            <Input placeholder="Ingresa la contraseña" required type="password" />
+                            <Input name="password" type="password" required placeholder="Ingresa la contraseña" />
                         </Field>
 
                         <Field>

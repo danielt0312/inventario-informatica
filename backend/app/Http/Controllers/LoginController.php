@@ -3,22 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /**
-     * Handle an authentication attempt.
-     */
-    public function authenticate(LoginRequest $request): RedirectResponse
-    {
-        if (!Auth::attempt($credentials)) {
-
-        }
+    public function store(LoginRequest $request) {
+        $request->authenticate();
 
         $request->session()->regenerate();
 
         return response()->json(['user' => Auth::user()]);
+    }
+
+    public function destroy(Request $request) {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return response();
     }
 }
