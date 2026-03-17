@@ -10,21 +10,27 @@ import { FaDoorOpen } from "react-icons/fa"
 import api from "@/lib/axios"
 import { useNavigate } from "@tanstack/react-router"
 import { Route as RouteInventario } from "@/routes/_auth/inventario"
+import { useQueryClient } from "@tanstack/react-query"
+
+type User = {
+    id: number
+    email: string
+    name: string
+}
 
 function Login() {
     const navigate = useNavigate();
+    const queryClient = useQueryClient()
 
-    function handleSubmit(e: React.SubmitEvent) {
+    async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
 
-        api.get('sanctum/csrf-cookie').then(() => {
-            api.post('login', document.getElementById('login-form'))
-                .then((response) => {
-                    console.log(response);
+        await api.get('sanctum/csrf-cookie')
+        const response = await api.post<User>('login', document.getElementById('login-form'))
 
-                    return navigate({ to: RouteInventario.to })
-                });
-        });
+        queryClient.setQueryData(['user'], response.data)
+
+        navigate({ to: RouteInventario.to })
     }
 
     return (
