@@ -19,7 +19,9 @@ function Login() {
 
         api.get('sanctum/csrf-cookie').then(() => {
             api.post('login', document.getElementById('login-form'))
-                .then(() => {
+                .then((response) => {
+                    console.log(response);
+
                     return navigate({ to: RouteInventario.to })
                 });
         });
