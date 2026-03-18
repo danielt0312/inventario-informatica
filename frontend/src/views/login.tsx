@@ -12,11 +12,7 @@ import { useNavigate } from "@tanstack/react-router"
 import { Route as RouteInventario } from "@/routes/_auth/inventario"
 import { useQueryClient } from "@tanstack/react-query"
 
-type User = {
-    id: number
-    email: string
-    name: string
-}
+import type { User } from '@/lib/types'
 
 function Login() {
     const navigate = useNavigate();
@@ -26,9 +22,10 @@ function Login() {
         e.preventDefault();
 
         await api.get('sanctum/csrf-cookie')
-        const response = await api.post<User>('login', document.getElementById('login-form'))
+        const data = api.post<{user: User}>('login', document.getElementById('login-form'))
+            .then(r => r.data.user)
 
-        queryClient.setQueryData(['user'], response.data)
+        queryClient.setQueryData(['user'], data)
 
         navigate({ to: RouteInventario.to })
     }
