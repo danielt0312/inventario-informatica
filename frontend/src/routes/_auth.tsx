@@ -11,16 +11,14 @@ export const Route = createFileRoute('/_auth')({
         const data = await context.queryClient.ensureQueryData({
             queryKey: ['user'],
             queryFn: async () => {
-                const res = await api.get<{user: User}>('api/user')
-                return res.data.user
-            }
+                const res = await api.get<{data: User}>('api/user')
+                return res.data
+            },
+            revalidateIfStale: true,
+            staleTime: 0
         })
 
-        console.log('USER FETCH', data);
-
-        if (!data) {
-            throw redirect({ to: RouteLogin.to })
-        }
+        if (!data) throw redirect({ to: RouteLogin.to })
 
         return { user: data }
     }
