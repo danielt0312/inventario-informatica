@@ -7,7 +7,7 @@ type User = {
 }
 
 type AuthRouteContext = {
-    user: User | null,
+    user: User | null
     queryClient: QueryClient
 }
 
