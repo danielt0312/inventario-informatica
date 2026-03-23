@@ -11,80 +11,80 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cat_file_types', function (Blueprint $table) {
+        Schema::create('cat_archivo_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('name', length: 150);
-            $table->char('extension', length: 5);
+            $table->string('nombre', length: 150);
+            $table->string('extension', length: 5);
         });
 
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('archivos', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('name', length: 150);
-            $table->foreignId('cat_file_type_id')
-                ->constrained()
+            $table->string('nombre', length: 150);
+            $table->foreignId('cat_archivo_tipo_id')
+                ->constrained(table: 'cat_archivo_tipos', indexName: 'archivos_cat_archivo_tipos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('is_active');
+            $table->boolean('activo');
             $table->timestamps();
             $table->softDeletes();
         });
 
-        Schema::create('cat_document_types', function (Blueprint $table) {
+        Schema::create('cat_documento_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('name', length: 150);
+            $table->string('nombre', length: 150);
         });
 
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('documentos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cat_document_type_id')
-                ->constrained()
+            $table->foreignId('cat_documento_tipo_id')
+                ->constrained(table: 'cat_documento_tipos', indexName: 'documentos_cat_documento_tipos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('file_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-        });
-
-        Schema::create('invoices', function (Blueprint $table) {
-            $table->id();
-            $table->date('invoice_date');
-            $table->foreignId('document_id')
-                ->constrained()
+            $table->foreignId('archivo_id')
+                ->constrained(table: 'archivos', indexName: 'documentos_archivos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
 
-        Schema::create('cat_item_states', function (Blueprint $table) {
+        Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            $table->string('name', length: 150);
+            $table->date('fecha_factura');
+            $table->foreignId('documento_id')
+                ->constrained(table: 'documentos', indexName: 'facturas_documentos_fk')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+        });
+
+        Schema::create('cat_item_estados', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', length: 150);
             $table->timestamps();
         });
 
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')
-                ->constrained()
+            $table->foreignId('producto_id')
+                ->constrained(table: 'productos', indexName: 'items_productos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('cat_item_state_id')
-                ->constrained()
+            $table->foreignId('cat_item_estado_id')
+                ->constrained(table: 'cat_item_estados', indexName: 'items_cat_item_estados_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('serial_number', length: 255)
+            $table->string('numero_serie', length: 255)
                 ->nullable()
                 ->unique();
-            $table->decimal('unit_cost', total: 7, places: 2)
+            $table->decimal('costo_unitario', total: 7, places: 2)
                 ->nullable();
-            $table->foreignId('invoice_id')
+            $table->foreignId('factura_id')
                 ->nullable()
-                ->constrained()
+                ->constrained(table: 'facturas', indexName: 'items_facturas_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('qr_file_id')
+            $table->foreignId('qr_archivo_id')
                 ->nullable()
-                ->constrained(table: 'files', indexName: 'articles_qr_file_id_foreign')
+                ->constrained(table: 'archivos', indexName: 'items_archivos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('is_countable');
@@ -110,13 +110,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_inspections');
+        // Schema::dropIfExists('item_inspections');
         Schema::dropIfExists('items');
-        Schema::dropIfExists('cat_item_states');
-        Schema::dropIfExists('invoices');
-        Schema::dropIfExists('documents');
-        Schema::dropIfExists('cat_document_types');
-        Schema::dropIfExists('files');
-        Schema::dropIfExists('cat_file_types');
+        Schema::dropIfExists('cat_item_estados');
+        Schema::dropIfExists('facturas');
+        Schema::dropIfExists('documentos');
+        Schema::dropIfExists('cat_documento_tipos');
+        Schema::dropIfExists('archivos');
+        Schema::dropIfExists('cat_archivo_tipos');
     }
 };

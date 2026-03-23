@@ -11,48 +11,48 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ram_types', function (Blueprint $table) {
+        Schema::create('ram_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('name', length: 150);
+            $table->string('nombre', length: 150);
         });
 
-        Schema::create('ram_storage_capacities', function (Blueprint $table) {
+        Schema::create('ram_capacidades', function (Blueprint $table) {
             $table->id();
-            $table->string('name', length: 150);
+            $table->string('nombre', length: 150);
         });
 
-        Schema::create('ram_clock_speeds', function (Blueprint $table) {
+        Schema::create('ram_frecuencias', function (Blueprint $table) {
             $table->id();
-            $table->string('name', length: 150);
+            $table->string('nombre', length: 150);
         });
 
         Schema::create('rams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ram_type_id')
-                ->constrained()
+            $table->foreignId('ram_tipo_id')
+                ->constrained(table: 'ram_tipos', indexName: 'rams_ram_tipos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('ram_storage_capacity_id')
-                ->constrained()
+            $table->foreignId('ram_capacidad_id')
+                ->constrained(table: 'ram_capacidades', indexName: 'rams_ram_capacidades')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('ram_clock_speed_id')
+            $table->foreignId('ram_frecuencia_id')
                 ->nullable()
-                ->constrained()
+                ->constrained(table: 'ram_frecuencias', indexName: 'rams_ram_frecuencias_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->unique(['ram_type_id', 'ram_storage_capacity_id', 'ram_clock_speed_id'], 'rams_unique');
+            $table->unique(['ram_tipo_id', 'ram_capacidad_id', 'ram_frecuencia_id'], 'rams_uk');
         });
 
-        Schema::create('product_rams', function (Blueprint $table) {
+        Schema::create('producto_rams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')
-                ->constrained()
+            $table->foreignId('producto_id')
+                ->constrained(table: 'productos', indexName: 'producto_rams_productos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('ram_id')
-                ->constrained()
+                ->constrained(table: 'rams', indexName: 'producto_rams_rams_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -63,10 +63,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_rams');
+        Schema::dropIfExists('producto_rams');
         Schema::dropIfExists('rams');
-        Schema::dropIfExists('ram_clock_speeds');
-        Schema::dropIfExists('ram_storage_capacities');
-        Schema::dropIfExists('ram_types');
+        Schema::dropIfExists('ram_frecuencias');
+        Schema::dropIfExists('ram_capacidades');
+        Schema::dropIfExists('ram_tipos');
     }
 };

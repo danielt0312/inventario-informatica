@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cpu_clock_speeds', function (Blueprint $table) {
+        Schema::create('cpu_frecuencias', function (Blueprint $table) {
             $table->id();
-            $table->string('name', length: 150);
+            $table->string('nombre', length: 150);
             $table->timestamps();
         });
 
@@ -21,24 +21,24 @@ return new class extends Migration
             $table->id();
             $table->tinyInteger('cores')
                 ->nullable();
-            $table->foreignId('cpu_clock_speed_id')
+            $table->foreignId('cpu_frecuencia_id')
                 ->nullable()
-                ->constrained()
+                ->constrained(table: 'cpu_frecuencias', indexName: 'cpus_cpu_frecuencias_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['cores', 'cpu_clock_speed_id'], 'cpus_unique');
+            $table->unique(['cores', 'cpu_frecuencia_id'], 'cpus_uk');
         });
 
-        Schema::create('product_cpus', function (Blueprint $table) {
+        Schema::create('producto_cpus', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')
-                ->constrained()
+            $table->foreignId('producto_id')
+                ->constrained(table: 'productos', indexName: 'producto_cpus_productos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('cpu_id')
-                ->constrained()
+                ->constrained(table: 'cpus', indexName: 'producto_cpus_cpus_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->timestamps();
@@ -50,8 +50,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_cpus');
+        Schema::dropIfExists('producto_cpus');
         Schema::dropIfExists('cpus');
-        Schema::dropIfExists('cpu_clock_speeds');
+        Schema::dropIfExists('cpu_frecuencias');
     }
 };

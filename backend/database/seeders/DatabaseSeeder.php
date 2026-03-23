@@ -7,7 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\{Product, ProductType};
+use App\Models\{Producto, ProductoTipo, ProductoMarca, ProductoModelo};
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,82 +28,82 @@ class DatabaseSeeder extends Seeder
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        ProductType::insert([
-            ['name' => 'Computadora'],
-            ['name' => 'Dispositivo de Almacenamiento'],
-            ['name' => 'Telefonía'],
-            ['name' => 'Redes'],
-            ['name' => 'Refacción'],
-            ['name' => 'Herramienta'],
-            ['name' => 'Audio'],
-            ['name' => 'Cámara y Video'],
-            ['name' => 'Proyección'],
-            ['name' => 'Impresora'],
-            ['name' => 'Periférico'],
-            ['name' => 'Eléctrico'],
-            ['name' => 'Escáner']
+        ProductoTipo::insert([
+            ['nombre' => 'Computadora'],
+            ['nombre' => 'Dispositivo de Almacenamiento'],
+            ['nombre' => 'Telefonía'],
+            ['nombre' => 'Redes'],
+            ['nombre' => 'Refacción'],
+            ['nombre' => 'Herramienta'],
+            ['nombre' => 'Audio'],
+            ['nombre' => 'Cámara y Video'],
+            ['nombre' => 'Proyección'],
+            ['nombre' => 'Impresora'],
+            ['nombre' => 'Periférico'],
+            ['nombre' => 'Eléctrico'],
+            ['nombre' => 'Escáner']
         ]);
 
-        Product::insert([
-            ['product_type_id'=> 1, 'name' => 'Desktop'],
-            ['product_type_id'=> 1, 'name' => 'Laptop'],
-            ['product_type_id'=> 1, 'name' => 'Servidor'],
-            ['product_type_id'=> 1, 'name' => 'Tablet'],
-            ['product_type_id'=> 2, 'name' => 'Disco'],
-            ['product_type_id'=> 3, 'name' => 'Telefono'],
-            ['product_type_id'=> 4, 'name' => 'Access Point'],
-            ['product_type_id'=> 4, 'name' => 'Antena'],
-            ['product_type_id'=> 5, 'name' => 'Firewall'],
-            ['product_type_id'=> 5, 'name' => 'Módem'],
-            ['product_type_id'=> 5, 'name' => 'Panel de Parcheo de 24 Puertos'],
-            ['product_type_id'=> 5, 'name' => 'Panel de Parcheo de 48 Puertos'],
-            ['product_type_id'=> 5, 'name' => 'Rack'],
-            ['product_type_id'=> 6, 'name' => 'Router'],
-            ['product_type_id'=> 6, 'name' => 'Switch'],
-            ['product_type_id'=> 7, 'name' => 'Adaptador '],
-            ['product_type_id'=> 7, 'name' => 'Módulo de Receptor'],
-            ['product_type_id'=> 7, 'name' => 'Apuntador Óptico'],
-            ['product_type_id'=> 7, 'name' => 'Caja de Conectividad'],
-            ['product_type_id'=> 7, 'name' => 'Lector de Código de Barras'],
-            ['product_type_id'=> 7, 'name' => 'Reloj Checador'],
-            ['product_type_id'=> 7, 'name' => 'Reloj Checador Biométrico'],
-            ['product_type_id'=> 8, 'name' => 'Bocina'],
-            ['product_type_id'=> 8, 'name' => 'Bocina Ambiental'],
-            ['product_type_id'=> 8, 'name' => 'Consola'],
-            ['product_type_id'=> 8, 'name' => 'Micrófono'],
-            ['product_type_id'=> 9, 'name' => 'Cámara de Video Digital'],
-            ['product_type_id'=> 9, 'name' => 'Cámara Fotográfica Digital'],
-            ['product_type_id'=> 9, 'name' => 'Cámara Web'],
-            ['product_type_id'=> 10, 'name' => 'Concentrador'],
-            ['product_type_id'=> 10, 'name' => 'Pantalla Retractil'],
-            ['product_type_id'=> 10, 'name' => 'Proyector'],
-            ['product_type_id'=> 10, 'name' => 'Unidad de Video'],
-            ['product_type_id'=> 11, 'name' => 'Impresora'],
-            ['product_type_id'=> 11, 'name' => 'Impresora Multifuncional'],
-            ['product_type_id'=> 11, 'name' => 'Plotter'],
-            ['product_type_id'=> 12, 'name' => 'Monitor'],
-            ['product_type_id'=> 12, 'name' => 'Quemador DVD Externo'],
-            ['product_type_id'=> 12, 'name' => 'Unidad DVD-RW USB Externa'],
-            ['product_type_id'=> 12, 'name' => 'Teclado'],
-            ['product_type_id'=> 12, 'name' => 'Mouse'],
-            ['product_type_id'=> 13, 'name' => 'Módulo de Baterías Externas'],
-            ['product_type_id'=> 13, 'name' => 'UPS'],
-            ['product_type_id'=> 14, 'name' => 'Escáner']
+        Producto::insert([
+            ['producto_tipo_id'=> 1, 'nombre' => 'Desktop'],
+            ['producto_tipo_id'=> 1, 'nombre' => 'Laptop'],
+            ['producto_tipo_id'=> 1, 'nombre' => 'Servidor'],
+            ['producto_tipo_id'=> 1, 'nombre' => 'Tablet'],
+            ['producto_tipo_id'=> 2, 'nombre' => 'Disco'],
+            ['producto_tipo_id'=> 3, 'nombre' => 'Telefono'],
+            ['producto_tipo_id'=> 4, 'nombre' => 'Access Point'],
+            ['producto_tipo_id'=> 4, 'nombre' => 'Antena'],
+            ['producto_tipo_id'=> 5, 'nombre' => 'Firewall'],
+            ['producto_tipo_id'=> 5, 'nombre' => 'Módem'],
+            ['producto_tipo_id'=> 5, 'nombre' => 'Panel de Parcheo de 24 Puertos'],
+            ['producto_tipo_id'=> 5, 'nombre' => 'Panel de Parcheo de 48 Puertos'],
+            ['producto_tipo_id'=> 5, 'nombre' => 'Rack'],
+            ['producto_tipo_id'=> 6, 'nombre' => 'Router'],
+            ['producto_tipo_id'=> 6, 'nombre' => 'Switch'],
+            ['producto_tipo_id'=> 7, 'nombre' => 'Adaptador '],
+            ['producto_tipo_id'=> 7, 'nombre' => 'Módulo de Receptor'],
+            ['producto_tipo_id'=> 7, 'nombre' => 'Apuntador Óptico'],
+            ['producto_tipo_id'=> 7, 'nombre' => 'Caja de Conectividad'],
+            ['producto_tipo_id'=> 7, 'nombre' => 'Lector de Código de Barras'],
+            ['producto_tipo_id'=> 7, 'nombre' => 'Reloj Checador'],
+            ['producto_tipo_id'=> 7, 'nombre' => 'Reloj Checador Biométrico'],
+            ['producto_tipo_id'=> 8, 'nombre' => 'Bocina'],
+            ['producto_tipo_id'=> 8, 'nombre' => 'Bocina Ambiental'],
+            ['producto_tipo_id'=> 8, 'nombre' => 'Consola'],
+            ['producto_tipo_id'=> 8, 'nombre' => 'Micrófono'],
+            ['producto_tipo_id'=> 9, 'nombre' => 'Cámara de Video Digital'],
+            ['producto_tipo_id'=> 9, 'nombre' => 'Cámara Fotográfica Digital'],
+            ['producto_tipo_id'=> 9, 'nombre' => 'Cámara Web'],
+            ['producto_tipo_id'=> 10, 'nombre' => 'Concentrador'],
+            ['producto_tipo_id'=> 10, 'nombre' => 'Pantalla Retractil'],
+            ['producto_tipo_id'=> 10, 'nombre' => 'Proyector'],
+            ['producto_tipo_id'=> 10, 'nombre' => 'Unidad de Video'],
+            ['producto_tipo_id'=> 11, 'nombre' => 'Impresora'],
+            ['producto_tipo_id'=> 11, 'nombre' => 'Impresora Multifuncional'],
+            ['producto_tipo_id'=> 11, 'nombre' => 'Plotter'],
+            ['producto_tipo_id'=> 12, 'nombre' => 'Monitor'],
+            ['producto_tipo_id'=> 12, 'nombre' => 'Quemador DVD Externo'],
+            ['producto_tipo_id'=> 12, 'nombre' => 'Unidad DVD-RW USB Externa'],
+            ['producto_tipo_id'=> 12, 'nombre' => 'Teclado'],
+            ['producto_tipo_id'=> 12, 'nombre' => 'Mouse'],
+            ['producto_tipo_id'=> 13, 'nombre' => 'Módulo de Baterías Externas'],
+            ['producto_tipo_id'=> 13, 'nombre' => 'UPS'],
+            ['producto_tipo_id'=> 14, 'nombre' => 'Escáner']
         ]);
 
-        ProductBrand::insert([
-            ['name' => 'Dell'],
-            ['name' => 'ASUS'],
-            ['name' => 'Intel']
+        ProductoMarca::insert([
+            ['nombre' => 'Dell'],
+            ['nombre' => 'ASUS'],
+            ['nombre' => 'Intel']
         ]);
 
-        ProductModel::insert([
-            ['product_id' => 1, 'product_brand_id' => 1, 'name' => 'Optiplex 3070'],
-            ['product_id' => 1, 'product_brand_id' => 1, 'name' => 'Optiplex 9020'],
-            ['product_id' => 2, 'product_brand_id' => 1, 'name' => 'Inspiron 3800'],
-            ['product_id' => 2, 'product_brand_id' => 1, 'name' => 'Inspiron 5070'],
-            ['product_id' => 2, 'product_brand_id' => 2, 'name' => 'Vivobook 14'],
-            ['product_id' => 2, 'product_brand_id' => 2, 'name' => 'Vivobook 14'],
+        ProductoModelo::insert([
+            ['producto_id' => 1, 'producto_marca_id' => 1, 'nombre' => 'Optiplex 3070'],
+            ['producto_id' => 1, 'producto_marca_id' => 1, 'nombre' => 'Optiplex 9020'],
+            ['producto_id' => 2, 'producto_marca_id' => 1, 'nombre' => 'Inspiron 3800'],
+            ['producto_id' => 2, 'producto_marca_id' => 1, 'nombre' => 'Inspiron 5070'],
+            ['producto_id' => 2, 'producto_marca_id' => 2, 'nombre' => 'Vivobook 14'],
+            ['producto_id' => 2, 'producto_marca_id' => 2, 'nombre' => 'Vivobook 14'],
         ]);
     }
 }
