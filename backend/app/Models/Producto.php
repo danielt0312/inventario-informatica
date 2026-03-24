@@ -17,10 +17,10 @@ class Producto extends Model
     ];
 
     public function tipo() {
-        return $this->hasOne(ProductoTipo::Class);
+        return $this->hasOne(ProductoTipo::class, 'id', 'producto_tipo_id');
     }
 
     public function marca() {
-        return $this->hasOne(ProductoMarca::Class);
+        return $this->hasOne(ProductoMarca::class, 'id', 'producto_marca_id');
     }
 }
