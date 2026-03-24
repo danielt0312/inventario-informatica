@@ -15,6 +15,6 @@ class ProductoMarca extends Model
     ];
 
     public function productos() {
-        $this->hasMany(Producto::class);
+        $this->belongsTo(Producto::class);
     }
 }

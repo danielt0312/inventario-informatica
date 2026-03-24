@@ -10,8 +10,7 @@ import { useState } from "react"
 function FormProducto() {
     const [productoCategoria, setProductoCategoria] = useState<ProductoCategoria | null>(null)
     const [productoTipo, setProductoTipo] = useState<ProductoTipo | null>(null)
-    const [producto, setProducto] = useState<Producto | null>(null)
-    // const [productoMarca, setProductoMarca] = useState<ProductoMarca | null>(null)
+    const [productoMarca, setProductoMarca] = useState<ProductoMarca | null>(null)
 
     const [popupIsOpen, setPopupIsOpen] = useState(false)
 
@@ -28,7 +27,20 @@ function FormProducto() {
         enabled: !!productoCategoria && !productoTipo,
         queryKey: ['producto_tipos', productoCategoria],
         queryFn: async () => {
-            const res = await api.get<{ data: ProductoTipo[] }>(`api/producto_tipos?producto_categoria_id=${productoCategoria?.id}`)
+            const res = await api.get<{ data: ProductoTipo[] }>(`api/producto_tipos`, { params: {
+                producto_categoria_id: productoCategoria?.id
+            }})
+            return res.data.data
+        }
+    })
+
+    const { data : producto_marcas = [] } = useQuery({
+        enabled: !!productoTipo && !productoMarca,
+        queryKey: ['producto_marcas', productoTipo],
+        queryFn: async () => {
+            const res = await api.get<{ data: ProductoMarca[] }>(`api/producto_marcas`, { params: {
+                producto_tipo_id: productoTipo?.id
+            }})
             return res.data.data
         }
     })
@@ -84,41 +96,34 @@ function FormProducto() {
             </FieldGroup>
 
             <FieldGroup className="grid grid-cols-2">
-                <Field data-disabled={!productoCategoria}>
-                    <FieldLabel htmlFor="producto_marca_id">Marca del bien:</FieldLabel>
+                <Field data-disabled={!productoTipo}>
+                    <FieldLabel htmlFor="producto_marca_id">Marca empresarial:</FieldLabel>
                     <Combobox
-                        // items={producto
-                        //     ? CAT_PRODUCTO_MARCA.filter((cat_producto_marca: typeof catProductoMarca) => {
-                        //             return PRODUCTO_MARCA_MODELO.filter((producto_marca_modelo: typeof productoMarcaTipo) => {
-                        //                 return producto_marca_modelo?.producto.id == producto.id && producto_marca_modelo?.cat_producto_marca.id == cat_producto_marca?.id
-                        //             })
-                        //         })
-                        //     : undefined
-                        // }
-                        // itemToStringLabel={(cat_producto_marca: typeof CAT_PRODUCTO_MARCA[number]) => cat_producto_marca.nombre}
-                        // onValueChange={handleChangeCatProductoMarca}
+                        items={producto_marcas}
+                        itemToStringLabel={(item: ProductoMarca) => item.nombre}
+                        onValueChange={setProductoMarca}
                         autoHighlight
                     >
-                        <ComboboxInput id="producto_marca_id" placeholder="Selecciona una opción" disabled={!productoCategoria || !producto} />
+                        <ComboboxInput id="producto_marca_id" placeholder="Selecciona una opción" disabled={!productoTipo} />
                         <ComboboxContent>
                             <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                             <ComboboxList>
-                                {/* {(item: CatProductoMarca) => (
+                                {(item: ProductoMarca) => (
                                     <ComboboxItem key={item.id} value={item}>
                                         {item.nombre}
                                     </ComboboxItem>
-                                )} */}
+                                )}
                             </ComboboxList>
                         </ComboboxContent>
                     </Combobox>
                 </Field>
 
-                <Field data-disabled={!productoCategoria}>
-                    <FieldLabel htmlFor="producto_modelo_id">Tipo del bien:</FieldLabel>
+                <Field data-disabled={!productoMarca}>
+                    <FieldLabel htmlFor="producto_modelo_id">Modelo:</FieldLabel>
                     <Combobox
                         autoHighlight
                     >
-                        <ComboboxInput id="producto_modelo_id" placeholder="Selecciona una opción" disabled={!productoCategoria || !producto} />
+                        <ComboboxInput id="producto_modelo_id" placeholder="Selecciona una opción" disabled={!productoMarca} />
                         <ComboboxContent>
                             <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                             <ComboboxList>
