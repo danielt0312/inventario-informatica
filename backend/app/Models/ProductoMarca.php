@@ -4,15 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\ProductoModelo;
+use App\Models\Producto;
 
 class ProductoMarca extends Model
 {
+    protected $table = 'producto_marcas';
+
     protected $fillable = [
         'nombre'
     ];
 
-    public function modelos() {
-        $this->hasMany(ProductoModelo::class);
+    public function productos() {
+        $this->hasMany(Producto::class);
     }
 }
