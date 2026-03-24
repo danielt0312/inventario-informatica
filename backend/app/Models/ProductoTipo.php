@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\{Producto, ProuctoCategoria};
+use App\Models\{Producto, ProductoCategoria};
 
 class ProductoTipo extends Model
 {
+    protected $table = 'producto_tipos';
+
     protected $fillable = [
         'producto_categoria_id',
         'nombre'
@@ -18,6 +20,6 @@ class ProductoTipo extends Model
     }
 
     public function productos() {
-        return $this->hasMany(Producto::class);
+        return $this->belongsTo(Producto::class);
     }
 }

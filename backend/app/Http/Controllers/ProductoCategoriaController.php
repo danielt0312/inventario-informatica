@@ -4,16 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\ProductoTipo;
+use App\Models\ProductoCategoria;
 
-use App\Http\Requests\ProductoTipo\ProductoTipoRequest;
-
-class ProductoTipoController extends Controller
+class ProductoCategoriaController extends Controller
 {
-    public function index(ProductoTipoRequest $request)
+    public function index(Request $request)
     {
-        $data = ProductoTipo::where($request->validated())
-            ->get();
+        $data = ProductoCategoria::all();
 
         return response()->json(compact('data'));
     }
