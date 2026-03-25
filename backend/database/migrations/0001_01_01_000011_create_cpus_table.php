@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('cpu_frecuencias', function (Blueprint $table) {
@@ -23,7 +20,7 @@ return new class extends Migration
                 ->nullable();
             $table->foreignId('cpu_frecuencia_id')
                 ->nullable()
-                ->constrained(table: 'cpu_frecuencias', indexName: 'cpus_cpu_frecuencias_fk')
+                ->constrained('cpu_frecuencias', indexName: 'cpus_cpu_frecuencias_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->timestamps();
@@ -34,20 +31,17 @@ return new class extends Migration
         Schema::create('producto_cpus', function (Blueprint $table) {
             $table->id();
             $table->foreignId('producto_id')
-                ->constrained(table: 'productos', indexName: 'producto_cpus_productos_fk')
+                ->constrained('productos', indexName: 'producto_cpus_productos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('cpu_id')
-                ->constrained(table: 'cpus', indexName: 'producto_cpus_cpus_fk')
+                ->constrained('cpus', indexName: 'producto_cpus_cpus_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('producto_cpus');

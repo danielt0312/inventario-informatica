@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('producto_categorias', function (Blueprint $table) {
@@ -20,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', length: 150);
             $table->foreignId('producto_categoria_id')
-                ->constrained(table: 'producto_categorias', indexName: 'productos_producto_categorias_fk')
+                ->constrained('producto_categorias', indexName: 'productos_producto_categorias_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -34,24 +31,21 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', length: 150);
             $table->foreignId('producto_tipo_id')
-                ->constrained(table: 'producto_tipos', indexName: 'productos_producto_tipos_fk')
+                ->constrained('producto_tipos', indexName: 'productos_producto_tipos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_marca_id')
-                ->constrained(table: 'producto_marcas', indexName: 'productos_producto_marcas_fk')
+                ->constrained('producto_marcas', indexName: 'productos_producto_marcas_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('producto_categorias');
-        Schema::dropIfExists('producto_tipos');
-        Schema::dropIfExists('producto_marcas');
         Schema::dropIfExists('productos');
+        Schema::dropIfExists('producto_marcas');
+        Schema::dropIfExists('producto_tipos');
+        Schema::dropIfExists('producto_categorias');
     }
 };
