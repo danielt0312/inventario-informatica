@@ -23,4 +23,10 @@ services:
       - 3306:3306
     env_file:
       - ./backend/.env
+    volumes:
+    - type: volume
+      source: database
+      target: /var/lib/mysql
 
+volumes:
+  database:
