@@ -20,9 +20,7 @@ function Inventario() {
                 </CardTitle>
 
                 <ButtonGroup>
-                    <Button
-                        variant={"outline"}
-                    >
+                    <Button variant={"outline"}>
                         <FaPlusCircle /> Registrar
                     </Button>
 
@@ -40,7 +38,7 @@ function Inventario() {
                                     </DropdownMenuItem>
                                 </Link>
                                 <DropdownMenuItem>
-                                    Nuevo Ingreso
+                                    Ingreso por Dictámen Tecnológico
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>

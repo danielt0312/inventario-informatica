@@ -103,7 +103,7 @@ class DatabaseSeeder extends Seeder
             ['producto_tipo_id' => 2, 'producto_marca_id' => 1, 'nombre' => 'Inspiron 3800'],
             ['producto_tipo_id' => 2, 'producto_marca_id' => 1, 'nombre' => 'Inspiron 5070'],
             ['producto_tipo_id' => 2, 'producto_marca_id' => 2, 'nombre' => 'Vivobook 14'],
-            ['producto_tipo_id' => 2, 'producto_marca_id' => 2, 'nombre' => 'Vivobook 14'],
+            ['producto_tipo_id' => 2, 'producto_marca_id' => 2, 'nombre' => 'Vivobook 15'],
         ]);
     }
 }

@@ -6,22 +6,23 @@ import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { FaSave } from "react-icons/fa"
+import { FaPaperclip, FaSave } from "react-icons/fa"
 
 function InventarioCreate() {
     function sendForm() {
-        
+
     }
 
     return (
         <>
             <Goback />
-            <Card>
-                <CardHeader>
-                    <CardTitle>Registro de Artículo existente</CardTitle>
-                </CardHeader>
 
-                <form action={sendForm}>
+            <form action={sendForm}>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Registro de Artículo existente</CardTitle>
+                    </CardHeader>
+
                     <CardContent>
                         <FieldSet>
                             <FormProducto />
@@ -42,9 +43,17 @@ function InventarioCreate() {
                                 </Field>
                             </FieldGroup>
 
+                            <FieldGroup className="grid grid-cols-4">
+                                <Button type="button">
+                                    <FaPaperclip /> Adjuntar Factura
+                                </Button>
+                                <FieldGroup>
+                                </FieldGroup>
+                            </FieldGroup>
+
                             <Field>
                                 <FieldLabel htmlFor="observaciones">Aclaraciones/Observaciones</FieldLabel>
-                                <Textarea id="observaciones" placeholder="Ingresa y/o detalla algúna aclacación/observación a mencionar" />
+                                <Textarea id="observaciones" placeholder="Ingresa y/o detalla alguna aclacación/observación a mencionar" />
                             </Field>
                         </FieldSet>
                     </CardContent>
@@ -54,8 +63,8 @@ function InventarioCreate() {
                             <FaSave /> Guardar
                         </Button>
                     </CardFooter>
-                </form>
-            </Card>
+                </Card>
+            </form>
         </>
     )
 }

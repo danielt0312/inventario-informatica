@@ -1,7 +1,5 @@
-'use client'
-
 import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "@/components/ui/combobox"
-import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import api from "@/lib/axios"
 import type { Producto, ProductoCategoria, ProductoTipo, ProductoMarca } from "@/lib/types"
 import { useQuery } from "@tanstack/react-query"
@@ -59,7 +57,7 @@ function FormProducto() {
     })
 
     return (
-        <FieldSet>
+        <>
             <FieldGroup className="grid grid-cols-2">
                 <Field>
                     <FieldLabel htmlFor="producto_categoria_id">Categoría de Producto</FieldLabel>
@@ -153,7 +151,7 @@ function FormProducto() {
                     </Combobox>
                 </Field>
             </FieldGroup>
-        </FieldSet>
+        </>
     )
 }
 
