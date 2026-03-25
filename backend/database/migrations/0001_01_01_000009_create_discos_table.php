@@ -56,8 +56,8 @@ return new class extends Migration
         });
 
         Schema::create('item_discos', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('item_id')
+                ->primary()
                 ->constrained('items', indexName: 'item_discos_items_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
@@ -69,14 +69,15 @@ return new class extends Migration
 
         Schema::create('item_computadora_discos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')
-                ->constrained('items', indexName: 'item_computadora_discos_items_fk')
+            $table->foreignId('computadora_item_id')
+                ->constrained('items', indexName: 'computadora_item_computadora_discos_items_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('producto_disco_id')
-                ->constrained('producto_discos', indexName: 'item_computadora_discos_producto_discos_fk')
+            $table->foreignId('disco_item_id')
+                ->constrained('item_discos', 'item_id','disco_item_computadora_discos_items_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->boolean('principal');
         });
     }
 

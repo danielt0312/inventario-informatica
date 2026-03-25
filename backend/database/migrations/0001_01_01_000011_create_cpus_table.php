@@ -40,10 +40,23 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->timestamps();
         });
+
+        Schema::create('item_computadora_cpus', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('computadora_item_id')
+                ->constrained('items', indexName: 'computadora_item_computadora_cpu_items_fk')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('producto_cpu_id')
+                ->constrained('producto_cpus', indexName: 'item_computadora_cpu_producto_cpus_fk')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+        });
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('item_computadora_cpus');
         Schema::dropIfExists('producto_cpus');
         Schema::dropIfExists('cpus');
         Schema::dropIfExists('cpu_frecuencias');

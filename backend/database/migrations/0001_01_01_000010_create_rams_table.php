@@ -53,10 +53,36 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
+
+        Schema::create('item_rams', function (Blueprint $table) {
+            $table->foreignId('item_id')
+                ->primary()
+                ->constrained('items', indexName: 'item_rams_items_fk')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('producto_ram_id')
+                ->constrained('producto_rams', indexName: 'item_rams_producto_rams_fk')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+        });
+
+        Schema::create('item_computadora_rams', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('computadora_item_id')
+                ->constrained('items', indexName: 'computadora_item_computadora_rams_items_fk')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('ram_item_id')
+                ->constrained('item_rams', 'item_id', 'ram_item_computadora_rams_items_fk')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->boolean('principal');
+        });
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('item_computadora_rams');
         Schema::dropIfExists('producto_rams');
         Schema::dropIfExists('rams');
         Schema::dropIfExists('ram_frecuencias');

@@ -23,7 +23,7 @@ return new class extends Migration
                 ->constrained('archivos', indexName: 'documentos_archivos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-        }); 
+        });
     }
 
     public function down(): void
