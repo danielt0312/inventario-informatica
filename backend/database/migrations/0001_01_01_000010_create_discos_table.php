@@ -10,17 +10,17 @@ return new class extends Migration
     {
         Schema::create('disco_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 150);
+            $table->string('nombre', length: 32);
         });
 
         Schema::create('disco_capacidades', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 150);
+            $table->string('nombre', length: 32);
         });
 
         Schema::create('disco_interfaces', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 150);
+            $table->string('nombre', length: 32);
         });
 
         Schema::create('discos', function (Blueprint $table) {
@@ -44,13 +44,12 @@ return new class extends Migration
 
         Schema::create('producto_discos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 150);
             $table->foreignId('producto_id')
                 ->constrained('productos', indexName: 'producto_discos_productos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('producto_marca_id')
-                ->constrained('producto_marcas', indexName: 'producto_discos_producto_marcas_fk')
+            $table->foreignId('disco_id')
+                ->constrained('discos', indexName: 'producto_discos_discos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

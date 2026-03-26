@@ -8,10 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('cat_item_estados', function (Blueprint $table) {
+        Schema::create('item_estados', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 150);
-            $table->timestamps();
+            $table->string('nombre', length: 32);
         });
 
         Schema::create('items', function (Blueprint $table) {
@@ -20,13 +19,13 @@ return new class extends Migration
                 ->constrained('productos', indexName: 'items_productos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('cat_item_estado_id')
-                ->constrained('cat_item_estados', indexName: 'items_cat_item_estados_fk')
+            $table->foreignId('item_estado_id')
+                ->constrained('item_estados', indexName: 'items_item_estados_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('numero_serie', length: 255)
+            $table->string('numero_serie', length: 32)
                 ->nullable()
-                ->unique();
+                ->unique('items_numero_serie_uk');
             $table->decimal('costo_unitario', total: 7, places: 2)
                 ->nullable();
             $table->foreignId('factura_id')
@@ -39,8 +38,8 @@ return new class extends Migration
                 ->constrained('archivos', indexName: 'items_archivos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('is_countable');
-            $table->boolean('is_active');
+            $table->boolean('contable');
+            $table->boolean('activo');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -61,6 +60,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('item_recepciones');
         Schema::dropIfExists('items');
-        Schema::dropIfExists('cat_item_estados');
+        Schema::dropIfExists('item_estados');
     }
 };

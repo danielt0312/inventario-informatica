@@ -8,15 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('cat_documento_tipos', function (Blueprint $table) {
+        Schema::create('documento_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 150);
+            $table->string('nombre', length: 32);
         });
 
         Schema::create('documentos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cat_documento_tipo_id')
-                ->constrained('cat_documento_tipos', indexName: 'documentos_cat_documento_tipos_fk')
+            $table->foreignId('documento_tipo_id')
+                ->constrained('documento_tipos', indexName: 'documentos_documento_tipos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('archivo_id')
@@ -29,6 +29,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('documentos');
-        Schema::dropIfExists('cat_documento_tipos');
+        Schema::dropIfExists('documento_tipos');
     }
 };
