@@ -33,13 +33,13 @@ return new class extends Migration
                 ->constrained('disco_capacidades', indexName: 'discos_disco_capacidades_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('disco_interface_id')
+            $table->foreignId('disco_interfaz_id')
                 ->nullable()
                 ->constrained('disco_interfaces', indexName: 'discos_disco_interfaces_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->unique(['disco_tipo_id', 'disco_capacidad_id', 'disco_interface_id'], 'discos_uk');
+            $table->unique(['disco_tipo_id', 'disco_capacidad_id', 'disco_interfaz_id'], 'discos_uk');
         });
 
         Schema::create('producto_discos', function (Blueprint $table) {
