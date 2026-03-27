@@ -13,14 +13,14 @@ return new class extends Migration
             $table->string('nombre', length: 32);
         });
 
-        Schema::create('item_computadora_softwares', function (Blueprint $table) {
-            $table->foreignId('computadora_item_id')
+        Schema::create('articulo_computadora_softwares', function (Blueprint $table) {
+            $table->foreignId('computadora_articulo_id')
                 ->primary()
-                ->constrained('items', indexName: 'item_computadora_softwares_items_fk')
+                ->constrained('articulos', indexName: 'articulo_computadora_softwares_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('software_tipo_id')
-                ->constrained('software_tipos', indexName: 'item_computadora_softwares_software_tipos_fk')
+                ->constrained('software_tipos', indexName: 'articulo_computadora_softwares_software_tipos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('version', length: 32)
@@ -30,7 +30,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('item_computadora_softwares');
+        Schema::dropIfExists('articulo_computadora_softwares');
         Schema::dropIfExists('software_tipos');
     }
 };

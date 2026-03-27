@@ -22,14 +22,14 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
-        Schema::create('item_computadora_os', function (Blueprint $table) {
-            $table->foreignId('computadora_item_id')
+        Schema::create('articulo_computadora_os', function (Blueprint $table) {
+            $table->foreignId('computadora_articulo_id')
                 ->primary()
-                ->constrained('items', indexName: 'item_computadora_os_items_fk')
+                ->constrained('articulos', indexName: 'articulo_computadora_os_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('os_edicion_id')
-                ->constrained('os_ediciones', indexName: 'item_computadora_os_os_ediciones_fk')
+                ->constrained('os_ediciones', indexName: 'articulo_computadora_os_os_ediciones_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('version', length: 32)
@@ -39,7 +39,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('item_computadora_os');
+        Schema::dropIfExists('articulo_computadora_os');
         Schema::dropIfExists('os_ediciones');
         Schema::dropIfExists('os_tipos');
     }

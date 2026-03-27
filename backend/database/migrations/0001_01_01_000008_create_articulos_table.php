@@ -8,34 +8,34 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('item_estados', function (Blueprint $table) {
+        Schema::create('articulo_estados', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', length: 32);
         });
 
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('articulos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('producto_id')
-                ->constrained('productos', indexName: 'items_productos_fk')
+                ->constrained('productos', indexName: 'articulos_productos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('item_estado_id')
-                ->constrained('item_estados', indexName: 'items_item_estados_fk')
+            $table->foreignId('articulo_estado_id')
+                ->constrained('articulo_estados', indexName: 'articulos_articulo_estados_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('numero_serie', length: 32)
                 ->nullable()
-                ->unique('items_numero_serie_uk');
+                ->unique('articulos_numero_serie_uk');
             $table->decimal('costo_unitario', total: 7, places: 2)
                 ->nullable();
             $table->foreignId('factura_id')
                 ->nullable()
-                ->constrained('facturas', indexName: 'items_facturas_fk')
+                ->constrained('facturas', indexName: 'articulos_facturas_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('qr_archivo_id')
                 ->nullable()
-                ->constrained('archivos', indexName: 'items_archivos_fk')
+                ->constrained('archivos', indexName: 'articulos_archivos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('contable');
@@ -44,10 +44,10 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('item_recepciones', function (Blueprint $table) {
-            $table->foreignId('item_id')
+        Schema::create('articulo_recepciones', function (Blueprint $table) {
+            $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('items', indexName: 'item_recepciones_item_fk')
+                ->constrained('articulos', indexName: 'articulo_recepciones_articulo_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('resultado_esperado');
@@ -58,8 +58,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('item_recepciones');
-        Schema::dropIfExists('items');
-        Schema::dropIfExists('item_estados');
+        Schema::dropIfExists('articulo_recepciones');
+        Schema::dropIfExists('articulos');
+        Schema::dropIfExists('articulo_estados');
     }
 };

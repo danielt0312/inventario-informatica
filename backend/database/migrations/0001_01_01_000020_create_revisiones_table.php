@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('revisiones', function (Blueprint $table) {
-            $table->foreignId('item_id')
+            $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('items', indexName: 'revisiones_items_fk')
+                ->constrained('articulos', indexName: 'revisiones_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
@@ -27,9 +27,9 @@ return new class extends Migration
         });
 
         Schema::create('revision_funcionalidades', function (Blueprint $table) {
-            $table->foreignId('revision_item_id')
+            $table->foreignId('revision_articulo_id')
                 ->primary()
-                ->constrained('revisiones', 'item_id','revision_funcionalidades_revisiones_fk')
+                ->constrained('revisiones', 'articulo_id','revision_funcionalidades_revisiones_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
@@ -57,9 +57,9 @@ return new class extends Migration
         });
 
         Schema::create('revision_configuraciones', function (Blueprint $table) {
-            $table->foreignId('revision_item_id')
+            $table->foreignId('revision_articulo_id')
                 ->primary()
-                ->constrained('revisiones', 'item_id', 'revision_configuraciones_revisiones_fk')
+                ->constrained('revisiones', 'articulo_id', 'revision_configuraciones_revisiones_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
@@ -78,9 +78,9 @@ return new class extends Migration
         });
 
         Schema::create('revision_aplicaciones', function (Blueprint $table) {
-            $table->foreignId('revision_item_id')
+            $table->foreignId('revision_articulo_id')
                 ->primary()
-                ->constrained('revisiones', 'item_id', 'revision_aplicaciones_revisiones_fk')
+                ->constrained('revisiones', 'articulo_id', 'revision_aplicaciones_revisiones_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')

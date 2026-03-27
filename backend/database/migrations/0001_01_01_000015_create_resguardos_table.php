@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('custodias', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')
-                ->constrained('items', indexName: 'custodias_items_fk')
+            $table->foreignId('articulo_id')
+                ->constrained('articulos', indexName: 'custodias_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->date('fecha_asignacion');

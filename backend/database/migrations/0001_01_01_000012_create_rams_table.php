@@ -49,26 +49,26 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
-        Schema::create('item_rams', function (Blueprint $table) {
-            $table->foreignId('item_id')
+        Schema::create('articulo_rams', function (Blueprint $table) {
+            $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('items', indexName: 'item_rams_items_fk')
+                ->constrained('articulos', indexName: 'articulo_rams_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_ram_id')
-                ->constrained('producto_rams', indexName: 'item_rams_producto_rams_fk')
+                ->constrained('producto_rams', indexName: 'articulo_rams_producto_rams_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
 
-        Schema::create('item_computadora_rams', function (Blueprint $table) {
+        Schema::create('articulo_computadora_rams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('computadora_item_id')
-                ->constrained('items', indexName: 'computadora_item_computadora_rams_items_fk')
+            $table->foreignId('computadora_articulo_id')
+                ->constrained('articulos', indexName: 'computadora_articulo_computadora_rams_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('ram_item_id')
-                ->constrained('item_rams', 'item_id', 'ram_item_computadora_rams_items_fk')
+            $table->foreignId('ram_articulo_id')
+                ->constrained('articulo_rams', 'articulo_id', 'ram_articulo_computadora_rams_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('principal');
@@ -77,8 +77,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('item_computadora_rams');
-        Schema::dropIfExists('item_rams');
+        Schema::dropIfExists('articulo_computadora_rams');
+        Schema::dropIfExists('articulo_rams');
         Schema::dropIfExists('producto_rams');
         Schema::dropIfExists('rams');
         Schema::dropIfExists('ram_capacidades');

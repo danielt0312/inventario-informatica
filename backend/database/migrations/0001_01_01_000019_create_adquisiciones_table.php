@@ -47,14 +47,14 @@ return new class extends Migration
             $table->tinyInteger('cantidad');
         });
 
-        Schema::create('adquisicion_items', function (Blueprint $table) {
+        Schema::create('adquisicion_articulos', function (Blueprint $table) {
             $table->foreignId('adquisicion_id')
-                ->constrained('adquisiciones', indexName: 'adquisicion_items_adquisiciones_fk')
+                ->constrained('adquisiciones', indexName: 'adquisicion_articulos_adquisiciones_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('item_id')
+            $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('items', indexName: 'adquisicion_items_items_fk')
+                ->constrained('articulos', indexName: 'adquisicion_articulos_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -62,7 +62,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('adquisicion_items');
+        Schema::dropIfExists('adquisicion_articulos');
         Schema::dropIfExists('adquisicion_productos');
         Schema::dropIfExists('adquisiciones');
         Schema::dropIfExists('adquisicion_estados');

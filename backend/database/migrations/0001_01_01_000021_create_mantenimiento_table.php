@@ -15,8 +15,8 @@ return new class extends Migration
 
         Schema::create('mantenimientos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')
-                ->constrained('items', indexName: 'mantenimientos_items_fk')
+            $table->foreignId('articulo_id')
+                ->constrained('articulos', indexName: 'mantenimientos_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('solicitante_user_id')
@@ -37,9 +37,9 @@ return new class extends Migration
         });
 
         Schema::create('mantenimiento_producto_otros', function (Blueprint $table) {
-            $table->foreignId('mantenimiento_item_id')
+            $table->foreignId('mantenimiento_articulo_id')
                 ->primary()
-                ->constrained('mantenimientos', 'item_id', 'mantenimiento_producto_otros_mantenimientos_fk')
+                ->constrained('mantenimientos', 'articulo_id', 'mantenimiento_producto_otros_mantenimientos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('nombre', length: 32);
@@ -47,9 +47,9 @@ return new class extends Migration
         });
 
         Schema::create('mantenimiento_hardware_computadoras', function (Blueprint $table) {
-            $table->foreignId('mantenimiento_item_id')
+            $table->foreignId('mantenimiento_articulo_id')
                 ->primary()
-                ->constrained('mantenimientos', 'item_id', 'mantenimiento_hardware_computadoras_mantenimientos_fk')
+                ->constrained('mantenimientos', 'articulo_id', 'mantenimiento_hardware_computadoras_mantenimientos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('tarjeta_madre');
@@ -62,9 +62,9 @@ return new class extends Migration
         });
 
         Schema::create('mantenimiento_hardware_impresoras', function (Blueprint $table) {
-            $table->foreignId('mantenimiento_item_id')
+            $table->foreignId('mantenimiento_articulo_id')
                 ->primary()
-                ->constrained('mantenimientos', 'item_id', 'mantenimiento_hardware_impresoras_mantenimientos_fk')
+                ->constrained('mantenimientos', 'articulo_id', 'mantenimiento_hardware_impresoras_mantenimientos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('carro');
@@ -78,9 +78,9 @@ return new class extends Migration
         });
 
         Schema::create('mantenimiento_hardware_perifericos', function (Blueprint $table) {
-            $table->foreignId('mantenimiento_item_id')
+            $table->foreignId('mantenimiento_articulo_id')
                 ->primary()
-                ->constrained('mantenimientos', 'item_id', 'mantenimiento_hardware_perifericos_mantenimientos_fk')
+                ->constrained('mantenimientos', 'articulo_id', 'mantenimiento_hardware_perifericos_mantenimientos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('teclados');

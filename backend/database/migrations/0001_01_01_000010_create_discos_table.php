@@ -54,26 +54,26 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
-        Schema::create('item_discos', function (Blueprint $table) {
-            $table->foreignId('item_id')
+        Schema::create('articulo_discos', function (Blueprint $table) {
+            $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('items', indexName: 'item_discos_items_fk')
+                ->constrained('articulos', indexName: 'articulo_discos_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_disco_id')
-                ->constrained('producto_discos', indexName: 'item_discos_producto_discos_fk')
+                ->constrained('producto_discos', indexName: 'articulo_discos_producto_discos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
 
-        Schema::create('item_computadora_discos', function (Blueprint $table) {
+        Schema::create('articulo_computadora_discos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('computadora_item_id')
-                ->constrained('items', indexName: 'computadora_item_computadora_discos_items_fk')
+            $table->foreignId('computadora_articulo_id')
+                ->constrained('articulos', indexName: 'computadora_articulo_computadora_discos_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('disco_item_id')
-                ->constrained('item_discos', 'item_id','disco_item_computadora_discos_items_fk')
+            $table->foreignId('disco_articulo_id')
+                ->constrained('articulo_discos', 'articulo_id','disco_articulo_computadora_discos_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('principal');
@@ -82,8 +82,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('item_computadora_discos');
-        Schema::dropIfExists('item_discos');
+        Schema::dropIfExists('articulo_computadora_discos');
+        Schema::dropIfExists('articulo_discos');
         Schema::dropIfExists('producto_discos');
         Schema::dropIfExists('discos');
         Schema::dropIfExists('disco_interfaces');

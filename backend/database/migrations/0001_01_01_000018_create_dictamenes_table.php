@@ -51,14 +51,14 @@ return new class extends Migration
             $table->tinyInteger('cantidad');
         });
 
-        Schema::create('dictamen_items', function (Blueprint $table) {
+        Schema::create('dictamen_articulos', function (Blueprint $table) {
             $table->foreignId('dictamen_id')
-                ->constrained('dictamenes', indexName: 'dictamen_items_dictamenes_fk')
+                ->constrained('dictamenes', indexName: 'dictamen_articulos_dictamenes_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('item_id')
+            $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('items', indexName: 'dictamen_items_items_fk')
+                ->constrained('articulos', indexName: 'dictamen_articulos_articulos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -66,7 +66,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('dictamen_items');
+        Schema::dropIfExists('dictamen_articulos');
         Schema::dropIfExists('dictamen_productos');
         Schema::dropIfExists('dictamenes');
         Schema::dropIfExists('dictamen_estados');
