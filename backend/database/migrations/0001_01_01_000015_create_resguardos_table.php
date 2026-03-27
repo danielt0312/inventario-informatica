@@ -27,6 +27,7 @@ return new class extends Migration
             $table->date('fecha_cancelacion')
                 ->nullable();
             $table->foreignId('documento_id')
+                ->nullable()
                 ->constrained('documentos', indexName: 'resguardos_documentos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

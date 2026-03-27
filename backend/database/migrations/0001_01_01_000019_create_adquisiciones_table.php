@@ -24,6 +24,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('documento_id')
+                ->nullable()
                 ->constrained('documentos', indexName: 'adquisiciones_documentos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
