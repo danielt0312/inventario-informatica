@@ -22,7 +22,8 @@ return new class extends Migration
                 ->constrained('documentos', indexName: 'revisiones_documentos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('observaciones', length: 255);
+            $table->string('observaciones', length: 255)
+                ->nullable();
             $table->timestamps();
         });
 

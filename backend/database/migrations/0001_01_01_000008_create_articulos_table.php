@@ -51,7 +51,8 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('resultado_esperado');
-            $table->string('observaciones', length: 255);
+            $table->string('observaciones', length: 255)
+                ->nullable();
             $table->timestamps();
         });
     }

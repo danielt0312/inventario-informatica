@@ -33,7 +33,7 @@ return new class extends Migration
                 ->constrained('oficio_asuntos', indexName: 'oficios_oficio_asuntos_fk')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('folio')
+            $table->string('folio', length: 32)
                 ->unique('oficios_folio_uk');
         });
     }
