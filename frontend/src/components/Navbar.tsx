@@ -3,6 +3,7 @@ import NavbarItem from "./NavbarItem"
 import { Route as AuthRoute } from "@/routes/_auth";
 import { Route as InventarioRoute } from "@/routes/_auth/inventario";
 import { Route as DictamenRoute } from "@/routes/_auth/dictamen";
+import { Route as DocumentosRoute } from "@/routes/_auth/documentos";
 
 function Navbar() {
     const { user } = AuthRoute.useRouteContext()
@@ -14,6 +15,7 @@ function Navbar() {
                     <div className="flex-1">
                         <Link to={InventarioRoute.to}><NavbarItem>Inventario</NavbarItem></Link>
                         <Link to={DictamenRoute.to}><NavbarItem>Dictamen Tecnológico</NavbarItem></Link>
+                        <Link to={DocumentosRoute.to}><NavbarItem>Documentos</NavbarItem></Link>
                     </div>
                     <div>
                         <NavbarItem>{user.name}</NavbarItem>
