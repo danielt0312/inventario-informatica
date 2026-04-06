@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 use App\Models\{Producto, ProductoMarca};
 
@@ -13,6 +14,8 @@ class ProductoSeeder extends Seeder
 
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+
         $this->call([
             ProductoTipoSeeder::class,
         ]);
@@ -31,5 +34,7 @@ class ProductoSeeder extends Seeder
             ['producto_tipo_id' => 2, 'producto_marca_id' => 2, 'nombre' => 'Vivobook 14'],
             ['producto_tipo_id' => 2, 'producto_marca_id' => 2, 'nombre' => 'Vivobook 15'],
         ]);
+
+        Schema::enableForeignKeyConstraints();
     }
 }
