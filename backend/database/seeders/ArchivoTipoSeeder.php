@@ -9,9 +9,11 @@ use App\Models\ArchivoTipo;
 
 class ArchivoTipoSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     public function run(): void
     {
-        ArchivoTipo::insert([
+        ArchivoTipo::insertOrIgnore([
             ['nombre' => 'Adobe Portable Document Format', 'extension' => '.pdf'],
             ['nombre' => 'Imágen JPEG', 'extension' => '.jpeg']
         ]);
