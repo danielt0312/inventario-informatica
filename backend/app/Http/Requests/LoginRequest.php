@@ -14,7 +14,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email'     => ['required', 'email', 'ends_with:@asetamaulipas.gob.mx', 'max:255'],
-            'password'  => ['required', 'size:8'],
+            'password'  => ['required', 'min:8', 'max:255'],
         ];
     }
 

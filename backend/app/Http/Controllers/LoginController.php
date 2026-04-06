@@ -12,7 +12,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return response()->json(['user' => Auth::user()]);
+        return response()->json(['data' => Auth::user()]);
     }
 
     public function destroy(Request $request) {
