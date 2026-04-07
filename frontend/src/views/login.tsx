@@ -24,8 +24,7 @@ function Login() {
         await api.get('sanctum/csrf-cookie')
 
         const { data: responseData } = await api.post<{ data: User }>('login', document.getElementById('login-form'))
-
-        queryClient.setQueryData(['user'], responseData)
+        queryClient.setQueryData(['user'], responseData.data)
 
         navigate({ to: RouteInventario.to })
     }

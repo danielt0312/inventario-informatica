@@ -8,18 +8,23 @@ import type { User } from '@/lib/types'
 export const Route = createFileRoute('/_auth')({
     component: AuthLayout,
     beforeLoad: async ({ context }) => {
-        const data = await context.queryClient.ensureQueryData({
-            queryKey: ['user'],
-            queryFn: async () => {
-                const res = await api.get<{data: User}>('api/user')
-                return res.data
-            },
-            revalidateIfStale: true,
-            staleTime: 0
-        })
+        try {
+            const data = await context.queryClient.ensureQueryData({
+                queryKey: ['user'],
+                queryFn: async () => {
+                    const { data: responseData } = await api.get<{ data: User }>('api/user');
+                    return responseData.data
+                },
+                revalidateIfStale: true,
+                staleTime: 0
+            })
 
-        if (!data) throw redirect({ to: RouteLogin.to })
+            if (!data) throw redirect({ to: RouteLogin.to })
 
-        return { user: data }
+            return { user: data }
+        } catch (exception) {
+            // todo verificar que tipo de exception fue capturado
+            throw redirect({ to: RouteLogin.to })
+        }
     }
 })
