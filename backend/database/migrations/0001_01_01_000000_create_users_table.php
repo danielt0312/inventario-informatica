@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('id')
                 ->primary();
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
