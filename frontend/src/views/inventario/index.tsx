@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 
 import { columns } from "./index.table-cols"
-import data from "./data.json"
 import { Button } from "@/components/ui/button"
 import { FaChevronDown, FaPlusCircle } from "react-icons/fa"
 import { Link } from "@tanstack/react-router"
@@ -46,7 +45,7 @@ function Inventario() {
                 </ButtonGroup>
             </CardHeader>
             <CardContent>
-                <DataTable columns={columns} data={data} />
+                <DataTable columns={columns} data={[]} />
             </CardContent>
         </Card>
     )
