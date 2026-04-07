@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -22,6 +23,6 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return response();
+        return response(status: 205);
     }
 }
