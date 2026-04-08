@@ -11,31 +11,31 @@ return new class extends Migration
         Schema::create('revisiones', function (Blueprint $table) {
             $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('articulos', indexName: 'revisiones_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_revisiones_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
-                ->constrained('users', indexName: 'revisiones_users_fk')
+                ->constrained('users', indexName: 'fk_revisiones_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('documento_id')
                 ->nullable()
-                ->constrained('documentos', indexName: 'revisiones_documentos_fk')
+                ->constrained('documentos', indexName: 'fk_revisiones_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('observaciones', length: 255)
+            $table->string('observaciones', 255)
                 ->nullable();
             $table->timestamps();
         });
 
         Schema::create('revision_funcionalidades', function (Blueprint $table) {
-            $table->foreignId('revision_articulo_id')
+            $table->foreignId('revision_id')
                 ->primary()
-                ->constrained('revisiones', 'articulo_id','revision_funcionalidades_revisiones_fk')
+                ->constrained('revisiones', 'articulo_id','fk_revision_funcionalidades_revisiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
-                ->constrained('users', indexName: 'revision_funcionalidades_users_fk')
+                ->constrained('users', indexName: 'fk_revision_funcionalidades_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('garantia');
@@ -59,13 +59,13 @@ return new class extends Migration
         });
 
         Schema::create('revision_configuraciones', function (Blueprint $table) {
-            $table->foreignId('revision_articulo_id')
+            $table->foreignId('revision_id')
                 ->primary()
-                ->constrained('revisiones', 'articulo_id', 'revision_configuraciones_revisiones_fk')
+                ->constrained('revisiones', 'articulo_id', 'fk_revision_configuraciones_revisiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
-                ->constrained('users', indexName: 'revision_configuraciones_users_fk')
+                ->constrained('users', indexName: 'fk_revision_configuraciones_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('garantia');
@@ -80,13 +80,13 @@ return new class extends Migration
         });
 
         Schema::create('revision_aplicaciones', function (Blueprint $table) {
-            $table->foreignId('revision_articulo_id')
+            $table->foreignId('revision_id')
                 ->primary()
-                ->constrained('revisiones', 'articulo_id', 'revision_aplicaciones_revisiones_fk')
+                ->constrained('revisiones', 'articulo_id', 'fk_revision_aplicaciones_revisiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
-                ->constrained('users', indexName: 'revision_aplicaciones_users_fk')
+                ->constrained('users', indexName: 'fk_revision_aplicaciones_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('sicysa');

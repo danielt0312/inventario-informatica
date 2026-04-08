@@ -10,49 +10,49 @@ return new class extends Migration
     {
         Schema::create('prestamo_estados', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('prestamo_motivos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('prestamos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')
-                ->constrained('articulos', indexName: 'prestamos_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_prestamos_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('prestamo_estado_id')
-                ->constrained('prestamo_estados', indexName: 'prestamos_prestamo_estados_fk')
+            $table->foreignId('estado_id')
+                ->constrained('prestamo_estados', indexName: 'fk_prestamos_prestamo_estados')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('prestamo_motivo_id')
-                ->constrained('prestamo_motivos', indexName: 'prestamos_prestamo_motivos_fk')
+            $table->foreignId('motivo_id')
+                ->constrained('prestamo_motivos', indexName: 'fk_prestamos_prestamo_motivos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('solicitante_user_id')
-                ->constrained('users', indexName: 'prestamos_solicitante_users_fk')
+                ->constrained('users', indexName: 'fk_prestamos_solicitante_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->date('fecha_entrega');
             $table->foreignId('proveedor_user_id')
-                ->constrained('users', indexName: 'prestamos_proveedor_users_fk')
+                ->constrained('users', indexName: 'fk_prestamos_proveedor_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->date('fecha_devolucion')
                 ->nullable();
             $table->foreignId('receptor_user_id')
-                ->constrained('users', indexName: 'prestamos_receptor_users_fk')
+                ->constrained('users', indexName: 'fk_prestamos_receptor_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('documento_id')
                 ->nullable()
-                ->constrained('documentos', indexName: 'prestamos_documentos_fk')
+                ->constrained('documentos', indexName: 'fk_prestamos_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('observaciones', length: 255)
+            $table->string('observaciones', 255)
                 ->nullable();
             $table->timestamps();
         });
@@ -60,10 +60,10 @@ return new class extends Migration
         Schema::create('prestamo_motivo_otros', function (Blueprint $table) {
             $table->foreignId('prestamo_id')
                 ->primary()
-                ->constrained('prestamos', indexName: 'prestamo_motivo_otros_prestamos_fk')
+                ->constrained('prestamos', indexName: 'fk_prestamo_motivo_otros_prestamos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
     }
 

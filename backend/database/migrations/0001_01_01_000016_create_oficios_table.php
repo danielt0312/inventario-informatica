@@ -10,31 +10,31 @@ return new class extends Migration
     {
         Schema::create('oficio_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('oficio_asuntos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('oficio_tipo_id')
-                ->constrained('oficio_tipos', indexName: 'oficio_asuntos_oficios_tipos_fk')
+            $table->foreignId('tipo_id')
+                ->constrained('oficio_tipos', indexName: 'fk_oficio_asuntos_oficio_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', length: 32)
+            $table->string('nombre', 32)
                 ->nullable();
         });
 
         Schema::create('oficios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('documento_id')
-                ->constrained('documentos', indexName: 'oficios_documentos_fk')
+                ->constrained('documentos', indexName: 'fk_oficios_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('oficio_asunto_id')
-                ->constrained('oficio_asuntos', indexName: 'oficios_oficio_asuntos_fk')
+            $table->foreignId('asunto_id')
+                ->constrained('oficio_asuntos', indexName: 'fk_oficios_oficio_asuntos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('folio', length: 32)
-                ->unique('oficios_folio_uk');
+            $table->string('folio', 32)
+                ->unique('uk_oficios_folio');
         });
     }
 

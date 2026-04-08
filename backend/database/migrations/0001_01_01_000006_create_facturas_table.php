@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha_factura');
+            $table->date('fecha_emision');
             $table->foreignId('documento_id')
-                ->constrained('documentos', indexName: 'facturas_documentos_fk')
+                ->constrained(indexName: 'fk_facturas_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

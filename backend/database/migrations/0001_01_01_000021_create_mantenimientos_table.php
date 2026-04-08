@@ -10,29 +10,29 @@ return new class extends Migration
     {
         Schema::create('mantenimiento_productos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('mantenimientos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')
-                ->constrained('articulos', indexName: 'mantenimientos_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_mantenimientos_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('resguardante_user_id')
-                ->constrained('users', indexName: 'mantenimientos_resguardante_users_fk')
+                ->constrained('users', indexName: 'fk_mantenimientos_users_resguardante')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('mantenimiento_producto_id')
-                ->constrained('mantenimiento_productos', indexName: 'mantenimientos_mantenimiento_productos_fk')
+            $table->foreignId('producto_id')
+                ->constrained('mantenimiento_productos', indexName: 'fk_mantenimientos_mantenimiento_productos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->date('mantenimiento');
+            $table->date('fecha_realizacion');
             $table->foreignId('soporte_user_id')
-                ->constrained('users', indexName: 'mantenimientos_soporte_users_fk')
+                ->constrained('users', indexName: 'fk_mantenimientos_users_soporte')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('observaciones', length: 255)
+            $table->string('observaciones', 255)
                 ->nullable();
             $table->timestamps();
         });
@@ -40,17 +40,17 @@ return new class extends Migration
         Schema::create('mantenimiento_producto_otros', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimientos', indexName: 'mantenimiento_producto_otros_mantenimientos_fk')
+                ->constrained('mantenimientos', indexName: 'fk_mantenimiento_producto_otros_mantenimientos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
             $table->timestamps();
         });
 
-        Schema::create('mantenimiento_hardware_computadoras', function (Blueprint $table) {
+        Schema::create('mantenimiento_computadoras', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimientos', indexName: 'mantenimiento_hardware_computadoras_mantenimientos_fk')
+                ->constrained('mantenimientos', indexName: 'fk_mantenimiento_computadoras_mantenimientos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('tarjeta_madre');
@@ -62,10 +62,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('mantenimiento_hardware_impresoras', function (Blueprint $table) {
+        Schema::create('mantenimiento_impresoras', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimientos', indexName: 'mantenimiento_hardware_impresoras_mantenimientos_fk')
+                ->constrained('mantenimientos', indexName: 'fk_mantenimiento_impresoras_mantenimientos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('carro');
@@ -78,10 +78,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('mantenimiento_hardware_perifericos', function (Blueprint $table) {
+        Schema::create('mantenimiento_perifericos', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimientos', indexName: 'mantenimiento_hardware_perifericos_mantenimientos_fk')
+                ->constrained('mantenimientos', indexName: 'fk_mantenimiento_perifericos_mantenimientos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('teclado');
@@ -94,20 +94,20 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('mantenimiento_hardware_periferico_otros', function (Blueprint $table) {
+        Schema::create('mantenimiento_periferico_otros', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimiento_hardware_perifericos', 'mantenimiento_id', 'mantenimiento_hardware_periferico_otros_mantenimientos_fk')
+                ->constrained('mantenimiento_perifericos', 'mantenimiento_id', 'fk_mantenimiento_periferico_otros_mantenimiento_perifericos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
             $table->timestamps();
         });
 
-        Schema::create('mantenimiento_software_os', function (Blueprint $table) {
+        Schema::create('mantenimiento_os', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimientos', indexName: 'mantenimiento_software_os_mantenimientos_fk')
+                ->constrained('mantenimientos', indexName: 'fk_mantenimiento_os_mantenimientos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('actualizaciones');
@@ -116,10 +116,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('mantenimiento_software_archivos', function (Blueprint $table) {
+        Schema::create('mantenimiento_archivos', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimientos', indexName: 'mantenimiento_software_archivos_mantenimientos_fk')
+                ->constrained('mantenimientos', indexName: 'fk_mantenimiento_archivos_mantenimientos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->tinyInteger('depuracion_programas');
@@ -130,20 +130,20 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('mantenimiento_software_archivo_pst', function (Blueprint $table) {
+        Schema::create('mantenimiento_archivo_pst', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimiento_software_archivos', 'mantenimiento_id', 'mantenimiento_software_archivo_pst_mantenimientos_fk')
+                ->constrained('mantenimiento_archivos', 'mantenimiento_id', 'fk_mantenimiento_archivo_pst_mantenimiento_archivos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
             $table->timestamps();
         });
 
-        Schema::create('mantenimiento_software_aplicaciones', function (Blueprint $table) {
+        Schema::create('mantenimiento_aplicaciones', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimientos', indexName: 'mantenimiento_software_aplicaciones_mantenimientos_fk')
+                ->constrained('mantenimientos', indexName: 'fk_mantenimiento_aplicaciones_mantenimientos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('antivirus');
@@ -155,28 +155,28 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('mantenimiento_software_aplicacion_otros', function (Blueprint $table) {
+        Schema::create('mantenimiento_aplicacion_otros', function (Blueprint $table) {
             $table->foreignId('mantenimiento_id')
                 ->primary()
-                ->constrained('mantenimiento_software_aplicaciones', 'mantenimiento_id', 'mantenimiento_software_aplicacion_otros_mantenimientos_fk')
+                ->constrained('mantenimiento_aplicaciones', 'mantenimiento_id', 'fk_mantenimiento_aplicacion_otros_mantenimiento_aplicaciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('mantenimiento_software_aplicacion_otros');
-        Schema::dropIfExists('mantenimiento_software_aplicaciones');
-        Schema::dropIfExists('mantenimiento_software_archivo_pst');
-        Schema::dropIfExists('mantenimiento_software_archivos');
-        Schema::dropIfExists('mantenimiento_software_os');
-        Schema::dropIfExists('mantenimiento_hardware_periferico_otros');
-        Schema::dropIfExists('mantenimiento_hardware_perifericos');
-        Schema::dropIfExists('mantenimiento_hardware_impresoras');
-        Schema::dropIfExists('mantenimiento_hardware_computadoras');
+        Schema::dropIfExists('mantenimiento_aplicacion_otros');
+        Schema::dropIfExists('mantenimiento_aplicaciones');
+        Schema::dropIfExists('mantenimiento_archivo_pst');
+        Schema::dropIfExists('mantenimiento_archivos');
+        Schema::dropIfExists('mantenimiento_os');
+        Schema::dropIfExists('mantenimiento_periferico_otros');
+        Schema::dropIfExists('mantenimiento_perifericos');
+        Schema::dropIfExists('mantenimiento_impresoras');
+        Schema::dropIfExists('mantenimiento_computadoras');
         Schema::dropIfExists('mantenimiento_producto_otros');
         Schema::dropIfExists('mantenimientos');
         Schema::dropIfExists('mantenimiento_productos');

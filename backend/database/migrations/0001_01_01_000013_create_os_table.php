@@ -10,14 +10,14 @@ return new class extends Migration
     {
         Schema::create('os_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('os_ediciones', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
-            $table->foreignId('os_tipo_id')
-                ->constrained('os_tipos', indexName: 'os_ediciones_os_tipos_fk')
+            $table->string('nombre', 32);
+            $table->foreignId('tipo_id')
+                ->constrained('os_tipos', indexName: 'fk_os_ediciones_os_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -25,14 +25,14 @@ return new class extends Migration
         Schema::create('articulo_computadora_os', function (Blueprint $table) {
             $table->foreignId('computadora_articulo_id')
                 ->primary()
-                ->constrained('articulos', indexName: 'articulo_computadora_os_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_articulo_computadora_os_articulos_computadora')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('os_edicion_id')
-                ->constrained('os_ediciones', indexName: 'articulo_computadora_os_os_ediciones_fk')
+            $table->foreignId('edicion_id')
+                ->constrained('os_ediciones', indexName: 'fk_articulo_computadora_os_os_ediciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('version', length: 32)
+            $table->string('version', 32)
                 ->nullable();
         });
     }

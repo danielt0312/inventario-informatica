@@ -10,41 +10,41 @@ return new class extends Migration
     {
         Schema::create('ram_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('ram_capacidades', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('rams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ram_tipo_id')
-                ->constrained('ram_tipos', indexName: 'rams_ram_tipos_fk')
+            $table->foreignId('tipo_id')
+                ->constrained('ram_tipos', indexName: 'fk_rams_ram_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('ram_capacidad_id')
-                ->constrained('ram_capacidades', indexName: 'rams_ram_capacidades')
+            $table->foreignId('capacidad_id')
+                ->constrained('ram_capacidades', indexName: 'fk_rams_ram_capacidades')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('frecuencia_id')
                 ->nullable()
-                ->constrained('frecuencias', indexName: 'rams_frecuencias_fk')
+                ->constrained('frecuencias', indexName: 'fk_rams_frecuencias')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->unique(['ram_tipo_id', 'ram_capacidad_id', 'frecuencia_id'], 'rams_uk');
+            $table->unique(['tipo_id', 'capacidad_id', 'frecuencia_id'], 'uk_rams');
         });
 
         Schema::create('producto_rams', function (Blueprint $table) {
             $table->id();
             $table->foreignId('producto_id')
-                ->constrained('productos', indexName: 'producto_rams_productos_fk')
+                ->constrained('productos', indexName: 'fk_producto_rams_productos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('ram_id')
-                ->constrained('rams', indexName: 'producto_rams_rams_fk')
+                ->constrained('rams', indexName: 'fk_producto_rams_rams')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -52,11 +52,11 @@ return new class extends Migration
         Schema::create('articulo_rams', function (Blueprint $table) {
             $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('articulos', indexName: 'articulo_rams_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_articulo_rams_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_ram_id')
-                ->constrained('producto_rams', indexName: 'articulo_rams_producto_rams_fk')
+                ->constrained('producto_rams', indexName: 'fk_articulo_rams_producto_rams')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -64,11 +64,11 @@ return new class extends Migration
         Schema::create('articulo_computadora_rams', function (Blueprint $table) {
             $table->id();
             $table->foreignId('computadora_articulo_id')
-                ->constrained('articulos', indexName: 'computadora_articulo_computadora_rams_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_articulo_computadora_rams_articulos_computadora')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('ram_articulo_id')
-                ->constrained('articulo_rams', 'articulo_id', 'ram_articulo_computadora_rams_articulos_fk')
+                ->constrained('articulo_rams', 'articulo_id', 'fk_articulo_computadora_rams_articulos_ram')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('principal');

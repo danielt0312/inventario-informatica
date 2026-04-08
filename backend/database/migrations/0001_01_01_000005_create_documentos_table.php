@@ -10,17 +10,17 @@ return new class extends Migration
     {
         Schema::create('documento_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('documentos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('documento_tipo_id')
-                ->constrained('documento_tipos', indexName: 'documentos_documento_tipos_fk')
+            $table->foreignId('tipo_id')
+                ->constrained('documento_tipos', indexName: 'fk_documentos_documento_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('archivo_id')
-                ->constrained('archivos', indexName: 'documentos_archivos_fk')
+                ->constrained('archivos', indexName: 'fk_documentos_archivos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

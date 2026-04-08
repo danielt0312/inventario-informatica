@@ -10,46 +10,46 @@ return new class extends Migration
     {
         Schema::create('disco_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('disco_capacidades', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('disco_interfaces', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('discos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('disco_tipo_id')
-                ->constrained('disco_tipos', indexName: 'discos_disco_tipos_fk')
+            $table->foreignId('tipo_id')
+                ->constrained('disco_tipos', indexName: 'fk_discos_disco_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('disco_capacidad_id')
-                ->constrained('disco_capacidades', indexName: 'discos_disco_capacidades_fk')
+            $table->foreignId('capacidad_id')
+                ->constrained('disco_capacidades', indexName: 'fk_discos_disco_capacidades')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('disco_interfaz_id')
+            $table->foreignId('interfaz_id')
                 ->nullable()
-                ->constrained('disco_interfaces', indexName: 'discos_disco_interfaces_fk')
+                ->constrained('disco_interfaces', indexName: 'fk_discos_disco_interfaces')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->unique(['disco_tipo_id', 'disco_capacidad_id', 'disco_interfaz_id'], 'discos_uk');
+            $table->unique(['tipo_id', 'capacidad_id', 'interfaz_id'], 'uk_discos');
         });
 
         Schema::create('producto_discos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('producto_id')
-                ->constrained('productos', indexName: 'producto_discos_productos_fk')
+                ->constrained('productos', indexName: 'fk_producto_discos_productos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('disco_id')
-                ->constrained('discos', indexName: 'producto_discos_discos_fk')
+                ->constrained('discos', indexName: 'fk_producto_discos_discos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -57,11 +57,11 @@ return new class extends Migration
         Schema::create('articulo_discos', function (Blueprint $table) {
             $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('articulos', indexName: 'articulo_discos_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_articulo_discos_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_disco_id')
-                ->constrained('producto_discos', indexName: 'articulo_discos_producto_discos_fk')
+                ->constrained('producto_discos', indexName: 'fk_articulo_discos_producto_discos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -69,11 +69,11 @@ return new class extends Migration
         Schema::create('articulo_computadora_discos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('computadora_articulo_id')
-                ->constrained('articulos', indexName: 'computadora_articulo_computadora_discos_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_articulo_computadora_discos_articulos_computadora')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('disco_articulo_id')
-                ->constrained('articulo_discos', 'articulo_id','disco_articulo_computadora_discos_articulos_fk')
+                ->constrained('articulo_discos', 'articulo_id', 'fk_articulo_computadora_discos_articulos_disco')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('principal');

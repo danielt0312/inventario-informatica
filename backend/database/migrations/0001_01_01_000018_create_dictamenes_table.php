@@ -10,22 +10,22 @@ return new class extends Migration
     {
         Schema::create('dictamen_estados', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('dictamenes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dictamen_estado_id')
-                ->constrained('dictamen_estados', indexName: 'dictamenes_dictamen_estados_fk')
+            $table->foreignId('estado_id')
+                ->constrained('dictamen_estados', indexName: 'fk_dictamenes_dictamen_estados')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('oficio_id')
-                ->constrained('oficios', indexName: 'dictamenes_oficios_fk')
+                ->constrained('oficios', indexName: 'fk_dictamenes_oficios')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('documento_id')
                 ->nullable()
-                ->constrained('documentos', indexName: 'adquisiciones_documentos_fk')
+                ->constrained('documentos', indexName: 'fk_dictamenes_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->date('fecha_solicitud');
@@ -37,29 +37,30 @@ return new class extends Migration
         Schema::create('dictamen_productos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('dictamen_id')
-                ->constrained('dictamenes', indexName: 'dictamen_productos_dictamen_fk')
+                ->constrained('dictamenes', indexName: 'fk_dictamen_productos_dictamenes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
-                ->constrained('users', indexName: 'dictamen_productos_user_fk')
+                ->constrained('users', indexName: 'fk_dictamen_productos_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_id')
-                ->constrained('productos', indexName: 'dictamen_productos_producto_fk')
+                ->constrained('productos', indexName: 'fk_dictamen_productos_productos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('producto_descripcion', length: 255);
+            $table->string('caracteristicas', 255)
+                ->nullable();
             $table->tinyInteger('cantidad');
         });
 
         Schema::create('dictamen_articulos', function (Blueprint $table) {
             $table->foreignId('dictamen_id')
-                ->constrained('dictamenes', indexName: 'dictamen_articulos_dictamenes_fk')
+                ->constrained('dictamenes', indexName: 'fk_dictamen_articulos_dictamenes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('articulo_id')
                 ->primary()
-                ->constrained('articulos', indexName: 'dictamen_articulos_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_dictamen_articulos_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

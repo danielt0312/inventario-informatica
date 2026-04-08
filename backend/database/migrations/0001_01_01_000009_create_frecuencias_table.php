@@ -10,14 +10,14 @@ return new class extends Migration
     {
         Schema::create('frecuencia_unidades', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 3);
+            $table->string('nombre', 3);
         });
 
         Schema::create('frecuencias', function (Blueprint $table) {
             $table->id();
-            $table->string('cantidad', length: 5);
-            $table->foreignId('frecuencia_unidad_id')
-                ->constrained('frecuencia_unidades', indexName: 'frecuencias_frecuencia_unidades_fk')
+            $table->string('cantidad', 5);
+            $table->foreignId('unidad_id')
+                ->constrained('frecuencia_unidades', indexName: 'fk_frecuencias_frecuencia_unidades')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

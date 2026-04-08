@@ -14,21 +14,21 @@ return new class extends Migration
                 ->nullable();
             $table->foreignId('frecuencia_id')
                 ->nullable()
-                ->constrained('frecuencias', indexName: 'cpus_frecuencias_fk')
+                ->constrained('frecuencias', indexName: 'fk_cpus_frecuencias')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->unique(['nucleos', 'frecuencia_id'], 'cpus_uk');
+            $table->unique(['nucleos', 'frecuencia_id'], 'uk_cpus');
         });
 
         Schema::create('producto_cpus', function (Blueprint $table) {
             $table->id();
             $table->foreignId('producto_id')
-                ->constrained('productos', indexName: 'producto_cpus_productos_fk')
+                ->constrained('productos', indexName: 'fk_producto_cpus_productos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('cpu_id')
-                ->constrained('cpus', indexName: 'producto_cpus_cpus_fk')
+                ->constrained('cpus', indexName: 'fk_producto_cpus_cpus')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -36,11 +36,11 @@ return new class extends Migration
         Schema::create('articulo_computadora_cpus', function (Blueprint $table) {
             $table->id();
             $table->foreignId('computadora_articulo_id')
-                ->constrained('articulos', indexName: 'computadora_articulo_computadora_cpu_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_articulo_computadora_cpu_articulos_computadora')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_cpu_id')
-                ->constrained('producto_cpus', indexName: 'articulo_computadora_cpu_producto_cpus_fk')
+                ->constrained('producto_cpus', indexName: 'fk_articulo_computadora_cpu_producto_cpus')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

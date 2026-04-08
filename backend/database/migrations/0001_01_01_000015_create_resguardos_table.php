@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('custodias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')
-                ->constrained('articulos', indexName: 'custodias_articulos_fk')
+                ->constrained('articulos', indexName: 'fk_custodias_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->date('fecha_asignacion');
@@ -20,7 +20,7 @@ return new class extends Migration
         Schema::create('resguardos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
-                ->constrained('users', indexName: 'resguardos_users_fk')
+                ->constrained('users', indexName: 'fk_resguardos_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->date('fecha_actualizacion');
@@ -28,7 +28,7 @@ return new class extends Migration
                 ->nullable();
             $table->foreignId('documento_id')
                 ->nullable()
-                ->constrained('documentos', indexName: 'resguardos_documentos_fk')
+                ->constrained('documentos', indexName: 'fk_resguardos_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('activo');
@@ -39,15 +39,15 @@ return new class extends Migration
         Schema::create('resguardo_custodia', function (Blueprint $table) {
             $table->id();
             $table->foreignId('resguardo_id')
-                ->constrained('resguardos', indexName: 'resguardo_custodia_resguardos_fk')
+                ->constrained('resguardos', indexName: 'fk_resguardo_custodia_resguardos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('custodia_id')
-                ->constrained('custodias', indexName: 'resguardo_custodia_custodias_fk')
+                ->constrained('custodias', indexName: 'fk_resguardo_custodia_custodias')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->unique(['resguardo_id', 'custodia_id'], 'resguardo_custodia_uk');
+            $table->unique(['resguardo_id', 'custodia_id'], 'uk_resguardo_custodia');
         });
     }
 

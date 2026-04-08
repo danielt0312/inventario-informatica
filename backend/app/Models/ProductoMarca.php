@@ -15,6 +15,6 @@ class ProductoMarca extends Model
     ];
 
     public function productos() {
-        $this->belongsTo(Producto::class);
+        return $this->belongsTo(Producto::class);
     }
 }

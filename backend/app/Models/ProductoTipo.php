@@ -11,7 +11,7 @@ class ProductoTipo extends Model
     protected $table = 'producto_tipos';
 
     protected $fillable = [
-        'producto_categoria_id',
+        'categoria_id',
         'nombre'
     ];
 

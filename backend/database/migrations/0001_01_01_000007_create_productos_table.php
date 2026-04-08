@@ -10,32 +10,32 @@ return new class extends Migration
     {
         Schema::create('producto_categorias', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('producto_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
-            $table->foreignId('producto_categoria_id')
-                ->constrained('producto_categorias', indexName: 'productos_producto_categorias_fk')
+            $table->string('nombre', 32);
+            $table->foreignId('categoria_id')
+                ->constrained('producto_categorias', indexName: 'fk_producto_tipos_producto_categorias')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
 
         Schema::create('producto_marcas', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
+            $table->string('nombre', 32);
         });
 
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
-            $table->foreignId('producto_tipo_id')
-                ->constrained('producto_tipos', indexName: 'productos_producto_tipos_fk')
+            $table->string('nombre', 32);
+            $table->foreignId('tipo_id')
+                ->constrained('producto_tipos', indexName: 'fk_productos_producto_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('producto_marca_id')
-                ->constrained('producto_marcas', indexName: 'productos_producto_marcas_fk')
+            $table->foreignId('marca_id')
+                ->constrained('producto_marcas', indexName: 'fk_productos_producto_marcas')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

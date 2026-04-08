@@ -10,16 +10,16 @@ return new class extends Migration
     {
         Schema::create('archivo_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', length: 32);
-            $table->string('extension', length: 5);
+            $table->string('nombre', 32);
+            $table->string('extension', 5);
         });
 
         Schema::create('archivos', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('nombre', length: 64);
-            $table->foreignId('archivo_tipo_id')
-                ->constrained('archivo_tipos', indexName: 'archivos_archivo_tipos_fk')
+            $table->string('nombre', 64);
+            $table->foreignId('tipo_id')
+                ->constrained('archivo_tipos', indexName: 'fk_archivos_archivo_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('activo');

@@ -27,12 +27,12 @@ class ProductoSeeder extends Seeder
         ]);
 
         Producto::insertOrIgnore([
-            ['producto_tipo_id' => 1, 'producto_marca_id' => 1, 'nombre' => 'Optiplex 3070'],
-            ['producto_tipo_id' => 1, 'producto_marca_id' => 1, 'nombre' => 'Optiplex 9020'],
-            ['producto_tipo_id' => 2, 'producto_marca_id' => 1, 'nombre' => 'Inspiron 3800'],
-            ['producto_tipo_id' => 2, 'producto_marca_id' => 1, 'nombre' => 'Inspiron 5070'],
-            ['producto_tipo_id' => 2, 'producto_marca_id' => 2, 'nombre' => 'Vivobook 14'],
-            ['producto_tipo_id' => 2, 'producto_marca_id' => 2, 'nombre' => 'Vivobook 15'],
+            ['tipo_id' => 1, 'marca_id' => 1, 'nombre' => 'Optiplex 3070'],
+            ['tipo_id' => 1, 'marca_id' => 1, 'nombre' => 'Optiplex 9020'],
+            ['tipo_id' => 2, 'marca_id' => 1, 'nombre' => 'Inspiron 3800'],
+            ['tipo_id' => 2, 'marca_id' => 1, 'nombre' => 'Inspiron 5070'],
+            ['tipo_id' => 2, 'marca_id' => 2, 'nombre' => 'Vivobook 14'],
+            ['tipo_id' => 2, 'marca_id' => 2, 'nombre' => 'Vivobook 15'],
         ]);
 
         Schema::enableForeignKeyConstraints();

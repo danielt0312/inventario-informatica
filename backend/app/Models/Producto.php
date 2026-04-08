@@ -11,16 +11,16 @@ class Producto extends Model
     protected $table = 'productos';
 
     protected $fillable = [
-        'producto_tipo_id',
-        'producto_marca_id',
+        'tipo_id',
+        'marca_id',
         'nombre'
     ];
 
     public function tipo() {
-        return $this->hasOne(ProductoTipo::class, 'id', 'producto_tipo_id');
+        return $this->hasOne(ProductoTipo::class);
     }
 
     public function marca() {
-        return $this->hasOne(ProductoMarca::class, 'id', 'producto_marca_id');
+        return $this->hasOne(ProductoMarca::class);
     }
 }
