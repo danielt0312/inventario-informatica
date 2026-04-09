@@ -23,6 +23,6 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return response(status: 205);
+        return response(status: 204);
     }
 }
