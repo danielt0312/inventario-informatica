@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use App\Models\{Producto, ProductoCategoria};
 
 class ProductoTipo extends Model
 {
+    use HasFactory;
+
     protected $table = 'producto_tipos';
 
     protected $fillable = [
@@ -15,11 +18,13 @@ class ProductoTipo extends Model
         'nombre'
     ];
 
+    public $timestamps = false;
+
     public function categoria() {
-        return $this->hasOne(ProductoCategoria::class);
+        return $this->belongsTo(ProductoCategoria::class, 'categoria_id');
     }
 
     public function productos() {
-        return $this->belongsTo(Producto::class);
+        return $this->hasMany(Producto::class, 'tipo_id');
     }
 }
