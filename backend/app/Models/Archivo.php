@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-use App\Models\ArchivoTipo;
-
 class Archivo extends Model
 {
     use SoftDeletes, HasUuids;

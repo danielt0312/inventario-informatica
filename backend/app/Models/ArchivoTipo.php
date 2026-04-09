@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Archivo;
-
 class ArchivoTipo extends Model
 {
     protected $table = 'archivo_tipos';
