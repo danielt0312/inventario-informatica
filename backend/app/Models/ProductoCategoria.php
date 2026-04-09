@@ -16,9 +16,5 @@ class ProductoCategoria extends Model
     ];
 
     public $timestamps = false;
-
-    public function tipos() {
-        return $this->hasMany(ProductoTipo::class, 'tipo_id');
-    }
 }
 

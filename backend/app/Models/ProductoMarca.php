@@ -12,12 +12,8 @@ class ProductoMarca extends Model
     protected $table = 'producto_marcas';
 
     protected $fillable = [
-        'nombre'
+        'nombre',
     ];
 
     public $timestamps = false;
-
-    public function productos() {
-        return $this->hasMany(Producto::class, 'producto_id');
-    }
 }
