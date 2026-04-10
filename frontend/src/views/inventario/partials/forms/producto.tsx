@@ -27,7 +27,7 @@ function FormProducto() {
         queryKey: ['producto_tipos', productoCategoria],
         queryFn: async () => {
             const res = await api.get<{ data: ProductoTipo[] }>(`api/producto_tipos`, { params: {
-                producto_categoria_id: productoCategoria?.id
+                categoria_id: productoCategoria?.id
             }})
             return res.data.data
         }
@@ -38,7 +38,7 @@ function FormProducto() {
         queryKey: ['producto_marcas', productoTipo],
         queryFn: async () => {
             const res = await api.get<{ data: ProductoMarca[] }>(`api/producto_marcas`, { params: {
-                producto_tipo_id: productoTipo?.id
+                tipo_id: productoTipo?.id
             }})
             return res.data.data
         }
@@ -49,8 +49,8 @@ function FormProducto() {
         queryKey: ['productos', productoMarca],
         queryFn: async () => {
             const res = await api.get<{ data: Producto[] }>(`api/productos`, { params: {
-                producto_tipo_id: productoTipo?.id,
-                producto_marca_id: productoMarca?.id
+                tipo_id: productoTipo?.id,
+                marca_id: productoMarca?.id
             }})
             return res.data.data
         }
@@ -60,7 +60,7 @@ function FormProducto() {
         <>
             <FieldGroup className="grid grid-cols-2">
                 <Field>
-                    <FieldLabel htmlFor="producto_categoria_id">Categoría de Producto</FieldLabel>
+                    <FieldLabel htmlFor="categoria_id">Categoría de Producto</FieldLabel>
                     <Combobox
                         items={producto_categorias}
                         itemToStringLabel={(item: ProductoCategoria) => item.nombre}
@@ -69,7 +69,7 @@ function FormProducto() {
                         autoHighlight
                         required
                     >
-                        <ComboboxInput id="producto_categoria_id" placeholder="Selecciona una opción" />
+                        <ComboboxInput id="categoria_id" placeholder="Selecciona una opción" />
                         <ComboboxContent>
                             <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                             <ComboboxList>
@@ -83,7 +83,7 @@ function FormProducto() {
                     </Combobox>
                 </Field>
                 <Field data-disabled={!productoCategoria}>
-                    <FieldLabel htmlFor="producto_tipo_id">Tipo de Producto</FieldLabel>
+                    <FieldLabel htmlFor="tipo_id">Tipo de Producto</FieldLabel>
                     <Combobox
                         items={producto_tipos}
                         itemToStringLabel={(item: ProductoTipo) => item.nombre}
@@ -91,7 +91,7 @@ function FormProducto() {
                         autoHighlight
                         required
                     >
-                        <ComboboxInput id="producto_tipo_id" placeholder="Selecciona una opción" disabled={!productoCategoria} />
+                        <ComboboxInput id="tipo_id" placeholder="Selecciona una opción" disabled={!productoCategoria} />
                         <ComboboxContent>
                             <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                             <ComboboxList>
@@ -108,14 +108,14 @@ function FormProducto() {
 
             <FieldGroup className="grid grid-cols-2">
                 <Field data-disabled={!productoTipo}>
-                    <FieldLabel htmlFor="producto_marca_id">Marca empresarial:</FieldLabel>
+                    <FieldLabel htmlFor="marca_id">Marca empresarial:</FieldLabel>
                     <Combobox
                         items={producto_marcas}
                         itemToStringLabel={(item: ProductoMarca) => item.nombre}
                         onValueChange={setProductoMarca}
                         autoHighlight
                     >
-                        <ComboboxInput id="producto_marca_id" placeholder="Selecciona una opción" disabled={!productoTipo} />
+                        <ComboboxInput id="marca_id" placeholder="Selecciona una opción" disabled={!productoTipo} />
                         <ComboboxContent>
                             <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                             <ComboboxList>
@@ -130,14 +130,14 @@ function FormProducto() {
                 </Field>
 
                 <Field data-disabled={!productoMarca}>
-                    <FieldLabel htmlFor="producto_modelo_id">Modelo:</FieldLabel>
+                    <FieldLabel htmlFor="producto_id">Modelo:</FieldLabel>
                     <Combobox
                         items={productos}
                         itemToStringLabel={(item: Producto) => item.nombre}
                         onValueChange={setProducto}
                         autoHighlight
                     >
-                        <ComboboxInput id="producto_modelo_id" placeholder="Selecciona una opción" disabled={!productoMarca} />
+                        <ComboboxInput id="producto_id" placeholder="Selecciona una opción" disabled={!productoMarca} />
                         <ComboboxContent>
                             <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                             <ComboboxList>

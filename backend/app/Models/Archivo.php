@@ -14,15 +14,15 @@ class Archivo extends Model
 
     protected $fillable = [
         'nombre',
-        'archivo_tipo_id'
+        'tipo_id'
     ];
 
     protected $attributes = [
-        'activo' => 1
+        'activo' => 1,
     ];
 
     public function tipo() {
-        return $this->hasOne(ArchivoTipo::class);
+        return $this->belongsTo(ArchivoTipo::class, 'tipo_id');
     }
 
     public function uniqueIds() {

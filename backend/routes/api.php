@@ -3,7 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\{ProductoController, ProductoCategoriaController, ProductoTipoController, ProductoMarcaController};
+use App\Http\Controllers\{
+    ProductoController,
+    ProductoCategoriaController,
+    ProductoTipoController,
+    ProductoMarcaController,
+    ArticuloController
+};
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', fn (Request $request) => response()->json(['data' => $request->user()]));
@@ -13,5 +19,6 @@ Route::middleware('auth:sanctum')->group(function () {
         'producto_tipos' => ProductoTipoController::class,
         'producto_marcas' => ProductoMarcaController::class,
         'productos' => ProductoController::class,
+        'articulos' => ArticuloController::class,
     ]);
 });
