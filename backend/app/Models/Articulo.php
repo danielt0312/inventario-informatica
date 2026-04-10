@@ -50,6 +50,7 @@ class Articulo extends Model
     public function casts(): array {
         return [
             'activo' => 'boolean',
+            'contable' => 'boolean',
         ];
     }
 }
