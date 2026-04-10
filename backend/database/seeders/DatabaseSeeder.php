@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             ArchivoTipoSeeder::class,
             ProductoSeeder::class,
             ArticuloEstadoSeeder::class,
+            DocumentoTipoSeeder::class,
         ]);
     }
 }

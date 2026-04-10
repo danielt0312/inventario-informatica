@@ -4,15 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use App\ArticuloEstadoEnum;
 
 class Articulo extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $table = 'articulos';
+    protected string $table = 'articulos';
 
-    protected $fillable = [
+    protected array $fillable = [
         'producto_id',
         'estado_id',
         'numero_serie',
@@ -22,25 +25,31 @@ class Articulo extends Model
         'contable',
     ];
 
-    protected $attributes = [
+    protected array $attributes = [
         'activo' => 1,
-        'estado_id' => ArticuloEstado::ACTIVO_ID,
+        'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
         'qr_archivo_id' => null,
     ];
 
-    public function producto() {
+    public function producto(): BelongsTo {
         return $this->belongsTo(Producto::class, 'producto_id');
     }
 
-    public function estado() {
+    public function estado(): BelongsTo {
         return $this->belongsTo(ArticuloEstado::class, 'estado_id');
     }
 
-    public function factura() {
-        return $this->belongsTo(Factura::class, 'articulo');
+    public function factura(): BelongsTo {
+        return $this->belongsTo(Factura::class, 'factura_id');
     }
 
-    public function qr() {
+    public function qr(): BelongsTo {
         return $this->belongsTo(Archivo::class, 'qr_archivo_id');
+    }
+
+    public function casts(): array {
+        return [
+            'activo' => 'boolean',
+        ];
     }
 }

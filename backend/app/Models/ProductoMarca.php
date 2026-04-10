@@ -9,11 +9,11 @@ class ProductoMarca extends Model
 {
     use HasFactory;
 
-    protected $table = 'producto_marcas';
+    protected string $table = 'producto_marcas';
 
-    protected $fillable = [
+    protected array $fillable = [
         'nombre',
     ];
 
-    public $timestamps = false;
+    public bool $timestamps = false;
 }

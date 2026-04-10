@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ArticuloEstado extends Model
+class DocumentoTipo extends Model
 {
-    protected string $table = 'articulo_estados';
+    protected string $table = 'documento_tipos';
 
     public bool $timestamps = false;
 }
