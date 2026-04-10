@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ArticuloEstado extends Model
 {
-    protected string $table = 'articulo_estados';
+    protected $table = 'articulo_estados';
 
-    public bool $timestamps = false;
+    public $timestamps = false;
 }

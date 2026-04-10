@@ -10,15 +10,15 @@ class Producto extends Model
 {
     use HasFactory;
 
-    protected string $table = 'productos';
+    protected $table = 'productos';
 
-    protected array $fillable = [
+    protected $fillable = [
         'tipo_id',
         'marca_id',
         'nombre'
     ];
 
-    public bool $timestamps = false;
+    public $timestamps = false;
 
     public function tipo(): BelongsTo {
         return $this->belongsTo(ProductoTipo::class, 'tipo_id');

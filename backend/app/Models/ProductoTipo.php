@@ -10,14 +10,14 @@ class ProductoTipo extends Model
 {
     use HasFactory;
 
-    protected string $table = 'producto_tipos';
+    protected $table = 'producto_tipos';
 
-    protected array $fillable = [
+    protected $fillable = [
         'categoria_id',
         'nombre'
     ];
 
-    public bool $timestamps = false;
+    public $timestamps = false;
 
     public function categoria(): BelongsTo {
         return $this->belongsTo(ProductoCategoria::class, 'categoria_id');

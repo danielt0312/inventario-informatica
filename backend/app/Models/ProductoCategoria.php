@@ -9,12 +9,12 @@ class ProductoCategoria extends Model
 {
     use HasFactory;
 
-    protected string $table = 'producto_categorias';
+    protected $table = 'producto_categorias';
 
-    protected array $fillable = [
+    protected $fillable = [
         'nombre',
     ];
 
-    public bool $timestamps = false;
+    public $timestamps = false;
 }
 

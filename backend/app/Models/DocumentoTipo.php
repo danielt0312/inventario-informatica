@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DocumentoTipo extends Model
 {
-    protected string $table = 'documento_tipos';
+    protected $table = 'documento_tipos';
 
-    public bool $timestamps = false;
+    public $timestamps = false;
 }

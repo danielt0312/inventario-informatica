@@ -12,14 +12,14 @@ class Archivo extends Model
 {
     use SoftDeletes, HasUuids, HasFactory;
 
-    protected string $table = 'archivos';
+    protected $table = 'archivos';
 
-    protected array $fillable = [
+    protected $fillable = [
         'nombre',
         'tipo_id'
     ];
 
-    protected array $attributes = [
+    protected $attributes = [
         'activo' => 1,
     ];
 
