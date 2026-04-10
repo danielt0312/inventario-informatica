@@ -13,7 +13,6 @@ class ProductoController extends Controller
     public function index(ProductoRequest $request)
     {
         $data = Producto::where($request->validated())
-            ->with(['tipo', 'marca'])
             ->get();
 
         return response()->json(compact('data'));

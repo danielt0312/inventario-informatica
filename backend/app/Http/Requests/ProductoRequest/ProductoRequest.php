@@ -9,8 +9,8 @@ class ProductoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'producto_tipo_id' => ['sometimes', 'integer', 'exists:producto_tipos,id'],
-            'producto_marca_id' => ['sometimes', 'integer', 'exists:producto_marcas,id'],
+            'tipo_id' => ['sometimes', 'integer', 'exists:producto_tipos,id'],
+            'marca_id' => ['sometimes', 'integer', 'exists:producto_marcas,id'],
         ];
     }
 }

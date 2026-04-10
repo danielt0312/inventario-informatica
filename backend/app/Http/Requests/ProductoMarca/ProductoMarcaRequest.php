@@ -9,7 +9,7 @@ class ProductoMarcaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'producto_tipo_id' => ['sometimes', 'integer', 'exists:producto_tipos,id']
+            'tipo_id' => ['sometimes', 'integer', 'exists:producto_tipos,id']
         ];
     }
 }

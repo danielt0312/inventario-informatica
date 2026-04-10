@@ -19,7 +19,7 @@ type ProductoCategoria = {
 type ProductoTipo = {
     id: number
     nombre: string
-    producto_categoria_id: number
+    categoria_id: number
 }
 
 type ProductoMarca = {
@@ -29,8 +29,8 @@ type ProductoMarca = {
 
 type Producto = {
     id: number
-    producto_tipo_id: number
-    producto_marca_id: number
+    tipo_id: number
+    marca_id: number
     nombre: string
 }
 

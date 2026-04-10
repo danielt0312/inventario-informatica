@@ -12,11 +12,16 @@ class ProductoMarcaController extends Controller
 {
     public function index(ProductoMarcaRequest $request)
     {
-        $data = ProductoMarca::query()
-            ->join('productos', 'producto_marcas.id', '=', 'productos.producto_marca_id')
+        $query = ProductoMarca::query()
+            ->join('productos', 'producto_marcas.id', '=', 'productos.marca_id')
             ->select('producto_marcas.*')
-            ->distinct()
-            ->get();
+            ->distinct();
+
+        if ($request->validated()) {
+            $query->where($request->validated());
+        }
+
+        $data = $query->get();
 
         return response()->json(compact('data'));
     }

@@ -21,8 +21,4 @@ class ProductoTipo extends Model
     public function categoria() {
         return $this->belongsTo(ProductoCategoria::class, 'categoria_id');
     }
-
-    public function productos() {
-        return $this->hasMany(Producto::class, 'tipo_id');
-    }
 }
