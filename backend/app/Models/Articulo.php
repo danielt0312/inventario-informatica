@@ -13,9 +13,9 @@ class Articulo extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected string $table = 'articulos';
+    protected $table = 'articulos';
 
-    protected array $fillable = [
+    protected $fillable = [
         'producto_id',
         'estado_id',
         'numero_serie',
@@ -25,7 +25,7 @@ class Articulo extends Model
         'contable',
     ];
 
-    protected array $attributes = [
+    protected $attributes = [
         'activo' => 1,
         'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
         'qr_archivo_id' => null,

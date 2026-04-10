@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\ArticuloEstado;
-use App\Models\ArticuloEstadoEnum;
+use App\ArticuloEstadoEnum;
 
 class ArticuloEstadoSeeder extends Seeder
 {
@@ -15,7 +15,7 @@ class ArticuloEstadoSeeder extends Seeder
         foreach (ArticuloEstadoEnum::cases() as $estado) {
             ArticuloEstado::insertOrIgnore([
                 'id' => $estado->value,
-                'nombre' => $estado->nombre()
+                'nombre' => $estado->nombre(),
             ]);
         }
     }
