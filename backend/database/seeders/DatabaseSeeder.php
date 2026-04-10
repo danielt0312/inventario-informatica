@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ArchivoTipoSeeder::class,
             ProductoSeeder::class,
+            ArticuloEstadoSeeder::class,
         ]);
     }
 }
