@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { FaPaperclip, FaSave } from "react-icons/fa"
 import { useForm, useStore } from "@tanstack/react-form"
 
-
 import type { Producto, ProductoCategoria, ProductoTipo, ProductoMarca } from "@/lib/types"
 import api from "@/lib/axios"
 import { useQuery } from "@tanstack/react-query"
@@ -27,6 +26,14 @@ function InventarioCreate() {
             factura_id: '',
             qr_archivo_id: '',
             contable: false,
+        },
+        onSubmit: async ({ value }) => {
+            try {
+                await api.post('api/articulos', value);
+            } catch (e) {
+                console.log(e);
+
+            }
         }
     })
 
@@ -83,7 +90,10 @@ function InventarioCreate() {
         <>
             <Goback />
 
-            <form>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
+            }}>
                 <Card>
                     <CardHeader>
                         <CardTitle>Registro de Artículo existente</CardTitle>
@@ -101,7 +111,6 @@ function InventarioCreate() {
                                                 itemToStringLabel={(item: ProductoCategoria) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id.toString() ?? '')}
                                                 autoHighlight
-                                                required
                                             >
                                                 <ComboboxInput placeholder="Selecciona una opción" />
                                                 <ComboboxContent>
@@ -128,7 +137,6 @@ function InventarioCreate() {
                                                 itemToStringLabel={(item: ProductoTipo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id.toString() ?? '')}
                                                 autoHighlight
-                                                required
                                             >
                                                 <ComboboxInput id="tipo_id" placeholder="Selecciona una opción" disabled={!productoCategoria} />
                                                 <ComboboxContent>
@@ -207,34 +215,48 @@ function InventarioCreate() {
                                 />
                             </FieldGroup>
 
-                            <Field>
-                                <FieldLabel htmlFor="numero_serie">Número de Serie</FieldLabel>
-                                <Input id="numero_serie" placeholder="Ingresa un valor" />
-                            </Field>
+                            <form.Field
+                                name="numero_serie"
+                                children={(field) => (
+                                    <Field>
+                                        <FieldLabel>Número de Serie</FieldLabel>
+                                        <Input
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            placeholder="Ingresa un valor"
+                                        />
+                                    </Field>
+                                )}
+                            />
 
                             <FieldGroup className="grid grid-cols-2">
-                                {/* <form.Field
+                                <form.Field
                                     name="costo_unitario"
-                                    children={(field) => ( */}
+                                    children={(field) => (
                                         <Field>
                                             <FieldLabel>Costo Unitario</FieldLabel>
                                             <Input
-                                            // name={field.name}
-                                            // value={field.state.value}
-                                            // onChange={(e) => {
-                                            //     const val = e.target.value;
-                                            //     // Convert to number, or use 0/undefined if the input is empty
-                                            //     field.handleChange(val === '' ? 0 : Number(val));
-                                            // }}
-                                            placeholder="Ingrese un valor"
+                                                name={field.name}
+                                                value={field.state.value}
+                                                onChange={(e) => field.handleChange(e.target.value)}
+                                                placeholder="Ingrese un valor"
                                             />
                                         </Field>
-                                    {/* )}
-                                /> */}
-                                <Field orientation='horizontal'>
-                                    <Checkbox id="contable" name="contable" />
-                                    <FieldLabel htmlFor="contable">Es contable</FieldLabel>
-                                </Field>
+                                    )}
+                                />
+                                <form.Field
+                                    name="contable"
+                                    children={(field) => (
+                                        <Field orientation='horizontal'>
+                                            <Checkbox
+                                                name={field.name}
+                                                onCheckedChange={(checked) => field.handleChange(!!checked)}
+                                            />
+                                            <FieldLabel>Es contable</FieldLabel>
+                                        </Field>
+                                    )}
+                                />
                             </FieldGroup>
 
                             <FieldGroup className="grid grid-cols-4">
