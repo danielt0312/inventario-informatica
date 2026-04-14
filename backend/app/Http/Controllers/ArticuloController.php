@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Articulo;
-use App\Http\Requests\Articulo\StoreArticuloRequest;
+use App\Http\Requests\Articulo\{ArticuloRequest, StoreArticuloRequest};
 use Illuminate\Http\Request;
 
 class ArticuloController extends Controller
 {
-    public function index()
+    public function index(ArticuloRequest $request)
     {
-        //
+        $data = Articulo::where($request->validated())
+            ->with(['estado', 'producto'])
+            ->get();
+
+        return response()->json(compact('data'));
     }
 
     public function store(StoreArticuloRequest $request)

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\ArticuloEstadoEnum;
 
 class Articulo extends Model
@@ -31,6 +31,10 @@ class Articulo extends Model
         'qr_archivo_id' => null,
     ];
 
+    protected $appends = [
+        'numero_inventario',
+    ];
+
     public function producto(): BelongsTo {
         return $this->belongsTo(Producto::class, 'producto_id');
     }
@@ -45,6 +49,12 @@ class Articulo extends Model
 
     public function qr(): BelongsTo {
         return $this->belongsTo(Archivo::class, 'qr_archivo_id');
+    }
+
+    public function numeroInventario(): Attribute {
+        return Attribute::make(
+            get: fn () => '500-01-'.str_pad($this->id, 4, 0, STR_PAD_LEFT),
+        );
     }
 
     public function casts(): array {

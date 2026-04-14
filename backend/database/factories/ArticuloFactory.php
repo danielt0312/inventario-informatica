@@ -12,6 +12,7 @@ class ArticuloFactory extends Factory
     {
         return [
             'producto_id' => Producto::factory(),
+            'contable' => 0,
         ];
     }
 
