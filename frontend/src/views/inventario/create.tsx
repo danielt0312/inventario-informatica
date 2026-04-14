@@ -1,7 +1,7 @@
 import Goback from "@/components/Goback"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "@/components/ui/combobox"
-import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field"
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
@@ -11,9 +11,14 @@ import { useForm, useStore } from "@tanstack/react-form"
 import type { Producto, ProductoCategoria, ProductoTipo, ProductoMarca } from "@/lib/types"
 import api from "@/lib/axios"
 import { useQuery } from "@tanstack/react-query"
-
+import { useNavigate } from "@tanstack/react-router"
+import { Route } from "@/routes/_auth/inventario"
+import { isAxiosError } from "axios"
+import { handleLaravel422 } from "@/lib/utils"
 
 function InventarioCreate() {
+    const navigate = useNavigate();
+
     const form = useForm({
         defaultValues: {
             producto_categoria_id: '',
@@ -27,12 +32,16 @@ function InventarioCreate() {
             qr_archivo_id: '',
             contable: false,
         },
-        onSubmit: async ({ value }) => {
+        onSubmit: async ({ value, formApi }) => {
             try {
                 await api.post('api/articulos', value);
-            } catch (e) {
-                console.log(e);
 
+                navigate({ to: Route.to });
+            } catch (error) {
+                if (isAxiosError(error) && error.response?.status === 422) {
+                    const serverErrors = error.response.data.errors;
+                    handleLaravel422(formApi, serverErrors);
+                }
             }
         }
     })
@@ -210,6 +219,7 @@ function InventarioCreate() {
                                                     </ComboboxList>
                                                 </ComboboxContent>
                                             </Combobox>
+                                            <FieldError errors={field.state.meta.errors} />
                                         </Field>
                                     )}
                                 />
@@ -251,6 +261,7 @@ function InventarioCreate() {
                                         <Field orientation='horizontal'>
                                             <Checkbox
                                                 name={field.name}
+                                                defaultChecked={field.state.value}
                                                 onCheckedChange={(checked) => field.handleChange(!!checked)}
                                             />
                                             <FieldLabel>Es contable</FieldLabel>
