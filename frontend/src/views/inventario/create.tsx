@@ -15,22 +15,74 @@ import { useNavigate } from "@tanstack/react-router"
 import { Route } from "@/routes/_auth/inventario"
 import { isAxiosError } from "axios"
 import { handleLaravel422 } from "@/lib/utils"
+import z from "zod"
+
+type FormSchema = {
+    producto_categoria_id: number | null,
+    producto_tipo_id: number | null,
+    producto_marca_id: number | null,
+    producto_id: number | null,
+    numero_serie: string | null,
+    costo_unitario: string | number | null,
+    factura_id: number | null,
+    qr_archivo_id: number | null,
+    contable: boolean,
+}
+
+const defaultValues: FormSchema = {
+    producto_categoria_id: null,
+    producto_tipo_id: null,
+    producto_marca_id: null,
+    producto_id: null,
+    numero_serie: null,
+    costo_unitario: null,
+    factura_id: null,
+    qr_archivo_id: null,
+    contable: false,
+}
+
+const formValidator = z.object({
+    producto_categoria_id: z
+        .number('Este campo es requerido')
+        .int(),
+    producto_tipo_id: z
+        .number('Este campo es requerido')
+        .int(),
+    producto_marca_id: z
+        .number('Este campo es requerido')
+        .int(),
+    producto_id: z
+        .number('Este campo es requerido')
+        .int(),
+    numero_serie: z
+        .string()
+        .nullable(),
+    costo_unitario: z
+        .union([z.string(), z.number(), z.null()])
+        .transform((val) => (val === '' || val === null ? null : Number(val)))
+        .pipe(
+            z.number("Este campo debe ser un número")
+             .min(0, "El costo no puede ser negativo")
+             .nullable()
+        ),
+    factura_id: z
+        .number()
+        .int()
+        .nullable(),
+    qr_archivo_id: z
+        .number()
+        .int()
+        .nullable(),
+    contable: z.boolean(),
+})
 
 function InventarioCreate() {
     const navigate = useNavigate();
 
     const form = useForm({
-        defaultValues: {
-            producto_categoria_id: '',
-            producto_tipo_id: '',
-            producto_marca_id: '',
-
-            producto_id: '',
-            numero_serie: '',
-            costo_unitario: '',
-            factura_id: '',
-            qr_archivo_id: '',
-            contable: false,
+        defaultValues,
+        validators: {
+            onSubmit: formValidator,
         },
         onSubmit: async ({ value, formApi }) => {
             try {
@@ -45,7 +97,7 @@ function InventarioCreate() {
             }
         }
     })
-
+ 
     const productoCategoria = useStore(form.store, (state) => state.values.producto_categoria_id)
     const productoTipo = useStore(form.store, (state) => state.values.producto_tipo_id)
     const productoMarca = useStore(form.store, (state) => state.values.producto_marca_id)
@@ -118,7 +170,7 @@ function InventarioCreate() {
                                             <Combobox
                                                 items={producto_categorias}
                                                 itemToStringLabel={(item: ProductoCategoria) => item.nombre}
-                                                onValueChange={(v) => field.handleChange(v?.id.toString() ?? '')}
+                                                onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
                                                 <ComboboxInput placeholder="Selecciona una opción" />
@@ -133,6 +185,7 @@ function InventarioCreate() {
                                                     </ComboboxList>
                                                 </ComboboxContent>
                                             </Combobox>
+                                            <FieldError errors={field.state.meta.errors} />
                                         </Field>
                                     )}
                                 />
@@ -144,7 +197,7 @@ function InventarioCreate() {
                                             <Combobox
                                                 items={producto_tipos}
                                                 itemToStringLabel={(item: ProductoTipo) => item.nombre}
-                                                onValueChange={(v) => field.handleChange(v?.id.toString() ?? '')}
+                                                onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
                                                 <ComboboxInput id="tipo_id" placeholder="Selecciona una opción" disabled={!productoCategoria} />
@@ -159,6 +212,7 @@ function InventarioCreate() {
                                                     </ComboboxList>
                                                 </ComboboxContent>
                                             </Combobox>
+                                            <FieldError errors={field.state.meta.errors} />
                                         </Field>
                                     )}
                                 />
@@ -173,7 +227,7 @@ function InventarioCreate() {
                                             <Combobox
                                                 items={producto_marcas}
                                                 itemToStringLabel={(item: ProductoMarca) => item.nombre}
-                                                onValueChange={(v) => field.handleChange(v?.id.toString() ?? '')}
+                                                onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
                                                 <ComboboxInput placeholder="Selecciona una opción" disabled={!productoTipo} />
@@ -188,6 +242,7 @@ function InventarioCreate() {
                                                     </ComboboxList>
                                                 </ComboboxContent>
                                             </Combobox>
+                                            <FieldError errors={field.state.meta.errors} />
                                         </Field>
                                     )}
                                 />
@@ -200,7 +255,7 @@ function InventarioCreate() {
                                             <Combobox
                                                 items={productos}
                                                 itemToStringLabel={(item: Producto) => item.nombre}
-                                                onValueChange={(v) => field.handleChange(v?.id.toString() ?? '')}
+                                                onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
                                                 <ComboboxInput
@@ -232,10 +287,11 @@ function InventarioCreate() {
                                         <FieldLabel>Número de Serie</FieldLabel>
                                         <Input
                                             name={field.name}
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            value={field.state.value ?? ''}
+                                            onChange={(e) => field.handleChange(e.target.value === '' ? null : e.target.value)}
                                             placeholder="Ingresa un valor"
                                         />
+                                        <FieldError errors={field.state.meta.errors} />
                                     </Field>
                                 )}
                             />
@@ -247,11 +303,13 @@ function InventarioCreate() {
                                         <Field>
                                             <FieldLabel>Costo Unitario</FieldLabel>
                                             <Input
+                                                type="text"
                                                 name={field.name}
-                                                value={field.state.value}
-                                                onChange={(e) => field.handleChange(e.target.value)}
-                                                placeholder="Ingrese un valor"
+                                                value={field.state.value ?? ''}
+                                                onChange={(e) => field.handleChange(e.target.value === '' ? null : e.target.value)}
+                                                placeholder="Ingresa un valor"
                                             />
+                                            <FieldError errors={field.state.meta.errors} />
                                         </Field>
                                     )}
                                 />
@@ -265,6 +323,7 @@ function InventarioCreate() {
                                                 onCheckedChange={(checked) => field.handleChange(!!checked)}
                                             />
                                             <FieldLabel>Es contable</FieldLabel>
+                                            <FieldError errors={field.state.meta.errors} />
                                         </Field>
                                     )}
                                 />
