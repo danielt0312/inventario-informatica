@@ -30,7 +30,7 @@ test('obtencion de articulos (`inventario`)', function () {
     $response->assertStatus(200)
         ->assertJsonStructure([
             'data' => ['*' => [
-                '   '
+                'numero_inventario'
             ]]
         ]);
 });
