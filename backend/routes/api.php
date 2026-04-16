@@ -9,7 +9,8 @@ use App\Http\Controllers\{
     ProductoTipoController,
     ProductoMarcaController,
     ArticuloController,
-    DocumentoController
+    DocumentoController,
+    DocumentoTipoController
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -23,4 +24,6 @@ Route::middleware('auth:sanctum')->group(function () {
         'articulos' => ArticuloController::class,
         'documentos' => DocumentoController::class
     ]);
+
+    Route::get('documento_tipos', [DocumentoController::class, 'index']);
 });

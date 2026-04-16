@@ -34,6 +34,11 @@ type Producto = {
     nombre: string
 }
 
+export type TCatalogo = {
+    id: number
+    nombre: string
+}
+
 export type {
     User,
     AuthRouteContext,
