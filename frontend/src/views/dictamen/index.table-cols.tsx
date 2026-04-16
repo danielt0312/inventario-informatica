@@ -3,7 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { FaEllipsisV } from "react-icons/fa";
+import { EllipsisVertical } from "lucide-react";
 
 type Dictamen = {
     id: number
@@ -39,7 +39,7 @@ const columns: ColumnDef<Dictamen>[] = [
                     <DropdownMenuTrigger asChild>
                         <Button variant={"outline"}>
                             <span className="sr-only">Open menu</span>
-                            <FaEllipsisV />
+                            <EllipsisVertical />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>

@@ -10,7 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import type { ColumnDef } from "@tanstack/react-table"
 import { useQuery } from "@tanstack/react-query"
 import api from "@/lib/axios"
-import { ChevronDown, EllipsisVerticalIcon, Eye, PlusCircle } from "lucide-react"
+import { ChevronDown, EllipsisVertical, Eye, PlusCircle } from "lucide-react"
 import { Label } from "@/components/ui/label"
 
 type Inventario = {
@@ -50,7 +50,7 @@ const columns: ColumnDef<Inventario>[] = [
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant={"outline"}>
-                            <EllipsisVerticalIcon />
+                            <EllipsisVertical />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>

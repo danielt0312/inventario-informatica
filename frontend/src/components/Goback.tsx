@@ -1,7 +1,7 @@
-import { FaArrowCircleLeft } from "react-icons/fa";
 import { Button } from "./ui/button";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { ArrowLeftCircle } from "lucide-react";
 
 // ! This is experimental
 function Goback({ children, className, ...props }: React.ComponentProps<"div">) {
@@ -18,7 +18,7 @@ function Goback({ children, className, ...props }: React.ComponentProps<"div">) 
             {...props}
         >
             <Button variant={"outline"} onClick={navigateToLocation}>
-                <FaArrowCircleLeft /> Regresar
+                <ArrowLeftCircle /> Regresar
             </Button>
 
             {children}

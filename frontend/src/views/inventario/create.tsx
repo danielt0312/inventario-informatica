@@ -5,7 +5,6 @@ import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/component
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-import { FaPaperclip, FaSave } from "react-icons/fa"
 import { useForm, useStore } from "@tanstack/react-form"
 
 import type { Producto, ProductoCategoria, ProductoTipo, ProductoMarca } from "@/lib/types"
@@ -17,6 +16,7 @@ import { isAxiosError } from "axios"
 import { handleLaravel422 } from "@/lib/utils"
 
 import { defaultValues, formValidator } from "./create.schema"
+import { Paperclip, Save } from "lucide-react"
 
 function InventarioCreate() {
     const navigate = useNavigate();
@@ -273,7 +273,7 @@ function InventarioCreate() {
 
                             <FieldGroup className="grid grid-cols-4">
                                 <Button type="button">
-                                    <FaPaperclip /> Adjuntar Factura
+                                    <Paperclip /> Adjuntar Factura
                                 </Button>
                                 <FieldGroup>
                                 </FieldGroup>
@@ -283,7 +283,7 @@ function InventarioCreate() {
 
                     <CardFooter className="justify-center">
                         <Button type="submit">
-                            <FaSave /> Guardar
+                            <Save /> Guardar
                         </Button>
                     </CardFooter>
                 </Card>

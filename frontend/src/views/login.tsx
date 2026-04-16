@@ -5,8 +5,6 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 
-import { FaDoorOpen } from "react-icons/fa"
-
 import api from "@/lib/axios"
 import { useNavigate } from "@tanstack/react-router"
 import { Route as RouteInventario } from "@/routes/_auth/inventario"
@@ -58,7 +56,7 @@ function Login() {
                         <Field>
                             <div className="flex justify-center items-center">
                                 <Button className="flex-1">
-                                    <FaDoorOpen /> Ingresar
+                                     Ingresar
                                 </Button>
                             </div>
                         </Field>

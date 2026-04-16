@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import type { ColumnDef } from "@tanstack/react-table"
-import { FaEllipsisV } from "react-icons/fa"
+import { EllipsisVertical } from "lucide-react"
 
 type Inventario = {
     id: number
@@ -42,7 +42,7 @@ const columns: ColumnDef<Inventario>[] = [
                     <DropdownMenuTrigger asChild>
                         <Button variant={"outline"}>
                             <span className="sr-only">Open</span>
-                            <FaEllipsisV />
+                            <EllipsisVertical />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
