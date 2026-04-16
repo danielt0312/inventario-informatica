@@ -32,4 +32,8 @@ class Archivo extends Model
             'activo' => 'boolean',
         ];
     }
+
+    public function uniqueIds(): array {
+        return ['uuid'];
+    }
 }

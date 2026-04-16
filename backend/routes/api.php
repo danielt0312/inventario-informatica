@@ -8,7 +8,8 @@ use App\Http\Controllers\{
     ProductoCategoriaController,
     ProductoTipoController,
     ProductoMarcaController,
-    ArticuloController
+    ArticuloController,
+    DocumentoController
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -20,5 +21,6 @@ Route::middleware('auth:sanctum')->group(function () {
         'producto_marcas' => ProductoMarcaController::class,
         'productos' => ProductoController::class,
         'articulos' => ArticuloController::class,
+        'documentos' => DocumentoController::class
     ]);
 });

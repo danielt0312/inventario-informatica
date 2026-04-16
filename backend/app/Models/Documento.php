@@ -20,7 +20,7 @@ class Documento extends Model
     public $timestamps = false;
 
     public function tipo(): BelongsTo {
-        return $this->belongsTo(ArchivoTipo::class, 'tipo_id');
+        return $this->belongsTo(DocumentoTipo::class, 'tipo_id');
     }
 
     public function archivo(): BelongsTo {
