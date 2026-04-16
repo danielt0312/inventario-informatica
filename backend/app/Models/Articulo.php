@@ -53,7 +53,7 @@ class Articulo extends Model
 
     public function numeroInventario(): Attribute {
         return Attribute::make(
-            get: fn () => '500-01-'.str_pad($this->id, 4, 0, STR_PAD_LEFT),
+            fn () => '500-01-'.str_pad($this->id, 4, 0, STR_PAD_LEFT)
         );
     }
 
