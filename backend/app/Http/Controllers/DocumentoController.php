@@ -2,24 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Documento;
+use App\Models\{Documento, Archivo};
 use Illuminate\Http\Request;
-use App\Http\Requests\Documento\DocumentoRequest;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Documento\StoreDocumentoRequest;
+use App\ArchivoTipoEnum;
 
 class DocumentoController extends Controller
 {
-    public function index(DocumentoRequest $request)
+    public function index()
     {
-        $data = Documento::where($request->validated())
-            ->with(['tipo', 'archivo'])
+        $data = Documento::with(['tipo', 'archivo'])
             ->get();
 
         return response()->json(compact('data'));
     }
 
-    public function store(Request $request)
+    public function store(StoreDocumentoRequest $request)
     {
-        //
+        DB::transaction(function ($request) {
+            $file = $request->archivo;
+            $filename = $file->getClientOriginalName();
+
+            $archivo = Archivo::create([
+                'nombre' => $filename,
+                'tipo_id' => ArchivoTipoEnum::PDF->value
+            ]);
+
+            $file->storeAs('');
+
+            $documento = new Documento([
+                'tipo_id' => $request->input('tipo_id'),
+            ]);
+
+            $documento->archivo()->associate($archivo);
+            $documento->save();
+        });
     }
 
     public function show(Documento $documento)

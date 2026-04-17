@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Archivo extends Model
 {
@@ -32,6 +33,12 @@ class Archivo extends Model
             'activo' => 'boolean',
         ];
     }
+
+    // protected function folder(): Attribute {
+    //     return Attribute::make(
+    //         fn () => substr($this->uuid, 1).'/'.substr($this->uuid, 1)
+    //     );
+    // }
 
     public function uniqueIds(): array {
         return ['uuid'];

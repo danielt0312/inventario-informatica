@@ -8,7 +8,7 @@ beforeEach(function () {
     $this->user = User::factory()->create();
 });
 
-test('obtencion de datos', function () {
+test('obtencion de datos y concordar total de registros con `DocumentoTipoEnum::cases()`', function () {
     $reponse = $this->actingAs($this->user, 'sanctum')
         ->getJson('api/documento_tipos');
 
@@ -19,5 +19,5 @@ test('obtencion de datos', function () {
                 'nombre'
             ]]
         ])
-        ->assertJsonCount(1, 'data');
+        ->assertJsonCount(count(DocumentoTipoEnum::cases()), 'data');
 });

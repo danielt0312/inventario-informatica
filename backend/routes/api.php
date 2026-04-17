@@ -25,5 +25,5 @@ Route::middleware('auth:sanctum')->group(function () {
         'documentos' => DocumentoController::class
     ]);
 
-    Route::get('documento_tipos', [DocumentoController::class, 'index']);
+    Route::get('documento_tipos', [DocumentoTipoController::class, 'index']);
 });
