@@ -7,10 +7,12 @@ import { FileUpload, FileUploadDropzone, FileUploadItem, FileUploadItemDelete, F
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import api from "@/lib/axios"
 import type { TCatalogo } from "@/lib/types"
+import { Route } from "@/routes/_auth/documentos/index"
 import { useForm } from "@tanstack/react-form"
 import { useQuery } from "@tanstack/react-query"
 import type { ColumnDef } from "@tanstack/react-table"
 import { PlusCircle, Save, Upload, X } from "lucide-react"
+import { useState } from "react"
 import z from "zod"
 
 type Documento = {
@@ -21,8 +23,8 @@ type Documento = {
 
 const columns: ColumnDef<Documento>[] = [
     {
-        accessorKey: 'tipo',
-        header: 'Tipo'
+        accessorKey: 'tipo.nombre',
+        header: 'Tipo de Documento'
     },
     {
         accessorKey: 'archivo.nombre',
@@ -51,6 +53,8 @@ const formSchema = z.object({
 });
 
 function Documentos() {
+    const { queryClient } = Route.useRouteContext();
+
     const form = useForm({
         defaultValues,
         validators: {
@@ -69,6 +73,14 @@ function Documentos() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+
+            if (response.status === 201) {
+                queryClient.invalidateQueries({
+                    queryKey: ['documentos']
+                });
+
+                setOpen(false);
+            }
         }
     });
 
@@ -84,13 +96,19 @@ function Documentos() {
             .then((response) => response.data.data)
     });
 
+    const [open, setOpen] = useState(false);
+
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Documentos almancenados</CardTitle>
-                <Dialog onOpenChange={(isOpen) => {
-                    if (!isOpen) form.reset();
-                }}>
+                <Dialog
+                    open={open}
+                    onOpenChange={(isOpen) => {
+                        setOpen(isOpen);
+                        if (!isOpen) form.reset();
+                    }}
+                >
                     <DialogTrigger asChild>
                         <Button variant={'outline'}>
                             <PlusCircle/> Registrar

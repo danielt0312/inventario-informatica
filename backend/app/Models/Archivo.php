@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
+use App\Support\FilePathGenerator;
+
 class Archivo extends Model
 {
     use SoftDeletes, HasUuids, HasFactory;
@@ -28,17 +30,25 @@ class Archivo extends Model
         return $this->belongsTo(ArchivoTipo::class, 'tipo_id');
     }
 
+    public function fileName(): Attribute {
+        return Attribute::make(
+            fn (mixed $value, array $attributes)
+                => sprintf('%s.%s', $this->uuid, $this->tipo->extension)
+        );
+    }
+
+    public function relativePath(): Attribute {
+        return Attribute::make(
+            fn ()
+                => FilePathGenerator::forUuid($this->uuid, $this->tipo->extension)
+        );
+    }
+
     public function casts(): array {
         return [
             'activo' => 'boolean',
         ];
     }
-
-    // protected function folder(): Attribute {
-    //     return Attribute::make(
-    //         fn () => substr($this->uuid, 1).'/'.substr($this->uuid, 1)
-    //     );
-    // }
 
     public function uniqueIds(): array {
         return ['uuid'];

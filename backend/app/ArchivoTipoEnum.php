@@ -16,8 +16,8 @@ enum ArchivoTipoEnum: int
 
     public function extension(): string {
         return match($this) {
-            self::PDF => '.pdf',
-            self::JPG => '.jpg'
+            self::PDF => 'pdf',
+            self::JPG => 'jpg'
         };
     }
 }

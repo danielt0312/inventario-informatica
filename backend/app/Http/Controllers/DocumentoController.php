@@ -20,16 +20,20 @@ class DocumentoController extends Controller
 
     public function store(StoreDocumentoRequest $request)
     {
-        DB::transaction(function ($request) {
-            $file = $request->archivo;
-            $filename = $file->getClientOriginalName();
+        DB::transaction(function () use ($request) {
+            $file = $request->file('archivo');
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
             $archivo = Archivo::create([
                 'nombre' => $filename,
                 'tipo_id' => ArchivoTipoEnum::PDF->value
             ]);
 
-            $file->storeAs('');
+            $fullPath = $archivo->relative_path;
+            $directory = dirname($fullPath);
+            $finalName = basename($fullPath);
+
+            $file->storeAs($directory, $finalName);
 
             $documento = new Documento([
                 'tipo_id' => $request->input('tipo_id'),
@@ -38,6 +42,8 @@ class DocumentoController extends Controller
             $documento->archivo()->associate($archivo);
             $documento->save();
         });
+
+        return response(status: 201);
     }
 
     public function show(Documento $documento)
