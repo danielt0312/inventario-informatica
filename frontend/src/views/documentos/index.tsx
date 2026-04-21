@@ -75,10 +75,8 @@ function Documentos() {
             });
 
             if (response.status === 201) {
-                queryClient.invalidateQueries({
-                    queryKey: ['documentos']
-                });
-
+                queryClient.invalidateQueries({ queryKey: ['documentos'] });
+                form.reset(defaultValues);
                 setOpen(false);
             }
         }
@@ -106,7 +104,8 @@ function Documentos() {
                     open={open}
                     onOpenChange={(isOpen) => {
                         setOpen(isOpen);
-                        if (!isOpen) form.reset();
+                        if (!isOpen) form.reset(defaultValues);
+
                     }}
                 >
                     <DialogTrigger asChild>
@@ -168,6 +167,7 @@ function Documentos() {
                                                 )}
                                             </FileUploadList>
                                             <FieldError errors={field.state.meta.errors} />
+                                            {JSON.stringify(field.state, null, 2)}
                                         </FileUpload>
                                     )}
                                 />
@@ -197,6 +197,7 @@ function Documentos() {
                                                 </SelectContent>
                                             </Select>
                                             <FieldError errors={field.state.meta.errors} />
+                                            {JSON.stringify(field.state, null, 2)}
                                         </Field>
                                     )}
                                 />
