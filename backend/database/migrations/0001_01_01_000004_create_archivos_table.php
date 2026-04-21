@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('archivo_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
             $table->string('extension', 5);
         });
 

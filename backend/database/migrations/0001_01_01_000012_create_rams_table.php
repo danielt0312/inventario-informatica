@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('ram_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('ram_capacidades', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('rams', function (Blueprint $table) {

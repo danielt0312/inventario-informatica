@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('oficio_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('oficio_asuntos', function (Blueprint $table) {
@@ -19,7 +19,7 @@ return new class extends Migration
                 ->constrained('oficio_tipos', indexName: 'fk_oficio_asuntos_oficio_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', 32)
+            $table->string('nombre', 64)
                 ->nullable();
         });
 
@@ -33,7 +33,7 @@ return new class extends Migration
                 ->constrained('oficio_asuntos', indexName: 'fk_oficios_oficio_asuntos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('folio', 32)
+            $table->string('folio', 64)
                 ->unique('uk_oficios_folio');
         });
     }

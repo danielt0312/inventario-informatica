@@ -10,17 +10,17 @@ return new class extends Migration
     {
         Schema::create('disco_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('disco_capacidades', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('disco_interfaces', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('discos', function (Blueprint $table) {

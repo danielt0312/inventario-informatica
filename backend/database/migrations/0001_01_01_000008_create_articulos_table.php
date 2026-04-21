@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('articulo_estados', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('articulos', function (Blueprint $table) {
@@ -23,7 +23,7 @@ return new class extends Migration
                 ->constrained('articulo_estados', indexName: 'fk_articulos_articulo_estados')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('numero_serie', 32)
+            $table->string('numero_serie', 64)
                 ->nullable()
                 ->unique('uk_articulos_numero_serie');
             $table->decimal('costo_unitario', 7, 2)

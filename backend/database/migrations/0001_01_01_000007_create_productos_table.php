@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('producto_categorias', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('producto_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
             $table->foreignId('categoria_id')
                 ->constrained('producto_categorias', indexName: 'fk_producto_tipos_producto_categorias')
                 ->cascadeOnUpdate()
@@ -24,12 +24,12 @@ return new class extends Migration
 
         Schema::create('producto_marcas', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
             $table->foreignId('tipo_id')
                 ->constrained('producto_tipos', indexName: 'fk_productos_producto_tipos')
                 ->cascadeOnUpdate()

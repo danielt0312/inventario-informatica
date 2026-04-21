@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('os_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('os_ediciones', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
             $table->foreignId('tipo_id')
                 ->constrained('os_tipos', indexName: 'fk_os_ediciones_os_tipos')
                 ->cascadeOnUpdate()
@@ -32,7 +32,7 @@ return new class extends Migration
                 ->constrained('os_ediciones', indexName: 'fk_articulo_computadora_os_os_ediciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('version', 32)
+            $table->string('version', 64)
                 ->nullable();
         });
     }

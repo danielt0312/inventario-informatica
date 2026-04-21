@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('prestamo_estados', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('prestamo_motivos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('prestamos', function (Blueprint $table) {
@@ -63,7 +63,7 @@ return new class extends Migration
                 ->constrained('prestamos', indexName: 'fk_prestamo_motivo_otros_prestamos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
     }
 

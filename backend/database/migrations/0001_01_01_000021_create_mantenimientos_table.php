@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('mantenimiento_productos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('mantenimientos', function (Blueprint $table) {
@@ -43,7 +43,7 @@ return new class extends Migration
                 ->constrained('mantenimientos', indexName: 'fk_mantenimiento_producto_otros_mantenimientos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
             $table->timestamps();
         });
 
@@ -100,7 +100,7 @@ return new class extends Migration
                 ->constrained('mantenimiento_perifericos', 'mantenimiento_id', 'fk_mantenimiento_periferico_otros_mantenimiento_perifericos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
             $table->timestamps();
         });
 
@@ -136,7 +136,7 @@ return new class extends Migration
                 ->constrained('mantenimiento_archivos', 'mantenimiento_id', 'fk_mantenimiento_archivo_pst_mantenimiento_archivos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
             $table->timestamps();
         });
 
@@ -161,7 +161,7 @@ return new class extends Migration
                 ->constrained('mantenimiento_aplicaciones', 'mantenimiento_id', 'fk_mantenimiento_aplicacion_otros_mantenimiento_aplicaciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
             $table->timestamps();
         });
     }

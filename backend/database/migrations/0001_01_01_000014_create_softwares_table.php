@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('software_tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 32);
+            $table->string('nombre', 64);
         });
 
         Schema::create('articulo_computadora_softwares', function (Blueprint $table) {
@@ -23,7 +23,7 @@ return new class extends Migration
                 ->constrained('software_tipos', indexName: 'fk_articulo_computadora_softwares_software_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('version', 32)
+            $table->string('version', 64)
                 ->nullable();
         });
     }
