@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { FileUpload, FileUploadDropzone, FileUploadItem, FileUploadItemDelete, FileUploadItemMetadata, FileUploadItemPreview, FileUploadList, FileUploadTrigger } from "@/components/ui/file-upload"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -105,7 +105,6 @@ function Documentos() {
                     onOpenChange={(isOpen) => {
                         setOpen(isOpen);
                         if (!isOpen) form.reset(defaultValues);
-
                     }}
                 >
                     <DialogTrigger asChild>
@@ -132,7 +131,7 @@ function Documentos() {
                                     name="archivo"
                                     children={(field) => (
                                         <FileUpload
-                                            value={field.state.value ? [field.state.value] :  undefined}
+                                            value={field.state.value ? [field.state.value] : undefined}
                                             onValueChange={(files) => field.handleChange(files[0] ?? null)}
                                             accept="application/pdf"
                                             maxFiles={1}
@@ -167,7 +166,6 @@ function Documentos() {
                                                 )}
                                             </FileUploadList>
                                             <FieldError errors={field.state.meta.errors} />
-                                            {JSON.stringify(field.state, null, 2)}
                                         </FileUpload>
                                     )}
                                 />
@@ -197,7 +195,6 @@ function Documentos() {
                                                 </SelectContent>
                                             </Select>
                                             <FieldError errors={field.state.meta.errors} />
-                                            {JSON.stringify(field.state, null, 2)}
                                         </Field>
                                     )}
                                 />
