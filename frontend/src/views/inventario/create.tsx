@@ -17,6 +17,8 @@ import { handleLaravel422 } from "@/lib/utils"
 
 import { defaultValues, formValidator } from "./create.schema"
 import { Paperclip, Save } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Content } from "../documentos/index.content"
 
 function InventarioCreate() {
     const navigate = useNavigate();
@@ -44,7 +46,7 @@ function InventarioCreate() {
     const productoTipo = useStore(form.store, (state) => state.values.producto_tipo_id)
     const productoMarca = useStore(form.store, (state) => state.values.producto_marca_id)
 
-    const { data : producto_categorias = [] } = useQuery({
+    const { data: producto_categorias = [] } = useQuery({
         queryKey: ['producto_categorias'],
         queryFn: async () => {
             const { data: axiosData } = await api.get<{ data: ProductoCategoria[] }>('api/producto_categorias')
@@ -272,9 +274,20 @@ function InventarioCreate() {
                             </FieldGroup>
 
                             <FieldGroup className="grid grid-cols-4">
-                                <Button type="button">
-                                    <Paperclip /> Adjuntar Factura
-                                </Button>
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button type="button">
+                                            <Paperclip /> Adjuntar Factura
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="w-full">
+                                        <DialogHeader>
+                                            <DialogTitle>Adjuntar Factura</DialogTitle>
+                                        </DialogHeader>
+
+                                        <Content />
+                                    </DialogContent>
+                                </Dialog>
                                 <FieldGroup>
                                 </FieldGroup>
                             </FieldGroup>
