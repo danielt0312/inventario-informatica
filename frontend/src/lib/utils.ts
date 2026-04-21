@@ -22,8 +22,6 @@ export function handleLaravel422(
 
         formApi.setFieldMeta(field as any, (prev) => ({
             ...prev,
-            // AQUÍ ESTÁ EL CAMBIO:
-            // Enviamos un objeto con la propiedad 'message' para que Shadcn lo lea
             errors: [{ message: errorMessage }],
             errorMap: {
                 ...prev.errorMap,
