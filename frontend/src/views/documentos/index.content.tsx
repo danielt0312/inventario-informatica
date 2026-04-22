@@ -14,13 +14,13 @@ import { PlusCircle, Save, Upload, X } from "lucide-react"
 import { useState } from "react"
 import z from "zod"
 
-type Documento = {
+export type Documento = {
     id: number
     tipo: TCatalogo
     archivo: TCatalogo
 };
 
-const columns: ColumnDef<Documento>[] = [
+const defaultColumns: ColumnDef<Documento>[] = [
     {
         accessorKey: 'tipo.nombre',
         header: 'Tipo de Documento'
@@ -51,8 +51,12 @@ const formSchema = z.object({
         .mime('application/pdf')
 });
 
-export function Content() {
+export function Content({
+    columns = []
+}: { columns?: ColumnDef<Documento>[] } ) {
     const { queryClient } = Route.useRouteContext();
+
+    const cols = [...defaultColumns, ...columns];
 
     const form = useForm({
         defaultValues,
@@ -140,7 +144,7 @@ export function Content() {
                                                 <div className="flex items-center justify-center rounded-full border p-2.5">
                                                     <Upload className="size-6 text-muted-foreground" />
                                                 </div>
-                                                <p className="font-medium text-sm">Arrastra y suelta un archivo aquí</p>
+                                                <p className="font-medium text-sm">Arrastra y suelta el archivo aquí</p>
                                                 <p className="text-muted-foreground text-xs">
                                                     O presiona aquí para navegar entre tus archivos (máximo de 5 MB)
                                                 </p>
@@ -208,7 +212,7 @@ export function Content() {
                 </DialogContent>
             </Dialog>
 
-            <DataTable columns={columns} data={data} />
+            <DataTable columns={cols} data={data} />
         </div>
     );
 }

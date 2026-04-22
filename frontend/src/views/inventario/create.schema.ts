@@ -1,15 +1,15 @@
 import z from "zod"
 
 type FormSchema = {
-    producto_categoria_id: number | null,
-    producto_tipo_id: number | null,
-    producto_marca_id: number | null,
-    producto_id: number | null,
-    numero_serie: string | null,
-    costo_unitario: string | number | null,
-    factura_id: number | null,
-    qr_archivo_id: number | null,
-    contable: boolean,
+    producto_categoria_id: number | null
+    producto_tipo_id: number | null
+    producto_marca_id: number | null
+    producto_id: number | null
+    numero_serie: string | null
+    costo_unitario: string | number | null
+    factura_id: number | null
+    qr_archivo_id: number | null
+    contable: boolean
 }
 
 export const defaultValues: FormSchema = {

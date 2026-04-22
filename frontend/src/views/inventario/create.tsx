@@ -16,12 +16,17 @@ import { isAxiosError } from "axios"
 import { handleLaravel422 } from "@/lib/utils"
 
 import { defaultValues, formValidator } from "./create.schema"
-import { Paperclip, Save } from "lucide-react"
+import { Paperclip, Save, X } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Content } from "../documentos/index.content"
+import { Content as DocumentoContent, type Documento } from "../documentos/index.content"
+
+import type { ColumnDef } from "@tanstack/react-table"
+import { useState, useMemo } from "react"
+import { FileUploadItem, FileUploadItemDelete, FileUploadItemMetadata, FileUploadItemPreview, FileUploadList } from "@/components/ui/file-upload"
 
 function InventarioCreate() {
     const navigate = useNavigate();
+    const [dialogDocumentoOpen, setDialogDocumentoOpen] = useState(false)
 
     const form = useForm({
         defaultValues,
@@ -41,6 +46,24 @@ function InventarioCreate() {
             }
         }
     });
+
+    const columns = useMemo<ColumnDef<Documento>[]>(() => [
+        {
+            id: 'selector',
+            cell: ({ row }) => (
+                <Button
+                    onClick={() => {
+                        form.setFieldValue('qr_archivo_id', row.original.id);
+                        setDialogDocumentoOpen(false);
+                    }}
+                    size={'sm'}
+                    variant={'outline'}
+                >
+                    <Paperclip /> Adjuntar
+                </Button>
+            )
+        }
+    ], [form]);
 
     const productoCategoria = useStore(form.store, (state) => state.values.producto_categoria_id)
     const productoTipo = useStore(form.store, (state) => state.values.producto_tipo_id)
@@ -274,21 +297,42 @@ function InventarioCreate() {
                             </FieldGroup>
 
                             <FieldGroup className="grid grid-cols-4">
-                                <Dialog>
+                                <Dialog
+                                    open={dialogDocumentoOpen}
+                                    onOpenChange={setDialogDocumentoOpen}
+                                >
                                     <DialogTrigger asChild>
                                         <Button type="button">
                                             <Paperclip /> Adjuntar Factura
                                         </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="w-full">
+                                    <DialogContent className="min-w-fit overflow-y-auto">
                                         <DialogHeader>
                                             <DialogTitle>Adjuntar Factura</DialogTitle>
                                         </DialogHeader>
 
-                                        <Content />
+                                        <DocumentoContent columns={columns} />
                                     </DialogContent>
                                 </Dialog>
                                 <FieldGroup>
+                                    {/* <form.Field
+                                        name="qr_archivo_id"
+                                        children={(field) => (
+                                            <FileUploadList>
+                                                {field.state.value && (
+                                                    <FileUploadItem value={}>
+                                                        <FileUploadItemPreview />
+                                                        <FileUploadItemMetadata />
+                                                        <FileUploadItemDelete asChild>
+                                                        <Button variant="ghost" size="icon" className="size-7">
+                                                            <X />
+                                                        </Button>
+                                                        </FileUploadItemDelete>
+                                                    </FileUploadItem>
+                                                )}
+                                            </FileUploadList>
+                                        )}
+                                    /> */}
                                 </FieldGroup>
                             </FieldGroup>
                         </FieldSet>
