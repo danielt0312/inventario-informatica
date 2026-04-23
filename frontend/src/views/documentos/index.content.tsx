@@ -212,7 +212,7 @@ export function Content({
                 </DialogContent>
             </Dialog>
 
-            <DataTable columns={cols} data={data} />
+            {/* <DataTable columns={cols} data={data} /> */}
         </div>
     );
 }

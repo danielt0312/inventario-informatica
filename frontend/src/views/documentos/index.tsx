@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Content } from "./index.content"
+import { Table } from "./partials/table"
 
 function Documentos() {
 
@@ -10,7 +10,7 @@ function Documentos() {
             </CardHeader>
 
             <CardContent>
-                <Content />
+                <Table />
             </CardContent>
         </Card>
     )

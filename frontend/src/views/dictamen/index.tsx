@@ -1,13 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DataTable } from "@/components/ui/data-table";
 
 import { Button } from "@/components/ui/button";
 
 import { Link } from "@tanstack/react-router";
 
 import { Route as RouteCreate } from '@/routes/_auth/dictamen/create'
-import { columns } from "./index.table-cols";
 import { PlusCircle } from "lucide-react";
+import { Table } from "./partials/table";
 
 function Dictamen() {
 
@@ -18,15 +17,17 @@ function Dictamen() {
                     Dictámenes Tecnológicos
                 </CardTitle>
                 <Link to={RouteCreate.to}>
-                    <Button>
-                        <PlusCircle />
-                        Crear
+                    <Button
+                        variant={'outline'}
+                        size={'sm'}
+                    >
+                        <PlusCircle /> Crear
                     </Button>
                 </Link>
             </CardHeader>
 
             <CardContent>
-                <DataTable columns={columns} data={[]} />
+                <Table />
             </CardContent>
         </Card>
     )

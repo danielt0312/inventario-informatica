@@ -14,8 +14,8 @@ type Dictamen = {
 
 const columns: ColumnDef<Dictamen>[] = [
     {
-        accessorKey: "id",
-        header: "Folio",
+        header: "No. de Inventario",
+        accessorKey: "numero_inventario",
     },
     {
         accessorKey: "area_solicitante",
@@ -32,7 +32,7 @@ const columns: ColumnDef<Dictamen>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            const dictamen = row.original
+            const data = row.original
 
             return (
                 <DropdownMenu>
