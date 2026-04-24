@@ -25,7 +25,7 @@ function Navbar() {
                 <div className="flex flex-row">
                     <div className="flex-1">
                         <Link to={InventarioRoute.to}><NavbarItem>Inventario</NavbarItem></Link>
-                        <Link to={DictamenRoute.to}><NavbarItem>Dictamen Tecnológico</NavbarItem></Link>
+                        {/* <Link to={DictamenRoute.to}><NavbarItem>Dictamen Tecnológico</NavbarItem></Link> */}
                         <Link to={DocumentosRoute.to}><NavbarItem>Documentos</NavbarItem></Link>
                     </div>
                     <div>

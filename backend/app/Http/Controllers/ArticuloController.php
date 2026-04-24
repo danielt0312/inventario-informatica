@@ -11,7 +11,7 @@ class ArticuloController extends Controller
     public function index(ArticuloRequest $request)
     {
         $data = Articulo::where($request->validated())
-            ->with(['estado', 'producto'])
+            ->with(['estado', 'producto.tipo.categoria'])
             ->get();
 
         return response()->json(compact('data'));

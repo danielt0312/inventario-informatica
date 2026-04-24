@@ -1,22 +1,29 @@
 import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/composed/datatable";
-import { columns, type Documento } from "./table.cols";
-import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import { columns as defaultColumns, type Documento } from "./table.cols";
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import type { TCatalogo } from "@/lib/types";
 import { Filter } from "@/components/ui/datatable/action-bar";
 import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Form } from "./form";
 
-export function Table() {
+export function Table({
+    cols = []
+}: {
+    cols?: ColumnDef<Documento>[]
+}) {
     const { data = [] } = useQuery({
         queryKey: ['documentos'],
         queryFn: async () => await api.get<{ data: Documento[] }>('api/documentos')
             .then(response => response.data.data),
         staleTime: 60 * 1000
     });
+
+    const columns = [...defaultColumns, ...cols];
 
     const table = useReactTable({
         columns,
@@ -41,16 +48,15 @@ export function Table() {
                     />
                     <Filter label="Tipo de Documento">
                         <DropdownMenuCheckboxItem>
-                            A
+                            Adquisición de Bienes Informáticos
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem>
+                            Factura
                         </DropdownMenuCheckboxItem>
                     </Filter>
                 </div>
                 <div>
-                    <Button
-                        size="sm"
-                    >
-                        <CirclePlus /> Registrar
-                    </Button>
+                    <Form />
                 </div>
             </div>
             <DataTable table={table} />

@@ -15,14 +15,14 @@ import { Route } from "@/routes/_auth/inventario"
 import { isAxiosError } from "axios"
 import { handleLaravel422 } from "@/lib/utils"
 
-import { defaultValues, formValidator } from "./create.schema"
+import { defaultValues, formValidator } from "./partials/create.schema"
 import { Paperclip, Save, X } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Content as DocumentoContent, type Documento } from "../documentos/index.content"
 
 import type { ColumnDef } from "@tanstack/react-table"
 import { useState, useMemo } from "react"
-import { FileUploadItem, FileUploadItemDelete, FileUploadItemMetadata, FileUploadItemPreview, FileUploadList } from "@/components/ui/file-upload"
+import type { Documento } from "../documentos/partials/table.cols"
+import { Table as DocumentosTable } from "../documentos/partials/table"
 
 function InventarioCreate() {
     const navigate = useNavigate();
@@ -56,8 +56,7 @@ function InventarioCreate() {
                         form.setFieldValue('qr_archivo_id', row.original.id);
                         setDialogDocumentoOpen(false);
                     }}
-                    size={'sm'}
-                    variant={'outline'}
+                    size="sm"
                 >
                     <Paperclip /> Adjuntar
                 </Button>
@@ -311,7 +310,7 @@ function InventarioCreate() {
                                             <DialogTitle>Adjuntar Factura</DialogTitle>
                                         </DialogHeader>
 
-                                        <DocumentoContent columns={columns} />
+                                        <DocumentosTable cols={columns} />
                                     </DialogContent>
                                 </Dialog>
                                 <FieldGroup>

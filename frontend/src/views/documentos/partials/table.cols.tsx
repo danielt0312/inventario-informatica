@@ -13,15 +13,15 @@ export type Documento = {
 }
 
 export const columns: ColumnDef<Documento>[] = [
-    {
-        id: 'select',
-        header: ({ table }) => (
-            <AllRowSelected table={table} />
-        ),
-        cell: ({ row }) => (
-            <RowSelected row={row} />
-        )
-    },
+    // {
+    //     id: 'select',
+    //     header: ({ table }) => (
+    //         <AllRowSelected table={table} />
+    //     ),
+    //     cell: ({ row }) => (
+    //         <RowSelected row={row} />
+    //     )
+    // },
     {
         header: ({ column }) => (
             <DataTableColumnHeaderSorting column={column} title="Tipo de Documento" />
@@ -49,20 +49,20 @@ export const columns: ColumnDef<Documento>[] = [
             });
         }
     },
-    {
-        id: 'actions',
-        cell: ({ row }) => {
-            const data = row.original;
+    // {
+    //     id: 'actions',
+    //     cell: ({ row }) => {
+    //         const data = row.original;
 
-            return (
-                <RowAction>
-                    <DropdownMenuItem>
-                        <FileText /> Ver
-                    </DropdownMenuItem>
-                    <DropdownMenuItem variant={'destructive'}>
-                        <Trash2 /> Eliminar
-                    </DropdownMenuItem>
-                </RowAction>
-        )}
-    }
+    //         return (
+    //             <RowAction>
+    //                 <DropdownMenuItem>
+    //                     <FileText /> Ver
+    //                 </DropdownMenuItem>
+    //                 <DropdownMenuItem variant={'destructive'}>
+    //                     <Trash2 /> Eliminar
+    //                 </DropdownMenuItem>
+    //             </RowAction>
+    //     )}
+    // }
 ];

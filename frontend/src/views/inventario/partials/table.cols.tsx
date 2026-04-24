@@ -1,25 +1,39 @@
+import { DataTableColumnHeaderSorting } from "@/components/ui/datatable"
 import { RowAction } from "@/components/ui/datatable/row"
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Label } from "@/components/ui/label"
+import type { TCatalogo } from "@/lib/types"
 import type { ColumnDef } from "@tanstack/react-table"
 import { FileText, Trash2 } from "lucide-react"
 
-export type Inventario = {
+export type Articulo = {
     id: number
     numero_inventario: string
-    tipo_producto: string
-    numero_serie: string
-    fecha_registro: string
-    estado: string
+    numero_serie: string | null
+    producto: TCatalogo & {
+        tipo: TCatalogo & {
+            categoria: TCatalogo
+        }
+    }
+    estado: TCatalogo
+    created_at: Date
 }
 
-export const columns: ColumnDef<Inventario>[] = [
+export const columns: ColumnDef<Articulo>[] = [
     {
         header: "No. de Inventario",
         accessorKey: "numero_inventario"
     },
     {
-        header: "Tipo de Producto",
+        header: "Categoría",
+        accessorKey: "producto.tipo.categoria.nombre"
+    },
+    {
+        header: "Producto",
+        accessorKey: "producto.tipo.nombre"
+    },
+    {
+        header: "Modelo",
         accessorKey: "producto.nombre"
     },
     {
@@ -36,19 +50,36 @@ export const columns: ColumnDef<Inventario>[] = [
         accessorKey: "estado.nombre"
     },
     {
-        id: 'actions',
-        cell: ({ row }) => {
-            const data = row.original;
+        header: ({ column }) => (
+            <DataTableColumnHeaderSorting column={column} title="Fecha de Creación" />
+        ),
+        accessorKey: 'created_at',
+        cell: ({ getValue }) => {
+            const date = getValue<Date>();
+            if (!date) return '—';
+            return new Date(date).toLocaleDateString('es-MX', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+    },
+    // {
+    //     id: 'actions',
+    //     cell: ({ row }) => {
+    //         const data = row.original;
 
-            return (
-                <RowAction>
-                    <DropdownMenuItem>
-                        <FileText /> Ver
-                    </DropdownMenuItem>
-                    <DropdownMenuItem variant={'destructive'}>
-                        <Trash2 /> Eliminar
-                    </DropdownMenuItem>
-                </RowAction>
-        )}
-    }
+    //         return (
+    //             <RowAction>
+    //                 <DropdownMenuItem>
+    //                     <FileText /> Ver
+    //                 </DropdownMenuItem>
+    //                 <DropdownMenuItem variant={'destructive'}>
+    //                     <Trash2 /> Eliminar
+    //                 </DropdownMenuItem>
+    //             </RowAction>
+    //     )}
+    // }
 ]
