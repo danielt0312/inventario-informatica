@@ -14,7 +14,8 @@ import {
   ArrowDown,
   ArrowUp,
   ChevronsUpDown,
-  EyeOff
+  EyeOff,
+  PlusCircle
 } from "lucide-react"
 
 import {
@@ -30,6 +31,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Button } from "./button"
 
 import { cn } from "@/lib/utils"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuTrigger } from "./dropdown-menu"
 
 interface DataTableProps<TData> {
   table: TTable<TData>
@@ -89,6 +91,8 @@ function DataTable<TData>({
 function DataTablePagination<TData>({
   table
 }: DataTableProps<TData>) {
+  const paginationSize = [10, 25, 50, 100] as const;
+
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
@@ -106,7 +110,7 @@ function DataTablePagination<TData>({
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
-              {[10, 20, 25, 30, 40, 50].map((pageSize) => (
+              {paginationSize.map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>
@@ -197,9 +201,38 @@ function DataTableColumnHeaderSorting<TData, TValue>({
   )
 }
 
+function DataTableFilter({
+    label,
+    children
+}: {
+    label: string,
+    children: React.ReactNode
+}) {
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                    <PlusCircle />{label}
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuGroup>
+                    {children}
+                </DropdownMenuGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+}
+
+function DataTableFilterItem({ ...props }) {
+    return <DropdownMenuCheckboxItem {...props} />;
+}
+
 export {
     DataTable,
     DataTablePagination,
     DataTableColumnHeaderSorting,
+    DataTableFilter,
+    DataTableFilterItem,
     type DataTableProps
 }

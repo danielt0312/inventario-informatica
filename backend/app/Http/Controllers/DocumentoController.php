@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\{Documento, Archivo};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\Documento\StoreDocumentoRequest;
+use App\Http\Requests\Documento\{DocumentoRequest, StoreDocumentoRequest};
 use App\ArchivoTipoEnum;
 
 class DocumentoController extends Controller
 {
-    public function index()
+    public function index(DocumentoRequest $request)
     {
         $data = Documento::with(['tipo', 'archivo'])
             ->get();

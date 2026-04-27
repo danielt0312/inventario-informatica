@@ -3,19 +3,21 @@
 import {
     DataTable as DataTablePrimitive,
     DataTablePagination,
-    type DataTableProps
+    type DataTableProps as DataTableProps
 } from "../ui/datatable";
 
 export function DataTable<TData>({
     table,
-    children
+    actionBar
 }: DataTableProps<TData> & {
-    children?: React.ReactNode
+    actionBar?: () => React.ReactNode
 }) {
     return (
         <div className="grid gap-y-4">
+            {actionBar?.()}
             <DataTablePrimitive table={table} />
             <DataTablePagination table={table} />
         </div>
     )
 }
+
