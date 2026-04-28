@@ -6,8 +6,7 @@ import { DataTable } from "@/components/composed/datatable";
 import { columns as defaultColumns, type Documento } from "./table.cols";
 import { getCoreRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
-import { Form } from "./form";
-import type { TCatalogo } from "@/lib/types";
+import { Form, queryOptTipos } from "./form";
 import { useState } from "react";
 import { DataTableFilter } from "@/components/ui/datatable";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -17,12 +16,7 @@ export function Table({
 }: {
     actionRow?: ColumnDef<Documento>[]
 }) {
-    const { data: TIPOS = [] } = useQuery({
-        queryKey: ['documento_tipos'],
-        queryFn: async () => await api.get<{ data: TCatalogo[] }>('api/documento_tipos')
-            .then(r => r.data.data),
-        staleTime: Infinity
-    });
+    const { data: TIPOS = [] } = useQuery(queryOptTipos);
 
     const [tipos, setsetTipos] = useState<number[]>([]);
     const debouncedsetTipos = useDebounce(tipos, 500);

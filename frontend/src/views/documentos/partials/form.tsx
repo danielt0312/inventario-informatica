@@ -7,7 +7,7 @@ import api from "@/lib/axios"
 import type { TCatalogo } from "@/lib/types"
 import { Route } from "@/routes/_auth"
 import { useForm } from "@tanstack/react-form"
-import { useQuery } from "@tanstack/react-query"
+import { queryOptions, useQuery } from "@tanstack/react-query"
 import { PlusCircle, Save, Upload, X } from "lucide-react"
 import { useState } from "react"
 import z from "zod"
@@ -30,6 +30,13 @@ const formSchema = z.object({
         .file('Debes de adjuntar un archivo')
         .max(5_000_000)
         .mime('application/pdf')
+});
+
+export const queryOptTipos = queryOptions({
+    queryKey: ['documento_tipos'],
+    queryFn: async () => await api.get<{ data: TCatalogo[] }>('api/documento_tipos')
+        .then((response) => response.data.data),
+    staleTime: Infinity
 });
 
 export function Form() {
@@ -62,11 +69,7 @@ export function Form() {
         }
     });
 
-    const { data: producto_tipos = [] } = useQuery({
-        queryKey: ['documento_tipos'],
-        queryFn: async () => await api.get<{ data: TCatalogo[] }>('api/documento_tipos')
-            .then((response) => response.data.data)
-    });
+    const { data: producto_tipos = [] } = useQuery(queryOptTipos);
 
     const [open, setOpen] = useState(false);
 
@@ -80,7 +83,7 @@ export function Form() {
         >
             <DialogTrigger asChild>
                 <div className="flex justify-end">
-                    <Button variant="outline" size="sm">
+                    <Button size="sm">
                         <PlusCircle /> Registrar
                     </Button>
                 </div>
