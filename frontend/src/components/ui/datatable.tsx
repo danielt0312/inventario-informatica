@@ -32,13 +32,17 @@ import { Button } from "./button"
 
 import { cn } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuTrigger } from "./dropdown-menu"
+import type { TCatalogo } from "@/lib/types"
+import type { Dispatch, SetStateAction } from "react"
 
 interface DataTableProps<TData> {
-  table: TTable<TData>
+  table: TTable<TData>,
+  contentStatus?: React.ReactNode
 }
 
 function DataTable<TData>({
-  table
+  table,
+  contentStatus = 'Sin información'
 }: DataTableProps<TData>) {
   return (
     <div className="overflow-hidden rounded-md border">
@@ -77,8 +81,10 @@ function DataTable<TData>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
-                Sin información.
+              <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24">
+                <div className="flex h-full items-center justify-center">
+                    {contentStatus}
+                </div>
               </TableCell>
             </TableRow>
           )}
@@ -96,7 +102,11 @@ function DataTablePagination<TData>({
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
-        {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s)
+        {table.getFilteredSelectedRowModel().rows.length > 0 && (
+          <>
+            {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s)
+          </>
+        )}
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
@@ -201,13 +211,25 @@ function DataTableColumnHeaderSorting<TData, TValue>({
   )
 }
 
+interface DataTableFilterProps {
+    label: string
+    filters: TCatalogo[]
+    selectedFilters: number[],
+    setSelectedFilters: Dispatch<SetStateAction<number[]>>
+}
+
 function DataTableFilter({
     label,
-    children
-}: {
-    label: string,
-    children: React.ReactNode
-}) {
+    filters,
+    selectedFilters,
+    setSelectedFilters
+}: DataTableFilterProps) {
+    const handleToggle = (id: number) => {
+        setSelectedFilters((prev) =>
+            prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+        );
+    };
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -216,16 +238,19 @@ function DataTableFilter({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuGroup>
-                    {children}
-                </DropdownMenuGroup>
+                {filters.map((filter) => (
+                    <DropdownMenuCheckboxItem
+                        key={filter.id}
+                        checked={selectedFilters.includes(filter.id)}
+                        onCheckedChange={() => handleToggle(filter.id)}
+                        onSelect={(e) => e.preventDefault()}
+                    >
+                        {filter.nombre}
+                    </DropdownMenuCheckboxItem>
+                ))}
             </DropdownMenuContent>
         </DropdownMenu>
     );
-}
-
-function DataTableFilterItem({ ...props }) {
-    return <DropdownMenuCheckboxItem {...props} />;
 }
 
 export {
@@ -233,6 +258,5 @@ export {
     DataTablePagination,
     DataTableColumnHeaderSorting,
     DataTableFilter,
-    DataTableFilterItem,
     type DataTableProps
 }
