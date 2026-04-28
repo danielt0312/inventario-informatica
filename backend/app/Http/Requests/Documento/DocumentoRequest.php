@@ -9,7 +9,9 @@ class DocumentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'archivo.nombre' => ['nullable', 'string'],
+            'archivo_nombre' => ['nullable', 'string', 'max:64'],
+            'tipos' => ['nullable', 'array'],
+            'tipos.*' => ['integer', 'exists:documento_tipos,id']
         ];
     }
 }

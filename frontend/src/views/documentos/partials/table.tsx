@@ -1,3 +1,5 @@
+'use client';
+
 import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/composed/datatable";
@@ -6,8 +8,8 @@ import { getCoreRowModel, useReactTable, type ColumnDef } from "@tanstack/react-
 import { Input } from "@/components/ui/input";
 import { Form } from "./form";
 import type { TCatalogo } from "@/lib/types";
-import { useEffect, useState } from "react";
-import { DataTableFilter, DataTableFilterItem } from "@/components/ui/datatable";
+import { useState } from "react";
+import { DataTableFilter } from "@/components/ui/datatable";
 import { useDebounce } from "@/hooks/use-debounce";
 
 export function Table({
@@ -15,33 +17,26 @@ export function Table({
 }: {
     actionRow?: ColumnDef<Documento>[]
 }) {
-    const { data: DOCUMENTO_TIPOS = [] } = useQuery({
+    const { data: TIPOS = [] } = useQuery({
         queryKey: ['documento_tipos'],
         queryFn: async () => await api.get<{ data: TCatalogo[] }>('api/documento_tipos')
-            .then(response => response.data.data),
+            .then(r => r.data.data),
         staleTime: Infinity
     });
 
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
-
-    useEffect(() => {
-        if (DOCUMENTO_TIPOS.length > 0 && selectedIds.length === 0) {
-            setSelectedIds(DOCUMENTO_TIPOS.map((c) => c.id));
-        }
-    }, [DOCUMENTO_TIPOS]);
-
+    const [tipos, setsetTipos] = useState<number[]>([]);
+    const debouncedsetTipos = useDebounce(tipos, 500);
 
     const [archivoNombre, setArchivoNombre] = useState('');
-    const debouncedArchivoNombre = useDebounce(archivoNombre)
+    const debouncedArchivoNombre = useDebounce(archivoNombre);
 
-    const { data = [] } = useQuery({
-        queryKey: ['documentos', debouncedArchivoNombre, selectedIds],
+    const query = useQuery({
+        queryKey: ['documentos', debouncedArchivoNombre, debouncedsetTipos],
         queryFn: async () => await api.get<{ data: Documento[] }>('api/documentos', { params: {
-            archivo: {
-                nombre: debouncedArchivoNombre,
-            }
+            archivo_nombre: debouncedArchivoNombre,
+            tipos: debouncedsetTipos.length  > 0 ? debouncedsetTipos : undefined
         } })
-            .then(response => response.data.data),
+            .then(r => r.data.data),
         staleTime: 60 * 1000
     });
 
@@ -49,35 +44,31 @@ export function Table({
 
     const table = useReactTable({
         columns,
-        data,
+        data: query.data ?? [],
         getCoreRowModel: getCoreRowModel()
-    })
+    });
 
     return (
         <DataTable
             table={table}
-            actionBar={() => (
-                <div className="flex justify-between items-center">
-                    <div className="flex-1 flex gap-2 flex-wrap">
-                        <Input
-                            placeholder="Buscar archivo..."
-                            value={archivoNombre}
-                            onChange={(e) => setArchivoNombre(e.target.value)}
-                            className="max-w-sm h-8"
-                        />
-                        <DataTableFilter label="Tipo de Documento">
-                            {DOCUMENTO_TIPOS.map((data, index) => (
-                                <DataTableFilterItem key={index}>
-                                    {data.nombre}
-                                </DataTableFilterItem>
-                            ))}
-                        </DataTableFilter>
-                    </div>
-                    <div>
-                        <Form />
-                    </div>
-                </div>
+            query={query}
+            filterBar={() => (
+                <>
+                    <Input
+                        placeholder="Buscar archivo..."
+                        value={archivoNombre}
+                        onChange={(e) => setArchivoNombre(e.target.value)}
+                        className="max-w-sm h-8"
+                    />
+                    <DataTableFilter
+                        label="Tipo de Documento"
+                        filters={TIPOS}
+                        selectedFilters={tipos}
+                        setSelectedFilters={setsetTipos}
+                    />
+                </>
             )}
+            actionBar={() => <Form />}
         />
     );
 }

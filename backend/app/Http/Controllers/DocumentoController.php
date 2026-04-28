@@ -12,8 +12,17 @@ class DocumentoController extends Controller
 {
     public function index(DocumentoRequest $request)
     {
-        $data = Documento::with(['tipo', 'archivo'])
-            ->get();
+        $query = Documento::with(['archivo', 'tipo']);
+
+        if ($request->filled('archivo_nombre'))
+            $query->whereHas('archivo', fn ($q)
+                => $q->whereLike('nombre', "%{$request->input('archivo_nombre')}%"));
+
+        if ($request->filled('tipos'))
+            $query->whereHas('tipo', fn ($q)
+                => $q->whereIn('id', $request->input('tipos')));
+
+        $data = $query->get();
 
         return response()->json(compact('data'));
     }

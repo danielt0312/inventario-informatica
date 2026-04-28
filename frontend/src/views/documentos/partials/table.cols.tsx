@@ -13,19 +13,8 @@ export type Documento = {
 }
 
 export const columns: ColumnDef<Documento>[] = [
-    // {
-    //     id: 'select',
-    //     header: ({ table }) => (
-    //         <AllRowSelected table={table} />
-    //     ),
-    //     cell: ({ row }) => (
-    //         <RowSelected row={row} />
-    //     )
-    // },
     {
-        header: ({ column }) => (
-            <DataTableColumnHeaderSorting column={column} title="Tipo de Documento" />
-        ),
+        header: 'Tipo de Documento',
         accessorKey: 'tipo.nombre'
     },
     {
@@ -33,9 +22,7 @@ export const columns: ColumnDef<Documento>[] = [
         accessorKey: 'archivo.nombre'
     },
     {
-        header: ({ column }) => (
-            <DataTableColumnHeaderSorting column={column} title="Fecha de Subida" />
-        ),
+        header: 'Fecha de Subida',
         accessorKey: 'archivo.created_at',
         cell: ({ getValue }) => {
             const date = getValue<Date>();
