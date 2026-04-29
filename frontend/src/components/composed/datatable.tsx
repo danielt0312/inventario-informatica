@@ -44,16 +44,18 @@ export function DataTable<TData>({
     const contentStatus = query ? getContentStatus({ query }) : undefined;
 
     return (
-        <div className="grid gap-y-4">
+        <div className="grid gap-y-4 w-full min-w-0">
             {(filterBar || actionBar) && (
                 <div className="flex justify-between items-center">
-                    <div className="flex-1 flex gap-2 flex-wrap">
+                    <div className="flex-1 flex gap-2 flex-wrap min-w-0">
                         {filterBar?.()}
                     </div>
                     {actionBar?.()}
                 </div>
             )}
-            <DataTablePrimitive table={table} contentStatus={contentStatus} />
+            <div className="overflow-x-auto w-full">
+                <DataTablePrimitive table={table} contentStatus={contentStatus} />
+            </div>
             <DataTablePagination table={table} />
         </div>
     )
