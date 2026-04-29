@@ -15,7 +15,7 @@ import { Route } from "@/routes/_auth/inventario"
 import { isAxiosError } from "axios"
 import { handleLaravel422 } from "@/lib/utils"
 
-import { defaultValues, formValidator } from "./partials/create.schema"
+import { defaultValues, formValidator } from "./partials/form.schema"
 import { Paperclip, Save, X } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
@@ -24,7 +24,7 @@ import { useState, useMemo } from "react"
 import type { Documento } from "../documentos/partials/table.cols"
 import { Table as DocumentosTable } from "../documentos/partials/table"
 
-function InventarioCreate() {
+function Create() {
     const navigate = useNavigate();
     const [dialogDocumentoOpen, setDialogDocumentoOpen] = useState(false)
 
@@ -47,7 +47,7 @@ function InventarioCreate() {
         }
     });
 
-    const columns = useMemo<ColumnDef<Documento>[]>(() => [
+    const selectRow = useMemo<ColumnDef<Documento>[]>(() => [
         {
             id: 'selector',
             cell: ({ row }) => (
@@ -305,12 +305,14 @@ function InventarioCreate() {
                                             <Paperclip /> Adjuntar Factura
                                         </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="min-w-fit overflow-y-auto">
+                                    <DialogContent className="sm:min-w-4xl overflow-y-auto">
                                         <DialogHeader>
                                             <DialogTitle>Adjuntar Factura</DialogTitle>
                                         </DialogHeader>
 
-                                        <DocumentosTable cols={columns} />
+                                        <DocumentosTable
+                                            actionRow={selectRow}
+                                        />
                                     </DialogContent>
                                 </Dialog>
                                 <FieldGroup>
@@ -348,4 +350,4 @@ function InventarioCreate() {
     )
 }
 
-export default InventarioCreate
+export default Create

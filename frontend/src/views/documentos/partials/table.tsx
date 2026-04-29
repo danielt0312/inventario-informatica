@@ -12,7 +12,8 @@ import { DataTableFilter } from "@/components/ui/datatable";
 import { useDebounce } from "@/hooks/use-debounce";
 
 export function Table({
-    actionRow = []
+    actionRow = [],
+    ...props
 }: {
     actionRow?: ColumnDef<Documento>[]
 }) {
@@ -63,6 +64,7 @@ export function Table({
                 </>
             )}
             actionBar={() => <Form />}
+            {...props}
         />
     );
 }

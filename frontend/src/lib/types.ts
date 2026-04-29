@@ -39,6 +39,17 @@ export type TCatalogo = {
     nombre: string
 }
 
+export const DocumentoTipo = {
+  FACTURA: 1,
+  OFICIO: 2,
+  ADQUISICION: 3,
+  RESGUARDO: 4,
+  PRESTAMO: 5,
+  DICTAMEN: 6
+} as const;
+
+export type DocumentoTipo = typeof DocumentoTipo[keyof typeof DocumentoTipo];
+
 export type {
     User,
     AuthRouteContext,
