@@ -38,6 +38,12 @@ return new class extends Migration
                 ->constrained('archivos', indexName: 'fk_articulos_archivos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->string('antiguo_numero_inventario', 10)
+                ->nullable()
+                ->unique('uk_articulo_antiguo_numero_inventario');
+            $table->string('cuenta_contable', 11)
+                ->nullable()
+                ->unique('uk_articulo_cuenta_contable', 11);
             $table->boolean('contable');
             $table->boolean('activo');
             $table->timestamps();

@@ -26,7 +26,7 @@ export const columns: ColumnDef<Documento>[] = [
         accessorKey: 'archivo.created_at',
         cell: ({ getValue }) => {
             const date = getValue<Date>();
-            if (!date) return '—';
+
             return new Date(date).toLocaleDateString('es-MX', {
                 day: '2-digit',
                 month: '2-digit',
