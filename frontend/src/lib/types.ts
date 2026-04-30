@@ -50,6 +50,14 @@ export const DocumentoTipo = {
 
 export type DocumentoTipo = typeof DocumentoTipo[keyof typeof DocumentoTipo];
 
+export interface PaginatedResponse<T> {
+  data: T[]
+  total: number
+  per_page: number
+  current_page: number
+  last_page: number
+}
+
 export type {
     User,
     AuthRouteContext,

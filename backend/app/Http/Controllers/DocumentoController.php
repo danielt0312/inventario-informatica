@@ -22,9 +22,9 @@ class DocumentoController extends Controller
             $query->whereHas('tipo', fn ($q)
                 => $q->whereIn('id', $request->input('tipos')));
 
-        $data = $query->get();
+        $data = $query->paginate($request->query('per_page', 10));
 
-        return response()->json(compact('data'));
+        return response()->json($data);
     }
 
     public function store(StoreDocumentoRequest $request)

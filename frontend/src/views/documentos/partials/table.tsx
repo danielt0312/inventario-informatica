@@ -4,12 +4,13 @@ import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/composed/datatable";
 import { columns as defaultColumns, type Documento } from "./table.cols";
-import { getCoreRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
+import { getCoreRowModel, getPaginationRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Form, queryOptTipos } from "./form";
 import { useState } from "react";
 import { DataTableFilter } from "@/components/ui/datatable";
 import { useDebounce } from "@/hooks/use-debounce";
+import type { PaginatedResponse } from "@/lib/types";
 
 export function Table({
     actionRow = [],
@@ -19,19 +20,27 @@ export function Table({
 }) {
     const { data: TIPOS = [] } = useQuery(queryOptTipos);
 
-    const [tipos, setsetTipos] = useState<number[]>([]);
-    const debouncedsetTipos = useDebounce(tipos, 500);
+    const [tipos, setTipos] = useState<number[]>([]);
+    const debouncedTipos = useDebounce(tipos, 500);
 
     const [archivoNombre, setArchivoNombre] = useState('');
     const debouncedArchivoNombre = useDebounce(archivoNombre);
 
+    const [pagination, setPagination] = useState({
+        pageIndex: 0,
+        pageSize: 10
+    });
+
     const query = useQuery({
-        queryKey: ['documentos', debouncedArchivoNombre, debouncedsetTipos],
-        queryFn: async () => await api.get<{ data: Documento[] }>('api/documentos', { params: {
-            archivo_nombre: debouncedArchivoNombre,
-            tipos: debouncedsetTipos.length  > 0 ? debouncedsetTipos : undefined
-        } })
-            .then(r => r.data.data),
+        queryKey: ['documentos', debouncedArchivoNombre, debouncedTipos, pagination],
+        queryFn: () => api.get<PaginatedResponse<Documento>>('api/documentos', {
+            params: {
+                archivo_nombre: debouncedArchivoNombre || undefined,
+                tipos: debouncedTipos.length  > 0 ? debouncedTipos : undefined,
+                page: pagination.pageIndex + 1,
+                per_page: pagination.pageSize
+            }
+        }).then(r => r.data),
         staleTime: 60 * 1000
     });
 
@@ -39,8 +48,13 @@ export function Table({
 
     const table = useReactTable({
         columns,
-        data: query.data ?? [],
-        getCoreRowModel: getCoreRowModel()
+        data: query.data?.data ?? [],
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        onPaginationChange: setPagination,
+        manualPagination: true,
+        rowCount: query.data?.total ?? 0,
+        state: { pagination }
     });
 
     return (
@@ -59,7 +73,7 @@ export function Table({
                         label="Tipo de Documento"
                         filters={TIPOS}
                         selectedFilters={tipos}
-                        setSelectedFilters={setsetTipos}
+                        setSelectedFilters={setTipos}
                     />
                 </>
             )}

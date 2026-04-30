@@ -7,6 +7,7 @@ import {
     type DataTableProps as DataTablePropsPrimitive
 } from "../ui/datatable";
 import { Spinner } from "../ui/spinner";
+import type { PaginatedResponse } from "@/lib/types";
 
 interface DataTableStatus {
     query: UseQueryResult<unknown, Error>
@@ -16,31 +17,46 @@ function getContentStatus({ query }: DataTableStatus): React.ReactNode {
     const { isError, isPending, isFetching, data } = query;
 
     if (isFetching && isPending) {
-        return <Spinner className="size-6" />;
+        return <Spinner className="size-6 md:size-8" />;
     }
 
     if (isError) {
-        return <span className="text-destructive">Hubo un error al intentar consultar la información</span>;
+        return (
+            <span className="text-destructive">
+                Hubo un error al intentar consultar la información
+            </span>
+        );
     }
 
-    return (Array.isArray(data) ? data.length === 0 : data == null)
-        ? 'Sin contenido'
+    const isEmpty =
+        data == null ||
+        (Array.isArray(data) ? data.length === 0
+        : Array.isArray((data as PaginatedResponse<unknown>).data)
+            ? (data as PaginatedResponse<unknown>).data.length === 0
+            : false);
+
+    return isEmpty
+        ? (
+            <span className="text-muted-foreground italic">
+                No se encontró información.
+            </span>
+        )
         : undefined;
 }
 
-interface DataTableProps<TData>
+interface DataTableProps<TData, TQueryData = TData[]>
   extends DataTablePropsPrimitive<TData> {
-    filterBar?: () => React.ReactNode,
-    actionBar?: () => React.ReactNode,
-    query?: UseQueryResult<TData[], Error>
+    filterBar?: () => React.ReactNode
+    actionBar?: () => React.ReactNode
+    query?: UseQueryResult<TQueryData, Error>
 }
 
-export function DataTable<TData>({
+export function DataTable<TData, TQueryData = TData[]>({
     table,
     filterBar,
     actionBar,
     query
-}: DataTableProps<TData>) {
+}: DataTableProps<TData, TQueryData>) {
     const contentStatus = query ? getContentStatus({ query }) : undefined;
 
     return (
