@@ -1,37 +1,14 @@
 import { QueryClient } from "@tanstack/react-query"
 
-type User = {
+export type User = {
     id: number
     email: string
     name: string
 }
 
-type AuthRouteContext = {
+export type AuthRouteContext = {
     user: User | null
     queryClient: QueryClient
-}
-
-type ProductoCategoria = {
-    id: number
-    nombre: string
-}
-
-type ProductoTipo = {
-    id: number
-    nombre: string
-    categoria_id: number
-}
-
-type ProductoMarca = {
-    id: number
-    nombre: string
-}
-
-type Producto = {
-    id: number
-    tipo_id: number
-    marca_id: number
-    nombre: string
 }
 
 export type TCatalogo = {
@@ -56,13 +33,4 @@ export interface PaginatedResponse<T> {
   per_page: number
   current_page: number
   last_page: number
-}
-
-export type {
-    User,
-    AuthRouteContext,
-    Producto,
-    ProductoCategoria,
-    ProductoTipo,
-    ProductoMarca
 }

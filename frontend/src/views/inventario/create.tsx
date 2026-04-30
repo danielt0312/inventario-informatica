@@ -7,7 +7,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { useForm, useStore } from "@tanstack/react-form"
 
-import type { Producto, ProductoCategoria, ProductoTipo, ProductoMarca } from "@/lib/types"
 import api from "@/lib/axios"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
@@ -23,6 +22,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { useState, useMemo } from "react"
 import type { Documento } from "../documentos/partials/table.cols"
 import { Table as DocumentosTable } from "../documentos/partials/table"
+import type { TCatalogo } from "@/lib/types"
 
 function Create() {
     const navigate = useNavigate();
@@ -71,7 +71,7 @@ function Create() {
     const { data: producto_categorias = [] } = useQuery({
         queryKey: ['producto_categorias'],
         queryFn: async () => {
-            const { data: axiosData } = await api.get<{ data: ProductoCategoria[] }>('api/producto_categorias')
+            const { data: axiosData } = await api.get<{ data: TCatalogo[] }>('api/producto_categorias')
             return axiosData.data
         }
     })
@@ -79,7 +79,7 @@ function Create() {
     const { data: producto_tipos = [] } = useQuery({
         queryKey: ['producto_tipos', productoCategoria],
         queryFn: async () => {
-            const { data: axiosData } = await api.get<{ data: ProductoTipo[] }>('api/producto_tipos', { params: {
+            const { data: axiosData } = await api.get<{ data: TCatalogo[] }>('api/producto_tipos', { params: {
                 categoria_id: productoCategoria
             }})
 
@@ -91,7 +91,7 @@ function Create() {
     const { data: producto_marcas = [] } = useQuery({
         queryKey: ['producto_marcas', productoTipo],
         queryFn: async () => {
-            const { data: axiosData } = await api.get<{ data: ProductoTipo[] }>('api/producto_marcas', { params: {
+            const { data: axiosData } = await api.get<{ data: TCatalogo[] }>('api/producto_marcas', { params: {
                 tipo_id: productoTipo
             }})
 
@@ -103,7 +103,7 @@ function Create() {
     const { data: productos = [] } = useQuery({
         queryKey: ['productos', productoTipo, productoMarca],
         queryFn: async () => {
-            const { data: axiosData } = await api.get<{ data: ProductoTipo[] }>('api/productos', { params: {
+            const { data: axiosData } = await api.get<{ data: TCatalogo[] }>('api/productos', { params: {
                 tipo_id: productoTipo,
                 marca_id: productoMarca
             }})
@@ -135,7 +135,7 @@ function Create() {
                                             <FieldLabel>Categoría del Bien Informático:</FieldLabel>
                                             <Combobox
                                                 items={producto_categorias}
-                                                itemToStringLabel={(item: ProductoCategoria) => item.nombre}
+                                                itemToStringLabel={(item: TCatalogo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
@@ -143,7 +143,7 @@ function Create() {
                                                 <ComboboxContent>
                                                     <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                                                     <ComboboxList>
-                                                        {(item: ProductoCategoria) => (
+                                                        {(item: TCatalogo) => (
                                                             <ComboboxItem key={item.id} value={item}>
                                                                 {item.nombre}
                                                             </ComboboxItem>
@@ -162,7 +162,7 @@ function Create() {
                                             <FieldLabel>Tipo de Producto</FieldLabel>
                                             <Combobox
                                                 items={producto_tipos}
-                                                itemToStringLabel={(item: ProductoTipo) => item.nombre}
+                                                itemToStringLabel={(item: TCatalogo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
@@ -170,7 +170,7 @@ function Create() {
                                                 <ComboboxContent>
                                                     <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                                                     <ComboboxList>
-                                                        {(item: ProductoTipo) => (
+                                                        {(item: TCatalogo) => (
                                                             <ComboboxItem key={item.id} value={item}>
                                                                 {item.nombre}
                                                             </ComboboxItem>
@@ -192,7 +192,7 @@ function Create() {
                                             <FieldLabel>Marca empresarial:</FieldLabel>
                                             <Combobox
                                                 items={producto_marcas}
-                                                itemToStringLabel={(item: ProductoMarca) => item.nombre}
+                                                itemToStringLabel={(item: TCatalogo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
@@ -200,7 +200,7 @@ function Create() {
                                                 <ComboboxContent>
                                                     <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                                                     <ComboboxList>
-                                                        {(item: ProductoMarca) => (
+                                                        {(item: TCatalogo) => (
                                                             <ComboboxItem key={item.id} value={item}>
                                                                 {item.nombre}
                                                             </ComboboxItem>
@@ -220,7 +220,7 @@ function Create() {
                                             <FieldLabel>Modelo:</FieldLabel>
                                             <Combobox
                                                 items={productos}
-                                                itemToStringLabel={(item: Producto) => item.nombre}
+                                                itemToStringLabel={(item: TCatalogo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
@@ -232,7 +232,7 @@ function Create() {
                                                 <ComboboxContent>
                                                     <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                                                     <ComboboxList>
-                                                        {(item: Producto) => (
+                                                        {(item: TCatalogo) => (
                                                             <ComboboxItem key={item.id} value={item}>
                                                                 {item.nombre}
                                                             </ComboboxItem>
