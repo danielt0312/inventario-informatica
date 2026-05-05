@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Models\Archivo;
-use App\DocumentoTipoEnum;
+use App\Enums\DocumentoTipoEnum;
 
 class DocumentoFactory extends Factory
 {

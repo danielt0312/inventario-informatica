@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\DocumentoTipo;
-use App\DocumentoTipoEnum;
+use App\Enums\DocumentoTipoEnum;
 
 class DocumentoTipoSeeder extends Seeder
 {

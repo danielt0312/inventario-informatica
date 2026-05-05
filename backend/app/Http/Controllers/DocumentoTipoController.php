@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\DocumentoTipoEnum;
+use App\Enums\DocumentoTipoEnum;
 
 class DocumentoTipoController extends Controller
 {

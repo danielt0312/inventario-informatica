@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\ArchivoTipo;
-use App\ArchivoTipoEnum;
+use App\Enums\ArchivoTipoEnum;
 
 class ArchivoTipoSeeder extends Seeder
 {

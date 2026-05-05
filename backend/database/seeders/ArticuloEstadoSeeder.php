@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\ArticuloEstado;
-use App\ArticuloEstadoEnum;
+use App\Enums\ArticuloEstadoEnum;
 
 class ArticuloEstadoSeeder extends Seeder
 {

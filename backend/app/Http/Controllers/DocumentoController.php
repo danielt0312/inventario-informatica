@@ -6,7 +6,7 @@ use App\Models\{Documento, Archivo};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Documento\{DocumentoRequest, StoreDocumentoRequest};
-use App\ArchivoTipoEnum;
+use App\Enums\ArchivoTipoEnum;
 
 class DocumentoController extends Controller
 {

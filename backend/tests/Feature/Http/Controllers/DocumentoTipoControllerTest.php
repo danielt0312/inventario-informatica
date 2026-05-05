@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-use App\DocumentoTipoEnum;
+use App\Enums\DocumentoTipoEnum;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
