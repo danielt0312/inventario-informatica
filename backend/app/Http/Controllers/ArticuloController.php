@@ -10,11 +10,31 @@ class ArticuloController extends Controller
 {
     public function index(ArticuloRequest $request)
     {
-        $data = Articulo::where($request->validated())
-            ->with(['estado', 'producto.tipo.categoria'])
-            ->get();
+        $query = Articulo::with(['estado', 'producto.tipo.categoria', 'producto.marca']);
 
-        return response()->json(compact('data'));
+        if ($request->filled('categorias')) {
+            $query->whereHas('producto.tipo.categoria', fn ($q)
+                => $q->whereIn('id', $request->input('categorias')));
+        }
+
+        if ($request->filled('tipos')) {
+            $query->whereHas('producto.tipo', fn ($q)
+                => $q->whereIn('id', $request->input('tipos')));
+        }
+
+        if ($request->filled('marcas')) {
+            $query->whereHas('producto.marca', fn ($q)
+                => $q->whereIn('id', $request->input('marcas')));
+        }
+
+        if ($request->filled('modelos')) {
+            $query->whereHas('producto', fn ($q)
+                => $q->whereIn('id', $request->input('modelos')));
+        }
+
+        $data = $query->paginate($request->query('per_page', 10));
+
+        return response()->json($data);
     }
 
     public function store(StoreArticuloRequest $request)

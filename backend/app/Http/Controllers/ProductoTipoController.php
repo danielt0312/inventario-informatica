@@ -12,8 +12,13 @@ class ProductoTipoController extends Controller
 {
     public function index(ProductoTipoRequest $request)
     {
-        $data = ProductoTipo::where($request->validated())
-            ->get();
+        $query = ProductoTipo::query();
+
+        if ($request->filled('categorias')){
+            $query->whereIn('categoria_id', $request->input('categorias'));
+        }
+
+        $data = $query->get();
 
         return response()->json(compact('data'));
     }

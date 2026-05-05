@@ -28,6 +28,10 @@ export const columns: ColumnDef<Articulo>[] = [
         accessorKey: "producto.tipo.nombre"
     },
     {
+        header: "Marca",
+        accessorKey: "producto.marca.nombre"
+    },
+    {
         header: "Modelo",
         accessorKey: "producto.nombre"
     },

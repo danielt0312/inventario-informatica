@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { useForm, useStore } from "@tanstack/react-form"
 
 import api from "@/lib/axios"
-import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { Route } from "@/routes/_auth/inventario"
 import { isAxiosError } from "axios"
@@ -23,10 +22,11 @@ import { useState, useMemo } from "react"
 import type { Documento } from "../documentos/partials/table.cols"
 import { Table as DocumentosTable } from "../documentos/partials/table"
 import type { TCatalogo } from "@/lib/types"
+import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/components/producto/categorizacion"
 
 function Create() {
     const navigate = useNavigate();
-    const [dialogDocumentoOpen, setDialogDocumentoOpen] = useState(false)
+    const [dialogDocumentoOpen, setDialogDocumentoOpen] = useState(false);
 
     const form = useForm({
         defaultValues,
@@ -68,50 +68,10 @@ function Create() {
     const productoTipo = useStore(form.store, (state) => state.values.producto_tipo_id)
     const productoMarca = useStore(form.store, (state) => state.values.producto_marca_id)
 
-    const { data: producto_categorias = [] } = useQuery({
-        queryKey: ['producto_categorias'],
-        queryFn: async () => {
-            const { data: axiosData } = await api.get<{ data: TCatalogo[] }>('api/producto_categorias')
-            return axiosData.data
-        }
-    })
-
-    const { data: producto_tipos = [] } = useQuery({
-        queryKey: ['producto_tipos', productoCategoria],
-        queryFn: async () => {
-            const { data: axiosData } = await api.get<{ data: TCatalogo[] }>('api/producto_tipos', { params: {
-                categoria_id: productoCategoria
-            }})
-
-            return axiosData.data
-        },
-        enabled: !!productoCategoria
-    })
-
-    const { data: producto_marcas = [] } = useQuery({
-        queryKey: ['producto_marcas', productoTipo],
-        queryFn: async () => {
-            const { data: axiosData } = await api.get<{ data: TCatalogo[] }>('api/producto_marcas', { params: {
-                tipo_id: productoTipo
-            }})
-
-            return axiosData.data
-        },
-        enabled: !!productoTipo
-    })
-
-    const { data: productos = [] } = useQuery({
-        queryKey: ['productos', productoTipo, productoMarca],
-        queryFn: async () => {
-            const { data: axiosData } = await api.get<{ data: TCatalogo[] }>('api/productos', { params: {
-                tipo_id: productoTipo,
-                marca_id: productoMarca
-            }})
-
-            return axiosData.data
-        },
-        enabled: !!productoTipo && !!productoMarca
-    })
+    const { data: PRODUCTO_CATEGORIA = [] } = useCategoriaQuery();
+    const { data: PRODUCTO_TIPOS = [] } = useTipoQuery(productoCategoria);
+    const { data: PRODUCTO_MARCAS = [] } = useMarcaQuery(productoTipo);
+    const { data: PRODUCTOS = [] } = useProductoQuery(productoTipo, productoMarca);
 
     return (
         <>
@@ -134,7 +94,7 @@ function Create() {
                                         <Field>
                                             <FieldLabel>Categoría del Bien Informático:</FieldLabel>
                                             <Combobox
-                                                items={producto_categorias}
+                                                items={PRODUCTO_CATEGORIA}
                                                 itemToStringLabel={(item: TCatalogo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
@@ -161,7 +121,7 @@ function Create() {
                                         <Field data-disabled={!productoCategoria}>
                                             <FieldLabel>Tipo de Producto</FieldLabel>
                                             <Combobox
-                                                items={producto_tipos}
+                                                items={PRODUCTO_TIPOS}
                                                 itemToStringLabel={(item: TCatalogo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
@@ -191,7 +151,7 @@ function Create() {
                                         <Field data-disabled={!productoTipo}>
                                             <FieldLabel>Marca empresarial:</FieldLabel>
                                             <Combobox
-                                                items={producto_marcas}
+                                                items={PRODUCTO_MARCAS}
                                                 itemToStringLabel={(item: TCatalogo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
@@ -219,7 +179,7 @@ function Create() {
                                         <Field data-disabled={!productoMarca}>
                                             <FieldLabel>Modelo:</FieldLabel>
                                             <Combobox
-                                                items={productos}
+                                                items={PRODUCTOS}
                                                 itemToStringLabel={(item: TCatalogo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight

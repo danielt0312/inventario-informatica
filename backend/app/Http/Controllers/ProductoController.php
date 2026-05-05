@@ -12,8 +12,19 @@ class ProductoController extends Controller
 {
     public function index(ProductoRequest $request)
     {
-        $data = Producto::where($request->validated())
-            ->get();
+        $query = Producto::where($request->validated());
+
+        if ($request->filled('tipos')) {
+            $query->whereHas('tipo', fn ($q)
+                => $q->whereIn('id', $request->input('tipos')));
+        }
+
+        if ($request->filled('marcas')) {
+            $query->whereHas('marca', fn ($q)
+                => $q->whereIn('id', $request->input('marcas')));
+        }
+
+        $data = $query->get();
 
         return response()->json(compact('data'));
     }

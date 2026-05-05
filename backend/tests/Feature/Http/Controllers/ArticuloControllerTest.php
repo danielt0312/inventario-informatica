@@ -22,7 +22,7 @@ test('auth user puede registrar con atributos validos', function () {
 });
 
 test('obtencion de articulos (`inventario`)', function () {
-    Articulo::factory(1)->create();
+    Articulo::factory()->create();
 
     $response = $this->actingAs($this->user, 'sanctum')
         ->getJson('api/articulos');
@@ -30,7 +30,12 @@ test('obtencion de articulos (`inventario`)', function () {
     $response->assertStatus(200)
         ->assertJsonStructure([
             'data' => ['*' => [
-                'numero_inventario'
+                'numero_inventario',
+                'categoria',
+                'tipo',
+                'marca',
+                'producto',
+                'estado'
             ]]
         ]);
 });

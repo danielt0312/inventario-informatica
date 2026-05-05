@@ -212,15 +212,17 @@ function DataTableColumnHeaderSorting<TData, TValue>({
 interface DataTableFilterProps {
     label: string
     filters: TCatalogo[]
-    selectedFilters: number[],
+    selectedFilters: number[]
     setSelectedFilters: Dispatch<SetStateAction<number[]>>
+    children?: (filter: TCatalogo) => React.ReactNode
 }
 
 function DataTableFilter({
     label,
     filters,
     selectedFilters,
-    setSelectedFilters
+    setSelectedFilters,
+    children
 }: DataTableFilterProps) {
     const handleToggle = (id: number) => {
         setSelectedFilters((prev) =>
@@ -243,7 +245,9 @@ function DataTableFilter({
                         onCheckedChange={() => handleToggle(filter.id)}
                         onSelect={(e) => e.preventDefault()}
                     >
-                        {filter.nombre}
+                        {children
+                            ? children(filter)
+                            : filter.nombre}
                     </DropdownMenuCheckboxItem>
                 ))}
             </DropdownMenuContent>

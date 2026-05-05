@@ -10,7 +10,8 @@ use App\Http\Controllers\{
     ProductoMarcaController,
     ArticuloController,
     DocumentoController,
-    DocumentoTipoController
+    DocumentoTipoController,
+    ArticuloEstadoController
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -26,4 +27,5 @@ Route::middleware('auth:sanctum')->group(function () {
     ]);
 
     Route::get('documento_tipos', [DocumentoTipoController::class, 'index']);
+    Route::get('articulo_estados', [ArticuloEstadoController::class, 'index']);
 });
