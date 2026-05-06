@@ -2,8 +2,12 @@
 
 namespace App\Enums;
 
+use App\Traits\EnumToArray;
+
 enum DocumentoTipoEnum: int
 {
+    use EnumToArray;
+
     case FACTURA        = 1;
     case OFICIO         = 2;
     case ADQUISICION    = 3;

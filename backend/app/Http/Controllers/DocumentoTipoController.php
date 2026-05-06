@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Enums\DocumentoTipoEnum;
 
 class DocumentoTipoController extends Controller
 {
     public function index() {
-        $data = array_map(
-            fn (DocumentoTipoEnum $v) => ['id' => $v->value, 'nombre' => $v->nombre()],
-            DocumentoTipoEnum::cases()
-        );
+        $data = DocumentoTipoEnum::toFormattedArray();
 
         return response()->json(compact('data'));
     }

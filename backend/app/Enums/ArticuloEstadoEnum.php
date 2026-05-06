@@ -2,8 +2,12 @@
 
 namespace App\Enums;
 
+use App\Traits\EnumToArray;
+
 enum ArticuloEstadoEnum: int
 {
+    use EnumToArray;
+
     case ACTIVO             = 1;
     case BAJA               = 2;
     case BAJA_PREVENTIVA    = 3;
