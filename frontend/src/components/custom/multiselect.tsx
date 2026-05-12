@@ -17,10 +17,11 @@ export function MultiSelect ({
             {...props}
             triggerer={(selected) => (
                 <>
-                    <PlusCircle/>{label}
-                    {withCountIndicator && selected.length > 0 && (
-                        <Badge className='h-4 min-w-4 px-1 tabular-nums'>{selected.length}</Badge>
-                    )}
+                    {withCountIndicator && selected.length > 0
+                        ? <Badge className='h-4 min-w-4 px-1 tabular-nums'>{selected.length}</Badge>
+                        : <PlusCircle/>
+                    }
+                    {label}
                 </>
             )}
         />

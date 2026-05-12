@@ -27,6 +27,7 @@ export interface MultiSelectProps {
   selected: string[]
   onChange: (values: string[]) => void
   placeholder?: string
+  emptyMessage?: () => React.ReactNode
   triggerer: (selected: string[]) => React.ReactNode
 }
 
@@ -35,6 +36,7 @@ export function MultiSelect({
   selected,
   onChange,
   placeholder = "Buscar...",
+  emptyMessage = () => "Sin resultados.",
   triggerer
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
@@ -65,7 +67,7 @@ export function MultiSelect({
         <Command>
           <CommandInput placeholder={placeholder} />
           <CommandList>
-            <CommandEmpty>Sin resultados.</CommandEmpty>
+            <CommandEmpty className="px-5 py-4 text-muted-foreground">{emptyMessage()}</CommandEmpty>
             <CommandGroup>
               {options.map((option) => (
                   <CommandItem
