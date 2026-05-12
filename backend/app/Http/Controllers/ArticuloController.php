@@ -27,9 +27,14 @@ class ArticuloController extends Controller
                 => $q->whereIn('id', $request->input('marcas')));
         }
 
-        if ($request->filled('modelos')) {
+        if ($request->filled('productos')) {
             $query->whereHas('producto', fn ($q)
-                => $q->whereIn('id', $request->input('modelos')));
+                => $q->whereIn('id', $request->input('productos')));
+        }
+
+        if ($request->filled('estados')) {
+            $query->whereHas('estado', fn ($q)
+                => $q->whereIn('id', $request->input('estados')));
         }
 
         $data = $query->paginate($request->query('per_page', 10));

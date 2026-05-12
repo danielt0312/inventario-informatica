@@ -10,29 +10,70 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/_auth/inventario/create";
 import type { PaginatedResponse, TCatalogo } from "@/lib/types";
-import { DataTableFilter } from "@/components/ui/datatable";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
+import { MultiSelect } from "@/components/custom/multiselect";
+
+interface TableFilters {
+    categorias: number[];
+    tipos: number[];
+    marcas: number[];
+    productos: number[];
+    estados: number[];
+    numero_inventario: string;
+}
 
 export function Table() {
-    const [categorias, setCategorias] = useState<number[]>([]);
-    const debouncedCategorias = useDebounce(categorias);
+    const [filters, setFilters] = useState<TableFilters>({
+        categorias: [],
+        tipos: [],
+        marcas: [],
+        productos: [],
+        estados: [],
+        numero_inventario: "",
+    });
+    const debounceFilters = useDebounce(filters);
 
-    const [tipos, setTipos] = useState<number[]>([]);
-    const debouncedTipos = useDebounce(tipos);
+    const { data: PRODUCTO_CATEGORIAS = [] } = useQuery({
+        queryKey: ['producto_categorias'],
+        queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_categorias')
+            .then(r => r.data.data)
+    });
 
-    const [marcas, setMarcas] = useState<number[]>([]);
-    const debouncedMarcas = useDebounce(marcas);
+    const { data: PRODUCTO_TIPOS = [] } = useQuery({
+        queryKey: ['producto_tipos', debounceFilters['categorias']],
+        queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_tipos', {
+            params: {
+                categorias: debounceFilters['categorias']
+            }
+        }).then(r => r.data.data)
+    });
 
-    const [modelos, setModelos] = useState<number[]>([]);
-    const debouncedModelos = useDebounce(modelos);
+    const { data: PRODUCTO_MARCAS = [] } = useQuery({
+        queryKey: ['producto_marcas', debounceFilters['tipos']],
+        queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_marcas', {
+            params: {
+                tipos: debounceFilters['tipos']
+            }
+        }).then(r => r.data.data)
+    });
 
-    const [estados, setEstados] = useState<number[]>([]);
-    const debouncedEstados = useDebounce(estados);
+    const { data: PRODUCTOS = [] } = useQuery({
+        queryKey: ['productos', debounceFilters['tipos'], debounceFilters['marcas']],
+        queryFn: () => api.get<{ data: TCatalogo[] }>('api/productos', {
+            params: {
+                tipos: debounceFilters['tipos'],
+                marcas: debounceFilters['marcas']
+            }
+        }).then(r => r.data.data)
+    });
 
-    const [numeroInventario, setNumeroInventario] = useState('');
-    const debouncedNumeroInventario = useDebounce(numeroInventario, 500);
+    const { data: PRODUCTO_ESTADOS = [] } = useQuery({
+        queryKey: ['articulo_estados'],
+        queryFn: () => api.get<{ data: TCatalogo[] }>('api/articulo_estados')
+            .then(r => r.data.data)
+    });
 
     const [pagination, setPagination] = useState({
         pageIndex: 0,
@@ -40,15 +81,10 @@ export function Table() {
     });
 
     const query = useQuery({
-        queryKey: ['articulos', debouncedNumeroInventario, debouncedCategorias, debouncedTipos, debouncedMarcas, debouncedModelos, debouncedEstados, pagination],
+        queryKey: ['articulos', debounceFilters, pagination],
         queryFn: () => api.get<PaginatedResponse<Articulo>>('api/articulos', {
             params: {
-                numero_inventario: debouncedNumeroInventario ?? undefined,
-                categorias,
-                tipos,
-                marcas,
-                modelos,
-                estados,
+                ...debounceFilters,
                 pagination
             }
         }).then(r => r.data),
@@ -66,45 +102,6 @@ export function Table() {
         state: { pagination }
     });
 
-    const { data: PRODUCTO_CATEGORIAS = [] } = useQuery({
-        queryKey: ['producto_categorias'],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_categorias')
-            .then(r => r.data.data)
-    });
-
-    const { data: PRODUCTO_TIPOS = [] } = useQuery({
-        queryKey: ['producto_tipos', debouncedCategorias],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_tipos', {
-            params: {
-                categorias
-            }
-        }).then(r => r.data.data)
-    });
-
-    const { data: PRODUCTO_MARCAS = [] } = useQuery({
-        queryKey: ['producto_marcas', debouncedTipos],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_marcas', {
-            params: {
-                tipos
-            }
-        }).then(r => r.data.data)
-    });
-
-    const { data: PRODUCTOS = [] } = useQuery({
-        queryKey: ['productos', debouncedTipos, debouncedMarcas],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/productos', {
-            params: {
-                tipos,
-                marcas
-            }
-        }).then(r => r.data.data)
-    });
-
-    const { data: PRODUCTO_ESTADOS = [] } = useQuery({
-        queryKey: ['producto_estados'],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/productos').then(r => r.data.data)
-    });
-
     return (
         <DataTable
             table={table}
@@ -113,40 +110,63 @@ export function Table() {
                 <>
                     <Input
                         placeholder="Número de Inventario..."
-                        value={numeroInventario}
-                        onChange={(e) => setNumeroInventario(e.target.value)}
+                        value={filters.numero_inventario}
+                        onChange={(e) => setFilters(prev => ({
+                            ...prev,
+                            numero_inventario: e.target.value
+                        }))}
                         className="max-w-sm h-8"
                     />
-                    <DataTableFilter
+                    <MultiSelect
                         label="Categoría"
-                        filters={PRODUCTO_CATEGORIAS}
-                        selectedFilters={categorias}
-                        setSelectedFilters={setCategorias}
+                        options={PRODUCTO_CATEGORIAS}
+                        selected={filters.categorias.map(String)}
+                        onChange={(v) => setFilters(prev => ({
+                            ...prev,
+                            categorias: v.map(Number),
+                            tipos: [],
+                            marcas: [],
+                            productos: []
+                        }))}
                     />
-                    <DataTableFilter
+                    <MultiSelect
                         label="Producto"
-                        filters={PRODUCTO_TIPOS}
-                        selectedFilters={tipos}
-                        setSelectedFilters={setTipos}
+                        options={PRODUCTO_TIPOS}
+                        selected={filters.tipos.map(String)}
+                        onChange={(v) => setFilters(prev => ({
+                            ...prev,
+                            tipos: v.map(Number),
+                            marcas: [],
+                            productos: []
+                        }))}
                     />
-                    <DataTableFilter
+                    <MultiSelect
                         label="Marca"
-                        filters={PRODUCTO_MARCAS}
-                        selectedFilters={marcas}
-                        setSelectedFilters={setMarcas}
+                        options={PRODUCTO_MARCAS}
+                        selected={filters.marcas.map(String)}
+                        onChange={(v) => setFilters(prev => ({
+                            ...prev,
+                            marcas: v.map(Number),
+                            productos: []
+                        }))}
                     />
-                    <DataTableFilter
+                    <MultiSelect
                         label="Modelo"
-                        filters={PRODUCTOS}
-                        selectedFilters={modelos}
-                        setSelectedFilters={setModelos}
+                        options={PRODUCTOS}
+                        selected={filters.productos.map(String)}
+                        onChange={(v) => setFilters(prev => ({
+                            ...prev,
+                            productos: v.map(Number)
+                        }))}
                     />
-                    <DataTableFilter
+                    <MultiSelect
                         label="Estado"
-                        filters={PRODUCTO_ESTADOS}
-                        selectedFilters={estados}
-                        setSelectedFilters={setEstados}
-                        children={(filter) => filter.nombre}
+                        options={PRODUCTO_ESTADOS}
+                        selected={filters.estados.map(String)}
+                        onChange={(v) => setFilters(prev => ({
+                            ...prev,
+                            estados: v.map(Number)
+                        }))}
                     />
                 </>
             )}

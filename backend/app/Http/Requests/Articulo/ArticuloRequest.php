@@ -16,9 +16,9 @@ class ArticuloRequest extends FormRequest
             'marcas' => ['nullable', 'array'],
             'marcas.*' => ['integer', 'exists:producto_marcas,id'],
             'productos' => ['nullable', 'array'],
-            'productos.*' => ['integer', 'exists:producto,id'],
+            'productos.*' => ['integer', 'exists:productos,id'],
             'estados' => ['nullable', 'array'],
-            'estados.*' => ['integer', 'exists:producto,id'],
+            'estados.*' => ['integer', 'exists:articulo_estados,id'],
             'numero_inventario' => ['nullable', 'string'],
         ];
     }
