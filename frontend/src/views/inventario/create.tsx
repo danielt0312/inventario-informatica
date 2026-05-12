@@ -22,11 +22,12 @@ import { useState, useMemo } from "react"
 import type { Documento } from "../documentos/partials/table.cols"
 import { Table as DocumentosTable } from "../documentos/partials/table"
 import type { TCatalogo } from "@/lib/types"
-import { useQuery } from "@tanstack/react-query"
 import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/components/producto/categorizacion"
+import { useQueryClient } from "@tanstack/react-query"
 
 function Create() {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const [dialogDocumentoOpen, setDialogDocumentoOpen] = useState(false);
 
     const form = useForm({
@@ -38,6 +39,7 @@ function Create() {
             try {
                 await api.post('api/articulos', value);
 
+                queryClient.invalidateQueries({ queryKey: ['articulos'] })
                 navigate({ to: Route.to });
             } catch (error) {
                 if (isAxiosError(error) && error.response?.status === 422) {
