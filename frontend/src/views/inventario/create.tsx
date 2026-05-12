@@ -22,6 +22,7 @@ import { useState, useMemo } from "react"
 import type { Documento } from "../documentos/partials/table.cols"
 import { Table as DocumentosTable } from "../documentos/partials/table"
 import type { TCatalogo } from "@/lib/types"
+import { useQuery } from "@tanstack/react-query"
 import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/components/producto/categorizacion"
 
 function Create() {
@@ -64,14 +65,27 @@ function Create() {
         }
     ], [form]);
 
-    const productoCategoria = useStore(form.store, (state) => state.values.producto_categoria_id)
-    const productoTipo = useStore(form.store, (state) => state.values.producto_tipo_id)
-    const productoMarca = useStore(form.store, (state) => state.values.producto_marca_id)
+    const categoria = useStore(form.store, (state) => state.values.producto_categoria_id)
+    const tipo = useStore(form.store, (state) => state.values.producto_tipo_id)
+    const marca = useStore(form.store, (state) => state.values.producto_marca_id)
 
-    const { data: PRODUCTO_CATEGORIA = [] } = useCategoriaQuery();
-    const { data: PRODUCTO_TIPOS = [] } = useTipoQuery(productoCategoria);
-    const { data: PRODUCTO_MARCAS = [] } = useMarcaQuery(productoTipo);
-    const { data: PRODUCTOS = [] } = useProductoQuery(productoTipo, productoMarca);
+    const { data: PRODUCTO_CATEGORIAS = [] } = useCategoriaQuery();
+
+    const { data: PRODUCTO_TIPOS = [] } = useTipoQuery({
+        categorias: categoria ? [categoria] : [],
+        enabled: !!categoria
+    });
+
+    const { data: PRODUCTO_MARCAS = [] } = useMarcaQuery({
+        tipos: tipo ? [tipo] : [],
+        enabled: !!tipo
+    });
+
+    const { data: PRODUCTOS = [] } = useProductoQuery({
+        marcas: marca ? [marca] : [],
+        tipos: tipo ? [tipo] : [],
+        enabled: !!tipo
+    });
 
     return (
         <>
@@ -94,7 +108,7 @@ function Create() {
                                         <Field>
                                             <FieldLabel>Categoría del Bien Informático:</FieldLabel>
                                             <Combobox
-                                                items={PRODUCTO_CATEGORIA}
+                                                items={PRODUCTO_CATEGORIAS}
                                                 itemToStringLabel={(item: TCatalogo) => item.nombre}
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
@@ -118,7 +132,7 @@ function Create() {
                                 <form.Field
                                     name="producto_tipo_id"
                                     children={(field) => (
-                                        <Field data-disabled={!productoCategoria}>
+                                        <Field data-disabled={!categoria}>
                                             <FieldLabel>Tipo de Producto</FieldLabel>
                                             <Combobox
                                                 items={PRODUCTO_TIPOS}
@@ -126,7 +140,7 @@ function Create() {
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
-                                                <ComboboxInput id="tipo_id" placeholder="Selecciona una opción" disabled={!productoCategoria} />
+                                                <ComboboxInput id="tipo_id" placeholder="Selecciona una opción" disabled={!categoria} />
                                                 <ComboboxContent>
                                                     <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                                                     <ComboboxList>
@@ -148,7 +162,7 @@ function Create() {
                                 <form.Field
                                     name="producto_marca_id"
                                     children={(field) => (
-                                        <Field data-disabled={!productoTipo}>
+                                        <Field data-disabled={!tipo}>
                                             <FieldLabel>Marca empresarial:</FieldLabel>
                                             <Combobox
                                                 items={PRODUCTO_MARCAS}
@@ -156,7 +170,7 @@ function Create() {
                                                 onValueChange={(v) => field.handleChange(v?.id ?? null)}
                                                 autoHighlight
                                             >
-                                                <ComboboxInput placeholder="Selecciona una opción" disabled={!productoTipo} />
+                                                <ComboboxInput placeholder="Selecciona una opción" disabled={!tipo} />
                                                 <ComboboxContent>
                                                     <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
                                                     <ComboboxList>
@@ -176,7 +190,7 @@ function Create() {
                                 <form.Field
                                     name="producto_id"
                                     children={field => (
-                                        <Field data-disabled={!productoMarca}>
+                                        <Field data-disabled={!marca}>
                                             <FieldLabel>Modelo:</FieldLabel>
                                             <Combobox
                                                 items={PRODUCTOS}
@@ -186,7 +200,7 @@ function Create() {
                                             >
                                                 <ComboboxInput
                                                     name={field.name}
-                                                    disabled={!productoMarca}
+                                                    disabled={!marca}
                                                     placeholder="Selecciona una opción"
                                                 />
                                                 <ComboboxContent>

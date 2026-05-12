@@ -1,49 +1,61 @@
 import api from "@/lib/axios"
 import type { TCatalogo } from "@/lib/types"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, type UseQueryOptions } from "@tanstack/react-query"
 
-type ID = number | null;
+type Option = number[];
 
-export const useCategoriaQuery = () => useQuery({
+export const useCategoriaQuery = (
+    params?: Omit<UseQueryOptions<TCatalogo[]>, 'queryKey' | 'queryFn'>
+) => useQuery({
+    ...params,
     queryKey: ['producto_categorias'],
     queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_categorias')
         .then(r => r.data.data)
 });
 
-export const useTipoQuery = (
-    categoria_id: ID
+export const useTipoQuery = ({
+    categorias,
+    ...params
+}: Omit<UseQueryOptions<TCatalogo[]>, 'queryKey' | 'queryFn'>
+    & { categorias: Option }
 ) => useQuery({
-    queryKey: ['producto_tipos', categoria_id],
+    ...params,
+    queryKey: ['producto_tipos', categorias],
     queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_tipos', {
         params: {
-            categoria_id
+            categorias
         }
-    }).then(r => r.data.data),
-    enabled: !!categoria_id
+    }).then(r => r.data.data)
 });
 
-export const useMarcaQuery = (
-    tipo_id: ID
+export const useMarcaQuery = ({
+    tipos,
+    ...params
+}: Omit<UseQueryOptions<TCatalogo[]>, 'queryKey' | 'queryFn'>
+    & { tipos: Option }
 ) => useQuery({
-    queryKey: ['producto_marcas', tipo_id],
+    ...params,
+    queryKey: ['producto_marcas', tipos],
     queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_marcas', {
         params: {
-            tipo_id
+            tipos
         }
-    }).then(r => r.data.data),
-    enabled: !!tipo_id
+    }).then(r => r.data.data)
 });
 
-export const useProductoQuery = (
-    tipo_id: ID,
-    marca_id: ID
+export const useProductoQuery = ({
+    tipos,
+    marcas,
+    ...params
+}: Omit<UseQueryOptions<TCatalogo[]>, 'queryKey' | 'queryFn'>
+    & { tipos: Option, marcas: Option }
 ) => useQuery({
-    queryKey: ['productos', tipo_id, marca_id],
+    ...params,
+    queryKey: ['productos', tipos, marcas],
     queryFn: () => api.get<{ data: TCatalogo[] }>('api/productos', {
         params: {
-            tipo_id,
-            marca_id
+            tipos,
+            marcas
         }
-    }).then(r => r.data.data),
-    enabled: !!tipo_id && !!marca_id
-})
+    }).then(r => r.data.data)
+});

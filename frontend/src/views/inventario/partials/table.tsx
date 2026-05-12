@@ -14,6 +14,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { MultiSelect } from "@/components/custom/multiselect";
+import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/components/producto/categorizacion";
 
 interface TableFilters {
     categorias: number[];
@@ -35,40 +36,21 @@ export function Table() {
     });
     const debounceFilters = useDebounce(filters);
 
-    const { data: PRODUCTO_CATEGORIAS = [] } = useQuery({
-        queryKey: ['producto_categorias'],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_categorias')
-            .then(r => r.data.data)
-    });
+    const { data: PRODUCTO_CATEGORIAS = [] } = useCategoriaQuery();
 
-    const { data: PRODUCTO_TIPOS = [] } = useQuery({
-        queryKey: ['producto_tipos', debounceFilters.categorias],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_tipos', {
-            params: {
-                categorias: debounceFilters.categorias
-            }
-        }).then(r => r.data.data),
+    const { data: PRODUCTO_TIPOS = [] } = useTipoQuery({
+        categorias: debounceFilters.categorias,
         enabled: debounceFilters.categorias.length > 0
     });
 
-    const { data: PRODUCTO_MARCAS = [] } = useQuery({
-        queryKey: ['producto_marcas', debounceFilters.tipos],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_marcas', {
-            params: {
-                tipos: debounceFilters.tipos
-            }
-        }).then(r => r.data.data),
+    const { data: PRODUCTO_MARCAS = [] } = useMarcaQuery({
+        tipos: debounceFilters.tipos,
         enabled: debounceFilters.tipos.length > 0
     });
 
-    const { data: PRODUCTOS = [] } = useQuery({
-        queryKey: ['productos', debounceFilters.tipos, debounceFilters.marcas],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/productos', {
-            params: {
-                tipos: debounceFilters.tipos,
-                marcas: debounceFilters.marcas
-            }
-        }).then(r => r.data.data),
+    const { data: PRODUCTOS = [] } = useProductoQuery({
+        tipos: debounceFilters.tipos,
+        marcas: debounceFilters.marcas,
         enabled: debounceFilters.tipos.length > 0
     });
 
