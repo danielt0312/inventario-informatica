@@ -12,12 +12,12 @@ class ProductoController extends Controller
 {
     public function index(ProductoRequest $request)
     {
-        $query = Producto::query();
-
-        if ($request->filled('tipos')) {
-            $query->whereHas('tipo', fn ($q)
-                => $q->whereIn('tipo_id', $request->input('tipos')));
+        if (!$request->filled('tipos')) {
+            return response()->json(['data' => []]);
         }
+
+        $query = Producto::whereHas('tipo', fn ($q)
+            => $q->whereIn('tipo_id', $request->input('tipos')));
 
         if ($request->filled('marcas')) {
             $query->whereHas('marca', fn ($q)

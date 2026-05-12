@@ -42,31 +42,34 @@ export function Table() {
     });
 
     const { data: PRODUCTO_TIPOS = [] } = useQuery({
-        queryKey: ['producto_tipos', debounceFilters['categorias']],
+        queryKey: ['producto_tipos', debounceFilters.categorias],
         queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_tipos', {
             params: {
-                categorias: debounceFilters['categorias']
+                categorias: debounceFilters.categorias
             }
-        }).then(r => r.data.data)
+        }).then(r => r.data.data),
+        enabled: debounceFilters.categorias.length > 0
     });
 
     const { data: PRODUCTO_MARCAS = [] } = useQuery({
-        queryKey: ['producto_marcas', debounceFilters['tipos']],
+        queryKey: ['producto_marcas', debounceFilters.tipos],
         queryFn: () => api.get<{ data: TCatalogo[] }>('api/producto_marcas', {
             params: {
-                tipos: debounceFilters['tipos']
+                tipos: debounceFilters.tipos
             }
-        }).then(r => r.data.data)
+        }).then(r => r.data.data),
+        enabled: debounceFilters.tipos.length > 0
     });
 
     const { data: PRODUCTOS = [] } = useQuery({
-        queryKey: ['productos', debounceFilters['tipos'], debounceFilters['marcas']],
+        queryKey: ['productos', debounceFilters.tipos, debounceFilters.marcas],
         queryFn: () => api.get<{ data: TCatalogo[] }>('api/productos', {
             params: {
-                tipos: debounceFilters['tipos'],
-                marcas: debounceFilters['marcas']
+                tipos: debounceFilters.tipos,
+                marcas: debounceFilters.marcas
             }
-        }).then(r => r.data.data)
+        }).then(r => r.data.data),
+        enabled: debounceFilters.tipos.length > 0
     });
 
     const { data: PRODUCTO_ESTADOS = [] } = useQuery({
@@ -139,6 +142,10 @@ export function Table() {
                             marcas: [],
                             productos: []
                         }))}
+                        emptyMessage={() => debounceFilters.categorias.length === 0
+                            ? 'Primero selecciona una categoría'
+                            : undefined
+                        }
                     />
                     <MultiSelect
                         label="Marca"
@@ -149,6 +156,10 @@ export function Table() {
                             marcas: v.map(Number),
                             productos: []
                         }))}
+                        emptyMessage={() => debounceFilters.productos.length === 0
+                            ? 'Primero selecciona un producto'
+                            : undefined
+                        }
                     />
                     <MultiSelect
                         label="Modelo"
@@ -158,6 +169,10 @@ export function Table() {
                             ...prev,
                             productos: v.map(Number)
                         }))}
+                        emptyMessage={() => debounceFilters.productos.length === 0
+                            ? 'Primero selecciona un producto'
+                            : undefined
+                        }
                     />
                     <MultiSelect
                         label="Estado"
