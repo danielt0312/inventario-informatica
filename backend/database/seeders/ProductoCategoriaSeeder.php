@@ -16,6 +16,7 @@ class ProductoCategoriaSeeder extends Seeder
         ProductoCategoria::insertOrIgnore([
             ['nombre' => 'Computadora'],
             ['nombre' => 'Dispositivo de Almacenamiento'],
+            ['nombre' => 'Memoria de Acceso Aleatorio'],
             ['nombre' => 'Telefonía'],
             ['nombre' => 'Redes'],
             ['nombre' => 'Refacción'],
@@ -27,7 +28,6 @@ class ProductoCategoriaSeeder extends Seeder
             ['nombre' => 'Periférico'],
             ['nombre' => 'Eléctrico'],
             ['nombre' => 'Escáner'],
-            ['nombre' => 'Memoria de Acceso Aleatorio'],
         ]);
     }
 }
