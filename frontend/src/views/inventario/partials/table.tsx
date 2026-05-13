@@ -70,7 +70,8 @@ export function Table() {
         queryFn: () => api.get<PaginatedResponse<Articulo>>('api/articulos', {
             params: {
                 ...debounceFilters,
-                pagination
+                page: pagination.pageIndex + 1,
+                per_page: pagination.pageSize
             }
         }).then(r => r.data),
         staleTime: 60 * 1000
