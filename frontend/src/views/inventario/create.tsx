@@ -14,16 +14,18 @@ import { isAxiosError } from "axios"
 import { handleLaravel422 } from "@/lib/utils"
 
 import { defaultValues, formValidator } from "./partials/form.schema"
-import { Paperclip, Save, X } from "lucide-react"
+import { Paperclip, Plus, Save, X } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 import type { ColumnDef } from "@tanstack/react-table"
 import { useState, useMemo } from "react"
 import type { Documento } from "../documentos/partials/table.cols"
 import { Table as DocumentosTable } from "../documentos/partials/table"
-import type { TCatalogo } from "@/lib/types"
+import { DocumentoTipo, ProductoCategoria, type TCatalogo } from "@/lib/types"
 import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/components/producto/categorizacion"
 import { useQueryClient } from "@tanstack/react-query"
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible"
+import { Form as FormComputadora } from "../articulos/computadoras/form"
 
 function Create() {
     const navigate = useNavigate();
@@ -101,14 +103,14 @@ function Create() {
                     <CardHeader>
                         <CardTitle>Registro de Artículo existente</CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex flex-col gap-6">
                         <FieldSet>
                             <FieldGroup className="grid grid-cols-2">
                                 <form.Field
                                     name="producto_categoria_id"
                                     children={(field) => (
                                         <Field>
-                                            <FieldLabel>Categoría del Bien Informático:</FieldLabel>
+                                            <FieldLabel>Categoría del Bien Informático</FieldLabel>
                                             <Combobox
                                                 items={PRODUCTO_CATEGORIAS}
                                                 itemToStringLabel={(item: TCatalogo) => item.nombre}
@@ -313,6 +315,16 @@ function Create() {
                                 </FieldGroup>
                             </FieldGroup>
                         </FieldSet>
+
+                        <Collapsible
+                            open={form.state.values.producto_categoria_id === ProductoCategoria.COMPUTADORA}
+                        >
+                            <CollapsibleContent>
+                                <FieldSet>
+                                    <FormComputadora />
+                                </FieldSet>
+                            </CollapsibleContent>
+                        </Collapsible>
                     </CardContent>
 
                     <CardFooter className="justify-center">

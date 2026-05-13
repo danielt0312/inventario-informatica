@@ -11,6 +11,8 @@ use App\Http\Controllers\{
     ArticuloController,
     DocumentoController,
     DocumentoTipoController,
+    DiscoController,
+    DiscoTipoController,
     ArticuloEstadoController
 };
 
@@ -30,4 +32,9 @@ Route::middleware('auth:sanctum')->group(function () {
         'documento_tipos' => DocumentoTipoController::class,
         'articulo_estados' => ArticuloEstadoController::class
     ], ['only' => 'index']);
+
+    Route::apiResources([
+        'discos' => DiscoController::class,
+        'disco_tipos' => DiscoTipoController::class
+    ], ['except' => 'show']);
 });
