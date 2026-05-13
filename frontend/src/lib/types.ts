@@ -16,21 +16,34 @@ export type TCatalogo = {
     nombre: string
 }
 
-export const DocumentoTipo = {
-  FACTURA: 1,
-  OFICIO: 2,
-  ADQUISICION: 3,
-  RESGUARDO: 4,
-  PRESTAMO: 5,
-  DICTAMEN: 6
-} as const;
+export type Response<T> = {
+    data: T;
+}
 
+export type ResponseCatalogo = Response<TCatalogo>;
+export type ResponseCatalogoList = Response<TCatalogo[]>;
+
+export interface PaginatedResponse<T>
+  extends Response<T[]> {
+    total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+}
+
+export const DocumentoTipo = {
+    FACTURA: 1,
+    OFICIO: 2,
+    ADQUISICION: 3,
+    RESGUARDO: 4,
+    PRESTAMO: 5,
+    DICTAMEN: 6
+} as const;
 export type DocumentoTipo = typeof DocumentoTipo[keyof typeof DocumentoTipo];
 
-export interface PaginatedResponse<T> {
-  data: T[]
-  total: number
-  per_page: number
-  current_page: number
-  last_page: number
-}
+export const ProductoCategoria = {
+    COMPUTADORA: 1,
+    DISPOSITIVO_ALMACENAMIENTO: 2,
+    MEMORIA_ACCESO_ALEATORIO: 3,
+} as const;
+export type ProductoCategoria = typeof ProductoCategoria[keyof typeof ProductoCategoria];
