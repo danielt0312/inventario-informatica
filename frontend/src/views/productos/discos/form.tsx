@@ -1,4 +1,4 @@
-import { CreatableCombobox } from "@/components/custom/combobox-creatable";
+import { CreatableCombobox } from "@/components/composed/combobox-creatable";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import api from "@/lib/axios";
 import type { ResponseCatalogo, TCatalogo } from "@/lib/types";

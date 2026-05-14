@@ -1,12 +1,12 @@
 import type { AnyFormApi } from "@tanstack/react-form"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import type { LaravelValidationErrors, TCatalogo } from "./types";
+import type { ComboboxOption } from "@/components/composed/combobox-creatable";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+    return twMerge(clsx(inputs))
 }
-
-type LaravelValidationErrors = Record<string, string[]>;
 
 export function handleLaravel422(
     formApi: AnyFormApi,
@@ -41,3 +41,13 @@ export function handleLaravel422(
         }, 10);
     }
 }
+
+export const catalogoToOption = ({
+    id,
+    nombre
+}: TCatalogo): ComboboxOption => ({
+    value: String(id),
+    label: nombre,
+})
+export const toOptions = (list: TCatalogo[]): ComboboxOption[] =>
+    list.map(catalogoToOption)

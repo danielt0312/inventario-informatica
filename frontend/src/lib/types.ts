@@ -20,8 +20,8 @@ export type Response<T> = {
     data: T;
 }
 
-export type ResponseCatalogo = Response<TCatalogo>;
-export type ResponseCatalogoList = Response<TCatalogo[]>;
+export type CatalogoResponse = Response<TCatalogo>;
+export type CatalogoListResponse = Response<TCatalogo[]>;
 
 export interface PaginatedResponse<T>
   extends Response<T[]> {
@@ -30,6 +30,8 @@ export interface PaginatedResponse<T>
     current_page: number;
     last_page: number;
 }
+
+export type LaravelValidationErrors = Record<string, string[]>;
 
 export const DocumentoTipo = {
     FACTURA: 1,

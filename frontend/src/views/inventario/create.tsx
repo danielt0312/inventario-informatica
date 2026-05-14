@@ -22,10 +22,11 @@ import { useState, useMemo } from "react"
 import type { Documento } from "../documentos/partials/table.cols"
 import { Table as DocumentosTable } from "../documentos/partials/table"
 import { DocumentoTipo, ProductoCategoria, type TCatalogo } from "@/lib/types"
-import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/components/producto/categorizacion"
+import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/views/productos/queries"
 import { useQueryClient } from "@tanstack/react-query"
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible"
 import { Form as FormComputadora } from "../articulos/computadoras/form"
+import { Form as FormArticulo } from "../articulos/partials/form"
 
 function Create() {
     const navigate = useNavigate();
@@ -39,7 +40,7 @@ function Create() {
         },
         onSubmit: async ({ value, formApi }) => {
             try {
-                await api.post('api/articulos', value);
+                await api.post('api/test', value);
 
                 queryClient.invalidateQueries({ queryKey: ['articulos'] })
                 navigate({ to: Route.to });
@@ -52,44 +53,22 @@ function Create() {
         }
     });
 
-    const selectRow = useMemo<ColumnDef<Documento>[]>(() => [
-        {
-            id: 'selector',
-            cell: ({ row }) => (
-                <Button
-                    onClick={() => {
-                        form.setFieldValue('qr_archivo_id', row.original.id);
-                        setDialogDocumentoOpen(false);
-                    }}
-                    size="sm"
-                >
-                    <Paperclip /> Adjuntar
-                </Button>
-            )
-        }
-    ], [form]);
-
-    const categoria = useStore(form.store, (state) => state.values.producto_categoria_id)
-    const tipo = useStore(form.store, (state) => state.values.producto_tipo_id)
-    const marca = useStore(form.store, (state) => state.values.producto_marca_id)
-
-    const { data: PRODUCTO_CATEGORIAS = [] } = useCategoriaQuery();
-
-    const { data: PRODUCTO_TIPOS = [] } = useTipoQuery({
-        categorias: categoria ? [categoria] : [],
-        enabled: !!categoria
-    });
-
-    const { data: PRODUCTO_MARCAS = [] } = useMarcaQuery({
-        tipos: tipo ? [tipo] : [],
-        enabled: !!tipo
-    });
-
-    const { data: PRODUCTOS = [] } = useProductoQuery({
-        marcas: marca ? [marca] : [],
-        tipos: tipo ? [tipo] : [],
-        enabled: !!tipo
-    });
+    // const selectRow = useMemo<ColumnDef<Documento>[]>(() => [
+    //     {
+    //         id: 'selector',
+    //         cell: ({ row }) => (
+    //             <Button
+    //                 onClick={() => {
+    //                     form.setFieldValue('qr_archivo_id', row.original.id);
+    //                     setDialogDocumentoOpen(false);
+    //                 }}
+    //                 size="sm"
+    //             >
+    //                 <Paperclip /> Adjuntar
+    //             </Button>
+    //         )
+    //     }
+    // ], [form]);
 
     return (
         <>
@@ -104,227 +83,7 @@ function Create() {
                         <CardTitle>Registro de Artículo existente</CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col gap-6">
-                        <FieldSet>
-                            <FieldGroup className="grid grid-cols-2">
-                                <form.Field
-                                    name="producto_categoria_id"
-                                    children={(field) => (
-                                        <Field>
-                                            <FieldLabel>Categoría del Bien Informático</FieldLabel>
-                                            <Combobox
-                                                items={PRODUCTO_CATEGORIAS}
-                                                itemToStringLabel={(item: TCatalogo) => item.nombre}
-                                                onValueChange={(v) => field.handleChange(v?.id ?? null)}
-                                                autoHighlight
-                                            >
-                                                <ComboboxInput placeholder="Selecciona una opción" />
-                                                <ComboboxContent>
-                                                    <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
-                                                    <ComboboxList>
-                                                        {(item: TCatalogo) => (
-                                                            <ComboboxItem key={item.id} value={item}>
-                                                                {item.nombre}
-                                                            </ComboboxItem>
-                                                        )}
-                                                    </ComboboxList>
-                                                </ComboboxContent>
-                                            </Combobox>
-                                            <FieldError errors={field.state.meta.errors} />
-                                        </Field>
-                                    )}
-                                />
-                                <form.Field
-                                    name="producto_tipo_id"
-                                    children={(field) => (
-                                        <Field data-disabled={!categoria}>
-                                            <FieldLabel>Tipo de Producto</FieldLabel>
-                                            <Combobox
-                                                items={PRODUCTO_TIPOS}
-                                                itemToStringLabel={(item: TCatalogo) => item.nombre}
-                                                onValueChange={(v) => field.handleChange(v?.id ?? null)}
-                                                autoHighlight
-                                            >
-                                                <ComboboxInput id="tipo_id" placeholder="Selecciona una opción" disabled={!categoria} />
-                                                <ComboboxContent>
-                                                    <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
-                                                    <ComboboxList>
-                                                        {(item: TCatalogo) => (
-                                                            <ComboboxItem key={item.id} value={item}>
-                                                                {item.nombre}
-                                                            </ComboboxItem>
-                                                        )}
-                                                    </ComboboxList>
-                                                </ComboboxContent>
-                                            </Combobox>
-                                            <FieldError errors={field.state.meta.errors} />
-                                        </Field>
-                                    )}
-                                />
-                            </FieldGroup>
-
-                            <FieldGroup className="grid grid-cols-2">
-                                <form.Field
-                                    name="producto_marca_id"
-                                    children={(field) => (
-                                        <Field data-disabled={!tipo}>
-                                            <FieldLabel>Marca empresarial:</FieldLabel>
-                                            <Combobox
-                                                items={PRODUCTO_MARCAS}
-                                                itemToStringLabel={(item: TCatalogo) => item.nombre}
-                                                onValueChange={(v) => field.handleChange(v?.id ?? null)}
-                                                autoHighlight
-                                            >
-                                                <ComboboxInput placeholder="Selecciona una opción" disabled={!tipo} />
-                                                <ComboboxContent>
-                                                    <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
-                                                    <ComboboxList>
-                                                        {(item: TCatalogo) => (
-                                                            <ComboboxItem key={item.id} value={item}>
-                                                                {item.nombre}
-                                                            </ComboboxItem>
-                                                        )}
-                                                    </ComboboxList>
-                                                </ComboboxContent>
-                                            </Combobox>
-                                            <FieldError errors={field.state.meta.errors} />
-                                        </Field>
-                                    )}
-                                />
-
-                                <form.Field
-                                    name="producto_id"
-                                    children={field => (
-                                        <Field data-disabled={!marca}>
-                                            <FieldLabel>Modelo:</FieldLabel>
-                                            <Combobox
-                                                items={PRODUCTOS}
-                                                itemToStringLabel={(item: TCatalogo) => item.nombre}
-                                                onValueChange={(v) => field.handleChange(v?.id ?? null)}
-                                                autoHighlight
-                                            >
-                                                <ComboboxInput
-                                                    name={field.name}
-                                                    disabled={!marca}
-                                                    placeholder="Selecciona una opción"
-                                                />
-                                                <ComboboxContent>
-                                                    <ComboboxEmpty>No se encontró ninguna opción</ComboboxEmpty>
-                                                    <ComboboxList>
-                                                        {(item: TCatalogo) => (
-                                                            <ComboboxItem key={item.id} value={item}>
-                                                                {item.nombre}
-                                                            </ComboboxItem>
-                                                        )}
-                                                    </ComboboxList>
-                                                </ComboboxContent>
-                                            </Combobox>
-                                            <FieldError errors={field.state.meta.errors} />
-                                        </Field>
-                                    )}
-                                />
-                            </FieldGroup>
-
-                            <form.Field
-                                name="numero_serie"
-                                children={(field) => (
-                                    <Field>
-                                        <FieldLabel>Número de Serie</FieldLabel>
-                                        <Input
-                                            name={field.name}
-                                            value={field.state.value ?? ''}
-                                            onChange={(e) => field.handleChange(e.target.value === '' ? null : e.target.value)}
-                                            placeholder="Ingresa un valor"
-                                        />
-                                        <FieldError errors={field.state.meta.errors} />
-                                    </Field>
-                                )}
-                            />
-
-                            <FieldGroup className="grid grid-cols-2">
-                                <form.Field
-                                    name="costo_unitario"
-                                    children={(field) => (
-                                        <Field>
-                                            <FieldLabel>Costo Unitario</FieldLabel>
-                                            <Input
-                                                type="text"
-                                                name={field.name}
-                                                value={field.state.value ?? ''}
-                                                onChange={(e) => field.handleChange(e.target.value === '' ? null : e.target.value)}
-                                                placeholder="Ingresa un valor"
-                                            />
-                                            <FieldError errors={field.state.meta.errors} />
-                                        </Field>
-                                    )}
-                                />
-                                <form.Field
-                                    name="contable"
-                                    children={(field) => (
-                                        <Field orientation='horizontal'>
-                                            <Checkbox
-                                                name={field.name}
-                                                defaultChecked={field.state.value}
-                                                onCheckedChange={(checked) => field.handleChange(!!checked)}
-                                            />
-                                            <FieldLabel>Es contable</FieldLabel>
-                                            <FieldError errors={field.state.meta.errors} />
-                                        </Field>
-                                    )}
-                                />
-                            </FieldGroup>
-
-                            <FieldGroup className="grid grid-cols-4">
-                                <Dialog
-                                    open={dialogDocumentoOpen}
-                                    onOpenChange={setDialogDocumentoOpen}
-                                >
-                                    <DialogTrigger asChild>
-                                        <Button type="button">
-                                            <Paperclip /> Adjuntar Factura
-                                        </Button>
-                                    </DialogTrigger>
-                                    <DialogContent className="sm:min-w-4xl overflow-y-auto">
-                                        <DialogHeader>
-                                            <DialogTitle>Adjuntar Factura</DialogTitle>
-                                        </DialogHeader>
-
-                                        <DocumentosTable
-                                            actionRow={selectRow}
-                                        />
-                                    </DialogContent>
-                                </Dialog>
-                                <FieldGroup>
-                                    {/* <form.Field
-                                        name="qr_archivo_id"
-                                        children={(field) => (
-                                            <FileUploadList>
-                                                {field.state.value && (
-                                                    <FileUploadItem value={}>
-                                                        <FileUploadItemPreview />
-                                                        <FileUploadItemMetadata />
-                                                        <FileUploadItemDelete asChild>
-                                                        <Button variant="ghost" size="icon" className="size-7">
-                                                            <X />
-                                                        </Button>
-                                                        </FileUploadItemDelete>
-                                                    </FileUploadItem>
-                                                )}
-                                            </FileUploadList>
-                                        )}
-                                    /> */}
-                                </FieldGroup>
-                            </FieldGroup>
-                        </FieldSet>
-
-                        <Collapsible
-                            open={form.state.values.producto_categoria_id === ProductoCategoria.COMPUTADORA}
-                        >
-                            <CollapsibleContent>
-                                <FieldSet>
-                                    <FormComputadora />
-                                </FieldSet>
-                            </CollapsibleContent>
-                        </Collapsible>
+                        <FormArticulo />
                     </CardContent>
 
                     <CardFooter className="justify-center">

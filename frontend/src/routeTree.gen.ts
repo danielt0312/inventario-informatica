@@ -13,6 +13,7 @@ import { Route as GuestRouteImport } from './routes/_guest'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuestLoginRouteImport } from './routes/_guest/login'
+import { Route as AuthTestRouteImport } from './routes/_auth/test'
 import { Route as AuthInventarioIndexRouteImport } from './routes/_auth/inventario/index'
 import { Route as AuthDocumentosIndexRouteImport } from './routes/_auth/documentos/index'
 import { Route as AuthDictamenIndexRouteImport } from './routes/_auth/dictamen/index'
@@ -36,6 +37,11 @@ const GuestLoginRoute = GuestLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => GuestRoute,
+} as any)
+const AuthTestRoute = AuthTestRouteImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => AuthRoute,
 } as any)
 const AuthInventarioIndexRoute = AuthInventarioIndexRouteImport.update({
   id: '/inventario/',
@@ -65,6 +71,7 @@ const AuthDictamenCreateRoute = AuthDictamenCreateRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/test': typeof AuthTestRoute
   '/login': typeof GuestLoginRoute
   '/dictamen/create': typeof AuthDictamenCreateRoute
   '/inventario/create': typeof AuthInventarioCreateRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/test': typeof AuthTestRoute
   '/login': typeof GuestLoginRoute
   '/dictamen/create': typeof AuthDictamenCreateRoute
   '/inventario/create': typeof AuthInventarioCreateRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/_guest': typeof GuestRouteWithChildren
+  '/_auth/test': typeof AuthTestRoute
   '/_guest/login': typeof GuestLoginRoute
   '/_auth/dictamen/create': typeof AuthDictamenCreateRoute
   '/_auth/inventario/create': typeof AuthInventarioCreateRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/test'
     | '/login'
     | '/dictamen/create'
     | '/inventario/create'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/test'
     | '/login'
     | '/dictamen/create'
     | '/inventario/create'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/_guest'
+    | '/_auth/test'
     | '/_guest/login'
     | '/_auth/dictamen/create'
     | '/_auth/inventario/create'
@@ -161,6 +173,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestLoginRouteImport
       parentRoute: typeof GuestRoute
     }
+    '/_auth/test': {
+      id: '/_auth/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof AuthTestRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/inventario/': {
       id: '/_auth/inventario/'
       path: '/inventario'
@@ -200,6 +219,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthRouteChildren {
+  AuthTestRoute: typeof AuthTestRoute
   AuthDictamenCreateRoute: typeof AuthDictamenCreateRoute
   AuthInventarioCreateRoute: typeof AuthInventarioCreateRoute
   AuthDictamenIndexRoute: typeof AuthDictamenIndexRoute
@@ -208,6 +228,7 @@ interface AuthRouteChildren {
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthTestRoute: AuthTestRoute,
   AuthDictamenCreateRoute: AuthDictamenCreateRoute,
   AuthInventarioCreateRoute: AuthInventarioCreateRoute,
   AuthDictamenIndexRoute: AuthDictamenIndexRoute,

@@ -71,7 +71,7 @@ export interface CreatableComboboxProps {
   createFieldPlaceholder?: string
   /** Width class applied to both the trigger and the popover (default: w-[280px]) */
   widthClass?: string
-  disabled?: boolean
+  enabled?: boolean
   className?: string
 }
 
@@ -89,7 +89,7 @@ export function CreatableCombobox({
   createFieldLabel = "Nombre",
   createFieldPlaceholder = "Ingresa un valor",
   widthClass = "w-[280px]",
-  disabled = false,
+  enabled = false,
   className,
 }: CreatableComboboxProps) {
   const [open, setOpen] = React.useState(false)
@@ -180,7 +180,7 @@ export function CreatableCombobox({
             role="combobox"
             aria-expanded={open}
             aria-haspopup="listbox"
-            disabled={disabled}
+            disabled={enabled}
             className={cn(
               "justify-between font-normal",
               widthClass,

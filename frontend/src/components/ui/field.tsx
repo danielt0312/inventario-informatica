@@ -204,9 +204,9 @@ function FieldError({
 
     const uniqueErrors = [
       ...new Map(normalized.map((error) => [error?.message, error])).values(),
-    ]
+    ];
 
-    if (uniqueErrors?.length == 1) {
+    if (uniqueErrors.length === 1) {
       return uniqueErrors[0]?.message
     }
 

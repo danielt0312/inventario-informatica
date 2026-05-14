@@ -14,7 +14,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { MultiSelect } from "@/components/custom/multiselect";
-import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/components/producto/categorizacion";
+import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/views/productos/queries";
 
 interface TableFilters {
     categorias: number[];
