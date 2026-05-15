@@ -47,16 +47,16 @@ function RouteComponent() {
                     <form.AppField
                         name='name'
                         children={(field) => (
-                            <field.FormTextField label='Nombre:' />
+                            <field.TextField label='Nombre:' />
                         )}
                     />
 
                     <form.AppField
                         name='lastName'
                         children={(field) => (
-                            <field.FormField>
+                            <field.Field>
                                 <Input></Input>
-                            </field.FormField>
+                            </field.Field>
                         )}
                     />
                 </form.AppForm>

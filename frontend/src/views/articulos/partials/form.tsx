@@ -1,37 +1,30 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
 import {
-    ProductoFieldGroup as ProductoFieldGroup,
-    type Fields as ProductoFields
+    defaultValues,
+    FieldGroupProductoFields,
+    type ProductoFields,
+    // ProductoFieldGroup as ProductoFieldGroup,
+    // type Fields as ProductoFields
 } from "@/views/productos/form";
-import { createFieldMap } from "@tanstack/react-form";
+import { createFieldMap, useStore } from "@tanstack/react-form";
 
-type Fields = Omit<ProductoFields, 'id'> & {
-    numero_serie: string;
-    producto_id: string;
-};
-
-const defaultValues: Fields = {
-    categoria_id: '',
-    tipo_id: '',
-    marca_id: '',
-    producto_id: '',
-    numero_serie: ''
-}
+type ArticuloFields = ProductoFields;
 
 const fields = createFieldMap(defaultValues);
 
 export const Form = () => {
     const form = useAppForm({
-        defaultValues,
+        defaultValues
     })
 
     return (
         <>
             <form.AppForm>
-                <ProductoFieldGroup
+                <FieldGroupProductoFields
                     form={form}
-                    fields={{...fields, id: 'producto_id'}}
+                    fields={fields}
                 />
+                <form.SubmitButton />
             </form.AppForm>
         </>
     );

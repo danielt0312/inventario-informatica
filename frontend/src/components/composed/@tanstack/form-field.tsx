@@ -1,20 +1,54 @@
 import {
-    FormField as FormFieldPrimitive,
-    type FormFieldProps as FormFieldPrimitiveProps
+    FormField,
+    type FormFieldProps
 } from '@/components/composed/form-field';
-import { useFieldContext } from './form';
+import { useFieldContext, useFormContext } from './form';
 import { Input } from '@/components/ui/input';
 import { CreatableCombobox, type CreatableComboboxProps } from '../combobox-creatable';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { Save } from 'lucide-react';
+import type { ComponentProps } from 'react';
+import { cn } from '@/lib/utils';
 
-export type FormFieldProps = Omit<FormFieldPrimitiveProps, "errors">;
+export type SubmitButtonProps = Omit<ComponentProps<typeof Button>, 'type' | 'disabled' > & { label?: string }
+export const SubmitButton = ({
+    label = "Guardar",
+    className,
+    ...props
+}: SubmitButtonProps) => {
+    const form = useFormContext();
 
-export const FormField = ({
+    return (
+        <form.Subscribe selector={(state) => state.isSubmitting}>
+            {(isSubmitting) => (
+                <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    children={(
+                        <>
+                            {isSubmitting
+                                ? <Spinner />
+                                : <Save />
+                            } {label}
+                        </>
+                    )}
+                    className={cn("max-w-fit self-center", className)}
+                    {...props}
+                />
+            )}
+        </form.Subscribe>
+    );
+}
+
+export type FieldProps = Omit<FormFieldProps, "errors">;
+export const Field = ({
     ...props
 }: FormFieldProps) => {
     const field = useFieldContext();
 
     return (
-        <FormFieldPrimitive
+        <FormField
             errors={field.state.meta.errors}
             {...props}
         />
@@ -24,39 +58,37 @@ export const FormField = ({
 export type TOmitChildrenProp = Omit<FormFieldProps, "children">
 
 export type FormTextFieldProps = TOmitChildrenProp;
-
-export const FormTextField = ({
+export const TextField = ({
     label
 }: FormTextFieldProps) => {
     const field = useFieldContext<string>();
 
     return (
-        <FormField label={label}>
+        <Field label={label}>
             <Input
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
             />
-        </FormField>
+        </Field>
     );
 };
 
-export type FormCreatableComboboxFieldProps = TOmitChildrenProp & CreatableComboboxProps;
-
-export const FormCreatableComboboxField = ({
+export type CreatableComboboxFieldProps = TOmitChildrenProp & CreatableComboboxProps;
+export const CreatableComboboxField = ({
     label,
     enabled,
     ...props
-}: FormCreatableComboboxFieldProps) => {
+}: CreatableComboboxFieldProps) => {
     const field = useFieldContext<string>();
 
     return (
-        <FormField label={label} data-disabled={enabled}>
+        <Field label={label} data-disabled={enabled}>
             <CreatableCombobox
                 value={field.state.value}
                 onValueChange={field.handleChange}
                 enabled={enabled}
                 {...props}
             />
-        </FormField>
+        </Field>
     );
 }

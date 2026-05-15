@@ -1,102 +1,140 @@
-import { withFieldGroup } from "@/components/composed/@tanstack/form";
 import { toOptions } from "@/lib/utils";
 import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "./queries";
-import { useStore } from "@tanstack/react-form";
+import { CreatableComboboxField } from "@/components/composed/@tanstack/form-field";
+import { withFieldGroup } from "@/components/composed/@tanstack/form";
+import z from "zod";
 import { FieldGroup } from "@/components/ui/field";
+import { useStore } from "@tanstack/react-form";
 
-export type Fields = {
+export const CategoriaField = () => {
+    const { data = [] } = useCategoriaQuery({
+        select: toOptions
+    });
+
+    return (
+        <CreatableComboboxField
+            options={data}
+            label="Categoria:"
+        />
+    );
+}
+
+export const TipoField = ({
+    categoria
+}: {
+    categoria: string
+}) => {
+    const { data = [] } = useTipoQuery({
+        select: toOptions,
+        categorias: [categoria],
+        enabled: !!categoria
+    });
+
+    return (
+        <CreatableComboboxField
+            options={data}
+            label="Tipo:"
+            enabled={!categoria}
+        />
+    );
+}
+
+export const MarcaField = ({
+    tipo
+}: {
+    tipo: string
+}) => {
+    const { data = [] } = useMarcaQuery({
+        select: toOptions,
+        tipos: [tipo],
+        enabled: !!tipo
+    });
+
+    return (
+        <CreatableComboboxField
+            options={data}
+            label="Marca:"
+            enabled={!tipo}
+        />
+    );
+}
+
+export const ProductoField = ({
+    tipo,
+    marca
+}: {
+    tipo: string;
+    marca: string;
+}) => {
+    const { data = [] } = useProductoQuery({
+        select: toOptions,
+        tipos: [tipo],
+        marcas: [marca],
+        enabled: !!marca
+    });
+
+    return (
+        <CreatableComboboxField
+            options={data}
+            label="Producto:"
+            enabled={!marca}
+        />
+    );
+}
+
+export type ProductoFields = {
     categoria_id: string;
     tipo_id: string;
     marca_id: string;
     id: string;
 }
 
-const defaultValues: Fields = {
+export const defaultValues: ProductoFields = {
     categoria_id: '',
     tipo_id: '',
     marca_id: '',
     id: '',
 }
 
-// Extrae el tipo de 'group' del callback render
-type InferGroup<T extends (config: any) => any> =
-    Parameters
-        Parameters<T>[0]['render']
-    >[0]['group']
+export const validator = z.object({
+    categoria_id: z
+        .number()
+        .int(),
+    tipo_id: z
+        .number()
+        .int(),
+    marca_id: z
+        .number()
+        .int(),
+    id: z
+        .number()
+        .int(),
+});
 
-// Úsalo con tus Fields específicos
-export type ProductoGroup = InferGroup<typeof withFieldGroup<Fields>>
-
-export const ProductoFieldGroup = withFieldGroup({
+export const FieldGroupProductoFields = withFieldGroup({
     defaultValues,
     render: function Render({ group }) {
         const categoria = useStore(group.store, (state) => state.values.categoria_id);
         const tipo = useStore(group.store, (state) => state.values.tipo_id);
         const marca = useStore(group.store, (state) => state.values.marca_id);
 
-        const { data: CATEGORIAS = [] } = useCategoriaQuery({
-            select: toOptions
-        });
-
-        const { data: TIPOS = [] } = useTipoQuery({
-            select: toOptions,
-            categorias: [categoria],
-            enabled: !!categoria
-        });
-
-        const { data: MARCAS = [] } = useMarcaQuery({
-            select: toOptions,
-            tipos: [tipo],
-            enabled: !!tipo
-        });
-
-        const { data: PRODUCTOS = [] } = useProductoQuery({
-            select: toOptions,
-            tipos: [tipo],
-            marcas: [marca],
-            enabled: !!tipo && !!marca
-        });
-
         return (
-            <FieldGroup className="grid grid-cols-2">
+            <FieldGroup className="md:grid md:grid-cols-2 xl:grid-cols-4 ">
                 <group.AppField
                     name="categoria_id"
-                    children={(field) => (
-                        <field.FormCreatableComboboxField
-                            label="Categoría:"
-                            options={CATEGORIAS}
-                        />
-                    )}
+                    children={() => <CategoriaField />}
                 />
                 <group.AppField
                     name="tipo_id"
-                    children={(field) => (
-                        <field.FormCreatableComboboxField
-                            label="Producto:"
-                            options={TIPOS}
-                            enabled={!categoria}
-                        />
-                    )}
+                    children={() => <TipoField categoria={categoria} />}
                 />
                 <group.AppField
                     name="marca_id"
-                    children={(field) => (
-                        <field.FormCreatableComboboxField
-                            label="Marca:"
-                            options={MARCAS}
-                            enabled={!tipo}
-                        />
-                    )}
+                    children={() => <MarcaField tipo={tipo} />}
                 />
                 <group.AppField
                     name="id"
-                    children={(field) => (
-                        <field.FormCreatableComboboxField
-                            label="Producto:"
-                            options={PRODUCTOS}
-                            enabled={!tipo}
-                        />
-                    )}
+                    children={() => <ProductoField tipo={tipo} marca={marca} />}
                 />
             </FieldGroup>
         );

@@ -85,12 +85,6 @@ function Create() {
                     <CardContent className="flex flex-col gap-6">
                         <FormArticulo />
                     </CardContent>
-
-                    <CardFooter className="justify-center">
-                        <Button type="submit">
-                            <Save /> Guardar
-                        </Button>
-                    </CardFooter>
                 </Card>
             </form>
         </>
