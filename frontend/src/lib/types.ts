@@ -49,3 +49,5 @@ export const ProductoCategoria = {
     MEMORIA_ACCESO_ALEATORIO: 3,
 } as const;
 export type ProductoCategoria = typeof ProductoCategoria[keyof typeof ProductoCategoria];
+
+export type IdValue = number | null;

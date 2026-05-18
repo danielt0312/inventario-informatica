@@ -1,12 +1,23 @@
 import { toOptions } from "@/lib/utils";
 import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "./queries";
-import { CreatableComboboxField } from "@/components/composed/@tanstack/form-field";
+import { CreatableComboboxField, type CreatableComboboxFieldProps } from "@/components/composed/@tanstack/form-field";
 import { withFieldGroup } from "@/components/composed/@tanstack/form";
 import z from "zod";
 import { FieldGroup } from "@/components/ui/field";
 import { useStore } from "@tanstack/react-form";
+import type { IdValue } from "@/lib/types";
 
-export const CategoriaField = () => {
+type OmitProps <
+  TField extends number | string = string,
+  TOmit extends keyof CreatableComboboxFieldProps<TField> = never
+> = Omit <
+  CreatableComboboxFieldProps<TField>,
+  'options' | 'label' | TOmit
+>;
+
+export const CategoriaField = ({
+    ...params
+}: OmitProps) => {
     const { data = [] } = useCategoriaQuery({
         select: toOptions
     });
@@ -15,18 +26,20 @@ export const CategoriaField = () => {
         <CreatableComboboxField
             options={data}
             label="Categoria:"
+            {...params}
         />
     );
 }
 
 export const TipoField = ({
-    categoria
-}: {
-    categoria: string
+    categoria,
+    ...params
+}: OmitProps<'enabled'> & {
+    categoria: IdValue
 }) => {
     const { data = [] } = useTipoQuery({
         select: toOptions,
-        categorias: [categoria],
+        categorias: categoria ? [categoria] : [],
         enabled: !!categoria
     });
 
@@ -35,18 +48,20 @@ export const TipoField = ({
             options={data}
             label="Tipo:"
             enabled={!categoria}
+            {...params}
         />
     );
 }
 
 export const MarcaField = ({
-    tipo
-}: {
-    tipo: string
+    tipo,
+    ...props
+}: OmitProps<'enabled'> & {
+    tipo: IdValue
 }) => {
     const { data = [] } = useMarcaQuery({
         select: toOptions,
-        tipos: [tipo],
+        tipos: tipo ? [tipo] : [],
         enabled: !!tipo
     });
 
@@ -55,21 +70,23 @@ export const MarcaField = ({
             options={data}
             label="Marca:"
             enabled={!tipo}
+            {...props}
         />
     );
 }
 
 export const ProductoField = ({
     tipo,
-    marca
-}: {
-    tipo: string;
-    marca: string;
+    marca,
+    ...props
+}: OmitProps<'enabled'> & {
+    tipo: IdValue;
+    marca: IdValue;
 }) => {
     const { data = [] } = useProductoQuery({
         select: toOptions,
-        tipos: [tipo],
-        marcas: [marca],
+        tipos: tipo ? [tipo] : [],
+        marcas: marca ? [marca] : [],
         enabled: !!marca
     });
 
@@ -78,36 +95,37 @@ export const ProductoField = ({
             options={data}
             label="Producto:"
             enabled={!marca}
+            {...props}
         />
     );
 }
 
 export type ProductoFields = {
-    categoria_id: string;
-    tipo_id: string;
-    marca_id: string;
-    id: string;
+    categoria_id: IdValue;
+    tipo_id: IdValue;
+    marca_id: IdValue;
+    id: IdValue;
 }
 
 export const defaultValues: ProductoFields = {
-    categoria_id: '',
-    tipo_id: '',
-    marca_id: '',
-    id: '',
+    categoria_id: null,
+    tipo_id: null,
+    marca_id: null,
+    id: null,
 }
 
 export const validator = z.object({
     categoria_id: z
-        .number()
+        .number('Debes de seleccionar una opción')
         .int(),
     tipo_id: z
-        .number()
+        .number('Debes de seleccionar una opción')
         .int(),
     marca_id: z
-        .number()
+        .number('Debes de seleccionar una opción')
         .int(),
     id: z
-        .number()
+        .number('Debes de seleccionar una opción')
         .int(),
 });
 

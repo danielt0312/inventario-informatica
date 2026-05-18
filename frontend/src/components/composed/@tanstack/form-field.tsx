@@ -11,7 +11,7 @@ import { Save } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
-export type SubmitButtonProps = Omit<ComponentProps<typeof Button>, 'type' | 'disabled' > & { label?: string }
+export type SubmitButtonProps = Omit<ComponentProps<typeof Button>, 'type' | 'disabled'> & { label?: string }
 export const SubmitButton = ({
     label = "Guardar",
     className,
@@ -73,22 +73,28 @@ export const TextField = ({
     );
 };
 
-export type CreatableComboboxFieldProps = TOmitChildrenProp & CreatableComboboxProps;
-export const CreatableComboboxField = ({
+export type CreatableComboboxFieldProps<T extends number | string> =
+    TOmitChildrenProp &
+    CreatableComboboxProps & {
+        parseValue?: (v: string) => T;
+    };
+
+export const CreatableComboboxField = <T extends number | string = number>({
     label,
     enabled,
+    parseValue = (v) => Number(v) as T,
     ...props
-}: CreatableComboboxFieldProps) => {
-    const field = useFieldContext<string>();
+}: CreatableComboboxFieldProps<T>) => {
+    const field = useFieldContext<T>();
 
     return (
         <Field label={label} data-disabled={enabled}>
             <CreatableCombobox
-                value={field.state.value}
-                onValueChange={field.handleChange}
+                value={String(field.state.value)}
+                onValueChange={(v) => field.handleChange(parseValue(v))}
                 enabled={enabled}
                 {...props}
             />
         </Field>
     );
-}
+};

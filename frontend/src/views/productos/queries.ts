@@ -2,7 +2,7 @@ import api from "@/lib/axios"
 import type { CatalogoListResponse, TCatalogo } from "@/lib/types"
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query"
 
-type Option = string[];
+type Option = (number | `${number}`)[];
 type OmitQueryOptions<TData = TCatalogo[]> = Omit<
     UseQueryOptions<TCatalogo[], Error, TData>,
     'queryKey' | 'queryFn'
