@@ -31,11 +31,11 @@ test('obtencion de articulos (`inventario`)', function () {
         ->assertJsonStructure([
             'data' => ['*' => [
                 'numero_inventario',
-                'categoria',
-                'tipo',
-                'marca',
-                'producto',
-                'estado'
+                'estado',
+                'producto' => [
+                    'tipo' => ['categoria'],
+                    'marca'
+                ],
             ]]
         ]);
 });
