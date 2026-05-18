@@ -3,6 +3,7 @@ import api from "@/lib/axios";
 import {
     FieldGroupProductoFields,
     type ProductoFields,
+    defaultValues as productoDefaultValues,
     validator as productoValidator
 } from "@/views/productos/form";
 import { useQueryClient } from "@tanstack/react-query";
@@ -11,24 +12,40 @@ import z from "zod";
 import { Route as RouteIndex } from "@/routes/_auth/inventario"
 import { isAxiosError } from "axios";
 import { handleLaravel422 } from "@/lib/utils";
+import { CheckboxField, TextField } from "@/components/composed/@tanstack/form-field";
+import { FieldGroup } from "@/components/ui/field";
 
 type ArticuloFields = Omit<ProductoFields, 'id'> & {
     producto_id: ProductoFields['id'];
+    costo_unitario: number | null;
+    numero_serie: string | null;
+    contable: boolean;
 };
 
+const { id: producto_id, ...restProductoDefaultValues } = productoDefaultValues;
+
 const defaultValues: ArticuloFields = {
-    categoria_id: null,
-    tipo_id: null,
-    marca_id: null,
-    producto_id: null,
+    ...restProductoDefaultValues,
+    producto_id,
+    costo_unitario: null,
+    numero_serie: null,
+    contable: false
 }
 
-export const validator = z.object({
-    categoria_id: productoValidator.shape.categoria_id,
-    tipo_id: productoValidator.shape.tipo_id,
-    marca_id: productoValidator.shape.marca_id,
-    producto_id: productoValidator.shape.id,
-});
+export const validator = productoValidator
+    .omit({ id: true })
+    .extend({
+        producto_id: productoValidator.shape.id,
+        costo_unitario: z
+            .number('Debes de ingresar un valor numérico')
+            .positive('El valor debe ser positivo')
+            .nullable(),
+        contable: z
+            .boolean(),
+        numero_serie: z
+            .string()
+            .nullable()
+    });
 
 export const useForm = () => {
     const navigate = useNavigate();
@@ -78,6 +95,34 @@ export const Form = () => {
                         id: 'producto_id'
                     }}
                 />
+
+                <form.AppField
+                    name="numero_serie"
+                    children={(field) => (
+                        <TextField
+                            label="Número de serie"
+                            value={field.state.value ?? ''}
+                        />
+                    )}
+                />
+
+                <FieldGroup className="grid grid-cols-2">
+                    <form.AppField
+                        name="costo_unitario"
+                        children={(field) => (
+                            <TextField
+                                label="Costo unitario"
+                                value={field.state.value ?? ''}
+                            />
+                        )}
+                    />
+
+                    <form.AppField
+                        name="contable"
+                        children={() => <CheckboxField label="Es contable" />}
+                    />
+                </FieldGroup>
+
                 <form.SubmitButton />
             </form.AppForm>
         </form>
