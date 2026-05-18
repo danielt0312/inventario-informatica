@@ -13,7 +13,6 @@ class StoreArticuloRequest extends FormRequest
             'numero_serie'      => ['nullable', 'string', 'max:32', 'unique:articulos,numero_serie'],
             'costo_unitario'    => ['nullable', 'numeric'],
             'factura_id'        => ['nullable', 'integer', 'exists:facturas,id'],
-            'qr_archivo_id'     => ['nullable', 'integer', 'exists:archivos,id'],
             'contable'          => ['required', 'boolean'],
         ];
     }

@@ -28,7 +28,9 @@ class Articulo extends Model
     protected $attributes = [
         'activo' => 1,
         'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-        'qr_archivo_id' => null,
+        'numero_serie' => null,
+        'costo_unitario' => null,
+        'factura_id' => null
     ];
 
     protected $appends = [
@@ -53,6 +55,7 @@ class Articulo extends Model
 
     public function numeroInventario(): Attribute {
         return Attribute::make(
+            // Todo generar dinamicamente
             fn () => '500-01-'.str_pad($this->id, 4, 0, STR_PAD_LEFT)
         );
     }
