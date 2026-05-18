@@ -10,6 +10,8 @@ import { Spinner } from '@/components/ui/spinner';
 import { Save } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
+import { Checkbox } from '@/components/ui/checkbox';
+import { FieldLabel } from '@/components/ui/field';
 
 export type SubmitButtonProps = Omit<ComponentProps<typeof Button>, 'type' | 'disabled'> & { label?: string }
 export const SubmitButton = ({
@@ -55,9 +57,9 @@ export const Field = ({
     );
 };
 
-export type TOmitChildrenProp = Omit<FormFieldProps, "children">
+export type OmitProps = Omit<FormFieldProps, "children">
 
-export type FormTextFieldProps = TOmitChildrenProp;
+export type FormTextFieldProps = OmitProps;
 export const TextField = ({
     label
 }: FormTextFieldProps) => {
@@ -74,11 +76,10 @@ export const TextField = ({
 };
 
 export type CreatableComboboxFieldProps<T extends number | string> =
-    TOmitChildrenProp &
+    OmitProps &
     CreatableComboboxProps & {
         parseValue?: (v: string) => T;
     };
-
 export const CreatableComboboxField = <T extends number | string = number>({
     label,
     enabled,
@@ -98,3 +99,27 @@ export const CreatableComboboxField = <T extends number | string = number>({
         </Field>
     );
 };
+
+export type CheckboxFieldProps =
+    OmitProps &
+    ComponentProps<typeof Checkbox> &
+    {
+        enabled?: boolean;
+    };
+export const CheckboxField = ({
+    label,
+    enabled,
+    ...props
+}: CheckboxFieldProps) => {
+    const field = useFieldContext<boolean | 'indeterminate'>();
+
+    return (
+        <Field data-disabled={enabled} orientation="horizontal">
+            <Checkbox
+                onCheckedChange={field.handleChange}
+                {...props}
+            />
+            <FieldLabel>{label}</FieldLabel>
+        </Field>
+    );
+}
