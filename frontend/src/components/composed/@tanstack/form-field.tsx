@@ -57,19 +57,23 @@ export const Field = ({
     );
 };
 
-export type OmitProps = Omit<FormFieldProps, "children">
+export type OmitProps = Omit<FormFieldProps, "children">;
 
-export type FormTextFieldProps = OmitProps;
+export type FormTextFieldProps = OmitProps & React.ComponentProps<typeof Input>;
 export const TextField = ({
-    label
+    type,
+    label,
+    ...props
 }: FormTextFieldProps) => {
-    const field = useFieldContext<string>();
+    const field = useFieldContext<typeof type>();
 
     return (
         <Field label={label}>
             <Input
+                placeholder="Ingresa un valor"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
+                {...props}
             />
         </Field>
     );
