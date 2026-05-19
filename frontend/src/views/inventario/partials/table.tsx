@@ -1,37 +1,19 @@
+import { QueryDataTable } from "@/components/custom/query-datatable";
 import { columns, type Articulo } from "./table.cols";
+import { Input } from "@/components/ui/input";
+import { MultiSelect } from "@/components/custom/multiselect";
+import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/views/productos/queries";
+import { useState } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
+import type { Response, TCatalogo } from "@/lib/types";
 import { ButtonGroup } from "@/components/ui/button-group";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/_auth/inventario/create";
-import type {
-    PaginatedResponse,
-    TCatalogo
-} from "@/lib/types";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { useDebounce } from "@/hooks/use-debounce";
-import { MultiSelect } from "@/components/custom/multiselect";
-import {
-    useCategoriaQuery,
-    useMarcaQuery,
-    useProductoQuery,
-    useTipoQuery
-} from "@/views/productos/queries";
-import {
-    DataTable,
-    usePagination,
-    useTable
-} from "@/components/custom/datatable";
 
 interface TableFilters {
     categorias: number[];
@@ -73,36 +55,16 @@ export function Table() {
 
     const { data: PRODUCTO_ESTADOS = [] } = useQuery({
         queryKey: ['articulo_estados'],
-        queryFn: () => api.get<{ data: TCatalogo[] }>('api/articulo_estados')
+        queryFn: () => api.get<Response<TCatalogo[]>>('api/articulo_estados')
             .then(r => r.data.data)
     });
 
-    const [pagination, setPagination] = usePagination();
-
-    const query = useQuery({
-        queryKey: ['articulos', debounceFilters, pagination],
-        queryFn: () => api.get<PaginatedResponse<Articulo>>('api/articulos', {
-            params: {
-                ...debounceFilters,
-                page: pagination.pageIndex + 1,
-                per_page: pagination.pageSize
-            }
-        }).then(r => r.data),
-        staleTime: 60 * 1000
-    });
-
-    const table = useTable({
-        data: query.data?.data ?? [],
-        columns,
-        onPaginationChange: setPagination,
-        rowCount: query.data?.total ?? 0,
-        state: { pagination }
-    })
-
     return (
-        <DataTable
-            table={table}
-            query={query}
+        <QueryDataTable<Articulo, TableFilters>
+            queryKey={["articulos"]}
+            url="api/articulos"
+            filters={debounceFilters}
+            columns={columns}
             filterBar={(
                 <>
                     <Input
@@ -203,5 +165,5 @@ export function Table() {
                 </ButtonGroup>
             )}
         />
-    );
-}
+    )
+};

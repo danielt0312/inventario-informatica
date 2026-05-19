@@ -106,8 +106,7 @@ export const CreatableComboboxField = <T extends number | string = number>({
 
 export type CheckboxFieldProps =
     OmitProps &
-    ComponentProps<typeof Checkbox> &
-    {
+    ComponentProps<typeof Checkbox> & {
         enabled?: boolean;
     };
 export const CheckboxField = ({
