@@ -1,20 +1,37 @@
-import { DataTable } from "@/components/composed/datatable";
-import { getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import { columns, type Articulo } from "./table.cols";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/_auth/inventario/create";
-import type { PaginatedResponse, TCatalogo } from "@/lib/types";
+import type {
+    PaginatedResponse,
+    TCatalogo
+} from "@/lib/types";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { MultiSelect } from "@/components/custom/multiselect";
-import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/views/productos/queries";
+import {
+    useCategoriaQuery,
+    useMarcaQuery,
+    useProductoQuery,
+    useTipoQuery
+} from "@/views/productos/queries";
+import {
+    DataTable,
+    usePagination,
+    useTable
+} from "@/components/custom/datatable";
 
 interface TableFilters {
     categorias: number[];
@@ -60,10 +77,7 @@ export function Table() {
             .then(r => r.data.data)
     });
 
-    const [pagination, setPagination] = useState({
-        pageIndex: 0,
-        pageSize: 10
-    });
+    const [pagination, setPagination] = usePagination();
 
     const query = useQuery({
         queryKey: ['articulos', debounceFilters, pagination],
@@ -77,22 +91,19 @@ export function Table() {
         staleTime: 60 * 1000
     });
 
-    const table = useReactTable({
+    const table = useTable({
         data: query.data?.data ?? [],
         columns,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         onPaginationChange: setPagination,
-        manualPagination: true,
         rowCount: query.data?.total ?? 0,
         state: { pagination }
-    });
+    })
 
     return (
         <DataTable
             table={table}
             query={query}
-            filterBar={() => (
+            filterBar={(
                 <>
                     <Input
                         placeholder="Número de Inventario..."
@@ -168,7 +179,7 @@ export function Table() {
                     />
                 </>
             )}
-            actionBar={() => (
+            actionBar={(
                 <ButtonGroup>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
