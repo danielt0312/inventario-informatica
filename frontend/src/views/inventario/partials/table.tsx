@@ -3,8 +3,6 @@ import { columns, type Articulo } from "./table.cols";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/custom/multiselect";
 import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/views/productos/queries";
-import { useState } from "react";
-import { useDebounce } from "@/hooks/use-debounce";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import type { Response, TCatalogo } from "@/lib/types";
@@ -14,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/_auth/inventario/create";
+import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 
 interface TableFilters {
     categorias: number[];
@@ -25,32 +24,31 @@ interface TableFilters {
 }
 
 export function Table() {
-    const [filters, setFilters] = useState<TableFilters>({
+    const { filters, setFilters, debouncedFilters } = useDebouncedFilters<TableFilters>({
         categorias: [],
         tipos: [],
         marcas: [],
         productos: [],
         estados: [],
-        numero_inventario: "",
+        numero_inventario: '',
     });
-    const debounceFilters = useDebounce(filters);
 
     const { data: PRODUCTO_CATEGORIAS = [] } = useCategoriaQuery();
 
     const { data: PRODUCTO_TIPOS = [] } = useTipoQuery({
-        categorias: debounceFilters.categorias,
-        enabled: debounceFilters.categorias.length > 0
+        categorias: debouncedFilters.categorias,
+        enabled: debouncedFilters.categorias.length > 0
     });
 
     const { data: PRODUCTO_MARCAS = [] } = useMarcaQuery({
-        tipos: debounceFilters.tipos,
-        enabled: debounceFilters.tipos.length > 0
+        tipos: debouncedFilters.tipos,
+        enabled: debouncedFilters.tipos.length > 0
     });
 
     const { data: PRODUCTOS = [] } = useProductoQuery({
-        tipos: debounceFilters.tipos,
-        marcas: debounceFilters.marcas,
-        enabled: debounceFilters.tipos.length > 0
+        tipos: debouncedFilters.tipos,
+        marcas: debouncedFilters.marcas,
+        enabled: debouncedFilters.tipos.length > 0
     });
 
     const { data: PRODUCTO_ESTADOS = [] } = useQuery({
@@ -63,7 +61,7 @@ export function Table() {
         <QueryDataTable<Articulo, TableFilters>
             queryKey={["articulos"]}
             url="api/articulos"
-            filters={debounceFilters}
+            filters={debouncedFilters}
             columns={columns}
             filterBar={(
                 <>
@@ -98,7 +96,7 @@ export function Table() {
                             marcas: [],
                             productos: []
                         }))}
-                        emptyMessage={() => debounceFilters.categorias.length === 0
+                        emptyMessage={() => debouncedFilters.categorias.length === 0
                             ? 'Primero selecciona una categoría'
                             : undefined
                         }
@@ -112,7 +110,7 @@ export function Table() {
                             marcas: v.map(Number),
                             productos: []
                         }))}
-                        emptyMessage={() => debounceFilters.productos.length === 0
+                        emptyMessage={() => debouncedFilters.productos.length === 0
                             ? 'Primero selecciona un producto'
                             : undefined
                         }
@@ -125,7 +123,7 @@ export function Table() {
                             ...prev,
                             productos: v.map(Number)
                         }))}
-                        emptyMessage={() => debounceFilters.productos.length === 0
+                        emptyMessage={() => debouncedFilters.productos.length === 0
                             ? 'Primero selecciona un producto'
                             : undefined
                         }
