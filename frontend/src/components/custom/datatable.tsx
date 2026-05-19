@@ -94,7 +94,6 @@ export const DataTable = <TData, TQueryData = TData[]>({
         <DataTablePrimitive
             actionBar={
                 <>
-                    {actionBar}
                     {query && (
                         <Button
                             variant="ghost"
@@ -108,6 +107,7 @@ export const DataTable = <TData, TQueryData = TData[]>({
                             <RefreshCcw className={isSpinning ? "animate-spin" : ""} />
                         </Button>
                     )}
+                    {actionBar}
                 </>
             }
             query={query}
