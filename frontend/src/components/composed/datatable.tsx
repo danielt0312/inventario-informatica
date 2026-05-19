@@ -44,10 +44,10 @@ function getContentStatus({ query }: DataTableStatus): React.ReactNode {
         : undefined;
 }
 
-interface DataTableProps<TData, TQueryData = TData[]>
+export interface DataTableProps<TData, TQueryData = TData[]>
   extends DataTablePropsPrimitive<TData> {
-    filterBar?: () => React.ReactNode
-    actionBar?: () => React.ReactNode
+    filterBar?: React.ReactNode
+    actionBar?: React.ReactNode
     query?: UseQueryResult<TQueryData, Error>
 }
 
@@ -64,9 +64,11 @@ export function DataTable<TData, TQueryData = TData[]>({
             {(filterBar || actionBar) && (
                 <div className="flex justify-between items-center">
                     <div className="flex-1 flex gap-2 flex-wrap min-w-0">
-                        {filterBar?.()}
+                        {filterBar}
                     </div>
-                    {actionBar?.()}
+                    <div className="flex gap-2">
+                        {actionBar}
+                    </div>
                 </div>
             )}
             <div className="overflow-x-auto w-full">
