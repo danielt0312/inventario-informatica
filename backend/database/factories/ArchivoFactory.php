@@ -11,7 +11,7 @@ class ArchivoFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre' => str_replace(' ', '_', fake()->words(rand(1, 5), true)),
+            'nombre' => fake()->slug(rand(1, 5)),
             'tipo_id' => ArchivoTipoEnum::PDF->value,
         ];
     }

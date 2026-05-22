@@ -38,11 +38,10 @@ class DocumentoController extends Controller
                 'tipo_id' => ArchivoTipoEnum::PDF->value
             ]);
 
-            $fullPath = $archivo->relative_path;
-            $directory = dirname($fullPath);
-            $finalName = basename($fullPath);
-
-            $file->storeAs($directory, $finalName);
+            $file->storeAs(
+                dirname($archivo->relative_path),
+                basename($archivo->relative_path)
+            );
 
             $documento = new Documento([
                 'tipo_id' => $request->input('tipo_id'),

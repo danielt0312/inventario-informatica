@@ -13,7 +13,11 @@ use App\Http\Controllers\{
     DocumentoTipoController,
     DiscoController,
     DiscoTipoController,
-    ArticuloEstadoController
+    ArticuloEstadoController,
+    DictamenController,
+    DictamenEstadoController,
+    EmpleadoController,
+    AdscripcionController
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -25,12 +29,16 @@ Route::middleware('auth:sanctum')->group(function () {
         'producto_marcas' => ProductoMarcaController::class,
         'productos' => ProductoController::class,
         'articulos' => ArticuloController::class,
-        'documentos' => DocumentoController::class
+        'documentos' => DocumentoController::class,
+        'dictamenes' => DictamenController::class,
     ]);
 
     Route::apiResources([
         'documento_tipos' => DocumentoTipoController::class,
-        'articulo_estados' => ArticuloEstadoController::class
+        'articulo_estados' => ArticuloEstadoController::class,
+        'dictamen_estados' => DictamenEstadoController::class,
+        'empleados' => EmpleadoController::class,
+        'adscripciones' => AdscripcionController::class
     ], ['only' => 'index']);
 
     Route::apiResources([

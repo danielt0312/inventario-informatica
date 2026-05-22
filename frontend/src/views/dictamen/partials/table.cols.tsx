@@ -1,26 +1,16 @@
-'use client'
-
 import type { ColumnDef } from "@tanstack/react-table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical } from "lucide-react";
 
-type Dictamen = {
-    id: number
-    area_solicitante: string
-    fecha_solicitud: string
-    estado: string
+interface Dictamen {
+    id: number;
+    area_solicitante: string;
+    fecha_solicitud: string;
+    estado: string;
 }
 
 const columns: ColumnDef<Dictamen>[] = [
-    {
-        header: "No. de Inventario",
-        accessorKey: "numero_inventario",
-    },
-    {
-        accessorKey: "area_solicitante",
-        header: "Área Solicitante",
-    },
     {
         accessorKey: "fecha_solicitud",
         header: "Fecha de Solicitud",
@@ -31,9 +21,7 @@ const columns: ColumnDef<Dictamen>[] = [
     },
     {
         id: "actions",
-        cell: ({ row }) => {
-            const data = row.original
-
+        cell: () => {
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

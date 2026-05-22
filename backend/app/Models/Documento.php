@@ -26,4 +26,14 @@ class Documento extends Model
     public function archivo(): BelongsTo {
         return $this->belongsTo(Archivo::class, 'archivo_id');
     }
+
+    public function oficios(): HasMany
+    {
+        return $this->hasMany(Oficio::class, 'documento_id');
+    }
+
+    public function dictamenes(): HasMany
+    {
+        return $this->hasMany(Dictamen::class, 'dictamen_id');
+    }
 }

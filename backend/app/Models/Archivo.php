@@ -23,11 +23,16 @@ class Archivo extends Model
     ];
 
     protected $attributes = [
-        'activo' => 1,
+        'activo' => 1
     ];
 
     public function tipo(): BelongsTo {
         return $this->belongsTo(ArchivoTipo::class, 'tipo_id');
+    }
+
+    public function documentos(): HasMany
+    {
+        return $this->hasMany(Documento::class, 'archivo_id');
     }
 
     public function fileName(): Attribute {

@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
             'name' => 'user.test',
             'email' => 'user.test@asetamaulipas.gob.mx',
             'password' => '12345678',
+            'empleado_id' => 1
         ]);
     }
 }
