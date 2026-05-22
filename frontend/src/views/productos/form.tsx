@@ -1,23 +1,24 @@
 import { toOptions } from "@/lib/utils";
-import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "./queries";
-import { CreatableComboboxField, type CreatableComboboxFieldProps } from "@/components/composed/@tanstack/form-field";
+import {
+    useCategoriaQuery,
+    useMarcaQuery,
+    useProductoQuery,
+    useTipoQuery
+} from "./queries";
+import { CreatableComboboxField } from "@/components/composed/@tanstack/form-field";
 import { withFieldGroup } from "@/components/composed/@tanstack/form";
-import z from "zod";
 import { FieldGroup } from "@/components/ui/field";
 import { useStore } from "@tanstack/react-form";
-import type { IdValue } from "@/lib/types";
-
-type OmitProps <
-  TField extends number | string = string,
-  TOmit extends keyof CreatableComboboxFieldProps<TField> = never
-> = Omit <
-  CreatableComboboxFieldProps<TField>,
-  'options' | 'label' | TOmit
->;
+import type {
+    IdValue,
+    OmitCreatableComboboxFieldsProps
+} from "@/lib/types";
+import { defaultValues } from "./form-schema";
+import type { ComponentProps } from "react";
 
 export const CategoriaField = ({
     ...params
-}: OmitProps) => {
+}: OmitCreatableComboboxFieldsProps) => {
     const { data = [] } = useCategoriaQuery({
         select: toOptions
     });
@@ -25,7 +26,7 @@ export const CategoriaField = ({
     return (
         <CreatableComboboxField
             options={data}
-            label="Categoria:"
+            label="Categoria"
             {...params}
         />
     );
@@ -34,7 +35,7 @@ export const CategoriaField = ({
 export const TipoField = ({
     categoria,
     ...params
-}: OmitProps<'enabled'> & {
+}: OmitCreatableComboboxFieldsProps<'enabled'> & {
     categoria: IdValue
 }) => {
     const { data = [] } = useTipoQuery({
@@ -46,7 +47,7 @@ export const TipoField = ({
     return (
         <CreatableComboboxField
             options={data}
-            label="Tipo:"
+            label="Tipo"
             enabled={!categoria}
             {...params}
         />
@@ -56,7 +57,7 @@ export const TipoField = ({
 export const MarcaField = ({
     tipo,
     ...props
-}: OmitProps<'enabled'> & {
+}: OmitCreatableComboboxFieldsProps<'enabled'> & {
     tipo: IdValue
 }) => {
     const { data = [] } = useMarcaQuery({
@@ -68,7 +69,7 @@ export const MarcaField = ({
     return (
         <CreatableComboboxField
             options={data}
-            label="Marca:"
+            label="Marca"
             enabled={!tipo}
             {...props}
         />
@@ -79,7 +80,7 @@ export const ProductoField = ({
     tipo,
     marca,
     ...props
-}: OmitProps<'enabled'> & {
+}: OmitCreatableComboboxFieldsProps<'enabled'> & {
     tipo: IdValue;
     marca: IdValue;
 }) => {
@@ -93,62 +94,60 @@ export const ProductoField = ({
     return (
         <CreatableComboboxField
             options={data}
-            label="Producto:"
+            label="Modelo"
             enabled={!marca}
             {...props}
         />
     );
 }
 
-export type ProductoFields = {
-    categoria_id: IdValue;
-    tipo_id: IdValue;
-    marca_id: IdValue;
-    id: IdValue;
-}
-
-export const defaultValues: ProductoFields = {
-    categoria_id: null,
-    tipo_id: null,
-    marca_id: null,
-    id: null,
-}
-
-export const validator = z.object({
-    categoria_id: z
-        .number('Debes de seleccionar una opción')
-        .int(),
-    tipo_id: z
-        .number('Debes de seleccionar una opción')
-        .int(),
-    marca_id: z
-        .number('Debes de seleccionar una opción')
-        .int(),
-    id: z
-        .number('Debes de seleccionar una opción')
-        .int(),
-});
+export type Props = ComponentProps<typeof FieldGroup>;
+export const defaultProps: Props = {} as const;
 
 export const FieldGroupProductoFields = withFieldGroup({
     defaultValues,
-    render: function Render({ group }) {
+    props: defaultProps,
+    render: function Render({
+        group,
+        ...props
+    }) {
         const categoria = useStore(group.store, (state) => state.values.categoria_id);
         const tipo = useStore(group.store, (state) => state.values.tipo_id);
         const marca = useStore(group.store, (state) => state.values.marca_id);
 
         return (
-            <FieldGroup className="md:grid md:grid-cols-2 xl:grid-cols-4 ">
+            <FieldGroup
+                {...props}
+            >
                 <group.AppField
                     name="categoria_id"
                     children={() => <CategoriaField />}
+                    listeners={{
+                        onChange: () => {
+                            group.setFieldValue('tipo_id', null);
+                            group.setFieldValue('marca_id', null);
+                            group.setFieldValue('id', null);
+                        },
+                    }}
                 />
                 <group.AppField
                     name="tipo_id"
                     children={() => <TipoField categoria={categoria} />}
+                    listeners={{
+                        onChange: () => {
+                            group.setFieldValue('marca_id', null);
+                            group.setFieldValue('id', null);
+                        },
+                    }}
                 />
                 <group.AppField
                     name="marca_id"
                     children={() => <MarcaField tipo={tipo} />}
+                    listeners={{
+                        onChange: () => {
+                            group.setFieldValue('id', null);
+                        },
+                    }}
                 />
                 <group.AppField
                     name="id"

@@ -1,15 +1,9 @@
 import api from "@/lib/axios"
-import type { CatalogoListResponse, TCatalogo } from "@/lib/types"
-import { useQuery, type UseQueryOptions } from "@tanstack/react-query"
-
-type Option = (number | `${number}`)[];
-type OmitQueryOptions<TData = TCatalogo[]> = Omit<
-    UseQueryOptions<TCatalogo[], Error, TData>,
-    'queryKey' | 'queryFn'
->;
+import type { CatalogoListResponse, OmitQueryOptions, NumberValue, TCatalogo } from "@/lib/types"
+import { useQuery } from "@tanstack/react-query"
 
 export const useCategoriaQuery = <TData = TCatalogo[]>(
-    params?: OmitQueryOptions<TData>
+    params?: OmitQueryOptions<TCatalogo[], Error, TData>
 ) => useQuery({
     ...params,
     queryKey: ['producto_categorias'],
@@ -20,8 +14,8 @@ export const useCategoriaQuery = <TData = TCatalogo[]>(
 export const useTipoQuery = <TData = TCatalogo[]>({
     categorias,
     ...params
-}: OmitQueryOptions<TData> & {
-    categorias: Option
+}: OmitQueryOptions<TCatalogo[], Error, TData> & {
+    categorias: NumberValue[]
 }) => useQuery({
     ...params,
     queryKey: ['producto_tipos', categorias],
@@ -35,8 +29,8 @@ export const useTipoQuery = <TData = TCatalogo[]>({
 export const useMarcaQuery = <TData = TCatalogo[]>({
     tipos,
     ...params
-}: OmitQueryOptions<TData> & {
-    tipos: Option
+}: OmitQueryOptions<TCatalogo[], Error, TData> & {
+    tipos: NumberValue[]
 }) => useQuery({
     ...params,
     queryKey: ['producto_marcas', tipos],
@@ -51,9 +45,9 @@ export const useProductoQuery = <TData = TCatalogo[]>({
     tipos,
     marcas,
     ...params
-}: OmitQueryOptions<TData> & {
-    tipos: Option,
-    marcas: Option
+}: OmitQueryOptions<TCatalogo[], Error, TData> & {
+    tipos: NumberValue[],
+    marcas: NumberValue[]
 }
 ) => useQuery({
     ...params,

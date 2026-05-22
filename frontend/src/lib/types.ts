@@ -1,4 +1,8 @@
-import { QueryClient } from "@tanstack/react-query"
+import type { CreatableComboboxFieldProps } from "@/components/composed/@tanstack/form-field"
+import {
+    QueryClient,
+    type UseQueryOptions
+} from "@tanstack/react-query"
 
 export type User = {
     id: number
@@ -16,15 +20,15 @@ export type TCatalogo = {
     nombre: string
 }
 
-export type Response<T> = {
+export type TResponse<T> = {
     data: T;
 }
 
-export type CatalogoResponse = Response<TCatalogo>;
-export type CatalogoListResponse = Response<TCatalogo[]>;
+export type CatalogoResponse = TResponse<TCatalogo>;
+export type CatalogoListResponse = TResponse<TCatalogo[]>;
 
 export interface PaginatedResponse<T>
-  extends Response<T[]> {
+    extends TResponse<T[]> {
     total: number;
     per_page: number;
     current_page: number;
@@ -50,4 +54,27 @@ export const ProductoCategoria = {
 } as const;
 export type ProductoCategoria = typeof ProductoCategoria[keyof typeof ProductoCategoria];
 
-export type IdValue = number | null;
+export type NumberValue = number | `${number}`;
+export type IdValue = NumberValue | null;
+
+export type WithPrefix<T, P extends string> = {
+    [K in keyof T as `${P}${string & K}`]: T[K];
+};
+
+export type OmitQueryOptions<
+    TQueryFnData = unknown,
+    TError extends Error = Error,
+    TData = TQueryFnData
+> = Omit<
+    UseQueryOptions<TQueryFnData, TError, TData>,
+    'queryKey' | 'queryFn'
+>;
+
+
+export type OmitCreatableComboboxFieldsProps<
+    TField extends number | string = string,
+    TOmit extends keyof CreatableComboboxFieldProps<TField> = never
+> = Omit<
+    CreatableComboboxFieldProps<TField>,
+    'options' | TOmit
+>;
