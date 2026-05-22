@@ -61,10 +61,25 @@ return new class extends Migration
                 ->nullable();
             $table->timestamps();
         });
+
+        Schema::create('articulo_historial', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('articulo_id')
+                ->constrained('articulos', indexName: 'fk_articulo_historial_articulos')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->json('datos');
+            $table->foreignId('user_id')
+                ->constrained('users', indexName: 'fk_articulo_historial_users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->timestamp('created_at');
+        });
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('articulo_historial');
         Schema::dropIfExists('articulo_recepciones');
         Schema::dropIfExists('articulos');
         Schema::dropIfExists('articulo_estados');

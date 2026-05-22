@@ -28,6 +28,14 @@ return new class extends Migration
                 ->constrained('documentos', indexName: 'fk_dictamenes_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignId('adscripcion_id')
+                ->constrained('adscripciones', indexName: 'fk_dictamenes_adscripciones')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('users_id')
+                ->constrained('users', indexName: 'fk_dictamenes_users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->date('fecha_solicitud');
             $table->boolean('activo');
             $table->timestamps();
@@ -40,8 +48,8 @@ return new class extends Migration
                 ->constrained('dictamenes', indexName: 'fk_dictamen_productos_dictamenes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('user_id')
-                ->constrained('users', indexName: 'fk_dictamen_productos_users')
+            $table->foreignId('empleado_id')
+                ->constrained('empleados', indexName: 'fk_dictamen_productos_empleados')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_id')
