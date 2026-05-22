@@ -1,11 +1,11 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
 import api from "@/lib/axios";
+import { FieldGroupProductoFields } from "@/views/productos/form";
 import {
-    FieldGroupProductoFields,
     type ProductoFields,
     defaultValues as productoDefaultValues,
     validator as productoValidator
-} from "@/views/productos/form";
+} from "@/views/productos/form-schema";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import z from "zod";

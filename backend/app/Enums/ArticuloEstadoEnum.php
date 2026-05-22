@@ -20,7 +20,7 @@ enum ArticuloEstadoEnum: int
             self::BAJA              => 'Baja definitiva',
             self::BAJA_PREVENTIVA   => 'Baja preventiva',
             self::REVISION          => 'Por verificar y configurar',
-            self::MANTENIMIENTO     => 'Mantenimiento preventivo',
+            self::MANTENIMIENTO     => 'Mantenimiento',
         };
     }
 }
