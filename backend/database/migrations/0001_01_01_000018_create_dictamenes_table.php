@@ -58,12 +58,11 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('caracteristicas', 255)
                 ->nullable();
-            $table->tinyInteger('cantidad');
         });
 
         Schema::create('dictamen_articulos', function (Blueprint $table) {
-            $table->foreignId('dictamen_id')
-                ->constrained('dictamenes', indexName: 'fk_dictamen_articulos_dictamenes')
+            $table->foreignId('producto_id')
+                ->constrained('dictamen_productos', indexName: 'fk_dictamen_articulos_dictamen_productos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('articulo_id')
