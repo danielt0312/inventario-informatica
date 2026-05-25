@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Documento extends Model
@@ -14,7 +14,7 @@ class Documento extends Model
 
     protected $fillable = [
         'tipo_id',
-        'archivo_id',
+        'archivo_id'
     ];
 
     public $timestamps = false;

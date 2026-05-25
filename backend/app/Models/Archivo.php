@@ -4,12 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
+use Illuminate\Http\UploadedFile;
+
 use App\Support\FilePathGenerator;
+
+use App\Enums\ArchivoTipoEnum;
 
 class Archivo extends Model
 {
@@ -44,8 +48,7 @@ class Archivo extends Model
 
     public function relativePath(): Attribute {
         return Attribute::make(
-            fn ()
-                => FilePathGenerator::forUuid($this->uuid, $this->tipo->extension)
+            fn () => FilePathGenerator::forUuid($this->uuid, $this->tipo->extension)
         );
     }
 
@@ -57,5 +60,24 @@ class Archivo extends Model
 
     public function uniqueIds(): array {
         return ['uuid'];
+    }
+
+    public static function createAndStore(
+        UploadedFile $file,
+        ArchivoTipoEnum $tipo = ArchivoTipoEnum::PDF
+    ) {
+        $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+
+        $archivo = self::create([
+            'nombre' => $filename,
+            'tipo_id' => $tipo->value
+        ]);
+
+        $file->storeAs(
+            dirname($archivo->relative_path),
+            basename($archivo->relative_path)
+        );
+
+        return $archivo;
     }
 }

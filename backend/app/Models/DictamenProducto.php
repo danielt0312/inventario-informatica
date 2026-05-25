@@ -14,10 +14,10 @@ class DictamenProducto extends Model
 
     protected $fillable = [
         'dictamen_id',
-        'user_id',
+        'empleado_id',
         'producto_id',
-        'caracteristicas',
-        'cantidad'
+        'cantidad',
+        'caracteristicas'
     ];
 
     public $timestamps = false;
@@ -26,8 +26,8 @@ class DictamenProducto extends Model
         return $this->belongsTo(Dictamen::class, 'dictamen_id');
     }
 
-    public function user(): BelongsTo {
-        return $this->belongsTo(User::class, 'user_id');
+    public function empleado(): BelongsTo {
+        return $this->belongsTo(Empleado::class, 'empleado_id');
     }
 
     public function producto(): BelongsTo {

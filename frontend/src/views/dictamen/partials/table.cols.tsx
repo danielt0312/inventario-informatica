@@ -14,9 +14,27 @@ const columns: ColumnDef<Dictamen>[] = [
     {
         accessorKey: "fecha_solicitud",
         header: "Fecha de Solicitud",
+        cell: ({ getValue }) => {
+            const date = getValue<Date>();
+
+            return new Date(date).toLocaleDateString('es-MX', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                timeZone: 'UTC'
+            });
+        }
     },
     {
-        accessorKey: "estado",
+        accessorKey: "",
+        header: "Área Solicitante",
+    },
+    {
+        accessorKey: "oficio.folio",
+        header: "Folio de Solicitud",
+    },
+    {
+        accessorKey: "estado.nombre",
         header: "Estado",
     },
     {
@@ -25,7 +43,7 @@ const columns: ColumnDef<Dictamen>[] = [
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant={"outline"}>
+                        <Button variant="outline" size="icon">
                             <span className="sr-only">Open menu</span>
                             <EllipsisVertical />
                         </Button>

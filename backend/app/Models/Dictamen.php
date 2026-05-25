@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 use App\Enums\DictamenEstadoEnum;
@@ -19,6 +19,7 @@ class Dictamen extends Model
         'estado_id',
         'oficio_id',
         'documento_id',
+        'adscripcion_id',
         'user_id',
         'fecha_solicitud'
     ];

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Dictamen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,19 +11,19 @@ use App\Http\Requests\Dictamen\{
 };
 
 use App\Models\{
-    Dictamen,
-    DictamenProducto
+    Archivo,
+    Dictamen
 };
 
 use App\Enums\{
-
+    DocumentoTipoEnum
 };
 
 class DictamenController extends Controller
 {
     public function index(DictamenRequest $request)
     {
-        $query = Dictamen::with(['estado', 'oficio', 'documento']);
+        $query = Dictamen::with(['estado', 'oficio.documento.archivo', 'documento.archivo']);
 
         $data = $query->paginate($request->query('per_page', 10));
 
@@ -34,9 +33,33 @@ class DictamenController extends Controller
     public function store(StoreDictamenRequest $request)
     {
         DB::transaction(function () use ($request) {
-            $archivo = Archivo::create([
-                'nombre'
+            $data = $request->validated();
+            logger($data);
+
+            $archivo = Archivo::createAndStore($request->file('archivo'));
+
+            $documento = $archivo->documentos()->create([
+                'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
             ]);
+
+            $oficio = $documento->oficios()->create([
+                'folio' => $data['folio']
+            ]);
+
+            //todo obtener el jefe de departamento de DTI
+            $user_id = 1;
+
+            //todo generar el documento al que el dictamen depende en su creacion
+            //todo verificar que la adscripcion exista en la tabla espejo `Adscripcion`
+            $dictamen = Dictamen::create([
+                'oficio_id' => $oficio->id,
+                'adscripcion_id' => $data['adscripcion_id'],
+                'user_id' => $user_id,
+                'fecha_solicitud' => $data['fecha_solicitud']
+            ]);
+
+            //todo verificar que los empleados existan en la tabla espejo `Empleado`
+            $dictamen->productos()->createMany($data['productos']);
         });
 
         return response(status: 201);

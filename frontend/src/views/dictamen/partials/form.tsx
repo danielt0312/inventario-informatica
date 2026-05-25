@@ -23,11 +23,16 @@ export function Form() {
             const data = value as OutputSchema;
             const formData = new FormData();
 
+            formData.append('adscripcion_id', String(data.adscripcion_id));
+            formData.append('folio', String(data.folio));
+            formData.append('fecha_solicitud', String(data.fecha_solicitud));
             formData.append('archivo', data.archivo[0]);
 
-            Object.entries(data).forEach(([key, val]) => {
-                if (key === 'archivo') return;
-                formData.append(key, String(val));
+            data.productos.forEach((producto, index) => {
+                formData.append(`productos[${index}][cantidad]`, String(producto.cantidad));
+                formData.append(`productos[${index}][producto_id]`, String(producto.producto_id));
+                formData.append(`productos[${index}][caracteristicas]`, String(producto.caracteristicas));
+                formData.append(`productos[${index}][empleado_id]`, String(producto.empleado_id));
             });
 
             await api.post('api/dictamenes', formData, {
@@ -134,6 +139,7 @@ export function Form() {
                                                         children={(field) => (
                                                             <TextField
                                                                 value={field.state.value ?? ''}
+                                                                onChange={(e) => field.handleChange(Number(e.target.value))}
                                                                 placeholder="Ingresa una cantidad"
                                                             />
                                                         )}
