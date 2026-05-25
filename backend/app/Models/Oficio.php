@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 
 class Oficio extends Model
 {
@@ -12,7 +12,6 @@ class Oficio extends Model
 
     protected $fillable = [
         'documento_id',
-        'asunto_id',
         'folio'
     ];
 
@@ -22,7 +21,8 @@ class Oficio extends Model
         return $this->belongsTo(Documento::class, 'documento_id');
     }
 
-    public function asunto(): BelongsTo {
-        return $this->belongsTo(OficioAsunto::class, 'asunto_id');
+    public function dictamenes(): HasMany
+    {
+        return $this->hasMany(Dictamen::class, 'dictamen_id');
     }
 }
