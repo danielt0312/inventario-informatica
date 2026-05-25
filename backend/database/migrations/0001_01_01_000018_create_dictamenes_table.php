@@ -32,14 +32,12 @@ return new class extends Migration
                 ->constrained('adscripciones', indexName: 'fk_dictamenes_adscripciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('users_id')
+            $table->foreignId('user_id')
                 ->constrained('users', indexName: 'fk_dictamenes_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->date('fecha_solicitud');
-            $table->boolean('activo');
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::create('dictamen_productos', function (Blueprint $table) {

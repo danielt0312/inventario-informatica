@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
+use App\Enums\DictamenEstadoEnum;
+
 class Dictamen extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory;
 
     protected $table = 'dictamenes';
 
@@ -18,11 +19,12 @@ class Dictamen extends Model
         'estado_id',
         'oficio_id',
         'documento_id',
+        'user_id',
         'fecha_solicitud'
     ];
 
     protected $attributes = [
-        'activo' => 1
+        'estado_id' => DictamenEstadoEnum::POR_DICTAMINAR->value
     ];
 
     public function estado(): BelongsTo {
@@ -43,7 +45,6 @@ class Dictamen extends Model
 
     public function casts(): array {
         return [
-            'activo' => 'boolean',
             'fecha_solicitud' => 'date'
         ];
     }
