@@ -56,6 +56,7 @@ return new class extends Migration
                 ->constrained('productos', indexName: 'fk_dictamen_productos_productos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->unsignedTinyInteger('cantidad');
             $table->string('caracteristicas', 255)
                 ->nullable();
         });
