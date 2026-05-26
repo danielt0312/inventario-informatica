@@ -54,8 +54,7 @@ export const ProductoCategoria = {
 } as const;
 export type ProductoCategoria = typeof ProductoCategoria[keyof typeof ProductoCategoria];
 
-export type NumberValue = number | `${number}`;
-export type IdValue = NumberValue | null;
+export type IdValue = number | null;
 
 export type WithPrefix<T, P extends string> = {
     [K in keyof T as `${P}${string & K}`]: T[K];

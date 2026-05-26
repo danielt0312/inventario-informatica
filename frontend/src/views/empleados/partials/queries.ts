@@ -1,6 +1,5 @@
 import api from "@/lib/axios";
 import type {
-    NumberValue,
     OmitQueryOptions,
     TResponse
 } from "@/lib/types";
@@ -20,7 +19,7 @@ export function useEmpleadoQuery<TData = Empleado[]>({
     adscripciones,
     ...params
 }: OmitQueryOptions<Empleado[], Error, TData> & {
-    adscripciones: NumberValue[]
+    adscripciones: number[]
 }) {
     return useQuery({
         ...params,
