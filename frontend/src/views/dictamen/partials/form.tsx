@@ -142,8 +142,10 @@ export function Form() {
                                                         name={`productos[${index}].cantidad`}
                                                         children={(field) => (
                                                             <TextField
-                                                                value={field.state.value ?? ''}
-                                                                onChange={(e) => field.handleChange(Number(e.target.value))}
+                                                                onChange={(e) => {
+                                                                    const v = Number(e.target.value);
+                                                                    field.handleChange(isNaN(v) || v === 0 ? 1 : v)
+                                                                }}
                                                                 placeholder="Ingresa una cantidad"
                                                             />
                                                         )}

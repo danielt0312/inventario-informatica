@@ -10,13 +10,13 @@ class StoreDictamenRequest extends FormRequest
     {
         return [
             'adscripcion_id' => ['required', 'integer'],
-            'folio' => ['required', 'string', 'max:64'],
+            'folio' => ['required', 'string', 'max:64', 'unique:oficios,folio'],
             'fecha_solicitud' => ['required', 'date', 'before_or_equal:today'],
-            'archivo' => ['required', 'file', 'mimes:pdf'],
+            'archivo' => ['required', 'file', 'max:5120', 'mimes:pdf'],
             'productos' => ['required', 'array', 'min:1'],
-            'productos.*.empleado_id' => ['required', 'integer', 'exists:empleados,id'],
+            'productos.*.empleado_id' => ['required', 'integer'],
             'productos.*.producto_id' => ['required', 'integer', 'exists:productos,id'],
-            'productos.*.cantidad' => ['required', 'integer', 'min:1', 'max:255'],
+            'productos.*.cantidad' => ['required', 'integer', 'gte:1', 'lte:255'],
             'productos.*.caracteristicas' => ['nullable', 'string', 'max:255'],
         ];
     }

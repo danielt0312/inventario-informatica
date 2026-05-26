@@ -49,7 +49,6 @@ export const SubmitButton = ({
     );
 }
 
-export type FieldProps = Omit<FormFieldProps, "errors">;
 export const Field = ({
     ...props
 }: FormFieldProps) => {

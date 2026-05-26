@@ -1,3 +1,4 @@
+import { FormValidationError } from "@/lib/constants";
 import type { IdValue } from "@/lib/types";
 import {
     prefixedDefaultValues as productoPrefixedDefaultValues,
@@ -37,15 +38,25 @@ export const dictamenDefaultValues: Dictamen = {
 
 export const validator = z.object({
     folio: z
-        .string('Este campo es requerido'),
+        .string(FormValidationError.REQUIRED)
+        .trim()
+        .refine(
+            v => v !== '',
+            FormValidationError.REQUIRED
+        ),
     fecha_solicitud: z
-        .string('Este campo es requerido'),
+        .iso
+        .date(FormValidationError.REQUIRED)
+        .refine(
+            v => new Date(v) <= new Date,
+            'Esta fecha debe ser menor o igual a hoy'
+        ),
     adscripcion_id: z
         .number('Debes de seleccionar una opción')
         .int(),
     archivo: z
         .array(z
-            .file('Debes de ajuntar un archivo')
+            .file()
             .max(5_000_000, 'El archivo no debe superar 5MB')
         , 'Debes de adjuntar un archivo')
         .min(1, 'Debes de seleccionar un archivo')
@@ -54,8 +65,9 @@ export const validator = z.object({
         .array(
             productoValidatorPrefixed.extend({
                 cantidad: z
-                    .number('Este campo es requerido')
-                    .int(),
+                    .number(FormValidationError.REQUIRED)
+                    .int()
+                    .min(1, 'Este campo debe ser mínimo de 1'),
                 empleado_id: z
                     .number('Debes de seleccionar una opción')
                     .int(),

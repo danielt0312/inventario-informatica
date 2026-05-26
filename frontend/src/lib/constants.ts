@@ -14,3 +14,8 @@ export const ProductoCategoria = {
     MEMORIA_ACCESO_ALEATORIO: 3,
 } as const;
 export type ProductoCategoria = (typeof ProductoCategoria)[keyof typeof ProductoCategoria];
+
+export const FormValidationError = {
+    REQUIRED: 'Este campo es requerido'
+} as const;
+export type FormValidationError = (typeof FormValidationError)[keyof typeof FormValidationError];
