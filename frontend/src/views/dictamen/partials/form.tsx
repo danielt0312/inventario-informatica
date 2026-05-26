@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 import api from "@/lib/axios";
-import { toISODate } from "@/lib/utils";
+import { handleFormValidationError, toISODate } from "@/lib/utils";
 import { PlusCircle, Trash2 } from "lucide-react";
-import { dictamenDefaultValues, dictamenProductoDefaultValues, validator, type OutputSchema } from "./form-schema";
+import { dictamenDefaultValues, dictamenProductoDefaultValues, validator } from "./form-schema";
 import { FieldGroupProductoFields } from "@/views/productos/form";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EmpleadoField } from "@/views/empleados/partials/form";
@@ -19,8 +19,8 @@ export function Form() {
         validators: {
             onSubmit: validator
         },
-        onSubmit: async ({ value }) => {
-            const data = value as OutputSchema;
+        onSubmit: async ({ value, formApi }) => {
+            const data = validator.parse(value);
             const formData = new FormData();
 
             formData.append('adscripcion_id', String(data.adscripcion_id));
@@ -35,9 +35,13 @@ export function Form() {
                 formData.append(`productos[${index}][empleado_id]`, String(producto.empleado_id));
             });
 
-            await api.post('api/dictamenes', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            try {
+                await api.post('api/dictamenes', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+            } catch (error) {
+                handleFormValidationError(error, formApi);
+            }
         }
     });
 

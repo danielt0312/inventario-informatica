@@ -52,7 +52,6 @@ export type OmitQueryOptions<
     'queryKey' | 'queryFn'
 >;
 
-
 export type OmitCreatableComboboxFieldsProps<
     TField extends number | string = string,
     TOmit extends keyof CreatableComboboxFieldProps<TField> = never

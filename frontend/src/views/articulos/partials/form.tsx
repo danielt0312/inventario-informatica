@@ -11,7 +11,7 @@ import { useNavigate } from "@tanstack/react-router";
 import z from "zod";
 import { Route as RouteIndex } from "@/routes/_auth/inventario"
 import { isAxiosError } from "axios";
-import { handleLaravel422 } from "@/lib/utils";
+import { setFormValidationErrors } from "@/lib/utils";
 import { CheckboxField, TextField } from "@/components/composed/@tanstack/form-field";
 import { FieldGroup } from "@/components/ui/field";
 
@@ -65,7 +65,7 @@ export const useForm = () => {
             } catch (error) {
                 if (isAxiosError(error) && error.response?.status === 422) {
                     const serverErrors = error.response.data.errors;
-                    handleLaravel422(formApi, serverErrors);
+                    setFormValidationErrors(formApi, serverErrors);
                 }
             }
         }
