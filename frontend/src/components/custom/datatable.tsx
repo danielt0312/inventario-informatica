@@ -2,7 +2,8 @@ import {
     useCallback,
     useEffect,
     useRef,
-    useState
+    useState,
+    type ComponentProps
 } from "react";
 import {
     useReactTable,
@@ -17,6 +18,8 @@ import {
 } from "../composed/datatable";
 import { Button } from "../ui/button";
 import { RefreshCcw } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Input } from "../ui/input";
 
 export const usePagination = (initialState: Partial<PaginationState> = {}) => {
     return useState<PaginationState>({
@@ -115,3 +118,20 @@ export const DataTable = <TData, TQueryData = TData[]>({
         />
     );
 };
+
+export interface SearchInputProps
+  extends Omit<ComponentProps<typeof Input>, 'placeholder'> {
+    placeholder: NonNullable<ComponentProps<typeof Input>>['placeholder']
+}
+
+export function SearchInput({
+    className,
+    ...props
+}: SearchInputProps) {
+    return (
+        <Input
+            className={cn("max-w-sm h-8", className)}
+            {...props}
+        />
+    )
+}
