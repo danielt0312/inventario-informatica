@@ -25,6 +25,11 @@ class DictamenController extends Controller
     {
         $query = Dictamen::with(['estado', 'oficio.documento.archivo', 'documento.archivo']);
 
+        if ($request->filled('folio')) {
+            $query->whereHas('oficio', fn ($q)
+                => $q->whereLike('folio', "%{$request->input('folio')}%"));
+        }
+
         $data = $query->paginate($request->query('per_page', 10));
 
         return response()->json($data);

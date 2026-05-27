@@ -9,7 +9,7 @@ class DictamenRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+            'folio' => ['nullable', 'string']
         ];
     }
 }

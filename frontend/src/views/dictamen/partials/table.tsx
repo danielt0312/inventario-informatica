@@ -9,14 +9,17 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Route as CreateRoute } from "@/routes/_auth/dictamen/create";
+import { SearchInput } from "@/components/custom/datatable";
 
 interface TableFilters {
     estados: number[];
+    folio: string;
 }
 
 export const Table = () => {
     const { debouncedFilters, filters, setFilters } = useDebouncedFilters<TableFilters>({
         estados: [],
+        folio: ''
     });
 
     const { data: ESTADOS = [] } = useQuery({
@@ -33,6 +36,15 @@ export const Table = () => {
             queryKey={['dictamenes']}
             filterBar={(
                 <>
+                    <SearchInput
+                        value={filters.folio}
+                        placeholder="Folio de solicitud"
+                        onChange={(e) => setFilters(prev => ({
+                            ...prev,
+                            folio: e.target.value
+                        }))}
+                    />
+
                     <MultiSelect
                         label="Estado"
                         options={ESTADOS}
@@ -48,16 +60,11 @@ export const Table = () => {
                 </>
             )}
             actionBar={(
-                <>
-                    <Link to={CreateRoute.to}>
-                        <Button
-                            size="sm"
-                        >
-                            <PlusCircle /> Crear
-                        </Button>
-                    </Link>
-
-                </>
+                <Link to={CreateRoute.to}>
+                    <Button size="sm">
+                        <PlusCircle /> Crear
+                    </Button>
+                </Link>
             )}
         />
     );
