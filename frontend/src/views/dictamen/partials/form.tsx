@@ -134,9 +134,10 @@ export function Form() {
                                             <TableHead colSpan={2}>
                                                 Bien Informático
                                             </TableHead>
-                                            <TableHead colSpan={2} rowSpan={2} className="border-none w-1/3">
+                                            <TableHead rowSpan={2} className="border-none w-1/4">
                                                 Resguardante
                                             </TableHead>
+                                            <TableHead rowSpan={2} className="border-none" />
                                         </TableRow>
 
                                         <TableRow>

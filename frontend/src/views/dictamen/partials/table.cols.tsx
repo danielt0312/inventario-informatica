@@ -1,16 +1,20 @@
-import type { ColumnDef } from "@tanstack/react-table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { TCatalogo } from "@/lib/types";
+import { DictamenEstado } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
-import { EllipsisVertical } from "lucide-react";
+import { FileInput } from "lucide-react";
 
-interface Dictamen {
+export interface Dictamen {
     id: number;
-    area_solicitante: string;
-    fecha_solicitud: string;
-    estado: string;
+    adscripcion: TCatalogo;
+    fecha_solicitud: Date;
+    estado: TCatalogo;
+    oficio: {
+        folio: string
+    }
 }
 
-const columns: ColumnDef<Dictamen>[] = [
+export const columns: ColumnDef<Dictamen>[] = [
     {
         accessorKey: "fecha_solicitud",
         header: "Fecha de Solicitud",
@@ -39,30 +43,14 @@ const columns: ColumnDef<Dictamen>[] = [
     },
     {
         id: "actions",
-        cell: () => {
+        cell: ({ row: { original: data } }) => {
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon">
-                            <span className="sr-only">Open menu</span>
-                            <EllipsisVertical />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem>
-                            Revisar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Editar
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                data.estado.id === DictamenEstado.POR_DICTAMINAR && (
+                    <Button size="icon" variant="secondary">
+                        <FileInput />
+                    </Button>
+                )
             )
         }
     },
-]
-
-export {
-    type Dictamen,
-    columns
-}
+];

@@ -11,7 +11,7 @@ use App\Http\Controllers\{
     ArticuloController,
     DocumentoController,
     DocumentoTipoController,
-    DiscoController,
+    // DiscoController,
     DiscoTipoController,
     ArticuloEstadoController,
     DictamenController,
@@ -29,9 +29,11 @@ Route::middleware('auth:sanctum')->group(function () {
         'producto_marcas' => ProductoMarcaController::class,
         'productos' => ProductoController::class,
         'articulos' => ArticuloController::class,
-        'documentos' => DocumentoController::class,
         'dictamenes' => DictamenController::class,
     ]);
+
+    Route::apiResource('dictamenes', DictamenController::class)
+        ->parameters(['dictamene' => 'dictamene:uuid']);
 
     Route::apiResources([
         'documento_tipos' => DocumentoTipoController::class,
@@ -42,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     ], ['only' => 'index']);
 
     Route::apiResources([
-        'discos' => DiscoController::class,
+        // 'discos' => DiscoController::class,
         'disco_tipos' => DiscoTipoController::class
     ], ['except' => 'show']);
 });

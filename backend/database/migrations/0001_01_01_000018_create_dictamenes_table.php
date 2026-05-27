@@ -15,6 +15,7 @@ return new class extends Migration
 
         Schema::create('dictamenes', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->foreignId('estado_id')
                 ->constrained('dictamen_estados', indexName: 'fk_dictamenes_dictamen_estados')
                 ->cascadeOnUpdate()

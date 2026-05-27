@@ -15,7 +15,7 @@ export const OrderDictamenEstado = [
 
 export type OrderDictamenEstado = (typeof OrderDictamenEstado)[number];
 
-export function getTitle(step: OrderDictamenEstado) {
+export function getTitle(step?: OrderDictamenEstado) {
     switch (step) {
         case DictamenEstado.POR_DICTAMINAR: return 'Dictaminar Requisición';
         case DictamenEstado.REQUISITADO: return 'Adjuntar evidencia de requisición';

@@ -46,7 +46,11 @@ class Dictamen extends Model
 
     public function casts(): array {
         return [
-            'fecha_solicitud' => 'date'
+            'fecha_solicitud' => 'date:Y-m-d'
         ];
+    }
+
+    public function uniqueIds(): array {
+        return ['uuid'];
     }
 }

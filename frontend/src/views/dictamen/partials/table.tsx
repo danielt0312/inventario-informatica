@@ -51,10 +51,7 @@ export const Table = () => {
                         selected={filters.estados.map(String)}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,
-                            categorias: v.map(Number),
-                            tipos: [],
-                            marcas: [],
-                            productos: []
+                            categorias: v.map(Number)
                         }))}
                     />
                 </>
