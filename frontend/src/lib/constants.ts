@@ -15,6 +15,15 @@ export const ProductoCategoria = {
 } as const;
 export type ProductoCategoria = (typeof ProductoCategoria)[keyof typeof ProductoCategoria];
 
+export const DictamenEstado = {
+    POR_DICTAMINAR: 1,
+    REQUISITADO: 2,
+    POR_SURTIR: 3,
+    SURTIDO: 4,
+    SURTIDO_PARCIAL: 5,
+} as const;
+export type DictamenEstado = (typeof DictamenEstado)[keyof typeof DictamenEstado];
+
 export const FormValidationError = {
     REQUIRED: 'Este campo es requerido'
 } as const;

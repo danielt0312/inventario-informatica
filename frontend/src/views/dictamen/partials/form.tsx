@@ -119,7 +119,7 @@ export function Form() {
                                             <TableHead colSpan={2}>
                                                 Bien Informático
                                             </TableHead>
-                                            <TableHead colSpan={2} rowSpan={2} className="border-none w-1/4">
+                                            <TableHead colSpan={2} rowSpan={2} className="border-none w-1/3">
                                                 Resguardante
                                             </TableHead>
                                         </TableRow>
@@ -181,7 +181,7 @@ export function Form() {
                                                         children={() => <EmpleadoField adscripcion={adscripcion} />}
                                                     />
                                                 </TableCell>
-                                                <TableCell className="max-w-fit">
+                                                <TableCell className="max-w-fit text-center">
                                                     <Button
                                                         disabled={field.state.value.length == 1}
                                                         onClick={() => field.removeValue(index)}

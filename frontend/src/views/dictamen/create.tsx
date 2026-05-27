@@ -1,21 +1,24 @@
 import Goback from "@/components/Goback"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form } from "./partials/form"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getTitle, OrderDictamenEstado, SidebarSteps } from "./partials/form-steps";
 
-function DictamenCreate() {
+export function DictamenCreate() {
+    const step: OrderDictamenEstado = undefined;
+
     return (
         <>
             <Goback />
-            <Card>
+            <SidebarSteps step={step}>
                 <CardHeader>
-                    <CardTitle>Crear</CardTitle>
+                    <CardTitle>
+                        {getTitle(step).toUpperCase()}
+                    </CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-6">
                     <Form />
                 </CardContent>
-            </Card>
+            </SidebarSteps>
         </>
     )
 }
-
-export default DictamenCreate
