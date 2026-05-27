@@ -12,8 +12,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { EmpleadoField } from "@/views/empleados/partials/form";
 import { useStore } from "@tanstack/react-form";
 import { AdscripcionField } from "@/views/adscripciones/partials/form";
+import { Route } from "@/routes/_auth/dictamen";
+import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 
-export function Form() {
+export function useForm() {
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
     const form = useAppForm({
         defaultValues: dictamenDefaultValues,
         validators: {
@@ -39,11 +45,20 @@ export function Form() {
                 await api.post('api/dictamenes', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
+
+                navigate({ to: Route.to });
+                queryClient.invalidateQueries({ queryKey: ['dictamenes'] })
             } catch (error) {
                 handleFormValidationError(error, formApi);
             }
         }
     });
+
+    return form;
+}
+
+export function Form() {
+    const form = useForm();
 
     const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
 
