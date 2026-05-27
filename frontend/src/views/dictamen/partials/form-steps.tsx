@@ -106,11 +106,13 @@ export function SidebarSteps({
 }) {
     return (
         <Card
-            className={cn(className, "flex flex-row gap-0 p-0 overflow-hidden")}
+            className={cn(className, "flex flex-row gap-0 p-0")}
             {...props}
         >
-            <div className="max-w-1/7 bg-stone-900 py-10 flex flex-col">
-                <Steps step={step} />
+            <div className="max-w-1/7 bg-stone-900 rounded-l-xl">
+                <div className="sticky top-0 py-10">
+                    <Steps step={step} />
+                </div>
             </div>
 
             <div className="flex-1 py-6 flex flex-col gap-6">
