@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { EmpleadoField } from "@/views/empleados/partials/form";
 import { useStore } from "@tanstack/react-form";
 import { AdscripcionField } from "@/views/adscripciones/partials/form";
-import { Route } from "@/routes/_auth/dictamen";
+import { Route } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 

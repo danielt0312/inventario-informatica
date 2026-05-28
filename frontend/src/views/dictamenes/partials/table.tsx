@@ -8,7 +8,7 @@ import type { TResponse, TCatalogo } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { Route as CreateRoute } from "@/routes/_auth/dictamen/create";
+import { Route as CreateRoute } from "@/routes/_auth/dictamenes/create";
 import { SearchInput } from "@/components/custom/datatable";
 
 interface TableFilters {

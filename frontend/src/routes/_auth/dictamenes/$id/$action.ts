@@ -1,8 +1,8 @@
 import api from '@/lib/axios';
 import { DictamenEstado } from '@/lib/constants';
 import type { TResponse } from '@/lib/types';
-import type { Dictamen } from '@/views/dictamen/partials/table.cols';
-import { View } from '@/views/dictamen/update';
+import type { Dictamen } from '@/views/dictamenes/partials/table.cols';
+import { View } from '@/views/dictamenes/update';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
 
@@ -16,7 +16,7 @@ export const ACTION_TO_ESTADO = {
     inventariar: DictamenEstado.SURTIDO,
 } as const satisfies Record<Action, DictamenEstado>;
 
-export const Route = createFileRoute('/_auth/dictamen/$id/$action')({
+export const Route = createFileRoute('/_auth/dictamenes/$id/$action')({
     params: {
         parse: (rawParams) => ({
             id: z.coerce.number().int().parse(rawParams.id),

@@ -15,10 +15,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuestLoginRouteImport } from './routes/_guest/login'
 import { Route as AuthInventarioIndexRouteImport } from './routes/_auth/inventario/index'
 import { Route as AuthDocumentosIndexRouteImport } from './routes/_auth/documentos/index'
-import { Route as AuthDictamenIndexRouteImport } from './routes/_auth/dictamen/index'
+import { Route as AuthDictamenesIndexRouteImport } from './routes/_auth/dictamenes/index'
 import { Route as AuthInventarioCreateRouteImport } from './routes/_auth/inventario/create'
-import { Route as AuthDictamenCreateRouteImport } from './routes/_auth/dictamen/create'
-import { Route as AuthDictamenIdActionRouteImport } from './routes/_auth/dictamen/$id/$action'
+import { Route as AuthDictamenesCreateRouteImport } from './routes/_auth/dictamenes/create'
+import { Route as AuthDictamenesIdActionRouteImport } from './routes/_auth/dictamenes/$id/$action'
 
 const GuestRoute = GuestRouteImport.update({
   id: '/_guest',
@@ -48,9 +48,9 @@ const AuthDocumentosIndexRoute = AuthDocumentosIndexRouteImport.update({
   path: '/documentos/',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthDictamenIndexRoute = AuthDictamenIndexRouteImport.update({
-  id: '/dictamen/',
-  path: '/dictamen/',
+const AuthDictamenesIndexRoute = AuthDictamenesIndexRouteImport.update({
+  id: '/dictamenes/',
+  path: '/dictamenes/',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthInventarioCreateRoute = AuthInventarioCreateRouteImport.update({
@@ -58,36 +58,36 @@ const AuthInventarioCreateRoute = AuthInventarioCreateRouteImport.update({
   path: '/inventario/create',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthDictamenCreateRoute = AuthDictamenCreateRouteImport.update({
-  id: '/dictamen/create',
-  path: '/dictamen/create',
+const AuthDictamenesCreateRoute = AuthDictamenesCreateRouteImport.update({
+  id: '/dictamenes/create',
+  path: '/dictamenes/create',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthDictamenIdActionRoute = AuthDictamenIdActionRouteImport.update({
-  id: '/dictamen/$id/$action',
-  path: '/dictamen/$id/$action',
+const AuthDictamenesIdActionRoute = AuthDictamenesIdActionRouteImport.update({
+  id: '/dictamenes/$id/$action',
+  path: '/dictamenes/$id/$action',
   getParentRoute: () => AuthRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof GuestLoginRoute
-  '/dictamen/create': typeof AuthDictamenCreateRoute
+  '/dictamenes/create': typeof AuthDictamenesCreateRoute
   '/inventario/create': typeof AuthInventarioCreateRoute
-  '/dictamen/': typeof AuthDictamenIndexRoute
+  '/dictamenes/': typeof AuthDictamenesIndexRoute
   '/documentos/': typeof AuthDocumentosIndexRoute
   '/inventario/': typeof AuthInventarioIndexRoute
-  '/dictamen/$id/$action': typeof AuthDictamenIdActionRoute
+  '/dictamenes/$id/$action': typeof AuthDictamenesIdActionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof GuestLoginRoute
-  '/dictamen/create': typeof AuthDictamenCreateRoute
+  '/dictamenes/create': typeof AuthDictamenesCreateRoute
   '/inventario/create': typeof AuthInventarioCreateRoute
-  '/dictamen': typeof AuthDictamenIndexRoute
+  '/dictamenes': typeof AuthDictamenesIndexRoute
   '/documentos': typeof AuthDocumentosIndexRoute
   '/inventario': typeof AuthInventarioIndexRoute
-  '/dictamen/$id/$action': typeof AuthDictamenIdActionRoute
+  '/dictamenes/$id/$action': typeof AuthDictamenesIdActionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -95,46 +95,46 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_guest': typeof GuestRouteWithChildren
   '/_guest/login': typeof GuestLoginRoute
-  '/_auth/dictamen/create': typeof AuthDictamenCreateRoute
+  '/_auth/dictamenes/create': typeof AuthDictamenesCreateRoute
   '/_auth/inventario/create': typeof AuthInventarioCreateRoute
-  '/_auth/dictamen/': typeof AuthDictamenIndexRoute
+  '/_auth/dictamenes/': typeof AuthDictamenesIndexRoute
   '/_auth/documentos/': typeof AuthDocumentosIndexRoute
   '/_auth/inventario/': typeof AuthInventarioIndexRoute
-  '/_auth/dictamen/$id/$action': typeof AuthDictamenIdActionRoute
+  '/_auth/dictamenes/$id/$action': typeof AuthDictamenesIdActionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/login'
-    | '/dictamen/create'
+    | '/dictamenes/create'
     | '/inventario/create'
-    | '/dictamen/'
+    | '/dictamenes/'
     | '/documentos/'
     | '/inventario/'
-    | '/dictamen/$id/$action'
+    | '/dictamenes/$id/$action'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
-    | '/dictamen/create'
+    | '/dictamenes/create'
     | '/inventario/create'
-    | '/dictamen'
+    | '/dictamenes'
     | '/documentos'
     | '/inventario'
-    | '/dictamen/$id/$action'
+    | '/dictamenes/$id/$action'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_guest'
     | '/_guest/login'
-    | '/_auth/dictamen/create'
+    | '/_auth/dictamenes/create'
     | '/_auth/inventario/create'
-    | '/_auth/dictamen/'
+    | '/_auth/dictamenes/'
     | '/_auth/documentos/'
     | '/_auth/inventario/'
-    | '/_auth/dictamen/$id/$action'
+    | '/_auth/dictamenes/$id/$action'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -187,11 +187,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDocumentosIndexRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/dictamen/': {
-      id: '/_auth/dictamen/'
-      path: '/dictamen'
-      fullPath: '/dictamen/'
-      preLoaderRoute: typeof AuthDictamenIndexRouteImport
+    '/_auth/dictamenes/': {
+      id: '/_auth/dictamenes/'
+      path: '/dictamenes'
+      fullPath: '/dictamenes/'
+      preLoaderRoute: typeof AuthDictamenesIndexRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_auth/inventario/create': {
@@ -201,39 +201,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthInventarioCreateRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/dictamen/create': {
-      id: '/_auth/dictamen/create'
-      path: '/dictamen/create'
-      fullPath: '/dictamen/create'
-      preLoaderRoute: typeof AuthDictamenCreateRouteImport
+    '/_auth/dictamenes/create': {
+      id: '/_auth/dictamenes/create'
+      path: '/dictamenes/create'
+      fullPath: '/dictamenes/create'
+      preLoaderRoute: typeof AuthDictamenesCreateRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/dictamen/$id/$action': {
-      id: '/_auth/dictamen/$id/$action'
-      path: '/dictamen/$id/$action'
-      fullPath: '/dictamen/$id/$action'
-      preLoaderRoute: typeof AuthDictamenIdActionRouteImport
+    '/_auth/dictamenes/$id/$action': {
+      id: '/_auth/dictamenes/$id/$action'
+      path: '/dictamenes/$id/$action'
+      fullPath: '/dictamenes/$id/$action'
+      preLoaderRoute: typeof AuthDictamenesIdActionRouteImport
       parentRoute: typeof AuthRoute
     }
   }
 }
 
 interface AuthRouteChildren {
-  AuthDictamenCreateRoute: typeof AuthDictamenCreateRoute
+  AuthDictamenesCreateRoute: typeof AuthDictamenesCreateRoute
   AuthInventarioCreateRoute: typeof AuthInventarioCreateRoute
-  AuthDictamenIndexRoute: typeof AuthDictamenIndexRoute
+  AuthDictamenesIndexRoute: typeof AuthDictamenesIndexRoute
   AuthDocumentosIndexRoute: typeof AuthDocumentosIndexRoute
   AuthInventarioIndexRoute: typeof AuthInventarioIndexRoute
-  AuthDictamenIdActionRoute: typeof AuthDictamenIdActionRoute
+  AuthDictamenesIdActionRoute: typeof AuthDictamenesIdActionRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthDictamenCreateRoute: AuthDictamenCreateRoute,
+  AuthDictamenesCreateRoute: AuthDictamenesCreateRoute,
   AuthInventarioCreateRoute: AuthInventarioCreateRoute,
-  AuthDictamenIndexRoute: AuthDictamenIndexRoute,
+  AuthDictamenesIndexRoute: AuthDictamenesIndexRoute,
   AuthDocumentosIndexRoute: AuthDocumentosIndexRoute,
   AuthInventarioIndexRoute: AuthInventarioIndexRoute,
-  AuthDictamenIdActionRoute: AuthDictamenIdActionRoute,
+  AuthDictamenesIdActionRoute: AuthDictamenesIdActionRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

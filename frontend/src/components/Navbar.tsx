@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router"
 import { Route as AuthRoute } from "@/routes/_auth";
 import { Route as InventarioRoute } from "@/routes/_auth/inventario";
-import { Route as DictamenRoute } from "@/routes/_auth/dictamen";
+import { Route as DictamenRoute } from "@/routes/_auth/dictamenes";
 import { Route as DocumentosRoute } from "@/routes/_auth/documentos";
 import { Route as LoginRoute } from "@/routes/_guest/login";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
