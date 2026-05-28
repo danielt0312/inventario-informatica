@@ -1,8 +1,4 @@
 import {
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
     type ComponentProps
 } from "react";
 import {
@@ -10,7 +6,6 @@ import {
     getCoreRowModel,
     getPaginationRowModel,
     type TableOptions,
-    type PaginationState,
 } from "@tanstack/react-table";
 import {
     DataTable as DataTablePrimitive,
@@ -20,70 +15,25 @@ import { Button } from "../ui/button";
 import { RefreshCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
-
-export const usePagination = (initialState: Partial<PaginationState> = {}) => {
-    return useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 10,
-        ...initialState,
-    });
-};
+import { useMinSpinning } from "@/hooks/use-min-spinning";
 
 interface UseTableOptions<TData> extends Omit<TableOptions<TData>, "getCoreRowModel"> {
     rowCount?: number;
     getCoreRowModel?: TableOptions<TData>["getCoreRowModel"];
 }
 
-export const useTable = <TData,>({
+export function useTable<TData>({
     rowCount,
     getCoreRowModel: coreRowModelFn = getCoreRowModel(),
     ...params
-}: UseTableOptions<TData>) =>
-    useReactTable<TData>({
+}: UseTableOptions<TData>) {
+    return useReactTable<TData>({
         getCoreRowModel: coreRowModelFn,
         getPaginationRowModel: getPaginationRowModel(),
         manualPagination: true,
         rowCount: rowCount ?? 0,
         ...params,
     });
-
-export function useMinSpinning(isFetching: boolean, minDuration = 500) {
-    const [isSpinning, setIsSpinning] = useState(false);
-    const spinStartRef = useRef<number | null>(null);
-    const stopTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    const startSpin = useCallback(() => {
-        if (!isSpinning) {
-            spinStartRef.current = Date.now();
-            setIsSpinning(true);
-        }
-    }, [isSpinning]);
-
-    useEffect(() => {
-        if (!isFetching && isSpinning && spinStartRef.current !== null) {
-            const elapsed = Date.now() - spinStartRef.current;
-            const remaining = minDuration - elapsed;
-
-            if (remaining <= 0) {
-                setIsSpinning(false);
-                spinStartRef.current = null;
-            } else {
-                stopTimeoutRef.current = setTimeout(() => {
-                    setIsSpinning(false);
-                    spinStartRef.current = null;
-                }, remaining);
-            }
-        }
-
-        return () => {
-            if (stopTimeoutRef.current) {
-                clearTimeout(stopTimeoutRef.current);
-                stopTimeoutRef.current = null;
-            }
-        };
-    }, [isFetching, isSpinning, minDuration]);
-
-    return { isSpinning, startSpin };
 }
 
 export const DataTable = <TData, TQueryData = TData[]>({
@@ -120,7 +70,7 @@ export const DataTable = <TData, TQueryData = TData[]>({
 };
 
 export interface SearchInputProps
-  extends Omit<ComponentProps<typeof Input>, 'placeholder'> {
+    extends Omit<ComponentProps<typeof Input>, 'placeholder'> {
     placeholder: NonNullable<ComponentProps<typeof Input>>['placeholder']
 }
 

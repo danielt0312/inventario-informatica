@@ -1,14 +1,17 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { usePagination, useTable } from "./datatable";
-import { DataTable } from "../custom/datatable";
-import { usePaginatedQuery, type UsePaginatedQueryOptions } from "@/hooks/use-paginated-query";
+import { useTable } from "./datatable";
+import {
+    usePaginatedQuery,
+    type UsePaginatedQueryOptions
+} from "@/hooks/use-paginated-query";
 import type { UseQueryOptions } from "@tanstack/react-query";
 import type { PaginatedResponse } from "@/lib/types";
-import type { DataTableProps } from "../composed/datatable";
+import { DataTable, type DataTableProps } from "../composed/datatable";
+import { usePagination } from "@/hooks/use-pagination";
 
 export interface QueryDataTableProps<TData, TFilters extends object>
-  extends Omit<DataTableProps<TData>, 'table' | 'query'>,
-          Pick<UsePaginatedQueryOptions<TData, TFilters>, 'queryKey' | 'url' | 'filters' | 'paramsTransformer'> {
+    extends Omit<DataTableProps<TData>, 'table' | 'query'>,
+    Pick<UsePaginatedQueryOptions<TData, TFilters>, 'queryKey' | 'url' | 'filters' | 'paramsTransformer'> {
     columns: ColumnDef<TData>[];
     queryOptions?: Omit<UseQueryOptions<PaginatedResponse<TData>>, "queryKey" | "queryFn">;
 }
