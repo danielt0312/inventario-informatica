@@ -1,26 +1,26 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
-import { DictamenEstado } from "@/lib/constants";
+import { DictamenEstadoEnum } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Check } from "lucide-react";
 
 export const OrderDictamenEstado = [
     undefined,
-    DictamenEstado.POR_DICTAMINAR,
-    DictamenEstado.REQUISITADO,
-    DictamenEstado.POR_SURTIR,
-    DictamenEstado.SURTIDO,
+    DictamenEstadoEnum.POR_DICTAMINAR,
+    DictamenEstadoEnum.REQUISITADO,
+    DictamenEstadoEnum.POR_SURTIR,
+    DictamenEstadoEnum.SURTIDO,
 ] as const;
 
 export type OrderDictamenEstado = (typeof OrderDictamenEstado)[number];
 
 export function getTitle(step?: OrderDictamenEstado) {
     switch (step) {
-        case DictamenEstado.POR_DICTAMINAR: return 'Dictaminar Requisición';
-        case DictamenEstado.REQUISITADO: return 'Adjuntar evidencia de requisición';
-        case DictamenEstado.POR_SURTIR: return 'Facturar Preinventario';
-        case DictamenEstado.SURTIDO: return 'Inventariar y Resguardar';
+        case DictamenEstadoEnum.POR_DICTAMINAR: return 'Dictaminar Requisición';
+        case DictamenEstadoEnum.REQUISITADO: return 'Adjuntar evidencia de requisición';
+        case DictamenEstadoEnum.POR_SURTIR: return 'Facturar Preinventario';
+        case DictamenEstadoEnum.SURTIDO: return 'Inventariar y Resguardar';
         default: return 'Creación de Dictamen';
     }
 }

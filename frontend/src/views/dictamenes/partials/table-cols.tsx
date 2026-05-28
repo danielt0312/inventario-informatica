@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TCatalogo } from "@/lib/types";
-import { DictamenEstado } from "@/lib/constants";
+import { DictamenEstadoEnum } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { FileInput } from "lucide-react";
 
@@ -45,7 +45,7 @@ export const columns: ColumnDef<Dictamen>[] = [
         id: "actions",
         cell: ({ row: { original: data } }) => {
             return (
-                data.estado.id === DictamenEstado.POR_DICTAMINAR && (
+                data.estado.id === DictamenEstadoEnum.POR_DICTAMINAR && (
                     <Button size="icon" variant="secondary">
                         <FileInput />
                     </Button>
