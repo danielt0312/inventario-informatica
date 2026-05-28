@@ -1,5 +1,5 @@
 import { QueryDataTable } from "@/components/custom/query-datatable";
-import { columns, type Dictamen } from "./table.cols";
+import { columns, type Dictamen } from "./table-cols";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import { MultiSelect } from "@/components/custom/multiselect";
 import { useQuery } from "@tanstack/react-query";
@@ -16,7 +16,7 @@ interface TableFilters {
     folio: string;
 }
 
-export const Table = () => {
+export function Table() {
     const { debouncedFilters, filters, setFilters } = useDebouncedFilters<TableFilters>({
         estados: [],
         folio: ''

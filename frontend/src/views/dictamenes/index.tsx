@@ -1,8 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle
+} from "@/components/ui/card";
 import { Table } from "./partials/table";
 
-function Dictamen() {
-
+export function View() {
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -15,7 +19,5 @@ function Dictamen() {
                 <Table />
             </CardContent>
         </Card>
-    )
+    );
 }
-
-export default Dictamen
