@@ -29,11 +29,10 @@ Route::middleware('auth:sanctum')->group(function () {
         'producto_marcas' => ProductoMarcaController::class,
         'productos' => ProductoController::class,
         'articulos' => ArticuloController::class,
-        'dictamenes' => DictamenController::class,
     ]);
 
     Route::apiResource('dictamenes', DictamenController::class)
-        ->parameters(['dictamene' => 'dictamene:uuid']);
+        ->parameters(['dictamenes' => 'dictamen:uuid']);
 
     Route::apiResources([
         'documento_tipos' => DocumentoTipoController::class,

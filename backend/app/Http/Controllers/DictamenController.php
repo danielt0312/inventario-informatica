@@ -74,7 +74,7 @@ class DictamenController extends Controller
     {
         $dictamen->load(['estado', 'oficio.documento.archivo', 'documento.archivo']);
 
-        return response()->json($dictamen);
+        return response()->json(['data' => $dictamen]);
     }
 
     public function update(Request $request, Dictamen $dictamen)
