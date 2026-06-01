@@ -2,7 +2,7 @@ import Goback from "@/components/Goback"
 import { Form } from "./partials/form"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTitle, SidebarSteps } from "./partials/form-steps";
-import { Route } from "@/routes/_auth/dictamenes/$id/$action";
+import { Route } from "@/routes/_auth/dictamenes/$uuid/$action";
 
 export function View() {
     const { dictamen: data } = Route.useRouteContext();

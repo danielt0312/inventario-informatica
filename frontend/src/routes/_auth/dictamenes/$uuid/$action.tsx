@@ -23,22 +23,18 @@ export type ValidatedDictamen = Omit<Dictamen, 'estado'> & {
     estado: { id: ValidatedDictamenEstado };
 };
 
-export const Route = createFileRoute('/_auth/dictamenes/$id/$action')({
+export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
     params: {
         parse: (rawParams) => ({
-            id: z.coerce.number().int().parse(rawParams.id),
+            uuid: z.string().parse(rawParams.uuid),
             action: z.enum(Actions).parse(rawParams.action),
-        }),
-        stringify: (params) => ({
-            id: String(params.id),
-            action: params.action,
         }),
     },
     component: View,
     beforeLoad: async ({ context, params }) => {
         const data = await context.queryClient.ensureQueryData({
-            queryKey: ['dictamen', params.id],
-            queryFn: () => api.get<TResponse<Dictamen>>(`api/dictamenes/${params.id}`)
+            queryKey: ['dictamen', params.uuid],
+            queryFn: () => api.get<TResponse<Dictamen>>(`api/dictamenes/${params.uuid}`)
                 .then(r => r.data.data)
         });
 
@@ -56,7 +52,7 @@ export const Route = createFileRoute('/_auth/dictamenes/$id/$action')({
             throw redirect({
                 to: Route.to,
                 params: {
-                    id: data.id,
+                    uuid: data.uuid,
                     action: StateAction[data.estado.id]
                 }
             })

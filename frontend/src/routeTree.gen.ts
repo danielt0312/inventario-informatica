@@ -18,7 +18,7 @@ import { Route as AuthDocumentosIndexRouteImport } from './routes/_auth/document
 import { Route as AuthDictamenesIndexRouteImport } from './routes/_auth/dictamenes/index'
 import { Route as AuthInventarioCreateRouteImport } from './routes/_auth/inventario/create'
 import { Route as AuthDictamenesCreateRouteImport } from './routes/_auth/dictamenes/create'
-import { Route as AuthDictamenesIdActionRouteImport } from './routes/_auth/dictamenes/$id/$action'
+import { Route as AuthDictamenesUuidActionRouteImport } from './routes/_auth/dictamenes/$uuid/$action'
 
 const GuestRoute = GuestRouteImport.update({
   id: '/_guest',
@@ -63,11 +63,12 @@ const AuthDictamenesCreateRoute = AuthDictamenesCreateRouteImport.update({
   path: '/dictamenes/create',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthDictamenesIdActionRoute = AuthDictamenesIdActionRouteImport.update({
-  id: '/dictamenes/$id/$action',
-  path: '/dictamenes/$id/$action',
-  getParentRoute: () => AuthRoute,
-} as any)
+const AuthDictamenesUuidActionRoute =
+  AuthDictamenesUuidActionRouteImport.update({
+    id: '/dictamenes/$uuid/$action',
+    path: '/dictamenes/$uuid/$action',
+    getParentRoute: () => AuthRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -77,7 +78,7 @@ export interface FileRoutesByFullPath {
   '/dictamenes/': typeof AuthDictamenesIndexRoute
   '/documentos/': typeof AuthDocumentosIndexRoute
   '/inventario/': typeof AuthInventarioIndexRoute
-  '/dictamenes/$id/$action': typeof AuthDictamenesIdActionRoute
+  '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -87,7 +88,7 @@ export interface FileRoutesByTo {
   '/dictamenes': typeof AuthDictamenesIndexRoute
   '/documentos': typeof AuthDocumentosIndexRoute
   '/inventario': typeof AuthInventarioIndexRoute
-  '/dictamenes/$id/$action': typeof AuthDictamenesIdActionRoute
+  '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -100,7 +101,7 @@ export interface FileRoutesById {
   '/_auth/dictamenes/': typeof AuthDictamenesIndexRoute
   '/_auth/documentos/': typeof AuthDocumentosIndexRoute
   '/_auth/inventario/': typeof AuthInventarioIndexRoute
-  '/_auth/dictamenes/$id/$action': typeof AuthDictamenesIdActionRoute
+  '/_auth/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -112,7 +113,7 @@ export interface FileRouteTypes {
     | '/dictamenes/'
     | '/documentos/'
     | '/inventario/'
-    | '/dictamenes/$id/$action'
+    | '/dictamenes/$uuid/$action'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,7 +123,7 @@ export interface FileRouteTypes {
     | '/dictamenes'
     | '/documentos'
     | '/inventario'
-    | '/dictamenes/$id/$action'
+    | '/dictamenes/$uuid/$action'
   id:
     | '__root__'
     | '/'
@@ -134,7 +135,7 @@ export interface FileRouteTypes {
     | '/_auth/dictamenes/'
     | '/_auth/documentos/'
     | '/_auth/inventario/'
-    | '/_auth/dictamenes/$id/$action'
+    | '/_auth/dictamenes/$uuid/$action'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -208,11 +209,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDictamenesCreateRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/dictamenes/$id/$action': {
-      id: '/_auth/dictamenes/$id/$action'
-      path: '/dictamenes/$id/$action'
-      fullPath: '/dictamenes/$id/$action'
-      preLoaderRoute: typeof AuthDictamenesIdActionRouteImport
+    '/_auth/dictamenes/$uuid/$action': {
+      id: '/_auth/dictamenes/$uuid/$action'
+      path: '/dictamenes/$uuid/$action'
+      fullPath: '/dictamenes/$uuid/$action'
+      preLoaderRoute: typeof AuthDictamenesUuidActionRouteImport
       parentRoute: typeof AuthRoute
     }
   }
@@ -224,7 +225,7 @@ interface AuthRouteChildren {
   AuthDictamenesIndexRoute: typeof AuthDictamenesIndexRoute
   AuthDocumentosIndexRoute: typeof AuthDocumentosIndexRoute
   AuthInventarioIndexRoute: typeof AuthInventarioIndexRoute
-  AuthDictamenesIdActionRoute: typeof AuthDictamenesIdActionRoute
+  AuthDictamenesUuidActionRoute: typeof AuthDictamenesUuidActionRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
@@ -233,7 +234,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthDictamenesIndexRoute: AuthDictamenesIndexRoute,
   AuthDocumentosIndexRoute: AuthDocumentosIndexRoute,
   AuthInventarioIndexRoute: AuthInventarioIndexRoute,
-  AuthDictamenesIdActionRoute: AuthDictamenesIdActionRoute,
+  AuthDictamenesUuidActionRoute: AuthDictamenesUuidActionRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

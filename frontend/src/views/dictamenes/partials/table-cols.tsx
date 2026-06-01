@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { FilePen } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Link } from "@tanstack/react-router";
-import { Route, StateAction } from "@/routes/_auth/dictamenes/$id/$action";
+import { Route, StateAction } from "@/routes/_auth/dictamenes/$uuid/$action";
 
 export interface Dictamen {
+    uuid: string;
     id: number;
     adscripcion: TCatalogo;
     fecha_solicitud: Date;
@@ -55,7 +56,10 @@ export const columns: ColumnDef<Dictamen>[] = [
                         <TooltipTrigger asChild>
                             <Link
                                 to={Route.to}
-                                params={{ id: data.id, action: StateAction[data.estado.id] }}
+                                params={{
+                                    uuid: data.uuid,
+                                    action: StateAction[data.estado.id]
+                                }}
                             >
                                 <Button size="icon" variant="secondary">
                                     <FilePen />
