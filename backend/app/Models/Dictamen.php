@@ -26,7 +26,7 @@ class Dictamen extends Model
     ];
 
     protected $attributes = [
-        'estado_id' => DictamenEstadoEnum::POR_DICTAMINAR->value
+        'estado_id' => DictamenEstadoEnum::DICTAMINAR->value
     ];
 
     public function estado(): BelongsTo {

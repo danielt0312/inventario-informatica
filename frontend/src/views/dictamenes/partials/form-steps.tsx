@@ -7,20 +7,19 @@ import { Check } from "lucide-react";
 
 export const OrderDictamenEstado = [
     undefined,
-    DictamenEstadoEnum.POR_DICTAMINAR,
-    DictamenEstadoEnum.REQUISITADO,
-    DictamenEstadoEnum.POR_SURTIR,
-    DictamenEstadoEnum.SURTIDO,
-] as const;
-
+    DictamenEstadoEnum.DICTAMINAR,
+    DictamenEstadoEnum.EVIDENCIAR,
+    DictamenEstadoEnum.SURTIR,
+    DictamenEstadoEnum.INVENTARIAR,
+] as const satisfies Partial<Record<number, DictamenEstadoEnum>>;
 export type OrderDictamenEstado = (typeof OrderDictamenEstado)[number];
 
 export function getTitle(step?: OrderDictamenEstado) {
     switch (step) {
-        case DictamenEstadoEnum.POR_DICTAMINAR: return 'Dictaminar Requisición';
-        case DictamenEstadoEnum.REQUISITADO: return 'Adjuntar evidencia de requisición';
-        case DictamenEstadoEnum.POR_SURTIR: return 'Facturar Preinventario';
-        case DictamenEstadoEnum.SURTIDO: return 'Inventariar y Resguardar';
+        case DictamenEstadoEnum.DICTAMINAR: return 'Dictaminar Requisición';
+        case DictamenEstadoEnum.EVIDENCIAR: return 'Adjuntar evidencia de requisición';
+        case DictamenEstadoEnum.SURTIR: return 'Facturar Preinventario';
+        case DictamenEstadoEnum.INVENTARIAR: return 'Inventariar y Resguardar';
         default: return 'Creación de Dictamen';
     }
 }
@@ -68,8 +67,6 @@ export function Steps({
     step
 }: TStep) {
     const currentIndex = OrderDictamenEstado.indexOf(step);
-    console.log(currentIndex, step);
-
 
     return (
         <>
@@ -98,17 +95,13 @@ export function Steps({
 
 export function SidebarSteps({
     step,
-    className,
-    children,
-    ...props
-}: React.ComponentProps<typeof Card> & {
-    step?: TStep['step']
+    children
+}: {
+    step?: TStep['step'];
+    children: React.ReactNode
 }) {
     return (
-        <Card
-            className={cn(className, "flex flex-row gap-0 p-0")}
-            {...props}
-        >
+        <Card className="flex flex-row gap-0 p-0">
             <div className="max-w-1/7 bg-stone-900 rounded-l-xl">
                 <div className="sticky top-0 py-10">
                     <Steps step={step} />

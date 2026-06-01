@@ -16,11 +16,12 @@ export const ProductoCategoriaEnum = {
 export type ProductoCategoriaEnum = (typeof ProductoCategoriaEnum)[keyof typeof ProductoCategoriaEnum];
 
 export const DictamenEstadoEnum = {
-    POR_DICTAMINAR: 1,
-    REQUISITADO: 2,
-    POR_SURTIR: 3,
-    SURTIDO: 4,
-    SURTIDO_PARCIAL: 5,
+    DICTAMINAR: 1,
+    EVIDENCIAR: 2,
+    SURTIR: 3,
+    INVENTARIAR: 4,
+    SURTIDO: 5,
+    SURTIDO_PARCIAL: 6,
 } as const;
 export type DictamenEstadoEnum = (typeof DictamenEstadoEnum)[keyof typeof DictamenEstadoEnum];
 

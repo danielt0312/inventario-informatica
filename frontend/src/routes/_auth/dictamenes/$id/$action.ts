@@ -3,24 +3,31 @@ import { DictamenEstadoEnum } from '@/lib/constants';
 import type { TResponse } from '@/lib/types';
 import type { Dictamen } from '@/views/dictamenes/partials/table-cols';
 import { View } from '@/views/dictamenes/update';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
+import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
 
-export const ACTIONS = ['dictaminar', 'evidenciar', 'facturar', 'inventariar'] as const;
-export type Action = (typeof ACTIONS)[number];
+export const Actions = ['dictaminar', 'evidenciar', 'facturar', 'inventariar'] as const;
+export type Actions = (typeof Actions)[number];
 
-export const ACTION_TO_ESTADO = {
-    dictaminar: DictamenEstadoEnum.POR_DICTAMINAR,
-    evidenciar: DictamenEstadoEnum.REQUISITADO,
-    facturar: DictamenEstadoEnum.POR_SURTIR,
-    inventariar: DictamenEstadoEnum.SURTIDO,
-} as const satisfies Record<Action, DictamenEstadoEnum>;
+export const StateAction = {
+    [DictamenEstadoEnum.DICTAMINAR]: 'dictaminar',
+    [DictamenEstadoEnum.EVIDENCIAR]: 'evidenciar',
+    [DictamenEstadoEnum.SURTIR]: 'facturar',
+    [DictamenEstadoEnum.INVENTARIAR]: 'inventariar',
+} as const satisfies Partial<Record<DictamenEstadoEnum, Actions>>;
+
+type ValidatedDictamenEstado = keyof typeof StateAction;
+
+export type ValidatedDictamen = Omit<Dictamen, 'estado'> & {
+    estado: { id: ValidatedDictamenEstado };
+};
 
 export const Route = createFileRoute('/_auth/dictamenes/$id/$action')({
     params: {
         parse: (rawParams) => ({
             id: z.coerce.number().int().parse(rawParams.id),
-            action: z.enum(ACTIONS).parse(rawParams.action),
+            action: z.enum(Actions).parse(rawParams.action),
         }),
         stringify: (params) => ({
             id: String(params.id),
@@ -29,16 +36,32 @@ export const Route = createFileRoute('/_auth/dictamenes/$id/$action')({
     },
     component: View,
     beforeLoad: async ({ context, params }) => {
-        const { data } = await context.queryClient.ensureQueryData({
+        const data = await context.queryClient.ensureQueryData({
             queryKey: ['dictamen', params.id],
             queryFn: () => api.get<TResponse<Dictamen>>(`api/dictamenes/${params.id}`)
-                .then(r => r.data)
+                .then(r => r.data.data)
         });
 
-        if (data.estado.id) {
-
+        switch (data.estado.id) {
+            case DictamenEstadoEnum.SURTIDO:
+            case DictamenEstadoEnum.SURTIDO_PARCIAL:
+                throw redirect({
+                    to: IndexRoute.to
+                });
+            default:
+                break;
         }
 
-        return { dictamen: data };
+        if (StateAction[data.estado.id] != params.action) {
+            throw redirect({
+                to: Route.to,
+                params: {
+                    id: data.id,
+                    action: StateAction[data.estado.id]
+                }
+            })
+        }
+
+        return { dictamen: data as ValidatedDictamen };
     }
 });

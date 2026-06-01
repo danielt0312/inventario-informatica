@@ -3,7 +3,7 @@ import { Form } from "./partials/form"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTitle, SidebarSteps } from "./partials/form-steps";
 
-export function Create() {
+export function View() {
     return (
         <>
             <Goback />
