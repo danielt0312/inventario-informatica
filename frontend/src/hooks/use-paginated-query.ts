@@ -16,7 +16,6 @@ export function usePaginatedQuery<TData, TFilters extends object>({
     url,
     filters,
     pagination,
-    staleTime = 60 * 1000,
     paramsTransformer,
     ...params
 }: UsePaginatedQueryOptions<TData, TFilters>): UseQueryResult<PaginatedResponse<TData>> {
@@ -30,7 +29,6 @@ export function usePaginatedQuery<TData, TFilters extends object>({
                     per_page: pagination.pageSize,
                 },
             }).then(r => r.data),
-        staleTime,
         ...params
     });
 }
