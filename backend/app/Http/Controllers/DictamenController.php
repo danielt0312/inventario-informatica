@@ -72,7 +72,7 @@ class DictamenController extends Controller
 
     public function show(Dictamen $dictamen)
     {
-        $dictamen->load(['estado', 'oficio.documento.archivo', 'documento.archivo']);
+        $dictamen->load(['estado', 'oficio.documento.archivo.tipo', 'documento.archivo.tipo', 'productos.producto.tipo.categoria', 'productos.producto.marca']);
 
         return response()->json(['data' => $dictamen]);
     }

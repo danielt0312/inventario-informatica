@@ -7,6 +7,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Link } from "@tanstack/react-router";
 import { Route, StateAction } from "@/routes/_auth/dictamenes/$uuid/$action";
 
+interface Producto extends TCatalogo {
+    tipo: TCatalogo & {
+        categoria: TCatalogo;
+    };
+    marca: TCatalogo;
+}
+
 export interface Dictamen {
     uuid: string;
     id: number;
@@ -16,8 +23,22 @@ export interface Dictamen {
         id: DictamenEstadoEnum;
     };
     oficio: {
-        folio: string
-    }
+        folio: string;
+        documento: {
+            archivo: TCatalogo & {
+                tipo: TCatalogo & {
+                    extension: string;
+                }
+            }
+        }
+    };
+    productos: {
+        id: number;
+        cantidad: number;
+        caracteristicas?: string;
+        producto: Producto;
+        empleado: TCatalogo;
+    }[];
 }
 
 export const columns: ColumnDef<Dictamen>[] = [
