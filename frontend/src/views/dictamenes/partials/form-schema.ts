@@ -10,14 +10,12 @@ import z from "zod";
 export type DictamenProducto = PrefixedProductoFields & {
     cantidad: number;
     empleado_id: IdValue;
-    caracteristicas: string | null;
 }
 
 export const dictamenProductoDefaultValues: DictamenProducto = {
     ...productoPrefixedDefaultValues,
     cantidad: 1,
     empleado_id: null,
-    caracteristicas: null
 } as const;
 
 export type Dictamen = {
@@ -70,10 +68,7 @@ export const validator = z.object({
                     .min(1, 'Este campo debe ser mínimo de 1'),
                 empleado_id: z
                     .number('Debes de seleccionar una opción')
-                    .int(),
-                caracteristicas: z
-                    .string()
-                    .nullable()
+                    .int()
             }))
         .min(1, 'Debes de agregar cuando menos 1 producto')
 });

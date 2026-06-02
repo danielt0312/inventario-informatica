@@ -34,6 +34,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('dictamenes', DictamenController::class)
         ->parameters(['dictamenes' => 'dictamen:uuid']);
 
+    Route::prefix('dictamenes/{dictamen:uuid}')
+        ->controller(DictamenController::class)
+        ->group(function () {
+            Route::post('dictaminar', 'dictaminar');
+        });
+
     Route::apiResources([
         'documento_tipos' => DocumentoTipoController::class,
         'articulo_estados' => ArticuloEstadoController::class,

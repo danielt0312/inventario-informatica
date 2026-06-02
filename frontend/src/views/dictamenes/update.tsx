@@ -2,6 +2,7 @@ import Goback from "@/components/Goback"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTitle, SidebarSteps } from "./partials/form-steps";
 import { Route } from "@/routes/_auth/dictamenes/$uuid/$action";
+import { Route as IndexRoute } from "@/routes/_auth/dictamenes/index";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -12,23 +13,17 @@ import z from "zod";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import api from "@/lib/axios";
 import { handleFormValidationError } from "@/lib/utils";
+import { TextareaField } from "@/components/composed/@tanstack/form-field";
+import { useNavigate } from "@tanstack/react-router";
 
 interface FormSchema {
-    archivo?: File[];
     productos: {
         id: number;
-        caracteristicas?: string;
+        caracteristicas: string;
     }[];
 }
 
 const validator = z.object({
-    archivo: z
-        .array(z
-            .file()
-            .max(5_000_000, 'El archivo no debe superar 5MB')
-            , 'Debes de adjuntar un archivo')
-        .min(1, 'Debes de seleccionar un archivo')
-        .max(1, 'Solo puedes subir un archivo'),
     productos: z
         .array(
             z.object({
@@ -37,7 +32,11 @@ const validator = z.object({
                     .int(),
                 caracteristicas: z
                     .string()
-                    .optional()
+                    .trim()
+                    .refine(
+                        v => v !== '',
+                        'Este campo es requerido'
+                    )
             }))
         .min(1, 'Debes de agregar cuando menos 1 producto')
 });
@@ -45,9 +44,18 @@ const validator = z.object({
 export function View() {
     const { dictamen } = Route.useRouteContext();
 
+    const formatedProductos = dictamen.productos.map(v => {
+        return {
+            ...v,
+            caracteristicas: v.caracteristicas ?? '',
+        }
+    })
+
     const defaultValues: FormSchema = {
-        productos: dictamen.productos
+        productos: formatedProductos
     }
+
+    const navigate = useNavigate();
 
     const form = useAppForm({
         defaultValues,
@@ -57,18 +65,10 @@ export function View() {
         onSubmit: async ({ value, formApi }) => {
             const data = validator.parse(value);
 
-            const formData = new FormData();
-
-            formData.append('archivo', data.archivo[0]);
-            data.productos.forEach((producto, index) => {
-                formData.append(`productos[${index}][caracteristicas]`, String(producto.caracteristicas));
-            });
-
-
             try {
-                await api.put(`api/dictamenes/${dictamen.uuid}`, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
+                await api.post(`api/dictamenes/${dictamen.uuid}/dictaminar`, data);
+
+                navigate({ to: IndexRoute.to });
             } catch (error) {
                 handleFormValidationError(error, formApi);
             }
@@ -96,7 +96,7 @@ export function View() {
                             <div className="grid grid-cols-3">
                                 <div data-slot="label">
                                     <Label className="font-bold">Área Solicitante</Label>
-                                    <Label>{dictamen.adscripcion?.nombre}</Label>
+                                    <Label>{dictamen.adscripcion?.nombre ?? 'Dirección de Tecnologías de la Información'}</Label>
                                 </div>
                                 <div data-slot="label">
                                     <Label className="font-bold">Folio de solicitud</Label>
@@ -137,7 +137,8 @@ export function View() {
                                             <TableHead rowSpan={2} className="border-none w-1/4">
                                                 Resguardante
                                             </TableHead>
-                                            <TableHead rowSpan={2} className="border-none" />
+                                            {/* todo quitar esto */}
+                                            <TableHead rowSpan={2} className="border-none"></TableHead>
                                         </TableRow>
 
                                         <TableRow>
@@ -155,8 +156,7 @@ export function View() {
                                             <TableRow key={index}>
                                                 <TableCell className="w-25">
                                                     <div data-slot="label">
-                                                        <Label className="font-bold">Cantidad</Label>
-                                                        <Label>{d.cantidad}</Label>
+                                                        <Label className="text-center">{d.cantidad}</Label>
                                                     </div>
                                                 </TableCell>
                                                 <TableCell className="grid grid-cols-1 gap-6">
@@ -166,17 +166,27 @@ export function View() {
                                                             {d.producto.tipo.categoria.nombre} {d.producto.tipo.nombre} {d.producto.marca.nombre} {d.producto.nombre}
                                                         </Label>
                                                     </div>
+                                                    <div data-slot="label">
+                                                        <form.AppField
+                                                            name={`productos[${index}].caracteristicas`}
+                                                            children={() => (
+                                                                <TextareaField
+                                                                    label="Características"
+                                                                    placeholder="Especifica las características del bien informático"
+                                                                />
+                                                            )}
+                                                        />
+                                                    </div>
                                                 </TableCell>
                                                 <TableCell>
                                                     <div data-slot="label">
-                                                        <Label className="font-bold">Resguardante</Label>
-                                                        <Label>
-                                                            {d.empleado.nombre}
+                                                        <Label className="text-center">
+                                                            {d.empleado?.nombre ?? 'Juan Pérez'}
                                                         </Label>
                                                     </div>
                                                 </TableCell>
-                                                <TableCell className="max-w-fit text-center">
-                                                </TableCell>
+                                                {/* todo quitar esto */}
+                                                <TableCell></TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -189,5 +199,5 @@ export function View() {
                 </CardContent>
             </SidebarSteps>
         </>
-    )
+    );
 }

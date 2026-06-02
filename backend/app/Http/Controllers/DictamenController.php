@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests\Dictamen\{
     DictamenRequest,
-    StoreDictamenRequest
+    StoreDictamenRequest,
+    DictaminarDictamenRequest
 };
 
 use App\Models\{
@@ -16,7 +17,8 @@ use App\Models\{
 };
 
 use App\Enums\{
-    DocumentoTipoEnum
+    DocumentoTipoEnum,
+    DictamenEstadoEnum
 };
 
 class DictamenController extends Controller
@@ -72,7 +74,13 @@ class DictamenController extends Controller
 
     public function show(Dictamen $dictamen)
     {
-        $dictamen->load(['estado', 'oficio.documento.archivo.tipo', 'documento.archivo.tipo', 'productos.producto.tipo.categoria', 'productos.producto.marca']);
+        $dictamen->load([
+            'estado',
+            'oficio.documento.archivo.tipo',
+            'documento.archivo.tipo',
+            'productos.producto.tipo.categoria',
+            'productos.producto.marca'
+        ]);
 
         return response()->json(['data' => $dictamen]);
     }
@@ -85,5 +93,23 @@ class DictamenController extends Controller
     public function destroy(Dictamen $dictamen)
     {
         //
+    }
+
+    public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen) {
+        DB::transaction(function () use ($request, $dictamen) {
+            foreach ($request->input('productos') as $productoData) {
+                $dictamen->productos()
+                    ->where('id', $productoData['id'])
+                    ->update([
+                        'caracteristicas' => $productoData['caracteristicas']
+                    ]);
+            }
+
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value,
+            ]);
+        });
+
+        return response(status: 201);
     }
 }

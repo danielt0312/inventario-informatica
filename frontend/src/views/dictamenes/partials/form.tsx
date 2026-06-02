@@ -37,7 +37,6 @@ export function useForm() {
             data.productos.forEach((producto, index) => {
                 formData.append(`productos[${index}][cantidad]`, String(producto.cantidad));
                 formData.append(`productos[${index}][producto_id]`, String(producto.producto_id));
-                formData.append(`productos[${index}][caracteristicas]`, String(producto.caracteristicas));
                 formData.append(`productos[${index}][empleado_id]`, String(producto.empleado_id));
             });
 
@@ -177,18 +176,6 @@ export function Form() {
                                                             marca_id: `productos[${index}].producto_marca_id`,
                                                         }}
                                                         className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-                                                    />
-
-                                                    <form.AppField
-                                                        name={`productos[${index}].caracteristicas`}
-                                                        children={(field) => (
-                                                            <TextareaField
-                                                                value={field.state.value ?? ''}
-                                                                label="Características"
-                                                                placeholder="Especifica las características del bien informático"
-                                                                rows={3}
-                                                            />
-                                                        )}
                                                     />
                                                 </TableCell>
                                                 <TableCell>

@@ -15,7 +15,8 @@ enum DictamenEstadoEnum: int
     case SURTIDO = 5;
     case SURTIDO_PARCIAL = 6;
 
-    public function nombre(): string {
+    public function nombre(): string
+    {
         return match($this) {
             self::DICTAMINAR => 'Por Dictaminar',
             self::EVIDENCIAR => 'Evidenciar Requisición',
@@ -24,5 +25,10 @@ enum DictamenEstadoEnum: int
             self::SURTIDO => 'Surtido',
             self::SURTIDO_PARCIAL => 'Surtido Parcial'
         };
+    }
+
+    public static function esDictaminar(int $value): bool
+    {
+        return self::DICTAMINAR->value === $value;
     }
 }
