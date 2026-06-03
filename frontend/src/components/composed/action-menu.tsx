@@ -11,7 +11,7 @@ import {
 
 import { Button } from "../ui/button";
 
-export function RowActionMenu({
+export function ActionMenu({
     children,
     ...props
 }: React.ComponentProps<typeof Button>) {
@@ -35,7 +35,7 @@ export function RowActionMenu({
 }
 
 export {
-    DropdownMenuItem as RowActionItem,
-    DropdownMenuSeparator as RowActionSeparator,
-    DropdownMenuLabel as RowActionLabel
+    DropdownMenuItem as ActionMenuItem,
+    DropdownMenuSeparator as ActionMenuSeparator,
+    DropdownMenuLabel as ActionMenuLabel
 }
