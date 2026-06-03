@@ -2,7 +2,7 @@ import api from '@/lib/axios';
 import { DictamenEstadoEnum } from '@/lib/constants';
 import type { TResponse } from '@/lib/types';
 import type { Dictamen } from '@/views/dictamenes/partials/table-cols';
-import { View } from '@/views/dictamenes/update';
+import { View } from '@/views/dictamenes/action';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';

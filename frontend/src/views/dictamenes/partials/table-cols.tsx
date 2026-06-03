@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TCatalogo } from "@/lib/types";
 import { DictamenEstadoEnum } from "@/lib/constants";
-import { Eye, FileCheck, FileInput, PackageOpen, Paperclip, Receipt } from "lucide-react";
+import { Eye, FileInput, PackageOpen, Paperclip, Receipt } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
     isValidState,
