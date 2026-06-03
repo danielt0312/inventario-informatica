@@ -16,14 +16,16 @@ class DictamenArticulo extends Model
 
     protected $fillable = [
         'articulo_id',
-        'dictamen_id'
+        'producto_id'
     ];
 
-    public function articulo(): BelongsTo {
+    public function articulo(): BelongsTo
+    {
         return $this->belongsTo(Articulo::class, 'articulo_id');
     }
 
-    public function dictamen(): BelongsTo {
-        return $this->belongsTo(Dictamen::class, 'dictamen_id');
+    public function producto(): BelongsTo
+    {
+        return $this->belongsTo(DictamenProducto::class, 'producto_id');
     }
 }

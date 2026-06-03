@@ -45,6 +45,10 @@ class Dictamen extends Model
         return $this->hasMany(DictamenProducto::class, 'dictamen_id');
     }
 
+    public function articulos(): HasMany {
+        return $this->hasMany(DictamenArticulo::class);
+    }
+
     public function casts(): array {
         return [
             'fecha_solicitud' => 'date:Y-m-d'

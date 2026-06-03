@@ -2,15 +2,11 @@
 
 namespace App\Http\Requests\Dictamen;
 
-use Illuminate\Validation\Rule;
-
-use App\Models\Dictamen;
-
-class DictaminarDictamenRequest extends ActionDictamenRequest
+class FacturarDictamenRequest extends ActionDictamenRequest
 {
     public function authorize(): bool
     {
-        return $this->dictamen->estado->esDictaminar();
+        return $this->dictamen->estado->esSurtir();
     }
 
     public function rules(): array
@@ -24,7 +20,7 @@ class DictaminarDictamenRequest extends ActionDictamenRequest
                     $query->where('dictamen_id', $this->dictamen->id);
                 }),
             ],
-            'productos.*.caracteristicas' => ['required', 'string', 'max:255']
+            'productos.*.factura_id' => ['required', 'integer', 'exists:facturas,id']
         ];
     }
 }

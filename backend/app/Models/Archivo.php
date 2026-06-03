@@ -62,6 +62,23 @@ class Archivo extends Model
         return ['uuid'];
     }
 
+    /**
+     * Stores an uploaded file on a filesystem disk using the model's `relativePath` attribute.
+     *
+     * @param UploadedFile $file
+     * @param array|string $options
+     */
+    public function store(
+        UploadedFile $file,
+        array|string $options = []
+    ) {
+        return $file->storeAs(
+            dirname($this->relativePath),
+            basename($this->relativePath),
+            $options
+        );
+    }
+
     public static function createAndStore(
         UploadedFile $file,
         ArchivoTipoEnum $tipo = ArchivoTipoEnum::PDF
@@ -73,10 +90,7 @@ class Archivo extends Model
             'tipo_id' => $tipo->value
         ]);
 
-        $file->storeAs(
-            dirname($archivo->relative_path),
-            basename($archivo->relative_path)
-        );
+        $archivo->store($file);
 
         return $archivo;
     }

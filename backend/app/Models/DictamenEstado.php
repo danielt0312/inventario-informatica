@@ -15,4 +15,14 @@ class DictamenEstado extends Model
     {
         return DictamenEstadoEnum::esDictaminar($this->id);
     }
+
+    public function esEvidenciar(): bool
+    {
+        return DictamenEstadoEnum::esEvidenciar($this->id);
+    }
+
+    public function esSurtir(): bool
+    {
+        return DictamenEstadoEnum::esSurtir($this->id);
+    }
 }

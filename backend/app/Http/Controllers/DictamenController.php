@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 use App\Http\Requests\Dictamen\{
     DictamenRequest,
     StoreDictamenRequest,
-    DictaminarDictamenRequest
+    DictaminarDictamenRequest,
+    EvidenciarDictamenRequest
 };
 
 use App\Models\{
@@ -41,17 +43,18 @@ class DictamenController extends Controller
     {
         DB::transaction(function () use ($request) {
             $data = $request->validated();
-            logger($data);
 
-            $archivo = Archivo::createAndStore($request->file('archivo'));
+            $oficioArchivo = Archivo::createAndStore($request->file('archivo'));
 
-            $documento = $archivo->documentos()->create([
-                'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
+            $oficioDocumento = $oficioArchivo->documentos()->create([
+                'tipo_id' => DocumentoTipoEnum::OFICIO->value
             ]);
 
-            $oficio = $documento->oficios()->create([
+            $oficio = $oficioDocumento->oficios()->create([
                 'folio' => $data['folio']
             ]);
+
+            $dictamenArchivo = Archivo::createAndStore;
 
             //todo obtener el jefe de departamento de DTI
             $user_id = 1;
@@ -61,6 +64,7 @@ class DictamenController extends Controller
             $dictamen = Dictamen::create([
                 'oficio_id' => $oficio->id,
                 'adscripcion_id' => $data['adscripcion_id'],
+                'documento_id' => $dictamenDocumento->id,
                 'user_id' => $user_id,
                 'fecha_solicitud' => $data['fecha_solicitud']
             ]);
@@ -95,7 +99,8 @@ class DictamenController extends Controller
         //
     }
 
-    public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen) {
+    public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
+    {
         DB::transaction(function () use ($request, $dictamen) {
             foreach ($request->input('productos') as $productoData) {
                 $dictamen->productos()
@@ -103,6 +108,37 @@ class DictamenController extends Controller
                     ->update([
                         'caracteristicas' => $productoData['caracteristicas']
                     ]);
+            }
+
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value,
+            ]);
+        });
+
+        return response(status: 201);
+    }
+
+    public function evidenciar(EvidenciarDictamenRequest $request, Dictamen $dictamen)
+    {
+        if (Storage::exists($dictamen->documento->archivo->relativePath)) {
+            Storage::delete($dictamen->documento->archivo->relativePath);
+        }
+
+        $dictamen->archivo->store($request->archivo);
+
+        $dictamen->update([
+            'estado_id' => DictamenEstadoEnum::SURTIR->value,
+        ]);
+
+        return response(status: 201);
+    }
+
+    public function facturar(FacturarDictamenRequest $request, Dictamen $dictamen)
+    {
+        DB::transaction(function () use ($request, $dictamen) {
+            foreach ($request->input('productos') as $productoData) {
+                $dictamen->articulos()
+                    ->createMany();
             }
 
             $dictamen->update([

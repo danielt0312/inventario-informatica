@@ -4,14 +4,15 @@ import { getTitle, SidebarSteps } from "./partials/form-steps";
 import { Route, type ActionDictamenEstado, type ValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { DictamenEstadoEnum } from "@/lib/constants";
 import { Form as DictaminarForm } from "./partials/actions/dictaminar";
+import { Form as EvidenciarForm } from "./partials/actions/evidenciar";
 
 export const ActionForm = ({
     dictamen
 }: {
     dictamen: ValidatedDictamen;
 }) => ({
-    [DictamenEstadoEnum.DICTAMINAR]: (<DictaminarForm dictamen={dictamen} />),
-    [DictamenEstadoEnum.EVIDENCIAR]: 'evidenciar',
+    [DictamenEstadoEnum.DICTAMINAR]: <DictaminarForm dictamen={dictamen} />,
+    [DictamenEstadoEnum.EVIDENCIAR]: <EvidenciarForm dictamen={dictamen} />,
     [DictamenEstadoEnum.SURTIR]: 'facturar',
     [DictamenEstadoEnum.INVENTARIAR]: 'inventariar',
 } as const satisfies Record<ActionDictamenEstado, React.ReactNode>)[dictamen.estado.id];
