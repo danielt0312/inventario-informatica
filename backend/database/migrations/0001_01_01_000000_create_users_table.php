@@ -36,7 +36,7 @@ return new class extends Migration
                 ->primary();
             $table->foreignId('user_id')
                 ->nullable()
-                ->constrained()
+                ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('ip_address', 45)->nullable();
