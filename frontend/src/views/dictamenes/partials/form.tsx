@@ -46,7 +46,7 @@ export function useForm() {
                 });
 
                 navigate({ to: Route.to });
-                queryClient.invalidateQueries({ queryKey: ['dictamenes'] })
+                queryClient.invalidateQueries({ queryKey: ['dictamenes'] });
             } catch (error) {
                 handleFormValidationError(error, formApi);
             }

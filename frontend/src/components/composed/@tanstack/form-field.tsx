@@ -19,32 +19,46 @@ import type { FileUploadProps } from '@/components/ui/file-upload';
 import { Textarea } from '@/components/ui/textarea';
 import { type CheckedState } from '@radix-ui/react-checkbox';
 
-export type SubmitButtonProps = Omit<ComponentProps<typeof Button>, 'type' | 'disabled'> & { label?: string }
+export interface SubmitButtonProps extends
+    Omit<ComponentProps<typeof Button>, 'type' | 'disabled' | 'children'> {
+    icon?: React.ReactNode;
+    label?: string;
+    children?: (isSubmitting: boolean) => React.ReactNode
+}
+
 export const SubmitButton = ({
     label = "Guardar",
+    icon = <Save />,
     className,
+    children,
     ...props
 }: SubmitButtonProps) => {
     const form = useFormContext();
 
     return (
         <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => (
-                <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    children={(
+            {(isSubmitting) => {
+                const renderChildren = typeof children === 'function'
+                    ? children(isSubmitting)
+                    : (
                         <>
                             {isSubmitting
                                 ? <Spinner />
-                                : <Save />
+                                : icon
                             } {label}
                         </>
-                    )}
-                    className={cn("max-w-fit self-center", className)}
-                    {...props}
-                />
-            )}
+                    );
+
+                return (
+                    <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        children={renderChildren}
+                        className={cn("max-w-fit self-center", className)}
+                        {...props}
+                    />
+                )
+            }}
         </form.Subscribe>
     );
 }
@@ -79,6 +93,7 @@ export const TextField = ({
     return (
         <Field className={className} label={label}>
             <Input
+                type={type}
                 placeholder="Ingresa un valor"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}

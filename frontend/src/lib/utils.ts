@@ -33,21 +33,58 @@ export function setFormValidationErrors(
     errorKeys.forEach((field) => {
         const errorMessage = errors[field][0];
 
-        formApi.setFieldMeta(field as any, (prev) => ({
-            ...prev,
-            errors: [{ message: errorMessage }],
-            errorMap: {
-                ...prev.errorMap,
-                onSubmit: errorMessage
-            },
-            isTouched: true,
-        }))
+        formApi.setFieldMeta(field as any, (prev) => {
+            const base = prev || {
+                errors: [],
+                errorMap: {},
+                isTouched: false,
+            };
+
+            return {
+                ...base,
+                errors: [{ message: errorMessage }],
+                errorMap: {
+                    ...base?.errorMap,
+                    onSubmit: errorMessage
+                },
+                isTouched: true,
+            }
+        })
     });
 }
 
-export function handleFormValidationError(error: unknown, formApi: AnyFormApi) {
-    if (isAxiosError(error) && error.response?.status === 422) {
-        setFormValidationErrors(formApi, error.response.data.errors);
+export function handleFormValidationError(
+    error: unknown,
+    formApi: AnyFormApi,
+    onGlobalError?: (message: string) => void,
+    defaultFallbackMessage: string = 'Ocurrió un error inesperado'
+) {
+    if (!isAxiosError(error) || error.response?.status !== 422) return;
+
+    const responseData = error.response.data || {};
+    const responseErrors = responseData.errors || {};
+    const fallbackMessage = responseData.message || defaultFallbackMessage;
+
+    const errorKeys = Object.keys(responseErrors);
+    const formKeys = Object.keys(formApi.state.values || {});
+
+    const localErrors: LaravelValidationErrors = {};
+    let hasGlobal = false;
+
+    errorKeys.forEach((key) => {
+        if (formKeys.includes(key)) {
+            localErrors[key] = responseErrors[key];
+        } else {
+            hasGlobal = true;
+        }
+    });
+
+    if (hasGlobal && onGlobalError) {
+        onGlobalError(fallbackMessage);
+    }
+
+    if (Object.keys(localErrors).length > 0) {
+        setFormValidationErrors(formApi, localErrors);
     }
 }
 
