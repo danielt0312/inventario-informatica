@@ -1,11 +1,15 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TCatalogo } from "@/lib/types";
 import { DictamenEstadoEnum } from "@/lib/constants";
-import { Button } from "@/components/ui/button";
-import { FilePen } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Eye, FileCheck, FileInput, PackageOpen, Paperclip, Receipt } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { Route, StateAction } from "@/routes/_auth/dictamenes/$uuid/$action";
+import {
+    isValidState,
+    StateAction,
+    type ActionDictamenEstado,
+    Route as ActionRoute
+} from "@/routes/_auth/dictamenes/$uuid/$action";
+import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
 
 interface Producto extends TCatalogo {
     tipo: TCatalogo & {
@@ -41,6 +45,33 @@ export interface Dictamen {
     }[];
 }
 
+const ActionIcon = {
+    [DictamenEstadoEnum.DICTAMINAR]: <FileInput />,
+    [DictamenEstadoEnum.EVIDENCIAR]: <Paperclip />,
+    [DictamenEstadoEnum.SURTIR]: <Receipt />,
+    [DictamenEstadoEnum.INVENTARIAR]: <PackageOpen />
+} as const satisfies Record<ActionDictamenEstado, React.ReactNode>;
+
+export function renderActionCell(value: DictamenEstadoEnum, uuid: string) {
+    if (!isValidState(value)) return null;
+
+    const action = StateAction[value];
+
+    return (
+        <Link
+            to={ActionRoute.to}
+            params={{
+                uuid,
+                action
+            }}
+        >
+            <ActionMenuItem className="capitalize">
+                {ActionIcon[value]} {action}
+            </ActionMenuItem>
+        </Link>
+    );
+}
+
 export const columns: ColumnDef<Dictamen>[] = [
     {
         accessorKey: "fecha_solicitud",
@@ -72,26 +103,12 @@ export const columns: ColumnDef<Dictamen>[] = [
         id: "actions",
         cell: ({ row: { original: data } }) => {
             return (
-                data.estado.id === DictamenEstadoEnum.DICTAMINAR && (
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Link
-                                to={Route.to}
-                                params={{
-                                    uuid: data.uuid,
-                                    action: StateAction[data.estado.id]
-                                }}
-                            >
-                                <Button size="icon" variant="secondary">
-                                    <FilePen />
-                                </Button>
-                            </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            Dictaminar
-                        </TooltipContent>
-                    </Tooltip>
-                )
+                <ActionMenu>
+                    {renderActionCell(data.estado.id, data.uuid)}
+                    <ActionMenuItem>
+                        <Eye /> Ver documento
+                    </ActionMenuItem>
+                </ActionMenu>
             )
         }
     },

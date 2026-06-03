@@ -17,10 +17,14 @@ export const StateAction = {
     [DictamenEstadoEnum.INVENTARIAR]: 'inventariar',
 } as const satisfies Partial<Record<DictamenEstadoEnum, Actions>>;
 
-type ValidatedDictamenEstado = keyof typeof StateAction;
+export type ActionDictamenEstado = keyof typeof StateAction;
+
+export function isValidState(value: DictamenEstadoEnum): value is ActionDictamenEstado {
+    return value in StateAction;
+}
 
 export type ValidatedDictamen = Omit<Dictamen, 'estado'> & {
-    estado: { id: ValidatedDictamenEstado };
+    estado: { id: ActionDictamenEstado };
 };
 
 export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
