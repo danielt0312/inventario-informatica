@@ -22,4 +22,4 @@ export const RequiredFile = z
             .max(5_000_000, 'El archivo no debe superar 5MB')
         , 'Debes de adjuntar un archivo')
         .min(1, 'Debes de seleccionar un archivo')
-        .max(1, 'Solo puedes subir un archivo')
+        .max(1, 'Solo puedes subir un archivo');

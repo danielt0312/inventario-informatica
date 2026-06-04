@@ -22,7 +22,7 @@ enum DocumentoTipoEnum: int
             self::ADQUISICION   => 'Adquisición de Bienes Informáticos',
             self::RESGUARDO     => 'Resguardo de Bienes Informáticos',
             self::PRESTAMO      => 'Préstamo Temporal',
-            self::DICTAMEN      => 'Dictámen Tecnológico',
+            self::DICTAMEN      => 'Dictamen de Tecnológias',
         };
     }
 }

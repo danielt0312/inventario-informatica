@@ -3,8 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{Blade, DB, View};
 use Illuminate\Support\Pluralizer;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Pluralizer::useLanguage('spanish');
+        Carbon::setLocale('es');
+
+        Blade::anonymousComponentPath(resource_path('pdfs/components'), 'pdf');
+        Blade::anonymousComponentPath(resource_path('pdfs/layouts'), 'pdf-layout');
+        Blade::anonymousComponentPath(resource_path('pdfs/views'), 'pdf-view');
+
+        View::addNamespace('pdf-view', resource_path('pdfs/views'));
 
         if (app()->environment('local')) {
             DB::enableQueryLog();

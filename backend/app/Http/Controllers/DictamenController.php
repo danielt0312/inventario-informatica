@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use App\Http\Requests\Dictamen\{
     DictamenRequest,
@@ -44,27 +45,23 @@ class DictamenController extends Controller
         DB::transaction(function () use ($request) {
             $data = $request->validated();
 
-            $oficioArchivo = Archivo::createAndStore($request->file('archivo'));
+            $archivo = Archivo::createAndStore($request->file('archivo'));
 
-            $oficioDocumento = $oficioArchivo->documentos()->create([
+            $documento = $oficioArchivo->documentos()->create([
                 'tipo_id' => DocumentoTipoEnum::OFICIO->value
             ]);
 
-            $oficio = $oficioDocumento->oficios()->create([
+            $oficio = $documento->oficios()->create([
                 'folio' => $data['folio']
             ]);
-
-            $dictamenArchivo = Archivo::createAndStore;
 
             //todo obtener el jefe de departamento de DTI
             $user_id = 1;
 
-            //todo generar el documento al que el dictamen depende en su creacion
             //todo verificar que la adscripcion exista en la tabla espejo `Adscripcion`
             $dictamen = Dictamen::create([
                 'oficio_id' => $oficio->id,
                 'adscripcion_id' => $data['adscripcion_id'],
-                'documento_id' => $dictamenDocumento->id,
                 'user_id' => $user_id,
                 'fecha_solicitud' => $data['fecha_solicitud']
             ]);
@@ -85,6 +82,9 @@ class DictamenController extends Controller
             'productos.producto.tipo.categoria',
             'productos.producto.marca'
         ]);
+
+        $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
+        Storage::put('test.pdf', $pdf->output());
 
         return response()->json(['data' => $dictamen]);
     }
@@ -109,6 +109,8 @@ class DictamenController extends Controller
                         'caracteristicas' => $productoData['caracteristicas']
                     ]);
             }
+
+            //todo generar el documento al que el dictamen depende en su creacion
 
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value,
