@@ -18,23 +18,19 @@
     <title>{{ $title }}</title>
 
     <style>
-        @page {
-            margin: 120px 40px 80px 40px;
-        }
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-size: 14px;
-            color: #333;
             margin: 0;
             padding: 0;
         }
         header {
             position: fixed;
-            top: -100px;
+            top: -60px;
             left: 0;
             right: 0;
             height: 60px;
-            border-bottom: 1px solid;
+            border-bottom: 0.5px solid;
             font-size: 12px;
         }
         footer {
@@ -43,14 +39,22 @@
             left: 0;
             right: 0;
             height: 40px;
-            border-top: 1px solid;
+            border-top: 0.5px solid;
             padding-top: 10px;
             font-size: 9px;
         }
 
+        .uppercase { text-transform: uppercase; }
+        .font-bold { font-weight: bold; }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
-        .mb-20 { margin-bottom: 20px; }
+        .text-around { letter-spacing: 3px; }
+        .text-2xl { font-size: 24px; }
+        .text-3xl { font-size: 30px; }
+        .my-10 { margin: 40px 0 }
+        .mt-20 { margin-top: 80px; }
+        .mb-5 { margin-bottom: 20px; }
+        .mb-8 { margin-bottom: 32px; }
     </style>
 
     @stack('style')

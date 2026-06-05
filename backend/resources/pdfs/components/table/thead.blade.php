@@ -1,2 +1,3 @@
 <thead {{ $attributes }}>
+    {{ $slot }}
 </thead>

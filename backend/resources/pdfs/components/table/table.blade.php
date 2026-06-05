@@ -1,13 +1,12 @@
-@push('style')
+@pushOnce('style')
     <style>
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            margin-bottom: 20px;
         }
     </style>
-@endPush
+@endPushOnce
 
 <table {{ $attributes }}>
+    {{ $slot }}
 </table>

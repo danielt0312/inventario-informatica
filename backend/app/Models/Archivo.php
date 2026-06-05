@@ -41,8 +41,7 @@ class Archivo extends Model
 
     public function fileName(): Attribute {
         return Attribute::make(
-            fn (mixed $value, array $attributes)
-                => sprintf('%s.%s', $this->uuid, $this->tipo->extension)
+            fn () => sprintf('%s.%s', $this->uuid, $this->tipo->extension)
         );
     }
 

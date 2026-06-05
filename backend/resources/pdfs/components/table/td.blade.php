@@ -1,13 +1,13 @@
-@push('style')
+@pushOnce('style')
     <style>
         td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #eeeeee;
-            font-size: 11px;
+            padding: 2px 8px;
             vertical-align: top;
+            border: 0.5px solid;
         }
     </style>
-@endPush
+@endPushOnce
 
 <td {{ $attributes }}>
+    {{ $slot }}
 </td>

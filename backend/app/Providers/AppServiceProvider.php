@@ -21,7 +21,6 @@ class AppServiceProvider extends ServiceProvider
 
         Blade::anonymousComponentPath(resource_path('pdfs/components'), 'pdf');
         Blade::anonymousComponentPath(resource_path('pdfs/layouts'), 'pdf-layout');
-        Blade::anonymousComponentPath(resource_path('pdfs/views'), 'pdf-view');
 
         View::addNamespace('pdf-view', resource_path('pdfs/views'));
 

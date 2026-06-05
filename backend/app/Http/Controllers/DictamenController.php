@@ -47,7 +47,7 @@ class DictamenController extends Controller
 
             $archivo = Archivo::createAndStore($request->file('archivo'));
 
-            $documento = $oficioArchivo->documentos()->create([
+            $documento = $archivo->documentos()->create([
                 'tipo_id' => DocumentoTipoEnum::OFICIO->value
             ]);
 
@@ -82,9 +82,6 @@ class DictamenController extends Controller
             'productos.producto.tipo.categoria',
             'productos.producto.marca'
         ]);
-
-        $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
-        Storage::put('test.pdf', $pdf->output());
 
         return response()->json(['data' => $dictamen]);
     }

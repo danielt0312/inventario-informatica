@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class DictamenProducto extends Model
 {
@@ -32,5 +33,16 @@ class DictamenProducto extends Model
 
     public function producto(): BelongsTo {
         return $this->belongsTo(Producto::class, 'producto_id');
+    }
+
+    public function descripcion(): Attribute
+    {
+        return Attribute::make(
+            function (mixed $value, array $attributes) {
+                $producto = $this->producto;
+
+                return "{$producto->tipo->nombre} {$producto->marca->nombre} {$producto->nombre} {$attributes['caracteristicas']}";
+            }
+        );
     }
 }

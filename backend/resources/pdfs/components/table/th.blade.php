@@ -1,16 +1,14 @@
-@push('style')
+@pushOnce('style')
     <style>
         th {
-            background-color: #f4f4f4;
-            color: #333333;
             font-weight: bold;
-            padding: 10px;
-            font-size: 11px;
-            border-bottom: 2px solid #dddddd;
+            padding: 2px 8px;
             text-align: left;
+            border: 0.5px solid;
         }
     </style>
-@endPush
+@endPushOnce
 
 <th {{ $attributes }}>
+    {{ $slot }}
 </th>

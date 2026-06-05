@@ -25,6 +25,10 @@
 
 @push('style')
     <style>
+        @page {
+            margin: 80px 60px;
+        }
+
         .container {
             display: table;
             width: 100%;
@@ -61,17 +65,6 @@
             line-height: 1.4;
         }
 
-        .title {
-            text-align: center;
-            text-transform: uppercase;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .subtitle {
-            margin-top: 30px;
-        }
-
         .subtitle span {
             display: block;
             font-weight: bold;
@@ -95,69 +88,59 @@
         </div>
     </x-slot:header>
 
-    <div class="title">
+    <div class="text-center font-bold text-2xl uppercase my-10">
         {{ $title }}
     </div>
 
-    <div class="subtitle mb-20">
+    <div class="subtitle mb-5">
         <span>C.P. FERNANDO MARTÍN CASTILLO DE ANDA</span>
         <span>DIRECTOR GENERAL DE ADMINISTRACIÓN Y FINANZAS</span>
-        <span>P R E S E N T E</span>
+        <span class="text-around">PRESENTE</span>
     </div>
 
-    <div class="mb-20">
-        Por medio del presente y en referencia al oficio <span style="font-weight: bold;">{{ $dictamen->oficio->folio }}</span>; es necesaria la adquisición de lo siguiente:
+    <div class="mb-5">
+        Por medio del presente y en referencia al oficio <b>{{ $dictamen->oficio->folio }}</b>; es necesaria la adquisición de lo siguiente:
     </div>
 
-    <x-table>
-        <x-table.thead>
-            <x-table.tr>
-                <x-table.th>Descripción</x-table.th>
-                <x-table.th class="text-center">Cantidad</x-table.th>
-                <x-table.th class="text-right">Precio Unitario</x-table.th>
-                <x-table.th class="text-right">Total</x-table.th>
-            </x-table.tr>
-        </x-table.thead>
-        <x-table.tbody>
-            <x-table.tr>
-                <x-table.td>Servicio de Desarrollo Web</x-table.td>
-                <x-table.td class="text-center">1</x-table.td>
-                <x-table.td class="text-right">$1,200.00</x-table.td>
-                <x-table.td class="text-right">$1,200.00</x-table.td>
-            </x-table.tr>
-            <x-table.tr>
-                <x-table.td>Soporte Técnico Mensual</x-table.td>
-                <x-table.td class="text-center">2</x-table.td>
-                <x-table.td class="text-right">$150.00</x-table.td>
-                <x-table.td class="text-right">$300.00</x-table.td>
-            </x-table.tr>
-        </x-table.tbody>
-    </x-table>
+    <x-pdf::table class="mb-5">
+        <x-pdf::table.thead>
+            <x-pdf::table.tr>
+                <x-pdf::table.th class="text-center">Cantidad</x-pdf::table.th>
+                <x-pdf::table.th>Descripción</x-pdf::table.th>
+                <x-pdf::table.th class="text-center">Resguardante</x-pdf::table.th>
+            </x-pdf::table.tr>
+        </x-pdf::table.thead>
+        <x-pdf::table.tbody>
+            @foreach($dictamen->productos as $producto)
+                <x-pdf::table.tr>
+                    <x-pdf::table.td class="text-center">{{ $producto->cantidad }}</x-pdf::table.td>
+                    <x-pdf::table.td>{{ $producto->descripcion }}</x-pdf::table.td>
+                    <x-pdf::table.td class="text-center">John Doe</x-pdf::table.td>
+                </x-pdf::table.tr>
+            @endforeach
+        </x-pdf::table.tbody>
+    </x-pdf::table>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Descripción</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Servicio de Desarrollo Web</td>
-                <td>1</td>
-                <td>$1,200.00</td>
-                <td>$1,200.00</td>
-            </tr>
-            <tr>
-                <td>Soporte Técnico Mensual</td>
-                <td>2</td>
-                <td>$150.00</td>
-                <td>$300.00</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="mb-5">
+        Para los usuarios del área de Dirección de Tecnologías de la Información, los cuales lo requieren para realizar sus actividades; esto para dar eficiencia en los trabajos y operaciones realizadas.
+    </div>
+
+    <div class="mb-5">
+        <b>NOTA:</b> "El proveedor deberá ofertar exclusivamente el equipo en el modelo y configuración especificados en este documento. No se aceptarán modelos alternos, equivalentes ni similares. En caso de presentarse alguna situación de desabasto o problema de disponibilidad del equipo solicitado, el proveedor estará obligado a informarlo y consultarlo previamente con la Dirección de Tecnologías de la Información (DTI), a fin de obtener autorización expresa ante de proponer cualquier alternativa."
+    </div>
+
+    <div class="mb-5">
+        Sin más por el momento le mando un cordial saludo.
+    </div>
+
+    <div class="font-bold text-center">
+        <div class="text-around">ATENTAMENTE</div>
+        <div class="mt-20">
+            <div>MTRO. JESÚS ALBERTO MATA ACOSTA</div>
+            <div>DIRECTOR DE TECNOLOGÍAS DE LA INFORMACIÓN</div>
+            <div>DE LA INFORMACIÓN</div>
+        </div>
+    </div>
 
     <x-slot:footer class="container">
         <div class="footer-left">
