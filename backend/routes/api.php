@@ -31,7 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
         'articulos' => ArticuloController::class,
     ]);
 
-    Route::apiResource('dictamenes', DictamenController::class);
+    Route::apiResource('dictamenes', DictamenController::class)
+        ->only(['index', 'show', 'store']);
     Route::prefix('dictamenes/{dictamen}')
         ->name('dictamenes.')
         ->controller(DictamenController::class)

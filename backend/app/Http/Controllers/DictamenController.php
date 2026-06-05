@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+
+use App\Services\ArchivoService;
 
 use App\Http\Requests\Dictamen\{
     DictamenRequest,
@@ -14,10 +16,7 @@ use App\Http\Requests\Dictamen\{
     EvidenciarDictamenRequest
 };
 
-use App\Models\{
-    Archivo,
-    Dictamen
-};
+use App\Models\Dictamen;
 
 use App\Enums\{
     DocumentoTipoEnum,
@@ -26,6 +25,10 @@ use App\Enums\{
 
 class DictamenController extends Controller
 {
+    public function __construct(
+        protected ArchivoService $archivoService
+    ) {}
+
     public function index(DictamenRequest $request)
     {
         $query = Dictamen::with(['estado', 'oficio.documento.archivo', 'documento.archivo']);
@@ -45,7 +48,7 @@ class DictamenController extends Controller
         DB::transaction(function () use ($request) {
             $data = $request->validated();
 
-            $archivo = Archivo::createAndStore($request->file('archivo'));
+            $archivo = $this->archivoService->createAndStore($request->file('archivo'));
 
             $documento = $archivo->documentos()->create([
                 'tipo_id' => DocumentoTipoEnum::OFICIO->value
@@ -86,16 +89,6 @@ class DictamenController extends Controller
         return response()->json(['data' => $dictamen]);
     }
 
-    public function update(Request $request, Dictamen $dictamen)
-    {
-        //
-    }
-
-    public function destroy(Dictamen $dictamen)
-    {
-        //
-    }
-
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
     {
         DB::transaction(function () use ($request, $dictamen) {
@@ -107,10 +100,20 @@ class DictamenController extends Controller
                     ]);
             }
 
-            //todo generar el documento al que el dictamen depende en su creacion
+            $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
+
+            $archivo = $this->archivoService->createAndStoreFromRaw(
+                DocumentoTipoEnum::DICTAMEN->nombre(),
+                $pdf->output()
+            );
+
+            $documento = $archivo->documentos()->create([
+                'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
+            ]);
 
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value,
+                'documento_id' => $documento->id,
+                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value
             ]);
         });
 
@@ -119,14 +122,13 @@ class DictamenController extends Controller
 
     public function evidenciar(EvidenciarDictamenRequest $request, Dictamen $dictamen)
     {
-        if (Storage::exists($dictamen->documento->archivo->relativePath)) {
-            Storage::delete($dictamen->documento->archivo->relativePath);
-        }
-
-        $dictamen->archivo->store($request->archivo);
+        $this->archivoService->store(
+            $dictamen->documento->archivo,
+            $request->file('archivo')
+        );
 
         $dictamen->update([
-            'estado_id' => DictamenEstadoEnum::SURTIR->value,
+            'estado_id' => DictamenEstadoEnum::SURTIR->value
         ]);
 
         return response(status: 201);
@@ -134,16 +136,16 @@ class DictamenController extends Controller
 
     public function facturar(FacturarDictamenRequest $request, Dictamen $dictamen)
     {
-        DB::transaction(function () use ($request, $dictamen) {
-            foreach ($request->input('productos') as $productoData) {
-                $dictamen->articulos()
-                    ->createMany();
-            }
+        // DB::transaction(function () use ($request, $dictamen) {
+        //     foreach ($request->input('productos') as $productoData) {
+        //         $dictamen->articulos()
+        //             ->createMany();
+        //     }
 
-            $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value,
-            ]);
-        });
+        //     $dictamen->update([
+        //         'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value,
+        //     ]);
+        // });
 
         return response(status: 201);
     }

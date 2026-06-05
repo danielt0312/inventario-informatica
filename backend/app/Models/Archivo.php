@@ -60,37 +60,4 @@ class Archivo extends Model
     public function uniqueIds(): array {
         return ['uuid'];
     }
-
-    /**
-     * Stores an uploaded file on a filesystem disk using the model's `relativePath` attribute.
-     *
-     * @param UploadedFile $file
-     * @param array|string $options
-     */
-    public function store(
-        UploadedFile $file,
-        array|string $options = []
-    ) {
-        return $file->storeAs(
-            dirname($this->relativePath),
-            basename($this->relativePath),
-            $options
-        );
-    }
-
-    public static function createAndStore(
-        UploadedFile $file,
-        ArchivoTipoEnum $tipo = ArchivoTipoEnum::PDF
-    ) {
-        $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-
-        $archivo = self::create([
-            'nombre' => $filename,
-            'tipo_id' => $tipo->value
-        ]);
-
-        $archivo->store($file);
-
-        return $archivo;
-    }
 }
