@@ -1,7 +1,7 @@
 import Goback from "@/components/Goback"
-import { Form } from "./partials/form"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTitle, SidebarSteps } from "./partials/form-steps";
+import { getTitle, SidebarSteps } from "../actions/form-steps";
+import { Form } from "./form";
 
 export function View() {
     return (

@@ -1,11 +1,11 @@
 import api from '@/lib/axios';
 import { DictamenEstadoEnum } from '@/lib/constants';
 import type { TResponse } from '@/lib/types';
-import type { Dictamen } from '@/views/dictamenes/partials/table-cols';
-import { View } from '@/views/dictamenes/action';
+import { View } from '@/views/dictamenes/actions/view';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
+import type { Dictamen, DictamenEstado } from '@/views/dictamenes/partials/types';
 
 export const Actions = ['dictaminar', 'evidenciar', 'facturar', 'inventariar'] as const;
 export type Actions = (typeof Actions)[number];
@@ -17,14 +17,16 @@ export const StateAction = {
     [DictamenEstadoEnum.INVENTARIAR]: 'inventariar',
 } as const satisfies Partial<Record<DictamenEstadoEnum, Actions>>;
 
-export type ActionDictamenEstado = keyof typeof StateAction;
+export type ActionDictamenEstadoEnum = keyof typeof StateAction;
 
-export function isValidState(value: DictamenEstadoEnum): value is ActionDictamenEstado {
+export function isValidState(value: DictamenEstadoEnum): value is ActionDictamenEstadoEnum {
     return value in StateAction;
 }
 
 export type ValidatedDictamen = Omit<Dictamen, 'estado'> & {
-    estado: { id: ActionDictamenEstado };
+    estado: Omit<DictamenEstado, 'id'> & {
+        id: ActionDictamenEstadoEnum;
+    };
 };
 
 export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({

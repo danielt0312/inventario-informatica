@@ -1,44 +1,18 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
 import { TextareaField } from "@/components/composed/@tanstack/form-field";
-import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import api from "@/lib/axios";
-import { NonEmptyString } from "@/lib/schemas/common";
 import { handleFormValidationError } from "@/lib/utils";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
-import type { ValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { Eye } from "lucide-react";
-import z from "zod";
+import { type FormSchema, validator } from "./form-schema";
+import type { Dictamen } from "../../partials/types";
+import { FilePreviewWindow } from "@/components/custom/file-preview";
+import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 
-interface FormSchema {
-    productos: {
-        id: number;
-        caracteristicas: string;
-    }[];
-}
-
-const validator = z.object({
-    productos: z
-        .array(z
-            .object({
-                id: z
-                    .number()
-                    .int(),
-                caracteristicas: NonEmptyString
-            }))
-        .min(1, 'Debes de agregar cuando menos 1 producto')
-});
-
-export function Form({
-    dictamen
-}: {
-    dictamen: ValidatedDictamen
-}) {
+export const useForm = (dictamen: Dictamen) => {
     const formatedProductos = dictamen.productos.map(v => {
         return {
             ...v,
@@ -53,7 +27,7 @@ export function Form({
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
-    const form = useAppForm({
+    return useAppForm({
         defaultValues,
         validators: {
             onSubmit: validator
@@ -71,6 +45,15 @@ export function Form({
             }
         }
     });
+}
+
+export function Form({
+    dictamen
+}: {
+    dictamen: Dictamen
+}) {
+    const form = useForm(dictamen);
+    const { mutate: previewOficio } = useFilePreviewWindowMutation(dictamen.oficio.documento.archivo.uuid);
 
     return (
         <form
@@ -99,19 +82,10 @@ export function Form({
                 <div className="grid grid-cols-3">
                     <div data-slot="label">
                         <Label className="font-bold">Oficio de Solicitud</Label>
-                        <ButtonGroup>
-                            <Button variant="outline">
-                                {dictamen.oficio.documento.archivo.nombre}.{dictamen.oficio.documento.archivo.tipo.extension}
-                            </Button>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button><Eye /></Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    Ver
-                                </TooltipContent>
-                            </Tooltip>
-                        </ButtonGroup>
+                        <FilePreviewWindow
+                            label={dictamen.oficio.documento.archivo.nombre}
+                            onClick={previewOficio}
+                        />
                     </div>
                 </div>
 

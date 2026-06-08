@@ -59,3 +59,27 @@ export type OmitCreatableComboboxFieldsProps<
     CreatableComboboxFieldProps<TField>,
     'options' | TOmit
 >;
+
+export type ProductoMarca = TCatalogo;
+export type ProductoCategoria = TCatalogo;
+export type ProductoTipo = TCatalogo & {
+    categoria: ProductoCategoria;
+};
+export type Producto = TCatalogo & {
+    tipo: ProductoTipo;
+    marca: ProductoMarca;
+}
+
+export type DocumentoTipo = TCatalogo;
+export type Documento = {
+    tipo: DocumentoTipo;
+    archivo: {
+        uuid: string;
+        nombre?: string;
+    }
+}
+
+export type Oficio = {
+    folio: string;
+    documento: Documento;
+}

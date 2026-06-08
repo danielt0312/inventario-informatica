@@ -1,66 +1,24 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TCatalogo } from "@/lib/types";
 import { DictamenEstadoEnum } from "@/lib/constants";
 import { Eye, FileInput, PackageOpen, Paperclip, Receipt } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
     isValidState,
     StateAction,
-    type ActionDictamenEstado,
+    type ActionDictamenEstadoEnum,
     Route as ActionRoute
 } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
-interface Producto extends TCatalogo {
-    tipo: TCatalogo & {
-        categoria: TCatalogo;
-    };
-    marca: TCatalogo;
-}
-
-export interface Dictamen {
-    uuid: string;
-    id: number;
-    adscripcion: TCatalogo;
-    fecha_solicitud: Date;
-    estado: {
-        id: DictamenEstadoEnum;
-    };
-    documento?: {
-        archivo: {
-            uuid: string;
-            nombre?: string;
-        }
-    }
-    oficio: {
-        folio: string;
-        documento: {
-            archivo: TCatalogo & {
-                uuid: string;
-                tipo: TCatalogo & {
-                    extension: string;
-                }
-            }
-        }
-    };
-    productos: {
-        id: number;
-        cantidad: number;
-        caracteristicas?: string;
-        producto: Producto;
-        empleado: TCatalogo;
-    }[];
-}
+import type { Dictamen } from "./types";
 
 const ActionIcon = {
     [DictamenEstadoEnum.DICTAMINAR]: <FileInput />,
     [DictamenEstadoEnum.EVIDENCIAR]: <Paperclip />,
     [DictamenEstadoEnum.SURTIR]: <Receipt />,
     [DictamenEstadoEnum.INVENTARIAR]: <PackageOpen />
-} as const satisfies Record<ActionDictamenEstado, React.ReactNode>;
+} as const satisfies Record<ActionDictamenEstadoEnum, React.ReactNode>;
 
 export function renderActionViewFile(dictamen: Dictamen) {
     if (!isValidState(dictamen.estado.id) || !dictamen.documento) return null;

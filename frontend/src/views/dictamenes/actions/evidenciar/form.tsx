@@ -8,10 +8,10 @@ import api from "@/lib/axios";
 import { RequiredFile } from "@/lib/schemas/common";
 import { handleFormValidationError } from "@/lib/utils";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
-import type { ValidatedDictamen as RouteValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import z from "zod";
+import type { Dictamen } from "../../partials/types";
 
 export interface FormSchema {
     archivo: File[] | undefined;
@@ -21,8 +21,8 @@ export const submitValidator = z.object({
     archivo: RequiredFile,
 });
 
-type ValidatedDictamen = Omit<RouteValidatedDictamen, 'documento'> & {
-    documento: NonNullable<RouteValidatedDictamen['documento']>;
+export type ValidatedDictamen = Omit<Dictamen, 'documento'> & {
+    documento: NonNullable<Dictamen['documento']>;
 }
 
 export function Form({
