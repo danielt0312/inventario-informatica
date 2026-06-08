@@ -1,18 +1,16 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
 import { FileUploaderField } from "@/components/composed/@tanstack/form-field";
-import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
+import { FilePreviewWindow } from "@/components/custom/file-preview";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import api from "@/lib/axios";
 import { RequiredFile } from "@/lib/schemas/common";
 import { handleFormValidationError } from "@/lib/utils";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
-import type { ValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
+import type { ValidatedDictamen as RouteValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { Eye } from "lucide-react";
 import z from "zod";
 
 export interface FormSchema {
@@ -23,11 +21,16 @@ export const submitValidator = z.object({
     archivo: RequiredFile,
 });
 
+type ValidatedDictamen = Omit<RouteValidatedDictamen, 'documento'> & {
+    documento: NonNullable<RouteValidatedDictamen['documento']>;
+}
+
 export function Form({
     dictamen
 }: {
     dictamen: ValidatedDictamen
 }) {
+
     const defaultValues: FormSchema = {
         ...dictamen,
         archivo: undefined
@@ -61,6 +64,9 @@ export function Form({
         }
     });
 
+    const { mutate: previewOficio } = useFilePreviewWindowMutation(dictamen.oficio.documento.archivo.uuid);
+    const { mutate: previewDictamen } = useFilePreviewWindowMutation(dictamen.documento.archivo.uuid);
+
     return (
         <form
             onSubmit={(e) => {
@@ -69,42 +75,46 @@ export function Form({
             }}
             className="contents"
         >
+            <div className="grid grid-cols-3">
+                <div data-slot="label">
+                    <Label className="font-bold">Número de Dictamen</Label>
+                    <Label>{dictamen.id}</Label>
+                </div>
+                <div data-slot="label" className="col-span-2">
+                    <Label className="font-bold">Dictamen tecnológico</Label>
+                    <FilePreviewWindow
+                        label={dictamen.oficio.documento.archivo.nombre}
+                        onClick={previewDictamen}
+                    />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-3">
+                <div data-slot="label">
+                    <Label className="font-bold">Área Solicitante</Label>
+                    <Label>{dictamen.adscripcion?.nombre ?? 'Dirección de Tecnologías de la Información'}</Label>
+                </div>
+                <div data-slot="label">
+                    <Label className="font-bold">Folio de solicitud</Label>
+                    <Label>{dictamen.oficio.folio}</Label>
+                </div>
+                <div data-slot="label">
+                    <Label className="font-bold">Fecha de solicitud</Label>
+                    <Label>{String(dictamen.fecha_solicitud)}</Label>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-3">
+                <div data-slot="label">
+                    <Label className="font-bold">Oficio de Solicitud</Label>
+                    <FilePreviewWindow
+                        label={dictamen.oficio.documento.archivo.nombre}
+                        onClick={previewOficio}
+                    />
+                </div>
+            </div>
+
             <form.AppForm>
-                <div className="grid grid-cols-3">
-                    <div data-slot="label">
-                        <Label className="font-bold">Área Solicitante</Label>
-                        <Label>{dictamen.adscripcion?.nombre ?? 'Dirección de Tecnologías de la Información'}</Label>
-                    </div>
-                    <div data-slot="label">
-                        <Label className="font-bold">Folio de solicitud</Label>
-                        <Label>{dictamen.oficio.folio}</Label>
-                    </div>
-                    <div data-slot="label">
-                        <Label className="font-bold">Fecha de solicitud</Label>
-                        <Label>{String(dictamen.fecha_solicitud)}</Label>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-3">
-                    <div data-slot="label">
-                        <Label className="font-bold">Oficio de Solicitud</Label>
-                        <ButtonGroup>
-                            <Button variant="outline">
-                                {dictamen.oficio.documento.archivo.nombre}.{dictamen.oficio.documento.archivo.tipo.extension}
-                            </Button>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button><Eye /></Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    Ver
-                                </TooltipContent>
-                            </Tooltip>
-                        </ButtonGroup>
-                    </div>
-                </div>
-
-
                 <div className="grid grid-cols-2">
                     <form.AppField
                         name="archivo"

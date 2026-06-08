@@ -12,6 +12,7 @@ import {
 import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Producto extends TCatalogo {
     tipo: TCatalogo & {
@@ -38,6 +39,7 @@ export interface Dictamen {
         folio: string;
         documento: {
             archivo: TCatalogo & {
+                uuid: string;
                 tipo: TCatalogo & {
                     extension: string;
                 }
@@ -60,7 +62,7 @@ const ActionIcon = {
     [DictamenEstadoEnum.INVENTARIAR]: <PackageOpen />
 } as const satisfies Record<ActionDictamenEstado, React.ReactNode>;
 
-export function renderViewFile(dictamen: Dictamen) {
+export function renderActionViewFile(dictamen: Dictamen) {
     if (!isValidState(dictamen.estado.id) || !dictamen.documento) return null;
 
     const { uuid, nombre } = dictamen.documento.archivo;
@@ -100,7 +102,7 @@ export function renderActionCell(dictamen: Dictamen) {
                     {ActionIcon[value]} {action}
                 </ActionMenuItem>
             </Link>
-            {action !== 'dictaminar' && renderViewFile(dictamen)}
+            {renderActionViewFile(dictamen)}
         </>
     );
 }
