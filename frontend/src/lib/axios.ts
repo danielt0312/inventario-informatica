@@ -1,13 +1,16 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const api = axios.create({
+export const root = axios.create({
     baseURL: `${import.meta.env.VITE_API_URL}`,
     withCredentials: true,
     withXSRFToken: true,
-    headers: {
-        Accept: "application/json"
-    },
     timeout: 3000
 });
 
-export default api
+export const api = root.create({
+    headers: {
+        'Accept': 'application/json'
+    }
+});
+
+export default api;

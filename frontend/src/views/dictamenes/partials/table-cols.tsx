@@ -10,6 +10,8 @@ import {
     Route as ActionRoute
 } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
+import { Spinner } from "@/components/ui/spinner";
+import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 
 interface Producto extends TCatalogo {
     tipo: TCatalogo & {
@@ -26,6 +28,12 @@ export interface Dictamen {
     estado: {
         id: DictamenEstadoEnum;
     };
+    documento?: {
+        archivo: {
+            uuid: string;
+            nombre?: string;
+        }
+    }
     oficio: {
         folio: string;
         documento: {
@@ -52,23 +60,48 @@ const ActionIcon = {
     [DictamenEstadoEnum.INVENTARIAR]: <PackageOpen />
 } as const satisfies Record<ActionDictamenEstado, React.ReactNode>;
 
-export function renderActionCell(value: DictamenEstadoEnum, uuid: string) {
+export function renderViewFile(dictamen: Dictamen) {
+    if (!isValidState(dictamen.estado.id) || !dictamen.documento) return null;
+
+    const { uuid, nombre } = dictamen.documento.archivo;
+    const { mutate, isPending } = useFilePreviewWindowMutation(uuid, nombre);
+
+    return (
+        <ActionMenuItem
+            disabled={isPending}
+            onClick={() => mutate()}
+        >
+            {isPending
+                ? <Spinner />
+                : <Eye />
+            } Ver documento
+        </ActionMenuItem>
+    );
+}
+
+export function renderActionCell(dictamen: Dictamen) {
+    const { uuid } = dictamen;
+    const value = dictamen.estado.id;
+
     if (!isValidState(value)) return null;
 
     const action = StateAction[value];
 
     return (
-        <Link
-            to={ActionRoute.to}
-            params={{
-                uuid,
-                action
-            }}
-        >
-            <ActionMenuItem className="capitalize">
-                {ActionIcon[value]} {action}
-            </ActionMenuItem>
-        </Link>
+        <>
+            <Link
+                to={ActionRoute.to}
+                params={{
+                    uuid,
+                    action
+                }}
+            >
+                <ActionMenuItem className="capitalize">
+                    {ActionIcon[value]} {action}
+                </ActionMenuItem>
+            </Link>
+            {action !== 'dictaminar' && renderViewFile(dictamen)}
+        </>
     );
 }
 
@@ -104,10 +137,7 @@ export const columns: ColumnDef<Dictamen>[] = [
         cell: ({ row: { original: data } }) => {
             return (
                 <ActionMenu>
-                    {renderActionCell(data.estado.id, data.uuid)}
-                    <ActionMenuItem>
-                        <Eye /> Ver documento
-                    </ActionMenuItem>
+                    {renderActionCell(data)}
                 </ActionMenu>
             )
         }

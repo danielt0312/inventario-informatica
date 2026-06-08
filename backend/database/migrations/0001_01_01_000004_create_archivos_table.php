@@ -17,7 +17,8 @@ return new class extends Migration
         Schema::create('archivos', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('nombre', 64);
+            $table->string('nombre', 64)
+                ->nullable();
             $table->foreignId('tipo_id')
                 ->constrained('archivo_tipos', indexName: 'fk_archivos_archivo_tipos')
                 ->cascadeOnUpdate()

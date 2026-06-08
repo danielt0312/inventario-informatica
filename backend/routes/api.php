@@ -17,7 +17,8 @@ use App\Http\Controllers\{
     DictamenController,
     DictamenEstadoController,
     EmpleadoController,
-    AdscripcionController
+    AdscripcionController,
+    ArchivoController
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -30,6 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
         'productos' => ProductoController::class,
         'articulos' => ArticuloController::class,
     ]);
+
+    Route::get('archivos/{archivo}/stream', [ArchivoController::class, 'stream']);
 
     Route::apiResource('dictamenes', DictamenController::class)
         ->only(['index', 'show', 'store']);

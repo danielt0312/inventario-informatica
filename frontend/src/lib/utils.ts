@@ -17,6 +17,7 @@ import {
     isValid
 } from "date-fns"
 import { isAxiosError } from "axios";
+import { root } from "./axios";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -112,3 +113,8 @@ export function addPrefix<T extends object, P extends string>(obj: T, prefix: P)
         Object.entries(obj).map(([k, v]) => [`${prefix}${k}`, v])
     ) as WithPrefix<T, P>;
 }
+
+export const getStreamedFile = (uuid: string) => root.get(`api/archivos/${uuid}/stream`, {
+    responseType: 'blob'
+}).then(r => r.data);
+

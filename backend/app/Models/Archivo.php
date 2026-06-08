@@ -27,10 +27,12 @@ class Archivo extends Model
     ];
 
     protected $attributes = [
+        'nombre' => null,
         'activo' => 1
     ];
 
-    public function tipo(): BelongsTo {
+    public function tipo(): BelongsTo
+    {
         return $this->belongsTo(ArchivoTipo::class, 'tipo_id');
     }
 
@@ -39,25 +41,34 @@ class Archivo extends Model
         return $this->hasMany(Documento::class, 'archivo_id');
     }
 
-    public function fileName(): Attribute {
+    public function fileName(): Attribute
+    {
         return Attribute::make(
             fn () => sprintf('%s.%s', $this->uuid, $this->tipo->extension)
         );
     }
 
-    public function relativePath(): Attribute {
+    public function relativePath(): Attribute
+    {
         return Attribute::make(
             fn () => FilePathGenerator::forUuid($this->uuid, $this->tipo->extension)
         );
     }
 
-    public function casts(): array {
+    public function casts(): array
+    {
         return [
             'activo' => 'boolean',
         ];
     }
 
-    public function uniqueIds(): array {
+    public function uniqueIds(): array
+    {
         return ['uuid'];
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
     }
 }
