@@ -39,7 +39,7 @@ export function useForm() {
             const data = validator.parse(value);
             const formData = new FormData();
 
-            formData.append('adscripcion_id', String(data.adscripcion_id));
+            formData.append('adscripcion_id', data.adscripcion_id);
             formData.append('folio', data.folio);
             formData.append('fecha_solicitud', data.fecha_solicitud);
             formData.append('archivo', data.archivo[0]);

@@ -9,7 +9,7 @@ export interface DictamenEstado {
 export interface DictamenProducto {
     id: number;
     cantidad: number;
-    caracteristicas?: string;
+    caracteristicas: string | null;
     empleado: TCatalogo;
     producto: Producto;
 }
@@ -20,7 +20,7 @@ export interface Dictamen {
     adscripcion: TCatalogo;
     fecha_solicitud: Date;
     estado: DictamenEstado
-    documento?: Documento;
+    documento: Documento | null;
     oficio: Oficio;
     productos: DictamenProducto[];
 }

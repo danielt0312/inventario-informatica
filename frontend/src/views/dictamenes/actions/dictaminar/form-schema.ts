@@ -1,7 +1,11 @@
-import { NonEmptyString } from "@/lib/schemas/common";
+import {
+    Integer,
+    NonEmptyString,
+    RequiredArray
+} from "@/lib/schemas/common";
 import z from "zod";
 
-export interface FormSchema {
+export interface Schema {
     productos: {
         id: number;
         caracteristicas: string;
@@ -9,13 +13,10 @@ export interface FormSchema {
 }
 
 export const validator = z.object({
-    productos: z
-        .array(z
-            .object({
-                id: z
-                    .number()
-                    .int(),
-                caracteristicas: NonEmptyString
-            })
-        ).min(1, 'Debes de agregar cuando menos 1 producto')
+    productos: RequiredArray(
+        z.object({
+            id: Integer,
+            caracteristicas: NonEmptyString
+        })
+    )
 });

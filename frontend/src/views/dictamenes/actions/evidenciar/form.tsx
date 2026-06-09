@@ -4,65 +4,36 @@ import { FilePreviewWindow } from "@/components/custom/file-preview";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
-import api from "@/lib/axios";
-import { RequiredFile } from "@/lib/schemas/common";
-import { handleFormValidationError } from "@/lib/utils";
-import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
-import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
-import z from "zod";
-import type { Dictamen } from "../../partials/types";
+import { submitValidator, type Schema, type ValidatedDictamen } from "./form-schema";
 
-export interface FormSchema {
-    archivo: File[] | undefined;
-}
+import { useFormMutation } from "../form";
 
-export const submitValidator = z.object({
-    archivo: RequiredFile,
-});
-
-export type ValidatedDictamen = Omit<Dictamen, 'documento'> & {
-    documento: NonNullable<Dictamen['documento']>;
-}
-
-export function Form({
-    dictamen
-}: {
-    dictamen: ValidatedDictamen
-}) {
-
-    const defaultValues: FormSchema = {
+export function useForm(dictamen: ValidatedDictamen) {
+    const defaultValues: Schema = {
         ...dictamen,
-        archivo: undefined
+        archivo: []
     };
 
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
+    const formMutation = useFormMutation(dictamen);
 
-    const form = useAppForm({
+    return useAppForm({
         defaultValues,
         validators: {
             onSubmit: submitValidator
         },
         onSubmit: async ({ value, formApi }) => {
-            const formData = new FormData();
-
             const data = submitValidator.parse(value);
+            const formData = new FormData;
 
             formData.append('archivo', data.archivo[0]);
 
-            try {
-                await api.post(`api/dictamenes/${dictamen.uuid}/evidenciar`, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-
-                queryClient.invalidateQueries({ queryKey: ['dictamenes'] });
-                navigate({ to: IndexRoute.to });
-            } catch (error) {
-                handleFormValidationError(error, formApi);
-            }
+            formMutation.mutate({ data: formData, api: formApi })
         }
     });
+}
+
+export function Form({ dictamen }: { dictamen: ValidatedDictamen}) {
+    const form = useForm(dictamen);
 
     const { mutate: previewOficio } = useFilePreviewWindowMutation(dictamen.oficio.documento.archivo.uuid);
     const { mutate: previewDictamen } = useFilePreviewWindowMutation(dictamen.documento.archivo.uuid);
@@ -71,6 +42,7 @@ export function Form({
         <form
             onSubmit={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 form.handleSubmit();
             }}
             className="contents"
@@ -121,7 +93,6 @@ export function Form({
                         children={() => (
                             <FileUploaderField
                                 label="Adjuntar evidencia de dictamen recibido"
-                                maxFiles={1}
                                 accept="application/pdf"
                             />
                         )}

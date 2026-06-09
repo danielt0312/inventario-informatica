@@ -53,10 +53,9 @@ export type OmitQueryOptions<
 >;
 
 export type OmitCreatableComboboxFieldsProps<
-    TField extends number | string = string,
-    TOmit extends keyof CreatableComboboxFieldProps<TField> = never
+    TOmit extends keyof CreatableComboboxFieldProps = never
 > = Omit<
-    CreatableComboboxFieldProps<TField>,
+    CreatableComboboxFieldProps,
     'options' | TOmit
 >;
 
@@ -75,7 +74,7 @@ export type Documento = {
     tipo: DocumentoTipo;
     archivo: {
         uuid: string;
-        nombre?: string;
+        nombre: string | null;
     }
 }
 

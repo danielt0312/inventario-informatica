@@ -1,16 +1,18 @@
 import { DictamenEstadoEnum } from "@/lib/constants";
 
-import type {
-    ActionDictamenEstadoEnum,
-    ValidatedDictamen
+import {
+    StateAction,
+    type ActionDictamenEstadoEnum,
+    type ValidatedDictamen
 } from "@/routes/_auth/dictamenes/$uuid/$action";
 
 import { Form as DictaminarForm } from "./dictaminar/form";
+import { Form as EvidenciarForm } from "./evidenciar/form";
+import { type ValidatedDictamen as EvidenciarValidatedDictamen } from "./evidenciar/form-schema";
 
-import {
-    Form as EvidenciarForm,
-    type ValidatedDictamen as EvidenciarValidatedDictamen
-} from "./evidenciar/form";
+import { useNavigate } from "@tanstack/react-router";
+import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
+import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 
 export const Form = ({
     dictamen
@@ -22,3 +24,18 @@ export const Form = ({
     [DictamenEstadoEnum.SURTIR]: 'facturar',
     [DictamenEstadoEnum.INVENTARIAR]: 'inventariar',
 } as const satisfies Record<ActionDictamenEstadoEnum, React.ReactNode>)[dictamen.estado.id];
+
+
+export function useFormMutation(dictamen: ValidatedDictamen) {
+    const navigate = useNavigate();
+    const action = StateAction[dictamen.estado.id];
+
+    return usePostFormMutation({
+        url: `api/dictamenes/${dictamen.uuid}/${action}`,
+        onSuccess: (_, __, ___, { client }) => {
+            client.invalidateQueries({ queryKey: ['dictamenes'] });
+            client.invalidateQueries({ queryKey: ['dictamen', dictamen.uuid] });
+            navigate({ to: IndexRoute.to })
+        }
+    })
+}

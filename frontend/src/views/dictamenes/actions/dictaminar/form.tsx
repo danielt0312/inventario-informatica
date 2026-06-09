@@ -2,17 +2,13 @@ import { useAppForm } from "@/components/composed/@tanstack/form";
 import { TextareaField } from "@/components/composed/@tanstack/form-field";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import api from "@/lib/axios";
-import { handleFormValidationError } from "@/lib/utils";
-import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
-import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
-import { type FormSchema, validator } from "./form-schema";
-import type { Dictamen } from "../../partials/types";
+import { type Schema, validator } from "./form-schema";
 import { FilePreviewWindow } from "@/components/custom/file-preview";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
+import { useFormMutation } from "../form";
+import type { ValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
 
-export const useForm = (dictamen: Dictamen) => {
+export const useForm = (dictamen: ValidatedDictamen) => {
     const formatedProductos = dictamen.productos.map(v => {
         return {
             ...v,
@@ -20,12 +16,11 @@ export const useForm = (dictamen: Dictamen) => {
         }
     });
 
-    const defaultValues: FormSchema = {
+    const defaultValues: Schema = {
         productos: formatedProductos
     }
 
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
+    const formMutation = useFormMutation(dictamen);
 
     return useAppForm({
         defaultValues,
@@ -35,14 +30,7 @@ export const useForm = (dictamen: Dictamen) => {
         onSubmit: async ({ value, formApi }) => {
             const data = validator.parse(value);
 
-            try {
-                await api.post(`api/dictamenes/${dictamen.uuid}/dictaminar`, data);
-
-                queryClient.invalidateQueries({ queryKey: ['dictamenes'] });
-                navigate({ to: IndexRoute.to });
-            } catch (error) {
-                handleFormValidationError(error, formApi);
-            }
+            formMutation.mutate({ data, api: formApi });
         }
     });
 }
@@ -50,7 +38,7 @@ export const useForm = (dictamen: Dictamen) => {
 export function Form({
     dictamen
 }: {
-    dictamen: Dictamen
+    dictamen: ValidatedDictamen
 }) {
     const form = useForm(dictamen);
     const { mutate: previewOficio } = useFilePreviewWindowMutation(dictamen.oficio.documento.archivo.uuid);
