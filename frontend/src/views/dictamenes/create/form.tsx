@@ -178,6 +178,7 @@ export function Form() {
                                                 </TableCell>
                                                 <TableCell className="max-w-fit text-center">
                                                     <Button
+                                                        disabled={field.state.value.length === 1}
                                                         onClick={() => field.removeValue(index)}
                                                         variant="destructive"
                                                         type="button"

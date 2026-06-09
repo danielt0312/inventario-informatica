@@ -11,7 +11,8 @@ class DictamenResource extends JsonResource
     {
         return [
             ...parent::toArray($request),
-            'oficio' => new OficioResource($this->whenLoaded('oficio'))
+            'oficio' => new OficioResource($this->whenLoaded('oficio')),
+            'documento' => new DocumentoResource($this->whenLoaded('documento'))
         ];
     }
 }

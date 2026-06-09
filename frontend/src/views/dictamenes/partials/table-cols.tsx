@@ -23,8 +23,8 @@ const ActionIcon = {
 export function renderActionViewFile(dictamen: Dictamen) {
     if (!isValidState(dictamen.estado.id) || !dictamen.documento) return null;
 
-    const { uuid, nombre } = dictamen.documento.archivo;
-    const { mutate, isPending } = useFilePreviewWindowMutation(uuid, nombre);
+    const { uuid, nombre } = dictamen.documento;
+    const { mutate, isPending } = useFilePreviewWindowMutation(uuid, nombre ?? uuid);
 
     return (
         <ActionMenuItem

@@ -103,12 +103,12 @@ class DictamenController extends Controller
                 $pdf->output()
             );
 
-            $documento = $archivo->documentos()->create([
+            $documento = $archivo->documento()->create([
                 'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
             ]);
 
             $dictamen->update([
-                'documento_id' => $documento->id,
+                'documento_id' => $documento->archivo_id,
                 'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value
             ]);
         });

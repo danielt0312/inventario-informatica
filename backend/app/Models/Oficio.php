@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Oficio extends Model
 {
@@ -17,12 +17,8 @@ class Oficio extends Model
 
     public $timestamps = false;
 
-    public function documento(): BelongsTo {
-        return $this->belongsTo(Documento::class, 'documento_id', 'archivo_id');
-    }
-
-    public function dictamenes(): HasMany
+    public function documento(): BelongsTo
     {
-        return $this->hasMany(Dictamen::class, 'dictamen_id');
+        return $this->belongsTo(Documento::class, 'documento_id', 'archivo_id');
     }
 }

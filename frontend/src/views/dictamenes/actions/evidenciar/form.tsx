@@ -55,7 +55,7 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen}) {
                 <div data-slot="label" className="col-span-2">
                     <Label className="font-bold">Dictamen tecnológico</Label>
                     <FilePreviewWindow
-                        label={dictamen.oficio.documento.nombre}
+                        label={dictamen.documento.nombre}
                         onClick={previewDictamen}
                     />
                 </div>
