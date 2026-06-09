@@ -35,8 +35,8 @@ export function useForm(dictamen: ValidatedDictamen) {
 export function Form({ dictamen }: { dictamen: ValidatedDictamen}) {
     const form = useForm(dictamen);
 
-    const { mutate: previewOficio } = useFilePreviewWindowMutation(dictamen.oficio.documento.archivo.uuid);
-    const { mutate: previewDictamen } = useFilePreviewWindowMutation(dictamen.documento.archivo.uuid);
+    const { mutate: previewOficio } = useFilePreviewWindowMutation(dictamen.oficio.documento.uuid);
+    const { mutate: previewDictamen } = useFilePreviewWindowMutation(dictamen.documento.uuid);
 
     return (
         <form
@@ -55,7 +55,7 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen}) {
                 <div data-slot="label" className="col-span-2">
                     <Label className="font-bold">Dictamen tecnológico</Label>
                     <FilePreviewWindow
-                        label={dictamen.oficio.documento.archivo.nombre}
+                        label={dictamen.oficio.documento.nombre}
                         onClick={previewDictamen}
                     />
                 </div>
@@ -80,7 +80,7 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen}) {
                 <div data-slot="label">
                     <Label className="font-bold">Oficio de Solicitud</Label>
                     <FilePreviewWindow
-                        label={dictamen.oficio.documento.archivo.nombre}
+                        label={dictamen.oficio.documento.nombre}
                         onClick={previewOficio}
                     />
                 </div>

@@ -71,11 +71,9 @@ export type Producto = TCatalogo & {
 
 export type DocumentoTipo = TCatalogo;
 export type Documento = {
-    tipo: DocumentoTipo;
-    archivo: {
-        uuid: string;
-        nombre: string | null;
-    }
+    tipo: DocumentoTipo | null | undefined;
+    uuid: string;
+    nombre: string | null;
 }
 
 export type Oficio = {

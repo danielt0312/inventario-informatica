@@ -29,7 +29,7 @@ class DictamenController extends Controller
 
     public function index(DictamenRequest $request)
     {
-        $query = Dictamen::with(['estado', 'oficio.documento', 'documento']);
+        $query = Dictamen::with(['estado', 'oficio.documento.archivo', 'documento']);
 
         if ($request->filled('folio')) {
             $query->whereHas('oficio', fn ($q)
@@ -82,7 +82,7 @@ class DictamenController extends Controller
             'productos.producto.marca'
         ]);
 
-        return response()->json(['data' => $dictamen]);
+        return $dictamen->toResource();
     }
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)

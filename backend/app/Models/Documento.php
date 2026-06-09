@@ -18,6 +18,8 @@ class Documento extends Model
 
     protected $keyType = 'int';
 
+    protected $with = ['archivo'];
+
     protected $fillable = [
         'tipo_id',
         'archivo_id'

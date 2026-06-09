@@ -41,7 +41,7 @@ export function Form({
     dictamen: ValidatedDictamen
 }) {
     const form = useForm(dictamen);
-    const { mutate: previewOficio } = useFilePreviewWindowMutation(dictamen.oficio.documento.archivo.uuid);
+    const { mutate: previewOficio } = useFilePreviewWindowMutation(dictamen.oficio.documento.uuid);
 
     return (
         <form
@@ -71,7 +71,7 @@ export function Form({
                     <div data-slot="label">
                         <Label className="font-bold">Oficio de Solicitud</Label>
                         <FilePreviewWindow
-                            label={dictamen.oficio.documento.archivo.nombre}
+                            label={dictamen.oficio.documento.nombre}
                             onClick={previewOficio}
                         />
                     </div>
