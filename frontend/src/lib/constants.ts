@@ -25,7 +25,3 @@ export const DictamenEstadoEnum = {
 } as const;
 export type DictamenEstadoEnum = (typeof DictamenEstadoEnum)[keyof typeof DictamenEstadoEnum];
 
-export const FormValidationError = {
-    REQUIRED: 'Este campo es requerido'
-} as const;
-export type FormValidationError = (typeof FormValidationError)[keyof typeof FormValidationError];

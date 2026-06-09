@@ -2,7 +2,7 @@ import { useAppForm } from "@/components/composed/@tanstack/form";
 import api from "@/lib/axios";
 import { FieldGroupProductoFields } from "@/views/productos/form";
 import {
-    type ProductoFields,
+    type Schema,
     defaultValues as productoDefaultValues,
     validator as productoValidator
 } from "@/views/productos/form-schema";
@@ -15,8 +15,8 @@ import { setFormValidationErrors } from "@/lib/utils";
 import { CheckboxField, TextField } from "@/components/composed/@tanstack/form-field";
 import { FieldGroup } from "@/components/ui/field";
 
-type ArticuloFields = Omit<ProductoFields, 'id'> & {
-    producto_id: ProductoFields['id'];
+type ArticuloFields = Omit<Schema, 'id'> & {
+    producto_id: Schema['id'];
     costo_unitario: number | null;
     numero_serie: string | null;
     contable: boolean;

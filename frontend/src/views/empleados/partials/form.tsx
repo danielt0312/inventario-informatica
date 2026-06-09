@@ -1,17 +1,17 @@
 import { toOptions } from "@/lib/utils";
 import { useEmpleadoQuery } from "./queries";
 import { CreatableComboboxField } from "@/components/composed/@tanstack/form-field";
-import type { IdValue, OmitCreatableComboboxFieldsProps } from "@/lib/types";
+import type { OmitCreatableComboboxFieldsProps } from "@/lib/types";
 
 export function EmpleadoField({
     adscripcion,
     ...props
 }: OmitCreatableComboboxFieldsProps & {
-    adscripcion: IdValue
+    adscripcion: string;
 }) {
     const { data = [] } = useEmpleadoQuery({
         select: toOptions,
-        adscripciones: adscripcion ? [adscripcion] : []
+        adscripciones: adscripcion ? [Number(adscripcion)] : []
     });
 
     return (

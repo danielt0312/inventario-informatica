@@ -1,5 +1,5 @@
 import { QueryDataTable, SearchInput } from "@/components/custom/query-datatable";
-import { columns, type Dictamen } from "./table-cols";
+import { columns } from "./table-cols";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import { MultiSelect } from "@/components/custom/multiselect";
 import { useQuery } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Route as CreateRoute } from "@/routes/_auth/dictamenes/create";
+import type { Dictamen } from "./types";
 
 export interface TableFilters {
     estados: number[];

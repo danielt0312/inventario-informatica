@@ -1,41 +1,26 @@
-import type { IdValue, WithPrefix } from "@/lib/types";
-import { addPrefix } from "@/lib/utils";
+import { NonEmptyString } from "@/lib/schemas/common";
 import z from "zod";
 
-export type Fields = {
-    categoria_id: IdValue;
-    tipo_id: IdValue;
-    marca_id: IdValue;
-};
-
-export type ProductoFields = Fields & {
-    id: IdValue
+export type Schema = {
+    id: string;
+    categoria_id: string;
+    tipo_id: string;
+    marca_id: string;
 }
 
-export const defaultValues: ProductoFields = {
-    categoria_id: null,
-    tipo_id: null,
-    marca_id: null,
-    id: null,
-};
+export const defaultValues: Schema = {
+    categoria_id: '',
+    tipo_id: '',
+    marca_id: '',
+    id: '',
+} as const;
 
 export const validator = z.object({
-    categoria_id: z
-        .number('Debes de seleccionar una opción')
-        .int(),
-    tipo_id: z
-        .number('Debes de seleccionar una opción')
-        .int(),
-    marca_id: z
-        .number('Debes de seleccionar una opción')
-        .int(),
-    id: z
-        .number('Debes de seleccionar una opción')
-        .int(),
+    categoria_id: NonEmptyString.transform(Number),
+    tipo_id: NonEmptyString.transform(Number),
+    marca_id: NonEmptyString.transform(Number),
+    id: NonEmptyString.transform(Number),
 });
 
-export const prefix = 'producto_' as const;
-export type PrefixedFields = WithPrefix<Fields, typeof prefix>;
-export type PrefixedProductoFields = WithPrefix<ProductoFields, typeof prefix>;
-export const prefixedDefaultValues = addPrefix(defaultValues, prefix);
-export const prefixedValidator = z.object(addPrefix(validator.shape, prefix));
+export type InputSchema = z.input<typeof validator>;
+export type OutputSchema = z.output<typeof validator>;

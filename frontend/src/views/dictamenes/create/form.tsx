@@ -10,28 +10,47 @@ import { dictamenDefaultValues, dictamenProductoDefaultValues, validator } from 
 import { FieldGroupProductoFields } from "@/views/productos/form";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EmpleadoField } from "@/views/empleados/partials/form";
-import { useStore } from "@tanstack/react-form";
+import { useStore, type AnyFormApi } from "@tanstack/react-form";
 import { AdscripcionField } from "@/views/adscripciones/partials/form";
-import { Route } from "@/routes/_auth/dictamenes";
+import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useForm() {
+export type FormMutaion = {
+    data: FormData,
+    api: AnyFormApi
+}
+export function useFormMutation() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    const form = useAppForm({
+    return useMutation({
+        mutationFn: ({ data }: FormMutaion) => api.post('api/dictamenes', data, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }),
+        onError: (error, { api }) => handleFormValidationError(error, api),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['dictamenes'] });
+            navigate({ to: IndexRoute.to });
+        }
+    })
+}
+
+export function useForm() {
+    const formMutation = useFormMutation();
+
+    return useAppForm({
         defaultValues: dictamenDefaultValues,
         validators: {
             onSubmit: validator
         },
-        onSubmit: async ({ value, formApi }) => {
+        onSubmit: ({ value, formApi }) => {
             const data = validator.parse(value);
             const formData = new FormData();
 
             formData.append('adscripcion_id', String(data.adscripcion_id));
-            formData.append('folio', String(data.folio));
-            formData.append('fecha_solicitud', String(data.fecha_solicitud));
+            formData.append('folio', data.folio);
+            formData.append('fecha_solicitud', data.fecha_solicitud);
             formData.append('archivo', data.archivo[0]);
 
             data.productos.forEach((producto, index) => {
@@ -40,25 +59,13 @@ export function useForm() {
                 formData.append(`productos[${index}][empleado_id]`, String(producto.empleado_id));
             });
 
-            try {
-                await api.post('api/dictamenes', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-
-                navigate({ to: Route.to });
-                queryClient.invalidateQueries({ queryKey: ['dictamenes'] });
-            } catch (error) {
-                handleFormValidationError(error, formApi);
-            }
+            formMutation.mutate({ data: formData, api: formApi });
         }
     });
-
-    return form;
 }
 
 export function Form() {
     const form = useForm();
-
     const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
 
     return (
@@ -78,10 +85,9 @@ export function Form() {
                     />
                     <form.AppField
                         name="folio"
-                        children={(field) => (
+                        children={() => (
                             <TextField
                                 label="Folio del oficio de solicitud"
-                                value={field.state.value ?? ''}
                                 placeholder="Ingresa el folio del oficio de la solicitud"
                             />
                         )}
@@ -101,7 +107,6 @@ export function Form() {
                         children={() => (
                             <FileUploaderField
                                 label="Adjuntar oficio de solicitud"
-                                maxFiles={1}
                                 accept="application/pdf"
                             />
                         )}
@@ -155,12 +160,8 @@ export function Form() {
                                                 <TableCell className="w-25">
                                                     <form.AppField
                                                         name={`productos[${index}].cantidad`}
-                                                        children={(field) => (
+                                                        children={() => (
                                                             <TextField
-                                                                onChange={(e) => {
-                                                                    const v = Number(e.target.value);
-                                                                    field.handleChange(isNaN(v) || v === 0 ? 1 : v)
-                                                                }}
                                                                 placeholder="Ingresa una cantidad"
                                                             />
                                                         )}
@@ -186,7 +187,6 @@ export function Form() {
                                                 </TableCell>
                                                 <TableCell className="max-w-fit text-center">
                                                     <Button
-                                                        disabled={field.state.value.length == 1}
                                                         onClick={() => field.removeValue(index)}
                                                         variant="destructive"
                                                         type="button"

@@ -10,7 +10,6 @@ import { withFieldGroup } from "@/components/composed/@tanstack/form";
 import { FieldGroup } from "@/components/ui/field";
 import { useStore } from "@tanstack/react-form";
 import type {
-    IdValue,
     OmitCreatableComboboxFieldsProps
 } from "@/lib/types";
 import { defaultValues } from "./form-schema";
@@ -19,13 +18,13 @@ import type { ComponentProps } from "react";
 export const CategoriaField = ({
     ...params
 }: OmitCreatableComboboxFieldsProps) => {
-    const { data = [] } = useCategoriaQuery({
+    const { data: options = [] } = useCategoriaQuery({
         select: toOptions
     });
 
     return (
         <CreatableComboboxField
-            options={data}
+            options={options}
             label="Categoria"
             {...params}
         />
@@ -36,11 +35,11 @@ export const TipoField = ({
     categoria,
     ...params
 }: OmitCreatableComboboxFieldsProps<'enabled'> & {
-    categoria: IdValue
+    categoria: string
 }) => {
     const { data = [] } = useTipoQuery({
         select: toOptions,
-        categorias: categoria ? [categoria] : [],
+        categorias: categoria ? [Number(categoria)] : [],
         enabled: !!categoria
     });
 
@@ -58,11 +57,11 @@ export const MarcaField = ({
     tipo,
     ...props
 }: OmitCreatableComboboxFieldsProps<'enabled'> & {
-    tipo: IdValue
+    tipo: string
 }) => {
     const { data = [] } = useMarcaQuery({
         select: toOptions,
-        tipos: tipo ? [tipo] : [],
+        tipos: tipo ? [Number(tipo)] : [],
         enabled: !!tipo
     });
 
@@ -81,13 +80,13 @@ export const ProductoField = ({
     marca,
     ...props
 }: OmitCreatableComboboxFieldsProps<'enabled'> & {
-    tipo: IdValue;
-    marca: IdValue;
+    tipo: string;
+    marca: string;
 }) => {
     const { data = [] } = useProductoQuery({
         select: toOptions,
-        tipos: tipo ? [tipo] : [],
-        marcas: marca ? [marca] : [],
+        tipos: tipo ? [Number(tipo)] : [],
+        marcas: marca ? [Number(marca)] : [],
         enabled: !!marca
     });
 
@@ -116,17 +115,15 @@ export const FieldGroupProductoFields = withFieldGroup({
         const marca = useStore(group.store, (state) => state.values.marca_id);
 
         return (
-            <FieldGroup
-                {...props}
-            >
+            <FieldGroup {...props}>
                 <group.AppField
                     name="categoria_id"
                     children={() => <CategoriaField />}
                     listeners={{
                         onChange: () => {
-                            group.setFieldValue('tipo_id', null);
-                            group.setFieldValue('marca_id', null);
-                            group.setFieldValue('id', null);
+                            group.setFieldValue('tipo_id', '');
+                            group.setFieldValue('marca_id', '');
+                            group.setFieldValue('id', '');
                         },
                     }}
                 />
@@ -135,8 +132,8 @@ export const FieldGroupProductoFields = withFieldGroup({
                     children={() => <TipoField categoria={categoria} />}
                     listeners={{
                         onChange: () => {
-                            group.setFieldValue('marca_id', null);
-                            group.setFieldValue('id', null);
+                            group.setFieldValue('marca_id', '');
+                            group.setFieldValue('id', '');
                         },
                     }}
                 />
@@ -145,7 +142,7 @@ export const FieldGroupProductoFields = withFieldGroup({
                     children={() => <MarcaField tipo={tipo} />}
                     listeners={{
                         onChange: () => {
-                            group.setFieldValue('id', null);
+                            group.setFieldValue('id', '');
                         },
                     }}
                 />

@@ -1,76 +1,61 @@
-import { FormValidationError } from "@/lib/constants";
-import type { IdValue } from "@/lib/types";
 import {
-    prefixedDefaultValues as productoPrefixedDefaultValues,
-    type PrefixedProductoFields,
-    prefixedValidator as productoValidatorPrefixed
+    NonEmptyString,
+    RequiredIsoDateLTEToday,
+    RequiredPositiveInteger,
+    ArrayStandardFile,
+    RequiredArray
+} from "@/lib/schemas/common";
+import type { WithPrefix } from "@/lib/types";
+import { addPrefix } from "@/lib/utils";
+import {
+    defaultValues as productoDefaultValues,
+    validator as productoValidator,
+    type Schema as ProductoSchema
 } from "@/views/productos/form-schema";
 import z from "zod";
 
-export type DictamenProducto = PrefixedProductoFields & {
-    cantidad: number;
-    empleado_id: IdValue;
+type PrefixedProductoSchema = WithPrefix<ProductoSchema, 'producto_'>;
+export type ProductoFields = PrefixedProductoSchema & {
+    cantidad: string;
+    empleado_id: string;
 }
 
-export const dictamenProductoDefaultValues: DictamenProducto = {
-    ...productoPrefixedDefaultValues,
-    cantidad: 1,
-    empleado_id: null,
+const prefixedProductoDefaultValues = addPrefix(productoDefaultValues, 'producto_');
+export const dictamenProductoDefaultValues: ProductoFields = {
+    ...prefixedProductoDefaultValues,
+    cantidad: '1',
+    empleado_id: '',
 } as const;
 
-export type Dictamen = {
-    folio: string | null;
-    fecha_solicitud: string | null;
-    adscripcion_id: IdValue;
+export type Schema = {
+    folio: string;
+    fecha_solicitud: string;
+    adscripcion_id: string;
     archivo: File[] | undefined;
-    productos: DictamenProducto[]
+    productos: ProductoFields[];
 }
 
-export const dictamenDefaultValues: Dictamen = {
-    folio: null,
-    fecha_solicitud: null,
-    adscripcion_id: null,
+export const dictamenDefaultValues: Schema = {
+    folio: '',
+    fecha_solicitud: '',
+    adscripcion_id: '',
     archivo: undefined,
     productos: [dictamenProductoDefaultValues]
 } as const;
 
+const prefixedProductoValidator = z.object(addPrefix(productoValidator.shape, 'producto_'));
 export const validator = z.object({
-    folio: z
-        .string(FormValidationError.REQUIRED)
-        .trim()
-        .refine(
-            v => v !== '',
-            FormValidationError.REQUIRED
-        ),
-    fecha_solicitud: z
-        .iso
-        .date(FormValidationError.REQUIRED)
-        .refine(
-            v => new Date(v) <= new Date,
-            'Esta fecha debe ser menor o igual a hoy'
-        ),
-    adscripcion_id: z
-        .number('Debes de seleccionar una opción')
-        .int(),
-    archivo: z
-        .array(z
-            .file()
-            .max(5_000_000, 'El archivo no debe superar 5MB')
-        , 'Debes de adjuntar un archivo')
-        .min(1, 'Debes de seleccionar un archivo')
-        .max(1, 'Solo puedes subir un archivo'),
-    productos: z
-        .array(
-            productoValidatorPrefixed.extend({
-                cantidad: z
-                    .number(FormValidationError.REQUIRED)
-                    .int()
-                    .min(1, 'Este campo debe ser mínimo de 1'),
-                empleado_id: z
-                    .number('Debes de seleccionar una opción')
-                    .int()
-            }))
-        .min(1, 'Debes de agregar cuando menos 1 producto')
+    folio: NonEmptyString,
+    fecha_solicitud: RequiredIsoDateLTEToday,
+    adscripcion_id: NonEmptyString,
+    archivo: ArrayStandardFile,
+    productos: RequiredArray(
+        prefixedProductoValidator.extend({
+            cantidad: RequiredPositiveInteger,
+            empleado_id: NonEmptyString
+        })
+    )
 });
 
+export type InputSchema = z.input<typeof validator>;
 export type OutputSchema = z.output<typeof validator>;

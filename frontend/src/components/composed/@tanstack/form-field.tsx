@@ -103,24 +103,21 @@ export const TextField = ({
     );
 };
 
-export type CreatableComboboxFieldProps<T extends number | string> =
+export type CreatableComboboxFieldProps =
     OmitProps &
-    CreatableComboboxProps & {
-        parseValue?: (v: string) => T;
-    };
-export const CreatableComboboxField = <T extends number | string = number>({
+    CreatableComboboxProps
+export const CreatableComboboxField = ({
     label,
     enabled,
-    parseValue = (v) => Number(v) as T,
     ...props
-}: CreatableComboboxFieldProps<T>) => {
-    const field = useFieldContext<T>();
+}: CreatableComboboxFieldProps) => {
+    const field = useFieldContext<CreatableComboboxProps['value']>();
 
     return (
         <Field label={label} data-disabled={enabled}>
             <CreatableCombobox
-                value={String(field.state.value)}
-                onValueChange={(v) => field.handleChange(parseValue(v))}
+                value={field.state.value}
+                onValueChange={field.handleChange}
                 enabled={enabled}
                 {...props}
             />
