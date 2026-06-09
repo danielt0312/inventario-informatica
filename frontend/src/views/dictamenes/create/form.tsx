@@ -3,37 +3,28 @@ import { DatePickerField, FileUploaderField, TextField } from "@/components/comp
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
-import api from "@/lib/axios";
-import { handleFormValidationError, toISODate } from "@/lib/utils";
+import { toISODate } from "@/lib/utils";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { dictamenDefaultValues, dictamenProductoDefaultValues, validator } from "./form-schema";
 import { FieldGroupProductoFields } from "@/views/productos/form";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EmpleadoField } from "@/views/empleados/partials/form";
-import { useStore, type AnyFormApi } from "@tanstack/react-form";
+import { useStore } from "@tanstack/react-form";
 import { AdscripcionField } from "@/views/adscripciones/partials/form";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
 
-export type FormMutaion = {
-    data: FormData,
-    api: AnyFormApi
-}
 export function useFormMutation() {
     const navigate = useNavigate();
-    const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: ({ data }: FormMutaion) => api.post('api/dictamenes', data, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }),
-        onError: (error, { api }) => handleFormValidationError(error, api),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['dictamenes'] });
-            navigate({ to: IndexRoute.to });
+    return usePostFormMutation({
+        url: 'api/dictamenes',
+        onSuccess: (_, __, ___, context) => {
+            context.client.invalidateQueries({ queryKey: ['dictamenes'] });
+            navigate({ to: IndexRoute.to })
         }
-    })
+    });
 }
 
 export function useForm() {
