@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasOne};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -36,9 +36,9 @@ class Archivo extends Model
         return $this->belongsTo(ArchivoTipo::class, 'tipo_id');
     }
 
-    public function documentos(): HasMany
+    public function documento(): HasOne
     {
-        return $this->hasMany(Documento::class, 'archivo_id');
+        return $this->hasOne(Documento::class, 'archivo_id');
     }
 
     public function fileName(): Attribute

@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->date('fecha_emision');
             $table->foreignId('documento_id')
-                ->constrained(indexName: 'fk_facturas_documentos')
+                ->constrained('documentos', 'archivo_id', 'fk_facturas_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

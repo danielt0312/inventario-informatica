@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasOne};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Documento extends Model
@@ -12,6 +12,12 @@ class Documento extends Model
 
     protected $table = 'documentos';
 
+    protected $primaryKey = 'archivo_id';
+
+    public $incrementing = false;
+
+    protected $keyType = 'int';
+
     protected $fillable = [
         'tipo_id',
         'archivo_id'
@@ -19,21 +25,23 @@ class Documento extends Model
 
     public $timestamps = false;
 
-    public function tipo(): BelongsTo {
+    public function tipo(): BelongsTo
+    {
         return $this->belongsTo(DocumentoTipo::class, 'tipo_id');
     }
 
-    public function archivo(): BelongsTo {
+    public function archivo(): BelongsTo
+    {
         return $this->belongsTo(Archivo::class, 'archivo_id');
     }
 
-    public function oficios(): HasMany
+    public function oficio(): HasOne
     {
-        return $this->hasMany(Oficio::class, 'documento_id');
+        return $this->hasOne(Oficio::class, 'documento_id', 'archivo_id');
     }
 
-    public function dictamenes(): HasMany
+    public function dictamen(): HasOne
     {
-        return $this->hasMany(Dictamen::class, 'dictamen_id');
+        return $this->hasOne(Dictamen::class, 'documento_id', 'archivo_id');
     }
 }

@@ -29,15 +29,15 @@ export type CatalogoListResponse = TResponse<TCatalogo[]>;
 
 export interface PaginatedResponse<T>
     extends TResponse<T[]> {
-    total: number;
-    per_page: number;
-    current_page: number;
-    last_page: number;
+    meta: {
+        total: number;
+        per_page: number;
+        current_page: number;
+        last_page: number;
+    }
 }
 
 export type LaravelValidationErrors = Record<string, string[]>;
-
-export type IdValue = number | null;
 
 export type WithPrefix<T, P extends string> = {
     [K in keyof T as `${P}${string & K}`]: T[K];

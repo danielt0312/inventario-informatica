@@ -29,31 +29,29 @@ class DictamenController extends Controller
 
     public function index(DictamenRequest $request)
     {
-        $query = Dictamen::with(['estado', 'oficio.documento.archivo', 'documento.archivo']);
+        $query = Dictamen::with(['estado', 'oficio.documento', 'documento']);
 
         if ($request->filled('folio')) {
             $query->whereHas('oficio', fn ($q)
                 => $q->whereLike('folio', "%{$request->input('folio')}%"));
         }
 
-        $data = $query->paginate($request->query('per_page', 10));
-
-        return response()->json($data);
+        return $query
+            ->paginate($request->query('per_page', 10))
+            ->toResourceCollection();
     }
 
     public function store(StoreDictamenRequest $request)
     {
         DB::transaction(function () use ($request) {
-            $data = $request->validated();
-
             $archivo = $this->archivoService->createAndStore($request->file('archivo'));
 
-            $documento = $archivo->documentos()->create([
+            $documento = $archivo->documento()->create([
                 'tipo_id' => DocumentoTipoEnum::OFICIO->value
             ]);
 
-            $oficio = $documento->oficios()->create([
-                'folio' => $data['folio']
+            $oficio = $documento->oficio()->create([
+                'folio' => $request->input('folio')
             ]);
 
             //todo obtener el jefe de departamento de DTI
@@ -62,13 +60,13 @@ class DictamenController extends Controller
             //todo verificar que la adscripcion exista en la tabla espejo `Adscripcion`
             $dictamen = Dictamen::create([
                 'oficio_id' => $oficio->id,
-                'adscripcion_id' => $data['adscripcion_id'],
+                'adscripcion_id' => $request->input('adscripcion_id'),
                 'user_id' => $user_id,
-                'fecha_solicitud' => $data['fecha_solicitud']
+                'fecha_solicitud' => $request->input('fecha_solicitud')
             ]);
 
             //todo verificar que los empleados existan en la tabla espejo `Empleado`
-            $dictamen->productos()->createMany($data['productos']);
+            $dictamen->productos()->createMany($request->input('productos'));
         });
 
         return response(status: 201);

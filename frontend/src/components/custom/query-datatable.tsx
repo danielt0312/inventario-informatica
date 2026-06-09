@@ -102,7 +102,7 @@ export function QueryDataTable<TData, TFilters extends object>({
         data: query.data?.data ?? [],
         columns,
         onPaginationChange: setPagination,
-        rowCount: query.data?.total ?? 0,
+        rowCount: query.data?.meta.total ?? 0,
         state: { pagination },
         ...tableOptions
     });

@@ -18,7 +18,7 @@ class Oficio extends Model
     public $timestamps = false;
 
     public function documento(): BelongsTo {
-        return $this->belongsTo(Documento::class, 'documento_id');
+        return $this->belongsTo(Documento::class, 'archivo_id');
     }
 
     public function dictamenes(): HasMany

@@ -29,33 +29,40 @@ class Dictamen extends Model
         'estado_id' => DictamenEstadoEnum::DICTAMINAR->value
     ];
 
-    public function estado(): BelongsTo {
+    public function estado(): BelongsTo
+    {
         return $this->belongsTo(DictamenEstado::class, 'estado_id');
     }
 
-    public function oficio(): BelongsTo {
+    public function oficio(): BelongsTo
+    {
         return $this->belongsTo(Oficio::class, 'oficio_id');
     }
 
-    public function documento(): BelongsTo {
-        return $this->belongsTo(Documento::class, 'documento_id');
+    public function documento(): BelongsTo
+    {
+        return $this->belongsTo(Documento::class, 'documento_id', 'archivo_id');
     }
 
-    public function productos(): HasMany {
+    public function productos(): HasMany
+    {
         return $this->hasMany(DictamenProducto::class, 'dictamen_id');
     }
 
-    public function articulos(): HasMany {
+    public function articulos(): HasMany
+    {
         return $this->hasMany(DictamenArticulo::class);
     }
 
-    public function casts(): array {
+    public function casts(): array
+    {
         return [
             'fecha_solicitud' => 'date:Y-m-d'
         ];
     }
 
-    public function uniqueIds(): array {
+    public function uniqueIds(): array
+    {
         return ['uuid'];
     }
 
