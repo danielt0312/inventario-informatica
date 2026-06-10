@@ -8,7 +8,9 @@ import {
 
 import { Form as DictaminarForm } from "./dictaminar/form";
 import { Form as EvidenciarForm } from "./evidenciar/form";
+import { Form as FacturarForm } from "./facturar/form";
 import { type ValidatedDictamen as EvidenciarValidatedDictamen } from "./evidenciar/form-schema";
+import { type ValidatedDictamen as FacturarValidatedDictamen } from "./facturar/form-schema";
 
 import { useNavigate } from "@tanstack/react-router";
 import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
@@ -21,7 +23,7 @@ export const Form = ({
 }) => ({
     [DictamenEstadoEnum.DICTAMINAR]: <DictaminarForm dictamen={dictamen} />,
     [DictamenEstadoEnum.EVIDENCIAR]: <EvidenciarForm dictamen={dictamen as EvidenciarValidatedDictamen} />,
-    [DictamenEstadoEnum.SURTIR]: 'facturar',
+    [DictamenEstadoEnum.SURTIR]: <FacturarForm dictamen={dictamen as FacturarValidatedDictamen} />,
     [DictamenEstadoEnum.INVENTARIAR]: 'inventariar',
 } as const satisfies Record<ActionDictamenEstadoEnum, React.ReactNode>)[dictamen.estado.id];
 
@@ -35,7 +37,7 @@ export function useFormMutation(dictamen: ValidatedDictamen) {
         onSuccess: (_, __, ___, { client }) => {
             client.invalidateQueries({ queryKey: ['dictamenes'] });
             client.invalidateQueries({ queryKey: ['dictamen', dictamen.uuid] });
-            navigate({ to: IndexRoute.to })
+            navigate({ to: IndexRoute.to });
         }
     })
 }

@@ -7,7 +7,7 @@ export interface Schema {
 }
 
 export const submitValidator = z.object({
-    archivo: ArrayStandardFile,
+    archivo: ArrayStandardFile
 });
 
 export type ValidatedDictamen = Omit<ActionValidatedDictamen, 'documento'> & {

@@ -1,10 +1,9 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
-import { FileUploaderField } from "@/components/composed/@tanstack/form-field";
-import { Label } from "@/components/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { submitValidator, type Schema, type ValidatedDictamen } from "./form-schema";
-
 import { useFormMutation } from "../form";
+import type { Schema, ValidatedDictamen } from "./form-schema";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { submitValidator } from "../evidenciar/form-schema";
+import { Label } from "@/components/ui/label";
 
 export function useForm(dictamen: ValidatedDictamen) {
     const defaultValues: Schema = {
@@ -43,18 +42,6 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen }) {
             className="contents"
         >
             <form.AppForm>
-                <div className="grid grid-cols-2">
-                    <form.AppField
-                        name="archivo"
-                        children={() => (
-                            <FileUploaderField
-                                label="Adjuntar evidencia de dictamen recibido"
-                                accept="application/pdf"
-                            />
-                        )}
-                    />
-                </div>
-
                 <div className="rounded-lg overflow-hidden border border-neutral-200">
                     <Table>
                         <TableHeader className="[&_tr]:bg-neutral-100 [&_tr]:hover:bg-neutral-100 [&_th]:font-bold [&_th]:text-center [&_th]:border-r">
@@ -62,8 +49,11 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen }) {
                                 <TableHead colSpan={2}>
                                     Bien Informático
                                 </TableHead>
-                                <TableHead rowSpan={2} className="border-none w-1/4">
+                                <TableHead rowSpan={2} className="w-1/4">
                                     Resguardante
+                                </TableHead>
+                                <TableHead rowSpan={2} className="border-none w-1/4">
+                                    Factura
                                 </TableHead>
                                 {/* todo quitar esto */}
                                 <TableHead rowSpan={2} className="border-none"></TableHead>
