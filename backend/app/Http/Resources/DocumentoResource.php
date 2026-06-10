@@ -10,8 +10,10 @@ class DocumentoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'documento' => $this->whenLoaded('tipo'),
-            $this->merge($this->archivo->toArray())
+            $this->mergeWhen($this->relationLoaded('tipo'), [
+                'documento_tipo' => $this->tipo->nombre
+            ]),
+            $this->merge(new ArchivoResource($this->archivo))
         ];
     }
 }

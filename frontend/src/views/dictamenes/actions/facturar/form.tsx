@@ -4,6 +4,9 @@ import type { Schema, ValidatedDictamen } from "./form-schema";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { submitValidator } from "../evidenciar/form-schema";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Paperclip } from "lucide-react";
+import { useState } from "react";
 
 export function useForm(dictamen: ValidatedDictamen) {
     const defaultValues: Schema = {
@@ -32,6 +35,8 @@ export function useForm(dictamen: ValidatedDictamen) {
 export function Form({ dictamen }: { dictamen: ValidatedDictamen }) {
     const form = useForm(dictamen);
 
+    const [documentosDialogOpen, setDocumentosDialogOpen] = useState(false);
+
     return (
         <form
             onSubmit={(e) => {
@@ -44,32 +49,30 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen }) {
             <form.AppForm>
                 <div className="rounded-lg overflow-hidden border border-neutral-200">
                     <Table>
-                        <TableHeader className="[&_tr]:bg-neutral-100 [&_tr]:hover:bg-neutral-100 [&_th]:font-bold [&_th]:text-center [&_th]:border-r">
+                        <TableHeader className="[&_tr]:bg-neutral-100 [&_tr]:hover:bg-neutral-100 [&_th]:font-bold [&_th]:text-center">
                             <TableRow>
-                                <TableHead colSpan={2}>
+                                <TableHead colSpan={2} className="border-r">
                                     Bien Informático
                                 </TableHead>
-                                <TableHead rowSpan={2} className="w-1/4">
+                                <TableHead rowSpan={2} className="border-r w-1/4">
                                     Resguardante
                                 </TableHead>
-                                <TableHead rowSpan={2} className="border-none w-1/4">
+                                <TableHead rowSpan={2} className="w-1/4">
                                     Factura
                                 </TableHead>
-                                {/* todo quitar esto */}
-                                <TableHead rowSpan={2} className="border-none"></TableHead>
                             </TableRow>
 
                             <TableRow>
-                                <TableHead>
+                                <TableHead className="border-r">
                                     Cantidad
                                 </TableHead>
-                                <TableHead>
+                                <TableHead className="border-r">
                                     Especificaciones técnicas
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
 
-                        <TableBody className="[&_tr]:hover:bg-transparent [&_td]:border-r [&_td:nth-last-child(-n+2)]:border-r-transparent">
+                        <TableBody className="[&_tr]:hover:bg-transparent [&_td]:border-r">
                             {dictamen.productos.map((d, index) => (
                                 <TableRow key={index}>
                                     <TableCell className="w-25">
@@ -86,7 +89,7 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen }) {
                                         </div>
                                         <div data-slot="label">
                                             <Label className="font-bold">Características</Label>
-                                            <Label>{d.caracteristicas}</Label>
+                                            <Label className="">{d.caracteristicas}</Label>
                                         </div>
                                     </TableCell>
                                     <TableCell>
@@ -96,8 +99,11 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen }) {
                                             </Label>
                                         </div>
                                     </TableCell>
-                                    {/* todo quitar esto */}
-                                    <TableCell></TableCell>
+                                    <TableCell className="text-center border-none">
+                                        <Button variant="outline">
+                                            <Paperclip /> Adjuntar
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

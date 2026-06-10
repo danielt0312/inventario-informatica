@@ -17,7 +17,7 @@ export function View() {
                         {getTitle(dictamen.estado.id).toUpperCase()}
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-6 **:data-[slot='label']:grid **:data-[slot='label']:gap-2">
+                <CardContent className="flex flex-col gap-6 **:data-[slot='label']:grid **:data-[slot='label']:gap-2 **:data-[slot='label']:text-wrap">
                     <ShowInfo dictamen={dictamen}/>
 
                     <ActionForm dictamen={dictamen} />

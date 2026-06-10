@@ -12,19 +12,21 @@ class DocumentoController extends Controller
 {
     public function index(DocumentoRequest $request)
     {
-        $query = Documento::with(['archivo', 'tipo']);
+        $query = Documento::with(['tipo']);
 
-        if ($request->filled('archivo_nombre'))
+        if ($request->filled('archivo')) {
             $query->whereHas('archivo', fn ($q)
-                => $q->whereLike('nombre', "%{$request->input('archivo_nombre')}%"));
+                => $q->whereLike('nombre', "%{$request->input('archivo')}%"));
+        }
 
-        if ($request->filled('tipos'))
+        if ($request->filled('tipos')) {
             $query->whereHas('tipo', fn ($q)
                 => $q->whereIn('id', $request->input('tipos')));
+        }
 
-        $data = $query->paginate($request->query('per_page', 10));
-
-        return response()->json($data);
+        return $query
+            ->paginate($request->query('per_page', 10))
+            ->toResourceCollection();
     }
 
     public function store(StoreDocumentoRequest $request)

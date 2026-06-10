@@ -1,84 +1,79 @@
-'use client';
-
+import { QueryDataTable, SearchInput, type QueryDataTableProps } from "@/components/custom/query-datatable";
+import { columns, defaultColumns } from "./table-cols";
+import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
+import type { CatalogoListResponse, Documento } from "@/lib/types";
+import { MultiSelect } from "@/components/custom/multiselect";
 import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
-import { DataTable } from "@/components/composed/datatable";
-import { columns as defaultColumns, type Documento } from "./table.cols";
-import { getCoreRowModel, getPaginationRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
-import { Input } from "@/components/ui/input";
-import { Form, queryOptTipos } from "./form";
-import { useState } from "react";
-import { DataTableFilter } from "@/components/ui/datatable";
-import { useDebounce } from "@/hooks/use-debounce";
-import type { PaginatedResponse } from "@/lib/types";
+import type { ColumnDef } from "@tanstack/react-table";
 
-export function Table({
-    actionRow = [],
+export interface TablePrimitiveProps<TData extends Documento = Documento>
+    extends Omit<QueryDataTableProps<TData>, 'columns' | 'queryKey' | 'url'> {
+    columns?: ColumnDef<TData>[];
+}
+
+export function TablePrimitive({
+    columns = [],
     ...props
-}: {
-    actionRow?: ColumnDef<Documento>[]
-}) {
-    const { data: TIPOS = [] } = useQuery(queryOptTipos);
+}: TablePrimitiveProps) {
+    const columnDefinition = [
+        ...columns,
+        ...defaultColumns,
+    ];
 
-    const [tipos, setTipos] = useState<number[]>([]);
-    const debouncedTipos = useDebounce(tipos, 500);
+    return (
+        <QueryDataTable
+            {...props}
+            columns={columnDefinition}
+            queryKey={['documentos']}
+            url="api/documentos"
+        />
+    );
+}
 
-    const [archivoNombre, setArchivoNombre] = useState('');
-    const debouncedArchivoNombre = useDebounce(archivoNombre);
+export type TableFilters = {
+    archivo: string;
+    tipos: string[];
+}
 
-    const [pagination, setPagination] = useState({
-        pageIndex: 0,
-        pageSize: 10
+export function Table() {
+    const { debouncedFilters, filters, setFilters } = useDebouncedFilters<TableFilters>({
+        archivo: '',
+        tipos: []
     });
 
-    const query = useQuery({
-        queryKey: ['documentos', debouncedArchivoNombre, debouncedTipos, pagination],
-        queryFn: () => api.get<PaginatedResponse<Documento>>('api/documentos', {
-            params: {
-                archivo_nombre: debouncedArchivoNombre || undefined,
-                tipos: debouncedTipos.length  > 0 ? debouncedTipos : undefined,
-                page: pagination.pageIndex + 1,
-                per_page: pagination.pageSize
-            }
-        }).then(r => r.data),
-        staleTime: 60 * 1000
-    });
-
-    const columns = [...defaultColumns, ...actionRow];
-
-    const table = useReactTable({
-        columns,
-        data: query.data?.data ?? [],
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        onPaginationChange: setPagination,
-        manualPagination: true,
-        rowCount: query.data?.total ?? 0,
-        state: { pagination }
+    const { data: TIPOS = [] } = useQuery({
+        queryKey: ['documento_tipos'],
+        queryFn: () => api.get<CatalogoListResponse>('api/documento_tipos')
+            .then(r => r.data.data)
     });
 
     return (
-        <DataTable
-            table={table}
-            query={query}
-            filterBar={() => (
+        <TablePrimitive
+            columns={columns}
+            filters={debouncedFilters}
+            filterBar={(
                 <>
-                    <Input
-                        placeholder="Buscar archivo..."
-                        value={archivoNombre}
-                        onChange={(e) => setArchivoNombre(e.target.value)}
-                        className="max-w-sm h-8"
+                    <SearchInput
+                        value={filters.archivo}
+                        placeholder="Nombre del documento..."
+                        onChange={(e) => setFilters(prev => ({
+                            ...prev,
+                            archivo: e.target.value
+                        }))}
                     />
-                    <DataTableFilter
-                        label="Tipo de Documento"
-                        filters={TIPOS}
-                        selectedFilters={tipos}
-                        setSelectedFilters={setTipos}
+
+                    <MultiSelect
+                        label="Tipo"
+                        options={TIPOS}
+                        selected={filters.tipos}
+                        onChange={(v) => setFilters(prev => ({
+                            ...prev,
+                            categorias: v.map(Number)
+                        }))}
                     />
                 </>
             )}
-            actionBar={() => <Form />}
-            {...props}
         />
     );
 }

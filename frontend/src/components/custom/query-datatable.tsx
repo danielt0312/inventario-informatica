@@ -62,7 +62,7 @@ export function useAppTable<TData>({
     });
 }
 
-export interface QueryDataTableProps<TData, TFilters extends object> extends
+export interface QueryDataTableProps<TData, TFilters extends object = Record<string, unknown>> extends
     Omit<DataTableProps<TData>, 'table'>,
     Pick<UsePaginatedQueryOptions<TData, TFilters>, 'queryKey' | 'url' | 'filters' | 'paramsTransformer'> {
     columns: ColumnDef<TData>[];
@@ -92,11 +92,9 @@ export function QueryDataTable<TData, TFilters extends object>({
         ...queryOptions
     });
 
-    const { isSpinning, startSpin } = useMinSpinning(query?.isFetching ?? false);
+    const { isSpinning, startSpin } = useMinSpinning(query.isFetching ?? false);
 
-    const contentStatus = query
-        ? getContentStatus({ query })
-        : undefined;
+    const contentStatus = getContentStatus({ query });
 
     const table = useAppTable<TData>({
         data: query.data?.data ?? [],

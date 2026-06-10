@@ -32,6 +32,9 @@ Route::middleware('auth:sanctum')->group(function () {
         'articulos' => ArticuloController::class,
     ]);
 
+    Route::apiResource('documentos', DocumentoController::class)
+        ->only(['index']);
+
     Route::get('archivos/{archivo}/stream', [ArchivoController::class, 'stream']);
 
     Route::apiResource('dictamenes', DictamenController::class)

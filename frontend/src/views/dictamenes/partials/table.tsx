@@ -12,14 +12,14 @@ import { Route as CreateRoute } from "@/routes/_auth/dictamenes/create";
 import type { Dictamen } from "./types";
 
 export interface TableFilters {
-    estados: number[];
     folio: string;
+    estados: string[];
 }
 
 export function Table() {
     const { debouncedFilters, filters, setFilters } = useDebouncedFilters<TableFilters>({
-        estados: [],
-        folio: ''
+        folio: '',
+        estados: []
     });
 
     const { data: ESTADOS = [] } = useQuery({
@@ -48,10 +48,10 @@ export function Table() {
                     <MultiSelect
                         label="Estado"
                         options={ESTADOS}
-                        selected={filters.estados.map(String)}
+                        selected={filters.estados}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,
-                            categorias: v.map(Number)
+                            categorias: v
                         }))}
                     />
                 </>

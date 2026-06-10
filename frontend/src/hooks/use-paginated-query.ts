@@ -3,12 +3,12 @@ import type { PaginatedResponse } from "@/lib/types";
 import { useQuery, type UseQueryOptions, type UseQueryResult } from "@tanstack/react-query";
 import type { PaginationState } from "@tanstack/react-table";
 
-export interface UsePaginatedQueryOptions<TData, TFilters extends object>
-  extends Omit<UseQueryOptions<PaginatedResponse<TData>>, "queryFn"> {
+export interface UsePaginatedQueryOptions<TData, TFilters extends object = Record<string, unknown>>
+    extends Omit<UseQueryOptions<PaginatedResponse<TData>>, "queryFn"> {
     url: string;
-    filters: TFilters;
+    filters?: TFilters;
     pagination: PaginationState;
-    paramsTransformer?: (filters: TFilters) => Record<string, unknown>;
+    paramsTransformer?: (filters?: TFilters) => Record<string, unknown>;
 }
 
 export function usePaginatedQuery<TData, TFilters extends object>({
@@ -20,15 +20,18 @@ export function usePaginatedQuery<TData, TFilters extends object>({
     ...params
 }: UsePaginatedQueryOptions<TData, TFilters>): UseQueryResult<PaginatedResponse<TData>> {
     return useQuery({
-        queryKey: [...queryKey, filters, pagination],
-        queryFn: () =>
-            api.get<PaginatedResponse<TData>>(url, {
+        queryKey: [...queryKey, filters ?? {}, pagination],
+        queryFn: () => {
+            const transformedParams = paramsTransformer ? paramsTransformer(filters) : filters;
+
+            return api.get<PaginatedResponse<TData>>(url, {
                 params: {
-                    ...(paramsTransformer ? paramsTransformer(filters) : filters),
+                    ...transformedParams,
                     page: pagination.pageIndex + 1,
                     per_page: pagination.pageSize,
                 },
-            }).then(r => r.data),
+            }).then(r => r.data)
+        },
         ...params
     });
 }
