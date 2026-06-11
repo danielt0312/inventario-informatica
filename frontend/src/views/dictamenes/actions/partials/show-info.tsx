@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { DictamenEstadoEnum } from "@/lib/constants";
 
 export function ShowInfo({ dictamen }: { dictamen: ValidatedDictamen }) {
-    const { mutate: previewOficio } = useFilePreviewWindowMutation(dictamen.oficio.documento.uuid);
+    const { mutate: previewOficio } = useFilePreviewWindowMutation();
 
     return (
         <>
@@ -41,7 +41,7 @@ export function ShowInfo({ dictamen }: { dictamen: ValidatedDictamen }) {
                     <Label className="font-bold">Oficio de Solicitud</Label>
                     <FilePreviewWindow
                         label={dictamen.oficio.documento.nombre}
-                        onClick={previewOficio}
+                        onClick={() => previewOficio({ uuid: dictamen.oficio.documento.uuid })}
                     />
                 </div>
             </div>
@@ -56,7 +56,7 @@ export function ShowDocument({
 }: React.ComponentProps<'div'> & {
     dictamen: EvidenciarValidatedDictamen;
 }) {
-    const { mutate: previewDictamen } = useFilePreviewWindowMutation(dictamen.documento.uuid);
+    const { mutate: previewDictamen } = useFilePreviewWindowMutation();
 
     return (
         <div
@@ -67,7 +67,7 @@ export function ShowDocument({
             <Label className="font-bold">Dictamen tecnológico</Label>
             <FilePreviewWindow
                 label={dictamen.documento.nombre}
-                onClick={previewDictamen}
+                onClick={() => previewDictamen({ uuid: dictamen.documento.uuid })}
             />
         </div>
     )

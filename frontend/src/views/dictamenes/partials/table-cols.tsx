@@ -24,12 +24,12 @@ export function renderActionViewFile(dictamen: Dictamen) {
     if (!isValidState(dictamen.estado.id) || !dictamen.documento) return null;
 
     const { uuid, nombre } = dictamen.documento;
-    const { mutate, isPending } = useFilePreviewWindowMutation(uuid, nombre ?? uuid);
+    const { mutate, isPending } = useFilePreviewWindowMutation();
 
     return (
         <ActionMenuItem
             disabled={isPending}
-            onClick={() => mutate()}
+            onClick={() => mutate({ uuid, title: nombre || uuid })}
         >
             {isPending
                 ? <Spinner />
