@@ -1,21 +1,22 @@
 import { QueryDataTable, SearchInput, type QueryDataTableProps } from "@/components/custom/query-datatable";
-import { columns, defaultColumns } from "./table-cols";
+import { columns, defaultColumns, initialState } from "./table-cols";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import type { CatalogoListResponse, Documento } from "@/lib/types";
 import { MultiSelect } from "@/components/custom/multiselect";
 import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
+import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 
-export interface TablePrimitiveProps<TData extends Documento = Documento>
+export interface PrimitiveTableProps<TData extends Documento = Documento>
     extends Omit<QueryDataTableProps<TData>, 'columns' | 'queryKey' | 'url'> {
     columns?: ColumnDef<TData>[];
 }
 
-export function TablePrimitive({
+export function PrimitiveTable({
     columns = [],
     ...props
-}: TablePrimitiveProps) {
+}: PrimitiveTableProps) {
     const columnDefinition = [
         ...columns,
         ...defaultColumns,
@@ -48,10 +49,19 @@ export function Table() {
             .then(r => r.data.data)
     });
 
+    const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
+
     return (
-        <TablePrimitive
+        <PrimitiveTable
             columns={columns}
             filters={debouncedFilters}
+            tableOptions={{
+                initialState,
+                meta: {
+                    previewFile: (uuid: string, title?: string) => mutate({ uuid, title }),
+                    isPreviewing
+                }
+            }}
             filterBar={(
                 <>
                     <SearchInput
