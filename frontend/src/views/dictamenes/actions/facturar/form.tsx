@@ -5,8 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { submitValidator } from "../evidenciar/form-schema";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Paperclip } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
+import { Table as FacturaTable } from "@/views/facturas/partials/table";
+import { Paperclip } from "lucide-react";
+
 
 export function useForm(dictamen: ValidatedDictamen) {
     const defaultValues: Schema = {
@@ -34,8 +37,7 @@ export function useForm(dictamen: ValidatedDictamen) {
 
 export function Form({ dictamen }: { dictamen: ValidatedDictamen }) {
     const form = useForm(dictamen);
-
-    const [documentosDialogOpen, setDocumentosDialogOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
     return (
         <form
@@ -100,9 +102,29 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen }) {
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-center border-none">
-                                        <Button variant="outline">
+                                        <Button
+                                            onClick={() => setOpen(true)}
+                                            variant="outline"
+                                        >
                                             <Paperclip /> Adjuntar
                                         </Button>
+
+                                        <Dialog
+                                            open={open}
+                                            onOpenChange={setOpen}
+                                        >
+                                            <DialogContent className="min-w-5xl">
+                                                <DialogHeader>
+                                                    <DialogTitle>Facturas</DialogTitle>
+                                                </DialogHeader>
+
+                                                <FacturaTable
+                                                    queryOptions={{
+                                                        enabled: open
+                                                    }}
+                                                />
+                                            </DialogContent>
+                                        </Dialog>
                                     </TableCell>
                                 </TableRow>
                             ))}

@@ -33,17 +33,24 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import type { TCatalogo } from "@/types/generics"
 import type { Dispatch, SetStateAction } from "react"
 
-interface DataTableProps<TData> {
+interface DataTableProps<TData>
+  extends React.ComponentProps<'div'>
+{
   table: TTable<TData>,
   contentStatus?: React.ReactNode
 }
 
 function DataTable<TData>({
   table,
-  contentStatus = 'Sin información'
+  contentStatus = 'Sin información',
+  className,
+  ...props
 }: DataTableProps<TData>) {
   return (
-    <div className="overflow-hidden rounded-md border">
+    <div
+      className={cn("overflow-hidden rounded-md border", className)}
+      {...props}
+    >
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

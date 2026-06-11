@@ -3,9 +3,7 @@ import type { Documento } from "@/types/documentos";
 import type { ColumnDef, InitialTableState } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
-export type Column = ColumnDef<Documento>;
-
-export const defaultColumns: Column[] = [
+export const getDefaultColumns = <TData extends Documento>(): ColumnDef<TData>[] => [
     {
         header: 'Nombre del Archivo',
         accessorKey: 'nombre'
@@ -45,7 +43,7 @@ export const defaultColumns: Column[] = [
     }
 ];
 
-export const columns: Column[] = [
+export const columns: ColumnDef<Documento>[] = [
     {
         header: 'Tipo de Documento',
         accessorKey: 'documento_tipo'

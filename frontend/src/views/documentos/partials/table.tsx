@@ -1,5 +1,5 @@
 import { QueryDataTable, SearchInput, type QueryDataTableProps } from "@/components/custom/query-datatable";
-import { columns, defaultColumns, initialState } from "./table-cols";
+import { columns, getDefaultColumns, initialState } from "./table-cols";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import type { Documento } from "@/types/documentos";
 import type { CatalogoListResponse } from "@/types/generics";
@@ -10,25 +10,26 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 
 export interface PrimitiveTableProps<TData extends Documento = Documento>
-    extends Omit<QueryDataTableProps<TData>, 'columns' | 'queryKey' | 'url'> {
+    extends Omit<
+        QueryDataTableProps<TData>,
+        'columns'
+    > {
     columns?: ColumnDef<TData>[];
 }
 
-export function PrimitiveTable({
+export function PrimitiveTable<TData extends Documento = Documento>({
     columns = [],
     ...props
-}: PrimitiveTableProps) {
+}: PrimitiveTableProps<TData>) {
     const columnDefinition = [
         ...columns,
-        ...defaultColumns
+        ...getDefaultColumns<TData>()
     ];
 
     return (
         <QueryDataTable
             {...props}
             columns={columnDefinition}
-            queryKey={['documentos']}
-            url="api/documentos"
         />
     );
 }
@@ -54,6 +55,8 @@ export function Table() {
 
     return (
         <PrimitiveTable
+            queryKey={['documentos']}
+            url="api/documentos"
             columns={columns}
             filters={debouncedFilters}
             tableOptions={{
