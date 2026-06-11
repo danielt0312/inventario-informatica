@@ -30,7 +30,7 @@ import { Button } from "./button"
 
 import { cn } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "./dropdown-menu"
-import type { TCatalogo } from "@/lib/types"
+import type { TCatalogo } from "@/types/generics"
 import type { Dispatch, SetStateAction } from "react"
 
 interface DataTableProps<TData> {

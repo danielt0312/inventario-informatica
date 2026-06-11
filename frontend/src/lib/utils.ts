@@ -8,9 +8,9 @@ import {
 import { twMerge } from "tailwind-merge";
 import type {
     LaravelValidationErrors,
-    TCatalogo,
     WithPrefix
-} from "./types";
+} from "@/types/generics";
+import type { TCatalogo } from "@/types/generics";
 import type { ComboboxOption } from "@/components/composed/combobox-creatable";
 import {
     parseISO,

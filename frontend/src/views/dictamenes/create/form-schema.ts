@@ -5,7 +5,7 @@ import {
     ArrayStandardFile,
     RequiredArray
 } from "@/lib/schemas/common";
-import type { WithPrefix } from "@/lib/types";
+import type { WithPrefix } from "@/types/generics";
 import { addPrefix } from "@/lib/utils";
 import {
     defaultValues as productoDefaultValues,

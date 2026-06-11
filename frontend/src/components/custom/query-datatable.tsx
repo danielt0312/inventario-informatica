@@ -1,4 +1,4 @@
-import type { PaginatedResponse } from "@/lib/types";
+import type { PaginatedResponse } from "@/types/generics";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import { Spinner } from "../ui/spinner";
 import { getCoreRowModel, getPaginationRowModel, useReactTable, type ColumnDef, type TableOptions } from "@tanstack/react-table";

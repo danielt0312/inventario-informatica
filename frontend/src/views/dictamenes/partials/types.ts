@@ -1,5 +1,7 @@
 import type { DictamenEstadoEnum } from "@/lib/constants";
-import type { Documento, Oficio, Producto, TCatalogo } from "@/lib/types";
+import type { Documento, Oficio } from "@/types/documentos";
+import type { Producto } from "@/types/productos";
+import type { TCatalogo } from "@/types/generics";
 
 export interface DictamenEstado {
     id: DictamenEstadoEnum;

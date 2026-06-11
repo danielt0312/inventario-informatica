@@ -9,9 +9,7 @@ import { CreatableComboboxField } from "@/components/composed/@tanstack/form-fie
 import { withFieldGroup } from "@/components/composed/@tanstack/form";
 import { FieldGroup } from "@/components/ui/field";
 import { useStore } from "@tanstack/react-form";
-import type {
-    OmitCreatableComboboxFieldsProps
-} from "@/lib/types";
+import type { OmitCreatableComboboxFieldsProps } from "@/types/generics";
 import { defaultValues } from "./form-schema";
 import type { ComponentProps } from "react";
 

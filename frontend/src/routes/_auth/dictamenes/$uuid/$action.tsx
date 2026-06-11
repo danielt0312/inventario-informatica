@@ -1,6 +1,6 @@
 import api from '@/lib/axios';
 import { DictamenEstadoEnum } from '@/lib/constants';
-import type { TResponse } from '@/lib/types';
+import type { TResponse } from "@/types/generics";
 import { View } from '@/views/dictamenes/actions/view';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';

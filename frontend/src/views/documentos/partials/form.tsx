@@ -4,7 +4,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { FileUpload, FileUploadDropzone, FileUploadItem, FileUploadItemDelete, FileUploadItemMetadata, FileUploadItemPreview, FileUploadList, FileUploadTrigger } from "@/components/ui/file-upload"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import api from "@/lib/axios"
-import type { TCatalogo } from "@/lib/types"
+import type { TCatalogo } from "@/types/generics"
 import { Route } from "@/routes/_auth"
 import { useForm } from "@tanstack/react-form"
 import { queryOptions, useQuery } from "@tanstack/react-query"

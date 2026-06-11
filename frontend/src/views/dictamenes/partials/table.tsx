@@ -4,7 +4,7 @@ import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import { MultiSelect } from "@/components/custom/multiselect";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
-import type { TResponse, TCatalogo } from "@/lib/types";
+import type { TResponse, TCatalogo } from "@/types/generics";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";

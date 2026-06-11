@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { PaginatedResponse } from "@/lib/types";
+import type { PaginatedResponse } from "@/types/generics";
 import { useQuery, type UseQueryOptions, type UseQueryResult } from "@tanstack/react-query";
 import type { PaginationState } from "@tanstack/react-table";
 

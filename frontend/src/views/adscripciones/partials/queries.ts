@@ -1,9 +1,10 @@
 import api from "@/lib/axios";
 import type {
-    OmitQueryOptions,
+    OmitQueryOptions} from "@/lib/types";
+import type {
     TCatalogo,
     TResponse
-} from "@/lib/types";
+} from "@/types/generics";
 import { useQuery } from "@tanstack/react-query";
 
 export type Adscripcion = TCatalogo;

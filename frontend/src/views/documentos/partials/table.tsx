@@ -1,7 +1,8 @@
 import { QueryDataTable, SearchInput, type QueryDataTableProps } from "@/components/custom/query-datatable";
 import { columns, defaultColumns, initialState } from "./table-cols";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
-import type { CatalogoListResponse, Documento } from "@/lib/types";
+import type { Documento } from "@/types/documentos";
+import type { CatalogoListResponse } from "@/types/generics";
 import { MultiSelect } from "@/components/custom/multiselect";
 import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";

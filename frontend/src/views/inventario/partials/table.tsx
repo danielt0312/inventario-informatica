@@ -5,7 +5,7 @@ import { MultiSelect } from "@/components/custom/multiselect";
 import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/views/productos/queries";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
-import type { TResponse, TCatalogo } from "@/lib/types";
+import type { TResponse, TCatalogo } from "@/types/generics";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";

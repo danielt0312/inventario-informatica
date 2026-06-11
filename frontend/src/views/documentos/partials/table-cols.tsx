@@ -1,5 +1,5 @@
 import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
-import type { Documento } from "@/lib/types";
+import type { Documento } from "@/types/documentos";
 import type { ColumnDef, InitialTableState } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 

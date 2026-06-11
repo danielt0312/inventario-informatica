@@ -1,4 +1,4 @@
-import type { TCatalogo } from "@/lib/types"
+import type { TCatalogo } from "@/types/generics"
 import type { ColumnDef } from "@tanstack/react-table"
 
 export type Articulo = {
