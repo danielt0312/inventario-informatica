@@ -67,7 +67,7 @@ export interface QueryDataTableProps<TData, TFilters extends object = Record<str
     Pick<UsePaginatedQueryOptions<TData, TFilters>, 'queryKey' | 'url' | 'filters' | 'paramsTransformer'> {
     columns: ColumnDef<TData>[];
     queryOptions?: Omit<UseQueryOptions<PaginatedResponse<TData>>, "queryKey" | "queryFn">;
-    tableOptions?: Omit<UseTableOptions<TData>, 'data' | 'colums' >
+    tableOptions?: Omit<UseTableOptions<TData>, 'data' | 'columns' >
 }
 
 export function QueryDataTable<TData, TFilters extends object>({
