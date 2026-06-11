@@ -20,7 +20,7 @@ export function PrimitiveTable({
 }: PrimitiveTableProps) {
     const columnDefinition = [
         ...columns,
-        ...defaultColumns,
+        ...defaultColumns
     ];
 
     return (
@@ -80,7 +80,7 @@ export function Table() {
                         selected={filters.tipos}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,
-                            categorias: v.map(Number)
+                            tipos: v
                         }))}
                     />
                 </>

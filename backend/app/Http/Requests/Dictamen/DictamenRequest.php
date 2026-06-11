@@ -9,7 +9,9 @@ class DictamenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'folio' => ['nullable', 'string']
+            'folio' => ['nullable', 'string'],
+            'estados' => ['nullable', 'array'],
+            'estados.*' => ['integer', 'exists:dictamen_estados,id']
         ];
     }
 }

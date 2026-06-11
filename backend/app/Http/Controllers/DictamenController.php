@@ -36,6 +36,11 @@ class DictamenController extends Controller
                 => $q->whereLike('folio', "%{$request->input('folio')}%"));
         }
 
+        if ($request->filled('estados')) {
+            $query->whereHas('estado', fn ($q)
+                => $q->whereIn('id', $request->input('estados')));
+        }
+
         return $query
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();

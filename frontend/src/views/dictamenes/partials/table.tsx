@@ -51,7 +51,7 @@ export function Table() {
                         selected={filters.estados}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,
-                            categorias: v
+                            estados: v
                         }))}
                     />
                 </>
