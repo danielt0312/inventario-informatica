@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Dictamen;
 
+use Illuminate\Validation\Rule;
+
 class FacturarDictamenRequest extends ActionDictamenRequest
 {
     public function authorize(): bool
@@ -20,7 +22,7 @@ class FacturarDictamenRequest extends ActionDictamenRequest
                     $query->where('dictamen_id', $this->dictamen->id);
                 }),
             ],
-            'productos.*.factura_id' => ['required', 'integer', 'exists:facturas,id']
+            'productos.*.archivo_uuid' => ['required', 'exists:archivos,uuid']
         ];
     }
 }

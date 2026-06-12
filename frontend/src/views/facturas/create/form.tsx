@@ -1,21 +1,33 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
-import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
+import { usePostFormMutation, type FormMutation } from "@/hooks/use-post-form-mutation";
 import { defaultValues, validator } from "./form-schema";
 import { DatePickerField, FileUploaderField } from "@/components/composed/@tanstack/form-field";
-import { toISODate } from "@/lib/utils";
+import { cn, toISODate } from "@/lib/utils";
 
-export const useFormMutation = () => usePostFormMutation({
+export const useFormMutation = (
+    props?: Omit<FormMutation, 'axiosConfig' | 'url'>
+) => usePostFormMutation({
     axiosConfig: {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     },
     url: `api/facturas`,
-    onSuccess: (_, __, ___, { client }) => client.invalidateQueries({ queryKey: ['facturas'] })
+    ...props,
+    onSuccess: (data, variables, onMutateResult, context) => {
+        context.client.invalidateQueries({ queryKey: ['facturas'] });
+        props?.onSuccess?.(data, variables, onMutateResult, context);
+    }
 });
 
-export const useForm = () => {
-    const formMutation = useFormMutation();
+interface UseFormOptions {
+    useMutationHook?: typeof useFormMutation;
+}
+
+export const useForm = ({
+    useMutationHook = useFormMutation
+}: UseFormOptions = {}) => {
+    const formMutation = useMutationHook();
 
     return useAppForm({
         defaultValues,
@@ -29,13 +41,23 @@ export const useForm = () => {
             formData.append('fecha_emision', data.fecha_emision);
             formData.append('archivo', data.archivo[0]);
 
-            formMutation.mutate({ data: formData, api: formApi })
+            formMutation.mutate({ data: formData, formApi: formApi })
         }
     })
 }
 
-export function Form() {
-    const form = useForm();
+interface FormProps
+    extends React.ComponentProps<'form'>
+{
+    useFormHook?: typeof useForm;
+}
+
+export function Form({
+    useFormHook = useForm,
+    className,
+    ...props
+}: FormProps) {
+    const form = useFormHook();
 
     return (
         <form
@@ -44,7 +66,8 @@ export function Form() {
                 e.stopPropagation();
                 form.handleSubmit();
             }}
-            className="contents"
+            className={cn("contents", className)}
+            {...props}
         >
             <form.AppForm>
                 <form.AppField

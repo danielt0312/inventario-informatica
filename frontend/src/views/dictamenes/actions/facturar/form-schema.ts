@@ -8,14 +8,14 @@ export interface ValidatedDictamen
 export interface Schema {
     productos: {
         id: string;
-        archivo_id: string;
+        archivo_uuid: string;
     }[]
 }
 
 export const validator = z.object({
     productos: RequiredArray(z.object({
         id: NonEmptyStringToNumber,
-        archivo_id: TrimmedString
+        archivo_uuid: TrimmedString
             .min(1, 'Debes de seleccionar un archivo')
     }))
 });

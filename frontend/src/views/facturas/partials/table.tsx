@@ -8,22 +8,33 @@ import { getDefaultColumns } from "./table-cols";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { Form } from "../create/form";
+import { Form, useForm, useFormMutation } from "../create/form";
+import React from "react";
 
-export interface PrimitiveTableProps<TData extends Factura = Factura>
+export interface TableProps<TData extends Factura = Factura>
     extends Omit<
         DocumentoPrimitiveTableProps<TData>,
-        'queryKey'| 'url'
+        'queryKey'| 'url' | 'actionBar'
     > {}
 
 export function Table<TData extends Factura = Factura>({
     columns = [],
     ...props
-}: PrimitiveTableProps<TData>) {
+}: TableProps<TData>) {
     const columnDefinition = [
         ...columns,
         ...getDefaultColumns<TData>()
     ];
+
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    const useDialogFormMutation = () => useFormMutation({
+        onSuccess: () => setIsOpen(false)
+    });
+
+    const useDialogForm = () => useForm({
+        useMutationHook: useDialogFormMutation
+    })
 
     return (
         <DocumentoPrimitiveTable<TData>
@@ -32,9 +43,9 @@ export function Table<TData extends Factura = Factura>({
             url="api/facturas"
             columns={columnDefinition}
             actionBar={(
-                <Dialog>
+                <Dialog open={isOpen}>
                     <DialogTrigger asChild>
-                        <Button size="sm">
+                        <Button size="sm" onClick={() => setIsOpen(true)}>
                             <PlusCircle /> Crear
                         </Button>
                     </DialogTrigger>
@@ -43,7 +54,7 @@ export function Table<TData extends Factura = Factura>({
                             <DialogTitle>Creación de Factura</DialogTitle>
                         </DialogHeader>
 
-                        <Form />
+                        <Form useFormHook={useDialogForm} />
                     </DialogContent>
                 </Dialog>
             )}

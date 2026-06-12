@@ -11,12 +11,17 @@ use App\Http\Requests\Dictamen\{
     DictamenRequest,
     StoreDictamenRequest,
     DictaminarDictamenRequest,
-    EvidenciarDictamenRequest
+    EvidenciarDictamenRequest,
+    FacturarDictamenRequest
 };
 
-use App\Models\Dictamen;
+use App\Models\{
+    Articulo,
+    Dictamen
+};
 
 use App\Enums\{
+    ArticuloEstadoEnum,
     DocumentoTipoEnum,
     DictamenEstadoEnum
 };
@@ -64,7 +69,7 @@ class DictamenController extends Controller
 
             //todo verificar que la adscripcion exista en la tabla espejo `Adscripcion`
             $dictamen = Dictamen::create([
-                'oficio_id' => $oficio->id,
+                'oficio_id' => $oficio->documento_id,
                 'adscripcion_id' => $request->input('adscripcion_id'),
                 'user_id' => $user_id,
                 'fecha_solicitud' => $request->input('fecha_solicitud')
@@ -81,7 +86,7 @@ class DictamenController extends Controller
     {
         $dictamen->load([
             'estado',
-            'oficio.documento.archivo.tipo',
+            'oficio',
             'documento.archivo.tipo',
             'productos.producto.tipo.categoria',
             'productos.producto.marca'
@@ -137,16 +142,25 @@ class DictamenController extends Controller
 
     public function facturar(FacturarDictamenRequest $request, Dictamen $dictamen)
     {
-        // DB::transaction(function () use ($request, $dictamen) {
-        //     foreach ($request->input('productos') as $productoData) {
-        //         $dictamen->articulos()
-        //             ->createMany();
-        //     }
+        DB::transaction(function () use ($request, $dictamen) {
+            foreach ($dictamen->productos() as $dictamen_producto) {
+                for ($i=0; $i < $dictamen_producto->cantidad; $i++) {
+                    // todo generar la imagen qr y guardar
+                    $qr_archivo = Archivo::create([
+                        'extension' => '.jpg'
+                    ]);
 
-        //     $dictamen->update([
-        //         'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value,
-        //     ]);
-        // });
+                    $articulo = Articulo::create([
+                        'producto_id' = $dictamen_producto->producto_id,
+                        'estado_id' => ArticuloEstadoEnum::REVISION->value,
+                    ])
+                }
+            }
+
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value,
+            ]);
+        });
 
         return response(status: 201);
     }
