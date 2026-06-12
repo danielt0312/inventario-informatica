@@ -46,4 +46,9 @@ class Documento extends Model
     {
         return $this->hasOne(Dictamen::class, 'documento_id', 'archivo_id');
     }
+
+    public function factura(): HasOne
+    {
+        return $this->hasOne(Factura::class, 'documento_id', 'archivo_id');
+    }
 }

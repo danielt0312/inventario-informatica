@@ -1,12 +1,22 @@
+import { NonEmptyStringToNumber, RequiredArray, TrimmedString } from "@/lib/schemas/common";
 import type { ValidatedDictamen as ActionValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
+import z from "zod";
 
 export interface ValidatedDictamen
     extends ActionValidatedDictamen {}
 
 export interface Schema {
-
+    productos: {
+        id: string;
+        archivo_id: string;
+    }[]
 }
 
-export const validator: Schema = {
+export const validator = z.object({
+    productos: RequiredArray(z.object({
+        id: NonEmptyStringToNumber,
+        archivo_id: TrimmedString
+            .min(1, 'Debes de seleccionar un archivo')
+    }))
+});
 
-}

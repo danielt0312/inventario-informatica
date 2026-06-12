@@ -27,7 +27,6 @@ export const Form = ({
     [DictamenEstadoEnum.INVENTARIAR]: 'inventariar',
 } as const satisfies Record<ActionDictamenEstadoEnum, React.ReactNode>)[dictamen.estado.id];
 
-
 export function useFormMutation(dictamen: ValidatedDictamen) {
     const navigate = useNavigate();
     const action = StateAction[dictamen.estado.id];

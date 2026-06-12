@@ -9,14 +9,23 @@ class Factura extends Model
 {
     protected $table = 'facturas';
 
+    protected $primaryKey = 'documento_id';
+
+    public $incrementing = false;
+
+    protected $keyType = 'int';
+
+    protected $with = ['documento'];
+
     protected $fillable = [
         'fecha_emision',
-        'documento_id',
+        'documento_id'
     ];
 
     public $timestamps = false;
 
-    public function documento(): BelongsTo {
-        return $this->belongsTo(Documento::class, 'documento_id');
+    public function documento(): BelongsTo
+    {
+        return $this->belongsTo(Documento::class, 'documento_id', 'archivo_id');
     }
 }

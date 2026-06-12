@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('facturas', function (Blueprint $table) {
-            $table->id();
             $table->date('fecha_emision');
             $table->foreignId('documento_id')
+                ->primary()
                 ->constrained('documentos', 'archivo_id', 'fk_facturas_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

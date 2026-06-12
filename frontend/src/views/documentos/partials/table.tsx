@@ -19,6 +19,7 @@ export interface PrimitiveTableProps<TData extends Documento = Documento>
 
 export function PrimitiveTable<TData extends Documento = Documento>({
     columns = [],
+    tableOptions,
     ...props
 }: PrimitiveTableProps<TData>) {
     const columnDefinition = [
@@ -26,10 +27,20 @@ export function PrimitiveTable<TData extends Documento = Documento>({
         ...getDefaultColumns<TData>()
     ];
 
+    const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
+
     return (
         <QueryDataTable
             {...props}
             columns={columnDefinition}
+            tableOptions={{
+                ...tableOptions,
+                meta: {
+                    ...tableOptions?.meta,
+                    previewFile: (uuid: string, title?: string) => mutate({ uuid, title }),
+                    isPreviewing
+                }
+            }}
         />
     );
 }
@@ -51,8 +62,6 @@ export function Table() {
             .then(r => r.data.data)
     });
 
-    const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
-
     return (
         <PrimitiveTable
             queryKey={['documentos']}
@@ -60,11 +69,7 @@ export function Table() {
             columns={columns}
             filters={debouncedFilters}
             tableOptions={{
-                initialState,
-                meta: {
-                    previewFile: (uuid: string, title?: string) => mutate({ uuid, title }),
-                    isPreviewing
-                }
+                initialState
             }}
             filterBar={(
                 <>

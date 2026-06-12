@@ -18,9 +18,11 @@ use App\Http\Controllers\{
     DictamenEstadoController,
     EmpleadoController,
     AdscripcionController,
-    ArchivoController
+    ArchivoController,
+    FacturaController
 };
 
+// todo organizar las apiResource(s)
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', fn (Request $request) => response()->json(['data' => $request->user()]));
 
@@ -29,11 +31,13 @@ Route::middleware('auth:sanctum')->group(function () {
         'producto_tipos' => ProductoTipoController::class,
         'producto_marcas' => ProductoMarcaController::class,
         'productos' => ProductoController::class,
-        'articulos' => ArticuloController::class,
+        'articulos' => ArticuloController::class
     ]);
 
     Route::apiResource('documentos', DocumentoController::class)
         ->only(['index']);
+
+    Route::apiResource('facturas', FacturaController::class);
 
     Route::get('archivos/{archivo}/stream', [ArchivoController::class, 'stream']);
 

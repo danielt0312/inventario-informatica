@@ -22,6 +22,7 @@ class Articulo extends Model
         'costo_unitario',
         'factura_id',
         'qr_archivo_id',
+        'numero_inventario',
         'contable',
     ];
 
@@ -37,16 +38,19 @@ class Articulo extends Model
         'numero_inventario',
     ];
 
-    public function producto(): BelongsTo {
+    public function producto(): BelongsTo
+    {
         return $this->belongsTo(Producto::class, 'producto_id');
     }
 
-    public function estado(): BelongsTo {
+    public function estado(): BelongsTo
+    {
         return $this->belongsTo(ArticuloEstado::class, 'estado_id');
     }
 
-    public function factura(): BelongsTo {
-        return $this->belongsTo(Factura::class, 'factura_id');
+    public function factura(): BelongsTo
+    {
+        return $this->belongsTo(Factura::class, 'documento_id');
     }
 
     public function qr(): BelongsTo {

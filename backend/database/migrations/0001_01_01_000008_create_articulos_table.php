@@ -30,7 +30,7 @@ return new class extends Migration
                 ->nullable();
             $table->foreignId('factura_id')
                 ->nullable()
-                ->constrained('facturas', indexName: 'fk_articulos_facturas')
+                ->constrained('facturas', 'documento_id', 'fk_articulos_facturas')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('qr_archivo_id')
@@ -38,9 +38,8 @@ return new class extends Migration
                 ->constrained('archivos', indexName: 'fk_articulos_archivos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('antiguo_numero_inventario', 10)
-                ->nullable()
-                ->unique('uk_articulo_antiguo_numero_inventario');
+            $table->string('numero_inventario', 11)
+                ->unique('uk_articulo_numero_inventario');
             $table->string('cuenta_contable', 11)
                 ->nullable()
                 ->unique('uk_articulo_cuenta_contable', 11);
