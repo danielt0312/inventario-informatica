@@ -12,9 +12,9 @@ class ArchivoResource extends JsonResource
         return [
             'uuid' => $this->uuid,
             'nombre' => $this->nombre,
+            'extension' => $this->extension,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            $this->mergeWhen($this->relationLoaded('tipo'), new ArchivoTipoResource($this->tipo))
         ];
     }
 }

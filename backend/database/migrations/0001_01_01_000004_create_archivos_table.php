@@ -8,21 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('archivo_tipos', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre', 64);
-            $table->string('extension', 5);
-        });
-
         Schema::create('archivos', function (Blueprint $table) {
             $table->id();
             $table->uuid();
             $table->string('nombre', 64)
                 ->nullable();
-            $table->foreignId('tipo_id')
-                ->constrained('archivo_tipos', indexName: 'fk_archivos_archivo_tipos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->string('extension', 5);
             $table->boolean('activo');
             $table->timestamps();
             $table->softDeletes();
@@ -32,6 +23,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('archivos');
-        Schema::dropIfExists('archivo_tipos');
     }
 };

@@ -23,18 +23,14 @@ class Archivo extends Model
 
     protected $fillable = [
         'nombre',
-        'tipo_id'
+        'tipo_id',
+        'extension'
     ];
 
     protected $attributes = [
         'nombre' => null,
         'activo' => 1
     ];
-
-    public function tipo(): BelongsTo
-    {
-        return $this->belongsTo(ArchivoTipo::class, 'tipo_id');
-    }
 
     public function documento(): HasOne
     {
@@ -44,14 +40,14 @@ class Archivo extends Model
     public function fileName(): Attribute
     {
         return Attribute::make(
-            fn () => sprintf('%s.%s', $this->uuid, $this->tipo->extension)
+            fn () => sprintf('%s.%s', $this->uuid, $this->extension)
         );
     }
 
     public function relativePath(): Attribute
     {
         return Attribute::make(
-            fn () => FilePathGenerator::forUuid($this->uuid, $this->tipo->extension)
+            fn () => FilePathGenerator::forUuid($this->uuid, $this->extension)
         );
     }
 

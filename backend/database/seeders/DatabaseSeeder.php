@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            ArchivoTipoSeeder::class,
+            // ArchivoTipoSeeder::class,
             ProductoSeeder::class,
             ArticuloEstadoSeeder::class,
             DocumentoTipoSeeder::class,

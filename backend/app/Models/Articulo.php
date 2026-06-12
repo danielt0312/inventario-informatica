@@ -28,7 +28,7 @@ class Articulo extends Model
 
     protected $attributes = [
         'activo' => 1,
-        'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
+        'estado_id' => ArticuloEstadoEnum::REVISION->value,
         'numero_serie' => null,
         'costo_unitario' => null,
         'factura_id' => null
