@@ -20,7 +20,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('oficio_id')
-                ->constrained('oficios', indexName: 'fk_adquisiciones_oficios')
+                ->constrained('oficios', 'documento_id', 'fk_adquisiciones_oficios')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('documento_id')

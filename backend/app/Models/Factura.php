@@ -3,19 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+use App\Traits\Models\HasDocumento;
 
 class Factura extends Model
 {
-    protected $table = 'facturas';
-
-    protected $primaryKey = 'documento_id';
-
-    public $incrementing = false;
-
-    protected $keyType = 'int';
-
-    protected $with = ['documento'];
+    use HasDocumento;
 
     protected $fillable = [
         'fecha_emision',
@@ -23,9 +16,4 @@ class Factura extends Model
     ];
 
     public $timestamps = false;
-
-    public function documento(): BelongsTo
-    {
-        return $this->belongsTo(Documento::class, 'documento_id', 'archivo_id');
-    }
 }
