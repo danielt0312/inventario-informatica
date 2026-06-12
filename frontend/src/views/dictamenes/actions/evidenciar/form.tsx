@@ -25,7 +25,7 @@ export function useForm(dictamen: ValidatedDictamen) {
 
             formData.append('archivo', data.archivo[0]);
 
-            formMutation.mutate({ data: formData, api: formApi })
+            formMutation.mutate({ data: formData, formApi })
         }
     });
 }

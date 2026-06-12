@@ -28,7 +28,7 @@ export const useForm = (dictamen: ValidatedDictamen) => {
         onSubmit: async ({ value, formApi }) => {
             const data = validator.parse(value);
 
-            formMutation.mutate({ data, api: formApi });
+            formMutation.mutate({ data, formApi });
         }
     });
 }

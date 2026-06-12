@@ -6,7 +6,7 @@ import type { AxiosRequestConfig, AxiosResponse } from "axios";
 
 export interface FormMutationFunction<TPayload> {
     data: TPayload;
-    api: AnyFormApi;
+    formApi: AnyFormApi;
 }
 
 export interface FormMutation<TResponse = any, TPayload = any>
@@ -29,7 +29,7 @@ export function usePostFormMutation<TResponse = any,  TPayload = any>({
 }: FormMutation<TResponse, TPayload>, queryClient?: QueryClient) {
     return useMutation({
         mutationFn: ({ data }: FormMutationFunction<TPayload>) => api.post<TResponse>(url, data, axiosConfig),
-        onError: (error, { api }) => handleFormValidationError(error, api),
+        onError: (error, { formApi }) => handleFormValidationError(error, formApi),
         ...props
     }, queryClient);
 }

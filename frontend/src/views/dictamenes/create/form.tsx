@@ -50,7 +50,7 @@ export function useForm() {
                 formData.append(`productos[${index}][empleado_id]`, String(producto.empleado_id));
             });
 
-            formMutation.mutate({ data: formData, api: formApi });
+            formMutation.mutate({ data: formData, formApi });
         }
     });
 }
