@@ -2,26 +2,25 @@ import { useAppForm } from "@/components/composed/@tanstack/form";
 import { useFormMutation } from "../form";
 import { validator, type Schema, type ValidatedDictamen } from "./form-schema";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { submitValidator } from "../evidenciar/form-schema";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Eye, Paperclip } from "lucide-react";
+import { Paperclip } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table as FacturaTable } from "@/views/facturas/partials/table";
 import { FieldError } from "@/components/ui/field";
-import { ButtonGroup } from "@/components/ui/button-group";
+import { FilePreviewWindow } from "@/components/custom/file-preview-window";
 
 export function useForm(dictamen: ValidatedDictamen) {
     const formMutation = useFormMutation(dictamen);
 
-    const formattedValues = dictamen.productos.map(v => ({
+    const formattedProductos = dictamen.productos.map(v => ({
         id: String(v.id),
-        archivo_id: ''
+        archivo_uuid: ''
     }));
 
     const defaultValues: Schema = {
-        productos: formattedValues
+        productos: formattedProductos
     }
 
     return useAppForm({
@@ -30,12 +29,9 @@ export function useForm(dictamen: ValidatedDictamen) {
             onSubmit: validator
         },
         onSubmit: async ({ value, formApi }) => {
-            const data = submitValidator.parse(value);
-            const formData = new FormData;
+            const data = validator.parse(value);
 
-            formData.append('archivo', data.archivo[0]);
-
-            formMutation.mutate({ data: formData, api: formApi })
+            formMutation.mutate({ data, formApi: formApi });
         }
     });
 }
@@ -108,25 +104,19 @@ export function Form({ dictamen }: { dictamen: ValidatedDictamen }) {
                                     </TableCell>
                                     <TableCell className="text-center border-none">
                                         <form.AppField
-                                            name={`productos[${index}].archivo_id`}
+                                            name={`productos[${index}].archivo_uuid`}
                                             children={(field) => (
                                                 <>
                                                     <div className="flex flex-col gap-2 items-center">
-                                                        <ButtonGroup>
-                                                            <Button
-                                                                type="button"
-                                                                onClick={() => setOpen(true)}
-                                                                variant="outline"
-                                                                className="max-w-fit"
-                                                            >
-                                                                <Paperclip /> Adjuntar
-                                                            </Button>
-                                                            <Button
-                                                                disabled={!!field.state.value}
-                                                            >
-                                                                <Eye />
-                                                            </Button>
-                                                        </ButtonGroup>
+                                                        <FilePreviewWindow
+                                                            uuid={field.state.value}
+                                                            onClick={() => setOpen(true)}
+                                                            className="max-w-fit"
+                                                            children={<><Paperclip /> Adjuntar</>}
+                                                            previewButtonProps={{
+                                                                disabled: !field.state.value
+                                                            }}
+                                                        />
 
                                                         <FieldError errors={field.state.meta.errors} />
                                                     </div>

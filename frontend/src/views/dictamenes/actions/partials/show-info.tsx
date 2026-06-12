@@ -1,14 +1,11 @@
-import { FilePreviewWindow } from "@/components/custom/file-preview";
+import { FilePreviewWindow } from "@/components/custom/file-preview-window";
 import { Label } from "@/components/ui/label";
-import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import type { ValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
 import type { ValidatedDictamen as EvidenciarValidatedDictamen } from "../evidenciar/form-schema";
 import { cn } from "@/lib/utils";
 import { DictamenEstadoEnum } from "@/lib/constants";
 
 export function ShowInfo({ dictamen }: { dictamen: ValidatedDictamen }) {
-    const { mutate: previewOficio } = useFilePreviewWindowMutation();
-
     return (
         <>
             <div className="grid grid-cols-3">
@@ -40,8 +37,8 @@ export function ShowInfo({ dictamen }: { dictamen: ValidatedDictamen }) {
                 <div data-slot="label">
                     <Label className="font-bold">Oficio de Solicitud</Label>
                     <FilePreviewWindow
-                        label={dictamen.oficio.documento.nombre}
-                        onClick={() => previewOficio({ uuid: dictamen.oficio.documento.uuid })}
+                        uuid={dictamen.oficio.uuid}
+                        title={dictamen.oficio.nombre ?? dictamen.oficio.uuid}
                     />
                 </div>
             </div>
@@ -56,8 +53,6 @@ export function ShowDocument({
 }: React.ComponentProps<'div'> & {
     dictamen: EvidenciarValidatedDictamen;
 }) {
-    const { mutate: previewDictamen } = useFilePreviewWindowMutation();
-
     return (
         <div
             data-slot="label"
@@ -66,8 +61,8 @@ export function ShowDocument({
         >
             <Label className="font-bold">Dictamen tecnológico</Label>
             <FilePreviewWindow
-                label={dictamen.documento.nombre}
-                onClick={() => previewDictamen({ uuid: dictamen.documento.uuid })}
+                uuid={dictamen.documento.uuid}
+                title={dictamen.documento.nombre ?? dictamen.documento.uuid}
             />
         </div>
     )
