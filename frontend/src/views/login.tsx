@@ -4,7 +4,6 @@ import { Separator } from "@/components/ui/separator"
 
 import api from "@/lib/axios"
 import { useNavigate } from "@tanstack/react-router"
-import { Route as InventarioRoute } from "@/routes/_auth/inventario"
 import { useQueryClient } from "@tanstack/react-query"
 
 import type { TResponse } from "@/types/generics"
@@ -42,20 +41,22 @@ export function View() {
     const form = useAppForm({
         defaultValues,
         validators: {
-            onSubmit: validator,
+            onSubmit: validator
         },
         onSubmit: async ({ value, formApi }) => {
+            setGlobalError(undefined);
+
             const data = validator.parse(value);
 
             try {
                 await api.get('sanctum/csrf-cookie');
 
-                const { data: userData } = await api.post<TResponse<User>>('login', data)
-                    .then(r => r.data);
+                const userData = await api.post<TResponse<User>>('login', data)
+                    .then(r => r.data.data);
 
-                queryClient.setQueryData(['user'], userData)
+                queryClient.setQueryData(['user'], userData);
 
-                navigate({ to: InventarioRoute.to })
+                navigate({ to: '/' })
             } catch (error) {
                 handleFormValidationError(error, formApi, setGlobalError);
             }
