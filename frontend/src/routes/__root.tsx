@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
-import type { AuthRouteContext } from '@/lib/auth';
+import type { AuthRouteContext } from '@/types/auth';
 
 function RootComponent() {
     return (

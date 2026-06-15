@@ -16,7 +16,7 @@ import { RequiredInstitutionalEmail, NonEmptyString } from "@/lib/schemas/common
 import { DoorOpen } from "lucide-react"
 import { useState } from "react"
 import { FieldError } from "@/components/ui/field"
-import type { User } from "@/lib/auth"
+import type { User } from "@/types/auth"
 
 interface FormSchema {
     email: string;
