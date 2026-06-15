@@ -14,12 +14,12 @@ return new class extends Migration
         });
 
         Schema::create('documentos', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('tipo_id')
                 ->constrained('documento_tipos', indexName: 'fk_documentos_documento_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('archivo_id')
-                ->primary()
                 ->constrained('archivos', indexName: 'fk_documentos_archivos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

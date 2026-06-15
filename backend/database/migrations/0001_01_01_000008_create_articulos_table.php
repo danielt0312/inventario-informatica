@@ -30,7 +30,7 @@ return new class extends Migration
                 ->nullable();
             $table->foreignId('factura_id')
                 ->nullable()
-                ->constrained('facturas', 'documento_id', 'fk_articulos_facturas')
+                ->constrained('facturas', indexName: 'fk_articulos_facturas')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('qr_archivo_id')

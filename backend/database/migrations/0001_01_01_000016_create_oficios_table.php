@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('oficios', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('documento_id')
-                ->primary()
-                ->constrained('documentos', 'archivo_id', 'fk_oficios_documentos')
+                ->constrained('documentos', indexName: 'fk_oficios_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('folio', 64)

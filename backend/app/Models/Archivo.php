@@ -4,12 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasOne};
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-
-use Illuminate\Http\UploadedFile;
 
 use App\Support\FilePathGenerator;
 
@@ -37,14 +35,16 @@ class Archivo extends Model
     public function fileName(): Attribute
     {
         return Attribute::make(
-            fn () => sprintf('%s.%s', $this->uuid, $this->extension)
+            fn (mixed $value, array $attributes)
+                => "{$attributes['uuid']}.{$attributes['extension']}"
         );
     }
 
     public function relativePath(): Attribute
     {
         return Attribute::make(
-            fn () => FilePathGenerator::forUuid($this->uuid, $this->extension)
+            fn (mixed $value, array $attributes)
+                => FilePathGenerator::forUuid($attributes['uuid'], $attributes['extension'])
         );
     }
 
