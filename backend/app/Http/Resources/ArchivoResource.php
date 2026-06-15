@@ -14,7 +14,7 @@ class ArchivoResource extends JsonResource
             'nombre' => $this->nombre,
             'extension' => $this->extension,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }

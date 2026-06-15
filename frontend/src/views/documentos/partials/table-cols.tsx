@@ -46,10 +46,10 @@ export const getDefaultColumns = <TData extends Documento>(): ColumnDef<TData>[]
 export const columns: ColumnDef<Documento>[] = [
     {
         header: 'Tipo de Documento',
-        accessorKey: 'documento_tipo'
+        accessorKey: 'documento'
     }
 ];
 
 export const initialState: InitialTableState = {
-    columnOrder: ['documento_tipo', 'nombre', 'created_at', 'actions']
+    columnOrder: ['documento', 'nombre', 'created_at', 'actions']
 }

@@ -1,26 +1,24 @@
 import type { DictamenEstadoEnum } from "@/lib/constants";
-import type { Documento, Oficio } from "@/types/documentos";
-import type { Producto } from "@/types/productos";
-import type { TCatalogo } from "@/types/generics";
+import type { TCatalogo } from "./generics";
+import type { Producto } from "./productos";
+import type { Documento, Oficio } from "./documentos";
 
-export interface DictamenEstado {
+export type DictamenEstado = {
     id: DictamenEstadoEnum;
     nombre: string;
 };
 
-export interface DictamenProducto {
-    id: number;
+export type DictamenProducto = {
     cantidad: number;
     caracteristicas: string | null;
     empleado: TCatalogo;
     producto: Producto;
 }
 
-export interface Dictamen {
-    id: number;
+export type Dictamen = {
     uuid: string;
     adscripcion: TCatalogo;
-    fecha_solicitud: Date;
+    fecha_solicitud: string;
     estado: DictamenEstado
     documento: Documento | null;
     oficio: Oficio;

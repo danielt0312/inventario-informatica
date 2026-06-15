@@ -11,7 +11,7 @@ import {
 import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
-import type { Dictamen } from "./types";
+import type { Dictamen } from "@/types/dictamenes";
 
 const ActionIcon = {
     [DictamenEstadoEnum.DICTAMINAR]: <FileInput />,

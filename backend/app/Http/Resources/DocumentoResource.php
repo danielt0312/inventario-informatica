@@ -11,7 +11,7 @@ class DocumentoResource extends JsonResource
     {
         return [
             $this->mergeWhen($this->relationLoaded('tipo'), [
-                'documento_tipo' => $this->tipo->nombre
+                'documento' => $this->tipo->nombre
             ]),
             $this->merge(new ArchivoResource($this->archivo))
         ];

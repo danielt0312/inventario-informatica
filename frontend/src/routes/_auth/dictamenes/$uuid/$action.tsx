@@ -4,7 +4,7 @@ import { View } from '@/views/dictamenes/actions/view';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
-import type { Dictamen, DictamenEstado } from '@/views/dictamenes/partials/types';
+import type { Dictamen, DictamenEstado } from "@/types/dictamenes";
 import type { TResponse } from '@/types/generics';
 
 export const Actions = ['dictaminar', 'evidenciar', 'facturar', 'inventariar'] as const;

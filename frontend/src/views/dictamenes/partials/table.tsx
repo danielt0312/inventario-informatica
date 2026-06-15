@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Route as CreateRoute } from "@/routes/_auth/dictamenes/create";
-import type { Dictamen } from "./types";
+import type { Dictamen } from "@/types/dictamenes";
 
 export interface TableFilters {
     folio: string;

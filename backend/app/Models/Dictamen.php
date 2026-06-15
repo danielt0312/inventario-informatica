@@ -36,7 +36,7 @@ class Dictamen extends Model
 
     public function oficio(): BelongsTo
     {
-        return $this->belongsTo(Oficio::class, 'oficio_id');
+        return $this->belongsTo(Oficio::class);
     }
 
     public function documento(): BelongsTo

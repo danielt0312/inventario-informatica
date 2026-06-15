@@ -1,6 +1,7 @@
 export type Archivo = {
     uuid: string;
     nombre: string | null;
+    extension: string;
 };
 
 export type Documento = Archivo & {
