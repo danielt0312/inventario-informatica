@@ -1,7 +1,5 @@
 import api from "@/lib/axios"
-import type {
-    OmitQueryOptions} from "@/lib/types"
-import type { CatalogoListResponse } from "@/types/generics";
+import type { CatalogoListResponse, OmitQueryOptions } from "@/types/generics";
 import type { TCatalogo } from "@/types/generics";
 import { useQuery } from "@tanstack/react-query"
 

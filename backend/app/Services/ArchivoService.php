@@ -16,7 +16,7 @@ class ArchivoService
     ): Archivo {
         return Archivo::create([
             'nombre' => pathinfo($nombre, PATHINFO_FILENAME),
-            'tipo_id' => $tipo->value
+            'extension' => $tipo->extension()
         ]);
     }
 

@@ -87,7 +87,7 @@ class DictamenController extends Controller
         $dictamen->load([
             'estado',
             'oficio',
-            'documento.archivo.tipo',
+            'documento',
             'productos.producto.tipo.categoria',
             'productos.producto.marca'
         ]);
@@ -151,9 +151,9 @@ class DictamenController extends Controller
                     ]);
 
                     $articulo = Articulo::create([
-                        'producto_id' = $dictamen_producto->producto_id,
+                        'producto_id' => $dictamen_producto->producto_id,
                         'estado_id' => ArticuloEstadoEnum::REVISION->value,
-                    ])
+                    ]);
                 }
             }
 

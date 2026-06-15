@@ -43,7 +43,7 @@ export function Table<TData extends Factura = Factura>({
             url="api/facturas"
             columns={columnDefinition}
             actionBar={(
-                <Dialog open={isOpen}>
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                         <Button size="sm" onClick={() => setIsOpen(true)}>
                             <PlusCircle /> Crear

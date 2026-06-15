@@ -47,8 +47,7 @@ export const useForm = ({
 }
 
 interface FormProps
-    extends React.ComponentProps<'form'>
-{
+    extends React.ComponentProps<'form'> {
     useFormHook?: typeof useForm;
 }
 
@@ -86,6 +85,7 @@ export function Form({
                     children={() => (
                         <FileUploaderField
                             label="Archivo"
+                            accept="application/pdf"
                         />
                     )}
                 />

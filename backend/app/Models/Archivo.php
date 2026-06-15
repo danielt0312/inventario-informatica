@@ -13,8 +13,6 @@ use Illuminate\Http\UploadedFile;
 
 use App\Support\FilePathGenerator;
 
-use App\Enums\ArchivoTipoEnum;
-
 class Archivo extends Model
 {
     use SoftDeletes, HasUuids, HasFactory;
@@ -23,7 +21,6 @@ class Archivo extends Model
 
     protected $fillable = [
         'nombre',
-        'tipo_id',
         'extension'
     ];
 

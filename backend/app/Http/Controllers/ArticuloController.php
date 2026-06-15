@@ -37,9 +37,8 @@ class ArticuloController extends Controller
                 => $q->whereIn('id', $request->input('estados')));
         }
 
-        $data = $query->paginate($request->query('per_page', 10));
-
-        return response()->json($data);
+        return $query->paginate($request->query('per_page', 10))
+            ->toResourceCollection();
     }
 
     public function store(StoreArticuloRequest $request)
