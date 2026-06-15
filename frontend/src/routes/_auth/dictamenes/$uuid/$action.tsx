@@ -38,8 +38,8 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
     },
     component: View,
     beforeLoad: async ({ context, params }) => {
-        const data = await context.queryClient.ensureQueryData({
-            queryKey: ['dictamen', params.uuid],
+        const data = await context.queryClient.fetchQuery({
+            queryKey: ['dictamenes', params.uuid],
             queryFn: () => api.get<TResponse<Dictamen>>(`api/dictamenes/${params.uuid}`)
                 .then(r => r.data.data)
         });
