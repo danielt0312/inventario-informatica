@@ -7,7 +7,6 @@ import { useNavigate } from "@tanstack/react-router"
 import { Route as InventarioRoute } from "@/routes/_auth/inventario"
 import { useQueryClient } from "@tanstack/react-query"
 
-import type { User } from '@/lib/types'
 import type { TResponse } from "@/types/generics"
 import z from "zod"
 import { useAppForm } from "@/components/composed/@tanstack/form"
@@ -17,6 +16,7 @@ import { RequiredInstitutionalEmail, NonEmptyString } from "@/lib/schemas/common
 import { DoorOpen } from "lucide-react"
 import { useState } from "react"
 import { FieldError } from "@/components/ui/field"
+import type { User } from "@/lib/auth"
 
 interface FormSchema {
     email: string;
