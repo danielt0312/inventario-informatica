@@ -1,9 +1,9 @@
-import AuthLayout from '@/components/AuthLayout'
-import api from '@/lib/axios'
-import { createFileRoute, redirect } from '@tanstack/react-router'
-import { Route as RouteLogin } from './_guest/login'
-
-import type { User } from '@/lib/types'
+import AuthLayout from '@/components/AuthLayout';
+import api from '@/lib/axios';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import { Route as RouteLogin } from './_guest/login';
+import type { User } from '@/lib/auth';
+import type { TResponse } from '@/types/generics';
 
 export const Route = createFileRoute('/_auth')({
     component: AuthLayout,
@@ -12,19 +12,19 @@ export const Route = createFileRoute('/_auth')({
             const data = await context.queryClient.ensureQueryData({
                 queryKey: ['user'],
                 queryFn: async () => {
-                    const { data: responseData } = await api.get<{ data: User }>('api/user');
+                    const { data: responseData } = await api.get<TResponse<User>>('api/user');
                     return responseData.data
                 },
                 revalidateIfStale: true,
                 staleTime: 0
-            })
+            });
 
-            if (!data) throw redirect({ to: RouteLogin.to })
+            if (!data) throw redirect({ to: RouteLogin.to });
 
-            return { user: data }
+            return { user: data };
         } catch (exception) {
             // todo verificar que tipo de exception fue capturado
-            throw redirect({ to: RouteLogin.to })
+            throw redirect({ to: RouteLogin.to });
         }
     }
-})
+});
