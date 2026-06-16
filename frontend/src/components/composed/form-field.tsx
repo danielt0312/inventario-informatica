@@ -5,7 +5,6 @@ import {
 } from '@/components/ui/field';
 
 export interface FormFieldProps extends React.ComponentProps<typeof Field> {
-    children: React.ReactNode;
     label?: string;
     errors?: React.ComponentProps<typeof FieldError>["errors"];
 }

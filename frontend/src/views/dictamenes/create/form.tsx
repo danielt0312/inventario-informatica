@@ -5,15 +5,15 @@ import { FieldError, FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 import { toISODate } from "@/lib/utils";
 import { PlusCircle, Trash2 } from "lucide-react";
-import { dictamenDefaultValues, dictamenProductoDefaultValues, validator } from "./form-schema";
-import { FieldGroupProductoFields } from "@/views/productos/form";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { dictamenDefaultValues, dictamenProductoDefaultValues, tipos, validator } from "./form-schema";
 import { EmpleadoField } from "@/views/empleados/partials/form";
 import { useStore } from "@tanstack/react-form";
 import { AdscripcionField } from "@/views/adscripciones/partials/form";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
+import { TipoField } from "@/views/productos/form";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function useFormMutation() {
     const navigate = useNavigate();
@@ -39,15 +39,15 @@ export function useForm() {
             const data = validator.parse(value);
             const formData = new FormData();
 
-            formData.append('adscripcion_id', data.adscripcion_id);
+            formData.append('adscripcion_id', String(data.adscripcion_id));
             formData.append('folio', data.folio);
             formData.append('fecha_solicitud', data.fecha_solicitud);
             formData.append('archivo', data.archivo[0]);
 
             data.productos.forEach((producto, index) => {
-                formData.append(`productos[${index}][cantidad]`, String(producto.cantidad));
-                formData.append(`productos[${index}][producto_id]`, String(producto.producto_id));
-                formData.append(`productos[${index}][empleado_id]`, String(producto.empleado_id));
+                formData.append(`productos[${index}].cantidad`, String(producto.cantidad));
+                formData.append(`productos[${index}].producto_tipo_id`, String(producto.producto_tipo_id));
+                formData.append(`productos[${index}].empleado_id`, String(producto.empleado_id));
             });
 
             formMutation.mutate({ data: formData, formApi });
@@ -66,10 +66,10 @@ export function Form() {
                 e.stopPropagation();
                 form.handleSubmit();
             }}
-            className="contents"
+            className="flex flex-col gap-6"
         >
             <form.AppForm>
-                <FieldGroup className="grid grid-cols-3">
+                <FieldGroup className="grid grid-cols-1 xl:grid-cols-3">
                     <form.AppField
                         name="adscripcion_id"
                         children={() => <AdscripcionField label="Área de Adscripción solicitante" />}
@@ -93,16 +93,18 @@ export function Form() {
                             />
                         )}
                     />
-                    <form.AppField
-                        name="archivo"
-                        children={() => (
-                            <FileUploaderField
-                                label="Adjuntar oficio de solicitud"
-                                accept="application/pdf"
-                            />
-                        )}
-                    />
                 </FieldGroup>
+
+                <form.AppField
+                    name="archivo"
+                    children={() => (
+                        <FileUploaderField
+                            label="Adjuntar oficio de solicitud"
+                            accept="application/pdf"
+                            className="md:max-w-1/2"
+                        />
+                    )}
+                />
 
                 <form.AppField
                     name="productos"
@@ -114,7 +116,6 @@ export function Form() {
                                 <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
                                 <Button
                                     variant="outline"
-                                    type="button"
                                     size="sm"
                                     onClick={() => field.pushValue(dictamenProductoDefaultValues)}
                                 >
@@ -122,75 +123,65 @@ export function Form() {
                                 </Button>
                             </div>
 
-                            <div className="rounded-lg overflow-hidden border border-neutral-200">
-                                <Table>
-                                    <TableHeader className="[&_tr]:bg-neutral-100 [&_tr]:hover:bg-neutral-100 [&_th]:font-bold [&_th]:text-center [&_th]:border-r">
-                                        <TableRow>
-                                            <TableHead colSpan={2}>
-                                                Bien Informático
-                                            </TableHead>
-                                            <TableHead rowSpan={2} className="border-none w-1/4">
-                                                Resguardante
-                                            </TableHead>
-                                            <TableHead rowSpan={2} className="border-none" />
-                                        </TableRow>
+                            {field.state.value.map((_, index) => (
+                                <Card key={index} className="shadow-none">
+                                    <CardContent className="flex gap-6 items-center">
+                                        <form.AppField
+                                            name={`productos[${index}].cantidad`}
+                                            children={() => (
+                                                <TextField
+                                                    label="Cantidad"
+                                                    placeholder="Ingresa una cantidad"
+                                                    className="max-w-min"
+                                                />
+                                            )}
+                                        />
 
-                                        <TableRow>
-                                            <TableHead>
-                                                Cantidad
-                                            </TableHead>
-                                            <TableHead>
-                                                Especificaciones técnicas
-                                            </TableHead>
-                                        </TableRow>
-                                    </TableHeader>
+                                        <form.AppField
+                                            name={`productos[${index}].producto_tipo_id`}
+                                            children={(field) => {
+                                                const value = field.state.value;
 
-                                    <TableBody className="[&_tr]:hover:bg-transparent [&_td]:border-r [&_td:nth-last-child(-n+2)]:border-r-transparent">
-                                        {field.state.value.length > 0 && field.state.value.map((_, index) => (
-                                            <TableRow key={index}>
-                                                <TableCell className="w-25">
-                                                    <form.AppField
-                                                        name={`productos[${index}].cantidad`}
-                                                        children={() => (
-                                                            <TextField
-                                                                placeholder="Ingresa una cantidad"
+                                                return (
+                                                    <div className="flex flex-col gap-6 w-full">
+                                                        <TipoField label="Bien Informático" />
+
+                                                        {value && tipos.includes(Number(value)) && (
+                                                            <form.AppField
+                                                                name={`productos[${index}].numero_inventario`}
+                                                                children={() => (
+                                                                    <TextField
+                                                                        label="Número de inventario"
+                                                                        placeholder="Ingresa el número de inventario"
+                                                                    />
+                                                                )}
                                                             />
                                                         )}
-                                                    />
-                                                </TableCell>
-                                                <TableCell className="grid grid-cols-1 gap-6">
-                                                    <FieldGroupProductoFields
-                                                        form={form}
-                                                        fields={{
-                                                            id: `productos[${index}].producto_id`,
-                                                            categoria_id: `productos[${index}].producto_categoria_id`,
-                                                            tipo_id: `productos[${index}].producto_tipo_id`,
-                                                            marca_id: `productos[${index}].producto_marca_id`,
-                                                        }}
-                                                        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-                                                    />
-                                                </TableCell>
-                                                <TableCell>
-                                                    <form.AppField
-                                                        name={`productos[${index}].empleado_id`}
-                                                        children={() => <EmpleadoField adscripcion={adscripcion} />}
-                                                    />
-                                                </TableCell>
-                                                <TableCell className="max-w-fit text-center">
-                                                    <Button
-                                                        disabled={field.state.value.length === 1}
-                                                        onClick={() => field.removeValue(index)}
-                                                        variant="destructive"
-                                                        type="button"
-                                                    >
-                                                        <Trash2 />
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
+                                                    </div>
+                                                );
+                                            }}
+                                        />
+
+                                        <form.AppField
+                                            name={`productos[${index}].empleado_id`}
+                                            children={() => (
+                                                <EmpleadoField
+                                                    label="Resguardante"
+                                                    adscripcion={adscripcion}
+                                                />
+                                            )}
+                                        />
+
+                                        <Button
+                                            disabled={field.state.value.length === 1}
+                                            onClick={() => field.removeValue(index)}
+                                            variant="destructive"
+                                        >
+                                            <Trash2 />
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            ))}
 
                             <FieldError errors={field.state.meta.errors} />
                         </>

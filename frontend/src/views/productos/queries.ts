@@ -1,7 +1,7 @@
 import api from "@/lib/axios"
 import type { CatalogoListResponse, OmitQueryOptions } from "@/types/generics";
 import type { TCatalogo } from "@/types/generics";
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query";
 
 export const useCategoriaQuery = <TData = TCatalogo[]>(
     params?: OmitQueryOptions<TCatalogo[], Error, TData>

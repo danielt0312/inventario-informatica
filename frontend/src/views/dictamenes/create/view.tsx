@@ -13,7 +13,7 @@ export function View() {
                         {getTitle().toUpperCase()}
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-6">
+                <CardContent>
                     <Form />
                 </CardContent>
             </SidebarSteps>

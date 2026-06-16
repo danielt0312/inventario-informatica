@@ -1,7 +1,5 @@
 import api from "@/lib/axios";
-import type {
-    OmitQueryOptions} from "@/lib/types";
-import type { TResponse } from "@/types/generics";
+import type { OmitQueryOptions, TResponse } from "@/types/generics";
 import { useQuery } from "@tanstack/react-query";
 
 export type Empleado = {

@@ -3,10 +3,10 @@ import {
     RequiredIsoDateLTEToday,
     RequiredPositiveInteger,
     ArrayStandardFile,
-    RequiredArray
+    RequiredArray,
+    NonEmptyStringToNumber,
+    TrimmedString
 } from "@/lib/schemas/common";
-import type { WithPrefix } from "@/types/generics";
-import { addPrefix } from "@/lib/utils";
 import {
     defaultValues as productoDefaultValues,
     validator as productoValidator,
@@ -14,17 +14,18 @@ import {
 } from "@/views/productos/form-schema";
 import z from "zod";
 
-type PrefixedProductoSchema = WithPrefix<ProductoSchema, 'producto_'>;
-export type ProductoFields = PrefixedProductoSchema & {
+export type ProductoFields = {
     cantidad: string;
+    producto_tipo_id: ProductoSchema['tipo_id'];
     empleado_id: string;
+    numero_inventario: string;
 }
 
-const prefixedProductoDefaultValues = addPrefix(productoDefaultValues, 'producto_');
 export const dictamenProductoDefaultValues: ProductoFields = {
-    ...prefixedProductoDefaultValues,
     cantidad: '1',
+    producto_tipo_id: productoDefaultValues['tipo_id'],
     empleado_id: '',
+    numero_inventario: ''
 } as const;
 
 export type Schema = {
@@ -43,17 +44,27 @@ export const dictamenDefaultValues: Schema = {
     productos: [dictamenProductoDefaultValues]
 } as const;
 
-const prefixedProductoValidator = z.object(addPrefix(productoValidator.shape, 'producto_'));
+// todo
+export const tipos = [1, 2, 3];
+
 export const validator = z.object({
     folio: NonEmptyString,
     fecha_solicitud: RequiredIsoDateLTEToday,
-    adscripcion_id: NonEmptyString,
+    adscripcion_id: NonEmptyStringToNumber,
     archivo: ArrayStandardFile,
-    productos: RequiredArray(
-        prefixedProductoValidator.extend({
+    productos: RequiredArray(z
+        .object({
             cantidad: RequiredPositiveInteger,
-            empleado_id: NonEmptyString
-        })
+            producto_tipo_id: productoValidator.shape.tipo_id,
+            empleado_id: NonEmptyStringToNumber,
+            numero_inventario: TrimmedString
+        }).refine(
+            ({ producto_tipo_id, numero_inventario }) => numero_inventario.length === 0 && !tipos.includes(producto_tipo_id),
+            {
+                message: "Este campo es requerido",
+                path: ["numero_inventario"]
+            }
+        ),
     )
 });
 

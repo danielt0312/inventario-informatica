@@ -89,15 +89,43 @@ export function handleFormValidationError(
     }
 }
 
-export const catalogoToOption = ({
-    id,
-    nombre
-}: TCatalogo): ComboboxOption => ({
-    value: String(id),
-    label: nombre,
-})
-export const toOptions = (list: TCatalogo[]): ComboboxOption[] =>
-    list.map(catalogoToOption)
+const getValueByPath = (obj: any, path: string): any => {
+  return path.split('.').reduce((acc, key) => acc?.[key], obj);
+};
+
+export const catalogoToComboboxOption = <T extends TCatalogo>(
+  item: T,
+  groupAccessor?: string | ((item: T) => any)
+): ComboboxOption => {
+  const option: ComboboxOption = {
+    value: String(item.id),
+    label: item.nombre,
+  };
+
+  if (groupAccessor) {
+    // Evaluamos si es una función o un string de acceso
+    const resolvedGroup = typeof groupAccessor === 'function'
+      ? groupAccessor(item)
+      : getValueByPath(item, groupAccessor);
+
+    // Si el valor devuelto es un string, lo asignamos directamente
+    if (typeof resolvedGroup === 'string') {
+      option.group = resolvedGroup;
+    }
+    // Flexibilidad extra: Si es un objeto que tiene una propiedad 'nombre', la usamos
+    else if (resolvedGroup && typeof resolvedGroup === 'object' && 'nombre' in resolvedGroup) {
+      option.group = String(resolvedGroup.nombre);
+    }
+  }
+
+  return option;
+};
+
+export const toOptions = <T extends TCatalogo>(
+  list: T[],
+  groupAccessor?: string | ((item: T) => any)
+): ComboboxOption[] =>
+  list.map((item) => catalogoToComboboxOption(item, groupAccessor));
 
 export const toISODate = (d: Date | undefined): string =>
     d?.toISOString().slice(0, 10) ?? ""

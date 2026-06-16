@@ -37,9 +37,9 @@ export type OmitQueryOptions<
     'queryKey' | 'queryFn'
 >;
 
-export type OmitCreatableComboboxFieldsProps<
-    TOmit extends keyof CreatableComboboxFieldProps = never
+export type TOmitCreatableComboboxFieldsProps<
+    O extends keyof CreatableComboboxFieldProps = never
 > = Omit<
-    CreatableComboboxFieldProps, 'options' | TOmit
+    CreatableComboboxFieldProps, 'options' | O
 >
 
