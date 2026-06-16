@@ -3,23 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Spatie\QueryBuilder\QueryBuilder;
 use App\Models\ProductoTipo;
-
-use App\Http\Requests\ProductoTipo\ProductoTipoRequest;
+use App\Http\Resources\ProductoTipoResource;
 
 class ProductoTipoController extends Controller
 {
-    public function index(ProductoTipoRequest $request)
+    public function index()
     {
-        if (!$request->filled('categorias')) {
-            return response()->json(['data' => []]);
-        }
-
-        $data = ProductoTipo::whereIn('categoria_id', $request->input('categorias'))
+        $data = QueryBuilder::for(ProductoTipo::class)
+            ->allowedIncludes('categoria')
             ->get();
 
-        return response()->json(compact('data'));
+        return ProductoTipoResource::collection($data);
     }
 
     public function store(Request $request)
