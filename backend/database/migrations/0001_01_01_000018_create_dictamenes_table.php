@@ -51,13 +51,27 @@ return new class extends Migration
                 ->constrained('empleados', indexName: 'fk_dictamen_productos_empleados')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignId('producto_tipo_id')
+                ->nullable()
+                ->constrained('producto_tipos', indexName: 'fk_dictamen_productos_producto_tipos')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->foreignId('producto_id')
+                ->nullable()
                 ->constrained('productos', indexName: 'fk_dictamen_productos_productos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->string('numero_inventario')
+                ->nullable();
             $table->unsignedTinyInteger('cantidad');
             $table->string('caracteristicas', 255)
                 ->nullable();
+
+            $table->foreign('numero_inventario')
+                ->references('numero_inventario')
+                ->on('articulos')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
         });
 
         Schema::create('dictamen_articulos', function (Blueprint $table) {
