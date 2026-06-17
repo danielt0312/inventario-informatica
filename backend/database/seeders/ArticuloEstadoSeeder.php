@@ -15,7 +15,7 @@ class ArticuloEstadoSeeder extends Seeder
         foreach (ArticuloEstadoEnum::cases() as $estado) {
             ArticuloEstado::insertOrIgnore([
                 'id' => $estado->value,
-                'nombre' => $estado->nombre(),
+                'nombre' => $estado->label(),
             ]);
         }
     }

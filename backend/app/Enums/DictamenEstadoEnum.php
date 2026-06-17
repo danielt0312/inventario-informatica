@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-use App\Traits\EnumToArray;
+use App\Traits\Enums\IsCatalog;
 
 enum DictamenEstadoEnum: int
 {
-    use EnumToArray;
+    use IsCatalog;
 
     case DICTAMINAR = 1;
     case EVIDENCIAR = 2;
@@ -15,7 +15,7 @@ enum DictamenEstadoEnum: int
     case SURTIDO = 5;
     case SURTIDO_PARCIAL = 6;
 
-    public function nombre(): string
+    public function label(): string
     {
         return match($this) {
             self::DICTAMINAR => 'Por Dictaminar',

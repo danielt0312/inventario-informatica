@@ -2,20 +2,20 @@
 
 namespace App\Enums;
 
-use App\Traits\EnumToArray;
+use App\Traits\Enums\IsCatalog;
 
 enum DocumentoTipoEnum: int
 {
-    use EnumToArray;
+    use IsCatalog;
 
-    case FACTURA        = 1;
-    case OFICIO         = 2;
-    case ADQUISICION    = 3;
-    case RESGUARDO      = 4;
-    case PRESTAMO       = 5;
-    case DICTAMEN       = 6;
+    case FACTURA = 1;
+    case OFICIO = 2;
+    case ADQUISICION = 3;
+    case RESGUARDO = 4;
+    case PRESTAMO = 5;
+    case DICTAMEN = 6;
 
-    public function nombre(): string {
+    public function label(): string {
         return match ($this) {
             self::FACTURA       => 'Factura',
             self::OFICIO        => 'Oficio solicitante',

@@ -17,7 +17,7 @@ class DocumentoTipoSeeder extends Seeder
         foreach (DocumentoTipoEnum::cases() as $tipo) {
             DocumentoTipo::insertOrIgnore([
                 'id' => $tipo->value,
-                'nombre' => $tipo->nombre(),
+                'nombre' => $tipo->label(),
             ]);
         }
     }

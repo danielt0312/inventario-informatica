@@ -2,19 +2,20 @@
 
 namespace App\Enums;
 
-use App\Traits\EnumToArray;
+use App\Traits\Enums\IsCatalog;
 
 enum ArticuloEstadoEnum: int
 {
-    use EnumToArray;
+    use IsCatalog;
 
-    case ACTIVO             = 1;
-    case BAJA               = 2;
-    case BAJA_PREVENTIVA    = 3;
-    case REVISION           = 4;
-    case MANTENIMIENTO      = 5;
+    case ACTIVO = 1;
+    case BAJA = 2;
+    case BAJA_PREVENTIVA = 3;
+    case REVISION = 4;
+    case MANTENIMIENTO = 5;
 
-    public function nombre(): string {
+    public function label(): string
+    {
         return match($this) {
             self::ACTIVO            => 'Activo',
             self::BAJA              => 'Baja definitiva',
