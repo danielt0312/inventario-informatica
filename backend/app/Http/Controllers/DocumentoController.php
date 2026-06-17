@@ -6,7 +6,7 @@ use App\Models\{Documento, Archivo};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Documento\{DocumentoRequest, StoreDocumentoRequest};
-use App\Enums\ArchivoTipoEnum;
+use App\Enums\AvailableFileExtensions;
 
 class DocumentoController extends Controller
 {
@@ -27,47 +27,5 @@ class DocumentoController extends Controller
         return $query
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
-    }
-
-    public function store(StoreDocumentoRequest $request)
-    {
-        DB::transaction(function () use ($request) {
-            $file = $request->file('archivo');
-            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-
-            $archivo = Archivo::create([
-                'nombre' => $filename,
-                'tipo_id' => ArchivoTipoEnum::PDF->value
-            ]);
-
-            $file->storeAs(
-                dirname($archivo->relative_path),
-                basename($archivo->relative_path)
-            );
-
-            $documento = new Documento([
-                'tipo_id' => $request->input('tipo_id'),
-            ]);
-
-            $documento->archivo()->associate($archivo);
-            $documento->save();
-        });
-
-        return response(status: 201);
-    }
-
-    public function show(Documento $documento)
-    {
-        //
-    }
-
-    public function update(Request $request, Documento $documento)
-    {
-        //
-    }
-
-    public function destroy(Documento $documento)
-    {
-        //
     }
 }

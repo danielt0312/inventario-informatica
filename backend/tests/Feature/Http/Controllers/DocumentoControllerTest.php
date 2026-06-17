@@ -4,7 +4,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\{User, Documento};
-use App\Enums\{ArchivoTipoEnum, DocumentoTipoEnum};
+use App\Enums\{AvailableFileExtensions, DocumentoTipoEnum};
 
 beforeEach(function () {
     $this->user = User::factory()->create();

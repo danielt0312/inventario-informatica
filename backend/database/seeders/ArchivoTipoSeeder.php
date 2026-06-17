@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\ArchivoTipo;
-use App\Enums\ArchivoTipoEnum;
+use App\Enums\AvailableFileExtensions;
 
 class ArchivoTipoSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class ArchivoTipoSeeder extends Seeder
 
     public function run(): void
     {
-        foreach (ArchivoTipoEnum::cases() as $tipo) {
+        foreach (AvailableFileExtensions::cases() as $tipo) {
             ArchivoTipo::insertOrIgnore([
                 'id' => $tipo->value,
                 'nombre' => $tipo->nombre(),

@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Enums\ArchivoTipoEnum;
+use App\Enums\AvailableFileExtensions;
 
 class ArchivoFactory extends Factory
 {
@@ -12,19 +12,19 @@ class ArchivoFactory extends Factory
     {
         return [
             'nombre' => fake()->slug(rand(1, 5)),
-            'tipo_id' => ArchivoTipoEnum::PDF->value,
+            'tipo_id' => AvailableFileExtensions::PDF->value,
         ];
     }
 
     public function pdf(): Factory {
         return $this->state(fn () => [
-            'tipo_id' => ArchivoTipoEnum::PDF->value,
+            'tipo_id' => AvailableFileExtensions::PDF->value,
         ]);
     }
 
     public function jpg(): Factory {
         return $this->state(fn () => [
-            'tipo_id' => ArchivoTipoEnum::JPG->value,
+            'tipo_id' => AvailableFileExtensions::JPG->value,
         ]);
     }
 }

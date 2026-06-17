@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Archivo;
-use App\Enums\ArchivoTipoEnum;
+use App\Enums\AvailableFileExtensions;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\{File, UploadedFile};
 use InvalidArgumentException;
@@ -12,11 +12,11 @@ class ArchivoService
 {
     public function create(
         string $nombre,
-        ArchivoTipoEnum $tipo
+        AvailableFileExtensions $tipo
     ): Archivo {
         return Archivo::create([
             'nombre' => pathinfo($nombre, PATHINFO_FILENAME),
-            'extension' => $tipo->extension()
+            'extension' => $tipo->value
         ]);
     }
 
@@ -46,7 +46,7 @@ class ArchivoService
     public function createAndStore(
         UploadedFile|File $file,
         string|null $fileName = null,
-        ArchivoTipoEnum $tipo = ArchivoTipoEnum::PDF,
+        AvailableFileExtensions $tipo = AvailableFileExtensions::PDF,
         string $disk = 'local'
     ): Archivo {
         if (is_null($fileName) && !($file instanceof UploadedFile)) {
@@ -65,7 +65,7 @@ class ArchivoService
     public function createAndStoreFromRaw(
         string $fileName,
         string $content,
-        ArchivoTipoEnum $tipo = ArchivoTipoEnum::PDF,
+        AvailableFileExtensions $tipo = AvailableFileExtensions::PDF,
         string $disk = 'local'
     ): Archivo {
         $archivo = $this->create($fileName, $tipo);
