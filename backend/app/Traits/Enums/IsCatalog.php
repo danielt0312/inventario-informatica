@@ -2,25 +2,30 @@
 
 namespace App\Traits\Enums;
 
-use App\Traits\HasLabel;
-
 trait IsCatalog
 {
-    use HasLabel;
+    public function toFormattedArray(): array
+    {
+        return [
+            'id' => $this->value,
+            'nombre' => $this->getLabelValue()
+        ];
+    }
 
-    public static function toFormattedArray(): array
+    public static function casesToFormattedArray(): array
     {
         return array_map(
-            fn (self $case) => [
-                'id' => $case->value,
-                'nombre' => $case->getLabelValue()
-            ],
+            fn (self $case) => $case->toFormattedArray(),
             self::cases()
         );
     }
 
     public function getLabelValue(): string
     {
+        if (!method_exists($this, 'label')) {
+            return $this->getFormattedLabel();
+        }
+
         try {
             return $this->label();
         } catch (\UnhandledMatchError) {
