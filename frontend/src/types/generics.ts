@@ -1,4 +1,3 @@
-import type { CreatableComboboxFieldProps } from "@/components/composed/@tanstack/form-field";
 import type { UseQueryOptions } from "@tanstack/react-query";
 
 export type TCatalogo = {
@@ -36,10 +35,3 @@ export type OmitQueryOptions<
     UseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey' | 'queryFn'
 >;
-
-export type TOmitCreatableComboboxFieldsProps<
-    O extends keyof CreatableComboboxFieldProps = never
-> = Omit<
-    CreatableComboboxFieldProps, 'options' | O
->
-
