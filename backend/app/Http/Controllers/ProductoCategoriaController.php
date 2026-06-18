@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Models\ProductoCategoria;
+use App\Http\Resources\ProductoCategoriaResource;
 
 class ProductoCategoriaController extends Controller
 {
     public function index()
     {
-        return QueryBuilder::for(ProductoCategoria::class)
+        $data = QueryBuilder::for(ProductoCategoria::class)
             ->allowedIncludes('tipos')
-            ->toResourceCollection();
+            ->get();
+
+        return ProductoCategoriaResource::collection($data);
     }
 
     public function store(Request $request)
