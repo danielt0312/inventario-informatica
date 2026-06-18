@@ -3,10 +3,13 @@ import {
     useProductoQuery,
 } from "./queries";
 import { CreatableComboboxField } from "@/components/composed/@tanstack/form-field";
-import type { TOmitCreatableComboboxFieldsProps, TResponse } from "@/types/generics";
+import type { TResponse } from "@/types/generics";
+import type { TOmitCreatableComboboxFieldsProps } from "@/components/composed/@tanstack/form-field";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import type { ProductoTipoWithCategoria } from "@/types/productos";
+import React from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const TipoField = (params: TOmitCreatableComboboxFieldsProps) => {
     const { data: options = [] } = useQuery({
@@ -17,14 +20,21 @@ export const TipoField = (params: TOmitCreatableComboboxFieldsProps) => {
             }
         }).then(r => r.data.data),
         select: (data) => toOptions(data, 'categoria')
-    })
+    });
+
 
     return (
-        <CreatableComboboxField
-            options={options}
-            label="Tipo"
-            {...params}
-        />
+        <>
+            <CreatableComboboxField
+                options={options}
+                label="Tipo"
+                onCreateRequest={(searchValue) => {
+                    setOpen(true);
+                }}
+                {...params}
+            />
+
+        </>
     );
 }
 
@@ -32,7 +42,7 @@ export const ProductoField = ({
     tipo,
     marca,
     ...props
-}: TOmitCreatableComboboxFieldsProps<'enabled'> & {
+}: TOmitCreatableComboboxFieldsProps<'disabled'> & {
     tipo: string;
     marca: string;
 }) => {
@@ -47,7 +57,7 @@ export const ProductoField = ({
         <CreatableComboboxField
             options={data}
             label="Modelo"
-            enabled={!marca}
+            disabled={!marca}
             {...props}
         />
     );

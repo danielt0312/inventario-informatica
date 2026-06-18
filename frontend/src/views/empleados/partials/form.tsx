@@ -1,7 +1,7 @@
 import { toOptions } from "@/lib/utils";
 import { useEmpleadoQuery } from "./queries";
 import { CreatableComboboxField } from "@/components/composed/@tanstack/form-field";
-import type { TOmitCreatableComboboxFieldsProps } from "@/types/generics";
+import type { TOmitCreatableComboboxFieldsProps } from "@/components/composed/@tanstack/form-field";
 
 export function EmpleadoField({
     adscripcion,
