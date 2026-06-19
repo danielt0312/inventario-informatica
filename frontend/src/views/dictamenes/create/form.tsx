@@ -12,13 +12,8 @@ import { AdscripcionField } from "@/views/adscripciones/partials/form";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
-import { TipoField } from "@/views/productos/form";
 import { Card, CardContent } from "@/components/ui/card";
-import { Combobox, ComboboxCollection, ComboboxContent, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxLabel, ComboboxList, ComboboxSeparator } from "@/components/ui/combobox";
-import { useQuery } from "@tanstack/react-query";
-import api from "@/lib/axios";
-import type { TCatalogo, TResponse } from "@/types/generics";
-import { useState } from "react";
+import { TipoField } from "@/views/productos/tipos/partials/form-fields";
 
 export function useFormMutation() {
     const navigate = useNavigate();
@@ -60,22 +55,9 @@ export function useForm() {
     });
 }
 
-type ProductoCategoria = TCatalogo & {
-    tipos: TCatalogo[]
-}
-
 export function Form() {
     const form = useForm();
     const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
-
-    const { data: PRODUCTO_CATEGORIAS = [] } = useQuery({
-        queryKey: ['producto_categorias'],
-        queryFn: () => api.get<TResponse<ProductoCategoria[]>>('api/producto_categorias', {
-            params: {
-                include: 'tipos'
-            }
-        }).then(r => r.data.data),
-    });
 
     return (
         <form
@@ -162,7 +144,10 @@ export function Form() {
 
                                                 return (
                                                     <div className="flex flex-col gap-6 w-full">
-                                                        <TipoField label="Bien Informático" />
+                                                        <form.AppField
+                                                            name={`productos[${index}].producto_tipo_id`}
+                                                            children={() => <TipoField />}
+                                                        />
 
                                                         {value && tipos.includes(Number(value)) && (
                                                             <form.AppField

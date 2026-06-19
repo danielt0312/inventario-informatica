@@ -4,7 +4,7 @@ export type ProductoMarca = TCatalogo;
 export type ProductoCategoria = TCatalogo;
 export type ProductoTipo = TCatalogo;
 export type ProductoCategoriaWithTipos = ProductoCategoria & {
-    productos: ProductoTipo[];
+    tipos: ProductoTipo[];
 }
 export type ProductoTipoWithCategoria = ProductoTipo & {
     categoria: ProductoCategoria;

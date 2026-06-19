@@ -2,43 +2,45 @@ import { CreatableComboboxField } from "@/components/composed/@tanstack/form/fie
 import api from "@/lib/axios";
 import { toOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
-import type { ProductoCategoria } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { useForm, useFormMutation } from "../create/form";
+import { AppForm, useForm, useFormMutation } from "../create/form";
+import type { ProductoCategoriaWithTipos } from "@/types/productos";
 
 export type FieldProps = Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
     'options' | 'onCreateRequest'
 >;
 
-export function Field({
-    label = 'Tipo',
+export function TipoField({
+    label = "Tipo de Producto",
     ...props
 }: FieldProps) {
     const { data: options = [] } = useQuery({
-        queryKey: ['producto_categorias'],
-        queryFn: () => api.get<TResponse<ProductoCategoria[]>>('api/producto_categorias', {
+        queryKey: ['producto_categorias_tipos'],
+        queryFn: () => api.get<TResponse<ProductoCategoriaWithTipos[]>>('api/producto_categorias', {
             params: {
                 include: 'tipos'
             }
         }).then(r => r.data.data),
-        select: toOptions
+        select: (data) => toOptions(data, 'tipos.nombre')
     });
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
     const useDialogFormMutation = () => useFormMutation({
-        onSuccess: () => setDialogIsOpen(false)
-    });
-    const useDialogForm = () => useForm({
-        useMutationHook: useDialogFormMutation
+        onSuccess: (_, __, ___, { client }) => {
+            setDialogIsOpen(false)
+            client.invalidateQueries({ queryKey: ['producto_categorias_tipos'] });
+        }
     });
 
-    const [searchValue, setSearchValue] = React.useState('');
+    const dialogForm = useForm({
+        useMutationHook: useDialogFormMutation
+    });
 
     return (
         <>
@@ -46,7 +48,7 @@ export function Field({
                 options={options}
                 label={label}
                 onCreateRequest={(searchValue) => {
-                    setSearchValue(searchValue);
+                    dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
                 }}
                 {...props}
@@ -55,30 +57,18 @@ export function Field({
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Crear nueva categoria</DialogTitle>
+                        <DialogTitle>Crear Tipo de Producto</DialogTitle>
                     </DialogHeader>
 
-                    <Form
-                        useFormHook={useDialogForm}
-                        className="contents"
-                    >
-                        {(form) => {
-                            form.setFieldValue('nombre', searchValue);
+                    <AppForm form={dialogForm} className="contents">
+                        <DialogFooter>
+                            <dialogForm.SubmitButton />
 
-                            return (
-                                <DialogFooter>
-                                    <form.SubmitButton />
-
-                                    <Button
-                                        // type="reset"
-                                        onClick={() => setDialogIsOpen(false)}
-                                    >
-                                        <XCircleIcon /> Cerrar
-                                    </Button>
-                                </DialogFooter>
-                            );
-                        }}
-                    </Form>
+                            <Button onClick={() => setDialogIsOpen(false)} variant="outline">
+                                <XCircleIcon /> Cerrar
+                            </Button>
+                        </DialogFooter>
+                    </AppForm>
                 </DialogContent>
             </Dialog>
         </>

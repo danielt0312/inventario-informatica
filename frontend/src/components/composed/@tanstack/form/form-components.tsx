@@ -3,6 +3,25 @@ import { SaveIcon } from "lucide-react";
 import { useFormContext } from "./form";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+import { type AnyFormApi } from "@tanstack/react-form";
+import type React from "react";
+
+interface FormProps extends React.ComponentProps<'form'> {
+    form: AnyFormApi;
+}
+
+export const Form = ({ form, ...props }: FormProps) => {
+    return (
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                form.handleSubmit();
+            }}
+            {...props}
+        />
+    );
+};
 
 export type SubmitButtonProps =
     Omit<

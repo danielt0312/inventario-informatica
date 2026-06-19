@@ -11,13 +11,13 @@ import type {
     WithPrefix
 } from "@/types/generics";
 import type { TCatalogo } from "@/types/generics";
-import type { ComboboxOption } from "@/components/composed/combobox-creatable";
 import {
     parseISO,
     isValid
 } from "date-fns"
 import { isAxiosError } from "axios";
 import { root } from "./axios";
+import type { ComboboxOption } from "@/components/composed/creatable-combobox";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))

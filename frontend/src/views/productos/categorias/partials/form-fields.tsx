@@ -9,16 +9,13 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useFormMutation } from "../create/form";
-import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
-import { defaultValues } from "./form-schema";
-import { FieldGroup as FieldGroupComponent } from "@/components/ui/field";
 
 export type FieldProps = Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
     'options' | 'onCreateRequest'
 >;
 
-export function Field({
+export function CategoriaField({
     label = "Categoría de Producto",
     ...props
 }: FieldProps) {
@@ -32,7 +29,10 @@ export function Field({
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
     const useDialogFormMutation = () => useFormMutation({
-        onSuccess: () => setDialogIsOpen(false)
+        onSuccess: (_, __, ___, { client }) => {
+            setDialogIsOpen(false)
+            client.invalidateQueries({ queryKey: ['producto_categorias'] });
+        }
     });
 
     const dialogForm = useForm({
@@ -54,14 +54,14 @@ export function Field({
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Crear nueva categoria</DialogTitle>
+                        <DialogTitle>Crear Categoría de Producto</DialogTitle>
                     </DialogHeader>
 
-                    <AppForm form={dialogForm}>
+                    <AppForm form={dialogForm} className="contents">
                         <DialogFooter>
                             <dialogForm.SubmitButton />
 
-                            <Button onClick={() => setDialogIsOpen(false)}>
+                            <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar
                             </Button>
                         </DialogFooter>
@@ -71,17 +71,3 @@ export function Field({
         </>
     );
 }
-
-const props: React.ComponentProps<typeof FieldGroupComponent> = {};
-export const FieldGroup = withFieldGroup({
-    defaultValues,
-    props,
-    render: ({ group, ...props }) => (
-        <FieldGroupComponent {...props}>
-            <group.AppField
-                name="id"
-                children={() => <Field />}
-            />
-        </FieldGroupComponent>
-    )
-})
