@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Models\ProductoCategoria;
 use App\Http\Resources\ProductoCategoriaResource;
+use App\Http\Requests\ProductoCategoria\StoreProductoCategoriaRequest;
 
 class ProductoCategoriaController extends Controller
 {
@@ -18,9 +19,11 @@ class ProductoCategoriaController extends Controller
         return ProductoCategoriaResource::collection($data);
     }
 
-    public function store(Request $request)
+    public function store(StoreProductoCategoriaRequest $request)
     {
-        //
+        ProductoCategoria::create($request->validated());
+
+        return response(status: 201);
     }
 
     public function show(string $id)

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Models\ProductoTipo;
 use App\Http\Resources\ProductoTipoResource;
+use App\Http\Requests\ProductoTipo\StoreProductoTipoRequest;
 
 class ProductoTipoController extends Controller
 {
@@ -18,9 +19,11 @@ class ProductoTipoController extends Controller
         return ProductoTipoResource::collection($data);
     }
 
-    public function store(Request $request)
+    public function store(StoreProductoTipoRequest $request)
     {
-        //
+        ProductoTipo::create($request->validated());
+
+        return response(status: 201);
     }
 
     public function show(string $id)
