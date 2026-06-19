@@ -1,4 +1,4 @@
-import { useAppForm } from "@/components/composed/@tanstack/form";
+import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { useFormMutation } from "../form";
 import { validator, type Schema, type ValidatedDictamen } from "./form-schema";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

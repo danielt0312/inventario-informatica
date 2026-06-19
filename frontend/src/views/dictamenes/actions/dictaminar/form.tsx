@@ -1,5 +1,5 @@
-import { useAppForm } from "@/components/composed/@tanstack/form";
-import { TextareaField } from "@/components/composed/@tanstack/form-fields";
+import { useAppForm } from "@/components/composed/@tanstack/form/form";
+import { TextareaField } from "@/components/composed/@tanstack/form/field-components";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { type Schema, validator } from "./form-schema";

@@ -1,4 +1,4 @@
-import { useAppForm } from "@/components/composed/@tanstack/form";
+import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import api from "@/lib/axios";
 import { FieldGroupProductoFields } from "@/views/productos/form";
 import {
@@ -12,7 +12,7 @@ import z from "zod";
 import { Route as RouteIndex } from "@/routes/_auth/inventario"
 import { isAxiosError } from "axios";
 import { setFormValidationErrors } from "@/lib/utils";
-import { CheckboxField, TextField } from "@/components/composed/@tanstack/form-fields";
+import { CheckboxField, TextField } from "@/components/composed/@tanstack/form/field-components";
 import { FieldGroup } from "@/components/ui/field";
 
 type ArticuloFields = Omit<Schema, 'id'> & {

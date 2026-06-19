@@ -8,9 +8,9 @@ import { useQueryClient } from "@tanstack/react-query"
 
 import type { TResponse } from "@/types/generics"
 import z from "zod"
-import { useAppForm } from "@/components/composed/@tanstack/form"
+import { useAppForm } from "@/components/composed/@tanstack/form/form"
 import { handleFormValidationError } from "@/lib/utils"
-import { TextField } from "@/components/composed/@tanstack/form-fields"
+import { TextField } from "@/components/composed/@tanstack/form/field-components"
 import { RequiredInstitutionalEmail, NonEmptyString } from "@/lib/schemas/common"
 import { DoorOpen } from "lucide-react"
 import { useState } from "react"
@@ -118,6 +118,6 @@ export function View() {
                     </form.AppForm>
                 </form>
             </CardContent>
-        </Card >
+        </Card>
     )
 }

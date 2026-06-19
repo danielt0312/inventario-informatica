@@ -1,73 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { SaveIcon } from "lucide-react";
-import {
-    useFieldContext,
-    useFormContext
-} from "./form";
-import { Spinner } from "@/components/ui/spinner";
-import { cn, fromISO } from "@/lib/utils";
-import {
-    FormField,
-    type FormFieldProps as TFormFieldProps
-} from "../form-field";
+import { useFieldContext } from "./form";
+import { fromISO } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FieldLabel } from "@/components/ui/field";
-import { DatePicker } from "../date-picker";
+import { DatePicker } from "../../date-picker";
 import React from "react";
-import { FileUploader } from "../file-uploader";
+import { FileUploader } from "../../file-uploader";
 import { Textarea } from "@/components/ui/textarea";
-import { CreatableCombobox } from "../creatable-combobox";
-
-export type SubmitButtonProps = &
-    Omit<
-        React.ComponentProps<typeof Button>,
-        'type' | 'disabled' | 'children'
-    > & {
-        icon?: React.ReactNode;
-        label?: string;
-        children?: (isSubmitting: boolean) => React.ReactNode;
-    }
-export const SubmitButton = ({
-    label = "Guardar",
-    icon = <SaveIcon />,
-    className,
-    children,
-    ...props
-}: SubmitButtonProps) => {
-    const form = useFormContext();
-
-    return (
-        <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => {
-                const renderChildren = typeof children === 'function'
-                    ? children(isSubmitting)
-                    : (
-                        <>
-                            {isSubmitting
-                                ? <Spinner />
-                                : icon
-                            } {label}
-                        </>
-                    );
-
-                return (
-                    <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        children={renderChildren}
-                        className={cn("max-w-fit self-center", className)}
-                        {...props}
-                    />
-                );
-            }}
-        </form.Subscribe>
-    );
-}
+import { CreatableCombobox } from "../../creatable-combobox";
+import { type FormFieldProps as TFormFieldProps, FormField } from "../../form-field";
 
 export type FormFieldProps = Omit<TFormFieldProps, 'orientation'> & {
     fieldOrientation?: TFormFieldProps['orientation'];
 };
+
 export const Field = ({
     fieldOrientation,
     ...props

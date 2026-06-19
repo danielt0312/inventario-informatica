@@ -1,4 +1,4 @@
-import { CreatableComboboxField } from "@/components/composed/@tanstack/form-fields";
+import { CreatableComboboxField } from "@/components/composed/@tanstack/form/field-components";
 import api from "@/lib/axios";
 import { toOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useFormMutation } from "../create/form";
-import { withFieldGroup } from "@/components/composed/@tanstack/form";
+import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
 import { defaultValues } from "./form-schema";
 import { FieldGroup as FieldGroupComponent } from "@/components/ui/field";
 

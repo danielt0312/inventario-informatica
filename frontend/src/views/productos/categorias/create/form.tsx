@@ -1,4 +1,4 @@
-import { useAppForm } from "@/components/composed/@tanstack/form";
+import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { type FormMutation, usePostFormMutation } from "@/hooks/use-post-form-mutation";
 import { defaultValues, validator } from "./form-schema";
 import { createFieldMap } from "@tanstack/react-form";
