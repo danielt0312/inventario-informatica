@@ -15,7 +15,7 @@ class StoreDictamenRequest extends FormRequest
             'archivo' => ['required', 'file', 'max:5120', 'mimes:pdf'],
             'productos' => ['required', 'array', 'min:1'],
             'productos.*.empleado_id' => ['required', 'integer'],
-            'productos.*.producto_id' => ['required', 'integer', 'exists:productos,id'],
+            'productos.*.producto_tipo_id' => ['required', 'integer', 'exists:producto_tipos,id'],
             'productos.*.cantidad' => ['required', 'integer', 'gte:1', 'lte:255'],
             'productos.*.caracteristicas' => ['nullable', 'string', 'max:255'],
         ];

@@ -22,7 +22,7 @@ export function useFormMutation() {
         url: 'api/dictamenes',
         onSuccess: (_, __, ___, context) => {
             context.client.invalidateQueries({ queryKey: ['dictamenes'] });
-            navigate({ to: IndexRoute.to })
+            navigate({ to: IndexRoute.to });
         }
     });
 }
@@ -45,9 +45,9 @@ export function useForm() {
             formData.append('archivo', data.archivo[0]);
 
             data.productos.forEach((producto, index) => {
-                formData.append(`productos[${index}].cantidad`, String(producto.cantidad));
-                formData.append(`productos[${index}].producto_tipo_id`, String(producto.producto_tipo_id));
-                formData.append(`productos[${index}].empleado_id`, String(producto.empleado_id));
+                formData.append(`productos[${index}][cantidad]`, String(producto.cantidad));
+                formData.append(`productos[${index}][producto_tipo_id]`, String(producto.producto_tipo_id));
+                formData.append(`productos[${index}][empleado_id]`, String(producto.empleado_id));
             });
 
             formMutation.mutate({ data: formData, formApi });
