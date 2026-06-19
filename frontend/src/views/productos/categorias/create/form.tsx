@@ -1,7 +1,6 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
 import { type FormMutation, usePostFormMutation } from "@/hooks/use-post-form-mutation";
 import { defaultValues, validator } from "./form-schema";
-import { FieldGroup } from "./form-fields";
 import { createFieldMap } from "@tanstack/react-form";
 
 export const useFormMutation = (
@@ -50,10 +49,6 @@ export function AppForm({
             {...props}
         >
             <form.AppForm>
-                <FieldGroup
-                    form={form}
-                    fields={createFieldMap(defaultValues)}
-                />
 
                 {children}
             </form.AppForm>

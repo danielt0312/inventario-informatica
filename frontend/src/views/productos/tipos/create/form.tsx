@@ -1,7 +1,7 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
 import { type FormMutation, usePostFormMutation } from "@/hooks/use-post-form-mutation";
 import { defaultValues, validator } from "./form-schema";
-import { TextField } from "@/components/composed/@tanstack/form-field";
+import { TextField } from "@/components/composed/@tanstack/form-fields";
 
 export const useFormMutation = (
     props?: Omit<FormMutation, 'axiosConfig' | 'url'>

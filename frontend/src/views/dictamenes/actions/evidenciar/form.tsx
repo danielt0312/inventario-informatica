@@ -1,5 +1,5 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
-import { FileUploaderField } from "@/components/composed/@tanstack/form-field";
+import { FileUploaderField } from "@/components/composed/@tanstack/form-fields";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { submitValidator, type Schema, type ValidatedDictamen } from "./form-schema";

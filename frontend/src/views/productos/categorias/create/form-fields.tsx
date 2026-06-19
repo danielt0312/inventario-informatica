@@ -1,8 +1,5 @@
-import { withFieldGroup } from "@/components/composed/@tanstack/form";
-import { TextField } from "@/components/composed/@tanstack/form-field";
-import { FieldGroup as FieldGroupComponent } from "@/components/ui/field";
+import { TextField } from "@/components/composed/@tanstack/form-fields";
 import type React from "react";
-import { defaultValues } from "./form-schema";
 
 export function Field({
     label = "Categoría de Producto",
@@ -17,18 +14,3 @@ export function Field({
         />
     );
 }
-
-type FieldGroup = React.ComponentProps<typeof FieldGroupComponent>;
-const defaultProps: FieldGroup = {};
-export const FieldGroup = withFieldGroup({
-    defaultValues,
-    props: defaultProps,
-    render: ({ group, ...props }) => (
-        <FieldGroupComponent {...props}>
-            <group.AppField
-                name="nombre"
-                children={() => <Field />}
-            />
-        </FieldGroupComponent>
-    )
-});

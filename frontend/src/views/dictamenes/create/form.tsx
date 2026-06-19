@@ -1,5 +1,5 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
-import { DatePickerField, FileUploaderField, TextField } from "@/components/composed/@tanstack/form-field";
+import { DatePickerField, FileUploaderField, TextField } from "@/components/composed/@tanstack/form-fields";
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";

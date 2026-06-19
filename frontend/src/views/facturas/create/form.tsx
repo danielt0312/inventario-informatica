@@ -1,7 +1,7 @@
 import { useAppForm } from "@/components/composed/@tanstack/form";
 import { usePostFormMutation, type FormMutation } from "@/hooks/use-post-form-mutation";
 import { defaultValues, validator } from "./form-schema";
-import { DatePickerField, FileUploaderField } from "@/components/composed/@tanstack/form-field";
+import { DatePickerField, FileUploaderField } from "@/components/composed/@tanstack/form-fields";
 import { cn, toISODate } from "@/lib/utils";
 
 export const useFormMutation = (

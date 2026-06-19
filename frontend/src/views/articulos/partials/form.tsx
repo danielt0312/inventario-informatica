@@ -12,7 +12,7 @@ import z from "zod";
 import { Route as RouteIndex } from "@/routes/_auth/inventario"
 import { isAxiosError } from "axios";
 import { setFormValidationErrors } from "@/lib/utils";
-import { CheckboxField, TextField } from "@/components/composed/@tanstack/form-field";
+import { CheckboxField, TextField } from "@/components/composed/@tanstack/form-fields";
 import { FieldGroup } from "@/components/ui/field";
 
 type ArticuloFields = Omit<Schema, 'id'> & {

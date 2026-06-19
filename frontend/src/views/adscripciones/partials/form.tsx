@@ -1,7 +1,7 @@
 import { toOptions } from "@/lib/utils";
 import { useAdscripcionQuery } from "./queries";
-import { CreatableComboboxField } from "@/components/composed/@tanstack/form-field";
-import type { TOmitCreatableComboboxFieldsProps } from "@/components/composed/@tanstack/form-field";
+import { CreatableComboboxField } from "@/components/composed/@tanstack/form-fields";
+import type { TOmitCreatableComboboxFieldsProps } from "@/components/composed/@tanstack/form-fields";
 
 export function AdscripcionField({
     ...props
