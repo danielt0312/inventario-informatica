@@ -121,11 +121,34 @@ export const catalogoToComboboxOption = <T extends TCatalogo>(
   return option;
 };
 
-export const toOptions = <T extends TCatalogo>(
+export const toOptions = <T extends any>(
   list: T[],
   groupAccessor?: string | ((item: T) => any)
-): ComboboxOption[] =>
-  list.map((item) => catalogoToComboboxOption(item, groupAccessor));
+): ComboboxOption[] => {
+  // 1. Detectar si el groupAccessor es un path anidado (ej. 'tipos.nombre')
+  if (typeof groupAccessor === 'string' && groupAccessor.includes('.')) {
+    const [arrayKey] = groupAccessor.split('.');
+
+    // 2. Si la propiedad del primer objeto es un Arreglo, activamos el modo "aplanado"
+    if (list.length > 0 && Array.isArray((list[0] as any)[arrayKey])) {
+      return list.flatMap((parent: any) => {
+        const children = parent[arrayKey] || [];
+        // El nombre del objeto padre (la Categoría) se convierte en el nombre del grupo
+        const groupName = parent.nombre || '';
+
+        // Mapeamos los hijos (los Tipos) como las opciones reales del combobox
+        return children.map((child: any) => ({
+          value: String(child.id),
+          label: child.nombre,
+          group: groupName,
+        }));
+      });
+    }
+  }
+
+  // 3. Comportamiento por defecto original si es una lista plana o relación 1 a 1
+  return list.map((item) => catalogoToComboboxOption(item as any, groupAccessor));
+};
 
 export const toISODate = (d: Date | undefined): string =>
     d?.toISOString().slice(0, 10) ?? ""
