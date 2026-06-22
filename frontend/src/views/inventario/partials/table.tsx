@@ -61,7 +61,7 @@ export function Table() {
         <QueryDataTable<Articulo, TableFilters>
             queryKey={["articulos"]}
             url="api/articulos"
-            filters={debouncedFilters}
+            filter={debouncedFilters}
             columns={columns}
             filterBar={(
                 <>

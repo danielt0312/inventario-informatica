@@ -67,7 +67,7 @@ export function Table() {
             queryKey={['documentos']}
             url="api/documentos"
             columns={columns}
-            filters={debouncedFilters}
+            filter={debouncedFilters}
             tableOptions={{
                 initialState
             }}

@@ -64,18 +64,27 @@ export function useAppTable<TData>({
 
 export interface QueryDataTableProps<TData, TFilters extends object = Record<string, unknown>> extends
     Omit<DataTableProps<TData>, 'table'>,
-    Pick<UsePaginatedQueryOptions<TData, TFilters>, 'queryKey' | 'url' | 'filters' | 'paramsTransformer'> {
+    Pick<
+        UsePaginatedQueryOptions<TData, TFilters>,
+        'queryKey' | 'url' | 'filter' | 'filterTransformer'
+    > {
     columns: ColumnDef<TData>[];
-    queryOptions?: Omit<UseQueryOptions<PaginatedResponse<TData>>, "queryKey" | "queryFn">;
-    tableOptions?: Omit<UseTableOptions<TData>, 'data' | 'columns' >
+    queryOptions?: Omit<
+        UseQueryOptions<PaginatedResponse<TData>>,
+        'queryKey' | 'queryFn'
+    >;
+    tableOptions?: Omit<
+        UseTableOptions<TData>,
+        'data' | 'columns'
+    >;
 }
 
 export function QueryDataTable<TData, TFilters extends object>({
     queryKey,
-    filters,
+    filter,
     columns,
     url,
-    paramsTransformer,
+    filterTransformer,
     actionBar,
     queryOptions,
     tableOptions,
@@ -86,9 +95,9 @@ export function QueryDataTable<TData, TFilters extends object>({
     const query = usePaginatedQuery<TData, TFilters>({
         queryKey,
         url,
-        filters,
+        filter,
         pagination,
-        paramsTransformer,
+        filterTransformer,
         ...queryOptions
     });
 

@@ -31,7 +31,7 @@ export function Table() {
     return (
         <QueryDataTable<Dictamen, TableFilters>
             columns={columns}
-            filters={debouncedFilters}
+            filter={debouncedFilters}
             url="api/dictamenes"
             queryKey={['dictamenes']}
             filterBar={(
