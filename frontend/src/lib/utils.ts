@@ -169,3 +169,26 @@ export const getStreamedFile = (uuid: string) => root.get(`api/archivos/${uuid}/
     responseType: 'blob'
 }).then(r => r.data);
 
+export function spatieFilterTransformer<TFilters extends object>(
+    filters?: TFilters
+): Record<string, unknown> {
+    if (!filters) return {};
+
+    const filterParams: Record<string, unknown> = {};
+
+    Object.entries(filters).forEach(([key, value]) => {
+        if (value === '' || value === null || value === undefined) {
+            return;
+        }
+
+        if (Array.isArray(value)) {
+            if (value.length > 0) {
+                filterParams[key] = value.join(',');
+            }
+        } else {
+            filterParams[key] = value;
+        }
+    });
+
+    return Object.keys(filterParams).length > 0 ? { filter: filterParams } : {};
+}
