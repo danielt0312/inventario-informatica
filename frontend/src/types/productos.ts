@@ -8,8 +8,15 @@ export type ProductoCategoriaWithTipos = ProductoCategoria & {
 }
 export type ProductoTipoWithCategoria = ProductoTipo & {
     categoria: ProductoCategoria;
-};
-export type Producto = TCatalogo & {
+}
+export type Producto = TCatalogo;
+export type ProductoWithTipo = Producto & {
+    tipo: ProductoTipo;
+}
+export type ProductoWithMarca = Producto & {
+    marca: ProductoMarca;
+}
+export type DetailedProducto = Producto & {
     tipo: ProductoTipo;
     marca: ProductoMarca;
 };
