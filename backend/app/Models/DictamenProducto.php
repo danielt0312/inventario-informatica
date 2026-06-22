@@ -11,28 +11,35 @@ class DictamenProducto extends Model
 {
     use HasFactory;
 
-    protected $table = 'dictamen_productos';
-
     protected $fillable = [
         'dictamen_id',
         'empleado_id',
         'producto_id',
+        'producto_tipo_id',
         'cantidad',
         'caracteristicas'
     ];
 
     public $timestamps = false;
 
-    public function dictamen(): BelongsTo {
+    public function dictamen(): BelongsTo
+    {
         return $this->belongsTo(Dictamen::class, 'dictamen_id');
     }
 
-    public function empleado(): BelongsTo {
+    public function empleado(): BelongsTo
+    {
         return $this->belongsTo(Empleado::class, 'empleado_id');
     }
 
-    public function producto(): BelongsTo {
+    public function producto(): BelongsTo
+    {
         return $this->belongsTo(Producto::class, 'producto_id');
+    }
+
+    public function productoTipo(): BelongsTo
+    {
+        return $this->belongsTo(ProductoTipo::class);
     }
 
     public function descripcion(): Attribute

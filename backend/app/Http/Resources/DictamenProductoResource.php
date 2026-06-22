@@ -13,6 +13,7 @@ class DictamenProductoResource extends JsonResource
             'id' => $this->id,
             'empleado_id' => $this->empleado_id,
             'producto' => new ProductoResource($this->whenLoaded('producto')),
+            'producto_tipo' => new ProductoTipoResource($this->whenLoaded('productoTipo')),
             'cantidad' => $this->cantidad,
             'caracteristicas' => $this->caracteristicas
         ];

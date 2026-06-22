@@ -40,7 +40,7 @@ class DictamenController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Dictamen::class)
-            ->with(['estado', 'oficio.documento.archivo', 'documento'])
+            ->with(['estado', 'oficio', 'documento'])
             ->allowedFilters(
                 AllowedFilter::partial('folio', 'oficio.folio'),
                 AllowedFilter::exact('estados', 'estado.id')
@@ -54,6 +54,8 @@ class DictamenController extends Controller
     public function store(StoreDictamenRequest $request)
     {
         DB::transaction(function () use ($request) {
+            $validated = $request->validated();
+
             $archivo = $this->archivoService->createAndStore($request->file('archivo'));
 
             $documento = $archivo->documento()->create([
@@ -61,7 +63,7 @@ class DictamenController extends Controller
             ]);
 
             $oficio = $documento->oficio()->create([
-                'folio' => $request->input('folio')
+                'folio' => $validated['folio']
             ]);
 
             //todo obtener el jefe de departamento de DTI
@@ -70,13 +72,13 @@ class DictamenController extends Controller
             //todo verificar que la adscripcion exista en la tabla espejo `Adscripcion`
             $dictamen = Dictamen::create([
                 'oficio_id' => $oficio->documento_id,
-                'adscripcion_id' => $request->input('adscripcion_id'),
+                'adscripcion_id' => $validated['adscripcion_id'],
                 'user_id' => $user_id,
-                'fecha_solicitud' => $request->input('fecha_solicitud')
+                'fecha_solicitud' => $validated['fecha_solicitud']
             ]);
 
             //todo verificar que los empleados existan en la tabla espejo `Empleado`
-            $dictamen->productos()->createMany($request->input('productos'));
+            $dictamen->productos()->createMany($validated['productos']);
         });
 
         return response(status: 201);
@@ -88,6 +90,7 @@ class DictamenController extends Controller
             'estado',
             'oficio',
             'documento',
+            'productos.productoTipo.categoria',
             'productos.producto.tipo.categoria',
             'productos.producto.marca'
         ]);
