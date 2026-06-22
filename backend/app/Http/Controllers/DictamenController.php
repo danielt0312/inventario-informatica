@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 use App\Services\ArchivoService;
+
+use App\Http\Resources\DictamenResource;
 
 use App\Http\Requests\Dictamen\{
     DictamenRequest,
@@ -32,19 +37,14 @@ class DictamenController extends Controller
         protected ArchivoService $archivoService
     ) {}
 
-    public function index(DictamenRequest $request)
+    public function index(Request $request)
     {
-        $query = Dictamen::with(['estado', 'oficio.documento.archivo', 'documento']);
-
-        if ($request->filled('folio')) {
-            $query->whereHas('oficio', fn ($q)
-                => $q->whereLike('folio', "%{$request->input('folio')}%"));
-        }
-
-        if ($request->filled('estados')) {
-            $query->whereHas('estado', fn ($q)
-                => $q->whereIn('id', $request->input('estados')));
-        }
+        $query = QueryBuilder::for(Dictamen::class)
+            ->with(['estado', 'oficio.documento.archivo', 'documento'])
+            ->allowedFilters(
+                AllowedFilter::partial('folio', 'oficio.folio'),
+                AllowedFilter::exact('estados', 'estado.id')
+            );
 
         return $query
             ->paginate($request->query('per_page', 10))
