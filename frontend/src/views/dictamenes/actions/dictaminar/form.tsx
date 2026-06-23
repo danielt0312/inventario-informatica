@@ -1,6 +1,6 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { type Schema, validator } from "./form-schema";
-import { useFormMutation } from "../form";
+import { useFormMutation } from "../partials/form";
 import type { DictaminarActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export const useForm = (dictamen: DictaminarActionDictamen) => {

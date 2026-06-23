@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { submitValidator, type Schema } from "./form-schema";
 
-import { useFormMutation } from "../form";
+import { useFormMutation } from "../partials/form";
 import type { ActionDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export function useForm(dictamen: ActionDictamenWithDictamenProductos) {

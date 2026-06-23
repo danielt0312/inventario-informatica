@@ -6,9 +6,9 @@ import {
     type DictaminarActionDictamen
 } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-import { Form as DictaminarForm } from "./dictaminar/form";
-import { Form as EvidenciarForm } from "./evidenciar/form";
-import { Form as FacturarForm } from "./facturar/form";
+import { Form as DictaminarForm } from "../dictaminar/form";
+import { Form as EvidenciarForm } from "../evidenciar/form";
+import { Form as FacturarForm } from "../facturar/form";
 
 import { useNavigate } from "@tanstack/react-router";
 import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
