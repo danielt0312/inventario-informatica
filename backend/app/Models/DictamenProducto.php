@@ -48,7 +48,7 @@ class DictamenProducto extends Model
             function (mixed $value, array $attributes) {
                 $producto = $this->producto;
 
-                return "{$producto->tipo->nombre} {$producto->marca->nombre} {$producto->nombre} {$attributes['caracteristicas']}";
+                return "{$this->productoTipo->nombre} {$producto->marca->nombre} {$producto->nombre} {$attributes['caracteristicas']}";
             }
         );
     }

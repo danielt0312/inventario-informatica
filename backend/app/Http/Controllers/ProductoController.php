@@ -7,26 +7,28 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProductoRequest\ProductoRequest;
 
 use App\Models\Producto;
+use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
 
 class ProductoController extends Controller
 {
-    public function index(ProductoRequest $request)
+    public function index(Request $request)
     {
-        if (!$request->filled('tipos')) {
-            return response()->json(['data' => []]);
+        $query = QueryBuilder::for(Producto::class)
+            ->allowedIncludes('tipo.categoria', 'marca')
+            ->allowedFilters(
+                AllowedFilter::exact('tipos', 'tipo_id'),
+                AllowedFilter::exact('marcas', 'marca_id')
+            );
+
+        if ($request->has('per_page')) {
+            return $query
+                ->paginate($request->query('per_page', 10))
+                ->toResourceCollection();
         }
 
-        $query = Producto::whereHas('tipo', fn ($q)
-            => $q->whereIn('tipo_id', $request->input('tipos')));
-
-        if ($request->filled('marcas')) {
-            $query->whereHas('marca', fn ($q)
-                => $q->whereIn('marca_id', $request->input('marcas')));
-        }
-
-        $data = $query->get();
-
-        return response()->json(compact('data'));
+        return $query
+            ->get()
+            ->toResourceCollection();
     }
 
     public function store(Request $request)

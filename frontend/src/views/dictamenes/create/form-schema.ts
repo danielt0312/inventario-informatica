@@ -11,7 +11,7 @@ import {
     defaultValues as productoDefaultValues,
     validator as productoValidator,
     type Schema as ProductoSchema
-} from "@/views/productos/form-schema";
+} from "@/views/productos/create/form-schema";
 import z from "zod";
 
 export type ProductoFields = {
@@ -45,7 +45,7 @@ export const dictamenDefaultValues: Schema = {
 } as const;
 
 // todo
-export const tipos = [1, 2, 3];
+export const tipos: number[] = [];
 
 export const validator = z.object({
     folio: NonEmptyString,

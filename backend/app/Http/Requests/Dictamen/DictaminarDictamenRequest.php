@@ -5,12 +5,13 @@ namespace App\Http\Requests\Dictamen;
 use Illuminate\Validation\Rule;
 
 use App\Models\Dictamen;
+use App\Enums\DictamenEstadoEnum;
 
 class DictaminarDictamenRequest extends ActionDictamenRequest
 {
     public function authorize(): bool
     {
-        return $this->dictamen->estado->esDictaminar();
+        return DictamenEstadoEnum::esDictaminar($this->dictamen->estado_id);
     }
 
     public function rules(): array
@@ -24,6 +25,23 @@ class DictaminarDictamenRequest extends ActionDictamenRequest
                     $query->where('dictamen_id', $this->dictamen->id);
                 }),
             ],
+            'productos.*.producto_id' => Rule::foreach(function ($_, string $attribute) {
+                $index = explode('.', $attribute)[1];
+
+                $dictamenProductoId = $this->input("productos.{$index}.id");
+
+                $dictamenProducto = $this->dictamen->productos->firstWhere('id', $dictamenProductoId);
+
+                $tipoId = $dictamenProducto?->productoTipo?->id;
+
+                return [
+                    'required',
+                    'integer',
+                    Rule::exists('productos', 'id')->where(function ($query) use ($tipoId) {
+                        $query->where('tipo_id', $tipoId);
+                    }),
+                ];
+            }),
             'productos.*.caracteristicas' => ['required', 'string', 'max:255']
         ];
     }

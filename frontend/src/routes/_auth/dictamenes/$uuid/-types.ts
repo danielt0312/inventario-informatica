@@ -35,6 +35,3 @@ export type ActionDictamenWithDocumento = Omit<ActionDictamen, 'documento'> & {
 export type ActionDictamenWithDictamenProductos = ActionDictamenWithDocumento & {
     productos: DictamenProducto<ProductoTipo, NonNullable<Producto>>[];
 };
-
-export type DictaminarActionDictamen = ActionDictamen<DictamenWithDictamenProductos>;
-export type DictaminadoActionDictamen = ActionDictamenWithDictamenProductos;

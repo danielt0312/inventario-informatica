@@ -52,7 +52,6 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_tipo_id')
-                ->nullable()
                 ->constrained('producto_tipos', indexName: 'fk_dictamen_productos_producto_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

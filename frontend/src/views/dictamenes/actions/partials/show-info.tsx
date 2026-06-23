@@ -6,8 +6,10 @@ import type {
     ActionDictamen,
     ActionDictamenWithDocumento
 } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DictamenProducto, DictamenWithDictamenProductos } from "@/types/dictamenes";
+import { Card, CardContent } from "@/components/ui/card";
 
-export function ShowInfo({ dictamen }: { dictamen: ActionDictamen }) {
+export function ShowInfo({ dictamen }: { dictamen: ActionDictamen<DictamenWithDictamenProductos> }) {
     return (
         <>
             <div className="grid grid-cols-3">
@@ -16,7 +18,7 @@ export function ShowInfo({ dictamen }: { dictamen: ActionDictamen }) {
                     <Label>{dictamen.id}</Label>
                 </div>
                 {dictamen.estado.id !== DictamenEstadoEnum.DICTAMINAR && (
-                    <ShowDocument dictamen={dictamen as ActionDictamenWithDocumento} />
+                    <ShowDocumento dictamen={dictamen as ActionDictamenWithDocumento} />
                 )}
             </div>
 
@@ -31,7 +33,7 @@ export function ShowInfo({ dictamen }: { dictamen: ActionDictamen }) {
                 </div>
                 <div data-slot="label">
                     <Label className="font-bold">Fecha de solicitud</Label>
-                    <Label>{String(dictamen.fecha_solicitud)}</Label>
+                    <Label>{dictamen.fecha_solicitud}</Label>
                 </div>
             </div>
 
@@ -45,10 +47,10 @@ export function ShowInfo({ dictamen }: { dictamen: ActionDictamen }) {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export function ShowDocument({
+export function ShowDocumento({
     dictamen,
     className,
     ...props
@@ -67,5 +69,35 @@ export function ShowDocument({
                 title={dictamen.documento.nombre ?? dictamen.documento.uuid}
             />
         </div>
-    )
+    );
+}
+
+interface ShowProductosProps {
+    dictamen: DictamenWithDictamenProductos;
+    children: (producto: DictamenProducto, index: number) => React.ReactNode;
+}
+
+export function ShowProductos({
+    dictamen,
+    children
+}: ShowProductosProps) {
+    return (
+        <>
+            {dictamen.productos.map((p, index) => {
+                <Card key={index} className="shadow-none">
+                    <CardContent>
+                        <div className="grid grid-cols-3">
+                            <div data-slot="label">
+                                <Label className="font-bold">Cantidad</Label>
+                                <Label>{p.cantidad}</Label>
+                            </div>
+                        </div>
+                        <>AA</>
+
+                        {children(p, index)}
+                    </CardContent>
+                </Card>
+            })}
+        </>
+    );
 }

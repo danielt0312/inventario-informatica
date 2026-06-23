@@ -12,7 +12,7 @@
 --}}
 @props([
     'dictamen',
-    'title' => DocumentoTipoEnum::DICTAMEN->nombre(),
+    'title' => DocumentoTipoEnum::DICTAMEN->label(),
     'location' => 'Ciudad Victoria, Tamaulipas',
     'date' => now()
         ->isoFormat('D [de] MMMM [de] YYYY'),

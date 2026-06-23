@@ -18,6 +18,7 @@ export const Form = ({ form, ...props }: FormProps) => {
                 e.stopPropagation();
                 form.handleSubmit();
             }}
+            className="contents"
             {...props}
         />
     );

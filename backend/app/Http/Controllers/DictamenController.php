@@ -71,7 +71,7 @@ class DictamenController extends Controller
 
             //todo verificar que la adscripcion exista en la tabla espejo `Adscripcion`
             $dictamen = Dictamen::create([
-                'oficio_id' => $oficio->documento_id,
+                'oficio_id' => $oficio->id,
                 'adscripcion_id' => $validated['adscripcion_id'],
                 'user_id' => $user_id,
                 'fecha_solicitud' => $validated['fecha_solicitud']
@@ -101,18 +101,23 @@ class DictamenController extends Controller
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
     {
         DB::transaction(function () use ($request, $dictamen) {
-            foreach ($request->input('productos') as $productoData) {
+            $validated = $request->validated();
+
+            foreach ($validated['productos'] as $productoData) {
                 $dictamen->productos()
                     ->where('id', $productoData['id'])
                     ->update([
+                        'producto_id' => $productoData['producto_id'],
                         'caracteristicas' => $productoData['caracteristicas']
                     ]);
             }
 
+            $dictamen->load('productos');
+
             $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
 
             $archivo = $this->archivoService->createAndStoreFromRaw(
-                DocumentoTipoEnum::DICTAMEN->nombre(),
+                DocumentoTipoEnum::DICTAMEN->label(),
                 $pdf->output()
             );
 

@@ -1,13 +1,20 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { type Schema, validator } from "./form-schema";
 import { useFormMutation } from "../partials/form";
-import type { DictaminarActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { ActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DictamenWithDictamenProductos } from "@/types/dictamenes";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { ProductoField } from "@/views/productos/partials/form-fields";
+import { CaracteristicasField } from "./form-fields";
+import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 
-export const useForm = (dictamen: DictaminarActionDictamen) => {
+export const useForm = (dictamen: ActionDictamen<DictamenWithDictamenProductos>) => {
     const productosToSchema = dictamen.productos.map(v => {
         return {
             id: String(v.id),
-            caracteristicas: v.caracteristicas ?? ''
+            caracteristicas: '',
+            producto_id: '',
         }
     });
 
@@ -31,7 +38,7 @@ export const useForm = (dictamen: DictaminarActionDictamen) => {
 }
 
 interface FormProps {
-    dictamen: DictaminarActionDictamen;
+    dictamen: ActionDictamen<DictamenWithDictamenProductos>;
 }
 
 export function Form({
@@ -40,18 +47,46 @@ export function Form({
     const form = useForm(dictamen);
 
     return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-            }}
-            className="contents"
-        >
+        <PrimitiveForm form={form}>
             <form.AppForm>
+                {dictamen.productos.map((dictamenProducto, index) => (
+                    <Card key={index} className="shadow-none">
+                        <CardContent className="flex flex-col gap-6">
+                            <div className="grid grid-cols-3 gap-6">
+                                <div data-slot="label">
+                                    <Label className="font-bold">Cantidad</Label>
+                                    <Label>{dictamenProducto.cantidad}</Label>
+                                </div>
+                                <div data-slot="label">
+                                    <Label className="font-bold">Producto</Label>
+                                    <Label>{dictamenProducto.producto_tipo.nombre}</Label>
+                                </div>
+                                <div data-slot="label">
+                                    <Label className="font-bold">Resguardante</Label>
+                                    <Label>{dictamenProducto.empleado?.nombre ?? 'Juan Perez'}</Label>
+                                </div>
 
-                <form.SubmitButton />
+                                <form.AppField
+                                    name={`productos[${index}].producto_id`}
+                                    children={() => (
+                                        <ProductoField
+                                            label="Modelo"
+                                            tipo_id={dictamenProducto.producto_tipo.id}
+                                        />
+                                    )}
+                                />
+                            </div>
+
+                            <form.AppField
+                                name={`productos[${index}].caracteristicas`}
+                                children={() => <CaracteristicasField />}
+                            />
+                        </CardContent>
+                    </Card>
+                ))}
+
+                <SubmitButton />
             </form.AppForm>
-        </form>
+        </PrimitiveForm>
     );
 }

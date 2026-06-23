@@ -10,6 +10,7 @@ class DictamenResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'uuid' => $this->uuid,
             'fecha_solicitud' => $this->fecha_solicitud->format('Y-m-d'),
             'adscripcion_id' => $this->adscripcion_id,

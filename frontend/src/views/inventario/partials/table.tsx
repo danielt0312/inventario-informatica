@@ -2,7 +2,7 @@ import { QueryDataTable } from "@/components/custom/query-datatable";
 import { columns, type Articulo } from "./table.cols";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/custom/multiselect";
-import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/views/productos/queries";
+// import { useCategoriaQuery, useMarcaQuery, useProductoQuery, useTipoQuery } from "@/views/productos/queries";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import type { TResponse, TCatalogo } from "@/types/generics";
@@ -33,23 +33,23 @@ export function Table() {
         numero_inventario: '',
     });
 
-    const { data: PRODUCTO_CATEGORIAS = [] } = useCategoriaQuery();
+    // const { data: PRODUCTO_CATEGORIAS = [] } = useCategoriaQuery();
 
-    const { data: PRODUCTO_TIPOS = [] } = useTipoQuery({
-        categorias: debouncedFilters.categorias,
-        enabled: debouncedFilters.categorias.length > 0
-    });
+    // const { data: PRODUCTO_TIPOS = [] } = useTipoQuery({
+    //     categorias: debouncedFilters.categorias,
+    //     enabled: debouncedFilters.categorias.length > 0
+    // });
 
-    const { data: PRODUCTO_MARCAS = [] } = useMarcaQuery({
-        tipos: debouncedFilters.tipos,
-        enabled: debouncedFilters.tipos.length > 0
-    });
+    // const { data: PRODUCTO_MARCAS = [] } = useMarcaQuery({
+    //     tipos: debouncedFilters.tipos,
+    //     enabled: debouncedFilters.tipos.length > 0
+    // });
 
-    const { data: PRODUCTOS = [] } = useProductoQuery({
-        tipos: debouncedFilters.tipos,
-        marcas: debouncedFilters.marcas,
-        enabled: debouncedFilters.tipos.length > 0
-    });
+    // const { data: PRODUCTOS = [] } = useProductoQuery({
+    //     tipos: debouncedFilters.tipos,
+    //     marcas: debouncedFilters.marcas,
+    //     enabled: debouncedFilters.tipos.length > 0
+    // });
 
     const { data: PRODUCTO_ESTADOS = [] } = useQuery({
         queryKey: ['articulo_estados'],
@@ -74,7 +74,7 @@ export function Table() {
                         }))}
                         className="max-w-sm h-8"
                     />
-                    <MultiSelect
+                    {/* <MultiSelect
                         label="Categoría"
                         options={PRODUCTO_CATEGORIAS}
                         selected={filters.categorias.map(String)}
@@ -127,7 +127,7 @@ export function Table() {
                             ? 'Primero selecciona un producto'
                             : undefined
                         }
-                    />
+                    /> */}
                     <MultiSelect
                         label="Estado"
                         options={PRODUCTO_ESTADOS}
