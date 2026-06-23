@@ -1,6 +1,5 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import api from "@/lib/axios";
-import { FieldGroupProductoFields } from "@/views/productos/form";
 import {
     type Schema,
     defaultValues as productoDefaultValues,
@@ -86,7 +85,7 @@ export const Form = () => {
             className="contents"
         >
             <form.AppForm>
-                <FieldGroupProductoFields
+                {/* <FieldGroupProductoFields
                     form={form}
                     fields={{
                         categoria_id: 'categoria_id',
@@ -94,7 +93,7 @@ export const Form = () => {
                         marca_id: 'marca_id',
                         id: 'producto_id'
                     }}
-                />
+                /> */}
 
                 <form.AppField
                     name="numero_serie"

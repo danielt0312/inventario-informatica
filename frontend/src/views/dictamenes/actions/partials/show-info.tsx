@@ -1,11 +1,13 @@
 import { FilePreviewWindow } from "@/components/custom/file-preview-window";
 import { Label } from "@/components/ui/label";
-import type { ValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
-import type { ValidatedDictamen as EvidenciarValidatedDictamen } from "../evidenciar/form-schema";
 import { cn } from "@/lib/utils";
 import { DictamenEstadoEnum } from "@/lib/constants";
+import type {
+    ActionDictamen,
+    ActionDictamenWithDocumento
+} from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export function ShowInfo({ dictamen }: { dictamen: ValidatedDictamen }) {
+export function ShowInfo({ dictamen }: { dictamen: ActionDictamen }) {
     return (
         <>
             <div className="grid grid-cols-3">
@@ -14,7 +16,7 @@ export function ShowInfo({ dictamen }: { dictamen: ValidatedDictamen }) {
                     <Label>{dictamen.id}</Label>
                 </div>
                 {dictamen.estado.id !== DictamenEstadoEnum.DICTAMINAR && (
-                    <ShowDocument dictamen={dictamen as EvidenciarValidatedDictamen} />
+                    <ShowDocument dictamen={dictamen as ActionDictamenWithDocumento} />
                 )}
             </div>
 
@@ -51,7 +53,7 @@ export function ShowDocument({
     className,
     ...props
 }: React.ComponentProps<'div'> & {
-    dictamen: EvidenciarValidatedDictamen;
+    dictamen: ActionDictamenWithDocumento;
 }) {
     return (
         <div

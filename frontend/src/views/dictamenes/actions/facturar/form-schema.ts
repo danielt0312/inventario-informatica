@@ -1,5 +1,5 @@
 import { NonEmptyStringToNumber, RequiredArray, TrimmedString } from "@/lib/schemas/common";
-import type { ValidatedDictamen as ActionValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
+import type { ActionDictamen as ActionValidatedDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
 import z from "zod";
 
 export interface ValidatedDictamen

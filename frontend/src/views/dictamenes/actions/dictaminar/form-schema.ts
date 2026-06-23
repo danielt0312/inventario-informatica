@@ -1,13 +1,13 @@
 import {
-    Integer,
     NonEmptyString,
+    NonEmptyStringToNumber,
     RequiredArray
 } from "@/lib/schemas/common";
 import z from "zod";
 
 export interface Schema {
     productos: {
-        id: number;
+        id: string;
         caracteristicas: string;
     }[];
 }
@@ -15,7 +15,7 @@ export interface Schema {
 export const validator = z.object({
     productos: RequiredArray(
         z.object({
-            id: Integer,
+            id: NonEmptyStringToNumber,
             caracteristicas: NonEmptyString
         })
     )

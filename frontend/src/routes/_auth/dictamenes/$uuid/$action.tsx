@@ -1,69 +1,57 @@
 import api from '@/lib/axios';
 import { DictamenEstadoEnum } from '@/lib/constants';
-import { View } from '@/views/dictamenes/actions/view';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
-import type { Dictamen, DictamenEstado } from "@/types/dictamenes";
 import type { TResponse } from '@/types/generics';
+import {
+    ActionLabels,
+    ActionStates,
+    type ActionDictamen,
+    type ActionDictamenEstadoEnum
+} from './-types';
+import type { DictamenWithDictamenProductos } from '@/types/dictamenes';
+import { View } from '@/views/dictamenes/actions/view';
 
-export const Actions = ['dictaminar', 'evidenciar', 'facturar', 'inventariar'] as const;
-export type Actions = (typeof Actions)[number];
-
-export const StateAction = {
-    [DictamenEstadoEnum.DICTAMINAR]: 'dictaminar',
-    [DictamenEstadoEnum.EVIDENCIAR]: 'evidenciar',
-    [DictamenEstadoEnum.SURTIR]: 'facturar',
-    [DictamenEstadoEnum.INVENTARIAR]: 'inventariar',
-} as const satisfies Partial<Record<DictamenEstadoEnum, Actions>>;
-
-export type ActionDictamenEstadoEnum = keyof typeof StateAction;
-
-export function isValidState(value: DictamenEstadoEnum): value is ActionDictamenEstadoEnum {
-    return value in StateAction;
+export function isActionState(value: DictamenEstadoEnum): value is ActionDictamenEstadoEnum {
+    return value in ActionStates;
 }
-
-export type ValidatedDictamen = Omit<Dictamen, 'estado'> & {
-    estado: Omit<DictamenEstado, 'id'> & {
-        id: ActionDictamenEstadoEnum;
-    };
-};
 
 export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
     params: {
         parse: (rawParams) => ({
             uuid: z.string().parse(rawParams.uuid),
-            action: z.enum(Actions).parse(rawParams.action),
-        }),
+            action: z.enum(ActionLabels).parse(rawParams.action),
+        })
     },
     component: View,
     beforeLoad: async ({ context, params }) => {
         const data = await context.queryClient.fetchQuery({
             queryKey: ['dictamenes', params.uuid],
-            queryFn: () => api.get<TResponse<Dictamen>>(`api/dictamenes/${params.uuid}`)
+            queryFn: () => api.get<TResponse<DictamenWithDictamenProductos>>(`api/dictamenes/${params.uuid}`)
                 .then(r => r.data.data)
         });
 
         switch (data.estado.id) {
             case DictamenEstadoEnum.SURTIDO:
             case DictamenEstadoEnum.SURTIDO_PARCIAL:
-                throw redirect({
-                    to: IndexRoute.to
-                });
+                throw redirect({ to: IndexRoute.to });
             default:
                 break;
         }
 
-        if (StateAction[data.estado.id] != params.action) {
+        if (ActionStates[data.estado.id] !== params.action) {
             throw redirect({
                 to: Route.to,
                 params: {
                     uuid: data.uuid,
-                    action: StateAction[data.estado.id]
+                    action: ActionStates[data.estado.id]
                 }
-            })
+            });
         }
 
-        return { dictamen: data as ValidatedDictamen };
+        return {
+            dictamen: data as ActionDictamen<DictamenWithDictamenProductos>
+        };
     }
 });

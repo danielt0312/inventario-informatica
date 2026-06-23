@@ -3,15 +3,14 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 import { Eye, FileInput, PackageOpen, Paperclip, Receipt } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
-    isValidState,
-    StateAction,
-    type ActionDictamenEstadoEnum,
+    isActionState,
     Route as ActionRoute
 } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import type { Dictamen } from "@/types/dictamenes";
+import { ActionStates, type ActionDictamenEstadoEnum } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 const ActionIcon = {
     [DictamenEstadoEnum.DICTAMINAR]: <FileInput />,
@@ -21,7 +20,7 @@ const ActionIcon = {
 } as const satisfies Record<ActionDictamenEstadoEnum, React.ReactNode>;
 
 export function renderActionViewFile(dictamen: Dictamen) {
-    if (!isValidState(dictamen.estado.id) || !dictamen.documento) return null;
+    if (!isActionState(dictamen.estado.id) || !dictamen.documento) return null;
 
     const { uuid, nombre } = dictamen.documento;
     const { mutate, isPending } = useFilePreviewWindowMutation();
@@ -43,9 +42,9 @@ export function renderActionCell(dictamen: Dictamen) {
     const { uuid } = dictamen;
     const value = dictamen.estado.id;
 
-    if (!isValidState(value)) return null;
+    if (!isActionState(value)) return null;
 
-    const action = StateAction[value];
+    const action = ActionStates[value];
 
     return (
         <>

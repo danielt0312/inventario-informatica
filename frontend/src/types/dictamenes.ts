@@ -1,34 +1,32 @@
 import type { DictamenEstadoEnum } from "@/lib/constants";
 import type { TCatalogo } from "./generics";
-import type { Producto, ProductoTipo } from "./productos";
 import type { Documento, Oficio } from "./documentos";
+import type { Producto, ProductoTipo } from "./productos";
 
 export type DictamenEstado = {
     id: DictamenEstadoEnum;
     nombre: string;
 };
 
-export type DictamenProducto = {
+export type DictamenProducto<TProductoTipo extends ProductoTipo = ProductoTipo, TProducto extends Producto = Producto> = {
     id: number;
     cantidad: number;
     caracteristicas: string | null;
-}
-
-export type DetailedDictamenProducto<TProducto extends Producto = Producto, TProductoTipo extends ProductoTipo = ProductoTipo> = DictamenProducto & {
     empleado: TCatalogo;
-    producto: TProducto;
     producto_tipo: TProductoTipo;
+    producto: TProducto | null;
 }
 
 export type Dictamen = {
+    id: number;
     uuid: string;
     adscripcion: TCatalogo;
     fecha_solicitud: string;
     estado: DictamenEstado;
-    documento: Documento | null;
     oficio: Oficio;
+    documento: Documento | null;
 }
 
-export type DetailedDictamen<TDictamenProducto extends DictamenProducto = DetailedDictamenProducto> = Dictamen & {
+export type DictamenWithDictamenProductos<TDictamenProducto extends DictamenProducto = DictamenProducto> = Dictamen & {
     productos: TDictamenProducto[];
-}
+};
