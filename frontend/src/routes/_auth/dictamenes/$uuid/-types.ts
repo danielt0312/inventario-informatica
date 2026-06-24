@@ -5,10 +5,6 @@ import type {
     DictamenProducto,
     DictamenWithDictamenProductos
 } from "@/types/dictamenes";
-import type {
-    Producto,
-    ProductoTipo
-} from "@/types/productos";
 
 export const ActionLabels = ['dictaminar', 'evidenciar', 'facturar', 'inventariar'] as const;
 export type ActionLabels = (typeof ActionLabels)[number];
@@ -28,10 +24,13 @@ export type ActionDictamen<TDictamen extends Dictamen = Dictamen> = Omit<TDictam
     }
 }
 
-export type ActionDictamenWithDocumento = Omit<ActionDictamen, 'documento'> & {
-    documento: NonNullable<ActionDictamen['documento']>;
+export type ActionDictamenWithDocumento<TActionDictamen extends ActionDictamen = ActionDictamen> = Omit<TActionDictamen, 'documento'> & {
+    documento: NonNullable<TActionDictamen['documento']>;
 }
 
-export type ActionDictamenWithDictamenProductos = ActionDictamenWithDocumento & {
-    productos: DictamenProducto<ProductoTipo, NonNullable<Producto>>[];
-};
+export type ActionDictamenProducto<TDictamenProducto extends DictamenProducto = DictamenProducto> = Omit<TDictamenProducto, 'producto'> & {
+    producto: NonNullable<DictamenProducto['producto']>;
+}
+
+export type ActionDictamenWithDictamenProductos<TActionDictamen extends ActionDictamen = ActionDictamen> = DictamenWithDictamenProductos<TActionDictamen>;
+export type ActionDictamenWithActionDictamenProductos<TActionDictamen extends ActionDictamen = ActionDictamenWithDocumento, TActionDictamenProducto extends ActionDictamenProducto = ActionDictamenProducto> = DictamenWithDictamenProductos<TActionDictamen, TActionDictamenProducto>;

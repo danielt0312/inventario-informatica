@@ -3,7 +3,7 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 import {
     ActionStates,
     type ActionDictamen,
-    type ActionDictamenWithDictamenProductos
+    type ActionDictamenWithActionDictamenProductos
 } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 import { Form as DictaminarForm } from "../dictaminar/form";
@@ -20,9 +20,9 @@ export function Form({ dictamen }: { dictamen: ActionDictamen<DictamenWithDictam
         case DictamenEstadoEnum.DICTAMINAR:
             return <DictaminarForm dictamen={dictamen} />;
         case DictamenEstadoEnum.EVIDENCIAR:
-            return <EvidenciarForm dictamen={dictamen as ActionDictamenWithDictamenProductos} />;
+            return <EvidenciarForm dictamen={dictamen as ActionDictamenWithActionDictamenProductos} />;
         case DictamenEstadoEnum.SURTIR:
-            return <FacturarForm dictamen={dictamen as ActionDictamenWithDictamenProductos} />;
+            return <FacturarForm dictamen={dictamen as ActionDictamenWithActionDictamenProductos} />;
         case DictamenEstadoEnum.INVENTARIAR:
             return <>inventariar</>;
         default:

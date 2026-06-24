@@ -27,6 +27,6 @@ export type Dictamen = {
     documento: Documento | null;
 }
 
-export type DictamenWithDictamenProductos<TDictamenProducto extends DictamenProducto = DictamenProducto> = Dictamen & {
+export type DictamenWithDictamenProductos<TDictamen extends Dictamen = Dictamen, TDictamenProducto extends DictamenProducto = DictamenProducto> = TDictamen & {
     productos: TDictamenProducto[];
 };

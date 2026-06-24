@@ -5,9 +5,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { submitValidator, type Schema } from "./form-schema";
 
 import { useFormMutation } from "../partials/form";
-import type { ActionDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { ActionDictamenWithActionDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export function useForm(dictamen: ActionDictamenWithDictamenProductos) {
+export function useForm(dictamen: ActionDictamenWithActionDictamenProductos) {
     const defaultValues: Schema = {
         ...dictamen,
         archivo: []
@@ -31,7 +31,7 @@ export function useForm(dictamen: ActionDictamenWithDictamenProductos) {
     });
 }
 
-export function Form({ dictamen }: { dictamen: ActionDictamenWithDictamenProductos }) {
+export function Form({ dictamen }: { dictamen: ActionDictamenWithActionDictamenProductos }) {
     const form = useForm(dictamen);
 
     return (

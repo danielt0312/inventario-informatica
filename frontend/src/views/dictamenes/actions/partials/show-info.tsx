@@ -1,10 +1,7 @@
 import { FilePreviewWindow } from "@/components/custom/file-preview-window";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { DictamenEstadoEnum } from "@/lib/constants";
 import type {
-    ActionDictamen,
-    ActionDictamenWithDocumento
+    ActionDictamen
 } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { DictamenProducto, DictamenWithDictamenProductos } from "@/types/dictamenes";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,8 +14,15 @@ export function ShowInfo({ dictamen }: { dictamen: ActionDictamen<DictamenWithDi
                     <Label className="font-bold">Número de Dictamen</Label>
                     <Label>{dictamen.id}</Label>
                 </div>
-                {dictamen.estado.id !== DictamenEstadoEnum.DICTAMINAR && (
-                    <ShowDocumento dictamen={dictamen as ActionDictamenWithDocumento} />
+
+                {!!dictamen.documento && (
+                    <div data-slot="label" className="col-span-2">
+                        <Label className="font-bold">Dictamen tecnológico</Label>
+                        <FilePreviewWindow
+                            uuid={dictamen.documento.uuid}
+                            title={dictamen.documento.nombre ?? dictamen.documento.uuid}
+                        />
+                    </div>
                 )}
             </div>
 
@@ -47,28 +51,6 @@ export function ShowInfo({ dictamen }: { dictamen: ActionDictamen<DictamenWithDi
                 </div>
             </div>
         </>
-    );
-}
-
-export function ShowDocumento({
-    dictamen,
-    className,
-    ...props
-}: React.ComponentProps<'div'> & {
-    dictamen: ActionDictamenWithDocumento;
-}) {
-    return (
-        <div
-            data-slot="label"
-            className={cn("col-span-2", className)}
-            {...props}
-        >
-            <Label className="font-bold">Dictamen tecnológico</Label>
-            <FilePreviewWindow
-                uuid={dictamen.documento.uuid}
-                title={dictamen.documento.nombre ?? dictamen.documento.uuid}
-            />
-        </div>
     );
 }
 
