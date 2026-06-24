@@ -2,7 +2,7 @@ import { TextField } from "@/components/composed/@tanstack/form/field-components
 import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
 import { FieldGroup } from "@/components/ui/field";
 import { ProductoTipo } from "@/lib/constants";
-import { TipoField } from "@/views/productos/tipos/partials/form-fields";
+import { TipoField } from "@/views/common/productos/tipos/partials/form-fields";
 import type React from "react";
 import { useState } from "react";
 import { productoFieldsGroupDefaultValues } from "./form-schema";

@@ -3,7 +3,7 @@ import { type Schema, validator } from "./form-schema";
 import { useFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ProductoField } from "@/views/productos/partials/form-fields";
+import { ProductoField } from "@/views/common/productos/partials/form-fields";
 import { CaracteristicasField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import type { ActionDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";

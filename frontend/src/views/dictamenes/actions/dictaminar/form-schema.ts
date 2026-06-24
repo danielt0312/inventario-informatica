@@ -8,7 +8,7 @@ import z from "zod";
 import {
     type Schema as ProductoSchema,
     validator as productoValidator
-} from "@/views/productos/partials/form-schema";
+} from "@/views/common/productos/partials/form-schema";
 
 export interface Schema {
     productos: {
