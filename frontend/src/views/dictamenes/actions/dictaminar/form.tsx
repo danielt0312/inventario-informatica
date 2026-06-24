@@ -1,15 +1,14 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { type Schema, validator } from "./form-schema";
 import { useFormMutation } from "../partials/form";
-import type { ActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { DictamenWithDictamenProductos } from "@/types/dictamenes";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ProductoField } from "@/views/productos/partials/form-fields";
 import { CaracteristicasField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import type { ActionDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export const useForm = (dictamen: ActionDictamen<DictamenWithDictamenProductos>) => {
+export const useForm = (dictamen: ActionDictamenWithDictamenProductos) => {
     const productosToSchema = dictamen.productos.map(v => {
         return {
             id: String(v.id),
@@ -38,7 +37,7 @@ export const useForm = (dictamen: ActionDictamen<DictamenWithDictamenProductos>)
 }
 
 interface FormProps {
-    dictamen: ActionDictamen<DictamenWithDictamenProductos>;
+    dictamen: ActionDictamenWithDictamenProductos;
 }
 
 export function Form({

@@ -7,8 +7,8 @@ import type { TResponse } from '@/types/generics';
 import {
     ActionLabels,
     ActionStates,
-    type ActionDictamen,
-    type ActionDictamenEstadoEnum
+    type ActionDictamenEstadoEnum,
+    type ActionDictamenWithDictamenProductos
 } from './-types';
 import type { DictamenWithDictamenProductos } from '@/types/dictamenes';
 import { View } from '@/views/dictamenes/actions/view';
@@ -51,7 +51,7 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
         }
 
         return {
-            dictamen: data as ActionDictamen<DictamenWithDictamenProductos>
+            dictamen: data as ActionDictamenWithDictamenProductos
         };
     }
 });

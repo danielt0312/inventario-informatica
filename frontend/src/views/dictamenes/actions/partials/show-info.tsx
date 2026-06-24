@@ -1,12 +1,10 @@
 import { FilePreviewWindow } from "@/components/custom/file-preview-window";
 import { Label } from "@/components/ui/label";
-import type {
-    ActionDictamen
-} from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { ActionDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { DictamenProducto, DictamenWithDictamenProductos } from "@/types/dictamenes";
 import { Card, CardContent } from "@/components/ui/card";
 
-export function ShowInfo({ dictamen }: { dictamen: ActionDictamen<DictamenWithDictamenProductos> }) {
+export function ShowInfo({ dictamen }: { dictamen: ActionDictamenWithDictamenProductos }) {
     return (
         <>
             <div className="grid grid-cols-3">
