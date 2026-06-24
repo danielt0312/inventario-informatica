@@ -192,3 +192,12 @@ export function spatieFilterTransformer<TFilters extends object>(
 
     return Object.keys(filterParams).length > 0 ? { filter: filterParams } : {};
 }
+
+export const cleanText = (text: string): string => {
+    return text
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡!]/g, "")
+        .trim();
+};

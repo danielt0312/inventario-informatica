@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Check, ChevronsUpDown, PlusCircle } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cleanText, cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
     Command,
@@ -57,19 +57,23 @@ export function CreatableCombobox({
     const filteredOptions = React.useMemo(() => {
         if (!search) return options;
 
-        const cleanSearch = search.toLowerCase().trim();
+        const searchCleaned = cleanText(search);
+
+        if (!searchCleaned) return options;
 
         const labelMatches = options.filter((o) =>
-            o.label.toLowerCase().includes(cleanSearch)
+            cleanText(o.label).includes(searchCleaned)
         );
 
         if (labelMatches.length > 0) {
             return labelMatches;
         }
 
-        return options.filter((o) =>
-            o.group && o.group.toLowerCase().includes(cleanSearch)
+        const groupMatches = options.filter((o) =>
+            o.group && cleanText(o.group).includes(searchCleaned)
         );
+
+        return groupMatches;
     }, [options, search]);
 
     const groups = React.useMemo(() => {
@@ -82,8 +86,9 @@ export function CreatableCombobox({
         return map;
     }, [filteredOptions]);
 
+    // Validación exacta usando la misma limpieza de texto
     const exactMatchExists = options.some(
-        (o) => o.label.toLowerCase() === search.trim().toLowerCase()
+        (o) => cleanText(o.label) === cleanText(search)
     );
 
     const showCreateAction = !!onCreateRequest && search.trim().length > 0 && !exactMatchExists;
