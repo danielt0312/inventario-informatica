@@ -56,8 +56,19 @@ export function CreatableCombobox({
 
     const filteredOptions = React.useMemo(() => {
         if (!search) return options;
+
+        const cleanSearch = search.toLowerCase().trim();
+
+        const labelMatches = options.filter((o) =>
+            o.label.toLowerCase().includes(cleanSearch)
+        );
+
+        if (labelMatches.length > 0) {
+            return labelMatches;
+        }
+
         return options.filter((o) =>
-            o.label.toLowerCase().includes(search.toLowerCase())
+            o.group && o.group.toLowerCase().includes(cleanSearch)
         );
     }, [options, search]);
 
@@ -109,7 +120,6 @@ export function CreatableCombobox({
             </PopoverTrigger>
 
             <PopoverContent className={cn("p-0", widthClass)} align="start">
-                {/* shouldFilter={false} es necesario para que funcione el filtrado personalizado */}
                 <Command shouldFilter={false}>
                     <CommandInput
                         placeholder={searchPlaceholder}
