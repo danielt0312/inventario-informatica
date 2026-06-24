@@ -6,18 +6,7 @@ import { TipoField } from "@/views/productos/tipos/partials/form-fields";
 import type React from "react";
 import { useState } from "react";
 import { productoFieldsGroupDefaultValues } from "./form-schema";
-
-export const NumeroInventarioField = ({
-    label = "Número de Inventario",
-    placeholder = "Ingresa el número de inventario de la computadora",
-    ...props
-}: React.ComponentProps<typeof TextField>) => (
-    <TextField
-        label={label}
-        placeholder={placeholder}
-        {...props}
-    />
-);
+import { NumeroInventarioField } from "@/views/common/numero-inventario/form-fields";
 
 const defaultProps: React.ComponentProps<typeof FieldGroup> = {}
 
@@ -47,7 +36,12 @@ export const ProductoFieldGroup = withFieldGroup({
                 {showNumeroInventarioField && (
                     <group.AppField
                         name="numero_inventario"
-                        children={() => <NumeroInventarioField />}
+                        children={(field) => (
+                            <>
+                                <NumeroInventarioField />
+                                {console.log(field.state.meta.errors)}
+                            </>
+                        )}
                     />
                 )}
             </FieldGroup>

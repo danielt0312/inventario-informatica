@@ -1,13 +1,13 @@
 import { CreatableComboboxField, type TOmitCreatableComboboxFieldsProps } from "@/components/composed/@tanstack/form/field-components";
 import { useQuery } from "@tanstack/react-query";
-import { type Schema as AdscripcionSchema } from "../../adscripciones/partials/form-schema";
 import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";
 import type { Empleado } from "@/types/externos";
 import { toOptions } from "@/lib/utils";
+import { type Field } from "../../../common/forms/schemas";
 
 interface EmpleadoFieldProps extends TOmitCreatableComboboxFieldsProps<'disabled'> {
-    adscripcion: AdscripcionSchema['id'];
+    adscripcion: Field;
 }
 
 export const EmpleadoField = ({
