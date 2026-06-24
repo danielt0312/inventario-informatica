@@ -5,15 +5,15 @@ import { FieldError, FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 import { toISODate } from "@/lib/utils";
 import { PlusCircle, Trash2 } from "lucide-react";
-import { dictamenDefaultValues, dictamenProductoDefaultValues, tipos, validator } from "./form-schema";
-import { EmpleadoField } from "@/views/empleados/partials/form";
+import { dictamenDefaultValues, productoFieldsDefaultValues, validator } from "./form-schema";
 import { useStore } from "@tanstack/react-form";
-import { AdscripcionField } from "@/views/adscripciones/partials/form";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
-import { TipoField } from "@/views/productos/tipos/partials/form-fields";
+import { CantidadField, ProductoFieldGroup } from "./form-fields";
+import { AdscripcionField } from "@/views/externos/adscripciones/partials/form-fields";
+import { EmpleadoField } from "@/views/externos/empleados/partials/form-fields";
 
 export function useFormMutation() {
     const navigate = useNavigate();
@@ -106,10 +106,7 @@ export function Form() {
                     )}
                 />
 
-                <form.AppField
-                    name="productos"
-                    mode="array"
-                >
+                <form.AppField name="productos" mode="array">
                     {(field) => (
                         <>
                             <div className="flex flex-row justify-between">
@@ -117,7 +114,7 @@ export function Form() {
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => field.pushValue(dictamenProductoDefaultValues)}
+                                    onClick={() => field.pushValue(productoFieldsDefaultValues)}
                                 >
                                     <PlusCircle /> Agregar
                                 </Button>
@@ -128,40 +125,14 @@ export function Form() {
                                     <CardContent className="flex gap-6 items-center">
                                         <form.AppField
                                             name={`productos[${index}].cantidad`}
-                                            children={() => (
-                                                <TextField
-                                                    label="Cantidad"
-                                                    placeholder="Ingresa una cantidad"
-                                                    className="max-w-min"
-                                                />
-                                            )}
+                                            children={() => <CantidadField className="max-w-min" />}
                                         />
 
-                                        <form.AppField
-                                            name={`productos[${index}].producto_tipo_id`}
-                                            children={(field) => {
-                                                const value = field.state.value;
-
-                                                return (
-                                                    <div className="flex flex-col gap-6 w-full">
-                                                        <form.AppField
-                                                            name={`productos[${index}].producto_tipo_id`}
-                                                            children={() => <TipoField />}
-                                                        />
-
-                                                        {value && tipos.includes(Number(value)) && (
-                                                            <form.AppField
-                                                                name={`productos[${index}].numero_inventario`}
-                                                                children={() => (
-                                                                    <TextField
-                                                                        label="Número de inventario"
-                                                                        placeholder="Ingresa el número de inventario"
-                                                                    />
-                                                                )}
-                                                            />
-                                                        )}
-                                                    </div>
-                                                );
+                                        <ProductoFieldGroup
+                                            form={form}
+                                            fields={{
+                                                numero_inventario: `productos[${index}].numero_inventario`,
+                                                producto_tipo_id: `productos[${index}].producto_tipo_id`,
                                             }}
                                         />
 
