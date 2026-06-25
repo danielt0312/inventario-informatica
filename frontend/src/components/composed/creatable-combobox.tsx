@@ -86,7 +86,6 @@ export function CreatableCombobox({
         return map;
     }, [filteredOptions]);
 
-    // Validación exacta usando la misma limpieza de texto
     const exactMatchExists = options.some(
         (o) => cleanText(o.label) === cleanText(search)
     );

@@ -29,7 +29,6 @@ export function setFormValidationErrors(
     errors: LaravelValidationErrors
 ) {
     const errorKeys = Object.keys(errors);
-
     if (errorKeys.length === 0) return;
 
     errorKeys.forEach((field) => {
@@ -39,7 +38,7 @@ export function setFormValidationErrors(
             const base = prev || {
                 errors: [],
                 errorMap: {},
-                isTouched: false,
+                isTouched: false
             };
 
             return {
@@ -49,7 +48,7 @@ export function setFormValidationErrors(
                     ...base?.errorMap,
                     onSubmit: errorMessage
                 },
-                isTouched: true,
+                isTouched: true
             }
         })
     });
@@ -104,17 +103,13 @@ export const catalogoToComboboxOption = <T extends TCatalogo>(
     };
 
     if (groupAccessor) {
-        // Evaluamos si es una función o un string de acceso
         const resolvedGroup = typeof groupAccessor === 'function'
             ? groupAccessor(item)
             : getValueByPath(item, groupAccessor);
 
-        // Si el valor devuelto es un string, lo asignamos directamente
         if (typeof resolvedGroup === 'string') {
             option.group = resolvedGroup;
-        }
-        // Flexibilidad extra: Si es un objeto que tiene una propiedad 'nombre', la usamos
-        else if (resolvedGroup && typeof resolvedGroup === 'object' && 'nombre' in resolvedGroup) {
+        } else if (resolvedGroup && typeof resolvedGroup === 'object' && 'nombre' in resolvedGroup) {
             option.group = String(resolvedGroup.nombre);
         }
     }
@@ -126,18 +121,14 @@ export const toOptions = <T extends any>(
     list: T[],
     groupAccessor?: string | ((item: T) => any)
 ): ComboboxOption[] => {
-    // 1. Detectar si el groupAccessor es un path anidado (ej. 'tipos.nombre')
     if (typeof groupAccessor === 'string' && groupAccessor.includes('.')) {
         const [arrayKey] = groupAccessor.split('.');
 
-        // 2. Si la propiedad del primer objeto es un Arreglo, activamos el modo "aplanado"
         if (list.length > 0 && Array.isArray((list[0] as any)[arrayKey])) {
             return list.flatMap((parent: any) => {
                 const children = parent[arrayKey] || [];
-                // El nombre del objeto padre (la Categoría) se convierte en el nombre del grupo
                 const groupName = parent.nombre || '';
 
-                // Mapeamos los hijos (los Tipos) como las opciones reales del combobox
                 return children.map((child: any) => ({
                     value: String(child.id),
                     label: child.nombre,
@@ -147,7 +138,6 @@ export const toOptions = <T extends any>(
         }
     }
 
-    // 3. Comportamiento por defecto original si es una lista plana o relación 1 a 1
     return list.map((item) => catalogoToComboboxOption(item as any, groupAccessor));
 };
 
