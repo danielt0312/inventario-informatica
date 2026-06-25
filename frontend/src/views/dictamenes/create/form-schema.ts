@@ -6,7 +6,6 @@ import {
     RequiredArray
 } from "@/lib/schemas/common";
 import * as CatalogoSchema from "../../common/forms/schemas";
-import { ProductoTipo } from "@/lib/constants";
 import z from "zod";
 import * as NumeroInventarioField from "@/views/common/numero-inventario/form-schema";
 
@@ -61,13 +60,7 @@ export const validator = z.object({
         .extend({
             cantidad: RequiredPositiveInteger,
             empleado_id: CatalogoSchema.validator
-        }).refine(
-            ({ producto_tipo_id, numero_inventario }) => numero_inventario.length != 0 && ProductoTipo.esCategoriaComputadora(producto_tipo_id),
-            {
-                message: "Este campo es requerido si eliges una computadora",
-                path: ["numero_inventario"]
-            }
-        ),
+        })
     )
 });
 

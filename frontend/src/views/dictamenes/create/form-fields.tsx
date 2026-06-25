@@ -1,15 +1,13 @@
 import { TextField } from "@/components/composed/@tanstack/form/field-components";
 import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
 import { FieldGroup } from "@/components/ui/field";
-import { ProductoTipo } from "@/lib/constants";
 import { TipoField } from "@/views/common/productos/tipos/partials/form-fields";
-import type React from "react";
 import { useState } from "react";
 import { productoFieldsGroupDefaultValues } from "./form-schema";
 import { NumeroInventarioField } from "@/views/common/numero-inventario/form-fields";
+import { cn, DictamenProducto } from "@/lib/utils";
 
 const defaultProps: React.ComponentProps<typeof FieldGroup> = {}
-
 export const ProductoFieldGroup = withFieldGroup({
     defaultValues: productoFieldsGroupDefaultValues,
     props: defaultProps,
@@ -17,16 +15,17 @@ export const ProductoFieldGroup = withFieldGroup({
         const [showNumeroInventarioField, setShowNumeroInventarioField] = useState(false);
 
         return (
-            <FieldGroup className="flex flex-col" {...props}>
+            <FieldGroup className={cn("flex flex-col", className)} {...props}>
                 <group.AppField
                     name="producto_tipo_id"
                     children={() => <TipoField />}
                     listeners={{
                         onChange: ({ value }) => {
-                            const esComputadora = ProductoTipo.esCategoriaComputadora(value);
-                            setShowNumeroInventarioField(esComputadora);
+                            const requiereNumeroInventario = DictamenProducto.tipoRequiereNumeroInventario(value);
 
-                            if (!esComputadora) {
+                            setShowNumeroInventarioField(requiereNumeroInventario);
+
+                            if (!requiereNumeroInventario) {
                                 group.setFieldValue('numero_inventario', '');
                             }
                         }
@@ -36,12 +35,7 @@ export const ProductoFieldGroup = withFieldGroup({
                 {showNumeroInventarioField && (
                     <group.AppField
                         name="numero_inventario"
-                        children={(field) => (
-                            <>
-                                <NumeroInventarioField />
-                                {console.log(field.state.meta.errors)}
-                            </>
-                        )}
+                        children={() => <NumeroInventarioField />}
                     />
                 )}
             </FieldGroup>

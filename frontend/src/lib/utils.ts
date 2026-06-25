@@ -18,6 +18,7 @@ import {
 import { isAxiosError } from "axios";
 import { root } from "./axios";
 import type { ComboboxOption } from "@/components/composed/creatable-combobox";
+import { dictamenProductoTiposRequierenNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -90,64 +91,64 @@ export function handleFormValidationError(
 }
 
 const getValueByPath = (obj: any, path: string): any => {
-  return path.split('.').reduce((acc, key) => acc?.[key], obj);
+    return path.split('.').reduce((acc, key) => acc?.[key], obj);
 };
 
 export const catalogoToComboboxOption = <T extends TCatalogo>(
-  item: T,
-  groupAccessor?: string | ((item: T) => any)
+    item: T,
+    groupAccessor?: string | ((item: T) => any)
 ): ComboboxOption => {
-  const option: ComboboxOption = {
-    value: String(item.id),
-    label: item.nombre,
-  };
+    const option: ComboboxOption = {
+        value: String(item.id),
+        label: item.nombre,
+    };
 
-  if (groupAccessor) {
-    // Evaluamos si es una función o un string de acceso
-    const resolvedGroup = typeof groupAccessor === 'function'
-      ? groupAccessor(item)
-      : getValueByPath(item, groupAccessor);
+    if (groupAccessor) {
+        // Evaluamos si es una función o un string de acceso
+        const resolvedGroup = typeof groupAccessor === 'function'
+            ? groupAccessor(item)
+            : getValueByPath(item, groupAccessor);
 
-    // Si el valor devuelto es un string, lo asignamos directamente
-    if (typeof resolvedGroup === 'string') {
-      option.group = resolvedGroup;
+        // Si el valor devuelto es un string, lo asignamos directamente
+        if (typeof resolvedGroup === 'string') {
+            option.group = resolvedGroup;
+        }
+        // Flexibilidad extra: Si es un objeto que tiene una propiedad 'nombre', la usamos
+        else if (resolvedGroup && typeof resolvedGroup === 'object' && 'nombre' in resolvedGroup) {
+            option.group = String(resolvedGroup.nombre);
+        }
     }
-    // Flexibilidad extra: Si es un objeto que tiene una propiedad 'nombre', la usamos
-    else if (resolvedGroup && typeof resolvedGroup === 'object' && 'nombre' in resolvedGroup) {
-      option.group = String(resolvedGroup.nombre);
-    }
-  }
 
-  return option;
+    return option;
 };
 
 export const toOptions = <T extends any>(
-  list: T[],
-  groupAccessor?: string | ((item: T) => any)
+    list: T[],
+    groupAccessor?: string | ((item: T) => any)
 ): ComboboxOption[] => {
-  // 1. Detectar si el groupAccessor es un path anidado (ej. 'tipos.nombre')
-  if (typeof groupAccessor === 'string' && groupAccessor.includes('.')) {
-    const [arrayKey] = groupAccessor.split('.');
+    // 1. Detectar si el groupAccessor es un path anidado (ej. 'tipos.nombre')
+    if (typeof groupAccessor === 'string' && groupAccessor.includes('.')) {
+        const [arrayKey] = groupAccessor.split('.');
 
-    // 2. Si la propiedad del primer objeto es un Arreglo, activamos el modo "aplanado"
-    if (list.length > 0 && Array.isArray((list[0] as any)[arrayKey])) {
-      return list.flatMap((parent: any) => {
-        const children = parent[arrayKey] || [];
-        // El nombre del objeto padre (la Categoría) se convierte en el nombre del grupo
-        const groupName = parent.nombre || '';
+        // 2. Si la propiedad del primer objeto es un Arreglo, activamos el modo "aplanado"
+        if (list.length > 0 && Array.isArray((list[0] as any)[arrayKey])) {
+            return list.flatMap((parent: any) => {
+                const children = parent[arrayKey] || [];
+                // El nombre del objeto padre (la Categoría) se convierte en el nombre del grupo
+                const groupName = parent.nombre || '';
 
-        // Mapeamos los hijos (los Tipos) como las opciones reales del combobox
-        return children.map((child: any) => ({
-          value: String(child.id),
-          label: child.nombre,
-          group: groupName,
-        }));
-      });
+                // Mapeamos los hijos (los Tipos) como las opciones reales del combobox
+                return children.map((child: any) => ({
+                    value: String(child.id),
+                    label: child.nombre,
+                    group: groupName,
+                }));
+            });
+        }
     }
-  }
 
-  // 3. Comportamiento por defecto original si es una lista plana o relación 1 a 1
-  return list.map((item) => catalogoToComboboxOption(item as any, groupAccessor));
+    // 3. Comportamiento por defecto original si es una lista plana o relación 1 a 1
+    return list.map((item) => catalogoToComboboxOption(item as any, groupAccessor));
 };
 
 export const toISODate = (d: Date | undefined): string =>
@@ -201,3 +202,37 @@ export const cleanText = (text: string): string => {
         .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡!]/g, "")
         .trim();
 };
+
+export const Producto = {
+    categoria: ProductoCategoriaEnum,
+    tipo: ProductoTipoEnum,
+    isValidTipo(value: unknown): value is ProductoTipoEnum {
+        if (value === null || value === undefined || value === '') return false;
+        return Number(value) in ProductoTipoProductoCategoriaMap;
+    },
+    getTipo(value: unknown): ProductoTipoEnum | undefined {
+        return this.isValidTipo(value)
+            ? Number(value) as ProductoTipoEnum
+            : undefined;
+    },
+    getCategoriaByTipo(tipo: unknown): ProductoCategoriaEnum | undefined {
+        return this.isValidTipo(tipo)
+            ? ProductoTipoProductoCategoriaMap[tipo]
+            : undefined;
+    },
+    tipoEsDeCategoria(tipo: unknown, categoria: ProductoCategoriaEnum): boolean {
+        return this.getCategoriaByTipo(tipo) === categoria;
+    },
+    tipoEsCategoriaComputadora(tipo: unknown): boolean {
+        return this.tipoEsDeCategoria(tipo, this.categoria.COMPUTADORA);
+    }
+}
+
+export const DictamenProducto = {
+    ...Producto,
+    tipos_requieren_numero_inventario: dictamenProductoTiposRequierenNumeroInventario,
+    tipoRequiereNumeroInventario(tipo: unknown): boolean {
+        const validTipo = this.getTipo(tipo);
+        return validTipo !== undefined && this.tipos_requieren_numero_inventario.includes(validTipo);
+    }
+}

@@ -33,7 +33,7 @@ export const ProductoCategoriaEnum = {
     ELECTRICO: 12,
     ESCANER: 13
 } as const;
-export type ProductoCategoria = (typeof ProductoCategoriaEnum)[keyof typeof ProductoCategoriaEnum];
+export type ProductoCategoriaEnum = (typeof ProductoCategoriaEnum)[keyof typeof ProductoCategoriaEnum];
 
 export const ProductoTipoEnum = {
     COMPUTADORA_ESCRITORIO: 1,
@@ -79,9 +79,9 @@ export const ProductoTipoEnum = {
     UPS: 41,
     ESCANER: 42
 } as const;
-export type ProductoTipo = (typeof ProductoTipoEnum)[keyof typeof ProductoTipoEnum];
+export type ProductoTipoEnum = (typeof ProductoTipoEnum)[keyof typeof ProductoTipoEnum];
 
-export const ProductoTipoProductoCategoriaMap: Record<ProductoTipo, ProductoCategoria> = {
+export const ProductoTipoProductoCategoriaMap: Record<ProductoTipoEnum, ProductoCategoriaEnum> = {
     [ProductoTipoEnum.COMPUTADORA_ESCRITORIO]: ProductoCategoriaEnum.COMPUTADORA,
     [ProductoTipoEnum.COMPUTADORA_PORTATIL]: ProductoCategoriaEnum.COMPUTADORA,
     [ProductoTipoEnum.SERVIDOR]: ProductoCategoriaEnum.COMPUTADORA,
@@ -126,20 +126,12 @@ export const ProductoTipoProductoCategoriaMap: Record<ProductoTipo, ProductoCate
     [ProductoTipoEnum.ESCANER]: ProductoCategoriaEnum.ESCANER
 }
 
-export const ProductoTipo = {
-    ...ProductoTipoEnum,
-    isValid(value: unknown): value is ProductoTipo {
-        if (value === null || value === undefined || value === '') return false;
-        return Number(value) in ProductoTipoProductoCategoriaMap;
-    },
-    getCategoria(tipo: unknown): ProductoCategoria | undefined {
-        if (!this.isValid(tipo)) return undefined;
-        return ProductoTipoProductoCategoriaMap[tipo];
-    },
-    esCategoria(tipo: unknown, categoria: ProductoCategoria): boolean {
-        return this.getCategoria(tipo) === categoria;
-    },
-    esCategoriaComputadora(tipo: unknown): boolean {
-        return this.esCategoria(tipo, ProductoCategoriaEnum.COMPUTADORA);
-    }
-}
+export const dictamenProductoTiposRequierenNumeroInventario: ProductoTipoEnum[] = [
+    ProductoTipoEnum.RAM,
+    ProductoTipoEnum.MONITOR,
+    ProductoTipoEnum.DISCO,
+    ProductoTipoEnum.TECLADO,
+    ProductoTipoEnum.CAMARA_WEB,
+    ProductoTipoEnum.BOCINA_AMBIENTAL,
+    ProductoTipoEnum.UNIDAD_DISCO_OPTICO
+] as const;
