@@ -50,7 +50,7 @@ class ArchivoService
         string $disk = 'local'
     ): Archivo {
         if (is_null($fileName) && !($file instanceof UploadedFile)) {
-            throw new InvalidArgumentException('You must provide the fileName when using a local File instance.');
+            throw new InvalidArgumentException('You must provide `fileName` when using a `File` instance.');
         }
 
         $fileName = $fileName ?: $file->getClientOriginalName();

@@ -3,11 +3,13 @@ import {
     RequiredIsoDateLTEToday,
     RequiredPositiveInteger,
     ArrayStandardFile,
-    RequiredArray
+    RequiredArray,
+    TrimmedString
 } from "@/lib/schemas/common";
 import * as CatalogoSchema from "../../common/forms/schemas";
 import z from "zod";
 import * as NumeroInventarioField from "@/views/common/numero-inventario/form-schema";
+import { DictamenProducto } from "@/lib/utils";
 
 type ProductoFieldsGroup = {
     producto_tipo_id: CatalogoSchema.Field;
@@ -21,7 +23,7 @@ export const productoFieldsGroupDefaultValues: ProductoFieldsGroup = {
 
 const productoFieldsGroupValidator = z.object({
     producto_tipo_id: CatalogoSchema.validator,
-    numero_inventario: NumeroInventarioField.validator
+    numero_inventario: TrimmedString
 })
 
 type ProductoFields = ProductoFieldsGroup & {
@@ -56,10 +58,29 @@ export const validator = z.object({
     fecha_solicitud: RequiredIsoDateLTEToday,
     adscripcion_id: CatalogoSchema.validator,
     archivo: ArrayStandardFile,
-    productos: RequiredArray(productoFieldsGroupValidator
-        .extend({
+    productos: RequiredArray(z
+        .object({
             cantidad: RequiredPositiveInteger,
-            empleado_id: CatalogoSchema.validator
+            empleado_id: CatalogoSchema.validator,
+            producto_tipo_id: productoFieldsGroupValidator.shape.producto_tipo_id,
+            numero_inventario: productoFieldsGroupValidator.shape.numero_inventario
+        })
+        .superRefine(({ producto_tipo_id, numero_inventario }, ctx) => {
+            if (DictamenProducto.tipoRequiereNumeroInventario(producto_tipo_id)) {
+                if (numero_inventario.length === 0) {
+                    ctx.addIssue({
+                        code: 'custom',
+                        message: 'Este campo es requerido',
+                        path: ['numero_inventario']
+                    });
+                } else if (numero_inventario.length != 11) {
+                    ctx.addIssue({
+                        code: 'custom',
+                        message: 'El número de inventario debe de contener 11 caracteres',
+                        path: ['numero_inventario']
+                    });
+                }
+            }
         })
     )
 });

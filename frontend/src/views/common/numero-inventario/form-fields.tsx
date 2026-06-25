@@ -3,7 +3,7 @@ import type React from "react";
 
 export const NumeroInventarioField = ({
     label = "Número de Inventario",
-    placeholder="500-01-0000",
+    placeholder = "500-01-0000",
     ...props
 }: React.ComponentProps<typeof TextField>) => {
     return (

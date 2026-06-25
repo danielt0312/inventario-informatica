@@ -195,6 +195,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'numero_inventario' => 'número de inventario'
+    ],
 
 ];

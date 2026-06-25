@@ -42,13 +42,15 @@ export function useForm() {
             formData.append('adscripcion_id', String(data.adscripcion_id));
             formData.append('folio', data.folio);
             formData.append('fecha_solicitud', data.fecha_solicitud);
-            formData.append('archivo', data.archivo[0]);
 
             data.productos.forEach((producto, index) => {
                 formData.append(`productos[${index}][cantidad]`, String(producto.cantidad));
-                formData.append(`productos[${index}][producto_tipo_id]`, String(producto.producto_tipo_id));
                 formData.append(`productos[${index}][empleado_id]`, String(producto.empleado_id));
+                formData.append(`productos[${index}][producto_tipo_id]`, String(producto.producto_tipo_id));
+                formData.append(`productos[${index}][numero_inventario]`, producto.numero_inventario);
             });
+
+            formData.append('archivo', data.archivo[0]);
 
             formMutation.mutate({ data: formData, formApi });
         }
@@ -131,11 +133,15 @@ export function Form() {
                                         <ProductoFieldGroup
                                             form={form}
                                             fields={{
-                                                numero_inventario: `productos[${index}].numero_inventario`,
                                                 producto_tipo_id: `productos[${index}].producto_tipo_id`,
+                                                numero_inventario: `productos[${index}].numero_inventario`,
                                             }}
                                         />
 
+                                        <form.AppField
+                                            name={`productos[${index}].numero_inventario`}
+                                            children={(field) => JSON.stringify(field.state.meta.errors)}
+                                        />
 
                                         <form.AppField
                                             name={`productos[${index}].empleado_id`}
