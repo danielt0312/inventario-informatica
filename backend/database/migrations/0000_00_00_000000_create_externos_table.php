@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('externo_empleado_id')
-                ->unique('uk_empleado');
+                ->unique('uk_empleados');
             $table->timestamp('verified_at');
         });
     }

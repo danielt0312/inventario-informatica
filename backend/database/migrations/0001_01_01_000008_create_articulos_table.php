@@ -39,10 +39,10 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('numero_inventario', 11)
-                ->unique('uk_articulo_numero_inventario');
+                ->unique('uk_articulos_numero_inventario');
             $table->string('cuenta_contable', 11)
                 ->nullable()
-                ->unique('uk_articulo_cuenta_contable', 11);
+                ->unique('uk_articulos_cuenta_contable', 11);
             $table->boolean('contable');
             $table->boolean('activo');
             $table->timestamps();
