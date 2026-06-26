@@ -16,8 +16,15 @@ class DictamenProducto extends Model
         'empleado_id',
         'producto_id',
         'producto_tipo_id',
+        'numero_inventario',
         'cantidad',
         'caracteristicas'
+    ];
+
+    protected $attributes = [
+        'producto_id' => null,
+        'numero_inventario' => null,
+        'caracteristicas' => null
     ];
 
     public $timestamps = false;
@@ -42,14 +49,25 @@ class DictamenProducto extends Model
         return $this->belongsTo(ProductoTipo::class);
     }
 
+    public function tipo(): Attribute
+    {
+        return Attribute::make(
+            fn (mixed $value, array $attributes) => $attributes['producto_id']
+                ? $this->producto->tipo
+                : $this->productoTipo
+        );
+    }
+
     public function descripcion(): Attribute
     {
         return Attribute::make(
-            function (mixed $value, array $attributes) {
-                $producto = $this->producto;
-
-                return "{$this->productoTipo->nombre} {$producto->marca->nombre} {$producto->nombre} {$attributes['caracteristicas']}";
-            }
+            fn (mixed $value, array $attributes) =>
+                implode(' ', array_filter([
+                    $this->tipo->nombre,
+                    $this->producto?->marca?->nombre,
+                    $this->producto?->nombre,
+                    $attributes['caracteristicas']
+                ]))
         );
     }
 }

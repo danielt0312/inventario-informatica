@@ -49,9 +49,14 @@
         .text-center { text-align: center; }
         .text-right { text-align: right; }
         .text-around { letter-spacing: 3px; }
+        .text-xs { font-size: 12px; }
         .text-2xl { font-size: 24px; }
         .text-3xl { font-size: 30px; }
         .my-10 { margin: 40px 0 }
+        .mt-1 { margin-top: 4px; }
+        .mt-2 { margin-top: 8px; }
+        .mt-3 { margin-top: 12px; }
+        .mt-4 { margin-top: 16px; }
         .mt-20 { margin-top: 80px; }
         .mb-5 { margin-bottom: 20px; }
         .mb-8 { margin-bottom: 32px; }

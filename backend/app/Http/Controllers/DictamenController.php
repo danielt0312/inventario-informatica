@@ -10,8 +10,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 use App\Services\ArchivoService;
 
-use App\Http\Resources\DictamenResource;
-
 use App\Http\Requests\Dictamen\{
     DictamenRequest,
     StoreDictamenRequest,

@@ -120,11 +120,6 @@ export function Form() {
                                         />
 
                                         <form.AppField
-                                            name={`productos[${index}].numero_inventario`}
-                                            children={(field) => JSON.stringify(field.state.meta.errors)}
-                                        />
-
-                                        <form.AppField
                                             name={`productos[${index}].empleado_id`}
                                             children={() => (
                                                 <EmpleadoField

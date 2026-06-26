@@ -76,9 +76,7 @@
     </style>
 @endpush
 
-<x-pdf-layout::master
-    title="{{ $fileTitle }}"
->
+<x-pdf-layout::master title="{{ $fileTitle }}">
     <x-slot:header class="container">
         <div class="header-logo">
             <x-pdf::logo />
@@ -87,6 +85,10 @@
             <span>{{ $location }} a {{ $date }}</span>
         </div>
     </x-slot:header>
+
+    <div class="mt-2 text-right">
+        <b>DICTAMEN NO. {{ $dictamen->id }}.</b>
+    </div>
 
     <div class="text-center font-bold text-2xl uppercase my-10">
         {{ $title }}
@@ -108,6 +110,7 @@
                 <x-pdf::table.th class="text-center">Cantidad</x-pdf::table.th>
                 <x-pdf::table.th>Descripción</x-pdf::table.th>
                 <x-pdf::table.th class="text-center">Resguardante</x-pdf::table.th>
+                <x-pdf::table.th class="text-center">No. de Inventario</x-pdf::table.th>
             </x-pdf::table.tr>
         </x-pdf::table.thead>
         <x-pdf::table.tbody>
@@ -116,6 +119,7 @@
                     <x-pdf::table.td class="text-center">{{ $producto->cantidad }}</x-pdf::table.td>
                     <x-pdf::table.td>{{ $producto->descripcion }}</x-pdf::table.td>
                     <x-pdf::table.td class="text-center">John Doe</x-pdf::table.td>
+                    <x-pdf::table.td class="text-center">{{ $producto->numero_inventario ?? 'N/A' }}</x-pdf::table.td>
                 </x-pdf::table.tr>
             @endforeach
         </x-pdf::table.tbody>
