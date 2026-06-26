@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
@@ -12,6 +13,24 @@ use App\Enums\DictamenEstadoEnum;
 class Dictamen extends Model
 {
     use HasFactory, HasUuids;
+
+    public function __call($method, $parameters)
+    {
+        if (Str::startsWith($method, 'esEstado')) {
+            $statusName = Str::after($method, 'esEstado');
+
+            $enumCaseName = strtoupper(Str::snake($statusName));
+
+            $enumClass = DictamenEstadoEnum::class;
+
+            if (defined("$enumClass::$enumCaseName")) {
+                $enumCase = constant("$enumClass::$enumCaseName");
+                return $enumCase->value === $this->estado_id;
+            }
+        }
+
+        return parent::__call($method, $parameters);
+    }
 
     protected $fillable = [
         'estado_id',
@@ -49,11 +68,6 @@ class Dictamen extends Model
     public function articulos(): HasMany
     {
         return $this->hasMany(DictamenArticulo::class);
-    }
-
-    public function esEstado(DictamenEstadoEnum $case): bool
-    {
-        return $this->estado_id === $case->value;
     }
 
     public function casts(): array

@@ -2,13 +2,11 @@
 
 namespace App\Http\Requests\Dictamen;
 
-use App\Enums\DictamenEstadoEnum;
-
 class EvidenciarDictamenRequest extends ActionDictamenRequest
 {
     public function authorize(): bool
     {
-        return $this->dictamen->esEstado(DictamenEstadoEnum::EVIDENCIAR);
+        return $this->dictamen->esEstadoEvidenciar();
     }
 
     public function rules(): array
