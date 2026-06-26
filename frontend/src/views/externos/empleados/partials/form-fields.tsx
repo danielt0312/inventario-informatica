@@ -4,12 +4,13 @@ import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";
 import type { Empleado } from "@/types/externos";
 import { toOptions } from "@/lib/utils";
-import { type Field } from "../../../common/forms/schemas";
+import type { AdscripcionField } from "../../adscripciones/partials/form-fields";
 
 interface EmpleadoFieldProps extends TOmitCreatableComboboxFieldsProps<'disabled'> {
-    adscripcion: Field;
+    adscripcion: AdscripcionField;
 }
 
+export type EmpleadoField = string;
 export const EmpleadoField = ({
     adscripcion,
     label = "Empleado",

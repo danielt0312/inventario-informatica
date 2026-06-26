@@ -1,21 +1,22 @@
-import * as CatalogSchema from "../../common/forms/schemas";
-import { NonEmptyString } from "@/lib/schemas/common";
+import { NonEmptyString, NonEmptyStringToNumber } from "@/lib/schemas/common";
+import type { TipoField } from "../tipos/partials/form-fields";
+import type { MarcaField } from "../marcas/partials/form-fields";
 import z from "zod";
 
 export type Schema = {
-    tipo_id: CatalogSchema.Field;
-    marca_id: CatalogSchema.Field;
+    tipo_id: TipoField;
+    marca_id: MarcaField;
     nombre: string;
 }
 
 export const defaultValues: Schema = {
-    tipo_id: CatalogSchema.defaultValue,
-    marca_id: CatalogSchema.defaultValue,
+    tipo_id: '',
+    marca_id: '',
     nombre: ''
 }
 
 export const validator = z.object({
-    tipo_id: CatalogSchema.validator,
-    marca_id: CatalogSchema.validator,
+    tipo_id: NonEmptyStringToNumber,
+    marca_id: NonEmptyStringToNumber,
     nombre: NonEmptyString
 });

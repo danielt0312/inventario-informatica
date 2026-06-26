@@ -15,6 +15,7 @@ export interface MarcaFieldProps extends Omit<
     'options' | 'onCreateRequest'
 > {}
 
+export type MarcaField = string;
 export function MarcaField({
     label = "Marca del Producto",
     ...props

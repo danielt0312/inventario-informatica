@@ -5,6 +5,7 @@ import type { Adscripcion } from "@/types/externos";
 import type { TResponse } from "@/types/generics";
 import { useQuery } from "@tanstack/react-query";
 
+export type AdscripcionField = string;
 export const AdscripcionField = ({
     label = "Área de Adscripción",
     ...props

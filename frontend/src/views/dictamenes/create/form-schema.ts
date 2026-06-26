@@ -4,51 +4,55 @@ import {
     RequiredPositiveInteger,
     ArrayStandardFile,
     RequiredArray,
-    TrimmedString
+    TrimmedString,
+    NonEmptyStringToNumber
 } from "@/lib/schemas/common";
-import * as CatalogoSchema from "../../common/forms/schemas";
-import z from "zod";
-import * as NumeroInventarioField from "@/views/common/numero-inventario/form-schema";
 import { DictamenProducto } from "@/lib/utils";
+import type { TipoField } from "@/views/common/productos/tipos/partials/form-fields";
+import type { NumeroInventarioField } from "@/views/common/numero-inventario/form-fields";
+import type { EmpleadoField } from "@/views/externos/empleados/partials/form-fields";
+import type { AdscripcionField } from "@/views/externos/adscripciones/partials/form-fields";
+import type { ArchivoField, CantidadField, FechaSolicitudField, FolioField } from "./form-fields";
+import z from "zod";
 
 type ProductoFieldsGroup = {
-    producto_tipo_id: CatalogoSchema.Field;
-    numero_inventario: NumeroInventarioField.Field;
+    producto_tipo_id: TipoField;
+    numero_inventario: NumeroInventarioField;
 }
 
 export const productoFieldsGroupDefaultValues: ProductoFieldsGroup = {
-    producto_tipo_id: CatalogoSchema.defaultValue,
-    numero_inventario: NumeroInventarioField.defaultValue
+    producto_tipo_id: '',
+    numero_inventario: ''
 }
 
 const productoFieldsGroupValidator = z.object({
-    producto_tipo_id: CatalogoSchema.validator,
+    producto_tipo_id: NonEmptyStringToNumber,
     numero_inventario: TrimmedString
 })
 
 type ProductoFields = ProductoFieldsGroup & {
-    cantidad: string;
-    empleado_id: CatalogoSchema.Field;
+    cantidad: CantidadField;
+    empleado_id: EmpleadoField;
 }
 
 export const productoFieldsDefaultValues: ProductoFields = {
     cantidad: '1',
-    empleado_id: CatalogoSchema.defaultValue,
+    empleado_id: '',
     ...productoFieldsGroupDefaultValues
 } as const;
 
 export type Schema = {
-    folio: string;
-    fecha_solicitud: string;
-    adscripcion_id: CatalogoSchema.Field;
-    archivo: File[] | undefined;
+    folio: FolioField;
+    fecha_solicitud: FechaSolicitudField;
+    adscripcion_id: AdscripcionField;
+    archivo: ArchivoField;
     productos: ProductoFields[];
 }
 
 export const dictamenDefaultValues: Schema = {
     folio: '',
     fecha_solicitud: '',
-    adscripcion_id: CatalogoSchema.defaultValue,
+    adscripcion_id: '',
     archivo: undefined,
     productos: [productoFieldsDefaultValues]
 } as const;
@@ -56,12 +60,12 @@ export const dictamenDefaultValues: Schema = {
 export const validator = z.object({
     folio: NonEmptyString,
     fecha_solicitud: RequiredIsoDateLTEToday,
-    adscripcion_id: CatalogoSchema.validator,
+    adscripcion_id: NonEmptyStringToNumber,
     archivo: ArrayStandardFile,
     productos: RequiredArray(z
         .object({
             cantidad: RequiredPositiveInteger,
-            empleado_id: CatalogoSchema.validator,
+            empleado_id: NonEmptyStringToNumber,
             producto_tipo_id: productoFieldsGroupValidator.shape.producto_tipo_id,
             numero_inventario: productoFieldsGroupValidator.shape.numero_inventario
         })

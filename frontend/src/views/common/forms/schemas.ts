@@ -1,5 +1,5 @@
 import { NonEmptyStringToNumber } from "@/lib/schemas/common";
 
-export type Field = string;
-export const defaultValue: Field = '';
+export type CatalogoField = string;
+export const catalogoDefaultValue: CatalogoField = '';
 export const validator = NonEmptyStringToNumber;

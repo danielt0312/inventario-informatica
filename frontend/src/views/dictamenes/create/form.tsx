@@ -1,9 +1,7 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
-import { DatePickerField, FileUploaderField, TextField } from "@/components/composed/@tanstack/form/field-components";
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
-import { toISODate } from "@/lib/utils";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { dictamenDefaultValues, productoFieldsDefaultValues, validator } from "./form-schema";
 import { useStore } from "@tanstack/react-form";
@@ -11,7 +9,7 @@ import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
-import { CantidadField, ProductoFieldGroup } from "./form-fields";
+import { ArchivoField, CantidadField, FechaSolicitudField, FolioField, ProductoFieldGroup } from "./form-fields";
 import { AdscripcionField } from "@/views/externos/adscripciones/partials/form-fields";
 import { EmpleadoField } from "@/views/externos/empleados/partials/form-fields";
 
@@ -78,34 +76,17 @@ export function Form() {
                     />
                     <form.AppField
                         name="folio"
-                        children={() => (
-                            <TextField
-                                label="Folio del oficio de solicitud"
-                                placeholder="Ingresa el folio del oficio de la solicitud"
-                            />
-                        )}
+                        children={() => <FolioField />}
                     />
                     <form.AppField
                         name="fecha_solicitud"
-                        children={() => (
-                            <DatePickerField
-                                label="Fecha de solicitud"
-                                parseValue={toISODate}
-                                placeholder="Selecciona la fecha de la solicitud"
-                            />
-                        )}
+                        children={() => <FechaSolicitudField />}
                     />
                 </FieldGroup>
 
                 <form.AppField
                     name="archivo"
-                    children={() => (
-                        <FileUploaderField
-                            label="Adjuntar oficio de solicitud"
-                            accept="application/pdf"
-                            className="md:max-w-1/2"
-                        />
-                    )}
+                    children={() => <ArchivoField className="md:max-w-1/2" />}
                 />
 
                 <form.AppField name="productos" mode="array">

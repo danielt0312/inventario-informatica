@@ -1,8 +1,9 @@
 import { NonEmptyString } from "@/lib/schemas/common";
+import type { NombreField } from "./form-fields";
 import z from "zod";
 
 export type Schema = {
-    nombre: string;
+    nombre: NombreField;
 }
 
 export const defaultValues: Schema = {

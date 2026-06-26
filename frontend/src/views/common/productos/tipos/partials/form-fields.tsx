@@ -15,6 +15,7 @@ export type FieldProps = Omit<
     'options' | 'onCreateRequest'
 >;
 
+export type TipoField = string;
 export function TipoField({
     label = "Tipo de Producto",
     ...props

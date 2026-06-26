@@ -1,6 +1,7 @@
 import { TextField } from "@/components/composed/@tanstack/form/field-components";
 import type React from "react";
 
+export type NombreField = string;
 export function NombreField({
     label = "Tipo de Producto",
     placeholder = "Ingresa el nombre del tipo de producto",
