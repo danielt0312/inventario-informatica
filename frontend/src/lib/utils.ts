@@ -24,6 +24,10 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
+function parseLaravelKeyErrorPath(key: string): string {
+    return key.replace(/\.(\d+)/g, '[$1]');
+}
+
 export function setFormValidationErrors(
     formApi: AnyFormApi,
     errors: LaravelValidationErrors
@@ -34,7 +38,9 @@ export function setFormValidationErrors(
     errorKeys.forEach((field) => {
         const errorMessage = errors[field][0];
 
-        formApi.setFieldMeta(field as any, (prev) => {
+        const fieldPath = parseLaravelKeyErrorPath(field);
+
+        formApi.setFieldMeta(fieldPath as any, (prev) => {
             const base = prev || {
                 errors: [],
                 errorMap: {},
@@ -49,8 +55,8 @@ export function setFormValidationErrors(
                     onSubmit: errorMessage
                 },
                 isTouched: true
-            }
-        })
+            };
+        });
     });
 }
 
@@ -73,7 +79,9 @@ export function handleFormValidationError(
     let hasGlobal = false;
 
     errorKeys.forEach((key) => {
-        if (formKeys.includes(key)) {
+        const rootKey = key.split('.')[0];
+
+        if (formKeys.includes(rootKey)) {
             localErrors[key] = responseErrors[key];
         } else {
             hasGlobal = true;
