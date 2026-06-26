@@ -1,23 +1,24 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
-import { type FormMutation, usePostFormMutation } from "@/hooks/use-post-form-mutation";
-import { defaultValues, validator } from "./form-schema";
+import { type FormMutation, useFormMutation } from "@/hooks/use-form-mutation";
+import { defaultValues, validator, type OutputSchema } from "./form-schema";
 import { NombreField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import { CategoriaField } from "../../categorias/partials/form-fields";
+import type { TResponse } from "@/types/generics";
+import type { ProductoTipo } from "@/types/productos";
 
-export const useFormMutation = (
-    props?: Omit<FormMutation, 'axiosConfig' | 'url'>
-) => usePostFormMutation({
-    url: `api/producto_tipos`,
-    ...props
-});
+export const useProductoTipoCreateFormMutation = <R extends TResponse<ProductoTipo>, P extends OutputSchema>(props?: Omit<FormMutation, 'url' | 'method'>) =>
+    useFormMutation<R, P>({
+        url: `api/producto_tipos`,
+        ...props
+    });
 
 interface UseFormOptions {
-    useMutationHook?: typeof useFormMutation;
+    useMutationHook?: typeof useProductoTipoCreateFormMutation;
 }
 
 export const useForm = ({
-    useMutationHook = useFormMutation
+    useMutationHook = useProductoTipoCreateFormMutation
 }: UseFormOptions = {}) => {
     const { mutate } = useMutationHook();
 
@@ -26,10 +27,7 @@ export const useForm = ({
         validators: {
             onSubmit: validator
         },
-        onSubmit: ({ value, formApi }) => {
-            const data = validator.parse(value);
-            mutate({ data, formApi });
-        }
+        onSubmit: ({ value, formApi }) => mutate({ data: validator.parse(value), formApi }),
     });
 }
 

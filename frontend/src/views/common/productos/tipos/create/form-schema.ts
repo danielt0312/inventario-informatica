@@ -17,3 +17,5 @@ export const validator = z.object({
     categoria_id: NonEmptyStringToNumber,
     nombre: NonEmptyString
 });
+
+export type OutputSchema = z.output<typeof validator>;

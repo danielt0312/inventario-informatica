@@ -8,7 +8,7 @@ import { getDefaultColumns } from "./table-cols";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { Form, useForm, useFormMutation } from "../create/form";
+import { Form, useForm, useFacturaCreateFormMutation } from "../create/form";
 import React from "react";
 
 export interface TableProps<TData extends Factura = Factura>
@@ -28,7 +28,7 @@ export function Table<TData extends Factura = Factura>({
 
     const [isOpen, setIsOpen] = React.useState(false);
 
-    const useDialogFormMutation = () => useFormMutation({
+    const useDialogFormMutation = () => useFacturaCreateFormMutation({
         onSuccess: () => setIsOpen(false)
     });
 

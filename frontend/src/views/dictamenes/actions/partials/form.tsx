@@ -14,7 +14,7 @@ import {
 import { Form as FacturarForm } from "../facturar/form";
 
 import { useNavigate } from "@tanstack/react-router";
-import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
+import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 
 export function Form({ dictamen }: { dictamen: ActionDictamenWithDictamenProductos }) {
@@ -37,7 +37,7 @@ export function useFormMutation(dictamen: ActionDictamenWithDictamenProductos) {
     const navigate = useNavigate();
     const action = ActionStates[dictamen.estado.id];
 
-    return usePostFormMutation({
+    return useFormMutation({
         url: `api/dictamenes/${dictamen.uuid}/${action}`,
         onSuccess: (_, __, ___, { client }) => {
             client.invalidateQueries({ queryKey: ['dictamenes'] });

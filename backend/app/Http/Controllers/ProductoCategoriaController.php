@@ -21,9 +21,10 @@ class ProductoCategoriaController extends Controller
 
     public function store(StoreProductoCategoriaRequest $request)
     {
-        ProductoCategoria::create($request->validated());
-
-        return response(status: 201);
+        return (ProductoCategoria::create($request->validated()))
+            ->toResource()
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function show(string $id)

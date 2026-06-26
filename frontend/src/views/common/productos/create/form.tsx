@@ -1,5 +1,5 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
-import { type FormMutation, usePostFormMutation } from "@/hooks/use-post-form-mutation";
+import { type FormMutation, useFormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator } from "./form-schema";
 import { NombreField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
@@ -8,7 +8,7 @@ import { TipoField } from "../tipos/partials/form-fields";
 
 export const useFormMutation = (
     props?: Omit<FormMutation, 'axiosConfig' | 'url'>
-) => usePostFormMutation({
+) => useFormMutation({
     url: `api/productos`,
     ...props
 });

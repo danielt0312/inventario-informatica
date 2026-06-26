@@ -7,7 +7,7 @@ import { dictamenDefaultValues, productoFieldsDefaultValues, validator } from ".
 import { useStore } from "@tanstack/react-form";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
-import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
+import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
 import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFieldGroup } from "./form-fields";
 import { AdscripcionField } from "@/views/externos/adscripciones/partials/form-fields";
@@ -16,7 +16,7 @@ import { EmpleadoField } from "@/views/externos/empleados/partials/form-fields";
 export function useFormMutation() {
     const navigate = useNavigate();
 
-    return usePostFormMutation({
+    return useFormMutation({
         url: 'api/dictamenes',
         onSuccess: (_, __, ___, context) => {
             context.client.invalidateQueries({ queryKey: ['dictamenes'] });

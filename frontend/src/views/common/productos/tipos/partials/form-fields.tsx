@@ -7,7 +7,7 @@ import React from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { AppForm, useForm, useFormMutation } from "../create/form";
+import { AppForm, useForm, useProductoTipoCreateFormMutation } from "../create/form";
 import type { ProductoCategoriaWithTipos } from "@/types/productos";
 
 export type FieldProps = Omit<
@@ -32,7 +32,7 @@ export function TipoField({
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
-    const useDialogFormMutation = () => useFormMutation({
+    const useDialogFormMutation = () => useProductoTipoCreateFormMutation({
         onSuccess: (_, __, ___, { client }) => {
             setDialogIsOpen(false)
             client.invalidateQueries({ queryKey: ['producto_categorias_tipos'] });

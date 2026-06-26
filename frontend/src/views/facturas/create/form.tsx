@@ -1,33 +1,30 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
-import { usePostFormMutation, type FormMutation } from "@/hooks/use-post-form-mutation";
+import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator } from "./form-schema";
 import { DatePickerField, FileUploaderField } from "@/components/composed/@tanstack/form/field-components";
 import { cn, toISODate } from "@/lib/utils";
+import type { Factura } from "@/types/documentos";
+import type { TResponse } from "@/types/generics";
 
-export const useFormMutation = (
-    props?: Omit<FormMutation, 'axiosConfig' | 'url'>
-) => usePostFormMutation({
-    axiosConfig: {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    },
-    url: `api/facturas`,
-    ...props,
-    onSuccess: (data, variables, onMutateResult, context) => {
-        context.client.invalidateQueries({ queryKey: ['facturas'] });
-        props?.onSuccess?.(data, variables, onMutateResult, context);
-    }
-});
+export const useFacturaCreateFormMutation = <R extends TResponse<Factura>, P extends FormData>(props?: Omit<FormMutation, 'url' | 'method' | 'axiosConfig'>) =>
+    useFormMutation<R, P>({
+        axiosConfig: {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        },
+        url: `api/facturas`,
+        ...props,
+    });
 
 interface UseFormOptions {
-    useMutationHook?: typeof useFormMutation;
+    useMutationHook?: typeof useFacturaCreateFormMutation;
 }
 
 export const useForm = ({
-    useMutationHook = useFormMutation
+    useMutationHook = useFacturaCreateFormMutation
 }: UseFormOptions = {}) => {
-    const formMutation = useMutationHook();
+    const { mutate } = useMutationHook();
 
     return useAppForm({
         defaultValues,
@@ -41,7 +38,7 @@ export const useForm = ({
             formData.append('fecha_emision', data.fecha_emision);
             formData.append('archivo', data.archivo[0]);
 
-            formMutation.mutate({ data: formData, formApi: formApi })
+            mutate({ data: formData, formApi: formApi })
         }
     })
 }
