@@ -18,19 +18,19 @@ export const ActionStates = {
 
 export type ActionDictamenEstadoEnum = keyof typeof ActionStates;
 
-export type ActionDictamen<TDictamen extends Dictamen = Dictamen> = Omit<TDictamen, 'estado'> & {
+export type ActionDictamen<T extends Dictamen = Dictamen> = Omit<T, 'estado'> & {
     estado: Omit<DictamenEstado, 'id'> & {
         id: ActionDictamenEstadoEnum;
     }
 }
 
-export type ActionDictamenWithDocumento<TActionDictamen extends ActionDictamen = ActionDictamen> = Omit<TActionDictamen, 'documento'> & {
-    documento: NonNullable<TActionDictamen['documento']>;
+export type ActionDictamenWithDocumento<T extends ActionDictamen = ActionDictamen> = Omit<T, 'documento'> & {
+    documento: NonNullable<T['documento']>;
 }
 
-export type ActionDictamenProducto<TDictamenProducto extends DictamenProducto = DictamenProducto> = Omit<TDictamenProducto, 'producto'> & {
-    producto: NonNullable<DictamenProducto['producto']>;
+export type ActionDictamenProducto<T extends DictamenProducto = DictamenProducto> = Omit<T, 'producto'> & {
+    producto: NonNullable<T['producto']>;
 }
 
-export type ActionDictamenWithDictamenProductos<TActionDictamen extends ActionDictamen = ActionDictamen> = DictamenWithDictamenProductos<TActionDictamen>;
-export type ActionDictamenWithActionDictamenProductos<TActionDictamen extends ActionDictamen = ActionDictamenWithDocumento, TActionDictamenProducto extends ActionDictamenProducto = ActionDictamenProducto> = DictamenWithDictamenProductos<TActionDictamen, TActionDictamenProducto>;
+export type ActionDictamenWithDictamenProductos<T extends ActionDictamen = ActionDictamen> = DictamenWithDictamenProductos<T>;
+export type ActionDictamenWithActionDictamenProductos<TActionDictamenProducto extends ActionDictamenProducto = ActionDictamenProducto, TActionDictamen extends ActionDictamen = ActionDictamenWithDocumento> = DictamenWithDictamenProductos<TActionDictamen, TActionDictamenProducto>;

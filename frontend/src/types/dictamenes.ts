@@ -8,7 +8,7 @@ export type DictamenEstado = {
     nombre: string;
 };
 
-export type DictamenProducto<TProductoTipo extends ProductoTipo = ProductoTipo, TProducto extends Producto = Producto> = {
+export type DictamenProducto<TProducto extends Producto = Producto, TProductoTipo extends ProductoTipo = ProductoTipo> = {
     id: number;
     cantidad: number;
     caracteristicas: string | null;
