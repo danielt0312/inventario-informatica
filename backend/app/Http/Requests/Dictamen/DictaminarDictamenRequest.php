@@ -4,14 +4,13 @@ namespace App\Http\Requests\Dictamen;
 
 use Illuminate\Validation\Rule;
 
-use App\Models\Dictamen;
 use App\Enums\DictamenEstadoEnum;
 
 class DictaminarDictamenRequest extends ActionDictamenRequest
 {
     public function authorize(): bool
     {
-        return DictamenEstadoEnum::esDictaminar($this->dictamen->estado_id);
+        return $this->dictamen->esEstado(DictamenEstadoEnum::DICTAMINAR);
     }
 
     public function rules(): array

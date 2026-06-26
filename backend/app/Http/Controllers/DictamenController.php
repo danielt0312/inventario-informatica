@@ -15,7 +15,7 @@ use App\Http\Requests\Dictamen\{
     StoreDictamenRequest,
     DictaminarDictamenRequest,
     EvidenciarDictamenRequest,
-    FacturarDictamenRequest
+    InventariarDictamenRequest
 };
 
 use App\Models\{
@@ -142,31 +142,6 @@ class DictamenController extends Controller
         $dictamen->update([
             'estado_id' => DictamenEstadoEnum::SURTIR->value
         ]);
-
-        return response(status: 201);
-    }
-
-    public function facturar(FacturarDictamenRequest $request, Dictamen $dictamen)
-    {
-        DB::transaction(function () use ($request, $dictamen) {
-            foreach ($dictamen->productos() as $dictamen_producto) {
-                for ($i=0; $i < $dictamen_producto->cantidad; $i++) {
-                    // todo generar la imagen qr y guardar
-                    $qr_archivo = Archivo::create([
-                        'extension' => '.jpg'
-                    ]);
-
-                    $articulo = Articulo::create([
-                        'producto_id' => $dictamen_producto->producto_id,
-                        'estado_id' => ArticuloEstadoEnum::REVISION->value,
-                    ]);
-                }
-            }
-
-            $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value,
-            ]);
-        });
 
         return response(status: 201);
     }

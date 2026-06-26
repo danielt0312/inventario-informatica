@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 use App\Enums\DictamenEstadoEnum;
@@ -13,8 +12,6 @@ use App\Enums\DictamenEstadoEnum;
 class Dictamen extends Model
 {
     use HasFactory, HasUuids;
-
-    protected $table = 'dictamenes';
 
     protected $fillable = [
         'estado_id',
@@ -52,6 +49,11 @@ class Dictamen extends Model
     public function articulos(): HasMany
     {
         return $this->hasMany(DictamenArticulo::class);
+    }
+
+    public function esEstado(DictamenEstadoEnum $case): bool
+    {
+        return $this->estado_id === $case->value;
     }
 
     public function casts(): array
