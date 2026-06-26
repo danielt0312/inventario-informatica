@@ -1,11 +1,12 @@
 import { ArrayStandardFile } from "@/lib/schemas/common";
+import type { ArchivoField } from "@/views/common/archivos/form-fields";
 import z from "zod";
 
-export interface Schema {
-    archivo: File[] | undefined;
+export type Schema = {
+    archivo: ArchivoField;
 }
 
-export const submitValidator = z.object({
+export const validator = z.object({
     archivo: ArrayStandardFile
 });
 

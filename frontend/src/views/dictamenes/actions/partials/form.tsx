@@ -7,7 +7,10 @@ import {
 } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 import { Form as DictaminarForm } from "../dictaminar/form";
-import { Form as EvidenciarForm } from "../evidenciar/form";
+import {
+    type ActionDictamen as EvidenciarDictamen,
+    Form as EvidenciarForm,
+} from "../evidenciar/form";
 import { Form as FacturarForm } from "../facturar/form";
 
 import { useNavigate } from "@tanstack/react-router";
@@ -19,7 +22,7 @@ export function Form({ dictamen }: { dictamen: ActionDictamenWithDictamenProduct
         case DictamenEstadoEnum.DICTAMINAR:
             return <DictaminarForm dictamen={dictamen} />;
         case DictamenEstadoEnum.EVIDENCIAR:
-            return <EvidenciarForm dictamen={dictamen as ActionDictamenWithActionDictamenProductos} />;
+            return <EvidenciarForm dictamen={dictamen as EvidenciarDictamen} />;
         case DictamenEstadoEnum.SURTIR:
             return <FacturarForm dictamen={dictamen as ActionDictamenWithActionDictamenProductos} />;
         case DictamenEstadoEnum.INVENTARIAR:

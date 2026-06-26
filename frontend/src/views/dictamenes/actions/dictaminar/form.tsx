@@ -51,30 +51,31 @@ export function Form({
                 {dictamen.productos.map((dictamenProducto, index) => (
                     <Card key={index} className="shadow-none">
                         <CardContent className="flex flex-col gap-6">
-                            <div className="grid grid-cols-3 gap-6">
-                                <div data-slot="label">
+                            <div className="flex flex-row gap-6">
+                                <div className="w-1/3" data-slot="label">
                                     <Label className="font-bold">Cantidad</Label>
                                     <Label>{dictamenProducto.cantidad}</Label>
                                 </div>
-                                <div data-slot="label">
+                                <div className="w-1/3" data-slot="label">
                                     <Label className="font-bold">Producto</Label>
                                     <Label>{dictamenProducto.producto_tipo.nombre}</Label>
                                 </div>
-                                <div data-slot="label">
+                                <div className="w-1/3" data-slot="label">
                                     <Label className="font-bold">Resguardante</Label>
                                     <Label>{dictamenProducto.empleado?.nombre ?? 'Juan Perez'}</Label>
                                 </div>
-
-                                <form.AppField
-                                    name={`productos[${index}].producto_id`}
-                                    children={() => (
-                                        <ProductoField
-                                            label="Modelo"
-                                            tipo_id={dictamenProducto.producto_tipo.id}
-                                        />
-                                    )}
-                                />
                             </div>
+
+                            <form.AppField
+                                name={`productos[${index}].producto_id`}
+                                children={() => (
+                                    <ProductoField
+                                        label="Modelo"
+                                        tipo_id={dictamenProducto.producto_tipo.id}
+                                        className="max-w-1/3"
+                                    />
+                                )}
+                            />
 
                             <form.AppField
                                 name={`productos[${index}].caracteristicas`}

@@ -12,7 +12,7 @@ import type { TipoField } from "@/views/common/productos/tipos/partials/form-fie
 import type { NumeroInventarioField } from "@/views/common/numero-inventario/form-fields";
 import type { EmpleadoField } from "@/views/externos/empleados/partials/form-fields";
 import type { AdscripcionField } from "@/views/externos/adscripciones/partials/form-fields";
-import type { ArchivoField, CantidadField, FechaSolicitudField, FolioField } from "./form-fields";
+import type { OficioField, CantidadField, FechaSolicitudField, FolioField } from "./form-fields";
 import z from "zod";
 
 type ProductoFieldsGroup = {
@@ -45,7 +45,7 @@ export type Schema = {
     folio: FolioField;
     fecha_solicitud: FechaSolicitudField;
     adscripcion_id: AdscripcionField;
-    archivo: ArchivoField;
+    archivo: OficioField;
     productos: ProductoFields[];
 }
 

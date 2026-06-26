@@ -9,7 +9,7 @@ import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { usePostFormMutation } from "@/hooks/use-post-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArchivoField, CantidadField, FechaSolicitudField, FolioField, ProductoFieldGroup } from "./form-fields";
+import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFieldGroup } from "./form-fields";
 import { AdscripcionField } from "@/views/externos/adscripciones/partials/form-fields";
 import { EmpleadoField } from "@/views/externos/empleados/partials/form-fields";
 
@@ -86,7 +86,7 @@ export function Form() {
 
                 <form.AppField
                     name="archivo"
-                    children={() => <ArchivoField className="md:max-w-1/2" />}
+                    children={() => <OficioField className="md:max-w-1/2" />}
                 />
 
                 <form.AppField name="productos" mode="array">

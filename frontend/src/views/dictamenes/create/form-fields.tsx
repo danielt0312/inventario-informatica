@@ -1,4 +1,4 @@
-import { DatePickerField, FileUploaderField, TextField } from "@/components/composed/@tanstack/form/field-components";
+import { DatePickerField, TextField } from "@/components/composed/@tanstack/form/field-components";
 import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
 import { FieldGroup } from "@/components/ui/field";
 import { TipoField } from "@/views/common/productos/tipos/partials/form-fields";
@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { productoFieldsGroupDefaultValues } from "./form-schema";
 import { NumeroInventarioField } from "@/views/common/numero-inventario/form-fields";
 import { cn, DictamenProducto, toISODate } from "@/lib/utils";
+import { PdfArchivoField, type ArchivoField, type PdfArchivoFieldProps } from "@/views/common/archivos/form-fields";
 
 const defaultProps: React.ComponentProps<typeof FieldGroup> = {}
 export const ProductoFieldGroup = withFieldGroup({
@@ -84,15 +85,13 @@ export const FechaSolicitudField = ({
     />
 );
 
-export type ArchivoField = File[] | undefined;
-interface ArchivoFieldProps extends Omit<React.ComponentProps<typeof FileUploaderField>, 'accept'> {}
-export const ArchivoField = ({
+export type OficioField = ArchivoField;
+export const OficioField = ({
     label = "Adjuntar oficio de solicitud",
     ...props
-}: ArchivoFieldProps) => (
-    <FileUploaderField
+}: PdfArchivoFieldProps) => (
+    <PdfArchivoField
         label={label}
-        accept="application/pdf"
         {...props}
     />
 );
