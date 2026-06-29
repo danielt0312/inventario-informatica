@@ -13,7 +13,7 @@ import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFi
 import { AdscripcionField } from "@/views/externos/adscripciones/partials/form-fields";
 import { EmpleadoField } from "@/views/externos/empleados/partials/form-fields";
 
-export function useFormMutation() {
+export function useCreateFormMutation() {
     const navigate = useNavigate();
 
     return useFormMutation({
@@ -26,7 +26,7 @@ export function useFormMutation() {
 }
 
 export function useForm() {
-    const formMutation = useFormMutation();
+    const formMutation = useCreateFormMutation();
 
     return useAppForm({
         defaultValues: dictamenDefaultValues,

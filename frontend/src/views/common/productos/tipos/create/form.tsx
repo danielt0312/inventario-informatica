@@ -7,18 +7,18 @@ import { CategoriaField } from "../../categorias/partials/form-fields";
 import type { TResponse } from "@/types/generics";
 import type { ProductoTipo } from "@/types/productos";
 
-export const useProductoTipoCreateFormMutation = <R extends TResponse<ProductoTipo>, P extends OutputSchema>(props?: Omit<FormMutation, 'url' | 'method'>) =>
+export const useCreateFormMutation = <R extends TResponse<ProductoTipo>, P extends OutputSchema>(props?: Omit<FormMutation, 'url' | 'method'>) =>
     useFormMutation<R, P>({
         url: `api/producto_tipos`,
         ...props
     });
 
 interface UseFormOptions {
-    useMutationHook?: typeof useProductoTipoCreateFormMutation;
+    useMutationHook?: typeof useCreateFormMutation;
 }
 
 export const useForm = ({
-    useMutationHook = useProductoTipoCreateFormMutation
+    useMutationHook = useCreateFormMutation
 }: UseFormOptions = {}) => {
     const { mutate } = useMutationHook();
 

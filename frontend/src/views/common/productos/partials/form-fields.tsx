@@ -8,7 +8,7 @@ import React from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { AppForm, useForm, useFormMutation } from "../create/form";
+import { AppForm, useForm, useCreateFormMutation } from "../create/form";
 
 export interface ProductoFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
@@ -37,7 +37,7 @@ export function ProductoField({
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
-    const useDialogFormMutation = () => useFormMutation({
+    const useDialogFormMutation = () => useCreateFormMutation({
         onSuccess: (_, __, ___, { client }) => {
             setDialogIsOpen(false)
             client.invalidateQueries({ queryKey: ['productos'] });

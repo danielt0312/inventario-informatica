@@ -1,7 +1,7 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { Label } from "@/components/ui/label";
 import { validator, type Schema } from "./form-schema";
-import { useFormMutation } from "../partials/form";
+import { useCreateFormMutation } from "../partials/form";
 import type {
     ActionDictamenProducto as TActionDictamenProducto,
     ActionDictamenWithActionDictamenProductos as TActionDictamenWithActionDictamenProductos
@@ -23,7 +23,7 @@ export function useForm(dictamen: ActionDictamen) {
         archivo: []
     };
 
-    const formMutation = useFormMutation(dictamen);
+    const formMutation = useCreateFormMutation(dictamen);
 
     return useAppForm({
         defaultValues,

@@ -1,5 +1,5 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
-import { useFormMutation } from "../partials/form";
+import { useCreateFormMutation } from "../partials/form";
 import { validator, type Schema, type ValidatedDictamen } from "./form-schema";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,7 @@ import { FieldError } from "@/components/ui/field";
 import { FilePreviewWindow } from "@/components/custom/file-preview-window";
 
 export function useForm(dictamen: ValidatedDictamen) {
-    const formMutation = useFormMutation(dictamen);
+    const formMutation = useCreateFormMutation(dictamen);
 
     const formattedProductos = dictamen.productos.map(v => ({
         id: String(v.id),

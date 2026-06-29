@@ -33,7 +33,7 @@ export function Form({ dictamen }: { dictamen: ActionDictamenWithDictamenProduct
     }
 }
 
-export function useFormMutation(dictamen: ActionDictamenWithDictamenProductos) {
+export function useCreateFormMutation(dictamen: ActionDictamenWithDictamenProductos) {
     const navigate = useNavigate();
     const action = ActionStates[dictamen.estado.id];
 

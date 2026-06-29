@@ -4,7 +4,7 @@ import { defaultValues, validator } from "./form-schema";
 import { NombreField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 
-export const useFormMutation = (
+export const useCreateFormMutation = (
     props?: Omit<FormMutation, 'axiosConfig' | 'url'>
 ) => useFormMutation({
     url: `api/producto_marcas`,
@@ -12,11 +12,11 @@ export const useFormMutation = (
 });
 
 interface UseFormOptions {
-    useMutationHook?: typeof useFormMutation;
+    useMutationHook?: typeof useCreateFormMutation;
 }
 
 export const useForm = ({
-    useMutationHook = useFormMutation
+    useMutationHook = useCreateFormMutation
 }: UseFormOptions = {}) => {
     const { mutate } = useMutationHook();
 

@@ -6,7 +6,7 @@ import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tans
 import { MarcaField } from "../marcas/partials/form-fields";
 import { TipoField } from "../tipos/partials/form-fields";
 
-export const useFormMutation = (
+export const useCreateFormMutation = (
     props?: Omit<FormMutation, 'axiosConfig' | 'url'>
 ) => useFormMutation({
     url: `api/productos`,
@@ -14,11 +14,11 @@ export const useFormMutation = (
 });
 
 interface UseFormOptions {
-    useMutationHook?: typeof useFormMutation;
+    useMutationHook?: typeof useCreateFormMutation;
 }
 
 export const useForm = ({
-    useMutationHook = useFormMutation
+    useMutationHook = useCreateFormMutation
 }: UseFormOptions = {}) => {
     const { mutate } = useMutationHook();
 
