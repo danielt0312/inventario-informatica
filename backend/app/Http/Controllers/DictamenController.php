@@ -15,6 +15,7 @@ use App\Http\Requests\Dictamen\{
     StoreDictamenRequest,
     DictaminarDictamenRequest,
     EvidenciarDictamenRequest,
+    SurtirDictamenRequest,
     InventariarDictamenRequest
 };
 
@@ -146,7 +147,7 @@ class DictamenController extends Controller
         return response(status: 200);
     }
 
-    public function surtir(Dictamen $dictamen)
+    public function surtir(SurtirDictamenRequest $request, Dictamen $dictamen)
     {
         $dictamen->update([
             'estado_id' => DictamenEstadoEnum::INVENTARIAR->value

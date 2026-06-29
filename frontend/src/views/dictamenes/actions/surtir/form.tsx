@@ -6,7 +6,7 @@ import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import { PackagePlusIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-import { Route } from "@/routes/_auth/dictamenes/$uuid/$action";
+import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
 
 export type SurtirActionDictamen = EvidenciarActionDictamen;
 
@@ -23,12 +23,12 @@ export const useSurtirMutation = (dictamen: EvidenciarActionDictamen, options?: 
 });
 
 export function SurtirForm({ dictamen }: { dictamen: EvidenciarActionDictamen }) {
-    const navigation = useNavigate();
+    const navigate = useNavigate();
 
     const { mutate } = useSurtirMutation(dictamen, {
         onSuccess: () => {
-            navigation({
-                to: Route.to,
+            navigate({
+                to: ActionRoute.to,
                 params: {
                     uuid: dictamen.uuid,
                     action: 'inventariar'
