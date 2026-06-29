@@ -9,7 +9,7 @@ import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tans
 import type { ActionDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export const useForm = (dictamen: ActionDictamenWithDictamenProductos) => {
-    const productosToSchema = dictamen.productos.map(v => {
+    const productosToSchema = dictamen.dictamen_productos.map(v => {
         return {
             id: String(v.id),
             caracteristicas: '',
@@ -48,42 +48,46 @@ export function Form({
     return (
         <PrimitiveForm form={form}>
             <form.AppForm>
-                {dictamen.productos.map((dictamenProducto, index) => (
-                    <Card key={index} className="shadow-none">
-                        <CardContent className="flex flex-col gap-6">
-                            <div className="flex flex-row gap-6">
-                                <div className="w-1/3" data-slot="label">
-                                    <Label className="font-bold">Cantidad</Label>
-                                    <Label>{dictamenProducto.cantidad}</Label>
-                                </div>
-                                <div className="w-1/3" data-slot="label">
-                                    <Label className="font-bold">Producto</Label>
-                                    <Label>{dictamenProducto.producto_tipo.nombre}</Label>
-                                </div>
-                                <div className="w-1/3" data-slot="label">
-                                    <Label className="font-bold">Resguardante</Label>
-                                    <Label>{dictamenProducto.empleado?.nombre ?? 'Juan Perez'}</Label>
-                                </div>
-                            </div>
+                {dictamen.dictamen_productos.map((dictamenProducto, index) => {
+                    const producto = dictamenProducto.producto;
 
-                            <form.AppField
-                                name={`productos[${index}].producto_id`}
-                                children={() => (
-                                    <ProductoField
-                                        label="Modelo"
-                                        tipo_id={dictamenProducto.producto_tipo.id}
-                                        className="max-w-1/3"
-                                    />
-                                )}
-                            />
+                    return (
+                        <Card key={index} className="shadow-none">
+                            <CardContent className="flex flex-col gap-6">
+                                <div className="flex flex-row gap-6">
+                                    <div className="w-1/3" data-slot="label">
+                                        <Label className="font-bold">Cantidad</Label>
+                                        <Label>{dictamenProducto.cantidad}</Label>
+                                    </div>
+                                    <div className="w-1/3" data-slot="label">
+                                        <Label className="font-bold">Producto</Label>
+                                        <Label>{producto.tipo.nombre}</Label>
+                                    </div>
+                                    <div className="w-1/3" data-slot="label">
+                                        <Label className="font-bold">Resguardante</Label>
+                                        <Label>{dictamenProducto.empleado?.nombre ?? 'Juan Perez'}</Label>
+                                    </div>
+                                </div>
 
-                            <form.AppField
-                                name={`productos[${index}].caracteristicas`}
-                                children={() => <CaracteristicasField />}
-                            />
-                        </CardContent>
-                    </Card>
-                ))}
+                                <form.AppField
+                                    name={`productos[${index}].producto_id`}
+                                    children={() => (
+                                        <ProductoField
+                                            label="Modelo"
+                                            tipo_id={producto.tipo.id}
+                                            className="max-w-1/3"
+                                        />
+                                    )}
+                                />
+
+                                <form.AppField
+                                    name={`productos[${index}].caracteristicas`}
+                                    children={() => <CaracteristicasField />}
+                                />
+                            </CardContent>
+                        </Card>
+                    );
+                })}
 
                 <SubmitButton />
             </form.AppForm>

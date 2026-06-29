@@ -114,7 +114,7 @@
             </x-pdf::table.tr>
         </x-pdf::table.thead>
         <x-pdf::table.tbody>
-            @foreach($dictamen->productos as $producto)
+            @foreach($dictamen->dictamenProductos as $producto)
                 <x-pdf::table.tr>
                     <x-pdf::table.td class="text-center">{{ $producto->cantidad }}</x-pdf::table.td>
                     <x-pdf::table.td>{{ $producto->descripcion }}</x-pdf::table.td>

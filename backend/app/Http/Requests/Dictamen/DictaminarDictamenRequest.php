@@ -27,7 +27,7 @@ class DictaminarDictamenRequest extends ActionDictamenRequest
 
                 $dictamenProductoId = $this->input("productos.{$index}.id");
 
-                $dictamenProducto = $this->dictamen->productos->firstWhere('id', $dictamenProductoId);
+                $dictamenProducto = $this->dictamen->dictamenProductos->firstWhere('id', $dictamenProductoId);
 
                 $tipoId = $dictamenProducto?->productoTipo?->id;
 

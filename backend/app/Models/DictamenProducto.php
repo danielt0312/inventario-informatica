@@ -31,17 +31,17 @@ class DictamenProducto extends Model
 
     public function dictamen(): BelongsTo
     {
-        return $this->belongsTo(Dictamen::class, 'dictamen_id');
+        return $this->belongsTo(Dictamen::class);
     }
 
     public function empleado(): BelongsTo
     {
-        return $this->belongsTo(Empleado::class, 'empleado_id');
+        return $this->belongsTo(Empleado::class);
     }
 
     public function producto(): BelongsTo
     {
-        return $this->belongsTo(Producto::class, 'producto_id');
+        return $this->belongsTo(Producto::class);
     }
 
     public function productoTipo(): BelongsTo
@@ -58,14 +58,35 @@ class DictamenProducto extends Model
         );
     }
 
+    public function categoria(): Attribute
+    {
+        return Attribute::make(
+            fn () => $this->tipo->categoria
+        );
+    }
+
+    public function marca(): Attribute
+    {
+        return Attribute::make(
+            fn () => $this->producto?->marca
+        );
+    }
+
+    public function modelo(): Attribute
+    {
+        return Attribute::make(
+            fn () => $this->producto
+        );
+    }
+
     public function descripcion(): Attribute
     {
         return Attribute::make(
             fn (mixed $value, array $attributes) =>
                 implode(' ', array_filter([
                     $this->tipo->nombre,
-                    $this->producto?->marca?->nombre,
-                    $this->producto?->nombre,
+                    $this->marca?->nombre,
+                    $this->modelo?->nombre,
                     $attributes['caracteristicas']
                 ]))
         );

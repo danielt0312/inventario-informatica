@@ -1,9 +1,10 @@
 import { DictamenEstadoEnum } from "@/lib/constants";
 import type {
+    AttributeProductoDictamenProducto,
     Dictamen,
     DictamenEstado,
     DictamenProducto,
-    DictamenWithDictamenProductos
+    DictamenWithDictamenProductos,
 } from "@/types/dictamenes";
 
 export const ActionLabels = ['dictaminar', 'evidenciar', 'surtir', 'inventariar', 'resguardar'] as const;
@@ -25,13 +26,20 @@ export type ActionDictamen<T extends Dictamen = Dictamen> = Omit<T, 'estado'> & 
     }
 }
 
-export type ActionDictamenWithDocumento<T extends ActionDictamen = ActionDictamen> = Omit<T, 'documento'> & {
-    documento: NonNullable<T['documento']>;
+export type ActionDictamenWithDictamenProductos = DictamenWithDictamenProductos<ActionDictamen>;
+
+export type DictaminadoAttributeProductoDictamenProducto = Omit<AttributeProductoDictamenProducto, 'marca' | 'modelo'> & {
+    marca: NonNullable<AttributeProductoDictamenProducto['marca']>;
+    modelo: NonNullable<AttributeProductoDictamenProducto['modelo']>;
 }
 
-export type ActionDictamenProducto<T extends DictamenProducto = DictamenProducto> = Omit<T, 'producto'> & {
-    producto: NonNullable<T['producto']>;
+export type DictaminadoDictamenProducto = Omit<DictamenProducto, 'caracteristicas' | 'producto'> & {
+    caracteristicas: NonNullable<DictamenProducto['caracteristicas']>;
+    producto: DictaminadoAttributeProductoDictamenProducto;
 }
 
-export type ActionDictamenWithDictamenProductos<T extends ActionDictamen = ActionDictamen> = DictamenWithDictamenProductos<T>;
-export type ActionDictamenWithActionDictamenProductos<TActionDictamenProducto extends ActionDictamenProducto = ActionDictamenProducto, TActionDictamen extends ActionDictamen = ActionDictamenWithDocumento> = DictamenWithDictamenProductos<TActionDictamen, TActionDictamenProducto>;
+export type DictaminadoDictamen = Omit<ActionDictamen, 'documento'> & {
+    documento: NonNullable<ActionDictamen['documento']>
+}
+
+export type DictaminadoDictamenWithDictaminadoDictamenProductos = DictamenWithDictamenProductos<DictaminadoDictamen, DictaminadoDictamenProducto>

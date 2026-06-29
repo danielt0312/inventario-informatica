@@ -111,7 +111,7 @@ class DictamenController extends Controller
                     ]);
             }
 
-            $dictamen->load('productos');
+            $dictamen->load('dictamenProductos');
 
             $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
 

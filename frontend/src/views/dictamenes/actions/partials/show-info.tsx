@@ -63,7 +63,7 @@ export function ShowProductos({
 }: ShowProductosProps) {
     return (
         <>
-            {dictamen.productos.map((p, index) => {
+            {dictamen.dictamen_productos.map((p, index) => {
                 <Card key={index} className="shadow-none">
                     <CardContent>
                         <div className="grid grid-cols-3">

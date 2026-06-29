@@ -2,22 +2,11 @@ import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { Label } from "@/components/ui/label";
 import { validator, type Schema } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
-import type {
-    ActionDictamenProducto as TActionDictamenProducto,
-    ActionDictamenWithActionDictamenProductos as TActionDictamenWithActionDictamenProductos
-} from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { DetailedProducto } from "@/types/productos";
-import type { DictamenProducto as TDictamenProducto } from "@/types/dictamenes";
 import { Card, CardContent } from "@/components/ui/card";
 import { DictamenArchivoField } from "./form-fields";
+import type { DictaminadoDictamenWithDictaminadoDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-type BaseActionDictamenProducto = TActionDictamenProducto<TDictamenProducto<DetailedProducto>>;
-type ActionDictamenProducto = Omit<BaseActionDictamenProducto, 'caracteristicas'> & {
-    caracteristicas: NonNullable<BaseActionDictamenProducto['caracteristicas']>
-};
-export type EvidenciarActionDictamen = TActionDictamenWithActionDictamenProductos<ActionDictamenProducto>;
-
-export function useForm(dictamen: EvidenciarActionDictamen) {
+export function useForm(dictamen: DictaminadoDictamenWithDictaminadoDictamenProductos) {
     const defaultValues: Schema = {
         ...dictamen,
         archivo: []
@@ -41,7 +30,7 @@ export function useForm(dictamen: EvidenciarActionDictamen) {
     });
 }
 
-export function Form({ dictamen }: { dictamen: EvidenciarActionDictamen }) {
+export function Form({ dictamen }: { dictamen: DictaminadoDictamenWithDictaminadoDictamenProductos }) {
     const form = useForm(dictamen);
 
     return (
@@ -61,7 +50,7 @@ export function Form({ dictamen }: { dictamen: EvidenciarActionDictamen }) {
                     />
                 </div>
 
-                {dictamen.productos.map((dictamenProducto, index) => {
+                {dictamen.dictamen_productos.map((dictamenProducto, index) => {
                     const producto = dictamenProducto.producto;
 
                     return (
@@ -75,7 +64,7 @@ export function Form({ dictamen }: { dictamen: EvidenciarActionDictamen }) {
                                     <div className="w-7/10" data-slot="label">
                                         <Label className="font-bold">Producto</Label>
                                         <Label>
-                                            {producto.tipo.nombre} {producto.marca.nombre} {producto.nombre} {dictamenProducto.caracteristicas}
+                                            {producto.tipo.nombre} {producto.marca.nombre} {producto.modelo.nombre} {dictamenProducto.caracteristicas}
                                         </Label>
                                     </div>
                                     <div className="w-2/10" data-slot="label">

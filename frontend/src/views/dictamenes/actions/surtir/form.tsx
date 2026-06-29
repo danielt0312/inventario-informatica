@@ -1,5 +1,4 @@
 import { Card, CardContent } from "@/components/ui/card";
-import type { EvidenciarActionDictamen } from "../evidenciar/form";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
@@ -7,11 +6,10 @@ import api from "@/lib/axios";
 import { PackagePlusIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
-
-export type SurtirActionDictamen = EvidenciarActionDictamen;
+import type { DictaminadoDictamen, DictaminadoDictamenWithDictaminadoDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export type SurtirMutationOptions = Omit<UseMutationOptions, 'mutationFn'>;
-export const useSurtirMutation = (dictamen: EvidenciarActionDictamen, options?: UseMutationOptions) => useMutation({
+export const useSurtirMutation = (dictamen: DictaminadoDictamen, options?: UseMutationOptions) => useMutation({
     ...options,
     mutationFn: () => api.post(`api/dictamenes/${dictamen.uuid}/surtir`),
     onSuccess: (data, variables, onMutateResult, context) => {
@@ -22,7 +20,7 @@ export const useSurtirMutation = (dictamen: EvidenciarActionDictamen, options?: 
     }
 });
 
-export function SurtirForm({ dictamen }: { dictamen: EvidenciarActionDictamen }) {
+export function SurtirForm({ dictamen }: { dictamen: DictaminadoDictamenWithDictaminadoDictamenProductos }) {
     const navigate = useNavigate();
 
     const { mutate } = useSurtirMutation(dictamen, {
@@ -39,7 +37,7 @@ export function SurtirForm({ dictamen }: { dictamen: EvidenciarActionDictamen })
 
     return (
         <>
-            {dictamen.productos.map((dictamenProducto, index) => {
+            {dictamen.dictamen_productos.map((dictamenProducto, index) => {
                 const producto = dictamenProducto.producto;
 
                 return (
@@ -53,7 +51,7 @@ export function SurtirForm({ dictamen }: { dictamen: EvidenciarActionDictamen })
                                 <div className="w-7/10" data-slot="label">
                                     <Label className="font-bold">Producto</Label>
                                     <Label>
-                                        {producto.tipo.nombre} {producto.marca.nombre} {producto.nombre} {dictamenProducto.caracteristicas}
+                                        {producto.tipo.nombre} {producto.marca.nombre} {producto.modelo.nombre} {dictamenProducto.caracteristicas}
                                     </Label>
                                 </div>
                                 <div className="w-2/10" data-slot="label">

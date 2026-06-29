@@ -2,16 +2,13 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 
 import {
     ActionStates,
-    type ActionDictamenWithDictamenProductos
+    type ActionDictamenWithDictamenProductos,
+    type DictaminadoDictamenWithDictaminadoDictamenProductos
 } from "@/routes/_auth/dictamenes/$uuid/-types";
-
+import { Form as EvidenciarForm } from "../evidenciar/form";
 import { Form as DictaminarForm } from "../dictaminar/form";
-import {
-    type EvidenciarActionDictamen as EvidenciarDictamen,
-    Form as EvidenciarForm,
-} from "../evidenciar/form";
 import { useFormMutation } from "@/hooks/use-form-mutation";
-import { SurtirForm, type SurtirActionDictamen } from "../surtir/form";
+import { SurtirForm } from "../surtir/form";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 
@@ -20,9 +17,9 @@ export function ActionForm({ dictamen }: { dictamen: ActionDictamenWithDictamenP
         case DictamenEstadoEnum.DICTAMINAR:
             return <DictaminarForm dictamen={dictamen} />;
         case DictamenEstadoEnum.EVIDENCIAR:
-            return <EvidenciarForm dictamen={dictamen as EvidenciarDictamen} />;
+            return <EvidenciarForm dictamen={dictamen as DictaminadoDictamenWithDictaminadoDictamenProductos} />;
         case DictamenEstadoEnum.SURTIR:
-            return <SurtirForm dictamen={dictamen as SurtirActionDictamen} />;
+            return <SurtirForm dictamen={dictamen as DictaminadoDictamenWithDictaminadoDictamenProductos} />;
         case DictamenEstadoEnum.INVENTARIAR:
             return <>inventariar</>;
         default:

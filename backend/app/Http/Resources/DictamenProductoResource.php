@@ -12,10 +12,16 @@ class DictamenProductoResource extends JsonResource
         return [
             'id' => $this->id,
             'empleado_id' => $this->empleado_id,
-            'producto' => new ProductoResource($this->whenLoaded('producto')),
-            'producto_tipo' => new ProductoTipoResource($this->whenLoaded('productoTipo')),
             'cantidad' => $this->cantidad,
-            'caracteristicas' => $this->caracteristicas
+            'caracteristicas' => $this->caracteristicas,
+            'producto' => [
+                'categoria' => new ProductoCategoriaResource($this->categoria),
+                'tipo' => new ProductoTipoResource($this->tipo),
+                $this->mergeWhen($this->producto_id, [
+                    'marca' => new ProductoMarcaResource($this->marca),
+                    'modelo' => new ProductoResource($this->producto)
+                ])
+            ]
         ];
     }
 }
