@@ -77,7 +77,7 @@ class DictamenController extends Controller
             ]);
 
             //todo verificar que los empleados existan en la tabla espejo `Empleado`
-            $dictamen->productos()->createMany($validated['productos']);
+            $dictamen->dictamenProductos()->createMany($validated['productos']);
         });
 
         return response(status: 201);
@@ -89,9 +89,9 @@ class DictamenController extends Controller
             'estado',
             'oficio',
             'documento',
-            'productos.productoTipo.categoria',
-            'productos.producto.tipo.categoria',
-            'productos.producto.marca'
+            'dictamenProductos.productoTipo.categoria',
+            'dictamenProductos.producto.tipo.categoria',
+            'dictamenProductos.producto.marca'
         ]);
 
         return $dictamen->toResource();
@@ -103,7 +103,7 @@ class DictamenController extends Controller
             $validated = $request->validated();
 
             foreach ($validated['productos'] as $productoData) {
-                $dictamen->productos()
+                $dictamen->dictamenProductos()
                     ->where('id', $productoData['id'])
                     ->update([
                         'producto_id' => $productoData['producto_id'],

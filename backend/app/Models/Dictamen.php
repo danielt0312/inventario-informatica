@@ -47,7 +47,7 @@ class Dictamen extends Model
 
     public function estado(): BelongsTo
     {
-        return $this->belongsTo(DictamenEstado::class, 'estado_id');
+        return $this->belongsTo(DictamenEstado::class);
     }
 
     public function oficio(): BelongsTo
@@ -57,12 +57,12 @@ class Dictamen extends Model
 
     public function documento(): BelongsTo
     {
-        return $this->belongsTo(Documento::class, 'documento_id', 'archivo_id');
+        return $this->belongsTo(Documento::class);
     }
 
-    public function productos(): HasMany
+    public function dictamenProductos(): HasMany
     {
-        return $this->hasMany(DictamenProducto::class, 'dictamen_id');
+        return $this->hasMany(DictamenProducto::class);
     }
 
     public function articulos(): HasMany

@@ -14,7 +14,7 @@ class DictamenResource extends JsonResource
             'uuid' => $this->uuid,
             'fecha_solicitud' => $this->fecha_solicitud->format('Y-m-d'),
             'adscripcion_id' => $this->adscripcion_id,
-            'productos' => DictamenProductoResource::collection($this->whenLoaded('productos')),
+            'productos' => DictamenProductoResource::collection($this->whenLoaded('dictamenProductos')),
             'estado' => new DictamenEstadoResource($this->whenLoaded('estado')),
             'oficio' => new OficioResource($this->whenLoaded('oficio')),
             'documento' => new DocumentoResource($this->whenLoaded('documento')),
