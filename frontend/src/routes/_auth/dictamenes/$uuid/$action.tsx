@@ -35,6 +35,7 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
         switch (data.estado.id) {
             case DictamenEstadoEnum.SURTIDO:
             case DictamenEstadoEnum.SURTIDO_PARCIAL:
+                // todo notificar a usuario de que no se puede acceder por tal motivo
                 throw redirect({ to: IndexRoute.to });
             default:
                 break;

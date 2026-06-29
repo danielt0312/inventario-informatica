@@ -1,7 +1,7 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { Label } from "@/components/ui/label";
 import { validator, type Schema } from "./form-schema";
-import { useCreateFormMutation } from "../partials/form";
+import { useActionFormMutation } from "../partials/form";
 import type {
     ActionDictamenProducto as TActionDictamenProducto,
     ActionDictamenWithActionDictamenProductos as TActionDictamenWithActionDictamenProductos
@@ -15,15 +15,15 @@ type BaseActionDictamenProducto = TActionDictamenProducto<TDictamenProducto<Deta
 type ActionDictamenProducto = Omit<BaseActionDictamenProducto, 'caracteristicas'> & {
     caracteristicas: NonNullable<BaseActionDictamenProducto['caracteristicas']>
 };
-export type ActionDictamen = TActionDictamenWithActionDictamenProductos<ActionDictamenProducto>;
+export type EvidenciarActionDictamen = TActionDictamenWithActionDictamenProductos<ActionDictamenProducto>;
 
-export function useForm(dictamen: ActionDictamen) {
+export function useForm(dictamen: EvidenciarActionDictamen) {
     const defaultValues: Schema = {
         ...dictamen,
         archivo: []
     };
 
-    const formMutation = useCreateFormMutation(dictamen);
+    const formMutation = useActionFormMutation(dictamen);
 
     return useAppForm({
         defaultValues,
@@ -41,7 +41,7 @@ export function useForm(dictamen: ActionDictamen) {
     });
 }
 
-export function Form({ dictamen }: { dictamen: ActionDictamen }) {
+export function Form({ dictamen }: { dictamen: EvidenciarActionDictamen }) {
     const form = useForm(dictamen);
 
     return (

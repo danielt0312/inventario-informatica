@@ -3,23 +3,25 @@ import { Card } from "@/components/ui/card";
 import { DictamenEstadoEnum } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Check } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 
-export const OrderDictamenEstado = [
+export const OrderActionDictamenEstado = [
     undefined,
     DictamenEstadoEnum.DICTAMINAR,
     DictamenEstadoEnum.EVIDENCIAR,
     DictamenEstadoEnum.SURTIR,
     DictamenEstadoEnum.INVENTARIAR,
-] as const satisfies Partial<Record<number, DictamenEstadoEnum>>;
-export type OrderDictamenEstado = (typeof OrderDictamenEstado)[number];
+    DictamenEstadoEnum.RESGUARDAR
+] as const;
+export type OrderActionDictamenEstado = (typeof OrderActionDictamenEstado)[number];
 
-export function getTitle(step?: OrderDictamenEstado) {
+export function getTitle(step?: OrderActionDictamenEstado) {
     switch (step) {
         case DictamenEstadoEnum.DICTAMINAR: return 'Dictaminar Requisición';
-        case DictamenEstadoEnum.EVIDENCIAR: return 'Adjuntar evidencia de requisición';
-        case DictamenEstadoEnum.SURTIR: return 'Facturar Preinventario';
-        case DictamenEstadoEnum.INVENTARIAR: return 'Inventariar y Resguardar';
+        case DictamenEstadoEnum.EVIDENCIAR: return 'Evidenciar confirmación de Requisición';
+        case DictamenEstadoEnum.SURTIR: return 'Confirmar surtimiento';
+        case DictamenEstadoEnum.INVENTARIAR: return 'Inventariar Bienes Informáticos';
+        case DictamenEstadoEnum.RESGUARDAR: return 'Resguardar Bienes Informáticos';
         default: return 'Creación de Dictamen';
     }
 }
@@ -41,7 +43,7 @@ const stepVariants = cva(
 );
 
 export type TStep = {
-    step: OrderDictamenEstado;
+    step: OrderActionDictamenEstado;
 };
 
 export function Step({
@@ -66,11 +68,11 @@ export function Step({
 export function Steps({
     step
 }: TStep) {
-    const currentIndex = OrderDictamenEstado.indexOf(step);
+    const currentIndex = OrderActionDictamenEstado.indexOf(step);
 
     return (
         <>
-            {OrderDictamenEstado.map((value, index) => {
+            {OrderActionDictamenEstado.map((value, index) => {
                 const isPast = index < currentIndex;
                 const isCurrent = value === step;
 
@@ -78,7 +80,7 @@ export function Steps({
                     <Step
                         key={index}
                         step={value}
-                        icon={isPast ? <Check /> : index + 1}
+                        icon={isPast ? <CheckIcon /> : index + 1}
                         variant={
                             isCurrent
                                 ? "ongoing"

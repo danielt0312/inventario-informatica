@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->group(function () {
             Route::name('dictaminar')->post('dictaminar', 'dictaminar');
             Route::name('evidenciar')->post('evidenciar', 'evidenciar');
-            Route::name('facturar')->post('facturar', 'facturar');
+            Route::name('surtir')->post('surtir', 'surtir');
         });
 
     Route::apiResources([

@@ -2,7 +2,7 @@ import Goback from "@/components/Goback"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Route } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { getTitle, SidebarSteps } from "./partials/form-steps";
-import { Form as ActionForm } from "./partials/form";
+import { ActionForm } from "./partials/form";
 import { ShowInfo } from "./partials/show-info";
 
 export function View() {

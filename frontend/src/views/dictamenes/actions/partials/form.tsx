@@ -2,29 +2,27 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 
 import {
     ActionStates,
-    type ActionDictamenWithActionDictamenProductos,
     type ActionDictamenWithDictamenProductos
 } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 import { Form as DictaminarForm } from "../dictaminar/form";
 import {
-    type ActionDictamen as EvidenciarDictamen,
+    type EvidenciarActionDictamen as EvidenciarDictamen,
     Form as EvidenciarForm,
 } from "../evidenciar/form";
-import { Form as FacturarForm } from "../facturar/form";
-
-import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
+import { SurtirForm, type SurtirActionDictamen } from "../surtir/form";
+import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 
-export function Form({ dictamen }: { dictamen: ActionDictamenWithDictamenProductos }) {
+export function ActionForm({ dictamen }: { dictamen: ActionDictamenWithDictamenProductos }) {
     switch (dictamen.estado.id) {
         case DictamenEstadoEnum.DICTAMINAR:
             return <DictaminarForm dictamen={dictamen} />;
         case DictamenEstadoEnum.EVIDENCIAR:
             return <EvidenciarForm dictamen={dictamen as EvidenciarDictamen} />;
         case DictamenEstadoEnum.SURTIR:
-            return <FacturarForm dictamen={dictamen as ActionDictamenWithActionDictamenProductos} />;
+            return <SurtirForm dictamen={dictamen as SurtirActionDictamen} />;
         case DictamenEstadoEnum.INVENTARIAR:
             return <>inventariar</>;
         default:
@@ -33,9 +31,9 @@ export function Form({ dictamen }: { dictamen: ActionDictamenWithDictamenProduct
     }
 }
 
-export function useCreateFormMutation(dictamen: ActionDictamenWithDictamenProductos) {
-    const navigate = useNavigate();
+export function useActionFormMutation(dictamen: ActionDictamenWithDictamenProductos) {
     const action = ActionStates[dictamen.estado.id];
+    const navigate = useNavigate();
 
     return useFormMutation({
         url: `api/dictamenes/${dictamen.uuid}/${action}`,

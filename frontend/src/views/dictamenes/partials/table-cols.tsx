@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { DictamenEstadoEnum } from "@/lib/constants";
-import { Eye, FileInput, PackageOpen, Paperclip, Receipt } from "lucide-react";
+import { EyeIcon, FileInputIcon, PackageOpenIcon, PackagePlus, PackagePlusIcon, PaperclipIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
     isActionState,
@@ -10,14 +10,15 @@ import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import type { Dictamen } from "@/types/dictamenes";
-import { ActionStates, type ActionDictamenEstadoEnum } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { ActionStates } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 const ActionIcon = {
-    [DictamenEstadoEnum.DICTAMINAR]: <FileInput />,
-    [DictamenEstadoEnum.EVIDENCIAR]: <Paperclip />,
-    [DictamenEstadoEnum.SURTIR]: <Receipt />,
-    [DictamenEstadoEnum.INVENTARIAR]: <PackageOpen />
-} as const satisfies Record<ActionDictamenEstadoEnum, React.ReactNode>;
+    [DictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
+    [DictamenEstadoEnum.EVIDENCIAR]: <PaperclipIcon />,
+    [DictamenEstadoEnum.SURTIR]: <PackagePlusIcon />,
+    [DictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
+    [DictamenEstadoEnum.RESGUARDAR]: <PackagePlus />
+} as const;
 
 export function renderActionViewFile(dictamen: Dictamen) {
     if (!isActionState(dictamen.estado.id) || !dictamen.documento) return null;
@@ -32,7 +33,7 @@ export function renderActionViewFile(dictamen: Dictamen) {
         >
             {isPending
                 ? <Spinner />
-                : <Eye />
+                : <EyeIcon />
             } Ver documento
         </ActionMenuItem>
     );

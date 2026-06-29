@@ -129,7 +129,7 @@ class DictamenController extends Controller
             ]);
         });
 
-        return response(status: 201);
+        return response(status: 200);
     }
 
     public function evidenciar(EvidenciarDictamenRequest $request, Dictamen $dictamen)
@@ -143,6 +143,15 @@ class DictamenController extends Controller
             'estado_id' => DictamenEstadoEnum::SURTIR->value
         ]);
 
-        return response(status: 201);
+        return response(status: 200);
+    }
+
+    public function surtir(Dictamen $dictamen)
+    {
+        $dictamen->update([
+            'estado_id' => DictamenEstadoEnum::INVENTARIAR->value
+        ]);
+
+        return response(status: 200);
     }
 }

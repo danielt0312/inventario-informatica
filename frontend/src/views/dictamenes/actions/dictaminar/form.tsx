@@ -1,6 +1,6 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { type Schema, validator } from "./form-schema";
-import { useCreateFormMutation } from "../partials/form";
+import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ProductoField } from "@/views/common/productos/partials/form-fields";
@@ -21,7 +21,7 @@ export const useForm = (dictamen: ActionDictamenWithDictamenProductos) => {
         productos: productosToSchema
     }
 
-    const formMutation = useCreateFormMutation(dictamen);
+    const formMutation = useActionFormMutation(dictamen);
 
     return useAppForm({
         defaultValues,
