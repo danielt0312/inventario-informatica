@@ -1,7 +1,8 @@
-import { CreatableCombobox, type CreatableComboboxProps } from "./creatable-combobox";
+import { CreatableCombobox } from "./creatable-combobox";
 import { Field, type FieldProps } from "./field";
 
-export type CreatableComboboxField = CreatableComboboxProps['value'];
+export interface CreatableComboboxFieldProps extends Omit<React.ComponentProps<typeof CreatableCombobox>, 'children'>, FieldProps {
+}
 export const CreatableComboboxField = ({
     className,
     description,
@@ -11,7 +12,7 @@ export const CreatableComboboxField = ({
     required,
     orientation,
     ...props
-}: Omit<React.ComponentProps<typeof CreatableCombobox>, 'children' > & FieldProps) => {
+}: CreatableComboboxFieldProps) => {
     const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
 
     return (

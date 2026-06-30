@@ -1,6 +1,9 @@
 import { Field, type FieldProps } from "./field";
 import { FileUploader } from "./file-uploader";
 
+export interface FileUploaderFieldProps extends Omit<React.ComponentProps<typeof FileUploader>, 'children' | 'label'>, FieldProps {
+    fileUploaderLabel?: React.ComponentProps<typeof FileUploader>['label'];
+}
 export const FileUploaderField = ({
     className,
     description,
@@ -9,13 +12,17 @@ export const FileUploaderField = ({
     label,
     required,
     orientation,
+    fileUploaderLabel,
     ...props
-}: Omit<React.ComponentProps<typeof FileUploader>, 'children'> & FieldProps) => {
+}: FileUploaderFieldProps) => {
     const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
 
     return (
         <Field {...fieldProps}>
-            <FileUploader {...props}/>
+            <FileUploader
+                label={fileUploaderLabel}
+                {...props}
+            />
         </Field>
     );
 }

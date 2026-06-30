@@ -1,6 +1,7 @@
 import { Textarea } from "../ui/textarea";
 import { Field, type FieldProps } from "./field";
 
+export interface TextareaFieldProps extends React.ComponentProps<typeof Textarea>, FieldProps {}
 export const TextareaField = ({
     className,
     description,
@@ -10,7 +11,7 @@ export const TextareaField = ({
     required,
     orientation,
     ...props
-}: React.ComponentProps<typeof Textarea> & FieldProps) => {
+}: TextareaFieldProps) => {
     const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
 
     return (
