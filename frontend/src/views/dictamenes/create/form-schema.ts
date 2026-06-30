@@ -10,8 +10,8 @@ import {
 import { DictamenProducto } from "@/lib/utils";
 import type { TipoField } from "@/views/common/productos/tipos/partials/form-fields";
 import type { NumeroInventarioField } from "@/views/common/numero-inventario/form-fields";
-import type { EmpleadoField } from "@/views/externos/empleados/partials/form-fields";
-import type { AdscripcionField } from "@/views/externos/adscripciones/partials/form-fields";
+import type { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
+import type { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import type { OficioField, CantidadField, FechaSolicitudField, FolioField } from "./form-fields";
 import z from "zod";
 

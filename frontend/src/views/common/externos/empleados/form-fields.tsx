@@ -4,7 +4,7 @@ import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";
 import type { Empleado } from "@/types/externos";
 import { toOptions } from "@/lib/utils";
-import type { AdscripcionField } from "../../adscripciones/partials/form-fields";
+import type { AdscripcionField } from "../adscripciones/form-fields";
 
 interface EmpleadoFieldProps extends TOmitCreatableComboboxFieldsProps<'disabled'> {
     adscripcion: AdscripcionField;

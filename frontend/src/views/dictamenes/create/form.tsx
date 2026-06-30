@@ -10,8 +10,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
 import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFieldGroup } from "./form-fields";
-import { AdscripcionField } from "@/views/externos/adscripciones/partials/form-fields";
-import { EmpleadoField } from "@/views/externos/empleados/partials/form-fields";
+import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
+import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 
 export function useCreateFormMutation() {
     const navigate = useNavigate();
