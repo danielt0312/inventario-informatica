@@ -1,5 +1,8 @@
 import z, { type ZodType } from "zod";
 
+export const RequiredNumber = z
+    .number('Este campo es requerido');
+
 export const TrimmedString = z
     .string()
     .trim();

@@ -8,15 +8,15 @@ import {
     NonEmptyStringToNumber
 } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
-import type { TipoField } from "@/views/common/productos/tipos/partials/form-fields";
-import type { NumeroInventarioField } from "@/views/common/numero-inventario/form-fields";
+import type { ProductoTipoField } from "@/views/common/productos/tipos/partials/form-fields";
+import type { NumeroInventarioField } from "@/views/common/articulos/form-fields";
 import type { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import type { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import type { OficioField, CantidadField, FechaSolicitudField, FolioField } from "./form-fields";
 import z from "zod";
 
 type ProductoFieldsGroup = {
-    producto_tipo_id: TipoField;
+    producto_tipo_id: ProductoTipoField;
     numero_inventario: NumeroInventarioField;
 }
 

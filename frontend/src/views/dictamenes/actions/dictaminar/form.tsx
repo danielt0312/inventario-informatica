@@ -74,7 +74,7 @@ export function Form({
                                     children={() => (
                                         <ProductoField
                                             label="Modelo"
-                                            tipo_id={producto.tipo.id}
+                                            tipo={producto.tipo.id}
                                             className="max-w-1/3"
                                         />
                                     )}

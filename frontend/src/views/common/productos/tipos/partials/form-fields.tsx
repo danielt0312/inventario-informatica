@@ -15,8 +15,8 @@ export type FieldProps = Omit<
     'options' | 'onCreateRequest'
 >;
 
-export type TipoField = string;
-export function TipoField({
+export type ProductoTipoField = string;
+export function ProductoTipoField({
     label = "Tipo de Producto",
     ...props
 }: FieldProps) {

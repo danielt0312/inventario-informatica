@@ -14,21 +14,22 @@ export interface ProductoFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
     'options' | 'onCreateRequest'
 > {
-    tipo_id: number;
+    tipo: number;
 }
 
+export type ProductoField = string;
 export function ProductoField({
     label = "Modelo de Producto",
-    tipo_id,
+    tipo,
     ...props
 }: ProductoFieldProps) {
     const { data: options = [] } = useQuery({
-        queryKey: ['productos', tipo_id],
+        queryKey: ['productos', tipo],
         queryFn: () => api.get<TResponse<ProductoWithMarca[]>>('api/productos', {
             params: {
                 include: ['marca'],
                 filter: {
-                    tipos: tipo_id,
+                    tipos: tipo,
                 }
             }
         }).then(r => r.data.data),

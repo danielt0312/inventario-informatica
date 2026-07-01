@@ -43,7 +43,8 @@ return new class extends Migration
             $table->string('cuenta_contable', 11)
                 ->nullable()
                 ->unique('uk_articulos_cuenta_contable', 11);
-            $table->boolean('contable');
+            $table->boolean('contable')
+                ->nullable();
             $table->boolean('activo');
             $table->timestamps();
             $table->softDeletes();

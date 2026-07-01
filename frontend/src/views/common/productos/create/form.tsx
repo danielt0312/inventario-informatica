@@ -4,7 +4,7 @@ import { defaultValues, validator } from "./form-schema";
 import { NombreField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import { MarcaField } from "../marcas/partials/form-fields";
-import { TipoField } from "../tipos/partials/form-fields";
+import { ProductoTipoField } from "../tipos/partials/form-fields";
 
 export const useCreateFormMutation = (
     props?: Omit<FormMutation, 'axiosConfig' | 'url'>
@@ -49,7 +49,7 @@ export const AppForm = ({
     >
         <form.AppField
             name="tipo_id"
-            children={() => <TipoField />}
+            children={() => <ProductoTipoField />}
         />
 
         <form.AppField
