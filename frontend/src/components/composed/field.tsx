@@ -70,10 +70,10 @@ export const Field = ({
             required={required}
             {...props}
         >
-            <FieldLabel required={required}>{label}</FieldLabel>
-            <Root.FieldDescription>{description}</Root.FieldDescription>
+            {label && <FieldLabel required={required}>{label}</FieldLabel>}
+            {description && <Root.FieldDescription>{description}</Root.FieldDescription>}
             {children}
-            <Root.FieldError errors={errors} />
+            {errors && <Root.FieldError errors={errors} />}
         </RootField>
     );
 }
@@ -84,18 +84,20 @@ export const AsideField = ({
     children,
     errors,
     required,
+    orientation = 'horizontal',
     ...props
 }: React.ComponentProps<typeof RootField> & FieldProps) => {
     return (
         <RootField
             required={required}
+            orientation={orientation}
             {...props}
         >
             {children}
             <Root.FieldContent>
-                <FieldLabel required={required}>{label}</FieldLabel>
-                <Root.FieldDescription>{description}</Root.FieldDescription>
-                <Root.FieldError errors={errors} />
+                {label && <FieldLabel required={required}>{label}</FieldLabel>}
+                {description && <Root.FieldDescription>{description}</Root.FieldDescription>}
+                {errors && <Root.FieldError errors={errors} />}
             </Root.FieldContent>
         </RootField>
     );

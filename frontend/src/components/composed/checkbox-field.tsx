@@ -22,6 +22,8 @@ export const CheckboxFieldItem = ({
     );
 }
 
-export const CheckboxField = (props: React.ComponentProps<typeof Field>) => (
+export interface CheckboxFieldProps extends React.ComponentProps<typeof Field> {
+}
+export const CheckboxField = (props: CheckboxFieldProps) => (
     <Field {...props} />
 );
