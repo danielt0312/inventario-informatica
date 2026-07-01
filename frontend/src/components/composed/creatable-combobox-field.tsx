@@ -17,7 +17,10 @@ export const CreatableComboboxField = ({
 
     return (
         <Field {...fieldProps}>
-            <CreatableCombobox {...props} />
+            <CreatableCombobox
+                disabled={disabled}
+                {...props}
+            />
         </Field>
     );
 }

@@ -1,4 +1,4 @@
-import { TextareaField } from "@/components/composed/@tanstack/form/field-components";
+import { TextareaField } from "@/components/composed/@tanstack/form/textarea-field";
 
 export function CaracteristicasField({
     label = "Especificaciones técnicas",

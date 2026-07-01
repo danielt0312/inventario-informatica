@@ -1,4 +1,4 @@
-import { CreatableComboboxField, type TOmitCreatableComboboxFieldsProps } from "@/components/composed/@tanstack/form/field-components";
+import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
 import api from "@/lib/axios";
 import { toOptions } from "@/lib/utils";
 import type { Adscripcion } from "@/types/externos";
@@ -9,7 +9,7 @@ export type AdscripcionField = string;
 export const AdscripcionField = ({
     label = "Área de Adscripción",
     ...props
-}: TOmitCreatableComboboxFieldsProps) => {
+}: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options'>) => {
     const { data: options = [] } = useQuery({
         queryKey: ['adscripciones'],
         queryFn: () => api.get<TResponse<Adscripcion[]>>('api/adscripciones')

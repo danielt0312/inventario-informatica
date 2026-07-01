@@ -1,4 +1,4 @@
-import { FileUploaderField } from "@/components/composed/@tanstack/form/field-components";
+import { FileUploaderField } from "@/components/composed/@tanstack/form/file-uploader-field";
 
 export type ArchivoField = File[] | undefined;
 

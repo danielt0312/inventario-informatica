@@ -10,7 +10,7 @@ import type { TResponse } from "@/types/generics"
 import z from "zod"
 import { useAppForm } from "@/components/composed/@tanstack/form/form"
 import { handleFormValidationError } from "@/lib/utils"
-import { TextField } from "@/components/composed/@tanstack/form/field-components"
+import { InputField } from "@/components/composed/@tanstack/form/field-components"
 import { RequiredInstitutionalEmail, NonEmptyString } from "@/lib/schemas/common"
 import { DoorOpen } from "lucide-react"
 import { useState } from "react"
@@ -90,7 +90,7 @@ export function View() {
                         <form.AppField
                             name="email"
                             children={() => (
-                                <TextField
+                                <InputField
                                     label="Correo institucional"
                                     placeholder="Ingresa tu correo institucional"
                                 />
@@ -100,7 +100,7 @@ export function View() {
                         <form.AppField
                             name="password"
                             children={() => (
-                                <TextField
+                                <InputField
                                     label="Contraseña"
                                     type="password"
                                     placeholder="Ingresa tu contraseña"

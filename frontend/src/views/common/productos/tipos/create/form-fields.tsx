@@ -1,4 +1,4 @@
-import { TextField } from "@/components/composed/@tanstack/form/field-components";
+import { InputField } from "@/components/composed/@tanstack/form/input-field";
 import type React from "react";
 
 export type NombreField = string;
@@ -6,9 +6,9 @@ export function NombreField({
     label = "Tipo de Producto",
     placeholder = "Ingresa el nombre del tipo de producto",
     ...props
-}: React.ComponentProps<typeof TextField>) {
+}: React.ComponentProps<typeof InputField>) {
     return (
-        <TextField
+        <InputField
             label={label}
             placeholder={placeholder}
             {...props}

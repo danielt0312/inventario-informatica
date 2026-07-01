@@ -1,4 +1,5 @@
-import { DatePickerField, TextField } from "@/components/composed/@tanstack/form/field-components";
+import { DatePickerField } from "@/components/composed/@tanstack/form/date-picker-field";
+import { InputField } from "@/components/composed/@tanstack/form/input-field";
 import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
 import { FieldGroup } from "@/components/ui/field";
 import { TipoField } from "@/views/common/productos/tipos/partials/form-fields";
@@ -49,8 +50,8 @@ export const CantidadField = ({
     label = "Cantidad",
     placeholder = "Ingresa la cantidad solicitada",
     ...props
-}: React.ComponentProps<typeof TextField>) => (
-    <TextField
+}: React.ComponentProps<typeof InputField>) => (
+    <InputField
         label={label}
         placeholder={placeholder}
         {...props}
@@ -62,8 +63,8 @@ export const FolioField = ({
     label = "Folio del oficio de solicitud",
     placeholder = "Ingresa el folio del oficio de la solicitud",
     ...props
-}: React.ComponentProps<typeof TextField>) => (
-    <TextField
+}: React.ComponentProps<typeof InputField>) => (
+    <InputField
         label={label}
         placeholder={placeholder}
         {...props}

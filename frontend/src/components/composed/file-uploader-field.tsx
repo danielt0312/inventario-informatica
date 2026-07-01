@@ -21,6 +21,8 @@ export const FileUploaderField = ({
         <Field {...fieldProps}>
             <FileUploader
                 label={fileUploaderLabel}
+                disabled={disabled}
+                required={required}
                 {...props}
             />
         </Field>

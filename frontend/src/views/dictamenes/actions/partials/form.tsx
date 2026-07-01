@@ -11,6 +11,7 @@ import { useFormMutation } from "@/hooks/use-form-mutation";
 import { SurtirForm } from "../surtir/form";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
+import { InventariarForm } from "../inventariar/form";
 
 export function ActionForm({ dictamen }: { dictamen: ActionDictamenWithDictamenProductos }) {
     switch (dictamen.estado.id) {
@@ -21,7 +22,7 @@ export function ActionForm({ dictamen }: { dictamen: ActionDictamenWithDictamenP
         case DictamenEstadoEnum.SURTIR:
             return <SurtirForm dictamen={dictamen as DictaminadoDictamenWithDictaminadoDictamenProductos} />;
         case DictamenEstadoEnum.INVENTARIAR:
-            return <>inventariar</>;
+            return <InventariarForm />;
         default:
             // todo mostrar un mensaje de error
             return null;

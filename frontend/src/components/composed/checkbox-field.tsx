@@ -17,7 +17,11 @@ export const CheckboxFieldItem = ({
 
     return (
         <AsideField {...fieldProps}>
-            <Checkbox required={required} {...props} />
+            <Checkbox
+                required={required}
+                disabled={disabled}
+                {...props}
+            />
         </AsideField>
     );
 }
