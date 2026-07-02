@@ -6,17 +6,16 @@ import type { Empleado } from "@/types/externos";
 import { toOptions } from "@/lib/utils";
 import type { AdscripcionField } from "../adscripciones/form-fields";
 
-interface EmpleadoFieldProps extends Omit<React.ComponentProps<typeof CreatableComboboxField>, 'disabled' | 'options'> {
+export type EmpleadoField = CreatableComboboxField;
+interface EmpleadoFieldProps extends Omit<React.ComponentProps<typeof CreatableComboboxField>, 'enabled' | 'options'> {
     adscripcion: AdscripcionField;
 }
-
-export type EmpleadoField = string;
 export const EmpleadoField = ({
     adscripcion,
     label = "Empleado",
     ...props
 }: EmpleadoFieldProps) => {
-    const disabled = adscripcion === '';
+    const disabled = adscripcion === undefined;
 
     const { data: options = [] } = useQuery({
         queryKey: ['empleados', adscripcion],

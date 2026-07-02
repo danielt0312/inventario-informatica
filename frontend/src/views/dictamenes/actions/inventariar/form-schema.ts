@@ -1,8 +1,8 @@
 import { NonEmptyString, RequiredArray, RequiredNumber, TrimmedString } from "@/lib/schemas/common";
 import type { DictaminadoDictamenWithDictaminadoDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-schema";
-import type { ProductoField } from "@/views/common/productos/modelos/partials/form-fields";
-import type { ProductoTipoField } from "@/views/common/productos/tipos/partials/form-fields";
+import type { ProductoModeloField } from "@/views/common/productos/modelos/form-fields";
+import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import z from "zod";
 
 export type ProductoFields = ResultadoEsperadoFieldGroup & {

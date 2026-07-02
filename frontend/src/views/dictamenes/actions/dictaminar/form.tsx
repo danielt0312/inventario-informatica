@@ -3,17 +3,17 @@ import { type Schema, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ProductoField } from "@/views/common/productos/modelos/partials/form-fields";
+import { ProductoModeloField } from "@/views/common/productos/modelos/form-fields";
 import { CaracteristicasField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import type { ActionDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export const useForm = (dictamen: ActionDictamenWithDictamenProductos) => {
-    const productosToSchema = dictamen.dictamen_productos.map(v => {
+    const productosToSchema = dictamen.dictamen_productos.map((dictamenProducto) => {
         return {
-            id: String(v.id),
+            id: dictamenProducto.id,
             caracteristicas: '',
-            producto_id: '',
+            producto_id: undefined,
         }
     });
 
@@ -72,7 +72,7 @@ export function Form({
                                 <form.AppField
                                     name={`productos[${index}].producto_id`}
                                     children={() => (
-                                        <ProductoField
+                                        <ProductoModeloField
                                             label="Modelo"
                                             tipo={producto.tipo.id}
                                             className="max-w-1/3"

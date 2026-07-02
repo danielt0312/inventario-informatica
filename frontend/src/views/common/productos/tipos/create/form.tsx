@@ -7,14 +7,14 @@ import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tans
 import type { TResponse } from "@/types/generics";
 import type { ProductoTipo } from "@/types/productos";
 
-export const useCreateFormMutation = <R extends TResponse<ProductoTipo>, P extends OutputSchema>(props?: Omit<FormMutation, 'url' | 'method'>) =>
+export const useCreateFormMutation = <R extends TResponse<ProductoTipo> = TResponse<ProductoTipo>, P extends OutputSchema = OutputSchema>(props?: Omit<FormMutation, 'url' | 'method'>) =>
     useFormMutation<R, P>({
         url: `api/producto_tipos`,
         ...props
     });
 
 interface UseFormOptions {
-    useMutationHook?: typeof useCreateFormMutation;
+    useMutationHook?: () => ReturnType<typeof useCreateFormMutation>;
 }
 
 export const useForm = ({

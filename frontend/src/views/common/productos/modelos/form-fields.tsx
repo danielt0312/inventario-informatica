@@ -2,13 +2,14 @@ import { CreatableComboboxField } from "@/components/composed/@tanstack/form/cre
 import api from "@/lib/axios";
 import { toOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
-import type { ProductoWithMarca } from "@/types/productos";
+import type { Producto, ProductoWithMarca } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { AppForm, useForm, useCreateFormMutation } from "../create/form";
+import { AppForm, useForm, useCreateFormMutation, defaultFormOptions } from "./create/form";
+import type { OutputSchema } from "./create/form-schema";
 
 export interface ProductoFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
@@ -17,8 +18,8 @@ export interface ProductoFieldProps extends Omit<
     tipo: number;
 }
 
-export type ProductoField = number;
-export function ProductoField({
+export type ProductoModeloField = CreatableComboboxField;
+export function ProductoModeloField({
     label = "Modelo de Producto",
     tipo,
     ...props
@@ -38,16 +39,14 @@ export function ProductoField({
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
-    const useDialogFormMutation = () => useCreateFormMutation({
+    const useDialogFormMutation = <R extends TResponse<Producto>, P extends OutputSchema>() => useCreateFormMutation<R, P>({
         onSuccess: (_, __, ___, { client }) => {
             setDialogIsOpen(false)
             client.invalidateQueries({ queryKey: ['productos'] });
         }
     });
 
-    const dialogForm = useForm({
-        useMutationHook: useDialogFormMutation
-    });
+    const dialogForm = useForm(() => defaultFormOptions(useDialogFormMutation));
 
     return (
         <>

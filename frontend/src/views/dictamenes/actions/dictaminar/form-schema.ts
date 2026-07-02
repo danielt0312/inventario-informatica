@@ -1,29 +1,25 @@
 import {
     NonEmptyString,
-    NonEmptyStringToNumber,
-    RequiredArray
+    RequiredArray,
+    RequiredNumber
 } from "@/lib/schemas/common";
+import type { ProductoModeloField } from "@/views/common/productos/modelos/form-fields";
 import z from "zod";
-
-import {
-    type Schema as ProductoSchema,
-    validator as productoValidator
-} from "@/views/common/productos/modelos/partials/form-schema";
 
 export interface Schema {
     productos: {
-        id: string;
+        id: number;
         caracteristicas: string;
-        producto_id: ProductoSchema['id'];
+        producto_id: ProductoModeloField;
     }[];
 }
 
 export const validator = z.object({
     productos: RequiredArray(
         z.object({
-            id: NonEmptyStringToNumber,
+            id: RequiredNumber,
             caracteristicas: NonEmptyString,
-            producto_id: productoValidator.shape.id
+            producto_id: RequiredNumber
         })
     )
 });

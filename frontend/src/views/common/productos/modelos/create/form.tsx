@@ -1,38 +1,40 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { type FormMutation, useFormMutation } from "@/hooks/use-form-mutation";
-import { defaultValues, validator } from "./form-schema";
+import { defaultValues, validator, type OutputSchema } from "./form-schema";
 import { NombreField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import { ProductoMarcaField } from "../../marcas/partials/form-fields";
-import { ProductoTipoField } from "../../tipos/partials/form-fields";
+import { ProductoTipoField } from "../../tipos/form-fields";
+import type { TResponse } from "@/types/generics";
+import type { Producto } from "@/types/productos";
+import { formOptions } from "@tanstack/react-form";
+import { asAnyFormApi } from "@/lib/utils";
 
-export const useCreateFormMutation = (
-    props?: Omit<FormMutation, 'axiosConfig' | 'url'>
-) => useFormMutation({
+export const useCreateFormMutation = <R extends TResponse<Producto> = TResponse<Producto>, P extends OutputSchema = OutputSchema>(
+    props?: Omit<FormMutation, 'url'>
+) => useFormMutation<R, P>({
     url: `api/productos`,
     ...props
 });
 
-interface UseFormOptions {
-    useMutationHook?: typeof useCreateFormMutation;
-}
+export const defaultFormOptions = (useMutationHook = useCreateFormMutation) => {
+    const mutation = useMutationHook();
 
-export const useForm = ({
-    useMutationHook = useCreateFormMutation
-}: UseFormOptions = {}) => {
-    const { mutate } = useMutationHook();
-
-    return useAppForm({
+    return formOptions({
         defaultValues,
         validators: {
             onSubmit: validator
         },
         onSubmit: ({ value, formApi }) => {
             const data = validator.parse(value);
-            mutate({ data, formApi });
+            mutation.mutate({ data, formApi: asAnyFormApi(formApi) });
         }
     });
 }
+
+export const useForm = (options: () => ReturnType<typeof defaultFormOptions> = defaultFormOptions) => (
+    useAppForm(options())
+);
 
 interface AppFormProps extends Omit<React.ComponentProps<typeof PrimitiveForm>, 'form'> {
     form: ReturnType<typeof useForm>;
@@ -44,23 +46,12 @@ export const AppForm = ({
     ...props
 }: AppFormProps) => (
     <PrimitiveForm
-        form={form}
+        form={asAnyFormApi(form)}
         {...props}
     >
-        <form.AppField
-            name="tipo_id"
-            children={() => <ProductoTipoField />}
-        />
-
-        <form.AppField
-            name="marca_id"
-            children={() => <ProductoMarcaField />}
-        />
-
-        <form.AppField
-            name="nombre"
-            children={() => <NombreField />}
-        />
+        <form.AppField name="tipo_id" children={() => <ProductoTipoField />}/>
+        <form.AppField name="marca_id" children={() => <ProductoMarcaField />}/>
+        <form.AppField name="nombre" children={() => <NombreField />}/>
         {children}
     </PrimitiveForm>
 );

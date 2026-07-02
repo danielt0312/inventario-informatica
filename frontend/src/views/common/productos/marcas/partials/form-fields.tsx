@@ -12,12 +12,9 @@ import { AppForm, useForm, useCreateFormMutation } from "../create/form";
 
 export interface ProductoMarcaFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
-    'options' | 'onCreateRequest' | 'value' | 'onValueChange'
+    'options' | 'onCreateRequest'
 > {
-    value: ProductoMarcaField;
-    onValueChange: (value: ProductoMarcaField) => void
 }
-
 export type ProductoMarcaField = number | undefined;
 export function ProductoMarcaField({
     label = "Marca del Producto",
@@ -50,8 +47,6 @@ export function ProductoMarcaField({
             <CreatableComboboxField
                 options={options}
                 label={label}
-                value={value === undefined ? '' : String(value)}
-                onValueChange={(v) => onValueChange(v === '' ? undefined : Number(v))}
                 onCreateRequest={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);

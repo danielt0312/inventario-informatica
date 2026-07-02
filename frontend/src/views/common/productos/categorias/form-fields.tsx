@@ -10,24 +10,17 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 import { SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import { useFieldContext } from "@/components/composed/@tanstack/form/form";
 
-type ProductoCategoriaValue = number;
-
-export interface RootProductoCategoriaFieldProps extends Omit<
+export interface ProductoCategoriaFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
-    'options' | 'onCreateRequest' | 'value' | 'onValueChange'
+    'options' | 'onCreateRequest'
 > {
-    value: ProductoCategoriaField;
-    onValueChange: (value: ProductoCategoriaField) => void;
 }
-
-export function RootProductoCategoriaField({
+export type ProductoCategoriaField = CreatableComboboxField;
+export function ProductoCategoriaField({
     label = "Categoría de Producto",
-    value,
-    onValueChange,
     ...props
-}: RootProductoCategoriaFieldProps) {
+}: ProductoCategoriaFieldProps) {
     const { data: options = [] } = useQuery({
         queryKey: ['producto_categorias'],
         queryFn: () => api.get<TResponse<ProductoCategoria[]>>('api/producto_categorias')
@@ -51,8 +44,6 @@ export function RootProductoCategoriaField({
             <CreatableComboboxField
                 options={options}
                 label={label}
-                value={value === undefined ? '' : String(value)}
-                onValueChange={(v) => onValueChange(v === '' ? undefined : Number(v))}
                 onCreateRequest={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
@@ -78,32 +69,5 @@ export function RootProductoCategoriaField({
                 </DialogContent>
             </Dialog>
         </>
-    );
-}
-
-export type ProductoCategoriaField = ProductoCategoriaValue | undefined;
-interface TProductoCategoriaFieldProps extends Omit<RootProductoCategoriaFieldProps, 'value' | 'onValueChange'> {
-}
-export const ProductoCategoriaField = (props: TProductoCategoriaFieldProps) => {
-    const field = useFieldContext<ProductoCategoriaField>();
-
-    return (
-        <RootProductoCategoriaField
-            value={field.state.value}
-            onValueChange={field.handleChange}
-            {...props}
-        />
-    );
-}
-
-export type NullableProductoCategoriaField = ProductoCategoriaValue | null;
-export function NullableProductoCategoriaField(props: TProductoCategoriaFieldProps) {
-    const field = useFieldContext<NullableProductoCategoriaField>();
-    return (
-        <RootProductoCategoriaField
-            value={field.state.value ?? undefined}
-            onValueChange={(v) => field.handleChange(v ?? null)}
-            {...props}
-        />
     );
 }

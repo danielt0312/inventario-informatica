@@ -7,19 +7,19 @@ import React from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { AppForm, useForm, useCreateFormMutation } from "../create/form";
+import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 import type { ProductoCategoriaWithTipos } from "@/types/productos";
 
-export type FieldProps = Omit<
+export interface RootProductoFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
     'options' | 'onCreateRequest'
->;
-
-export type ProductoTipoField = string;
+> {
+}
+export type ProductoTipoField = CreatableComboboxField;
 export function ProductoTipoField({
     label = "Tipo de Producto",
     ...props
-}: FieldProps) {
+}: RootProductoFieldProps) {
     const { data: options = [] } = useQuery({
         queryKey: ['producto_categorias_tipos'],
         queryFn: () => api.get<TResponse<ProductoCategoriaWithTipos[]>>('api/producto_categorias', {

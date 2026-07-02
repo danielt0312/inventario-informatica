@@ -5,10 +5,10 @@ import {
     ArrayStandardFile,
     RequiredArray,
     TrimmedString,
-    NonEmptyStringToNumber
+    RequiredNumber
 } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
-import type { ProductoTipoField } from "@/views/common/productos/tipos/partials/form-fields";
+import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import type { NumeroInventarioField } from "@/views/common/articulos/form-fields";
 import type { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import type { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
@@ -21,12 +21,12 @@ type ProductoFieldsGroup = {
 }
 
 export const productoFieldsGroupDefaultValues: ProductoFieldsGroup = {
-    producto_tipo_id: '',
+    producto_tipo_id: undefined,
     numero_inventario: ''
 }
 
 const productoFieldsGroupValidator = z.object({
-    producto_tipo_id: NonEmptyStringToNumber,
+    producto_tipo_id: RequiredNumber,
     numero_inventario: TrimmedString
 })
 
@@ -37,7 +37,7 @@ type ProductoFields = ProductoFieldsGroup & {
 
 export const productoFieldsDefaultValues: ProductoFields = {
     cantidad: '1',
-    empleado_id: '',
+    empleado_id: undefined,
     ...productoFieldsGroupDefaultValues
 } as const;
 
@@ -52,7 +52,7 @@ export type Schema = {
 export const dictamenDefaultValues: Schema = {
     folio: '',
     fecha_solicitud: '',
-    adscripcion_id: '',
+    adscripcion_id: undefined,
     archivo: undefined,
     productos: [productoFieldsDefaultValues]
 } as const;
@@ -60,12 +60,12 @@ export const dictamenDefaultValues: Schema = {
 export const validator = z.object({
     folio: NonEmptyString,
     fecha_solicitud: RequiredIsoDateLTEToday,
-    adscripcion_id: NonEmptyStringToNumber,
+    adscripcion_id: RequiredNumber,
     archivo: ArrayStandardFile,
     productos: RequiredArray(z
         .object({
             cantidad: RequiredPositiveInteger,
-            empleado_id: NonEmptyStringToNumber,
+            empleado_id: RequiredNumber,
             producto_tipo_id: productoFieldsGroupValidator.shape.producto_tipo_id,
             numero_inventario: productoFieldsGroupValidator.shape.numero_inventario
         })

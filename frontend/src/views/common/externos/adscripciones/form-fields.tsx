@@ -5,11 +5,13 @@ import type { Adscripcion } from "@/types/externos";
 import type { TResponse } from "@/types/generics";
 import { useQuery } from "@tanstack/react-query";
 
-export type AdscripcionField = string;
+export type AdscripcionField = CreatableComboboxField;
+export interface AdscripcionFieldProps extends Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options'> {
+}
 export const AdscripcionField = ({
     label = "Área de Adscripción",
     ...props
-}: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options'>) => {
+}: AdscripcionFieldProps) => {
     const { data: options = [] } = useQuery({
         queryKey: ['adscripciones'],
         queryFn: () => api.get<TResponse<Adscripcion[]>>('api/adscripciones')

@@ -2,7 +2,7 @@ import { DatePickerField } from "@/components/composed/@tanstack/form/date-picke
 import { InputField } from "@/components/composed/@tanstack/form/input-field";
 import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
 import { FieldGroup } from "@/components/ui/field";
-import { ProductoTipoField } from "@/views/common/productos/tipos/partials/form-fields";
+import { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import React, { useState } from "react";
 import { productoFieldsGroupDefaultValues } from "./form-schema";
 import { NumeroInventarioField } from "@/views/common/articulos/form-fields";

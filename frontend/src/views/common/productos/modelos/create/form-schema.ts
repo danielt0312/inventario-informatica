@@ -1,5 +1,5 @@
-import { NonEmptyString, NonEmptyStringToNumber } from "@/lib/schemas/common";
-import type { ProductoTipoField } from "../../tipos/partials/form-fields";
+import { NonEmptyString, NonEmptyStringToNumber, RequiredNumber } from "@/lib/schemas/common";
+import type { ProductoTipoField } from "../../tipos/form-fields";
 import type { ProductoMarcaField } from "../../marcas/partials/form-fields";
 import z from "zod";
 
@@ -10,13 +10,15 @@ export type Schema = {
 }
 
 export const defaultValues: Schema = {
-    tipo_id: '',
-    marca_id: '',
+    tipo_id: undefined,
+    marca_id: undefined,
     nombre: ''
 }
 
 export const validator = z.object({
-    tipo_id: NonEmptyStringToNumber,
-    marca_id: NonEmptyStringToNumber,
+    tipo_id: RequiredNumber,
+    marca_id: RequiredNumber,
     nombre: NonEmptyString
 });
+
+export type OutputSchema = z.output<typeof validator>;

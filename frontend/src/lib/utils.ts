@@ -234,3 +234,5 @@ export const DictamenProducto = {
         return validTipo !== undefined && this.tipos_requieren_numero_inventario.includes(validTipo);
     }
 }
+
+export const asAnyFormApi = (formApi: unknown) => formApi as AnyFormApi;

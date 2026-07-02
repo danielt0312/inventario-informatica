@@ -1,5 +1,5 @@
 import { InputField } from "@/components/composed/@tanstack/form/input-field";
-import type React from "react";
+import React from "react";
 
 export function NombreField({
     label = "Modelo del Producto",
