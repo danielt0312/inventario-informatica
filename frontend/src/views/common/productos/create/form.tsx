@@ -3,7 +3,7 @@ import { type FormMutation, useFormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator } from "./form-schema";
 import { NombreField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import { MarcaField } from "../marcas/partials/form-fields";
+import { ProductoMarcaField } from "../marcas/partials/form-fields";
 import { ProductoTipoField } from "../tipos/partials/form-fields";
 
 export const useCreateFormMutation = (
@@ -54,7 +54,7 @@ export const AppForm = ({
 
         <form.AppField
             name="marca_id"
-            children={() => <MarcaField />}
+            children={() => <ProductoMarcaField />}
         />
 
         <form.AppField

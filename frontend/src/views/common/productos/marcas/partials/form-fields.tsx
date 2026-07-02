@@ -10,16 +10,21 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation } from "../create/form";
 
-export interface MarcaFieldProps extends Omit<
+export interface ProductoMarcaFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
-    'options' | 'onCreateRequest'
-> {}
+    'options' | 'onCreateRequest' | 'value' | 'onValueChange'
+> {
+    value: ProductoMarcaField;
+    onValueChange: (value: ProductoMarcaField) => void
+}
 
-export type MarcaField = string;
-export function MarcaField({
+export type ProductoMarcaField = number | undefined;
+export function ProductoMarcaField({
     label = "Marca del Producto",
+    value,
+    onValueChange,
     ...props
-}: MarcaFieldProps) {
+}: ProductoMarcaFieldProps) {
     const { data: options = [] } = useQuery({
         queryKey: ['producto_marcas'],
         queryFn: () => api.get<TResponse<ProductoMarca[]>>('api/producto_marcas')
@@ -45,6 +50,8 @@ export function MarcaField({
             <CreatableComboboxField
                 options={options}
                 label={label}
+                value={value === undefined ? '' : String(value)}
+                onValueChange={(v) => onValueChange(v === '' ? undefined : Number(v))}
                 onCreateRequest={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);

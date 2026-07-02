@@ -8,18 +8,26 @@ import React from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { AppForm, useForm, useCreateFormMutation } from "../create/form";
+import { AppForm, useForm, useCreateFormMutation } from "./create/form";
+import { SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { useFieldContext } from "@/components/composed/@tanstack/form/form";
 
-export type FieldProps = Omit<
+type ProductoCategoriaValue = number;
+
+export interface RootProductoCategoriaFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
-    'options' | 'onCreateRequest'
->;
+    'options' | 'onCreateRequest' | 'value' | 'onValueChange'
+> {
+    value: ProductoCategoriaField;
+    onValueChange: (value: ProductoCategoriaField) => void;
+}
 
-export type CategoriaField = string;
-export function CategoriaField({
+export function RootProductoCategoriaField({
     label = "Categoría de Producto",
+    value,
+    onValueChange,
     ...props
-}: FieldProps) {
+}: RootProductoCategoriaFieldProps) {
     const { data: options = [] } = useQuery({
         queryKey: ['producto_categorias'],
         queryFn: () => api.get<TResponse<ProductoCategoria[]>>('api/producto_categorias')
@@ -36,15 +44,15 @@ export function CategoriaField({
         }
     });
 
-    const dialogForm = useForm({
-        useMutationHook: useDialogFormMutation
-    });
+    const dialogForm = useForm({ useMutationHook: useDialogFormMutation });
 
     return (
         <>
             <CreatableComboboxField
                 options={options}
                 label={label}
+                value={value === undefined ? '' : String(value)}
+                onValueChange={(v) => onValueChange(v === '' ? undefined : Number(v))}
                 onCreateRequest={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
@@ -60,7 +68,7 @@ export function CategoriaField({
 
                     <AppForm form={dialogForm} className="contents">
                         <DialogFooter>
-                            <dialogForm.SubmitButton />
+                            <SubmitButton />
 
                             <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar
@@ -70,5 +78,32 @@ export function CategoriaField({
                 </DialogContent>
             </Dialog>
         </>
+    );
+}
+
+export type ProductoCategoriaField = ProductoCategoriaValue | undefined;
+interface TProductoCategoriaFieldProps extends Omit<RootProductoCategoriaFieldProps, 'value' | 'onValueChange'> {
+}
+export const ProductoCategoriaField = (props: TProductoCategoriaFieldProps) => {
+    const field = useFieldContext<ProductoCategoriaField>();
+
+    return (
+        <RootProductoCategoriaField
+            value={field.state.value}
+            onValueChange={field.handleChange}
+            {...props}
+        />
+    );
+}
+
+export type NullableProductoCategoriaField = ProductoCategoriaValue | null;
+export function NullableProductoCategoriaField(props: TProductoCategoriaFieldProps) {
+    const field = useFieldContext<NullableProductoCategoriaField>();
+    return (
+        <RootProductoCategoriaField
+            value={field.state.value ?? undefined}
+            onValueChange={(v) => field.handleChange(v ?? null)}
+            {...props}
+        />
     );
 }

@@ -1,20 +1,20 @@
-import { NonEmptyString, NonEmptyStringToNumber } from "@/lib/schemas/common";
+import { NonEmptyString, RequiredNumber } from "@/lib/schemas/common";
 import type { NombreField } from "./form-fields";
-import type { CategoriaField } from "../../categorias/partials/form-fields";
+import type { ProductoCategoriaField } from "../../categorias/form-fields";
 import z from "zod";
 
 export type Schema = {
-    categoria_id: CategoriaField;
+    categoria_id: ProductoCategoriaField;
     nombre: NombreField;
 }
 
 export const defaultValues: Schema = {
-    categoria_id: '',
+    categoria_id: undefined,
     nombre: ''
 }
 
 export const validator = z.object({
-    categoria_id: NonEmptyStringToNumber,
+    categoria_id: RequiredNumber,
     nombre: NonEmptyString
 });
 

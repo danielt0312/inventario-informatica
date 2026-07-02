@@ -17,7 +17,7 @@ export interface ProductoFieldProps extends Omit<
     tipo: number;
 }
 
-export type ProductoField = string;
+export type ProductoField = number;
 export function ProductoField({
     label = "Modelo de Producto",
     tipo,

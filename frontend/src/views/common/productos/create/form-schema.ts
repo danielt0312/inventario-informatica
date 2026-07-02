@@ -1,11 +1,11 @@
 import { NonEmptyString, NonEmptyStringToNumber } from "@/lib/schemas/common";
 import type { ProductoTipoField } from "../tipos/partials/form-fields";
-import type { MarcaField } from "../marcas/partials/form-fields";
+import type { ProductoMarcaField } from "../marcas/partials/form-fields";
 import z from "zod";
 
 export type Schema = {
     tipo_id: ProductoTipoField;
-    marca_id: MarcaField;
+    marca_id: ProductoMarcaField;
     nombre: string;
 }
 
