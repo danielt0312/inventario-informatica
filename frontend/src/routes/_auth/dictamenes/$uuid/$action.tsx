@@ -7,14 +7,19 @@ import type { TResponse } from '@/types/generics';
 import {
     ActionLabels,
     ActionStates,
-    type ActionDictamenEstadoEnum,
-    type ActionDictamenWithDictamenProductos
+    type ActionDictamen,
+    type ActionDictamenWithDictamenProductos,
+    type DictaminadoDictamen
 } from './-types';
-import type { DictamenWithDictamenProductos } from '@/types/dictamenes';
+import type { Dictamen, DictamenWithDictamenProductos } from '@/types/dictamenes';
 import { View } from '@/views/dictamenes/actions/view';
 
-export function isActionState(value: DictamenEstadoEnum): value is ActionDictamenEstadoEnum {
-    return value in ActionStates;
+export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamen {
+    return dictamen.estado.id in ActionStates;
+}
+
+export function isDictaminadoDictamen(dictamen: Dictamen): dictamen is DictaminadoDictamen {
+    return dictamen.estado.id !== DictamenEstadoEnum.DICTAMINAR;
 }
 
 export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({

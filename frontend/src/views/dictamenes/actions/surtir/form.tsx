@@ -6,10 +6,10 @@ import api from "@/lib/axios";
 import { PackagePlusIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
-import type { DictaminadoDictamen, DictaminadoDictamenWithDictaminadoDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DictaminadoActionDictamen, DictaminadoDictamenWithDictaminadoDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export type SurtirMutationOptions = Omit<UseMutationOptions, 'mutationFn'>;
-export const useSurtirMutation = (dictamen: DictaminadoDictamen, options?: UseMutationOptions) => useMutation({
+export const useSurtirMutation = (dictamen: DictaminadoActionDictamen, options?: UseMutationOptions) => useMutation({
     ...options,
     mutationFn: () => api.post(`api/dictamenes/${dictamen.uuid}/surtir`),
     onSuccess: (data, variables, onMutateResult, context) => {

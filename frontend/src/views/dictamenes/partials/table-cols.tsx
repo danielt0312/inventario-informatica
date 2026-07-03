@@ -1,16 +1,20 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { DictamenEstadoEnum } from "@/lib/constants";
 import { EyeIcon, FileInputIcon, PackageOpenIcon, PackagePlus, PackagePlusIcon, PaperclipIcon } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import {
-    isActionState,
-    Route as ActionRoute
+    isActionDictamen,
+    Route as ActionRoute,
+    isDictaminadoDictamen,
 } from "@/routes/_auth/dictamenes/$uuid/$action";
-import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
+import * as Root from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import type { Dictamen } from "@/types/dictamenes";
-import { ActionStates } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { ActionStates, type ActionDictamen, type ActionDictamenEstadoEnum, type DictaminadoActionDictamen, type DictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { useState } from "react";
+import { useSurtirMutation } from "../actions/surtir/form";
 
 const ActionIcon = {
     [DictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
@@ -20,14 +24,12 @@ const ActionIcon = {
     [DictamenEstadoEnum.RESGUARDAR]: <PackagePlus />
 } as const;
 
-export function renderActionViewFile(dictamen: Dictamen) {
-    if (!isActionState(dictamen.estado.id) || !dictamen.documento) return null;
-
+const ViewFileActionMenu = ({ dictamen }: { dictamen: DictaminadoDictamen }) => {
     const { uuid, nombre } = dictamen.documento;
     const { mutate, isPending } = useFilePreviewWindowMutation();
 
     return (
-        <ActionMenuItem
+        <Root.ActionMenuItem
             disabled={isPending}
             onClick={() => mutate({ uuid, title: nombre || uuid })}
         >
@@ -35,34 +37,101 @@ export function renderActionViewFile(dictamen: Dictamen) {
                 ? <Spinner />
                 : <EyeIcon />
             } Ver documento
-        </ActionMenuItem>
+        </Root.ActionMenuItem>
     );
 }
 
-export function renderActionCell(dictamen: Dictamen) {
-    const { uuid } = dictamen;
-    const value = dictamen.estado.id;
+const ActionMenuItem = ({ state, children, ...props }: React.ComponentProps<typeof Root.ActionMenuItem> & { state: ActionDictamenEstadoEnum }) => (
+    <Root.ActionMenuItem className="capitalize" {...props}>
+        {ActionIcon[state]} {ActionStates[state]}
+        {children}
+    </Root.ActionMenuItem>
+);
 
-    if (!isActionState(value)) return null;
+const NavigationActionMenu = ({ dictamen }: { dictamen: ActionDictamen }) => (
+    <Root.ActionMenu>
+        <Link
+            to={ActionRoute.to}
+            params={{
+                uuid: dictamen.uuid,
+                action: ActionStates[dictamen.estado.id]
+            }}
+        >
+            <ActionMenuItem state={dictamen.estado.id} />
+            {isDictaminadoDictamen(dictamen) && (
+                <>
+                    <Root.ActionMenuSeparator />
+                    <ViewFileActionMenu dictamen={dictamen} />
+                </>
+            )}
+        </Link>
+    </Root.ActionMenu>
+);
 
-    const action = ActionStates[value];
+const SurtirActionMenu = ({ dictamen }: { dictamen: DictaminadoActionDictamen }) => {
+    const [open, setOpen] = useState(false);
+    const mutation = useSurtirMutation(dictamen);
+    const navigate = useNavigate();
 
     return (
         <>
-            <Link
-                to={ActionRoute.to}
-                params={{
-                    uuid,
-                    action
-                }}
-            >
-                <ActionMenuItem className="capitalize">
-                    {ActionIcon[value]} {action}
-                </ActionMenuItem>
-            </Link>
-            {renderActionViewFile(dictamen)}
+            <Root.ActionMenu>
+                <ActionMenuItem
+                    state={dictamen.estado.id}
+                    onClick={() => setOpen(true)}
+                />
+                <Root.ActionMenuSeparator />
+                <ViewFileActionMenu dictamen={dictamen} />
+            </Root.ActionMenu>
+
+            <AlertDialog open={open} onOpenChange={setOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            ¿Desas continuar?
+                        </AlertDialogTitle>
+
+                        <AlertDialogDescription>
+                            Al continuar, estarás confirmando que los bienes informáticos ya se encuentran en la institución.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogAction
+                        onClick={async () => {
+                            await mutation.mutateAsync();
+                            navigate({
+                                to: ActionRoute.to,
+                                params: {
+                                    uuid: dictamen.uuid,
+                                    action: ActionStates[dictamen.estado.id]
+                                }
+                            });
+                        }}
+                    >
+                        Continuar
+                    </AlertDialogAction>
+                    <AlertDialogCancel onClick={() => setOpen(false)}>Cancelar</AlertDialogCancel>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
+}
+
+const ActionMenu = ({ dictamen }: { dictamen: Dictamen }) => {
+    const actionState = isActionDictamen(dictamen);
+    const dictaminadoState = isDictaminadoDictamen(dictamen);
+
+    return (
+        actionState && ActionStates[dictamen.estado.id] === 'surtir'
+            ? <SurtirActionMenu dictamen={dictamen} />
+            : actionState && dictaminadoState
+                ? <NavigationActionMenu dictamen={dictamen} />
+                : (
+                    <Root.ActionMenu>
+                        <ViewFileActionMenu dictamen={dictamen} />
+                    </Root.ActionMenu>
+                )
+    )
 }
 
 export const columns: ColumnDef<Dictamen>[] = [
@@ -94,12 +163,8 @@ export const columns: ColumnDef<Dictamen>[] = [
     },
     {
         id: "actions",
-        cell: ({ row: { original: data } }) => {
-            return (
-                <ActionMenu>
-                    {renderActionCell(data)}
-                </ActionMenu>
-            )
-        }
+        cell: ({ row: { original: data } }) => (
+            <ActionMenu dictamen={data} />
+        )
     },
 ];

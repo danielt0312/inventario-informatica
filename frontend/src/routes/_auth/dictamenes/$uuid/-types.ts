@@ -10,15 +10,17 @@ import type {
 export const ActionLabels = ['dictaminar', 'evidenciar', 'surtir', 'inventariar', 'resguardar'] as const;
 export type ActionLabels = (typeof ActionLabels)[number];
 
-export const ActionStates = {
-    [DictamenEstadoEnum.DICTAMINAR]: 'dictaminar',
-    [DictamenEstadoEnum.EVIDENCIAR]: 'evidenciar',
-    [DictamenEstadoEnum.SURTIR]: 'surtir',
-    [DictamenEstadoEnum.INVENTARIAR]: 'inventariar',
-    [DictamenEstadoEnum.RESGUARDAR]: 'resguardar'
-} as const satisfies Partial<Record<DictamenEstadoEnum, ActionLabels>>;
+const { SURTIDO, SURTIDO_PARCIAL, ...dictamenEstadoEnum } = DictamenEstadoEnum;
+export const ActionDictamenEstadoEnum = dictamenEstadoEnum;
+export type ActionDictamenEstadoEnum = (typeof ActionDictamenEstadoEnum)[keyof typeof ActionDictamenEstadoEnum];
 
-export type ActionDictamenEstadoEnum = keyof typeof ActionStates;
+export const ActionStates = {
+    [ActionDictamenEstadoEnum.DICTAMINAR]: 'dictaminar',
+    [ActionDictamenEstadoEnum.EVIDENCIAR]: 'evidenciar',
+    [ActionDictamenEstadoEnum.SURTIR]: 'surtir',
+    [ActionDictamenEstadoEnum.INVENTARIAR]: 'inventariar',
+    [ActionDictamenEstadoEnum.RESGUARDAR]: 'resguardar'
+} as const satisfies Record<ActionDictamenEstadoEnum, ActionLabels>;
 
 export type ActionDictamen<T extends Dictamen = Dictamen> = Omit<T, 'estado'> & {
     estado: Omit<DictamenEstado, 'id'> & {
@@ -38,8 +40,14 @@ export type DictaminadoDictamenProducto = Omit<DictamenProducto, 'caracteristica
     producto: DictaminadoAttributeProductoDictamenProducto;
 }
 
-export type DictaminadoDictamen = Omit<ActionDictamen, 'documento'> & {
-    documento: NonNullable<ActionDictamen['documento']>
+export type DictaminadoDictamen<T extends Dictamen = Dictamen> = Omit<T, 'documento'> & {
+    documento: NonNullable<T['documento']>
 }
 
-export type DictaminadoDictamenWithDictaminadoDictamenProductos = DictamenWithDictamenProductos<DictaminadoDictamen, DictaminadoDictamenProducto>
+export type DictaminadoActionDictamen = DictaminadoDictamen<ActionDictamen>;
+export type DictaminadoDictamenWithDictaminadoDictamenProductos = DictamenWithDictamenProductos<DictaminadoActionDictamen, DictaminadoDictamenProducto>;
+export type SurtirDictamen = Omit<DictaminadoActionDictamen, 'estado'> & {
+    estado: Omit<DictaminadoActionDictamen, 'id'> & {
+        id: ActionDictamenEstadoEnum
+    }
+};
