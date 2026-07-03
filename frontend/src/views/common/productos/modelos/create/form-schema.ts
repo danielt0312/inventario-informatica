@@ -1,6 +1,6 @@
-import { NonEmptyString, NonEmptyStringToNumber, RequiredNumber } from "@/lib/schemas/common";
+import { NonEmptyString, RequiredNumber } from "@/lib/schemas/common";
 import type { ProductoTipoField } from "../../tipos/form-fields";
-import type { ProductoMarcaField } from "../../marcas/partials/form-fields";
+import type { ProductoMarcaField } from "../../marcas/form-fields";
 import z from "zod";
 
 export type Schema = {

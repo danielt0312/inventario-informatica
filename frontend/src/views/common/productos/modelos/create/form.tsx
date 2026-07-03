@@ -3,7 +3,7 @@ import { type FormMutation, useFormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator, type OutputSchema } from "./form-schema";
 import { NombreField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import { ProductoMarcaField } from "../../marcas/partials/form-fields";
+import { ProductoMarcaField } from "../../marcas/form-fields";
 import { ProductoTipoField } from "../../tipos/form-fields";
 import type { TResponse } from "@/types/generics";
 import type { Producto } from "@/types/productos";
@@ -38,18 +38,20 @@ export const useForm = (options: () => ReturnType<typeof defaultFormOptions> = d
 
 interface AppFormProps extends Omit<React.ComponentProps<typeof PrimitiveForm>, 'form'> {
     form: ReturnType<typeof useForm>;
+    showTipoField?: boolean;
 }
 
 export const AppForm = ({
     form,
     children,
+    showTipoField,
     ...props
 }: AppFormProps) => (
     <PrimitiveForm
         form={asAnyFormApi(form)}
         {...props}
     >
-        <form.AppField name="tipo_id" children={() => <ProductoTipoField />}/>
+        {showTipoField && <form.AppField name="tipo_id" children={() => <ProductoTipoField />}/>}
         <form.AppField name="marca_id" children={() => <ProductoMarcaField />}/>
         <form.AppField name="nombre" children={() => <NombreField />}/>
         {children}

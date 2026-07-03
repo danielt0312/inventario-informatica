@@ -4,13 +4,12 @@ namespace App\Http\Requests\ProductoMarca;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductoMarcaRequest extends FormRequest
+class StoreProductoMarcaRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
-            'tipos' => ['nullable', 'array'],
-            'tipos.*' => ['integer', 'exists:producto_tipos,id']
+            'nombre' => ['required', 'string', 'max:64', 'unique:producto_marcas,nombre']
         ];
     }
 }

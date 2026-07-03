@@ -47,6 +47,7 @@ export function ProductoModeloField({
     });
 
     const dialogForm = useForm(() => defaultFormOptions(useDialogFormMutation));
+    dialogForm.setFieldValue('tipo_id', tipo);
 
     return (
         <>
@@ -66,7 +67,7 @@ export function ProductoModeloField({
                         <DialogTitle>Crear Modelo de Producto</DialogTitle>
                     </DialogHeader>
 
-                    <AppForm form={dialogForm} className="contents">
+                    <AppForm form={dialogForm} className="contents" showTipoField={false}>
                         <DialogFooter>
                             <dialogForm.SubmitButton />
 

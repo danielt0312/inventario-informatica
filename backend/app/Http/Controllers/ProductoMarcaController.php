@@ -4,30 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests\ProductoMarca\ProductoMarcaRequest;
-
+use App\Http\Requests\ProductoMarca\StoreProductoMarcaRequest;
 use App\Models\ProductoMarca;
+use Spatie\QueryBuilder\{AllowedInclude, QueryBuilder};
 
 class ProductoMarcaController extends Controller
 {
-    public function index(ProductoMarcaRequest $request)
+    public function index()
     {
-        if (!$request->filled('tipos')) {
-            return response()->json(['data' => []]);
-        }
-
-        $data = ProductoMarca::join('productos', 'producto_marcas.id', '=', 'productos.marca_id')
-            ->whereIn('producto_marcas.id', $request->input('tipos'))
-            ->select('producto_marcas.*')
-            ->distinct()
-            ->get();
-
-        return response()->json(compact('data'));
+        return QueryBuilder::for(ProductoMarca::class)
+            ->allowedIncludes(
+                AllowedInclude::relationship('modelos', 'tipos'),
+            )
+            ->get()
+            ->toResourceCollection();
     }
 
-    public function store(Request $request)
+    public function store(StoreProductoMarcaRequest $request)
     {
-        //
+        return (ProductoMarca::create($request->validated()))
+            ->toResource()
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function show(string $id)

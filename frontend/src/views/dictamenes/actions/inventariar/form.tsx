@@ -9,6 +9,7 @@ import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-co
 import { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
 import { useStore } from "@tanstack/react-form";
 import { Separator } from "@/components/ui/separator";
+import { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 
 export const useForm = (dictamen: DictaminadoDictamenWithDictaminadoDictamenProductos) => {
     const { mutate } = useActionFormMutation(dictamen);

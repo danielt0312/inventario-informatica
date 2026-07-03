@@ -1,6 +1,7 @@
 import { InputField } from "@/components/composed/@tanstack/form/input-field";
 import React from "react";
 
+export type NombreField = string;
 export function NombreField({
     label = "Modelo del Producto",
     placeholder = "Ingresa el nombre del modelo del producto",

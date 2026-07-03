@@ -8,7 +8,7 @@ import React from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { AppForm, useForm, useCreateFormMutation } from "../create/form";
+import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 
 export interface ProductoMarcaFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
@@ -18,8 +18,6 @@ export interface ProductoMarcaFieldProps extends Omit<
 export type ProductoMarcaField = number | undefined;
 export function ProductoMarcaField({
     label = "Marca del Producto",
-    value,
-    onValueChange,
     ...props
 }: ProductoMarcaFieldProps) {
     const { data: options = [] } = useQuery({
