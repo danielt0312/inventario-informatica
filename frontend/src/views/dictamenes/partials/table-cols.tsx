@@ -10,8 +10,8 @@ import {
 import * as Root from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
-import type { DictaminadoDictamen, DictaminarDictamen, SurtirDictamen } from "@/types/dictamenes";
-import { type ActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { SurtirDictamen } from "@/types/dictamenes";
+import { type ActionDictamen, type ActionDictamenUnion, type ActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { ActionDictamenEstadoEnum, ActionStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useState, type JSX } from "react";
@@ -31,7 +31,7 @@ const ActionMenuItem = ({ state, ...props }: React.ComponentProps<typeof Root.Ac
     </Root.ActionMenuItem>
 );
 
-const ViewFileActionMenu = ({ dictamen }: { dictamen: DictaminadoDictamen }) => {
+const ViewFileActionMenu = ({ dictamen }: { dictamen: ActionDictaminadoDictamen }) => {
     const { uuid, nombre } = dictamen.documento;
     const { mutate, isPending } = useFilePreviewWindowMutation();
 
@@ -118,8 +118,7 @@ const SurtirActionMenu = ({ dictamen }: { dictamen: SurtirDictamen }) => {
     );
 }
 
-export type DictamenData = DictaminarDictamen | ActionDictamen | SurtirDictamen | DictaminadoDictamen;
-const ActionMenu = ({ dictamen }: { dictamen: DictamenData }) => {
+const ActionMenu = ({ dictamen }: { dictamen: ActionDictamenUnion }) => {
     if (isActionDictamen(dictamen)) {
         if (isSurtirDictamen(dictamen)) {
             return <SurtirActionMenu dictamen={dictamen} />;
@@ -135,7 +134,7 @@ const ActionMenu = ({ dictamen }: { dictamen: DictamenData }) => {
     );
 }
 
-export const columns: ColumnDef<DictamenData>[] = [
+export const columns: ColumnDef<ActionDictamenUnion>[] = [
     {
         accessorKey: "fecha_solicitud",
         header: "Fecha de Solicitud",

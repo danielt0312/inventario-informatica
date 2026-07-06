@@ -1,35 +1,31 @@
 import { DictamenEstadoEnum } from "@/lib/constants";
-
-import {
-    type ActionDictamenWithDictamenProductos,
-    type DictaminadoDictamenWithDictaminadoDictamenProductos
-} from "@/routes/_auth/dictamenes/$uuid/-types";
+import { type ActionDictamenWithDictamenProductosUnion } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { ActionStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { Form as EvidenciarForm } from "../evidenciar/form";
 import { Form as DictaminarForm } from "../dictaminar/form";
 import { useFormMutation } from "@/hooks/use-form-mutation";
-import { SurtirForm } from "../surtir/form";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { InventariarForm } from "../inventariar/form";
+import { isDictaminarDictamenWithProductos } from "@/routes/_auth/dictamenes/$uuid/$action";
+import { SurtirForm } from "../surtir/form";
 
-export function ActionForm({ dictamen }: { dictamen: ActionDictamenWithDictamenProductos }) {
+export function ActionForm({ dictamen }: { dictamen: ActionDictamenWithDictamenProductosUnion }) {
+    if (isDictaminarDictamenWithProductos(dictamen)) {
+        return <DictaminarForm dictamen={dictamen} />;
+    }
+
     switch (dictamen.estado.id) {
-        case DictamenEstadoEnum.DICTAMINAR:
-            return <DictaminarForm dictamen={dictamen} />;
         case DictamenEstadoEnum.EVIDENCIAR:
-            return <EvidenciarForm dictamen={dictamen as DictaminadoDictamenWithDictaminadoDictamenProductos} />;
+            return <EvidenciarForm dictamen={dictamen} />;
         case DictamenEstadoEnum.SURTIR:
-            return <SurtirForm dictamen={dictamen as DictaminadoDictamenWithDictaminadoDictamenProductos} />;
+            return <SurtirForm dictamen={dictamen} />;
         case DictamenEstadoEnum.INVENTARIAR:
-            return <InventariarForm />;
-        default:
-            // todo mostrar un mensaje de error
-            return null;
+            return <InventariarForm dictamen={dictamen} />;
     }
 }
 
-export function useActionFormMutation(dictamen: ActionDictamenWithDictamenProductos) {
+export function useActionFormMutation(dictamen: ActionDictamenWithDictamenProductosUnion) {
     const action = ActionStates[dictamen.estado.id];
     const navigate = useNavigate();
 
@@ -37,7 +33,6 @@ export function useActionFormMutation(dictamen: ActionDictamenWithDictamenProduc
         url: `api/dictamenes/${dictamen.uuid}/${action}`,
         onSuccess: (_, __, ___, { client }) => {
             client.invalidateQueries({ queryKey: ['dictamenes'] });
-            client.invalidateQueries({ queryKey: ['dictamenes', dictamen.uuid] });
             navigate({ to: IndexRoute.to });
         }
     })

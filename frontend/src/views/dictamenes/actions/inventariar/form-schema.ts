@@ -1,8 +1,6 @@
 import { NonEmptyString, RequiredArray, RequiredNumber, TrimmedString } from "@/lib/schemas/common";
-import type { DictaminadoDictamenWithDictaminadoDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-schema";
-import type { ProductoModeloField } from "@/views/common/productos/modelos/form-fields";
-import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import z from "zod";
 
 export type ProductoFields = ResultadoEsperadoFieldGroup & {
@@ -17,7 +15,7 @@ export type InventariarDictamenSchema = {
     productos: ProductoFields[];
 }
 
-export const defaultValues: (dictamen: DictaminadoDictamenWithDictaminadoDictamenProductos) => InventariarDictamenSchema = (dictamen) => ({
+export const defaultValues: (dictamen: ActionDictaminadoDictamenWithDictamenProductos) => InventariarDictamenSchema = (dictamen) => ({
     productos: dictamen.dictamen_productos.map((dictamenProducto) => ({
         dictamen_producto_id: dictamenProducto.id,
         archivo_id: null,

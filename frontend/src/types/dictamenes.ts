@@ -34,7 +34,7 @@ export type DictaminarDictamenEstado = DictamenEstado<typeof DictamenEstadoEnum.
 export type DictaminarDictamen = Dictamen<DictaminarDictamenEstado>;
 export type DictaminarAttributeProductoDictamenProducto = AttributeProductoDictamenProducto<ProductoCategoria, ProductoTipo, ProductoMarca, Producto>;
 export type DictaminarDictamenProducto = DictamenProducto<DictaminarAttributeProductoDictamenProducto>;
-export type DictaminarDictamenProductoWithDictamenProductos = DictamenWithDictamenProductos<DictaminarDictamen, DictaminarDictamenProducto>;
+export type DictaminarDictamenWithDictamenProductos = DictamenWithDictamenProductos<DictaminarDictamen, DictaminarDictamenProducto>;
 
 export type DictaminadoDictamenEstado<TDictamenEstado extends DictaminadoDictamenEstadoEnum = DictaminadoDictamenEstadoEnum> = DictamenEstado<TDictamenEstado>;
 export type DictaminadoAttributeProductoDictamenProducto = Omit<AttributeProductoDictamenProducto<ProductoCategoria, ProductoTipo, ProductoMarca, Producto>, 'marca' | 'modelo'> & {
@@ -47,7 +47,8 @@ export type DictaminadoDictamenProducto = Omit<DictamenProducto<DictaminadoAttri
 export type DictaminadoDictamen<TDictaminadoDictamenEstado extends DictaminadoDictamenEstado = DictaminadoDictamenEstado> = Omit<Dictamen<TDictaminadoDictamenEstado>, 'documento'> & {
     documento: NonNullable<Dictamen['documento']>
 }
-export type DictaminadoDictamenWithDictamenProductos = DictamenWithDictamenProductos<DictaminadoDictamen, DictaminadoDictamenProducto>;
+export type DictaminadoDictamenWithDictamenProductos<TDictaminadoDictamen extends DictaminadoDictamen = DictaminadoDictamen, TDictaminadoDictamenProducto extends DictaminadoDictamenProducto = DictaminadoDictamenProducto> = DictamenWithDictamenProductos<TDictaminadoDictamen, TDictaminadoDictamenProducto>;
 
 export type SurtirDictamenEstado = DictaminadoDictamenEstado<typeof DictaminadoDictamenEstadoEnum.SURTIR>;
 export type SurtirDictamen = DictaminadoDictamen<SurtirDictamenEstado>;
+export type SurtirDictamenWithDictamenProductos = DictaminadoDictamenWithDictamenProductos<SurtirDictamen>;

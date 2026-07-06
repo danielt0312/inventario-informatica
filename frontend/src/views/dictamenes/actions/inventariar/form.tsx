@@ -1,17 +1,15 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Route } from "@/routes/_auth/dictamenes/$uuid/$action";
-import type { DictaminadoDictamenWithDictaminadoDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
-import { useStore } from "@tanstack/react-form";
 import { Separator } from "@/components/ui/separator";
 import { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
+import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export const useForm = (dictamen: DictaminadoDictamenWithDictaminadoDictamenProductos) => {
+export const useForm = (dictamen: ActionDictaminadoDictamenWithDictamenProductos) => {
     const { mutate } = useActionFormMutation(dictamen);
 
     return useAppForm({
@@ -26,16 +24,10 @@ export const useForm = (dictamen: DictaminadoDictamenWithDictaminadoDictamenProd
     });
 }
 
-export function InventariarForm() {
-    const { dictamen: data } = Route.useRouteContext();
-
-    const dictamen = data as DictaminadoDictamenWithDictaminadoDictamenProductos;
-
+export function InventariarForm({ dictamen }: { dictamen: ActionDictaminadoDictamenWithDictamenProductos }) {
     const form = useForm(dictamen);
     let total = 0;
     let index = 0;
-
-    const errors = useStore(form.store, (state) => state.errors)
 
     return (
         <Form form={form}>

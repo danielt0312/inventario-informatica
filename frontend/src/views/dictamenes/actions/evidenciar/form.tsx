@@ -4,15 +4,15 @@ import { validator, type Schema } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { DictamenArchivoField } from "./form-fields";
-import type { DictaminadoDictamenWithDictaminadoDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export function useForm(dictamen: DictaminadoDictamenWithDictaminadoDictamenProductos) {
+export function useForm(dictamen: ActionDictaminadoDictamenWithDictamenProductos) {
+    const formMutation = useActionFormMutation(dictamen);
+
     const defaultValues: Schema = {
         ...dictamen,
         archivo: []
     };
-
-    const formMutation = useActionFormMutation(dictamen);
 
     return useAppForm({
         defaultValues,
@@ -30,7 +30,7 @@ export function useForm(dictamen: DictaminadoDictamenWithDictaminadoDictamenProd
     });
 }
 
-export function Form({ dictamen }: { dictamen: DictaminadoDictamenWithDictaminadoDictamenProductos }) {
+export function Form({ dictamen }: { dictamen: ActionDictaminadoDictamenWithDictamenProductos }) {
     const form = useForm(dictamen);
 
     return (

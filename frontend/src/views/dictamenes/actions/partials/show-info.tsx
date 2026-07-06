@@ -1,8 +1,8 @@
 import { FilePreviewWindow } from "@/components/custom/file-preview-window";
 import { Label } from "@/components/ui/label";
-import type { ActionDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { DictamenProducto, DictamenWithDictamenProductos } from "@/types/dictamenes";
 import { Card, CardContent } from "@/components/ui/card";
+import type { ActionDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export function ShowInfo({ dictamen }: { dictamen: ActionDictamenWithDictamenProductos }) {
     return (

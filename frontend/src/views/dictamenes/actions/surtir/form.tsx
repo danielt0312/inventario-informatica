@@ -8,14 +8,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
 import type { DictaminadoDictamen, DictaminadoDictamenWithDictamenProductos } from "@/types/dictamenes";
 
-export type SurtirMutationOptions = Omit<UseMutationOptions, 'mutationFn'>;
 export const useSurtirMutation = (dictamen: DictaminadoDictamen, options?: UseMutationOptions) => useMutation({
     ...options,
     mutationFn: () => api.post(`api/dictamenes/${dictamen.uuid}/surtir`),
     onSuccess: (data, variables, onMutateResult, context) => {
         context.client.invalidateQueries({ queryKey: ['dictamenes'] });
-        context.client.invalidateQueries({ queryKey: ['dictamenes', dictamen.uuid] });
-
         options?.onSuccess?.(data, variables, onMutateResult, context);
     }
 });

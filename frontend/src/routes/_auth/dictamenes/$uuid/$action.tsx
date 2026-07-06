@@ -4,19 +4,20 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
 import type { TResponse } from '@/types/generics';
-import {
-    type ActionDictamen,
-    type ActionDictamenWithDictamenProductos,
-} from './-types';
+import { type ActionDictamenUnion, type ActionDictamenWithDictamenProductosUnion } from './-types';
 import {
     ActionLabels,
     ActionStates
 } from "./-constants";
-import type { Dictamen, DictamenWithDictamenProductos, DictaminadoDictamen, SurtirDictamen } from '@/types/dictamenes';
+import type { Dictamen, DictamenWithDictamenProductos, DictaminadoDictamen, DictaminarDictamen, DictaminarDictamenWithDictamenProductos, SurtirDictamen, SurtirDictamenWithDictamenProductos } from '@/types/dictamenes';
 import { View } from '@/views/dictamenes/actions/view';
 
-export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamen {
+export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamenUnion {
     return dictamen.estado.id in ActionStates;
+}
+
+export function isDictaminarDictamen(dictamen: Dictamen): dictamen is DictaminarDictamen {
+    return dictamen.estado.id === DictamenEstadoEnum.DICTAMINAR;
 }
 
 export function isDictaminadoDictamen(dictamen: Dictamen): dictamen is DictaminadoDictamen {
@@ -24,6 +25,18 @@ export function isDictaminadoDictamen(dictamen: Dictamen): dictamen is Dictamina
 }
 
 export function isSurtirDictamen(dictamen: Dictamen): dictamen is SurtirDictamen {
+    return dictamen.estado.id === DictaminadoDictamenEstadoEnum.SURTIR;
+}
+
+export function isActionDictamenWithProductos(dictamen: DictamenWithDictamenProductos): dictamen is ActionDictamenWithDictamenProductosUnion {
+    return dictamen.estado.id in ActionStates;
+}
+
+export function isDictaminarDictamenWithProductos(dictamen: DictamenWithDictamenProductos): dictamen is DictaminarDictamenWithDictamenProductos {
+    return dictamen.estado.id === DictamenEstadoEnum.DICTAMINAR;
+}
+
+export function isSurtirDictamenWithProductos(dictamen: DictamenWithDictamenProductos): dictamen is SurtirDictamenWithDictamenProductos {
     return dictamen.estado.id === DictaminadoDictamenEstadoEnum.SURTIR;
 }
 
@@ -42,13 +55,8 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
                 .then(r => r.data.data)
         });
 
-        switch (data.estado.id) {
-            case DictamenEstadoEnum.SURTIDO:
-            case DictamenEstadoEnum.SURTIDO_PARCIAL:
-                // todo notificar a usuario de que no se puede acceder por tal motivo
-                throw redirect({ to: IndexRoute.to });
-            default:
-                break;
+        if (!isActionDictamenWithProductos(data)) {
+            throw redirect({ to: IndexRoute.to });
         }
 
         if (ActionStates[data.estado.id] !== params.action) {
@@ -62,7 +70,7 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
         }
 
         return {
-            dictamen: data as ActionDictamenWithDictamenProductos
+            dictamen: data
         };
     }
 });

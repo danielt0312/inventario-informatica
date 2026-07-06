@@ -4,12 +4,13 @@ import {
     RequiredNumber
 } from "@/lib/schemas/common";
 import type { ProductoModeloField } from "@/views/common/productos/modelos/form-fields";
+import type { CaracteristicasField } from "./form-fields";
 import z from "zod";
 
 export interface Schema {
     productos: {
-        id: number;
-        caracteristicas: string;
+        id: ProductoModeloField;
+        caracteristicas: CaracteristicasField;
         producto_id: ProductoModeloField;
     }[];
 }
