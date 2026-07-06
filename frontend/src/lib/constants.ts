@@ -19,6 +19,17 @@ export const DictamenEstadoEnum = {
 } as const;
 export type DictamenEstadoEnum = (typeof DictamenEstadoEnum)[keyof typeof DictamenEstadoEnum];
 
+const { EVIDENCIAR, SURTIR, INVENTARIAR, RESGUARDAR, SURTIDO, SURTIDO_PARCIAL } = DictamenEstadoEnum;
+export const DictaminadoDictamenEstadoEnum = {
+    EVIDENCIAR,
+    SURTIR,
+    INVENTARIAR,
+    RESGUARDAR,
+    SURTIDO,
+    SURTIDO_PARCIAL
+};
+export type DictaminadoDictamenEstadoEnum = (typeof DictaminadoDictamenEstadoEnum)[keyof typeof DictaminadoDictamenEstadoEnum];
+
 export const ProductoCategoriaEnum = {
     COMPUTADORA: 1,
     DISPOSITIVO_ALMACENAMIENTO: 2,

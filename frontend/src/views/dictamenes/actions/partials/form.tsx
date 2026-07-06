@@ -1,10 +1,10 @@
 import { DictamenEstadoEnum } from "@/lib/constants";
 
 import {
-    ActionStates,
     type ActionDictamenWithDictamenProductos,
     type DictaminadoDictamenWithDictaminadoDictamenProductos
 } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { ActionStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { Form as EvidenciarForm } from "../evidenciar/form";
 import { Form as DictaminarForm } from "../dictaminar/form";
 import { useFormMutation } from "@/hooks/use-form-mutation";

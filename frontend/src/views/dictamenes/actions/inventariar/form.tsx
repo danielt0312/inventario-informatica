@@ -37,8 +37,6 @@ export function InventariarForm() {
 
     const errors = useStore(form.store, (state) => state.errors)
 
-    console.log(errors);
-
     return (
         <Form form={form}>
             <form.AppForm>

@@ -1,17 +1,18 @@
 import api from '@/lib/axios';
-import { DictamenEstadoEnum } from '@/lib/constants';
+import { DictamenEstadoEnum, DictaminadoDictamenEstadoEnum } from '@/lib/constants';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
 import type { TResponse } from '@/types/generics';
 import {
-    ActionLabels,
-    ActionStates,
     type ActionDictamen,
     type ActionDictamenWithDictamenProductos,
-    type DictaminadoDictamen
 } from './-types';
-import type { Dictamen, DictamenWithDictamenProductos } from '@/types/dictamenes';
+import {
+    ActionLabels,
+    ActionStates
+} from "./-constants";
+import type { Dictamen, DictamenWithDictamenProductos, DictaminadoDictamen, SurtirDictamen } from '@/types/dictamenes';
 import { View } from '@/views/dictamenes/actions/view';
 
 export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamen {
@@ -20,6 +21,10 @@ export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamen
 
 export function isDictaminadoDictamen(dictamen: Dictamen): dictamen is DictaminadoDictamen {
     return dictamen.estado.id !== DictamenEstadoEnum.DICTAMINAR;
+}
+
+export function isSurtirDictamen(dictamen: Dictamen): dictamen is SurtirDictamen {
+    return dictamen.estado.id === DictaminadoDictamenEstadoEnum.SURTIR;
 }
 
 export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
