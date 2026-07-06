@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { EyeIcon, FileInputIcon, PackageOpenIcon, PackagePlus, PackagePlusIcon, PaperclipIcon } from "lucide-react";
+import { CircleXIcon, EyeIcon, FileInputIcon, PackageOpenIcon, PackagePlus, PackagePlusIcon, PaperclipIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
     isActionDictamen,
@@ -13,7 +13,7 @@ import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mu
 import type { DictaminadoDictamen, DictaminarDictamen, SurtirDictamen } from "@/types/dictamenes";
 import { type ActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { ActionDictamenEstadoEnum, ActionStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useState, type JSX } from "react";
 import { useSurtirMutation } from "../actions/surtir/form";
 
@@ -25,6 +25,12 @@ const ActionIcon = {
     [ActionDictamenEstadoEnum.RESGUARDAR]: <PackagePlus />
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
+const ActionMenuItem = ({ state, ...props }: React.ComponentProps<typeof Root.ActionMenuItem> & { state: ActionDictamenEstadoEnum }) => (
+    <Root.ActionMenuItem className="capitalize" {...props}>
+        {ActionIcon[state]} {ActionStates[state]}
+    </Root.ActionMenuItem>
+);
+
 const ViewFileActionMenu = ({ dictamen }: { dictamen: DictaminadoDictamen }) => {
     const { uuid, nombre } = dictamen.documento;
     const { mutate, isPending } = useFilePreviewWindowMutation();
@@ -34,20 +40,10 @@ const ViewFileActionMenu = ({ dictamen }: { dictamen: DictaminadoDictamen }) => 
             disabled={isPending}
             onClick={() => mutate({ uuid, title: nombre || uuid })}
         >
-            {isPending
-                ? <Spinner />
-                : <EyeIcon />
-            } Ver documento
+            {isPending ? <Spinner /> : <EyeIcon />} Ver documento
         </Root.ActionMenuItem>
     );
 }
-
-const ActionMenuItem = ({ state, children, ...props }: React.ComponentProps<typeof Root.ActionMenuItem> & { state: ActionDictamenEstadoEnum }) => (
-    <Root.ActionMenuItem className="capitalize" {...props}>
-        {ActionIcon[state]} {ActionStates[state]}
-        {children}
-    </Root.ActionMenuItem>
-);
 
 const NavigationActionMenu = ({ dictamen }: { dictamen: ActionDictamen }) => (
     <Root.ActionMenu>
@@ -89,37 +85,41 @@ const SurtirActionMenu = ({ dictamen }: { dictamen: SurtirDictamen }) => {
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>
-                            ¿Desas continuar?
+                            ¿Confirmar surtimiento?
                         </AlertDialogTitle>
 
                         <AlertDialogDescription>
-                            Al continuar, estarás confirmando que los bienes informáticos ya se encuentran en la institución.
+                            Al continuar, estarás confirmando que los bienes informáticos ya se encuentran dentro de la institución y procederás a realizar el inventariado.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
 
-                    <AlertDialogAction
-                        onClick={async () => {
-                            await mutation.mutateAsync();
-                            navigate({
-                                to: ActionRoute.to,
-                                params: {
-                                    uuid: dictamen.uuid,
-                                    action: ActionStates[dictamen.estado.id]
-                                }
-                            });
-                        }}
-                    >
-                        Continuar
-                    </AlertDialogAction>
-                    <AlertDialogCancel onClick={() => setOpen(false)}>Cancelar</AlertDialogCancel>
+                    <AlertDialogFooter>
+                        <AlertDialogAction
+                            onClick={async () => {
+                                await mutation.mutateAsync();
+                                await navigate({
+                                    to: ActionRoute.to,
+                                    params: {
+                                        uuid: dictamen.uuid,
+                                        action: ActionStates[dictamen.estado.id]
+                                    }
+                                });
+                            }}
+                        >
+                            {ActionIcon[dictamen.estado.id]} Confirmar e Inventariar
+                        </AlertDialogAction>
+                        <AlertDialogCancel onClick={() => setOpen(false)}>
+                            <CircleXIcon /> Cancelar
+                        </AlertDialogCancel>
+                    </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
         </>
     );
 }
 
-type TDictamen = DictaminarDictamen | ActionDictamen | SurtirDictamen | DictaminadoDictamen;
-const ActionMenu = ({ dictamen }: { dictamen: TDictamen }) => {
+export type DictamenData = DictaminarDictamen | ActionDictamen | SurtirDictamen | DictaminadoDictamen;
+const ActionMenu = ({ dictamen }: { dictamen: DictamenData }) => {
     if (isActionDictamen(dictamen)) {
         if (isSurtirDictamen(dictamen)) {
             return <SurtirActionMenu dictamen={dictamen} />;
@@ -135,7 +135,7 @@ const ActionMenu = ({ dictamen }: { dictamen: TDictamen }) => {
     );
 }
 
-export const columns: ColumnDef<TDictamen>[] = [
+export const columns: ColumnDef<DictamenData>[] = [
     {
         accessorKey: "fecha_solicitud",
         header: "Fecha de Solicitud",
