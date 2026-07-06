@@ -59,13 +59,13 @@ const NavigationActionMenu = ({ dictamen }: { dictamen: ActionDictamen }) => (
             }}
         >
             <ActionMenuItem state={dictamen.estado.id} />
-            {isDictaminadoDictamen(dictamen) && (
-                <>
-                    <Root.ActionMenuSeparator />
-                    <ViewFileActionMenu dictamen={dictamen} />
-                </>
-            )}
         </Link>
+        {isDictaminadoDictamen(dictamen) && (
+            <>
+                <Root.ActionMenuSeparator />
+                <ViewFileActionMenu dictamen={dictamen} />
+            </>
+        )}
     </Root.ActionMenu>
 );
 
