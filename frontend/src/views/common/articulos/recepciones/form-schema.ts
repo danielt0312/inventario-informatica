@@ -6,6 +6,6 @@ export type ResultadoEsperadoFieldGroup = {
 }
 
 export const resultadoEsperadoFieldGroupDefaultValues: ResultadoEsperadoFieldGroup = {
-    resultado_esperado: null,
+    resultado_esperado: undefined,
     observaciones: null
 }

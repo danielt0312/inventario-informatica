@@ -1,70 +1,35 @@
-import { useFieldContext, withFieldGroup } from "@/components/composed/@tanstack/form/form";
-import { RadioGroupField, RadioGroupFieldItem } from "@/components/composed/@tanstack/form/radio-group-field";
-import { TextareaField } from "@/components/composed/@tanstack/form/textarea-field";
+import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
+import { NullableTextareaField } from "@/components/composed/@tanstack/form/textarea-field";
 import { resultadoEsperadoFieldGroupDefaultValues } from "./form-schema";
 import { useStore } from "@tanstack/react-form";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
+import { BooleanField } from "@/components/custom/boolean-field";
 
-export type ObservacionesField = string | null;
+export type ObservacionesField = NullableTextareaField;
 export const ObservacionesField = ({
     label = "Observaciones/Aclaraciones",
     placeholder = "Ingresa cualquier observación, aclaración, o nota importante a declarar",
     ...props
-}: React.ComponentProps<typeof TextareaField>) => {
-    const field = useFieldContext<ObservacionesField>();
+}: React.ComponentProps<typeof NullableTextareaField>) => (
+    <NullableTextareaField
+        label={label}
+        placeholder={placeholder}
+        {...props}
+    />
+);
 
-    return (
-        <TextareaField
-            label={label}
-            value={field.state.value ?? ''}
-            onChange={(e) => {
-                const value = e.target.value;
-                field.handleChange(value.trim().length === 0 ? null : value);
-            }}
-            placeholder={placeholder}
-            {...props}
-        />
-    );
-};
-
-export type ResultadoEsperadoField = boolean | null;
+export type ResultadoEsperadoField = BooleanField;
 export const ResultadoEsperadoField = ({
     label = "¿Es el resultado esperado?",
-    className,
     ...props
-}: Omit<React.ComponentProps<typeof RadioGroupField>, 'children'>) => {
-    const field = useFieldContext<ResultadoEsperadoField>();
+}: React.ComponentProps<typeof BooleanField>) => (
+    <BooleanField label={label} {...props} />
+);
 
-    return (
-        <RadioGroupField
-            label={label}
-            value={field.state.value === true
-                ? 'true'
-                : field.state.value === false
-                    ? 'false'
-                    : ''
-            }
-            onValueChange={(value) => field.handleChange(
-                value === 'true'
-                    ? true
-                    : value === 'false'
-                        ? false
-                        : null
-            )}
-            className={cn("**:data-[slot='radio-group']:flex **:data-[slot='radio-group']:gap-7 **:data-[slot='field']:max-w-fit", className)}
-            {...props}
-        >
-            <RadioGroupFieldItem value="true" label="Si" />
-            <RadioGroupFieldItem value="false" label="No" />
-        </RadioGroupField>
-    );
-};
-
-const defaultProps: Omit<React.ComponentProps<typeof FieldGroup>, 'children'> = {}
 export const ResultadoEsperadoFieldGroup = withFieldGroup({
     defaultValues: resultadoEsperadoFieldGroupDefaultValues,
-    props: defaultProps,
+    props: {} as Omit<React.ComponentProps<typeof FieldGroup>, 'children'>,
     render: ({ group, className, ...props }) => {
         const resultadoEsperado = useStore(group.store, (state) => state.values.resultado_esperado);
 

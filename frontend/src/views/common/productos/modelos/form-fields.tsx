@@ -10,18 +10,20 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation, defaultFormOptions } from "./create/form";
 import type { OutputSchema } from "./create/form-schema";
+import type { ProductoTipoField } from "../tipos/form-fields";
 
 export interface ProductoFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
     'options' | 'onCreateRequest'
 > {
-    tipo: number;
+    tipo: ProductoTipoField;
 }
 
 export type ProductoModeloField = CreatableComboboxField;
 export function ProductoModeloField({
     label = "Modelo de Producto",
     tipo,
+    disabled,
     ...props
 }: ProductoFieldProps) {
     const { data: options = [] } = useQuery({
@@ -34,7 +36,8 @@ export function ProductoModeloField({
                 }
             }
         }).then(r => r.data.data),
-        select: (data) => toOptions(data, 'marca.nombre')
+        select: (data) => toOptions(data, 'marca.nombre'),
+        enabled: !disabled
     });
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
@@ -58,6 +61,7 @@ export function ProductoModeloField({
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
                 }}
+                disabled={disabled}
                 {...props}
             />
 

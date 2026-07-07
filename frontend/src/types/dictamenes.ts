@@ -42,7 +42,7 @@ type DictaminadoAttributeProductoDictamenProducto = Omit<AttributeProductoDictam
     marca: NonNullable<AttributeProductoDictamenProducto['marca']>;
     modelo: NonNullable<AttributeProductoDictamenProducto['modelo']>;
 }
-type DictaminadoDictamenProducto = Omit<DictamenProducto<DictaminadoAttributeProductoDictamenProducto>, 'caracteristicas'> & {
+export type DictaminadoDictamenProducto = Omit<DictamenProducto<DictaminadoAttributeProductoDictamenProducto>, 'caracteristicas'> & {
     caracteristicas: NonNullable<DictamenProducto['caracteristicas']>;
 }
 export type DictaminadoDictamen<TDictaminadoDictamenEstado extends DictaminadoDictamenEstado = DictaminadoDictamenEstado> = Omit<Dictamen<TDictaminadoDictamenEstado>, 'documento'> & {

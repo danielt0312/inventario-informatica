@@ -16,14 +16,14 @@ class DictamenProducto extends Model
         'empleado_id',
         'producto_id',
         'producto_tipo_id',
-        'numero_inventario',
+        'articulo_id',
         'cantidad',
         'caracteristicas'
     ];
 
     protected $attributes = [
         'producto_id' => null,
-        'numero_inventario' => null,
+        'articulo_id' => null,
         'caracteristicas' => null
     ];
 
@@ -47,6 +47,11 @@ class DictamenProducto extends Model
     public function productoTipo(): BelongsTo
     {
         return $this->belongsTo(ProductoTipo::class);
+    }
+
+    public function articulo(): BelongsTo
+    {
+        return $this->belongsTo(Articulo::class);
     }
 
     public function tipo(): Attribute
