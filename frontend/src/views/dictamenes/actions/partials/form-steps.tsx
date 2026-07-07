@@ -5,21 +5,19 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CheckIcon } from "lucide-react";
 
-export const OrderActionDictamenEstado = [
+const OrderActionDictamenEstado = [
     undefined,
     DictamenEstadoEnum.DICTAMINAR,
     DictamenEstadoEnum.EVIDENCIAR,
-    DictamenEstadoEnum.SURTIR,
     DictamenEstadoEnum.INVENTARIAR,
     DictamenEstadoEnum.RESGUARDAR
 ] as const;
-export type OrderActionDictamenEstado = (typeof OrderActionDictamenEstado)[number];
+type OrderActionDictamenEstado = (typeof OrderActionDictamenEstado)[number];
 
 export function getTitle(step?: OrderActionDictamenEstado) {
     switch (step) {
         case DictamenEstadoEnum.DICTAMINAR: return 'Dictaminar Requisición';
         case DictamenEstadoEnum.EVIDENCIAR: return 'Evidenciar confirmación de Requisición';
-        case DictamenEstadoEnum.SURTIR: return 'Confirmar surtimiento';
         case DictamenEstadoEnum.INVENTARIAR: return 'Inventariar Bienes Informáticos';
         case DictamenEstadoEnum.RESGUARDAR: return 'Resguardar Bienes Informáticos';
         default: return 'Creación de Dictamen';

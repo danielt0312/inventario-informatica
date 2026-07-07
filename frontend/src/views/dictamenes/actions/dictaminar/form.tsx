@@ -6,9 +6,9 @@ import { Label } from "@/components/ui/label";
 import { ProductoModeloField } from "@/views/common/productos/modelos/form-fields";
 import { CaracteristicasField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import type { DictaminarDictamenWithDictamenProductos } from "@/types/dictamenes";
+import type { ActionDictaminarDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export const useForm = (dictamen: DictaminarDictamenWithDictamenProductos) => {
+export const useForm = (dictamen: ActionDictaminarDictamenWithDictamenProductos) => {
     const productosToSchema = dictamen.dictamen_productos.map((dictamenProducto) => {
         return {
             id: dictamenProducto.id,
@@ -36,7 +36,7 @@ export const useForm = (dictamen: DictaminarDictamenWithDictamenProductos) => {
     });
 }
 
-export function Form({ dictamen }: { dictamen: DictaminarDictamenWithDictamenProductos }) {
+export function Form({ dictamen }: { dictamen: ActionDictaminarDictamenWithDictamenProductos }) {
     const form = useForm(dictamen);
 
     return (

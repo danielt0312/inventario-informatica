@@ -1,37 +1,36 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { CircleXIcon, EyeIcon, FileInputIcon, PackageOpenIcon, PackagePlus, PackagePlusIcon, PaperclipIcon } from "lucide-react";
+import { CircleXIcon, EyeIcon, FileInputIcon, PackageOpenIcon, PackagePlus, PaperclipIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
     isActionDictamen,
     Route as ActionRoute,
-    isDictaminadoDictamen,
+    isActionDictaminadoDictamen,
     isSurtirDictamen,
 } from "@/routes/_auth/dictamenes/$uuid/$action";
 import * as Root from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
-import type { SurtirDictamen } from "@/types/dictamenes";
-import { type ActionDictamen, type ActionDictamenUnion, type ActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import { ActionDictamenEstadoEnum, ActionStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import type { DictaminadoDictamen, SurtirDictamen } from "@/types/dictamenes";
+import type { ActionDictamenUnion, ActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { useState, type JSX } from "react";
 import { useSurtirMutation } from "../actions/surtir/form";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 const ActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
     [ActionDictamenEstadoEnum.EVIDENCIAR]: <PaperclipIcon />,
-    [ActionDictamenEstadoEnum.SURTIR]: <PackagePlusIcon />,
     [ActionDictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
     [ActionDictamenEstadoEnum.RESGUARDAR]: <PackagePlus />
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
 const ActionMenuItem = ({ state, ...props }: React.ComponentProps<typeof Root.ActionMenuItem> & { state: ActionDictamenEstadoEnum }) => (
     <Root.ActionMenuItem className="capitalize" {...props}>
-        {ActionIcon[state]} {ActionStates[state]}
+        {ActionIcon[state]} {ActionDictamenStates[state]}
     </Root.ActionMenuItem>
 );
 
-const ViewFileActionMenu = ({ dictamen }: { dictamen: ActionDictaminadoDictamen }) => {
+const ViewFileActionMenuItem = ({ dictamen }: { dictamen: ActionDictaminadoDictamen | DictaminadoDictamen }) => {
     const { uuid, nombre } = dictamen.documento;
     const { mutate, isPending } = useFilePreviewWindowMutation();
 
@@ -45,21 +44,21 @@ const ViewFileActionMenu = ({ dictamen }: { dictamen: ActionDictaminadoDictamen 
     );
 }
 
-const NavigationActionMenu = ({ dictamen }: { dictamen: ActionDictamen }) => (
+const FormActionMenu = ({ dictamen }: { dictamen: ActionDictamenUnion }) => (
     <Root.ActionMenu>
         <Link
             to={ActionRoute.to}
             params={{
                 uuid: dictamen.uuid,
-                action: ActionStates[dictamen.estado.id]
+                action: ActionDictamenStates[dictamen.estado.id]
             }}
         >
             <ActionMenuItem state={dictamen.estado.id} />
         </Link>
-        {isDictaminadoDictamen(dictamen) && (
+        {isActionDictaminadoDictamen(dictamen) && (
             <>
                 <Root.ActionMenuSeparator />
-                <ViewFileActionMenu dictamen={dictamen} />
+                <ViewFileActionMenuItem dictamen={dictamen} />
             </>
         )}
     </Root.ActionMenu>
@@ -69,16 +68,17 @@ const SurtirActionMenu = ({ dictamen }: { dictamen: SurtirDictamen }) => {
     const [open, setOpen] = useState(false);
     const mutation = useSurtirMutation(dictamen);
     const navigate = useNavigate();
+    const nextState = ActionDictamenEstadoEnum.INVENTARIAR;
 
     return (
         <>
             <Root.ActionMenu>
                 <ActionMenuItem
-                    state={dictamen.estado.id}
+                    state={nextState}
                     onClick={() => setOpen(true)}
                 />
                 <Root.ActionMenuSeparator />
-                <ViewFileActionMenu dictamen={dictamen} />
+                <ViewFileActionMenuItem dictamen={dictamen} />
             </Root.ActionMenu>
 
             <AlertDialog open={open} onOpenChange={setOpen}>
@@ -101,12 +101,12 @@ const SurtirActionMenu = ({ dictamen }: { dictamen: SurtirDictamen }) => {
                                     to: ActionRoute.to,
                                     params: {
                                         uuid: dictamen.uuid,
-                                        action: ActionStates[dictamen.estado.id]
+                                        action: ActionDictamenStates[nextState]
                                     }
                                 });
                             }}
                         >
-                            {ActionIcon[dictamen.estado.id]} Confirmar e Inventariar
+                            {ActionIcon[nextState]} Confirmar e Inventariar
                         </AlertDialogAction>
                         <AlertDialogCancel onClick={() => setOpen(false)}>
                             <CircleXIcon /> Cancelar
@@ -118,23 +118,25 @@ const SurtirActionMenu = ({ dictamen }: { dictamen: SurtirDictamen }) => {
     );
 }
 
-const ActionMenu = ({ dictamen }: { dictamen: ActionDictamenUnion }) => {
-    if (isActionDictamen(dictamen)) {
-        if (isSurtirDictamen(dictamen)) {
-            return <SurtirActionMenu dictamen={dictamen} />;
-        }
+export type DictamenData = ActionDictamenUnion | DictaminadoDictamen;
 
-        return <NavigationActionMenu dictamen={dictamen} />
+const ActionMenu = ({ dictamen }: { dictamen: DictamenData }) => {
+    if (isSurtirDictamen(dictamen)) {
+        return <SurtirActionMenu dictamen={dictamen} />;
+    }
+
+    if (isActionDictamen(dictamen)) {
+        return <FormActionMenu dictamen={dictamen} />
     }
 
     return (
         <Root.ActionMenu>
-            <ViewFileActionMenu dictamen={dictamen} />
+            <ViewFileActionMenuItem dictamen={dictamen} />
         </Root.ActionMenu>
     );
 }
 
-export const columns: ColumnDef<ActionDictamenUnion>[] = [
+export const columns: ColumnDef<DictamenData>[] = [
     {
         accessorKey: "fecha_solicitud",
         header: "Fecha de Solicitud",

@@ -3,7 +3,7 @@ import type { TCatalogo } from "./generics";
 import type { Documento, Oficio } from "./documentos";
 import type { Producto, ProductoCategoria, ProductoMarca, ProductoTipo } from "./productos";
 
-export type DictamenEstado<T extends DictamenEstadoEnum = DictamenEstadoEnum> = TCatalogo<T>
+export type DictamenEstado<T extends DictamenEstadoEnum = DictamenEstadoEnum> = TCatalogo<T>;
 export type Dictamen<TDictamenEstado extends DictamenEstado = DictamenEstado> = {
     id: number;
     uuid: string;
@@ -30,18 +30,19 @@ export type DictamenWithDictamenProductos<TDictamen extends Dictamen = Dictamen,
     dictamen_productos: TDictamenProducto[];
 };
 
-export type DictaminarDictamenEstado = DictamenEstado<typeof DictamenEstadoEnum.DICTAMINAR>;
+export type Dictaminar = typeof DictamenEstadoEnum.DICTAMINAR;
+type DictaminarDictamenEstado = DictamenEstado<Dictaminar>;
 export type DictaminarDictamen = Dictamen<DictaminarDictamenEstado>;
-export type DictaminarAttributeProductoDictamenProducto = AttributeProductoDictamenProducto<ProductoCategoria, ProductoTipo, ProductoMarca, Producto>;
-export type DictaminarDictamenProducto = DictamenProducto<DictaminarAttributeProductoDictamenProducto>;
+type DictaminarAttributeProductoDictamenProducto = AttributeProductoDictamenProducto<ProductoCategoria, ProductoTipo, ProductoMarca, Producto>;
+type DictaminarDictamenProducto = DictamenProducto<DictaminarAttributeProductoDictamenProducto>;
 export type DictaminarDictamenWithDictamenProductos = DictamenWithDictamenProductos<DictaminarDictamen, DictaminarDictamenProducto>;
 
-export type DictaminadoDictamenEstado<TDictamenEstado extends DictaminadoDictamenEstadoEnum = DictaminadoDictamenEstadoEnum> = DictamenEstado<TDictamenEstado>;
-export type DictaminadoAttributeProductoDictamenProducto = Omit<AttributeProductoDictamenProducto<ProductoCategoria, ProductoTipo, ProductoMarca, Producto>, 'marca' | 'modelo'> & {
+type DictaminadoDictamenEstado<TDictamenEstado extends DictaminadoDictamenEstadoEnum = DictaminadoDictamenEstadoEnum> = DictamenEstado<TDictamenEstado>;
+type DictaminadoAttributeProductoDictamenProducto = Omit<AttributeProductoDictamenProducto<ProductoCategoria, ProductoTipo, ProductoMarca, Producto>, 'marca' | 'modelo'> & {
     marca: NonNullable<AttributeProductoDictamenProducto['marca']>;
     modelo: NonNullable<AttributeProductoDictamenProducto['modelo']>;
 }
-export type DictaminadoDictamenProducto = Omit<DictamenProducto<DictaminadoAttributeProductoDictamenProducto>, 'caracteristicas'> & {
+type DictaminadoDictamenProducto = Omit<DictamenProducto<DictaminadoAttributeProductoDictamenProducto>, 'caracteristicas'> & {
     caracteristicas: NonNullable<DictamenProducto['caracteristicas']>;
 }
 export type DictaminadoDictamen<TDictaminadoDictamenEstado extends DictaminadoDictamenEstado = DictaminadoDictamenEstado> = Omit<Dictamen<TDictaminadoDictamenEstado>, 'documento'> & {
@@ -49,6 +50,7 @@ export type DictaminadoDictamen<TDictaminadoDictamenEstado extends DictaminadoDi
 }
 export type DictaminadoDictamenWithDictamenProductos<TDictaminadoDictamen extends DictaminadoDictamen = DictaminadoDictamen, TDictaminadoDictamenProducto extends DictaminadoDictamenProducto = DictaminadoDictamenProducto> = DictamenWithDictamenProductos<TDictaminadoDictamen, TDictaminadoDictamenProducto>;
 
-export type SurtirDictamenEstado = DictaminadoDictamenEstado<typeof DictaminadoDictamenEstadoEnum.SURTIR>;
+export type Surtir = typeof DictaminadoDictamenEstadoEnum.SURTIR;
+type SurtirDictamenEstado = DictaminadoDictamenEstado<Surtir>;
 export type SurtirDictamen = DictaminadoDictamen<SurtirDictamenEstado>;
 export type SurtirDictamenWithDictamenProductos = DictaminadoDictamenWithDictamenProductos<SurtirDictamen>;

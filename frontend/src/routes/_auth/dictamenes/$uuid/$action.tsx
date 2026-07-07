@@ -1,50 +1,57 @@
 import api from '@/lib/axios';
-import { DictamenEstadoEnum, DictaminadoDictamenEstadoEnum } from '@/lib/constants';
+import { DictamenEstadoEnum } from '@/lib/constants';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
 import type { TResponse } from '@/types/generics';
-import { type ActionDictamenUnion, type ActionDictamenWithDictamenProductosUnion } from './-types';
+import type {
+    ActionDictamenUnion,
+    ActionDictamenWithDictamenProductosUnion,
+    ActionDictaminadoDictamen,
+    ActionDictaminarDictamen,
+    ActionDictaminarDictamenWithDictamenProductos,
+} from './-types';
 import {
-    ActionLabels,
-    ActionStates
-} from "./-constants";
-import type { Dictamen, DictamenWithDictamenProductos, DictaminadoDictamen, DictaminarDictamen, DictaminarDictamenWithDictamenProductos, SurtirDictamen, SurtirDictamenWithDictamenProductos } from '@/types/dictamenes';
+    ActionDictamenEstadoEnum,
+    ActionDictamenLabels,
+    ActionDictamenStates
+} from './-constants';
+import type {
+    Dictamen,
+    DictamenWithDictamenProductos,
+    SurtirDictamen,
+} from '@/types/dictamenes';
 import { View } from '@/views/dictamenes/actions/view';
 
-export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamenUnion {
-    return dictamen.estado.id in ActionStates;
-}
-
-export function isDictaminarDictamen(dictamen: Dictamen): dictamen is DictaminarDictamen {
-    return dictamen.estado.id === DictamenEstadoEnum.DICTAMINAR;
-}
-
-export function isDictaminadoDictamen(dictamen: Dictamen): dictamen is DictaminadoDictamen {
-    return dictamen.estado.id !== DictamenEstadoEnum.DICTAMINAR;
-}
-
 export function isSurtirDictamen(dictamen: Dictamen): dictamen is SurtirDictamen {
-    return dictamen.estado.id === DictaminadoDictamenEstadoEnum.SURTIR;
+    return dictamen.estado.id === DictamenEstadoEnum.SURTIR;
 }
 
-export function isActionDictamenWithProductos(dictamen: DictamenWithDictamenProductos): dictamen is ActionDictamenWithDictamenProductosUnion {
-    return dictamen.estado.id in ActionStates;
+export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamenUnion {
+    return dictamen.estado.id in ActionDictamenStates;
 }
 
-export function isDictaminarDictamenWithProductos(dictamen: DictamenWithDictamenProductos): dictamen is DictaminarDictamenWithDictamenProductos {
-    return dictamen.estado.id === DictamenEstadoEnum.DICTAMINAR;
+export function isActionDictaminar(dictamen: Dictamen): dictamen is ActionDictaminarDictamen {
+    return dictamen.estado.id === ActionDictamenEstadoEnum.DICTAMINAR;
 }
 
-export function isSurtirDictamenWithProductos(dictamen: DictamenWithDictamenProductos): dictamen is SurtirDictamenWithDictamenProductos {
-    return dictamen.estado.id === DictaminadoDictamenEstadoEnum.SURTIR;
+export function isActionDictaminadoDictamen(dictamen: Dictamen): dictamen is ActionDictaminadoDictamen {
+    return !isActionDictaminar(dictamen);
+}
+
+export function isActionDictamenWithDictamenProductos(dictamen: DictamenWithDictamenProductos): dictamen is ActionDictamenWithDictamenProductosUnion {
+    return isActionDictamen(dictamen);
+}
+
+export function isActionDictaminarDictamenWithDictamenProductos(dictamen: DictamenWithDictamenProductos): dictamen is ActionDictaminarDictamenWithDictamenProductos {
+    return isActionDictaminar(dictamen);
 }
 
 export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
     params: {
         parse: (rawParams) => ({
             uuid: z.string().parse(rawParams.uuid),
-            action: z.enum(ActionLabels).parse(rawParams.action),
+            action: z.enum(ActionDictamenLabels).parse(rawParams.action),
         })
     },
     component: View,
@@ -55,16 +62,16 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
                 .then(r => r.data.data)
         });
 
-        if (!isActionDictamenWithProductos(data)) {
+        if (!isActionDictamenWithDictamenProductos(data)) {
             throw redirect({ to: IndexRoute.to });
         }
 
-        if (ActionStates[data.estado.id] !== params.action) {
+        if (ActionDictamenStates[data.estado.id] !== params.action) {
             throw redirect({
                 to: Route.to,
                 params: {
                     uuid: data.uuid,
-                    action: ActionStates[data.estado.id]
+                    action: ActionDictamenStates[data.estado.id]
                 }
             });
         }
