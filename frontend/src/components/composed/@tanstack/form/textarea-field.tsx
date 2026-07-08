@@ -1,7 +1,9 @@
 import { useFieldContext } from "./form"
 import * as Root from "../../textarea-field";
 
-export type TextareaField = string | undefined;
+type TextareaFieldValue = string;
+
+export type TextareaField = TextareaFieldValue | undefined;
 export const TextareaField = ({
     value,
     onChange,
@@ -23,7 +25,7 @@ export const TextareaField = ({
                 : field.handleChange(
                     e.target.value.trim() === ''
                         ? undefined
-                        : e.target.value.trim()
+                        : e.target.value
                 )
             }
             errors={field.state.meta.errors}
@@ -32,7 +34,7 @@ export const TextareaField = ({
     );
 }
 
-export type NullableTextareaField = TextareaField | null;
+export type NullableTextareaField = TextareaFieldValue | null;
 export const NullableTextareaField = ({
     value,
     onChange,
@@ -47,13 +49,15 @@ export const NullableTextareaField = ({
                     ? value
                     : field.state.value === null
                         ? ''
-                        : undefined
+                        : field.state.value
             }
             onChange={(e) => onChange !== undefined
                 ? onChange(e)
-                : e.target.value.trim() === ''
-                ? field.handleChange(null)
-                : undefined
+                : field.handleChange(
+                    e.target.value.trim() === ''
+                        ? null
+                        : e.target.value
+                )
             }
             {...props}
         />

@@ -1,7 +1,8 @@
 import { Textarea } from "../ui/textarea";
 import { Field, type FieldProps } from "./field";
 
-export interface TextareaFieldProps extends React.ComponentProps<typeof Textarea>, FieldProps {}
+export interface TextareaFieldProps extends Omit<React.ComponentProps<typeof Textarea>, 'children'>, FieldProps {
+}
 export const TextareaField = ({
     className,
     description,
@@ -17,6 +18,8 @@ export const TextareaField = ({
     return (
         <Field {...fieldProps}>
             <Textarea
+                disabled={disabled}
+                required={required}
                 {...props}
             />
         </Field>
