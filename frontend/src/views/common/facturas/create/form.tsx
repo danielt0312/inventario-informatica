@@ -1,11 +1,11 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator } from "./form-schema";
-import { cn, toISODate } from "@/lib/utils";
 import type { Factura } from "@/types/documentos";
 import type { TResponse } from "@/types/generics";
-import { DatePickerField } from "@/components/composed/date-picker-field";
-import { FileUploaderField } from "@/components/composed/file-uploader-field";
+import { Form as RootForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { DatePickerField } from "@/components/composed/@tanstack/form/date-picker-field";
+import { FileUploaderField } from "@/components/composed/@tanstack/form/file-uploader-field";
 
 export const useFacturaCreateFormMutation = <R extends TResponse<Factura>, P extends FormData>(props?: Omit<FormMutation, 'url' | 'method' | 'axiosConfig'>) =>
     useFormMutation<R, P>({
@@ -44,28 +44,18 @@ export const useForm = ({
     })
 }
 
-interface FormProps
-    extends React.ComponentProps<'form'> {
+interface FormProps extends Omit<React.ComponentProps<typeof RootForm>, 'form'> {
     useFormHook?: typeof useForm;
 }
 
 export function Form({
     useFormHook = useForm,
-    className,
     ...props
 }: FormProps) {
     const form = useFormHook();
 
     return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-            }}
-            className={cn("contents", className)}
-            {...props}
-        >
+        <RootForm form={form} {...props}>
             <form.AppForm>
                 <form.AppField
                     name="fecha_emision"
@@ -73,7 +63,6 @@ export function Form({
                         <DatePickerField
                             label="Fecha de emisión"
                             placeholder="Ingresa la fecha de emisión"
-                            parseValue={toISODate}
                         />
                     )}
                 />
@@ -88,8 +77,8 @@ export function Form({
                     )}
                 />
 
-                <form.SubmitButton className="justify-self-center" />
+                <SubmitButton className="justify-self-center" />
             </form.AppForm>
-        </form>
+        </RootForm>
     );
 }

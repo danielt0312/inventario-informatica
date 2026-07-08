@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
 import { Separator } from "@/components/ui/separator";
 import { ProductoGroupField } from "@/views/common/productos/modelos/form-fields";
+import { FacturaField } from "@/views/common/facturas/form-fields";
 
 export const useForm = (dictamen: ActionDictaminadoDictamenWithDictamenProductos) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -95,7 +96,7 @@ export function InventariarForm({ dictamen }: { dictamen: ActionDictaminadoDicta
                                         <div>
                                             <form.AppField
                                                 name={`productos[${globalIndex}].archivo_uuid`}
-                                                children={() => <></>}
+                                                children={() => <FacturaField />}
                                             />
                                         </div>
                                     </CardContent>

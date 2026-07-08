@@ -18,5 +18,3 @@ export const validator = z.object({
     fecha_emision: RequiredIsoDateLTEToday,
     archivo: ArrayStandardFile
 });
-
-export type OutputSchema = z.output<typeof validator>;
