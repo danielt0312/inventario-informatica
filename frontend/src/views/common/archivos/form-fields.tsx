@@ -1,6 +1,6 @@
 import { FileUploaderField } from "@/components/composed/@tanstack/form/file-uploader-field";
 
-export type ArchivoField = File[] | undefined;
+export type PdfArchivoField = File[] | undefined;
 
 export interface PdfArchivoFieldProps extends Omit<React.ComponentProps<typeof FileUploaderField>, 'accept'> {}
 export const PdfArchivoField = ({
@@ -11,3 +11,8 @@ export const PdfArchivoField = ({
         {...props}
     />
 );
+
+export type ArchivoField = string | undefined;
+export const ArchivoField = () => {
+
+}

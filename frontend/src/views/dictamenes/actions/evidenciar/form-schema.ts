@@ -1,9 +1,9 @@
 import { ArrayStandardFile } from "@/lib/schemas/common";
-import type { ArchivoField } from "@/views/common/archivos/form-fields";
+import type { PdfArchivoField } from "@/views/common/archivos/form-fields";
 import z from "zod";
 
 export type Schema = {
-    archivo: ArchivoField;
+    archivo: PdfArchivoField;
 }
 
 export const validator = z.object({

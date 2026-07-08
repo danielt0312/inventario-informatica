@@ -9,7 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Form, useForm, useFacturaCreateFormMutation } from "../create/form";
-import React from "react";
+import type { TResponse } from "@/types/generics";
+import { useState } from "react";
 
 export interface TableProps<TData extends Factura = Factura>
     extends Omit<
@@ -26,9 +27,9 @@ export function Table<TData extends Factura = Factura>({
         ...getDefaultColumns<TData>()
     ];
 
-    const [isOpen, setIsOpen] = React.useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-    const useDialogFormMutation = () => useFacturaCreateFormMutation({
+    const useDialogFormMutation = <R extends TResponse<Factura>, P extends FormData>() => useFacturaCreateFormMutation<R, P>({
         onSuccess: () => setIsOpen(false)
     });
 

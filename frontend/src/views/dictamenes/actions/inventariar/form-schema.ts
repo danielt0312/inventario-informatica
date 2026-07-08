@@ -1,23 +1,22 @@
-import { NonEmptyString, RequiredArray, RequiredNumber, TrimmedString } from "@/lib/schemas/common";
+import { NonEmptyString, NullableString, RequiredArray, RequiredNumber } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
 import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { NumeroInventarioField } from "@/views/common/articulos/form-fields";
 import type { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-schema";
-import type { ProductoModeloField } from "@/views/common/productos/modelos/form-fields";
-import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
+import type { ProductoGroupField } from "@/views/common/productos/modelos/form-fields";
 import z from "zod";
 
 export type ProductoField = ResultadoEsperadoFieldGroup & {
     dictamen_producto_id: number | undefined;
     cuenta_contable: string | undefined;
-    archivo_id: number | undefined;
-    producto_tipo_id: ProductoTipoField;
-    producto_id: ProductoModeloField;
+    archivo_uuid: string | undefined;
+    producto_tipo_id: ProductoGroupField['tipo_id'];
+    producto_id: ProductoGroupField['modelo_id'];
     numero_inventario: NumeroInventarioField | null;
 }
 
 export const defaultValuesProductoField: ProductoField = {
-    archivo_id: undefined,
+    archivo_uuid: undefined,
     cuenta_contable: undefined,
     dictamen_producto_id: undefined,
     numero_inventario: null,
@@ -46,11 +45,11 @@ export const validator = z.object({
             dictamen_producto_id: RequiredNumber,
             producto_tipo_id: RequiredNumber,
             producto_id: RequiredNumber,
-            archivo_id: RequiredNumber,
+            archivo_uuid: NonEmptyString,
             cuenta_contable: NonEmptyString,
-            observaciones: TrimmedString.nullable(),
+            observaciones: NullableString,
             resultado_esperado: z.boolean('Debes de seleccionar una opción'),
-            numero_inventario: TrimmedString.nullable()
+            numero_inventario: NullableString
         })
         .superRefine(({
             resultado_esperado,
@@ -58,7 +57,7 @@ export const validator = z.object({
             producto_tipo_id,
             numero_inventario
         }, ctx) => {
-            if (resultado_esperado === false && (observaciones === null || observaciones.length === 0)) {
+            if (resultado_esperado === true && (observaciones === null || observaciones.length === 0)) {
                 ctx.addIssue({
                     code: 'custom',
                     message: 'Este campo es requerido',

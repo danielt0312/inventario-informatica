@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { productoFieldsGroupDefaultValues } from "./form-schema";
 import { NumeroInventarioField } from "@/views/common/articulos/form-fields";
 import { cn, DictamenProducto, toISODate } from "@/lib/utils";
-import { PdfArchivoField, type ArchivoField, type PdfArchivoFieldProps } from "@/views/common/archivos/form-fields";
+import { PdfArchivoField, type PdfArchivoFieldProps } from "@/views/common/archivos/form-fields";
 
 const defaultProps: React.ComponentProps<typeof FieldGroup> = {}
 export const ProductoFieldGroup = withFieldGroup({
@@ -86,7 +86,7 @@ export const FechaSolicitudField = ({
     />
 );
 
-export type OficioField = ArchivoField;
+export type OficioField = PdfArchivoField;
 export const OficioField = ({
     label = "Adjuntar oficio de solicitud",
     ...props

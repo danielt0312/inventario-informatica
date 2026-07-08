@@ -10,7 +10,10 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation, defaultFormOptions } from "./create/form";
 import type { OutputSchema } from "./create/form-schema";
-import type { ProductoTipoField } from "../tipos/form-fields";
+import { ProductoTipoField } from "../tipos/form-fields";
+import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
+import { useStore } from "@tanstack/react-form";
+import { FieldGroup } from "@/components/ui/field";
 
 export interface ProductoFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
@@ -85,3 +88,40 @@ export function ProductoModeloField({
         </>
     );
 }
+
+export type ProductoGroupField = {
+    tipo_id: ProductoTipoField;
+    modelo_id: ProductoModeloField;
+};
+
+const productoGroupDefaultValues: ProductoGroupField = {
+    modelo_id: undefined,
+    tipo_id: undefined,
+};
+
+export const ProductoGroupField = withFieldGroup({
+    defaultValues: productoGroupDefaultValues,
+    props: {} as React.ComponentProps<typeof FieldGroup>,
+    render: ({ group, ...props }) => {
+        const productoTipo = useStore(group.store, (state) => state.values.tipo_id);
+
+        return (
+            <FieldGroup {...props}>
+                <group.AppField
+                    name="tipo_id"
+                    children={() => <ProductoTipoField />}
+                    listeners={{
+                        onChange: () => group.setFieldValue('modelo_id', undefined)
+                    }}
+                />
+
+                <group.AppField
+                    name="modelo_id"
+                    children={() =>
+                        <ProductoModeloField tipo={productoTipo} disabled={productoTipo === undefined} />
+                    }
+                />
+            </FieldGroup>
+        );
+    }
+});

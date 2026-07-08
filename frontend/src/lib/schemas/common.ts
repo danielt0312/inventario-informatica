@@ -7,6 +7,12 @@ export const TrimmedString = z
     .string()
     .trim();
 
+export const EmptyStringToNull = TrimmedString
+    .transform(v => v !== '' ? v : null);
+
+export const NullableString = EmptyStringToNull
+    .nullable();
+
 export const NonEmptyString = TrimmedString
     .min(1, 'Este campo es requerido');
 
