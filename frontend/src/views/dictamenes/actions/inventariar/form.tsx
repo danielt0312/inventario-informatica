@@ -9,6 +9,8 @@ import { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepcione
 import { Separator } from "@/components/ui/separator";
 import { ProductoGroupField } from "@/views/common/productos/modelos/form-fields";
 import { FacturaField } from "@/views/common/facturas/form-fields";
+import { FieldGroup } from "@/components/ui/field";
+import { CuentaContable } from "./form-fields";
 
 export const useForm = (dictamen: ActionDictaminadoDictamenWithDictamenProductos) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -30,16 +32,16 @@ export function InventariarForm({ dictamen }: { dictamen: ActionDictaminadoDicta
     const slots = dictamen.dictamen_productos.flatMap((dictamenProducto) =>
         Array.from({ length: dictamenProducto.cantidad }, (_, i) => ({
             dictamenProducto,
-            localIndex: i,
+            index: i,
         }))
     );
 
     return (
         <Form form={form}>
             <form.AppForm>
-                {slots.map((slot, globalIndex) => (
+                {slots.map((slot, index) => (
                     <form.AppField
-                        key={`${slot.dictamenProducto.id}-${slot.localIndex}`}
+                        key={`${slot.dictamenProducto.id}-${slot.index}`}
                         name="productos"
                         mode="array"
                         children={() => {
@@ -48,7 +50,7 @@ export function InventariarForm({ dictamen }: { dictamen: ActionDictaminadoDicta
                             return (
                                 <Card>
                                     <CardContent className="flex flex-col gap-4">
-                                        <Label className="font-bold text-base capitalize">Bien Informático #{globalIndex + 1}</Label>
+                                        <Label className="font-bold text-base capitalize">Bien Informático #{index + 1}</Label>
 
                                         <div className="flex flex-col gap-7">
                                             <div className="flex gap-7">
@@ -75,8 +77,8 @@ export function InventariarForm({ dictamen }: { dictamen: ActionDictaminadoDicta
                                                 <ResultadoEsperadoFieldGroup
                                                     form={form}
                                                     fields={{
-                                                        observaciones: `productos[${globalIndex}].observaciones`,
-                                                        resultado_esperado: `productos[${globalIndex}].resultado_esperado`
+                                                        observaciones: `productos[${index}].observaciones`,
+                                                        resultado_esperado: `productos[${index}].resultado_esperado`
                                                     }}
                                                 />
                                             </div>
@@ -87,18 +89,23 @@ export function InventariarForm({ dictamen }: { dictamen: ActionDictaminadoDicta
                                         <ProductoGroupField
                                             form={form}
                                             fields={{
-                                                modelo_id: `productos[${globalIndex}].producto_id`,
-                                                tipo_id: `productos[${globalIndex}].producto_tipo_id`
+                                                modelo_id: `productos[${index}].producto_id`,
+                                                tipo_id: `productos[${index}].producto_tipo_id`
                                             }}
                                             className="flex-row"
                                         />
 
-                                        <div>
+                                        <FieldGroup className="flex-row">
                                             <form.AppField
-                                                name={`productos[${globalIndex}].archivo_uuid`}
+                                                name={`productos[${index}].cuenta_contable`}
+                                                children={() => <CuentaContable />}
+                                            />
+
+                                            <form.AppField
+                                                name={`productos[${index}].factura_uuid`}
                                                 children={() => <FacturaField />}
                                             />
-                                        </div>
+                                        </FieldGroup>
                                     </CardContent>
                                 </Card>
                             );

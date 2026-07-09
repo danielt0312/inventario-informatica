@@ -4,19 +4,20 @@ import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_a
 import type { NumeroInventarioField } from "@/views/common/articulos/form-fields";
 import type { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-schema";
 import type { ProductoGroupField } from "@/views/common/productos/modelos/form-fields";
+import type { CuentaContable } from "./form-fields";
 import z from "zod";
 
 export type ProductoField = ResultadoEsperadoFieldGroup & {
     dictamen_producto_id: number | undefined;
-    cuenta_contable: string | undefined;
-    archivo_uuid: string | undefined;
+    cuenta_contable: CuentaContable;
+    factura_uuid: string | undefined;
     producto_tipo_id: ProductoGroupField['tipo_id'];
     producto_id: ProductoGroupField['modelo_id'];
     numero_inventario: NumeroInventarioField | null;
 }
 
 export const defaultValuesProductoField: ProductoField = {
-    archivo_uuid: undefined,
+    factura_uuid: undefined,
     cuenta_contable: undefined,
     dictamen_producto_id: undefined,
     numero_inventario: null,
@@ -45,7 +46,7 @@ export const validator = z.object({
             dictamen_producto_id: RequiredNumber,
             producto_tipo_id: RequiredNumber,
             producto_id: RequiredNumber,
-            archivo_uuid: NonEmptyString,
+            factura_uuid: NonEmptyString,
             cuenta_contable: NonEmptyString,
             observaciones: NullableString,
             resultado_esperado: z.boolean('Debes de seleccionar una opción'),
@@ -57,7 +58,7 @@ export const validator = z.object({
             producto_tipo_id,
             numero_inventario
         }, ctx) => {
-            if (resultado_esperado === true && (observaciones === null || observaciones.length === 0)) {
+            if (resultado_esperado === false && (observaciones === null || observaciones.length === 0)) {
                 ctx.addIssue({
                     code: 'custom',
                     message: 'Este campo es requerido',

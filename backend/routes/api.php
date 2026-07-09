@@ -47,9 +47,9 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('dictamenes.')
         ->controller(DictamenController::class)
         ->group(function () {
-            Route::name('dictaminar')->post('dictaminar', 'dictaminar');
-            Route::name('evidenciar')->post('evidenciar', 'evidenciar');
-            Route::name('surtir')->post('surtir', 'surtir');
+            foreach (['dictaminar', 'evidenciar', 'surtir', 'inventariar'] as $action) {
+                Route::name($action)->post($action, $action);
+            }
         });
 
     Route::apiResources([

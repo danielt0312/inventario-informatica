@@ -24,11 +24,8 @@ class DictaminarDictamenRequest extends ActionDictamenRequest
             ],
             'productos.*.producto_id' => Rule::foreach(function ($_, string $attribute) {
                 $index = explode('.', $attribute)[1];
-
                 $dictamenProductoId = $this->input("productos.{$index}.id");
-
                 $dictamenProducto = $this->dictamen->dictamenProductos->firstWhere('id', $dictamenProductoId);
-
                 $tipoId = $dictamenProducto?->productoTipo?->id;
 
                 return [

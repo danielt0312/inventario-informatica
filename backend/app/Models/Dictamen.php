@@ -5,8 +5,12 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    HasMany,
+    HasManyThrough
+};
 
 use App\Enums\DictamenEstadoEnum;
 
@@ -45,6 +49,23 @@ class Dictamen extends Model
         'estado_id' => DictamenEstadoEnum::DICTAMINAR->value
     ];
 
+    public function dictamenArticulos(): HasMany
+    {
+        return $this->hasMany(DictamenArticulo::class);
+    }
+
+    public function articulos(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Articulo::class,
+            DictamenArticulo::class,
+            // 'dictamen_id',
+            // 'id',
+            // 'id',
+            // 'articulo_id'
+        );
+    }
+
     public function estado(): BelongsTo
     {
         return $this->belongsTo(DictamenEstado::class);
@@ -63,11 +84,6 @@ class Dictamen extends Model
     public function dictamenProductos(): HasMany
     {
         return $this->hasMany(DictamenProducto::class);
-    }
-
-    public function articulos(): HasMany
-    {
-        return $this->hasMany(DictamenArticulo::class);
     }
 
     public function casts(): array

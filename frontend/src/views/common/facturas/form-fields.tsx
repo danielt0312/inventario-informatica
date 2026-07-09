@@ -18,7 +18,11 @@ export const FacturaField = ({
     const factura = useStore(field.store, (state) => state.value);
 
     return (
-        <Field label={label} {...props}>
+        <Field
+            label={label}
+            errors={field.state.meta.errors}
+            {...props}
+        >
             <FilePreviewWindowGroup
                 onClick={() => setOpen(true)}
                 uuid={factura}

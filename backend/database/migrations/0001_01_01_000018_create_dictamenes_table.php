@@ -71,13 +71,13 @@ return new class extends Migration
         });
 
         Schema::create('dictamen_articulos', function (Blueprint $table) {
-            $table->foreignId('dictamen_producto_id')
-                ->constrained('dictamen_productos', indexName: 'fk_dictamen_articulos_dictamen_productos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->foreignId('articulo_id')
                 ->primary()
                 ->constrained('articulos', indexName: 'fk_dictamen_articulos_articulos')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('dictamen_id')
+                ->constrained('dictamenes', indexName: 'fk_dictamen_articulos_dictamenes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });

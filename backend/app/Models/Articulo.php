@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasOne};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+
 use App\Enums\ArticuloEstadoEnum;
 
 class Articulo extends Model
@@ -22,8 +23,7 @@ class Articulo extends Model
         'costo_unitario',
         'factura_id',
         'qr_archivo_id',
-        'numero_inventario',
-        'contable',
+        'contable'
     ];
 
     protected $attributes = [
@@ -31,37 +31,61 @@ class Articulo extends Model
         'estado_id' => ArticuloEstadoEnum::REVISION->value,
         'numero_serie' => null,
         'costo_unitario' => null,
-        'factura_id' => null
+        'factura_id' => null,
+        'contable' => null,
+        'numero_inventario' => null
     ];
 
-    protected $appends = [
-        'numero_inventario',
-    ];
+    protected static function booted(): void
+    {
+        static::created(function (Articulo $articulo) {
+            if (is_null($articulo->numero_inventario)) {
+                // todo generar dinamicamente
+                $articulo->numero_inventario = '500-01-'.str_pad($articulo->id, 4, 0, STR_PAD_LEFT);
+                $articulo->saveQuietly();
+            }
+        });
+    }
+
+    public function dictamenArticulo(): HasOne
+    {
+        return $this->hasOne(DictamenArticulo::class);
+    }
+
+    public function dictamen(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Dictamen::class,
+            DictamenArticulo::class,
+            // 'articulo_id',
+            // 'id',
+            // 'id',
+            // 'dictamen_id'
+        );
+    }
+
+    public function recepcion(): HasOne
+    {
+        return $this->hasOne(ArticuloRecepcion::class);
+    }
 
     public function producto(): BelongsTo
     {
-        return $this->belongsTo(Producto::class, 'producto_id');
+        return $this->belongsTo(Producto::class);
     }
 
     public function estado(): BelongsTo
     {
-        return $this->belongsTo(ArticuloEstado::class, 'estado_id');
+        return $this->belongsTo(ArticuloEstado::class);
     }
 
     public function factura(): BelongsTo
     {
-        return $this->belongsTo(Factura::class, 'documento_id');
+        return $this->belongsTo(Factura::class);
     }
 
     public function qr(): BelongsTo {
         return $this->belongsTo(Archivo::class, 'qr_archivo_id');
-    }
-
-    public function numeroInventario(): Attribute {
-        return Attribute::make(
-            // Todo generar dinamicamente
-            fn () => '500-01-'.str_pad($this->id, 4, 0, STR_PAD_LEFT)
-        );
     }
 
     public function casts(): array {

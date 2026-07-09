@@ -3,17 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-use App\Traits\Models\HasDocumento;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Factura extends Model
 {
-    use HasDocumento;
-
     protected $fillable = [
         'fecha_emision',
         'documento_id'
     ];
 
     public $timestamps = false;
+
+    public function documento(): BelongsTo
+    {
+        return $this->belongsTo(Documento::class);
+    }
 }

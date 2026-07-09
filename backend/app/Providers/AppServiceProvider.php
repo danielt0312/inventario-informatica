@@ -26,6 +26,12 @@ class AppServiceProvider extends ServiceProvider
 
         if (app()->environment('local')) {
             DB::enableQueryLog();
+
+            if (env('ENABLE_QUERY_LISTENER_LOGGER', 0)) {
+                DB::listen(function ($query) {
+                    logger()->info("SQL: {$query->sql} [" . implode(', ', $query->bindings) . "] - Time: {$query->time}ms");
+                });
+            }
         }
     }
 }

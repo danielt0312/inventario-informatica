@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
 
 use App\Services\ArchivoService;
 
@@ -152,6 +151,37 @@ class DictamenController extends Controller
         $dictamen->update([
             'estado_id' => DictamenEstadoEnum::INVENTARIAR->value
         ]);
+
+        return response(status: 200);
+    }
+
+    public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen)
+    {
+        DB::transaction(function () use ($request, $dictamen) {
+            $validated = $request->validated();
+
+            foreach ($validated['productos'] as $payload) {
+                $factura = $request->getFactura($payload['factura_uuid']);
+
+                $articulo = Articulo::create([
+                    'producto_id' => $payload['producto_id'],
+                    'factura_id' => $factura->id,
+                ]);
+
+                $articulo->recepcion()->create([
+                    'resultado_esperado' => $payload['resultado_esperado'],
+                    'observaciones' => $payload['observaciones'] ?? null
+                ]);
+
+                $articulo->dictamenArticulo()->create([
+                    'dictamen_id' => $dictamen->id
+                ]);
+            }
+
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::RESGUARDAR->value
+            ]);
+        });
 
         return response(status: 200);
     }

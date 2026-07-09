@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { CircleXIcon, EyeIcon, FileInputIcon, PackageOpenIcon, PackagePlus, PaperclipIcon } from "lucide-react";
+import { CircleXIcon, EyeIcon, FileInputIcon, PackageCheckIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
     isActionDictamen,
@@ -21,7 +21,7 @@ const ActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
     [ActionDictamenEstadoEnum.EVIDENCIAR]: <PaperclipIcon />,
     [ActionDictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
-    [ActionDictamenEstadoEnum.RESGUARDAR]: <PackagePlus />
+    [ActionDictamenEstadoEnum.RESGUARDAR]: <PackageCheckIcon />
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
 const ActionMenuItem = ({ state, ...props }: React.ComponentProps<typeof Root.ActionMenuItem> & { state: ActionDictamenEstadoEnum }) => (
@@ -73,10 +73,9 @@ const SurtirActionMenu = ({ dictamen }: { dictamen: SurtirDictamen }) => {
     return (
         <>
             <Root.ActionMenu>
-                <ActionMenuItem
-                    state={nextState}
-                    onClick={() => setOpen(true)}
-                />
+                <Root.ActionMenuItem onClick={() => setOpen(true)}>
+                    <PackagePlusIcon /> Surtir
+                </Root.ActionMenuItem>
                 <Root.ActionMenuSeparator />
                 <ViewFileActionMenuItem dictamen={dictamen} />
             </Root.ActionMenu>

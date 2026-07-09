@@ -2,28 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class DictamenArticulo extends Model
+class ArticuloRecepcion extends Model
 {
-    use HasFactory;
-
     protected $primaryKey = 'articulo_id';
     public $incrementing = false;
     protected $keyType = 'bigint';
     public $timestamps = false;
 
     protected $fillable = [
-        'articulo_id',
-        'dictamen_id'
+        'resultado_esperado',
+        'observaciones'
     ];
 
-    public function dictamen(): BelongsTo
-    {
-        return $this->belongsTo(Dictamen::class);
-    }
+    protected $attributes = [
+        'observaciones' => null
+    ];
 
     public function articulo(): BelongsTo
     {

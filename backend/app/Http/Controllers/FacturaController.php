@@ -18,7 +18,8 @@ class FacturaController extends Controller
 
     public function index(Request $request)
     {
-        return Factura::paginate($request->query('per_page', 10))
+        return Factura::with(['documento.archivo'])
+            ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
     }
 
