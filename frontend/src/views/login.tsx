@@ -11,25 +11,25 @@ import z from "zod"
 import { useAppForm } from "@/components/composed/@tanstack/form/form"
 import { handleFormValidationError } from "@/lib/utils"
 import { InputField } from "@/components/composed/@tanstack/form/input-field"
-import { RequiredInstitutionalEmail, NonEmptyString } from "@/lib/schemas/common"
+import { filledString, requiredInstitutionalEmail } from "@/lib/schemas/common"
 import { DoorOpen } from "lucide-react"
 import { useState } from "react"
 import { FieldError } from "@/components/ui/field"
 import type { User } from "@/types/auth"
 
-interface FormSchema {
-    email: string;
-    password: string;
+interface Schema {
+    email: string | undefined;
+    password: string | undefined;
 }
 
-const defaultValues: FormSchema = {
-    email: '',
-    password: '',
+const defaultValues: Schema = {
+    email: undefined,
+    password: undefined,
 }
 
 const validator = z.object({
-    email: RequiredInstitutionalEmail,
-    password: NonEmptyString
+    email: requiredInstitutionalEmail,
+    password: filledString
 });
 
 export function View() {

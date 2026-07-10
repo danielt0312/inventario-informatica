@@ -1,67 +1,101 @@
-import z, { type ZodType } from "zod";
+import z from "zod";
 
-export const RequiredNumber = z
-    .number('Este campo es requerido');
+export const number = (
+    params: Parameters<typeof z.number>[0] = 'Este campo es requerido'
+) => z
+    .number(params);
 
-export const TrimmedString = z
-    .string()
+export const selectedNumberOption = z
+    .number('Debes de seleccionar una opción');
+
+export const trimmedString = (
+    params?: Parameters<typeof z.string>[0]
+) => z
+    .string(params)
     .trim();
 
-export const EmptyStringToNull = TrimmedString
-    .transform(v => v !== '' ? v : null);
-
-export const NullableString = EmptyStringToNull
-    .nullable();
-
-export const NonEmptyString = TrimmedString
+export const filledString = trimmedString()
     .min(1, 'Este campo es requerido');
 
-export const Email = z
-    .email('Debes ingresar una dirección de correo válida');
-
-export const InstitutionalEmail = Email
-    .endsWith('@asetamaulipas.gob.mx', 'La dirección debe de ser un correo institucional');
-
-export const RequiredInstitutionalEmail = NonEmptyString
-    .pipe(InstitutionalEmail);
-
-export const RequiredArray = <T extends ZodType>(
-    schema: T,
-    params?: Parameters<typeof z.array>[1],
+export const preprocessUndefinedToString = <T extends z.ZodType>(
+    schema: T
 ) => z
-    .array(schema, params)
-    .min(1, 'Debes de agregar cuando menos 1 elemento');
+    .preprocess(
+        (v: string | undefined) => v ?? '',
+        schema
+    );
 
-export const File = z
-    .file('Debes de proporcionar un archivo');
+export const requiredString = preprocessUndefinedToString(filledString);
 
-export const StandardFile = File
-    .max(5_000_000, 'El archivo no debe de pesar más de 5MB');
+export const convertEmptyStringToNull = trimmedString()
+    .transform(v => v !== '' ? v : null);
 
-export const ArrayStandardFiles = z
-    .array(StandardFile, 'Este campo es requerido');
+export const nullableString = convertEmptyStringToNull
+    .nullable();
 
-export const ArrayStandardFile = ArrayStandardFiles
-    .length(1, 'Solo debes de adjuntar 1 archivo')
+export const email = (
+    params: Parameters<typeof z.email>[0] = 'Debes ingresar una dirección de correo válida'
+) => z
+    .email(params);
 
-export const RequiredIsoDate = z
+export const institutionalEmail = (
+    params: Parameters<z._ZodString['endsWith']>[1] = 'La dirección debe de ser un correo institucional',
+) => email()
+    .endsWith('@asetamaulipas.gob.mx', params);
+
+export const filledInstitutionalEmail = filledString
+    .pipe(institutionalEmail());
+
+export const requiredInstitutionalEmail = preprocessUndefinedToString(filledInstitutionalEmail);
+
+const requiredArrayDefaultErrorMessage = 'Debes de agregar cuando menos 1 elemento';
+export const requiredArray = <T extends z.ZodType>(
+    element: T
+) => z
+    .array(element, requiredArrayDefaultErrorMessage)
+    .min(1, requiredArrayDefaultErrorMessage);
+
+export const file = (
+    params: Parameters<typeof z.file>[0] = 'Debes de adjuntar un archivo'
+) => z
+    .file(params);
+
+export const pdfFile = (
+    params: Parameters<z.ZodFile['mime']>[1] = 'El archivo adjuntado debe de ser PDF'
+) => file()
+    .mime('application/pdf', params);
+
+export const STANDARD_MAX_FILE_SIZE = 5_000_000;
+
+export const standardFile = (
+    params: Parameters<z.ZodFile['max']>[1] = 'El archivo no debe de pesar más de 5MB'
+) => file()
+    .max(STANDARD_MAX_FILE_SIZE, params);
+
+export const standardPdfFile = pdfFile()
+    .max(STANDARD_MAX_FILE_SIZE);
+
+export const requiredIsoDate = (
+    params: Parameters<typeof z.iso.date>[0] = 'Debes de proporcionar una fecha'
+) => z
     .iso
-    .date('Debes de proporcionar una fecha');
+    .date(params);
 
-export const RequiredIsoDateLTEToday = RequiredIsoDate
+export const requiredIsoDateLTEToday = requiredIsoDate()
     .refine(
         v => new Date(v) <= new Date,
         'La fecha debe ser menor o igual que hoy'
     );
 
-export const NonEmptyStringToNumber = NonEmptyString
-    .transform(Number);
+export const integer = z
+    .int('Debes de ingresar un número entero');
 
-export const Integer = z
-    .int('Este campo debe de ser un número entero');
+export const positiveInteger = integer
+    .positive('Debes de ingresar un número mayor que 0');
 
-export const PositiveInteger = Integer
-    .positive('Este campo debe de ser un número mayor que 0');
+export const boolean = (
+    params: Parameters<typeof z.boolean>[0] = 'Este campo es requerido'
+) => z
+    .boolean(params)
 
-export const RequiredPositiveInteger = NonEmptyStringToNumber
-    .pipe(PositiveInteger)
+export const selectedBooleanOption = z.boolean('Debes de seleccionar una opción');

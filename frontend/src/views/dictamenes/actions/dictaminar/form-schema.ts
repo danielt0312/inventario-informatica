@@ -1,13 +1,10 @@
-import {
-    NonEmptyString,
-    RequiredArray,
-    RequiredNumber
-} from "@/lib/schemas/common";
+import { requiredArray, requiredString, selectedNumberOption } from "@/lib/schemas/common";
 import type { ProductoModeloField } from "@/views/common/productos/modelos/form-fields";
 import type { CaracteristicasField } from "./form-fields";
 import z from "zod";
+import type { ActionDictaminarDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export interface Schema {
+export type Schema = {
     productos: {
         id: ProductoModeloField;
         caracteristicas: CaracteristicasField;
@@ -15,12 +12,20 @@ export interface Schema {
     }[];
 }
 
+export const defaultValues = (dictamen: ActionDictaminarDictamenWithDictamenProductos): Schema => ({
+    productos: dictamen.dictamen_productos.map((dictamenProducto) => ({
+        id: dictamenProducto.id,
+        caracteristicas: '',
+        producto_id: undefined,
+    }))
+});
+
 export const validator = z.object({
-    productos: RequiredArray(
+    productos: requiredArray(
         z.object({
-            id: RequiredNumber,
-            caracteristicas: NonEmptyString,
-            producto_id: RequiredNumber
+            id: selectedNumberOption,
+            caracteristicas: requiredString,
+            producto_id: selectedNumberOption
         })
     )
 });

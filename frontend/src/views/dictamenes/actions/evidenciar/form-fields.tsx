@@ -1,11 +1,11 @@
-import { PdfArchivoField, type PdfArchivoFieldProps } from "@/views/common/archivos/form-fields";
+import { PdfFileField } from "@/views/common/archivos/form-fields";
 
-export type DictamenArchivoField = PdfArchivoField;
+export type DictamenArchivoField = PdfFileField;
 export const DictamenArchivoField = ({
     label = "Adjuntar evidencia de dictamen recibido",
     ...props
-}: PdfArchivoFieldProps) => (
-    <PdfArchivoField
+}: React.ComponentProps<typeof PdfFileField>) => (
+    <PdfFileField
         label={label}
         {...props}
     />

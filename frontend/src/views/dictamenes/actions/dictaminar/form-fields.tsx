@@ -1,6 +1,6 @@
 import { TextareaField } from "@/components/composed/@tanstack/form/textarea-field";
 
-export type CaracteristicasField = string;
+export type CaracteristicasField = TextareaField;
 export function CaracteristicasField({
     label = "Especificaciones técnicas",
     placeholder = "Ingresa las especificaciones técnicas",

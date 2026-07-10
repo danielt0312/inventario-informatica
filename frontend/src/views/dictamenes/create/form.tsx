@@ -48,7 +48,7 @@ export function useForm() {
                 formData.append(`productos[${index}][numero_inventario]`, producto.numero_inventario);
             });
 
-            formData.append('archivo', data.archivo[0]);
+            formData.append('archivo', data.archivo);
 
             formMutation.mutate({ data: formData, formApi });
         }

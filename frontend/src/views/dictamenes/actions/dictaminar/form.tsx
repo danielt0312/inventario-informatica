@@ -1,5 +1,5 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
-import { type Schema, validator } from "./form-schema";
+import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -9,22 +9,10 @@ import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tans
 import type { ActionDictaminarDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export const useForm = (dictamen: ActionDictaminarDictamenWithDictamenProductos) => {
-    const productosToSchema = dictamen.dictamen_productos.map((dictamenProducto) => {
-        return {
-            id: dictamenProducto.id,
-            caracteristicas: '',
-            producto_id: undefined,
-        }
-    });
-
-    const defaultValues: Schema = {
-        productos: productosToSchema
-    }
-
     const formMutation = useActionFormMutation(dictamen);
 
     return useAppForm({
-        defaultValues,
+        defaultValues: defaultValues(dictamen),
         validators: {
             onSubmit: validator
         },

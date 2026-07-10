@@ -1,18 +1,13 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { Label } from "@/components/ui/label";
-import { validator, type Schema } from "./form-schema";
+import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { DictamenArchivoField } from "./form-fields";
 import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export function useForm(dictamen: ActionDictaminadoDictamenWithDictamenProductos) {
-    const formMutation = useActionFormMutation(dictamen);
-
-    const defaultValues: Schema = {
-        ...dictamen,
-        archivo: []
-    };
+    const { mutate } = useActionFormMutation(dictamen);
 
     return useAppForm({
         defaultValues,
@@ -20,12 +15,12 @@ export function useForm(dictamen: ActionDictaminadoDictamenWithDictamenProductos
             onSubmit: validator
         },
         onSubmit: async ({ value, formApi }) => {
-            const data = validator.parse(value);
-            const formData = new FormData;
+            const { archivo } = validator.parse(value);
 
-            formData.append('archivo', data.archivo[0]);
+            const data = new FormData;
+            data.append('archivo', archivo);
 
-            formMutation.mutate({ data: formData, formApi })
+            mutate({ data, formApi });
         }
     });
 }

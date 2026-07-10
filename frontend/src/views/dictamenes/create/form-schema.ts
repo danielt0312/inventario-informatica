@@ -1,18 +1,19 @@
 import {
-    NonEmptyString,
-    RequiredIsoDateLTEToday,
-    RequiredPositiveInteger,
-    ArrayStandardFile,
-    RequiredArray,
-    TrimmedString,
-    RequiredNumber
+    requiredIsoDateLTEToday,
+    requiredArray,
+    trimmedString,
+    selectedNumberOption,
+    standardPdfFile,
+    positiveInteger,
+    requiredString
 } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
 import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import type { NumeroInventarioField } from "@/views/common/articulos/form-fields";
 import type { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import type { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
-import type { OficioField, CantidadField, FechaSolicitudField, FolioField } from "./form-fields";
+import type { OficioField, FechaSolicitudField, FolioField } from "./form-fields";
+import type { NumberInputField } from "@/components/composed/@tanstack/form/input-field";
 import z from "zod";
 
 type ProductoFieldsGroup = {
@@ -26,17 +27,17 @@ export const productoFieldsGroupDefaultValues: ProductoFieldsGroup = {
 }
 
 const productoFieldsGroupValidator = z.object({
-    producto_tipo_id: RequiredNumber,
-    numero_inventario: TrimmedString
+    producto_tipo_id: selectedNumberOption,
+    numero_inventario: trimmedString()
 })
 
 type ProductoFields = ProductoFieldsGroup & {
-    cantidad: CantidadField;
+    cantidad: NumberInputField;
     empleado_id: EmpleadoField;
 }
 
 export const productoFieldsDefaultValues: ProductoFields = {
-    cantidad: '1',
+    cantidad: 1,
     empleado_id: undefined,
     ...productoFieldsGroupDefaultValues
 } as const;
@@ -50,22 +51,22 @@ export type Schema = {
 }
 
 export const dictamenDefaultValues: Schema = {
-    folio: '',
-    fecha_solicitud: '',
+    folio: undefined,
+    fecha_solicitud: undefined,
     adscripcion_id: undefined,
     archivo: undefined,
     productos: [productoFieldsDefaultValues]
 } as const;
 
 export const validator = z.object({
-    folio: NonEmptyString,
-    fecha_solicitud: RequiredIsoDateLTEToday,
-    adscripcion_id: RequiredNumber,
-    archivo: ArrayStandardFile,
-    productos: RequiredArray(z
+    folio: requiredString,
+    fecha_solicitud: requiredIsoDateLTEToday,
+    adscripcion_id: selectedNumberOption,
+    archivo: standardPdfFile,
+    productos: requiredArray(z
         .object({
-            cantidad: RequiredPositiveInteger,
-            empleado_id: RequiredNumber,
+            cantidad: positiveInteger,
+            empleado_id: selectedNumberOption,
             producto_tipo_id: productoFieldsGroupValidator.shape.producto_tipo_id,
             numero_inventario: productoFieldsGroupValidator.shape.numero_inventario
         })
@@ -88,6 +89,3 @@ export const validator = z.object({
         })
     )
 });
-
-export type InputSchema = z.input<typeof validator>;
-export type OutputSchema = z.output<typeof validator>;

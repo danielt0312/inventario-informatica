@@ -4,13 +4,14 @@ import type { FieldProps } from "./field";
 import { fromISO, toISODate } from "@/lib/utils";
 import { Field } from "./field";
 
-export interface DatePickerFieldProps<T extends Date | string = Date> extends Omit<DatePickerProps, 'disabled' | 'value' | 'onValueChange'>, FieldProps {
+export type DatePickerField = Date | string | undefined;
+export interface DatePickerFieldProps<T extends DatePickerField = Date> extends Omit<DatePickerProps, 'disabled' | 'value' | 'onValueChange'>, FieldProps {
     value?: T;
     onValueChange?: (value: T) => void;
     parseValue?: (d: DatePickerProps['value']) => T;
     disablerMatcher?: DatePickerProps['disabled'];
 }
-export const DatePickerField = <T extends Date | string = Date>({
+export const DatePickerField = <T extends DatePickerField = Date>({
     className,
     description,
     disabled,
@@ -25,10 +26,9 @@ export const DatePickerField = <T extends Date | string = Date>({
     ...props
 }: DatePickerFieldProps<T>) => {
     const dateValue = React.useMemo(() => {
-        const v = value;
-        if (!v) return undefined;
-        if (v instanceof Date) return v;
-        return fromISO(v);
+        if (!value) return undefined;
+        if (value instanceof Date) return value;
+        return fromISO(value);
     }, [value]);
 
     const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };

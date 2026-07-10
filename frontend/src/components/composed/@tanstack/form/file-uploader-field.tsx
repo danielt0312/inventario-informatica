@@ -1,8 +1,9 @@
 import * as Root from "../../file-uploader-field";
 import { useFieldContext } from "./form";
 
+export type FileUploaderField = Root.FileUploaderFieldProps['value'];
 export const FileUploaderField = (props: Root.FileUploaderFieldProps) => {
-    const field = useFieldContext<Root.FileUploaderFieldProps['value']>();
+    const field = useFieldContext<FileUploaderField>();
 
     return (
         <Root.FileUploaderField

@@ -4,8 +4,8 @@ import { defaultValues, validator } from "./form-schema";
 import type { Factura } from "@/types/documentos";
 import type { TResponse } from "@/types/generics";
 import { Form as RootForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import { DatePickerField } from "@/components/composed/@tanstack/form/date-picker-field";
-import { FileUploaderField } from "@/components/composed/@tanstack/form/file-uploader-field";
+import { PdfFileField } from "../../archivos/form-fields";
+import { FechaEmisionField } from "./form-fields";
 
 export const useFacturaCreateFormMutation = <R extends TResponse<Factura>, P extends FormData>(props?: Omit<FormMutation, 'url' | 'method' | 'axiosConfig'>) =>
     useFormMutation<R, P>({
@@ -33,13 +33,13 @@ export const useForm = ({
             onSubmit: validator
         },
         onSubmit: ({ value, formApi }) => {
-            const data = validator.parse(value);
+            const { fecha_emision, archivo } = validator.parse(value);
 
-            const formData = new FormData;
-            formData.append('fecha_emision', data.fecha_emision);
-            formData.append('archivo', data.archivo[0]);
+            const data = new FormData;
+            data.append('fecha_emision', fecha_emision);
+            data.append('archivo', archivo);
 
-            mutate({ data: formData, formApi: formApi })
+            mutate({ data, formApi });
         }
     })
 }
@@ -59,22 +59,12 @@ export function Form({
             <form.AppForm>
                 <form.AppField
                     name="fecha_emision"
-                    children={() => (
-                        <DatePickerField
-                            label="Fecha de emisión"
-                            placeholder="Ingresa la fecha de emisión"
-                        />
-                    )}
+                    children={() => <FechaEmisionField />}
                 />
 
                 <form.AppField
                     name="archivo"
-                    children={() => (
-                        <FileUploaderField
-                            label="Archivo"
-                            accept="application/pdf"
-                        />
-                    )}
+                    children={() => <PdfFileField />}
                 />
 
                 <SubmitButton className="justify-self-center" />

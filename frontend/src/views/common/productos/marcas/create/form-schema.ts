@@ -1,4 +1,4 @@
-import { NonEmptyString } from "@/lib/schemas/common";
+import { requiredString } from "@/lib/schemas/common";
 import type { NombreField } from "./form-fields";
 import z from "zod";
 
@@ -7,9 +7,9 @@ export type Schema = {
 }
 
 export const defaultValues: Schema = {
-    nombre: ''
+    nombre: undefined
 }
 
 export const validator = z.object({
-    nombre: NonEmptyString
+    nombre: requiredString
 });

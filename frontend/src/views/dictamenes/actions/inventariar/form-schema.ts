@@ -1,4 +1,4 @@
-import { NonEmptyString, NullableString, RequiredArray, RequiredNumber } from "@/lib/schemas/common";
+import { nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
 import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { NumeroInventarioField } from "@/views/common/articulos/form-fields";
@@ -41,16 +41,16 @@ export const defaultValues = (dictamen: ActionDictaminadoDictamenWithDictamenPro
 });
 
 export const validator = z.object({
-    productos: RequiredArray(z
+    productos: requiredArray(z
         .object({
-            dictamen_producto_id: RequiredNumber,
-            producto_tipo_id: RequiredNumber,
-            producto_id: RequiredNumber,
-            factura_uuid: NonEmptyString,
-            cuenta_contable: NonEmptyString,
-            observaciones: NullableString,
-            resultado_esperado: z.boolean('Debes de seleccionar una opción'),
-            numero_inventario: NullableString
+            dictamen_producto_id: selectedNumberOption,
+            producto_tipo_id: selectedNumberOption,
+            producto_id: selectedNumberOption,
+            factura_uuid: requiredString,
+            cuenta_contable: requiredString,
+            observaciones: nullableString,
+            resultado_esperado: selectedBooleanOption,
+            numero_inventario: nullableString
         })
         .superRefine(({
             resultado_esperado,

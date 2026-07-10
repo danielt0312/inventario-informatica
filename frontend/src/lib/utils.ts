@@ -19,6 +19,7 @@ import { isAxiosError } from "axios";
 import { root } from "./axios";
 import type { ComboboxOption } from "@/components/composed/creatable-combobox";
 import { dictamenProductoTiposRequierenNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap } from "./constants";
+import type { DatePickerField } from "@/components/composed/date-picker-field";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -149,13 +150,13 @@ export const toOptions = <T extends any>(
     return list.map((item) => catalogoToComboboxOption(item as any, groupAccessor));
 };
 
-export const toISODate = (d: Date | undefined): string =>
-    d?.toISOString().slice(0, 10) ?? ""
+export const toISODate = (date: DatePickerField): string =>
+    date === undefined ? '' : new Date(date).toISOString().slice(0, 10) ?? "";
 
 export const fromISO = (v: unknown): Date | undefined => {
-    if (!v || typeof v !== "string") return undefined
-    const parsed = parseISO(v)
-    return isValid(parsed) ? parsed : undefined
+    if (!v || typeof v !== "string") return undefined;
+    const parsed = parseISO(v);
+    return isValid(parsed) ? parsed : undefined;
 }
 
 export function addPrefix<T extends object, P extends string>(obj: T, prefix: P): WithPrefix<T, P> {

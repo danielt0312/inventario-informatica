@@ -1,7 +1,7 @@
 import { InputField } from "@/components/composed/@tanstack/form/input-field";
 import type React from "react";
 
-export type NumeroInventarioField = string;
+export type NumeroInventarioField = InputField;
 export const NumeroInventarioField = ({
     label = "Número de Inventario",
     placeholder = "500-01-0000",
@@ -15,4 +15,3 @@ export const NumeroInventarioField = ({
         />
     );
 }
-
