@@ -17,8 +17,8 @@ import {
 } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 
-interface Option {
-  id: number | string;
+type Option = {
+  id: number;
   nombre: string;
 }
 

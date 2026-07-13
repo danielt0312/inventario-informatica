@@ -2,42 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
+
 use App\Models\Articulo;
 use App\Http\Requests\Articulo\{ArticuloRequest, StoreArticuloRequest};
-use Illuminate\Http\Request;
 
 class ArticuloController extends Controller
 {
     public function index(ArticuloRequest $request)
     {
-        $query = Articulo::with(['estado', 'producto.tipo.categoria', 'producto.marca']);
-
-        if ($request->filled('categorias')) {
-            $query->whereHas('producto.tipo.categoria', fn ($q)
-                => $q->whereIn('id', $request->input('categorias')));
-        }
-
-        if ($request->filled('tipos')) {
-            $query->whereHas('producto.tipo', fn ($q)
-                => $q->whereIn('id', $request->input('tipos')));
-        }
-
-        if ($request->filled('marcas')) {
-            $query->whereHas('producto.marca', fn ($q)
-                => $q->whereIn('id', $request->input('marcas')));
-        }
-
-        if ($request->filled('productos')) {
-            $query->whereHas('producto', fn ($q)
-                => $q->whereIn('id', $request->input('productos')));
-        }
-
-        if ($request->filled('estados')) {
-            $query->whereHas('estado', fn ($q)
-                => $q->whereIn('id', $request->input('estados')));
-        }
-
-        return $query->paginate($request->query('per_page', 10))
+        return QueryBuilder::for(Articulo::class)
+            ->with(['estado', 'producto.tipo.categoria', 'producto.marca'])
+            ->allowedFilters(
+                AllowedFilter::exact('categorias', 'producto.tipo.categoria.id'),
+                AllowedFilter::exact('tipos', 'producto.tipo.id'),
+                AllowedFilter::exact('marcas', 'producto.marca.id'),
+                AllowedFilter::exact('modelos', 'producto_id'),
+                AllowedFilter::exact('estados', 'estado_id'),
+            )
+            ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
     }
 
