@@ -18,7 +18,7 @@ class ArticuloController extends Controller
                 AllowedFilter::exact('categorias', 'producto.tipo.categoria.id'),
                 AllowedFilter::exact('tipos', 'producto.tipo.id'),
                 AllowedFilter::exact('marcas', 'producto.marca.id'),
-                AllowedFilter::exact('modelos', 'producto_id'),
+                AllowedFilter::exact('productos', 'producto_id'),
                 AllowedFilter::exact('estados', 'estado_id'),
             )
             ->paginate($request->query('per_page', 10))

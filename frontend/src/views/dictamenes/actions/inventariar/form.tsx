@@ -2,17 +2,17 @@ import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
 import { Separator } from "@/components/ui/separator";
-import { ProductoGroupField } from "@/views/common/productos/modelos/form-fields";
+import { ProductoGroupField } from "@/views/common/productos/form-fields";
 import { FacturaField } from "@/views/common/facturas/form-fields";
 import { FieldGroup } from "@/components/ui/field";
 import { CuentaContable } from "./form-fields";
 
-export const useForm = (dictamen: ActionDictaminadoDictamenWithDictamenProductos) => {
+export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
 
     return useAppForm({
@@ -27,7 +27,7 @@ export const useForm = (dictamen: ActionDictaminadoDictamenWithDictamenProductos
     });
 }
 
-export function InventariarForm({ dictamen }: { dictamen: ActionDictaminadoDictamenWithDictamenProductos }) {
+export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen }) {
     const form = useForm(dictamen);
     const slots = dictamen.dictamen_productos.flatMap((dictamenProducto) =>
         Array.from({ length: dictamenProducto.cantidad }, (_, i) => ({
@@ -59,7 +59,7 @@ export function InventariarForm({ dictamen }: { dictamen: ActionDictaminadoDicta
                                                         Características solicitadas
                                                     </Label>
                                                     <Label>
-                                                        {producto.tipo.nombre} {producto.marca.nombre} {producto.modelo.nombre} {dictamenProducto.caracteristicas}
+                                                        {producto.tipo.nombre} {producto.marca.nombre} {producto.nombre} {dictamenProducto.caracteristicas}
                                                     </Label>
                                                 </div>
 
@@ -89,7 +89,7 @@ export function InventariarForm({ dictamen }: { dictamen: ActionDictaminadoDicta
                                         <ProductoGroupField
                                             form={form}
                                             fields={{
-                                                modelo_id: `productos[${index}].producto_id`,
+                                                id: `productos[${index}].producto_id`,
                                                 tipo_id: `productos[${index}].producto_tipo_id`
                                             }}
                                             className="flex-row"

@@ -3,12 +3,12 @@ import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ProductoModeloField } from "@/views/common/productos/modelos/form-fields";
+import { ProductoField } from "@/views/common/productos/form-fields";
 import { CaracteristicasField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import type { ActionDictaminarDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export const useForm = (dictamen: ActionDictaminarDictamenWithDictamenProductos) => {
+export const useForm = (dictamen: DetailedActionDictaminarDictamen) => {
     const formMutation = useActionFormMutation(dictamen);
 
     return useAppForm({
@@ -24,14 +24,14 @@ export const useForm = (dictamen: ActionDictaminarDictamenWithDictamenProductos)
     });
 }
 
-export function Form({ dictamen }: { dictamen: ActionDictaminarDictamenWithDictamenProductos }) {
+export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen }) {
     const form = useForm(dictamen);
 
     return (
         <PrimitiveForm form={form}>
             <form.AppForm>
                 {dictamen.dictamen_productos.map((dictamenProducto, index) => {
-                    const producto = dictamenProducto.producto;
+                    const productoTipo = dictamenProducto.producto_tipo;
 
                     return (
                         <Card key={index} className="shadow-none">
@@ -43,7 +43,7 @@ export function Form({ dictamen }: { dictamen: ActionDictaminarDictamenWithDicta
                                     </div>
                                     <div className="w-1/3" data-slot="label">
                                         <Label className="font-bold">Producto</Label>
-                                        <Label>{producto.tipo.nombre}</Label>
+                                        <Label>{productoTipo.nombre}</Label>
                                     </div>
                                     <div className="w-1/3" data-slot="label">
                                         <Label className="font-bold">Resguardante</Label>
@@ -54,9 +54,9 @@ export function Form({ dictamen }: { dictamen: ActionDictaminarDictamenWithDicta
                                 <form.AppField
                                     name={`productos[${index}].producto_id`}
                                     children={() => (
-                                        <ProductoModeloField
+                                        <ProductoField
                                             label="Modelo"
-                                            tipo={producto.tipo.id}
+                                            tipo={productoTipo.id}
                                             className="max-w-1/3"
                                         />
                                     )}

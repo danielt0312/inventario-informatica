@@ -4,9 +4,9 @@ import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { DictamenArchivoField } from "./form-fields";
-import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export function useForm(dictamen: ActionDictaminadoDictamenWithDictamenProductos) {
+export function useForm(dictamen: DetailedActionDictaminadoDictamen) {
     const { mutate } = useActionFormMutation(dictamen);
 
     return useAppForm({
@@ -25,7 +25,7 @@ export function useForm(dictamen: ActionDictaminadoDictamenWithDictamenProductos
     });
 }
 
-export function Form({ dictamen }: { dictamen: ActionDictaminadoDictamenWithDictamenProductos }) {
+export function Form({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen }) {
     const form = useForm(dictamen);
 
     return (
@@ -59,7 +59,7 @@ export function Form({ dictamen }: { dictamen: ActionDictaminadoDictamenWithDict
                                     <div className="w-7/10" data-slot="label">
                                         <Label className="font-bold">Producto</Label>
                                         <Label>
-                                            {producto.tipo.nombre} {producto.marca.nombre} {producto.modelo.nombre} {dictamenProducto.caracteristicas}
+                                            {producto.tipo.nombre} {producto.marca.nombre} {producto.nombre} {dictamenProducto.caracteristicas}
                                         </Label>
                                     </div>
                                     <div className="w-2/10" data-slot="label">

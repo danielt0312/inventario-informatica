@@ -14,14 +14,12 @@ class DictamenProductoResource extends JsonResource
             'empleado_id' => $this->empleado_id,
             'cantidad' => $this->cantidad,
             'caracteristicas' => $this->caracteristicas,
-            'producto' => [
-                'categoria' => new ProductoCategoriaResource($this->categoria),
-                'tipo' => new ProductoTipoResource($this->tipo),
-                $this->mergeWhen($this->producto_id, [
-                    'marca' => new ProductoMarcaResource($this->marca),
-                    'modelo' => new ProductoResource($this->producto)
-                ])
-            ]
+            $this->mergeWhen($this->dictamen->esEstadoDictaminar(), [
+                'producto_tipo' => new ProductoTipoResource($this->tipo),
+            ]),
+            $this->mergeWhen(!$this->dictamen->esEstadoDictaminar(), [
+                'producto' => new ProductoResource($this->producto),
+            ]),
         ];
     }
 }

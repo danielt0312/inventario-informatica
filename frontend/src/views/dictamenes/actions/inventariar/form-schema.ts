@@ -1,9 +1,9 @@
 import { nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
-import type { ActionDictaminadoDictamenWithDictamenProductos } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { NumeroInventarioField } from "@/views/common/articulos/form-fields";
 import type { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-schema";
-import type { ProductoGroupField } from "@/views/common/productos/modelos/form-fields";
+import type { ProductoGroupField } from "@/views/common/productos/form-fields";
 import type { CuentaContable } from "./form-fields";
 import z from "zod";
 
@@ -12,7 +12,7 @@ export type ProductoField = ResultadoEsperadoFieldGroup & {
     cuenta_contable: CuentaContable;
     factura_uuid: string | undefined;
     producto_tipo_id: ProductoGroupField['tipo_id'];
-    producto_id: ProductoGroupField['modelo_id'];
+    producto_id: ProductoGroupField['id'];
     numero_inventario: NumeroInventarioField | null;
 }
 
@@ -31,12 +31,12 @@ export type InventariarDictamenSchema = {
     productos: ProductoField[];
 }
 
-export const defaultValues = (dictamen: ActionDictaminadoDictamenWithDictamenProductos): InventariarDictamenSchema => ({
+export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): InventariarDictamenSchema => ({
     productos: dictamen.dictamen_productos.map((dictamenProducto): ProductoField => ({
         ...defaultValuesProductoField,
         dictamen_producto_id: dictamenProducto.id,
         producto_tipo_id: dictamenProducto.producto.tipo.id,
-        producto_id: dictamenProducto.producto.modelo.id,
+        producto_id: dictamenProducto.producto.id,
     }))
 });
 

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation, defaultFormOptions } from "./create/form";
 import type { OutputSchema } from "./create/form-schema";
-import { ProductoTipoField } from "../tipos/form-fields";
+import { ProductoTipoField } from "./tipos/form-fields";
 import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
 import { useStore } from "@tanstack/react-form";
 import { FieldGroup } from "@/components/ui/field";
@@ -22,8 +22,8 @@ export interface ProductoFieldProps extends Omit<
     tipo: ProductoTipoField;
 }
 
-export type ProductoModeloField = CreatableComboboxField;
-export function ProductoModeloField({
+export type ProductoField = CreatableComboboxField;
+export function ProductoField({
     label = "Modelo de Producto",
     tipo,
     disabled,
@@ -91,11 +91,11 @@ export function ProductoModeloField({
 
 export type ProductoGroupField = {
     tipo_id: ProductoTipoField;
-    modelo_id: ProductoModeloField;
+    id: ProductoField;
 };
 
 const productoGroupDefaultValues: ProductoGroupField = {
-    modelo_id: undefined,
+    id: undefined,
     tipo_id: undefined,
 };
 
@@ -111,14 +111,14 @@ export const ProductoGroupField = withFieldGroup({
                     name="tipo_id"
                     children={() => <ProductoTipoField />}
                     listeners={{
-                        onChange: () => group.setFieldValue('modelo_id', undefined)
+                        onChange: () => group.setFieldValue('id', undefined)
                     }}
                 />
 
                 <group.AppField
-                    name="modelo_id"
+                    name="id"
                     children={() =>
-                        <ProductoModeloField tipo={productoTipo} disabled={productoTipo === undefined} />
+                        <ProductoField tipo={productoTipo} disabled={productoTipo === undefined} />
                     }
                 />
             </FieldGroup>

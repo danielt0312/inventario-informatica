@@ -5,11 +5,11 @@ import z from 'zod';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
 import type { TResponse } from '@/types/generics';
 import type {
-    ActionDictamenUnion,
-    ActionDictamenWithDictamenProductosUnion,
+    ActionDictamen,
+    DetailedActionDictamen,
     ActionDictaminadoDictamen,
     ActionDictaminarDictamen,
-    ActionDictaminarDictamenWithDictamenProductos,
+    DetailedActionDictaminarDictamen,
 } from './-types';
 import {
     ActionDictamenEstadoEnum,
@@ -17,8 +17,8 @@ import {
     ActionDictamenStates
 } from './-constants';
 import type {
+    DetailedDictamen,
     Dictamen,
-    DictamenWithDictamenProductos,
     SurtirDictamen,
 } from '@/types/dictamenes';
 import { View } from '@/views/dictamenes/actions/view';
@@ -27,24 +27,24 @@ export function isSurtirDictamen(dictamen: Dictamen): dictamen is SurtirDictamen
     return dictamen.estado.id === DictamenEstadoEnum.SURTIR;
 }
 
-export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamenUnion {
+export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamen {
     return dictamen.estado.id in ActionDictamenStates;
 }
 
-export function isActionDictaminar(dictamen: Dictamen): dictamen is ActionDictaminarDictamen {
+export function isActionDictaminarDictamen(dictamen: Dictamen): dictamen is ActionDictaminarDictamen {
     return dictamen.estado.id === ActionDictamenEstadoEnum.DICTAMINAR;
 }
 
 export function isActionDictaminadoDictamen(dictamen: Dictamen): dictamen is ActionDictaminadoDictamen {
-    return !isActionDictaminar(dictamen);
+    return !isActionDictaminarDictamen(dictamen);
 }
 
-export function isActionDictamenWithDictamenProductos(dictamen: DictamenWithDictamenProductos): dictamen is ActionDictamenWithDictamenProductosUnion {
+export function isDetailedActionDictamen(dictamen: DetailedDictamen): dictamen is DetailedActionDictamen {
     return isActionDictamen(dictamen);
 }
 
-export function isActionDictaminarDictamenWithDictamenProductos(dictamen: DictamenWithDictamenProductos): dictamen is ActionDictaminarDictamenWithDictamenProductos {
-    return isActionDictaminar(dictamen);
+export function isDetailedActionDictaminarDictamen(dictamen: DetailedDictamen): dictamen is DetailedActionDictaminarDictamen {
+    return isActionDictaminarDictamen(dictamen);
 }
 
 export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
@@ -58,11 +58,11 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
     beforeLoad: async ({ context, params }) => {
         const data = await context.queryClient.fetchQuery({
             queryKey: ['dictamenes', params.uuid],
-            queryFn: () => api.get<TResponse<DictamenWithDictamenProductos>>(`api/dictamenes/${params.uuid}`)
+            queryFn: () => api.get<TResponse<DetailedDictamen>>(`api/dictamenes/${params.uuid}`)
                 .then(r => r.data.data)
         });
 
-        if (!isActionDictamenWithDictamenProductos(data)) {
+        if (!isDetailedActionDictamen(data)) {
             throw redirect({ to: IndexRoute.to });
         }
 

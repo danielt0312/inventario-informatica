@@ -1,34 +1,39 @@
 import type {
-    Dictamen,
-    DictamenEstado,
-    DictamenProducto,
-    DictamenWithDictamenProductos,
+    TDictamenEstado,
     DictaminadoDictamen,
-    DictaminadoDictamenWithDictamenProductos,
+    DetailedDictaminadoDictamen,
     Dictaminar,
+    TDictamen,
+    AttrDocumento,
+    TDetailedDictamen,
+    TDictamenProducto,
+    AttrProductoTipo,
+    AttrProducto,
+    AttrCaracteristicas,
+    DictaminarDictamen,
 } from "@/types/dictamenes";
 import { ActionDictamenEstadoEnum } from "./-constants";
 import type { DictaminadoDictamenEstadoEnum } from "@/lib/constants";
+import type { DetailedProductoTipo } from "@/types/productos";
 
-type Action = ActionDictamenEstadoEnum;
-type ActionDictamenEstado<TAction extends Action = Action> = DictamenEstado<TAction>;
-type ActionDictamen<TActionDictamenEstado extends ActionDictamenEstado = ActionDictamenEstado> = Dictamen<TActionDictamenEstado>;
-type ActionDictamenWithDictamenProductos<TActionDictamen extends ActionDictamen = ActionDictamen, TDictamenProducto extends DictamenProducto = DictamenProducto> = DictamenWithDictamenProductos<TActionDictamen, TDictamenProducto>;
+type TAction = ActionDictamenEstadoEnum;
+type TActionDictamenEstado<T extends TAction> = TDictamenEstado<T>;
+type TActionDictamen<T extends TActionDictamenEstado<TAction>, TDocumento extends AttrDocumento> = TDictamen<T, TDocumento>;
+type TDetailedActionDictamen<T extends TActionDictamen<TActionDictamenEstado<TAction>, AttrDocumento>, AttrDictamenProducto extends TDictamenProducto<AttrProductoTipo, AttrProducto, AttrCaracteristicas>> = TDetailedDictamen<T, AttrDictamenProducto>
 
-type ActionDictaminarDictamenEstado = ActionDictamenEstado<Dictaminar>;
-export type ActionDictaminarDictamen = ActionDictamen<ActionDictaminarDictamenEstado>;
-export type ActionDictaminarDictamenWithDictamenProductos = ActionDictamenWithDictamenProductos<ActionDictaminarDictamen>;
+type ActionDictaminarDictamenEstado = TActionDictamenEstado<Dictaminar>;
+export type ActionDictaminarDictamen = DictaminarDictamen<ActionDictaminarDictamenEstado>;
+export type DetailedActionDictaminarDictamen = TDetailedActionDictamen<ActionDictaminarDictamen, TDictamenProducto<DetailedProductoTipo, null, null>>;
 
-type ActionDictaminado = Action & DictaminadoDictamenEstadoEnum;
-type ActionDictaminadoDictamenEstado = ActionDictamenEstado<ActionDictaminado>;
+type ActionDictaminado = TAction & DictaminadoDictamenEstadoEnum;
+type ActionDictaminadoDictamenEstado = TActionDictamenEstado<ActionDictaminado>;
 export type ActionDictaminadoDictamen = DictaminadoDictamen<ActionDictaminadoDictamenEstado>;
-export type ActionDictaminadoDictamenWithDictamenProductos = DictaminadoDictamenWithDictamenProductos<ActionDictaminadoDictamen>;
+export type DetailedActionDictaminadoDictamen = DetailedDictaminadoDictamen<ActionDictaminadoDictamen>;
 
-export type ActionDictamenUnion =
+export type ActionDictamen =
     | ActionDictaminarDictamen
     | ActionDictaminadoDictamen;
 
-export type ActionDictamenWithDictamenProductosUnion =
-    | ActionDictaminarDictamenWithDictamenProductos
-    | ActionDictaminadoDictamenWithDictamenProductos;
-
+export type DetailedActionDictamen =
+    | DetailedActionDictaminarDictamen
+    | DetailedActionDictaminadoDictamen;

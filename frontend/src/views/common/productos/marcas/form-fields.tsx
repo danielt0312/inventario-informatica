@@ -10,12 +10,13 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 
-export interface ProductoMarcaFieldProps extends Omit<
+interface ProductoMarcaFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
     'options' | 'onCreateRequest'
 > {
 }
-export type ProductoMarcaField = number | undefined;
+
+export type ProductoMarcaField = CreatableComboboxField;
 export function ProductoMarcaField({
     label = "Marca del Producto",
     ...props

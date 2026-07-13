@@ -11,7 +11,7 @@ import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 import { SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 
-export interface ProductoCategoriaFieldProps extends Omit<
+interface ProductoCategoriaFieldProps extends Omit<
     React.ComponentProps<typeof CreatableComboboxField>,
     'options' | 'onCreateRequest'
 > {

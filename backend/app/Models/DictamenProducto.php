@@ -57,7 +57,7 @@ class DictamenProducto extends Model
     public function tipo(): Attribute
     {
         return Attribute::make(
-            fn (mixed $value, array $attributes) => $attributes['producto_id']
+            fn (mixed $value, array $attributes): ProductoTipo => $attributes['producto_id']
                 ? $this->producto->tipo
                 : $this->productoTipo
         );
@@ -66,21 +66,14 @@ class DictamenProducto extends Model
     public function categoria(): Attribute
     {
         return Attribute::make(
-            fn () => $this->tipo->categoria
+            fn (): ProductoCategoria => $this->tipo->categoria
         );
     }
 
     public function marca(): Attribute
     {
         return Attribute::make(
-            fn () => $this->producto?->marca
-        );
-    }
-
-    public function modelo(): Attribute
-    {
-        return Attribute::make(
-            fn () => $this->producto
+            fn (): ProductoMarca | null => $this->producto?->marca
         );
     }
 
@@ -91,7 +84,7 @@ class DictamenProducto extends Model
                 implode(' ', array_filter([
                     $this->tipo->nombre,
                     $this->marca?->nombre,
-                    $this->modelo?->nombre,
+                    $this->producto?->nombre,
                     $attributes['caracteristicas']
                 ]))
         );

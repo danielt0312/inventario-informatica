@@ -1,9 +1,9 @@
 import { FilePreviewWindowGroup } from "@/components/composed/file-preview-window";
 import { Label } from "@/components/ui/label";
-import type { ActionDictamenUnion } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { ActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { isActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
 
-export function ShowInfo({ dictamen }: { dictamen: ActionDictamenUnion }) {
+export function ShowInfo({ dictamen }: { dictamen: ActionDictamen }) {
     return (
         <>
             <div className="grid grid-cols-3">

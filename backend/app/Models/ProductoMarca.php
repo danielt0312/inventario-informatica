@@ -15,9 +15,4 @@ class ProductoMarca extends Model
     ];
 
     public $timestamps = false;
-
-    public function modelos(): HasMany
-    {
-        return $this->hasMany(ProductoTipo::class, 'marca_id');
-    }
 }

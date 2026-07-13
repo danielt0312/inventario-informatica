@@ -64,7 +64,7 @@ export function Table() {
     });
 
     const { data: PRODUCTOS = [] } = useQuery({
-        queryKey: ['producto_modelos', debouncedFilters.tipos, debouncedFilters.marcas],
+        queryKey: ['productos', debouncedFilters.tipos, debouncedFilters.marcas],
         queryFn: () => api.get<TResponse<Producto[]>>('api/productos', {
             params: {
                 filters: {

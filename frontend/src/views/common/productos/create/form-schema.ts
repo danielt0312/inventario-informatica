@@ -1,8 +1,8 @@
 import { requiredString, selectedNumberOption } from "@/lib/schemas/common";
-import type { ProductoTipoField } from "../../tipos/form-fields";
-import type { ProductoMarcaField } from "../../marcas/form-fields";
 import type { NombreField } from "./form-fields";
 import z from "zod";
+import type { ProductoTipoField } from "../tipos/form-fields";
+import type { ProductoMarcaField } from "../marcas/form-fields";
 
 export type Schema = {
     tipo_id: ProductoTipoField;

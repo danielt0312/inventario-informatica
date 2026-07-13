@@ -11,7 +11,7 @@ import * as Root from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import type { DictaminadoDictamen, SurtirDictamen } from "@/types/dictamenes";
-import type { ActionDictamenUnion, ActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { ActionDictamen, ActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { useState, type JSX } from "react";
 import { useSurtirMutation } from "../actions/surtir/form";
@@ -44,7 +44,7 @@ const ViewFileActionMenuItem = ({ dictamen }: { dictamen: ActionDictaminadoDicta
     );
 }
 
-const FormActionMenu = ({ dictamen }: { dictamen: ActionDictamenUnion }) => (
+const FormActionMenu = ({ dictamen }: { dictamen: ActionDictamen }) => (
     <Root.ActionMenu>
         <Link
             to={ActionRoute.to}
@@ -117,7 +117,7 @@ const SurtirActionMenu = ({ dictamen }: { dictamen: SurtirDictamen }) => {
     );
 }
 
-export type DictamenData = ActionDictamenUnion | DictaminadoDictamen;
+export type DictamenData = ActionDictamen | DictaminadoDictamen;
 
 const ActionMenu = ({ dictamen }: { dictamen: DictamenData }) => {
     if (isSurtirDictamen(dictamen)) {
