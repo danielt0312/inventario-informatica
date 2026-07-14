@@ -44,8 +44,7 @@ return new class extends Migration
             $table->string('cuenta_contable', 11)
                 ->nullable()
                 ->unique('uk_articulos_cuenta_contable', 11);
-            $table->boolean('contable')
-                ->nullable();
+            $table->boolean('es_contable');
             $table->boolean('activo');
             $table->timestamps();
             $table->softDeletes();
@@ -57,7 +56,7 @@ return new class extends Migration
                 ->constrained('articulos', indexName: 'fk_articulo_recepciones_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('resultado_esperado');
+            $table->boolean('es_resultado_esperado');
             $table->string('observaciones', 255)
                 ->nullable();
             $table->timestamps();

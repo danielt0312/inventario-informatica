@@ -5,12 +5,13 @@ import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-co
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ResultadoEsperadoFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
+import { RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
 import { Separator } from "@/components/ui/separator";
 import { ProductoGroupField } from "@/views/common/productos/form-fields";
 import { FacturaField } from "@/views/common/facturas/form-fields";
 import { FieldGroup } from "@/components/ui/field";
 import { CuentaContable } from "./form-fields";
+import { CostoUnitarioField, EsContableField, NumeroSerieField } from "@/views/common/articulos/form-fields";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -74,11 +75,11 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                             </div>
 
                                             <div>
-                                                <ResultadoEsperadoFieldGroup
+                                                <RecepcionFieldGroup
                                                     form={form}
                                                     fields={{
                                                         observaciones: `productos[${index}].observaciones`,
-                                                        resultado_esperado: `productos[${index}].resultado_esperado`
+                                                        es_resultado_esperado: `productos[${index}].es_resultado_esperado`
                                                     }}
                                                 />
                                             </div>
@@ -94,6 +95,21 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                             }}
                                             className="flex-row"
                                         />
+
+                                        <FieldGroup className="flex-row">
+                                            <form.AppField
+                                                name={`productos[${index}].numero_serie`}
+                                                children={() => <NumeroSerieField />}
+                                            />
+                                            <form.AppField
+                                                name={`productos[${index}].costo_unitario`}
+                                                children={() => <CostoUnitarioField />}
+                                            />
+                                            <form.AppField
+                                                name={`productos[${index}].es_contable`}
+                                                children={() => <EsContableField />}
+                                            />
+                                        </FieldGroup>
 
                                         <FieldGroup className="flex-row">
                                             <form.AppField

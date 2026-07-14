@@ -21,6 +21,26 @@ export const InputField = (props: Root.InputFieldProps) => {
     );
 };
 
+export type NullableInputField = string | null;
+export const NullableInputField = (props: Root.InputFieldProps) => {
+    const field = useFieldContext<NullableInputField>();
+
+    return (
+        <Root.InputField
+            name={field.name}
+            value={field.state.value ?? ''}
+            onChange={(e) => field.handleChange(
+                e.target.value.trim() !== ''
+                    ? e.target.value
+                    : null
+            )}
+            errors={field.state.meta.errors}
+            {...props}
+        />
+    );
+};
+
+
 export type NumberInputField = number | undefined;
 export const NumberInputField = (props: Omit<Root.InputFieldProps, 'type' | 'inputMode'>) => {
     const field = useFieldContext<NumberInputField>();
@@ -39,6 +59,33 @@ export const NumberInputField = (props: Omit<Root.InputFieldProps, 'type' | 'inp
                     value.trim() !== '' && !isNaN(Number(value)) && !/[.,]$/.test(value)
                         ? Number(value)
                         : undefined
+                );
+            }}
+            errors={field.state.meta.errors}
+            {...props}
+            inputMode="decimal"
+        />
+    );
+}
+
+export type NullableNumberInputField = number | null;
+export const NullableNumberInputField = (props: Omit<Root.InputFieldProps, 'type' | 'inputMode'>) => {
+    const field = useFieldContext<NullableNumberInputField>();
+    const [rawValue, setRawValue] = useState(
+        field.state.value === null ? '' : String(field.state.value)
+    );
+
+    return (
+        <Root.InputField
+            name={field.name}
+            value={rawValue}
+            onChange={(e) => {
+                const value = e.target.value;
+                setRawValue(value);
+                field.handleChange(
+                    value.trim() !== '' && !isNaN(Number(value)) && !/[.,]$/.test(value)
+                        ? Number(value)
+                        : null
                 );
             }}
             errors={field.state.meta.errors}

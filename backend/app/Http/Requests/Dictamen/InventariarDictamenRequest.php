@@ -22,7 +22,10 @@ class InventariarDictamenRequest extends ActionDictamenRequest
             'productos.*.observaciones' => ['exclude_unless:productos.*.resultado_esperado,false', 'required', 'string', 'max:255'],
             'productos.*.producto_tipo_id' => ['required', 'integer', 'exists:producto_tipos,id'],
             'productos.*.producto_id' => ['required', 'integer', 'exists:productos,id'],
-            'productos.*.cuenta_contable' => ['required', 'string', 'size:11', 'unique:articulos,cuenta_contable'],
+            'productos.*.cuenta_contable' => ['required', 'string', 'size:11', 'distinct', 'unique:articulos,cuenta_contable'],
+            'productos.*.numero_serie' => ['required', 'string', 'max:64', 'distinct', 'unique:articulos,numero_serie'],
+            'productos.*.es_contable' => ['required', 'string', 'max:64', 'distinct', 'unique:articulos,numero_serie'],
+            'productos.*.costo_unitario' => ['nullable', 'required_if:productos.*.es_contable,true', 'decimal:7,2', 'max:64', 'distinct', 'unique:articulos,numero_serie'],
             'productos.*.factura_uuid' => [
                 'required',
                 'uuid',

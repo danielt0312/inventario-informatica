@@ -1,21 +1,15 @@
 import z from "zod";
 
-export const number = (
-    params: Parameters<typeof z.number>[0] = 'Este campo es requerido'
-) => z
-    .number(params);
-
-export const selectedNumberOption = z
-    .number('Debes de seleccionar una opción');
-
 export const trimmedString = (
     params?: Parameters<typeof z.string>[0]
 ) => z
     .string(params)
     .trim();
 
-export const filledString = trimmedString()
-    .min(1, 'Este campo es requerido');
+export const filledString = (
+    params: Parameters<z._ZodString['min']>[1] = 'Este campo es requerido'
+) => trimmedString()
+    .min(1, params);
 
 export const preprocessUndefinedToString = <T extends z.ZodType>(
     schema: T
@@ -25,7 +19,7 @@ export const preprocessUndefinedToString = <T extends z.ZodType>(
         schema
     );
 
-export const requiredString = preprocessUndefinedToString(filledString);
+export const requiredString = preprocessUndefinedToString(filledString());
 
 export const convertEmptyStringToNull = trimmedString()
     .transform(v => v !== '' ? v : null);
@@ -43,7 +37,7 @@ export const institutionalEmail = (
 ) => email()
     .endsWith('@asetamaulipas.gob.mx', params);
 
-export const filledInstitutionalEmail = filledString
+export const filledInstitutionalEmail = filledString()
     .pipe(institutionalEmail());
 
 export const requiredInstitutionalEmail = preprocessUndefinedToString(filledInstitutionalEmail);
@@ -87,15 +81,22 @@ export const requiredIsoDateLTEToday = requiredIsoDate()
         'La fecha debe ser menor o igual que hoy'
     );
 
-export const integer = z
-    .int('Debes de ingresar un número entero');
-
-export const positiveInteger = integer
-    .positive('Debes de ingresar un número mayor que 0');
-
 export const boolean = (
     params: Parameters<typeof z.boolean>[0] = 'Este campo es requerido'
 ) => z
     .boolean(params)
 
 export const selectedBooleanOption = z.boolean('Debes de seleccionar una opción');
+
+export const selectedNumberOption = z
+    .number('Debes de seleccionar una opción');
+
+export const integer = z
+    .int('Debes de ingresar un número entero');
+
+export const positiveInteger = integer
+    .positive('Debes de ingresar un número mayor que 0');
+
+export const nullableNumber = z
+    .number()
+    .nullable();

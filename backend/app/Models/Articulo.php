@@ -23,16 +23,14 @@ class Articulo extends Model
         'costo_unitario',
         'factura_id',
         'qr_archivo_id',
-        'contable'
+        'es_contable'
     ];
 
     protected $attributes = [
         'activo' => 1,
         'estado_id' => ArticuloEstadoEnum::REVISION->value,
         'numero_serie' => null,
-        'costo_unitario' => null,
         'factura_id' => null,
-        'contable' => null,
         'numero_inventario' => null
     ];
 
@@ -91,7 +89,7 @@ class Articulo extends Model
     public function casts(): array {
         return [
             'activo' => 'boolean',
-            'contable' => 'boolean',
+            'es_contable' => 'boolean',
         ];
     }
 }

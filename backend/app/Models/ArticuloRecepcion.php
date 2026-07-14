@@ -13,7 +13,7 @@ class ArticuloRecepcion extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'resultado_esperado',
+        'es_resultado_esperado',
         'observaciones'
     ];
 
@@ -24,5 +24,12 @@ class ArticuloRecepcion extends Model
     public function articulo(): BelongsTo
     {
         return $this->belongsTo(Articulo::class);
+    }
+
+    public function casts(): array
+    {
+        return [
+            'es_resultado_esperado' => 'boolean',
+        ];
     }
 }
