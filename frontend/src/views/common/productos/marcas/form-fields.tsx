@@ -5,22 +5,19 @@ import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation } from "./create/form";
-
-interface ProductoMarcaFieldProps extends Omit<
-    React.ComponentProps<typeof CreatableComboboxField>,
-    'options' | 'onCreateRequest'
-> {
-}
+import { useFieldContext } from "@/components/composed/@tanstack/form/form";
 
 export type ProductoMarcaField = CreatableComboboxField;
 export function ProductoMarcaField({
     label = "Marca del Producto",
     ...props
-}: ProductoMarcaFieldProps) {
+}: Omit<React.ComponentProps<typeof CreatableComboboxField>,'options' | 'onCreateRequest'>) {
+    const field = useFieldContext<ProductoMarcaField>();
+
     const { data: options = [] } = useQuery({
         queryKey: ['producto_marcas'],
         queryFn: () => api.get<TResponse<ProductoMarca[]>>('api/producto_marcas')
@@ -31,15 +28,14 @@ export function ProductoMarcaField({
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
     const useDialogFormMutation = () => useCreateFormMutation({
-        onSuccess: (_, __, ___, { client }) => {
-            setDialogIsOpen(false)
+        onSuccess: (data, _, __, { client }) => {
+            setDialogIsOpen(false);
             client.invalidateQueries({ queryKey: ['producto_marcas'] });
+            field.handleChange(data.data.data.id);
         }
     });
 
-    const dialogForm = useForm({
-        useMutationHook: useDialogFormMutation
-    });
+    const dialogForm = useForm(useDialogFormMutation);
 
     return (
         <>
@@ -49,6 +45,7 @@ export function ProductoMarcaField({
                 onCreateRequest={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
+                    field.handleChange(undefined);
                 }}
                 {...props}
             />
@@ -57,6 +54,9 @@ export function ProductoMarcaField({
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Crear Marca de Producto</DialogTitle>
+                        <DialogDescription className="sr-only">
+                            Creación de marca de producto
+                        </DialogDescription>
                     </DialogHeader>
 
                     <AppForm form={dialogForm} className="contents">

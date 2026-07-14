@@ -12,18 +12,18 @@ class ProductoTipoController extends Controller
 {
     public function index()
     {
-        $data = QueryBuilder::for(ProductoTipo::class)
+        return QueryBuilder::for(ProductoTipo::class)
             ->allowedIncludes('categoria')
-            ->get();
-
-        return ProductoTipoResource::collection($data);
+            ->get()
+            ->toResourceCollection();
     }
 
     public function store(StoreProductoTipoRequest $request)
     {
-        ProductoTipo::create($request->validated());
-
-        return response(status: 201);
+        return (ProductoTipo::create($request->validated()))
+            ->toResource()
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function show(string $id)

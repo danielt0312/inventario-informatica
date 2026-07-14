@@ -13,3 +13,5 @@ export const defaultValues: Schema = {
 export const validator = z.object({
     nombre: requiredString
 });
+
+export type OutputSchema = z.output<typeof validator>;

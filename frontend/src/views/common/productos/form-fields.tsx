@@ -2,25 +2,18 @@ import { CreatableComboboxField } from "@/components/composed/@tanstack/form/cre
 import api from "@/lib/axios";
 import { toOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
-import type { Producto, ProductoWithMarca } from "@/types/productos";
+import type { ProductoWithMarca } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation, defaultFormOptions } from "./create/form";
-import type { OutputSchema } from "./create/form-schema";
 import { ProductoTipoField } from "./tipos/form-fields";
-import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
+import { useFieldContext, withFieldGroup } from "@/components/composed/@tanstack/form/form";
 import { useStore } from "@tanstack/react-form";
 import { FieldGroup } from "@/components/ui/field";
-
-export interface ProductoFieldProps extends Omit<
-    React.ComponentProps<typeof CreatableComboboxField>,
-    'options' | 'onCreateRequest'
-> {
-    tipo: ProductoTipoField;
-}
+import { SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 
 export type ProductoField = CreatableComboboxField;
 export function ProductoField({
@@ -28,7 +21,11 @@ export function ProductoField({
     tipo,
     disabled,
     ...props
-}: ProductoFieldProps) {
+}: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options' | 'onCreateRequest'> & {
+    tipo: ProductoTipoField;
+}) {
+    const field = useFieldContext<ProductoField>();
+
     const { data: options = [] } = useQuery({
         queryKey: ['productos', tipo],
         queryFn: () => api.get<TResponse<ProductoWithMarca[]>>('api/productos', {
@@ -45,10 +42,11 @@ export function ProductoField({
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
-    const useDialogFormMutation = <R extends TResponse<Producto>, P extends OutputSchema>() => useCreateFormMutation<R, P>({
-        onSuccess: (_, __, ___, { client }) => {
+    const useDialogFormMutation = () => useCreateFormMutation({
+        onSuccess: (data, _, __, { client }) => {
             setDialogIsOpen(false)
             client.invalidateQueries({ queryKey: ['productos'] });
+            field.handleChange(data.data.data.id);
         }
     });
 
@@ -63,6 +61,7 @@ export function ProductoField({
                 onCreateRequest={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
+                    field.handleChange(undefined);
                 }}
                 disabled={disabled}
                 {...props}
@@ -72,11 +71,14 @@ export function ProductoField({
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Crear Modelo de Producto</DialogTitle>
+                        <DialogDescription className="sr-only">
+                            Creación de modelo de producto
+                        </DialogDescription>
                     </DialogHeader>
 
                     <AppForm form={dialogForm} className="contents" showTipoField={false}>
                         <DialogFooter>
-                            <dialogForm.SubmitButton />
+                            <SubmitButton />
 
                             <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar
@@ -103,7 +105,7 @@ export const ProductoGroupField = withFieldGroup({
     defaultValues: productoGroupDefaultValues,
     props: {} as React.ComponentProps<typeof FieldGroup>,
     render: ({ group, ...props }) => {
-        const productoTipo = useStore(group.store, (state) => state.values.tipo_id);
+        const tipo = useStore(group.store, (state) => state.values.tipo_id);
 
         return (
             <FieldGroup {...props}>
@@ -118,7 +120,7 @@ export const ProductoGroupField = withFieldGroup({
                 <group.AppField
                     name="id"
                     children={() =>
-                        <ProductoField tipo={productoTipo} disabled={productoTipo === undefined} />
+                        <ProductoField tipo={tipo} disabled={tipo === undefined} />
                     }
                 />
             </FieldGroup>

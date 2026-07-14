@@ -12,11 +12,10 @@ class ProductoCategoriaController extends Controller
 {
     public function index()
     {
-        $data = QueryBuilder::for(ProductoCategoria::class)
+        return QueryBuilder::for(ProductoCategoria::class)
             ->allowedIncludes('tipos')
-            ->get();
-
-        return ProductoCategoriaResource::collection($data);
+            ->get()
+            ->toResourceCollection();
     }
 
     public function store(StoreProductoCategoriaRequest $request)

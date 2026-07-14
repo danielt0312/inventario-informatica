@@ -10,9 +10,9 @@ import { asAnyFormApi } from "@/lib/utils";
 import { ProductoTipoField } from "../tipos/form-fields";
 import { ProductoMarcaField } from "../marcas/form-fields";
 
-export const useCreateFormMutation = <R extends TResponse<Producto> = TResponse<Producto>, P extends OutputSchema = OutputSchema>(
-    props?: Omit<FormMutation, 'url'>
-) => useFormMutation<R, P>({
+export const useCreateFormMutation = (
+    props?: Omit<FormMutation<TResponse<Producto>, OutputSchema>, 'url'>
+) => useFormMutation<TResponse<Producto>, OutputSchema>({
     url: `api/productos`,
     ...props
 });
@@ -32,7 +32,7 @@ export const defaultFormOptions = (useMutationHook = useCreateFormMutation) => {
     });
 }
 
-export const useForm = (options: () => ReturnType<typeof defaultFormOptions> = defaultFormOptions) => (
+export const useForm = (options = defaultFormOptions) => (
     useAppForm(options())
 );
 

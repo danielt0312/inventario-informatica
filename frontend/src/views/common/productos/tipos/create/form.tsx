@@ -7,19 +7,13 @@ import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tans
 import type { TResponse } from "@/types/generics";
 import type { ProductoTipo } from "@/types/productos";
 
-export const useCreateFormMutation = <R extends TResponse<ProductoTipo> = TResponse<ProductoTipo>, P extends OutputSchema = OutputSchema>(props?: Omit<FormMutation, 'url' | 'method'>) =>
-    useFormMutation<R, P>({
+export const useCreateFormMutation = (props?: Omit<FormMutation<TResponse<ProductoTipo>, OutputSchema>, 'url' | 'method'>) =>
+    useFormMutation<TResponse<ProductoTipo>, OutputSchema>({
         url: `api/producto_tipos`,
         ...props
     });
 
-interface UseFormOptions {
-    useMutationHook?: () => ReturnType<typeof useCreateFormMutation>;
-}
-
-export const useForm = ({
-    useMutationHook = useCreateFormMutation
-}: UseFormOptions = {}) => {
+export const useForm = (useMutationHook = useCreateFormMutation) => {
     const { mutate } = useMutationHook();
 
     return useAppForm({
@@ -27,7 +21,9 @@ export const useForm = ({
         validators: {
             onSubmit: validator
         },
-        onSubmit: ({ value, formApi }) => mutate({ data: validator.parse(value), formApi }),
+        onSubmit: ({ value, formApi }) => {
+            mutate({ data: validator.parse(value), formApi });
+        },
     });
 }
 

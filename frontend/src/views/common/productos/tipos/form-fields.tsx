@@ -4,22 +4,21 @@ import { toOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 import type { ProductoCategoriaWithTipos } from "@/types/productos";
+import { SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { useFieldContext } from "@/components/composed/@tanstack/form/form";
 
-export interface RootProductoFieldProps extends Omit<
-    React.ComponentProps<typeof CreatableComboboxField>,
-    'options' | 'onCreateRequest'
-> {
-}
 export type ProductoTipoField = CreatableComboboxField;
 export function ProductoTipoField({
     label = "Tipo de Producto",
     ...props
-}: RootProductoFieldProps) {
+}: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options' | 'onCreateRequest'>) {
+    const field = useFieldContext<ProductoTipoField>();
+
     const { data: options = [] } = useQuery({
         queryKey: ['producto_categorias_tipos'],
         queryFn: () => api.get<TResponse<ProductoCategoriaWithTipos[]>>('api/producto_categorias', {
@@ -33,15 +32,14 @@ export function ProductoTipoField({
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
     const useDialogFormMutation = () => useCreateFormMutation({
-        onSuccess: (_, __, ___, { client }) => {
-            setDialogIsOpen(false)
+        onSuccess: (data, _, __, { client }) => {
+            setDialogIsOpen(false);
             client.invalidateQueries({ queryKey: ['producto_categorias_tipos'] });
+            field.handleChange(data.data.data.id);
         }
     });
 
-    const dialogForm = useForm({
-        useMutationHook: useDialogFormMutation
-    });
+    const dialogForm = useForm(useDialogFormMutation);
 
     return (
         <>
@@ -51,6 +49,7 @@ export function ProductoTipoField({
                 onCreateRequest={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
+                    field.handleChange(undefined);
                 }}
                 {...props}
             />
@@ -59,11 +58,14 @@ export function ProductoTipoField({
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Crear Tipo de Producto</DialogTitle>
+                        <DialogDescription className="sr-only">
+                            Creación de tipo de producto
+                        </DialogDescription>
                     </DialogHeader>
 
                     <AppForm form={dialogForm} className="contents">
                         <DialogFooter>
-                            <dialogForm.SubmitButton />
+                            <SubmitButton />
 
                             <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar
