@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
 
 use App\Models\Articulo;
-use App\Http\Requests\Articulo\{ArticuloRequest, StoreArticuloRequest};
+use App\Http\Requests\Articulo\StoreArticuloRequest;
 
 class ArticuloController extends Controller
 {
-    public function index(ArticuloRequest $request)
+    public function index(Request $request)
     {
         return QueryBuilder::for(Articulo::class)
             ->with(['estado', 'producto.tipo.categoria', 'producto.marca'])

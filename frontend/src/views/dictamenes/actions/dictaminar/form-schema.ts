@@ -6,7 +6,7 @@ import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes
 
 export type Schema = {
     productos: {
-        id: ProductoField;
+        id: number;
         caracteristicas: CaracteristicasField;
         producto_id: ProductoField;
     }[];

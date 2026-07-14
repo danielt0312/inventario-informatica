@@ -11,8 +11,6 @@ use App\Http\Controllers\{
     ArticuloController,
     DocumentoController,
     DocumentoTipoController,
-    // DiscoController,
-    DiscoTipoController,
     ArticuloEstadoController,
     DictamenController,
     DictamenEstadoController,
@@ -59,9 +57,4 @@ Route::middleware('auth:sanctum')->group(function () {
         'empleados' => EmpleadoController::class,
         'adscripciones' => AdscripcionController::class
     ], ['only' => 'index']);
-
-    Route::apiResources([
-        // 'discos' => DiscoController::class,
-        'disco_tipos' => DiscoTipoController::class
-    ], ['except' => 'show']);
 });

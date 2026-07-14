@@ -5,6 +5,7 @@ import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { DictamenArchivoField } from "./form-fields";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 
 export function useForm(dictamen: DetailedActionDictaminadoDictamen) {
     const { mutate } = useActionFormMutation(dictamen);
@@ -29,14 +30,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen
     const form = useForm(dictamen);
 
     return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-            }}
-            className="contents"
-        >
+        <PrimitiveForm form={form}>
             <form.AppForm>
                 <div className="grid grid-cols-2">
                     <form.AppField
@@ -72,8 +66,8 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen
                     );
                 })}
 
-                <form.SubmitButton />
+                <SubmitButton />
             </form.AppForm>
-        </form>
+        </PrimitiveForm>
     );
 }
