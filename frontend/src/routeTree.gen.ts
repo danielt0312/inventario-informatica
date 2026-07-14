@@ -16,7 +16,6 @@ import { Route as GuestLoginRouteImport } from './routes/_guest/login'
 import { Route as AuthInventarioIndexRouteImport } from './routes/_auth/inventario/index'
 import { Route as AuthDocumentosIndexRouteImport } from './routes/_auth/documentos/index'
 import { Route as AuthDictamenesIndexRouteImport } from './routes/_auth/dictamenes/index'
-import { Route as AuthInventarioCreateRouteImport } from './routes/_auth/inventario/create'
 import { Route as AuthDictamenesCreateRouteImport } from './routes/_auth/dictamenes/create'
 import { Route as AuthDictamenesUuidActionRouteImport } from './routes/_auth/dictamenes/$uuid/$action'
 
@@ -53,11 +52,6 @@ const AuthDictamenesIndexRoute = AuthDictamenesIndexRouteImport.update({
   path: '/dictamenes/',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthInventarioCreateRoute = AuthInventarioCreateRouteImport.update({
-  id: '/inventario/create',
-  path: '/inventario/create',
-  getParentRoute: () => AuthRoute,
-} as any)
 const AuthDictamenesCreateRoute = AuthDictamenesCreateRouteImport.update({
   id: '/dictamenes/create',
   path: '/dictamenes/create',
@@ -74,7 +68,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof GuestLoginRoute
   '/dictamenes/create': typeof AuthDictamenesCreateRoute
-  '/inventario/create': typeof AuthInventarioCreateRoute
   '/dictamenes/': typeof AuthDictamenesIndexRoute
   '/documentos/': typeof AuthDocumentosIndexRoute
   '/inventario/': typeof AuthInventarioIndexRoute
@@ -84,7 +77,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof GuestLoginRoute
   '/dictamenes/create': typeof AuthDictamenesCreateRoute
-  '/inventario/create': typeof AuthInventarioCreateRoute
   '/dictamenes': typeof AuthDictamenesIndexRoute
   '/documentos': typeof AuthDocumentosIndexRoute
   '/inventario': typeof AuthInventarioIndexRoute
@@ -97,7 +89,6 @@ export interface FileRoutesById {
   '/_guest': typeof GuestRouteWithChildren
   '/_guest/login': typeof GuestLoginRoute
   '/_auth/dictamenes/create': typeof AuthDictamenesCreateRoute
-  '/_auth/inventario/create': typeof AuthInventarioCreateRoute
   '/_auth/dictamenes/': typeof AuthDictamenesIndexRoute
   '/_auth/documentos/': typeof AuthDocumentosIndexRoute
   '/_auth/inventario/': typeof AuthInventarioIndexRoute
@@ -109,7 +100,6 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/dictamenes/create'
-    | '/inventario/create'
     | '/dictamenes/'
     | '/documentos/'
     | '/inventario/'
@@ -119,7 +109,6 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/dictamenes/create'
-    | '/inventario/create'
     | '/dictamenes'
     | '/documentos'
     | '/inventario'
@@ -131,7 +120,6 @@ export interface FileRouteTypes {
     | '/_guest'
     | '/_guest/login'
     | '/_auth/dictamenes/create'
-    | '/_auth/inventario/create'
     | '/_auth/dictamenes/'
     | '/_auth/documentos/'
     | '/_auth/inventario/'
@@ -195,13 +183,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDictamenesIndexRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/inventario/create': {
-      id: '/_auth/inventario/create'
-      path: '/inventario/create'
-      fullPath: '/inventario/create'
-      preLoaderRoute: typeof AuthInventarioCreateRouteImport
-      parentRoute: typeof AuthRoute
-    }
     '/_auth/dictamenes/create': {
       id: '/_auth/dictamenes/create'
       path: '/dictamenes/create'
@@ -221,7 +202,6 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteChildren {
   AuthDictamenesCreateRoute: typeof AuthDictamenesCreateRoute
-  AuthInventarioCreateRoute: typeof AuthInventarioCreateRoute
   AuthDictamenesIndexRoute: typeof AuthDictamenesIndexRoute
   AuthDocumentosIndexRoute: typeof AuthDocumentosIndexRoute
   AuthInventarioIndexRoute: typeof AuthInventarioIndexRoute
@@ -230,7 +210,6 @@ interface AuthRouteChildren {
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthDictamenesCreateRoute: AuthDictamenesCreateRoute,
-  AuthInventarioCreateRoute: AuthInventarioCreateRoute,
   AuthDictamenesIndexRoute: AuthDictamenesIndexRoute,
   AuthDocumentosIndexRoute: AuthDocumentosIndexRoute,
   AuthInventarioIndexRoute: AuthInventarioIndexRoute,

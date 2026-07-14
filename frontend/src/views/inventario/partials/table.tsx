@@ -1,16 +1,10 @@
 import { QueryDataTable } from "@/components/custom/query-datatable";
-import { columns, type Articulo } from "./table.cols";
+import { columns, type Articulo } from "./table-cols";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/custom/multiselect";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import type { TResponse, TCatalogo } from "@/types/generics";
-import { ButtonGroup } from "@/components/ui/button-group";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { Route } from "@/routes/_auth/inventario/create";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import { type Producto, type ProductoCategoria, type ProductoMarca, type ProductoTipo } from "@/types/productos";
 
@@ -163,29 +157,6 @@ export function Table() {
                         }))}
                     />
                 </>
-            )}
-            actionBar={(
-                <ButtonGroup>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button size="sm">
-                                <PlusCircle /> Registrar
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuGroup>
-                                <Link to={Route.to}>
-                                    <DropdownMenuItem>
-                                        Artículo Existente
-                                    </DropdownMenuItem>
-                                </Link>
-                                <DropdownMenuItem>
-                                    Ingreso por Dictámen Tecnológico
-                                </DropdownMenuItem>
-                            </DropdownMenuGroup>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </ButtonGroup>
             )}
         />
     )
