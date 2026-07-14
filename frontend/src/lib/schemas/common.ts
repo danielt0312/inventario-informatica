@@ -11,15 +11,10 @@ export const filledString = (
 ) => trimmedString()
     .min(1, params);
 
-export const preprocessUndefinedToString = <T extends z.ZodType>(
-    schema: T
-) => z
-    .preprocess(
-        (v: string | undefined) => v ?? '',
-        schema
-    );
+export const preprocessUndefinedToString = z
+    .transform((v: string | undefined) => v ?? '');
 
-export const requiredString = preprocessUndefinedToString(filledString());
+export const requiredString = preprocessUndefinedToString.pipe(filledString());
 
 export const convertEmptyStringToNull = trimmedString()
     .transform(v => v !== '' ? v : null);
@@ -40,7 +35,7 @@ export const institutionalEmail = (
 export const filledInstitutionalEmail = filledString()
     .pipe(institutionalEmail());
 
-export const requiredInstitutionalEmail = preprocessUndefinedToString(filledInstitutionalEmail);
+export const requiredInstitutionalEmail = preprocessUndefinedToString.pipe(filledInstitutionalEmail);
 
 const requiredArrayDefaultErrorMessage = 'Debes de agregar cuando menos 1 elemento';
 export const requiredArray = <T extends z.ZodType>(
