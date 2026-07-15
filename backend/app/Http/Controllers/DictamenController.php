@@ -50,35 +50,49 @@ class DictamenController extends Controller
 
     public function store(StoreDictamenRequest $request)
     {
-        DB::transaction(function () use ($request) {
+        $dictamen = DB::transaction(function () use ($request) {
             $validated = $request->validated();
 
-            $archivo = $this->archivoService->createAndStore($request->file('archivo'));
+            $adscripcionId = $validated['adscripcion_id'];
+            $oficio = null;
+            // todo identificar si el area de adscripcion es la interna
+            if ($adscripcionId == 1) {
+                $archivo = $this->archivoService->createAndStore($request->file('archivo'));
 
-            $documento = $archivo->documento()->create([
-                'tipo_id' => DocumentoTipoEnum::OFICIO->value
-            ]);
+                $documento = $archivo->documento()->create([
+                    'tipo_id' => DocumentoTipoEnum::OFICIO->value
+                ]);
 
-            $oficio = $documento->oficio()->create([
-                'folio' => $validated['folio']
-            ]);
+                $oficio = $documento->oficio()->create([
+                    'folio' => $validated['folio']
+                ]);
+            }
 
             //todo obtener el jefe de departamento de DTI
             $user_id = 1;
 
             //todo verificar que la adscripcion exista en la tabla espejo `Adscripcion`
             $dictamen = Dictamen::create([
-                'oficio_id' => $oficio->id,
-                'adscripcion_id' => $validated['adscripcion_id'],
-                'user_id' => $user_id,
-                'fecha_solicitud' => $validated['fecha_solicitud']
+                'user_id' => $user_id
+            ]);
+
+            $version = $dictamen->versiones()->create([
+                'fecha_solicitud' => $validated['fecha_solicitud'],
+                'oficio_id' => $oficio?->id,
+                'adscripcion_id' => $adscripcionId
             ]);
 
             //todo verificar que los empleados existan en la tabla espejo `Empleado`
-            $dictamen->dictamenProductos()->createMany($validated['productos']);
+            $version->dictamenProductos()->createMany($validated['productos']);
+
+            $dictamen->version()->associate($version)->save();
+
+            return $dictamen;
         });
 
-        return response(status: 201);
+        return $dictamen->toResource()
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function show(Dictamen $dictamen)

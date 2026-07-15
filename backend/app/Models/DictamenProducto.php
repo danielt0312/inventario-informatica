@@ -12,7 +12,7 @@ class DictamenProducto extends Model
     use HasFactory;
 
     protected $fillable = [
-        'dictamen_id',
+        'dictamen_version_id',
         'empleado_id',
         'producto_id',
         'producto_tipo_id',
@@ -29,9 +29,9 @@ class DictamenProducto extends Model
 
     public $timestamps = false;
 
-    public function dictamen(): BelongsTo
+    public function dictamenVersion(): BelongsTo
     {
-        return $this->belongsTo(Dictamen::class);
+        return $this->belongsTo(DictamenVersion::class);
     }
 
     public function empleado(): BelongsTo

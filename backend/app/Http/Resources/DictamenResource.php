@@ -12,13 +12,9 @@ class DictamenResource extends JsonResource
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
-            'fecha_solicitud' => $this->fecha_solicitud->format('Y-m-d'),
-            'adscripcion_id' => $this->adscripcion_id,
-            'dictamen_productos' => DictamenProductoResource::collection($this->whenLoaded('dictamenProductos')),
+            'created_at' => $this->created_at,
             'estado' => new DictamenEstadoResource($this->whenLoaded('estado')),
-            'oficio' => new OficioResource($this->whenLoaded('oficio')),
-            'documento' => new DocumentoResource($this->whenLoaded('documento')),
-            'created_at' => $this->created_at
+            'orden_compra' => new OrdenCompraResource($this->whenLoaded('ordenCompra')),
         ];
     }
 }

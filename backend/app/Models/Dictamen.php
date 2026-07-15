@@ -12,12 +12,11 @@ use Illuminate\Database\Eloquent\Relations\{
     HasManyThrough
 };
 
-use App\Traits\Models\HasDocumento;
 use App\Enums\DictamenEstadoEnum;
 
 class Dictamen extends Model
 {
-    use HasFactory, HasUuids, HasDocumento;
+    use HasFactory, HasUuids;
 
     public function __call($method, $parameters)
     {
@@ -36,17 +35,32 @@ class Dictamen extends Model
     }
 
     protected $fillable = [
+        'version_id',
         'estado_id',
-        'oficio_id',
-        'orden_compra',
-        'adscripcion_id',
+        'orden_compra_id',
         'user_id',
-        'fecha_solicitud'
     ];
 
     protected $attributes = [
-        'estado_id' => DictamenEstadoEnum::DICTAMINAR->value
+        'estado_id' => DictamenEstadoEnum::DICTAMINAR->value,
+        'version_id' => null,
+        'orden_compra_id' => null,
     ];
+
+    public function versiones(): HasMany
+    {
+        return $this->hasMany(DictamenVersion::class);
+    }
+
+    public function version(): BelongsTo
+    {
+        return $this->belongsTo(DictamenVersion::class);
+    }
+
+    public function ordenCompra(): BelongsTo
+    {
+        return $this->belongsTo(OrdenCompra::class);
+    }
 
     public function dictamenArticulos(): HasMany
     {
@@ -68,28 +82,6 @@ class Dictamen extends Model
     public function estado(): BelongsTo
     {
         return $this->belongsTo(DictamenEstado::class);
-    }
-
-    public function oficio(): BelongsTo
-    {
-        return $this->belongsTo(Oficio::class);
-    }
-
-    public function documento(): BelongsTo
-    {
-        return $this->belongsTo(Documento::class);
-    }
-
-    public function dictamenProductos(): HasMany
-    {
-        return $this->hasMany(DictamenProducto::class);
-    }
-
-    public function casts(): array
-    {
-        return [
-            'fecha_solicitud' => 'date:Y-m-d'
-        ];
     }
 
     public function uniqueIds(): array

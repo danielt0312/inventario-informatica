@@ -25,6 +25,10 @@ return new class extends Migration
                 ->constrained('orden_compras', indexName: 'fk_dictamenes_orden_compras')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->constrained('users', indexName: 'fk_dictamen_versiones_users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
 
         Schema::create('dictamen_versiones', function (Blueprint $table) {
@@ -34,6 +38,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->unsignedInteger('version');
+            $table->date('fecha_solicitud');
             $table->foreignId('oficio_id')
                 ->nullable()
                 ->constrained('oficios', indexName: 'fk_dictamen_versiones_oficios')
@@ -48,11 +53,6 @@ return new class extends Migration
                 ->constrained('adscripciones', indexName: 'fk_dictamen_versiones_adscripciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('user_id')
-                ->constrained('users', indexName: 'fk_dictamen_versiones_users')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->date('fecha_solicitud');
             $table->timestamps();
 
             $table->unique(['dictamen_id', 'version'], 'uk_dictamen_versiones');
