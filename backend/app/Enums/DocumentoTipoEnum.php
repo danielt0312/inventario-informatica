@@ -14,6 +14,7 @@ enum DocumentoTipoEnum: int
     case RESGUARDO = 4;
     case PRESTAMO = 5;
     case DICTAMEN = 6;
+    case ORDEN_COMPRA = 7;
 
     public function label(): string {
         return match ($this) {
@@ -23,6 +24,7 @@ enum DocumentoTipoEnum: int
             self::RESGUARDO     => 'Resguardo de Bienes Informáticos',
             self::PRESTAMO      => 'Préstamo Temporal',
             self::DICTAMEN      => 'Dictamen de Tecnologías',
+            self::ORDEN_COMPRA  => 'Orden de Compra',
         };
     }
 }

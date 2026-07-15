@@ -6,19 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use App\Traits\Models\HasDocumento;
+
 class Oficio extends Model
 {
-    use HasFactory;
+    use HasFactory, HasDocumento;
 
     protected $fillable = [
-        'documento_id',
         'folio'
     ];
 
     public $timestamps = false;
-
-    public function documento(): BelongsTo
-    {
-        return $this->belongsTo(Documento::class);
-    }
 }

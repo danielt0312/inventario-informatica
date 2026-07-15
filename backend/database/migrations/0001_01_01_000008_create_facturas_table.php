@@ -10,6 +10,10 @@ return new class extends Migration
     {
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('orden_compra_id')
+                ->constrained('orden_compras', indexName: 'fk_facturas_orden_compras')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->date('fecha_emision');
             $table->foreignId('documento_id')
                 ->constrained('documentos', indexName: 'fk_facturas_documentos')

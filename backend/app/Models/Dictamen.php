@@ -12,19 +12,18 @@ use Illuminate\Database\Eloquent\Relations\{
     HasManyThrough
 };
 
+use App\Traits\Models\HasDocumento;
 use App\Enums\DictamenEstadoEnum;
 
 class Dictamen extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, HasDocumento;
 
     public function __call($method, $parameters)
     {
         if (Str::startsWith($method, 'esEstado')) {
             $statusName = Str::after($method, 'esEstado');
-
             $enumCaseName = strtoupper(Str::snake($statusName));
-
             $enumClass = DictamenEstadoEnum::class;
 
             if (defined("$enumClass::$enumCaseName")) {
@@ -39,7 +38,7 @@ class Dictamen extends Model
     protected $fillable = [
         'estado_id',
         'oficio_id',
-        'documento_id',
+        'orden_compra',
         'adscripcion_id',
         'user_id',
         'fecha_solicitud'

@@ -20,31 +20,57 @@ return new class extends Migration
                 ->constrained('dictamen_estados', indexName: 'fk_dictamenes_dictamen_estados')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignId('orden_compra_id')
+                ->nullable()
+                ->constrained('orden_compras', indexName: 'fk_dictamenes_orden_compras')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+        });
+
+        Schema::create('dictamen_versiones', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('dictamen_id')
+                ->constrained('dictamenes', indexName: 'fk_dictamen_versiones_dictamenes')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->unsignedInteger('version');
             $table->foreignId('oficio_id')
-                ->constrained('oficios', indexName: 'fk_dictamenes_oficios')
+                ->nullable()
+                ->constrained('oficios', indexName: 'fk_dictamen_versiones_oficios')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('documento_id')
                 ->nullable()
-                ->constrained('documentos', indexName: 'fk_dictamenes_documentos')
+                ->constrained('documentos', indexName: 'fk_dictamen_versiones_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('adscripcion_id')
-                ->constrained('adscripciones', indexName: 'fk_dictamenes_adscripciones')
+                ->constrained('adscripciones', indexName: 'fk_dictamen_versiones_adscripciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
-                ->constrained('users', indexName: 'fk_dictamenes_users')
+                ->constrained('users', indexName: 'fk_dictamen_versiones_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->date('fecha_solicitud');
+            $table->timestamps();
+
+            $table->unique(['dictamen_id', 'version'], 'uk_dictamen_versiones');
+        });
+
+        Schema::table('dictamenes', function (Blueprint $table) {
+            $table->foreignId('version_id')
+                ->nullable()
+                ->constrained('dictamen_versiones', indexName: 'fk_dictamenes_dictamen_versiones')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
 
         Schema::create('dictamen_productos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dictamen_id')
-                ->constrained('dictamenes', indexName: 'fk_dictamen_productos_dictamenes')
+            $table->foreignId('dictamen_version_id')
+                ->constrained('dictamen_versiones', indexName: 'fk_dictamen_productos_dictamen_versiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('empleado_id')
@@ -68,6 +94,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('cantidad');
             $table->string('caracteristicas', 255)
                 ->nullable();
+            $table->timestamps();
         });
 
         Schema::create('dictamen_articulos', function (Blueprint $table) {
@@ -87,6 +114,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('dictamen_articulos');
         Schema::dropIfExists('dictamen_productos');
+        Schema::dropIfExists('dictamen_versiones');
         Schema::dropIfExists('dictamenes');
         Schema::dropIfExists('dictamen_estados');
     }
