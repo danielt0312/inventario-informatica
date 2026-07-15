@@ -37,7 +37,10 @@ class DictamenController extends Controller
     public function index(Request $request)
     {
         $query = QueryBuilder::for(Dictamen::class)
-            ->with(['estado', 'oficio', 'documento'])
+            ->with([
+                'estado',
+                'version' => ['oficio', 'documento']
+            ])
             ->allowedFilters(
                 AllowedFilter::partial('folio', 'oficio.folio'),
                 AllowedFilter::exact('estados', 'estado.id')

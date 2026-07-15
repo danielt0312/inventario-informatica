@@ -11,6 +11,7 @@ class DictamenVersionResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'version' => $this->version,
             'fecha_solicitud' => $this->fecha_solicitud->format('Y-m-d'),
             'adscripcion_id' => $this->adscripcion_id,
             'created_at' => $this->created_at,
