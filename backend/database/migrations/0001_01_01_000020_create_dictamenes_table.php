@@ -26,7 +26,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
-                ->constrained('users', indexName: 'fk_dictamen_versiones_users')
+                ->constrained('users', indexName: 'fk_dictamenes_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -59,7 +59,7 @@ return new class extends Migration
         });
 
         Schema::table('dictamenes', function (Blueprint $table) {
-            $table->foreignId('version_id')
+            $table->foreignId('version_actual_id')
                 ->nullable()
                 ->constrained('dictamen_versiones', indexName: 'fk_dictamenes_dictamen_versiones')
                 ->cascadeOnUpdate()

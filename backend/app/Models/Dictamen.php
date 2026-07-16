@@ -35,7 +35,7 @@ class Dictamen extends Model
     }
 
     protected $fillable = [
-        'version_id',
+        'version_actual_id',
         'estado_id',
         'orden_compra_id',
         'user_id',
@@ -43,7 +43,7 @@ class Dictamen extends Model
 
     protected $attributes = [
         'estado_id' => DictamenEstadoEnum::DICTAMINAR->value,
-        'version_id' => null,
+        'version_actual_id' => null,
         'orden_compra_id' => null,
     ];
 
@@ -52,7 +52,7 @@ class Dictamen extends Model
         return $this->hasMany(DictamenVersion::class);
     }
 
-    public function version(): BelongsTo
+    public function versionActual(): BelongsTo
     {
         return $this->belongsTo(DictamenVersion::class);
     }

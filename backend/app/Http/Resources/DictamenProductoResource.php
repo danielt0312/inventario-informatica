@@ -15,11 +15,11 @@ class DictamenProductoResource extends JsonResource
             'id' => $this->id,
             'empleado_id' => $this->empleado_id,
             'cantidad' => $this->cantidad,
-            'caracteristicas' => $this->caracteristicas,
             $this->mergeWhen($esEstadoDictaminar, [
                 'producto_tipo' => new ProductoTipoResource($this->tipo),
             ]),
             $this->mergeWhen(!$esEstadoDictaminar, [
+                'caracteristicas' => $this->caracteristicas,
                 'producto' => new ProductoResource($this->producto),
             ]),
         ];

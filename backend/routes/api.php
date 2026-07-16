@@ -39,15 +39,21 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('archivos/{archivo}/stream', [ArchivoController::class, 'stream']);
 
-    Route::apiResource('dictamenes', DictamenController::class)
-        ->only(['index', 'show', 'store']);
-    Route::prefix('dictamenes/{dictamen}')
-        ->name('dictamenes.')
-        ->controller(DictamenController::class)
+    Route::name('dictamenes.')
+        ->prefix('dictamenes')
         ->group(function () {
-            foreach (['dictaminar', 'evidenciar', 'surtir', 'inventariar'] as $action) {
-                Route::name($action)->post($action, $action);
-            }
+            Route::apiResource('', DictamenController::class)
+                ->only(['index', 'store']);
+            Route::get('{dictamen}', [DictamenController::class, 'show'])
+                // ->whereUuid('uuid')
+                ->name('show');
+            Route::controller(DictamenController::class)
+                ->prefix('{dictamen}')
+                ->group(function () {
+                    foreach (['dictaminar', 'evidenciar', 'surtir', 'inventariar'] as $action) {
+                        Route::post($action, $action)->name($action);
+                    }
+                });
         });
 
     Route::apiResources([

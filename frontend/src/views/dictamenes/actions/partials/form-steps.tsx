@@ -10,7 +10,6 @@ const OrderActionDictamenEstado = [
     DictamenEstadoEnum.DICTAMINAR,
     DictamenEstadoEnum.EVIDENCIAR,
     DictamenEstadoEnum.INVENTARIAR,
-    DictamenEstadoEnum.RESGUARDAR
 ] as const;
 type OrderActionDictamenEstado = (typeof OrderActionDictamenEstado)[number];
 
@@ -19,7 +18,6 @@ export function getTitle(step?: OrderActionDictamenEstado) {
         case DictamenEstadoEnum.DICTAMINAR: return 'Dictaminar Requisición';
         case DictamenEstadoEnum.EVIDENCIAR: return 'Evidenciar confirmación de Requisición';
         case DictamenEstadoEnum.INVENTARIAR: return 'Inventariar Bienes Informáticos';
-        case DictamenEstadoEnum.RESGUARDAR: return 'Resguardar Bienes Informáticos';
         default: return 'Creación de Dictamen';
     }
 }

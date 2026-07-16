@@ -8,26 +8,22 @@ export const DocumentoTipoEnum = {
 } as const;
 export type DocumentoTipoEnum = (typeof DocumentoTipoEnum)[keyof typeof DocumentoTipoEnum];
 
+export const DICTAMEN_ESTADO_DICTAMINAR = 1;
+export const DICTAMEN_ESTADO_SURTIR = 3;
 export const DictamenEstadoEnum = {
-    DICTAMINAR: 1,
+    DICTAMINAR: DICTAMEN_ESTADO_DICTAMINAR,
     EVIDENCIAR: 2,
-    SURTIR: 3,
+    SURTIR: DICTAMEN_ESTADO_SURTIR,
     INVENTARIAR: 4,
-    RESGUARDAR: 5,
-    SURTIDO: 6,
-    SURTIDO_PARCIAL: 7
+    SURTIDO: 5,
+    SURTIDO_PARCIAL: 6,
+    SURTIDO_CON_OBSERVACIONES: 7,
 } as const;
 export type DictamenEstadoEnum = (typeof DictamenEstadoEnum)[keyof typeof DictamenEstadoEnum];
 
-const { EVIDENCIAR, SURTIR, INVENTARIAR, RESGUARDAR, SURTIDO, SURTIDO_PARCIAL } = DictamenEstadoEnum;
-export const DictaminadoDictamenEstadoEnum = {
-    EVIDENCIAR,
-    SURTIR,
-    INVENTARIAR,
-    RESGUARDAR,
-    SURTIDO,
-    SURTIDO_PARCIAL
-};
+const { DICTAMINAR, ...DictaminadoDictamenEstadoEnum } = DictamenEstadoEnum;
+
+export { DictaminadoDictamenEstadoEnum };
 export type DictaminadoDictamenEstadoEnum = (typeof DictaminadoDictamenEstadoEnum)[keyof typeof DictaminadoDictamenEstadoEnum];
 
 export const ProductoCategoriaEnum = {

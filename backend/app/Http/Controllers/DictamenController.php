@@ -88,7 +88,7 @@ class DictamenController extends Controller
             //todo verificar que los empleados existan en la tabla espejo `Empleado`
             $version->dictamenProductos()->createMany($validated['productos']);
 
-            $dictamen->version()->associate($version)->save();
+            $dictamen->versionActual()->associate($version)->save();
 
             return $dictamen;
         });
@@ -98,18 +98,13 @@ class DictamenController extends Controller
             ->setStatusCode(201);
     }
 
-    public function show(Dictamen $dictamen)
+    public function show(string $uuid)
     {
-        $dictamen->load([
-            'estado',
-            'oficio',
-            'documento',
-            'dictamenProductos.productoTipo.categoria',
-            'dictamenProductos.producto.tipo.categoria',
-            'dictamenProductos.producto.marca'
-        ]);
-
-        return $dictamen->toResource();
+        return QueryBuilder::for(Dictamen::class)
+            ->allowedIncludes('versiones.dictamenProductos', 'versionActual.dictamenProductos')
+            ->where('uuid', $uuid)
+            ->firstOrFail()
+            ->toResource();
     }
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)

@@ -1,54 +1,53 @@
-import type { DictamenEstadoEnum, DictaminadoDictamenEstadoEnum } from "@/lib/constants";
+import type { DICTAMEN_ESTADO_DICTAMINAR, DictamenEstadoEnum, DictaminadoDictamenEstadoEnum } from "@/lib/constants";
 import type { TCatalogo } from "./generics";
 import type { Documento, Oficio } from "./documentos";
-import type { DetailedProducto, DetailedProductoTipo } from "./productos";
+import type { DetailedProducto, DetailedProductoTipo, Producto } from "./productos";
 
-export type TDictamenEstado<T extends DictamenEstadoEnum = DictamenEstadoEnum> = TCatalogo<T>;
-export type AttrDocumento = Documento | null;
-export type TDictamen<TEstado extends TDictamenEstado, TDocumento extends AttrDocumento> = {
+export type BaseDictamenEstado<T extends DictamenEstadoEnum = DictamenEstadoEnum> = TCatalogo<T>;
+export type BaseDictamen<T extends BaseDictamenEstado = BaseDictamenEstado> = {
     id: number;
     uuid: string;
+    estado: T;
+    oficio: Oficio;
+}
+export type BaseDictamenVersion = {
+    version: number;
     adscripcion: TCatalogo;
     fecha_solicitud: string;
-    estado: TEstado;
-    oficio: Oficio;
-    documento: TDocumento;
 }
-export type AttrProductoTipo = DetailedProductoTipo | null;
-export type AttrProducto = DetailedProducto | null;
-export type AttrCaracteristicas = string | null;
-export type TDictamenProducto<TProductoTipo extends AttrProductoTipo, TProducto extends AttrProducto, TCaracteristicas extends AttrCaracteristicas> = {
+export type BaseDictamenProducto = {
     id: number;
     cantidad: number;
-    caracteristicas: TCaracteristicas;
     empleado: TCatalogo;
+}
+export type BaseDetailedDictamenVersion<TDictamenVersion extends BaseDictamenVersion = BaseDictamenVersion, TDictamenProducto extends BaseDictamenProducto = BaseDictamenProducto> = TDictamenVersion & {
+    dictamen_productos: TDictamenProducto[];
+}
+export type BaseDictamenVersionActual<TDictamen extends BaseDictamen = BaseDictamen, TDictamenVersion extends BaseDictamenVersion = BaseDictamenVersion> = TDictamen & {
+    version_actual: TDictamenVersion;
+}
+export type BaseDetailedDictamenVersionActual<TDictamen extends BaseDictamen, TDetailedDictamenVersion extends BaseDetailedDictamenVersion> = BaseDictamenVersionActual<TDictamen, TDetailedDictamenVersion>;
+
+export type Dictaminar = typeof DICTAMEN_ESTADO_DICTAMINAR;
+export type DictaminarDictamenEstado = BaseDictamenEstado<Dictaminar>;
+export type DictaminarDictamen<TDictaminarDictamenEstado extends DictaminarDictamenEstado = DictaminarDictamenEstado> = BaseDictamen<TDictaminarDictamenEstado>;
+export type DictaminarDictamenVersion = BaseDictamenVersion;
+export type DictaminarDictamenProducto<TProductoTipo extends DetailedProductoTipo = DetailedProductoTipo> = BaseDictamenProducto & {
     producto_tipo: TProductoTipo;
+}
+export type DictaminarDictamenVersionActual = BaseDictamenVersionActual<DictaminarDictamen, DictaminarDictamenVersion>;
+export type DetailedDictaminarDictamenVersion = BaseDetailedDictamenVersion<DictaminarDictamenVersion, DictaminarDictamenProducto>;
+export type DetailedDictaminarDictamenVersionActual = BaseDetailedDictamenVersionActual<DictaminarDictamen, DetailedDictaminarDictamenVersion>;
+
+export type Dictaminado = DictaminadoDictamenEstadoEnum;
+export type DictaminadoDictamenEstado<TDictaminado extends Dictaminado = Dictaminado> = BaseDictamenEstado<TDictaminado>;
+export type DictaminadoDictamen<TDictaminadoDictamenEstado extends DictaminadoDictamenEstado = DictaminadoDictamenEstado> = BaseDictamen<TDictaminadoDictamenEstado>;
+export type DictaminadoDictamenVersion = BaseDictamenVersion & {
+    documento: Documento;
+}
+export type DictaminadoDictamenProducto<TProducto extends Producto = DetailedProducto> = BaseDictamenProducto & {
     producto: TProducto;
 }
-export type TDetailedDictamen<T extends TDictamen<TDictamenEstado, AttrDocumento>, AttrDictamenProducto extends TDictamenProducto<AttrProductoTipo, AttrProducto, AttrCaracteristicas>> = T & {
-    dictamen_productos: AttrDictamenProducto[];
-};
-
-export type Dictaminar = typeof DictamenEstadoEnum.DICTAMINAR;
-export type DictaminarDictamenEstado = TDictamenEstado<Dictaminar>;
-export type DictaminarDictamen<TEstado extends DictaminarDictamenEstado = DictaminarDictamenEstado> = TDictamen<TEstado, null>;
-export type DictaminarDictamenProducto = TDictamenProducto<AttrProductoTipo, null, null>
-export type DetailedDictaminarDictamen = TDetailedDictamen<DictaminarDictamen, DictaminarDictamenProducto>;
-
-export type DictaminadoDictamenEstado<TDictaminadoEstado extends DictaminadoDictamenEstadoEnum = DictaminadoDictamenEstadoEnum> = TDictamenEstado<TDictaminadoEstado>;
-export type DictaminadoDictamen<TEstado extends DictaminadoDictamenEstado = DictaminadoDictamenEstado> = TDictamen<TEstado, Documento>;
-export type DictaminadoDictamenProducto = TDictamenProducto<null, DetailedProducto, string>;
-export type DetailedDictaminadoDictamen<TDictaminadoDictamen extends DictaminadoDictamen = DictaminadoDictamen, TDictaminadoDictamenProducto extends DictaminadoDictamenProducto = DictaminadoDictamenProducto> = TDetailedDictamen<TDictaminadoDictamen, TDictaminadoDictamenProducto>;
-
-export type Surtir = typeof DictaminadoDictamenEstadoEnum.SURTIR;
-export type SurtirDictamenEstado = DictaminadoDictamenEstado<Surtir>;
-export type SurtirDictamen = DictaminadoDictamen<SurtirDictamenEstado>;
-export type DetailedSurtirDictamen = DetailedDictaminadoDictamen<SurtirDictamen>;
-
-export type Dictamen =
-    | DictaminarDictamen
-    | DictaminadoDictamen;
-
-export type DetailedDictamen =
-    | DetailedDictaminarDictamen
-    | DetailedDictaminadoDictamen;
+export type DictaminadoDictamenVersionActual = BaseDictamenVersionActual<DictaminadoDictamen, DictaminadoDictamenVersion>;
+export type DetailedDictaminadoDictamenVersion = BaseDetailedDictamenVersion<DictaminadoDictamenVersion, DictaminadoDictamenProducto>;
+export type DetailedDictaminadoDictamenVersionActual<TDictaminadoDictamen extends DictaminadoDictamen = DictaminadoDictamen, TDetailedDictaminadoDictamenVersion extends DetailedDictaminadoDictamenVersion = DetailedDictaminadoDictamenVersion> = BaseDetailedDictamenVersionActual<TDictaminadoDictamen, TDetailedDictaminadoDictamenVersion>;
