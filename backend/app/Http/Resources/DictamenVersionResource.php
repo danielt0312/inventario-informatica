@@ -15,8 +15,12 @@ class DictamenVersionResource extends JsonResource
             'fecha_solicitud' => $this->fecha_solicitud->format('Y-m-d'),
             'adscripcion_id' => $this->adscripcion_id,
             'created_at' => $this->created_at,
-            'documento' => new DocumentoResource($this->whenLoaded('documento')),
-            'dictamen_productos' => DictamenProductoResource::collection($this->whenLoaded('dictamenProductos')),
+            'adquisiciones' => DictamenAdquisicionResource::collection($this->whenLoaded('adquisiciones')),
+            'oficio' => new OficioResource($this->whenLoaded('oficio')),
+            'documento' => $this->when(
+                !$this->dictamen->esEstadoDictaminar(),
+                fn () => new DocumentoResource($this->whenLoaded('documento'))
+            ),
         ];
     }
 }

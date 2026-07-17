@@ -23,13 +23,13 @@ class StoreDictamenRequest extends FormRequest
             'folio' => ['required', 'string', 'max:64', 'unique:oficios,folio'],
             'fecha_solicitud' => ['required', 'date', 'before_or_equal:today'],
             'archivo' => ['required', 'file', 'max:5120', 'mimes:pdf'],
-            'productos' => ['required', 'array', 'min:1'],
-            'productos.*.cantidad' => ['required', 'integer', 'gte:1', 'lte:255'],
-            'productos.*.empleado_id' => ['required', 'integer'],
-            'productos.*.producto_tipo_id' => ['required', 'integer', 'exists:producto_tipos,id'],
-            'productos.*.numero_inventario' => Rule::foreach(function ($_, string $attribute) {
+            'adquisiciones' => ['required', 'array', 'min:1'],
+            'adquisiciones.*.cantidad' => ['required', 'integer', 'gte:1', 'lte:255'],
+            'adquisiciones.*.empleado_id' => ['required', 'integer'],
+            'adquisiciones.*.producto_tipo_id' => ['required', 'integer', 'exists:producto_tipos,id'],
+            'adquisiciones.*.numero_inventario' => Rule::foreach(function ($_, string $attribute) {
                 $index = explode('.', $attribute)[1];
-                $tipo = $this->input("productos.{$index}.producto_tipo_id");
+                $tipo = $this->input("adquisiciones.{$index}.producto_tipo_id");
                 $tipoEnum = ProductoTipoEnum::tryFrom($tipo);
 
                 return [

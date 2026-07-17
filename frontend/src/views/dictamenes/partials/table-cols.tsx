@@ -1,27 +1,22 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { CircleXIcon, EyeIcon, FileInputIcon, PackageCheckIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon } from "lucide-react";
+import { CircleXIcon, EyeIcon, FileInputIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import {
-    isActionDictamen,
-    Route as ActionRoute,
-    isActionDictaminadoDictamen,
-    isSurtirDictamen,
-} from "@/routes/_auth/dictamenes/$uuid/$action";
+import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
 import * as Root from "@/components/composed/action-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
-import type { DictaminadoDictamen, SurtirDictamen } from "@/types/dictamenes";
-import type { ActionDictamen, ActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { useState, type JSX } from "react";
 import { useSurtirMutation } from "../actions/surtir/form";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import type { DetailedActionDictamen, DetailedActionDictaminado } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedDictaminado, DetailedSurtir as DetailedSurtirDictamen } from "@/types/dictamenes";
+import { isActionDictamen, isActionDictaminadoDictamen, isDetailedSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 
 const ActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
     [ActionDictamenEstadoEnum.EVIDENCIAR]: <PaperclipIcon />,
     [ActionDictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
-    [ActionDictamenEstadoEnum.RESGUARDAR]: <PackageCheckIcon />
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
 const ActionMenuItem = ({ state, ...props }: React.ComponentProps<typeof Root.ActionMenuItem> & { state: ActionDictamenEstadoEnum }) => (
@@ -30,8 +25,8 @@ const ActionMenuItem = ({ state, ...props }: React.ComponentProps<typeof Root.Ac
     </Root.ActionMenuItem>
 );
 
-const ViewFileActionMenuItem = ({ dictamen }: { dictamen: ActionDictaminadoDictamen | DictaminadoDictamen }) => {
-    const { uuid, nombre } = dictamen.documento;
+const ViewFileActionMenuItem = ({ dictamen }: { dictamen: DetailedActionDictaminado | DetailedDictaminado }) => {
+    const { uuid, nombre } = dictamen.version_actual.documento;
     const { mutate, isPending } = useFilePreviewWindowMutation();
 
     return (
@@ -44,7 +39,7 @@ const ViewFileActionMenuItem = ({ dictamen }: { dictamen: ActionDictaminadoDicta
     );
 }
 
-const FormActionMenu = ({ dictamen }: { dictamen: ActionDictamen }) => (
+const FormActionMenu = ({ dictamen }: { dictamen: DetailedActionDictamen }) => (
     <Root.ActionMenu>
         <Link
             to={ActionRoute.to}
@@ -64,7 +59,7 @@ const FormActionMenu = ({ dictamen }: { dictamen: ActionDictamen }) => (
     </Root.ActionMenu>
 );
 
-const SurtirActionMenu = ({ dictamen }: { dictamen: SurtirDictamen }) => {
+const SurtirActionMenu = ({ dictamen }: { dictamen: DetailedSurtirDictamen }) => {
     const [open, setOpen] = useState(false);
     const mutation = useSurtirMutation(dictamen);
     const navigate = useNavigate();
@@ -117,10 +112,10 @@ const SurtirActionMenu = ({ dictamen }: { dictamen: SurtirDictamen }) => {
     );
 }
 
-export type DictamenData = ActionDictamen | DictaminadoDictamen;
+export type DictamenData = DetailedActionDictamen | DetailedDictaminado;
 
 const ActionMenu = ({ dictamen }: { dictamen: DictamenData }) => {
-    if (isSurtirDictamen(dictamen)) {
+    if (isDetailedSurtirDictamen(dictamen)) {
         return <SurtirActionMenu dictamen={dictamen} />;
     }
 
@@ -137,7 +132,7 @@ const ActionMenu = ({ dictamen }: { dictamen: DictamenData }) => {
 
 export const columns: ColumnDef<DictamenData>[] = [
     {
-        accessorKey: "fecha_solicitud",
+        accessorKey: "version_actual.fecha_solicitud",
         header: "Fecha de Solicitud",
         cell: ({ getValue }) => {
             const date = getValue<Date>();
@@ -155,7 +150,7 @@ export const columns: ColumnDef<DictamenData>[] = [
         header: "Área Solicitante",
     },
     {
-        accessorKey: "oficio.folio",
+        accessorKey: "version_actual.oficio.folio",
         header: "Folio de Solicitud",
     },
     {

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { ProductoField } from "@/views/common/productos/form-fields";
 import { CaracteristicasField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedActionDictaminar as DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export const useForm = (dictamen: DetailedActionDictaminarDictamen) => {
     const formMutation = useActionFormMutation(dictamen);
@@ -30,8 +30,8 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
     return (
         <PrimitiveForm form={form}>
             <form.AppForm>
-                {dictamen.dictamen_productos.map((dictamenProducto, index) => {
-                    const productoTipo = dictamenProducto.producto_tipo;
+                {dictamen.version_actual.adquisiciones.map((adquisicion, index) => {
+                    const productoTipo = adquisicion.producto_tipo;
 
                     return (
                         <Card key={index} className="shadow-none">
@@ -39,7 +39,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
                                 <div className="flex flex-row gap-6">
                                     <div className="w-1/3" data-slot="label">
                                         <Label className="font-bold">Cantidad</Label>
-                                        <Label>{dictamenProducto.cantidad}</Label>
+                                        <Label>{adquisicion.cantidad}</Label>
                                     </div>
                                     <div className="w-1/3" data-slot="label">
                                         <Label className="font-bold">Producto</Label>
@@ -47,12 +47,12 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
                                     </div>
                                     <div className="w-1/3" data-slot="label">
                                         <Label className="font-bold">Resguardante</Label>
-                                        <Label>{dictamenProducto.empleado?.nombre ?? 'Juan Perez'}</Label>
+                                        <Label>{adquisicion.empleado?.nombre ?? 'Juan Perez'}</Label>
                                     </div>
                                 </div>
 
                                 <form.AppField
-                                    name={`productos[${index}].producto_id`}
+                                    name={`adquisiciones[${index}].producto_id`}
                                     children={() => (
                                         <ProductoField
                                             label="Modelo"
@@ -63,7 +63,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
                                 />
 
                                 <form.AppField
-                                    name={`productos[${index}].caracteristicas`}
+                                    name={`adquisiciones[${index}].caracteristicas`}
                                     children={() => <CaracteristicasField />}
                                 />
                             </CardContent>

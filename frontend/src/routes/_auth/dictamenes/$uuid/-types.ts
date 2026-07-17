@@ -1,35 +1,20 @@
-import type {
-    BaseDictamenEstado,
-    DictaminadoDictamen,
-    DetailedDictaminadoDictamenVersionActual,
-    Dictaminar,
-    BaseDictamen,
-    DictaminarDictamen,
-} from "@/types/dictamenes";
+import * as Dictamen from "@/types/dictamenes";
 import { ActionDictamenEstadoEnum } from "./-constants";
 import type { DictaminadoDictamenEstadoEnum } from "@/lib/constants";
-import type { DetailedProductoTipo } from "@/types/productos";
 
-type TAction = ActionDictamenEstadoEnum;
-type TActionDictamenEstado<T extends TAction> = BaseDictamenEstado<T>;
-type ActionDictamenEstadoBase = TActionDictamenEstado<TAction>
-type TActionDictamen<T extends ActionDictamenEstadoBase> = BaseDictamen<T>;
-type ActionDictamenBase =
-type TDetailedActionDictamen<T extends TActionDictamen<TActionDictamenEstado<TAction>, AttrDocumento>, AttrDictamenProducto extends TDictamenProducto<AttrProductoTipo, AttrProducto, AttrCaracteristicas>> = TDetailedDictamen<T, AttrDictamenProducto>
+// type ActionDictaminarEstado = BaseActionEstado<typeof DICTAMEN_ESTADO_DICTAMINAR>;
+type Dictaminar = Dictamen.Dictaminar;
+type DetailedDictaminar = Dictamen.DetailedDictaminar;
 
-type ActionDictaminarDictamenEstado = TActionDictamenEstado<Dictaminar>;
-export type ActionDictaminarDictamen = DictaminarDictamen<ActionDictaminarDictamenEstado>;
-export type DetailedActionDictaminarDictamen = TDetailedActionDictamen<ActionDictaminarDictamen, TDictamenProducto<DetailedProductoTipo, null, null>>;
+type Dictaminado = Dictamen.Dictaminado<Dictamen.BaseEstado<ActionDictamenEstadoEnum & DictaminadoDictamenEstadoEnum>>;
+type DetailedDictaminado = Dictamen.DetailedDictaminado<Dictaminado>;
 
-type ActionDictaminado = TAction & DictaminadoDictamenEstadoEnum;
-type ActionDictaminadoDictamenEstado = TActionDictamenEstado<ActionDictaminado>;
-export type ActionDictaminadoDictamen = DictaminadoDictamen<ActionDictaminadoDictamenEstado>;
-export type DetailedActionDictaminadoDictamen = DetailedDictaminadoDictamenVersionActual<ActionDictaminadoDictamen>;
+type Action =
+    | Dictaminar
+    | Dictaminado;
 
-export type ActionDictamen =
-    | ActionDictaminarDictamen
-    | ActionDictaminadoDictamen;
+type DetailedAction =
+    | DetailedDictaminar
+    | DetailedDictaminado;
 
-export type DetailedActionDictamen =
-    | DetailedActionDictaminarDictamen
-    | DetailedActionDictaminadoDictamen;
+export type { Action as ActionDictamen, DetailedAction as DetailedActionDictamen, Dictaminar as ActionDictaminar, DetailedDictaminar as DetailedActionDictaminar, Dictaminado as ActionDictaminado, DetailedDictaminado as DetailedActionDictaminado }

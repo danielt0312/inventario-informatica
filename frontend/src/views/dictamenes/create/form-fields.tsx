@@ -5,7 +5,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import React, { useState } from "react";
 import { productoFieldsGroupDefaultValues } from "./form-schema";
-import { NumeroInventarioField } from "@/views/common/articulos/form-fields";
+import { NullableNumeroInventarioField } from "@/views/common/articulos/form-fields";
 import { cn, DictamenProducto } from "@/lib/utils";
 import { PdfFileField } from "@/views/common/archivos/form-fields";
 
@@ -27,7 +27,7 @@ export const ProductoFieldGroup = withFieldGroup({
                             setShowNumeroInventarioField(requiereNumeroInventario);
 
                             if (!requiereNumeroInventario) {
-                                group.setFieldValue('numero_inventario', '');
+                                group.setFieldValue('numero_inventario', null);
                             }
                         }
                     }}
@@ -36,7 +36,7 @@ export const ProductoFieldGroup = withFieldGroup({
                 {showNumeroInventarioField && (
                     <group.AppField
                         name="numero_inventario"
-                        children={() => <NumeroInventarioField />}
+                        children={() => <NullableNumeroInventarioField />}
                     />
                 )}
             </FieldGroup>

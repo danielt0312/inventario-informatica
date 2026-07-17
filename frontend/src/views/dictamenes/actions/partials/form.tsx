@@ -6,7 +6,7 @@ import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { InventariarForm } from "../inventariar/form";
-import { isDetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/$action";
+import { isDetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 
 export function ActionForm({ dictamen }: { dictamen: DetailedActionDictamen }) {
     if (isDetailedActionDictaminarDictamen(dictamen)) {
@@ -18,8 +18,6 @@ export function ActionForm({ dictamen }: { dictamen: DetailedActionDictamen }) {
             return <EvidenciarForm dictamen={dictamen} />;
         case ActionDictamenEstadoEnum.INVENTARIAR:
             return <InventariarForm dictamen={dictamen} />;
-        case ActionDictamenEstadoEnum.RESGUARDAR:
-            return '<ResguardarForm />';
     }
 }
 

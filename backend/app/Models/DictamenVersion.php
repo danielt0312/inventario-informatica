@@ -38,9 +38,9 @@ class DictamenVersion extends Model
         return $this->belongsTo(Documento::class);
     }
 
-    public function dictamenProductos(): HasMany
+    public function adquisiciones(): HasMany
     {
-        return $this->hasMany(DictamenProducto::class);
+        return $this->hasMany(DictamenAdquisicion::class);
     }
 
     public function casts(): array

@@ -67,28 +67,29 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('dictamen_productos', function (Blueprint $table) {
+        Schema::create('dictamen_adquisiciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('dictamen_version_id')
-                ->constrained('dictamen_versiones', indexName: 'fk_dictamen_productos_dictamen_versiones')
+                ->constrained('dictamen_versiones', indexName: 'fk_dictamen_adquisiciones_dictamen_versiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('empleado_id')
-                ->constrained('empleados', indexName: 'fk_dictamen_productos_empleados')
+                ->constrained('empleados', indexName: 'fk_dictamen_adquisiciones_empleados')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_tipo_id')
-                ->constrained('producto_tipos', indexName: 'fk_dictamen_productos_producto_tipos')
+                ->nullable()
+                ->constrained('producto_tipos', indexName: 'fk_dictamen_adquisiciones_producto_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('producto_id')
                 ->nullable()
-                ->constrained('productos', indexName: 'fk_dictamen_productos_productos')
+                ->constrained('productos', indexName: 'fk_dictamen_adquisiciones_productos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('articulo_id')
                 ->nullable()
-                ->constrained('articulos', indexName: 'fk_dictamen_productos_articulos')
+                ->constrained('articulos', indexName: 'fk_dictamen_adquisiciones_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->unsignedTinyInteger('cantidad');
@@ -113,7 +114,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('dictamen_articulos');
-        Schema::dropIfExists('dictamen_productos');
+        Schema::dropIfExists('dictamen_adquisiciones');
         Schema::dropIfExists('dictamen_versiones');
         Schema::dropIfExists('dictamenes');
         Schema::dropIfExists('dictamen_estados');

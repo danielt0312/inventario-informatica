@@ -1,15 +1,15 @@
 import {
     requiredIsoDateLTEToday,
     requiredArray,
-    trimmedString,
     selectedNumberOption,
     standardPdfFile,
     positiveInteger,
-    requiredString
+    requiredString,
+    nullableString
 } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
 import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
-import type { NumeroInventarioField } from "@/views/common/articulos/form-fields";
+import type { NullableNumeroInventarioField } from "@/views/common/articulos/form-fields";
 import type { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import type { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import type { OficioField, FechaSolicitudField, FolioField } from "./form-fields";
@@ -18,28 +18,28 @@ import z from "zod";
 
 type ProductoFieldsGroup = {
     producto_tipo_id: ProductoTipoField;
-    numero_inventario: NumeroInventarioField;
+    numero_inventario: NullableNumeroInventarioField;
 }
 
 export const productoFieldsGroupDefaultValues: ProductoFieldsGroup = {
     producto_tipo_id: undefined,
-    numero_inventario: ''
+    numero_inventario: null
 }
 
 const productoFieldsGroupValidator = z.object({
     producto_tipo_id: selectedNumberOption,
-    numero_inventario: trimmedString()
+    numero_inventario: nullableString
 })
 
-type ProductoFields = ProductoFieldsGroup & {
+type AdquisicionFields = ProductoFieldsGroup & {
     cantidad: NumberInputField;
     empleado_id: EmpleadoField;
 }
 
-export const productoFieldsDefaultValues: ProductoFields = {
+export const productoFieldsDefaultValues: AdquisicionFields = {
+    ...productoFieldsGroupDefaultValues,
     cantidad: 1,
     empleado_id: undefined,
-    ...productoFieldsGroupDefaultValues
 } as const;
 
 export type Schema = {
@@ -47,7 +47,7 @@ export type Schema = {
     fecha_solicitud: FechaSolicitudField;
     adscripcion_id: AdscripcionField;
     archivo: OficioField;
-    productos: ProductoFields[];
+    adquisiciones: AdquisicionFields[];
 }
 
 export const dictamenDefaultValues: Schema = {
@@ -55,7 +55,7 @@ export const dictamenDefaultValues: Schema = {
     fecha_solicitud: undefined,
     adscripcion_id: undefined,
     archivo: undefined,
-    productos: [productoFieldsDefaultValues]
+    adquisiciones: [productoFieldsDefaultValues]
 } as const;
 
 export const validator = z.object({
@@ -63,7 +63,7 @@ export const validator = z.object({
     fecha_solicitud: requiredIsoDateLTEToday,
     adscripcion_id: selectedNumberOption,
     archivo: standardPdfFile,
-    productos: requiredArray(z
+    adquisiciones: requiredArray(z
         .object({
             cantidad: positiveInteger,
             empleado_id: selectedNumberOption,
@@ -72,7 +72,7 @@ export const validator = z.object({
         })
         .superRefine(({ producto_tipo_id, numero_inventario }, ctx) => {
             if (DictamenProducto.tipoRequiereNumeroInventario(producto_tipo_id)) {
-                if (numero_inventario.length === 0) {
+                if (numero_inventario === null || numero_inventario.length === 0) {
                     ctx.addIssue({
                         code: 'custom',
                         message: 'Este campo es requerido',

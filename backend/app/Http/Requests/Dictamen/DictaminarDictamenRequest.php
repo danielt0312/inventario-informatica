@@ -14,19 +14,19 @@ class DictaminarDictamenRequest extends ActionDictamenRequest
     public function rules(): array
     {
         return [
-            'productos' => ['required', 'array', 'min:1'],
-            'productos.*.id' => [
+            'adquisiciones' => ['required', 'array', 'min:1'],
+            'adquisiciones.*.id' => [
                 'required',
                 'integer',
                 Rule::exists('dictamen_productos', 'id')->where(function ($query) {
                     $query->where('dictamen_id', $this->dictamen->id);
                 }),
             ],
-            'productos.*.producto_id' => Rule::foreach(function ($_, string $attribute) {
+            'adquisiciones.*.producto_id' => Rule::foreach(function ($_, string $attribute) {
                 $index = explode('.', $attribute)[1];
-                $dictamenProductoId = $this->input("productos.{$index}.id");
-                $dictamenProducto = $this->dictamen->dictamenProductos->firstWhere('id', $dictamenProductoId);
-                $tipoId = $dictamenProducto?->productoTipo?->id;
+                $adquisicionId = $this->input("adquisiciones.{$index}.id");
+                $adquisicion = $this->dictamen->adquisiciones->firstWhere('id', $adquisicionId);
+                $tipoId = $adquisicion?->productoTipo?->id;
 
                 return [
                     'required',
@@ -36,7 +36,7 @@ class DictaminarDictamenRequest extends ActionDictamenRequest
                     }),
                 ];
             }),
-            'productos.*.caracteristicas' => ['required', 'string', 'max:255']
+            'adquisiciones.*.caracteristicas' => ['required', 'string', 'max:255']
         ];
     }
 }

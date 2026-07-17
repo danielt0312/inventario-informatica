@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class DictamenProducto extends Model
+class DictamenAdquisicion extends Model
 {
     use HasFactory;
 
@@ -27,11 +27,9 @@ class DictamenProducto extends Model
         'caracteristicas' => null
     ];
 
-    public $timestamps = false;
-
-    public function dictamenVersion(): BelongsTo
+    public function version(): BelongsTo
     {
-        return $this->belongsTo(DictamenVersion::class);
+        return $this->belongsTo(DictamenVersion::class, 'dictamen_version_id');
     }
 
     public function empleado(): BelongsTo

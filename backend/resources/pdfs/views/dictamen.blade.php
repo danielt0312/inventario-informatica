@@ -87,7 +87,7 @@
     </x-slot:header>
 
     <div class="mt-2 text-right">
-        <b>DICTAMEN NO. {{ $dictamen->id }}.</b>
+        <b>DICTAMEN NO. {{ $dictamen->id.' '. $dictamen->version->version }}.</b>
     </div>
 
     <div class="text-center font-bold text-2xl uppercase my-10">
@@ -114,12 +114,12 @@
             </x-pdf::table.tr>
         </x-pdf::table.thead>
         <x-pdf::table.tbody>
-            @foreach($dictamen->dictamenProductos as $producto)
+            @foreach($dictamen->version->adquisiciones as $adquisicion)
                 <x-pdf::table.tr>
-                    <x-pdf::table.td class="text-center">{{ $producto->cantidad }}</x-pdf::table.td>
-                    <x-pdf::table.td>{{ $producto->descripcion }}</x-pdf::table.td>
+                    <x-pdf::table.td class="text-center">{{ $adquisicion->cantidad }}</x-pdf::table.td>
+                    <x-pdf::table.td>{{ $adquisicion->descripcion }}</x-pdf::table.td>
                     <x-pdf::table.td class="text-center">John Doe</x-pdf::table.td>
-                    <x-pdf::table.td class="text-center">{{ $producto->numero_inventario ?? 'N/A' }}</x-pdf::table.td>
+                    <x-pdf::table.td class="text-center">{{ $adquisicion->numero_inventario ?? 'N/A' }}</x-pdf::table.td>
                 </x-pdf::table.tr>
             @endforeach
         </x-pdf::table.tbody>

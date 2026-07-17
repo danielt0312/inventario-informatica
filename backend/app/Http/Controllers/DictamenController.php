@@ -36,17 +36,15 @@ class DictamenController extends Controller
 
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(Dictamen::class)
+        return QueryBuilder::for(Dictamen::class)
             ->with([
                 'estado',
-                'version' => ['oficio', 'documento']
+                'versionActual' => ['oficio', 'documento']
             ])
             ->allowedFilters(
-                AllowedFilter::partial('folio', 'oficio.folio'),
+                AllowedFilter::partial('folio', 'versionActual.oficio.folio'),
                 AllowedFilter::exact('estados', 'estado.id')
-            );
-
-        return $query
+            )
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
     }
@@ -74,7 +72,6 @@ class DictamenController extends Controller
             //todo obtener el jefe de departamento de DTI
             $user_id = 1;
 
-            //todo verificar que la adscripcion exista en la tabla espejo `Adscripcion`
             $dictamen = Dictamen::create([
                 'user_id' => $user_id
             ]);
@@ -85,8 +82,7 @@ class DictamenController extends Controller
                 'adscripcion_id' => $adscripcionId
             ]);
 
-            //todo verificar que los empleados existan en la tabla espejo `Empleado`
-            $version->dictamenProductos()->createMany($validated['productos']);
+            $version->adquisiciones()->createMany($validated['adquisiciones']);
 
             $dictamen->versionActual()->associate($version)->save();
 
@@ -101,7 +97,7 @@ class DictamenController extends Controller
     public function show(string $uuid)
     {
         return QueryBuilder::for(Dictamen::class)
-            ->allowedIncludes('versiones.dictamenProductos', 'versionActual.dictamenProductos')
+            ->allowedIncludes('versiones.adquisiciones', 'versionActual.adquisiciones')
             ->where('uuid', $uuid)
             ->firstOrFail()
             ->toResource();
@@ -109,19 +105,20 @@ class DictamenController extends Controller
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
     {
-        DB::transaction(function () use ($request, $dictamen) {
+        $dictamen = DB::transaction(function () use ($request, $dictamen) {
             $validated = $request->validated();
 
-            foreach ($validated['productos'] as $productoData) {
-                $dictamen->dictamenProductos()
+            foreach ($validated['adquisiciones'] as $productoData) {
+                $dictamen->adquisiciones()
                     ->where('id', $productoData['id'])
                     ->update([
+                        'producto_tipo_id' => null,
                         'producto_id' => $productoData['producto_id'],
                         'caracteristicas' => $productoData['caracteristicas']
                     ]);
             }
 
-            $dictamen->load('dictamenProductos');
+            $dictamen->load('adquisiciones');
 
             $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
 
@@ -134,13 +131,16 @@ class DictamenController extends Controller
                 'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
             ]);
 
-            $dictamen->update([
-                'documento_id' => $documento->archivo_id,
-                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value
-            ]);
+            $dictamen->documento()->associate($documento);
+            $dictamen->estado_id = DictamenEstadoEnum::EVIDENCIAR->value;
+            $dictamen->save();
+
+            return $dictamen;
         });
 
-        return response(status: 200);
+        return $dictamen->toResource()
+            ->response()
+            ->setStatusCode(200);
     }
 
     public function evidenciar(EvidenciarDictamenRequest $request, Dictamen $dictamen)
@@ -154,7 +154,9 @@ class DictamenController extends Controller
             'estado_id' => DictamenEstadoEnum::SURTIR->value
         ]);
 
-        return response(status: 200);
+        return $dictamen->toResource()
+            ->response()
+            ->setStatusCode(200);
     }
 
     public function surtir(SurtirDictamenRequest $request, Dictamen $dictamen)
@@ -163,7 +165,9 @@ class DictamenController extends Controller
             'estado_id' => DictamenEstadoEnum::INVENTARIAR->value
         ]);
 
-        return response(status: 200);
+        return $dictamen->toResource()
+            ->response()
+            ->setStatusCode(200);;
     }
 
     public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen)
@@ -171,7 +175,7 @@ class DictamenController extends Controller
         DB::transaction(function () use ($request, $dictamen) {
             $validated = $request->validated();
 
-            foreach ($validated['productos'] as $payload) {
+            foreach ($validated['adquisiciones'] as $payload) {
                 $factura = $request->getFactura($payload['factura_uuid']);
 
                 $articulo = Articulo::create([

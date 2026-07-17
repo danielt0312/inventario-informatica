@@ -5,11 +5,11 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DictamenProductoResource extends JsonResource
+class DictamenAdquisicionResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $esEstadoDictaminar = $this->dictamenVersion->dictamen->esEstadoDictaminar();
+        $esEstadoDictaminar = $this->version->dictamen->esEstadoDictaminar();
 
         return [
             'id' => $this->id,

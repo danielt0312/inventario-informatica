@@ -12,6 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFieldGroup } from "./form-fields";
 import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
+import { Form as PrimitiveForm } from "@/components/composed/@tanstack/form/form-components";
 
 export function useCreateFormMutation() {
     const navigate = useNavigate();
@@ -41,11 +42,11 @@ export function useForm() {
             formData.append('folio', data.folio);
             formData.append('fecha_solicitud', data.fecha_solicitud);
 
-            data.productos.forEach((producto, index) => {
-                formData.append(`productos[${index}][cantidad]`, String(producto.cantidad));
-                formData.append(`productos[${index}][empleado_id]`, String(producto.empleado_id));
-                formData.append(`productos[${index}][producto_tipo_id]`, String(producto.producto_tipo_id));
-                formData.append(`productos[${index}][numero_inventario]`, producto.numero_inventario);
+            data.adquisiciones.forEach((adquisicion, index) => {
+                formData.append(`adquisiciones[${index}][cantidad]`, String(adquisicion.cantidad));
+                formData.append(`adquisiciones[${index}][empleado_id]`, String(adquisicion.empleado_id));
+                formData.append(`adquisiciones[${index}][producto_tipo_id]`, String(adquisicion.producto_tipo_id));
+                formData.append(`adquisiciones[${index}][numero_inventario]`, adquisicion.numero_inventario ?? '');
             });
 
             formData.append('archivo', data.archivo);
@@ -60,14 +61,7 @@ export function Form() {
     const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
 
     return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-            }}
-            className="flex flex-col gap-6"
-        >
+        <PrimitiveForm form={form} className="flex flex-col gap-6">
             <form.AppForm>
                 <FieldGroup className="grid grid-cols-1 xl:grid-cols-3">
                     <form.AppField
@@ -89,7 +83,7 @@ export function Form() {
                     children={() => <OficioField className="md:max-w-1/2" />}
                 />
 
-                <form.AppField name="productos" mode="array">
+                <form.AppField name="adquisiciones" mode="array">
                     {(field) => (
                         <>
                             <div className="flex flex-row justify-between">
@@ -107,20 +101,20 @@ export function Form() {
                                 <Card key={index} className="shadow-none">
                                     <CardContent className="flex gap-6 items-center">
                                         <form.AppField
-                                            name={`productos[${index}].cantidad`}
+                                            name={`adquisiciones[${index}].cantidad`}
                                             children={() => <CantidadField className="max-w-min" />}
                                         />
 
                                         <ProductoFieldGroup
                                             form={form}
                                             fields={{
-                                                producto_tipo_id: `productos[${index}].producto_tipo_id`,
-                                                numero_inventario: `productos[${index}].numero_inventario`,
+                                                producto_tipo_id: `adquisiciones[${index}].producto_tipo_id`,
+                                                numero_inventario: `adquisiciones[${index}].numero_inventario`,
                                             }}
                                         />
 
                                         <form.AppField
-                                            name={`productos[${index}].empleado_id`}
+                                            name={`adquisiciones[${index}].empleado_id`}
                                             children={() => (
                                                 <EmpleadoField
                                                     label="Resguardante"
@@ -147,6 +141,6 @@ export function Form() {
 
                 <form.SubmitButton />
             </form.AppForm>
-        </form >
+        </PrimitiveForm>
     );
 }

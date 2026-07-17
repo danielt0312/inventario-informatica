@@ -35,3 +35,9 @@ export type OmitQueryOptions<
     UseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey' | 'queryFn'
 >;
+
+export type Includable<T> = T | null;
+export type WithTimestamps<T extends object | never = never> = ([T] extends [never] ? {} : T) & {
+    created_at: string;
+    updated_at: string;
+}
