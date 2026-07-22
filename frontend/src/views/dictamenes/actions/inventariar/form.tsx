@@ -2,7 +2,6 @@ import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
@@ -12,6 +11,7 @@ import { FacturaField } from "@/views/common/facturas/form-fields";
 import { FieldGroup } from "@/components/ui/field";
 import { CuentaContable } from "./form-fields";
 import { CostoUnitarioField, EsContableField, NumeroSerieField } from "@/views/common/articulos/form-fields";
+import type { DetailedActionDictaminado as DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -30,9 +30,9 @@ export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
 
 export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen }) {
     const form = useForm(dictamen);
-    const slots = dictamen.dictamen_productos.flatMap((dictamenProducto) =>
-        Array.from({ length: dictamenProducto.cantidad }, (_, i) => ({
-            dictamenProducto,
+    const slots = dictamen.version_actual.adquisiciones.flatMap((adquisicion) =>
+        Array.from({ length: adquisicion.cantidad }, (_, i) => ({
+            adquisicion,
             index: i,
         }))
     );
@@ -42,11 +42,11 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
             <form.AppForm>
                 {slots.map((slot, index) => (
                     <form.AppField
-                        key={`${slot.dictamenProducto.id}-${slot.index}`}
-                        name="productos"
+                        key={`${slot.adquisicion.id}-${slot.index}`}
+                        name="adquisiciones"
                         mode="array"
                         children={() => {
-                            const { producto, ...dictamenProducto } = slot.dictamenProducto;
+                            const { producto, ...adquisicion } = slot.adquisicion;
 
                             return (
                                 <Card>
@@ -60,7 +60,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                                         Características solicitadas
                                                     </Label>
                                                     <Label>
-                                                        {producto.tipo.nombre} {producto.marca.nombre} {producto.nombre} {dictamenProducto.caracteristicas}
+                                                        {producto.tipo.nombre} {producto.marca.nombre} {producto.nombre} {adquisicion.caracteristicas}
                                                     </Label>
                                                 </div>
 
@@ -69,7 +69,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                                         Resguardante
                                                     </Label>
                                                     <Label>
-                                                        {dictamenProducto.empleado?.nombre ?? 'Juan Pérez'}
+                                                        {adquisicion.empleado?.nombre ?? 'Juan Pérez'}
                                                     </Label>
                                                 </div>
                                             </div>
@@ -78,8 +78,8 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                                 <RecepcionFieldGroup
                                                     form={form}
                                                     fields={{
-                                                        observaciones: `productos[${index}].observaciones`,
-                                                        es_resultado_esperado: `productos[${index}].es_resultado_esperado`
+                                                        observaciones: `adquisiciones[${index}].observaciones`,
+                                                        es_resultado_esperado: `adquisiciones[${index}].es_resultado_esperado`
                                                     }}
                                                 />
                                             </div>
@@ -90,35 +90,35 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                         <ProductoGroupField
                                             form={form}
                                             fields={{
-                                                id: `productos[${index}].producto_id`,
-                                                tipo_id: `productos[${index}].producto_tipo_id`
+                                                id: `adquisiciones[${index}].producto_id`,
+                                                tipo_id: `adquisiciones[${index}].producto_tipo_id`
                                             }}
                                             className="flex-row"
                                         />
 
                                         <FieldGroup className="flex-row">
                                             <form.AppField
-                                                name={`productos[${index}].numero_serie`}
+                                                name={`adquisiciones[${index}].numero_serie`}
                                                 children={() => <NumeroSerieField />}
                                             />
                                             <form.AppField
-                                                name={`productos[${index}].costo_unitario`}
+                                                name={`adquisiciones[${index}].costo_unitario`}
                                                 children={() => <CostoUnitarioField />}
                                             />
                                             <form.AppField
-                                                name={`productos[${index}].es_contable`}
+                                                name={`adquisiciones[${index}].es_contable`}
                                                 children={() => <EsContableField />}
                                             />
                                         </FieldGroup>
 
                                         <FieldGroup className="flex-row">
                                             <form.AppField
-                                                name={`productos[${index}].cuenta_contable`}
+                                                name={`adquisiciones[${index}].cuenta_contable`}
                                                 children={() => <CuentaContable />}
                                             />
 
                                             <form.AppField
-                                                name={`productos[${index}].factura_uuid`}
+                                                name={`adquisiciones[${index}].factura_uuid`}
                                                 children={() => <FacturaField />}
                                             />
                                         </FieldGroup>

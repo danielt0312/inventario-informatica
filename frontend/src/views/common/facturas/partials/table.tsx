@@ -4,7 +4,7 @@ import {
 } from "@/views/documentos/partials/table";
 import type { Factura } from "@/types/documentos";
 import { getDefaultColumns } from "./table-cols";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Form, useForm, useFacturaCreateFormMutation } from "../create/form";
@@ -55,7 +55,10 @@ export function Table<TData extends Factura = Factura>({
                     <Dialog open={isOpen} onOpenChange={setIsOpen}>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>Creación de Factura</DialogTitle>
+                                <DialogTitle>Crear Factura</DialogTitle>
+                                <DialogDescription className="sr-only">
+                                    Creación de factura
+                                </DialogDescription>
                             </DialogHeader>
 
                             <Form useFormHook={useDialogForm} />

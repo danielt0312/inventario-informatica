@@ -87,7 +87,7 @@
     </x-slot:header>
 
     <div class="mt-2 text-right">
-        <b>DICTAMEN NO. {{ $dictamen->id.' '. $dictamen->version->version }}.</b>
+        <b>DICTAMEN NO. {{ $dictamen->id.' '. $dictamen->versionActual->version }}.</b>
     </div>
 
     <div class="text-center font-bold text-2xl uppercase my-10">
@@ -101,7 +101,7 @@
     </div>
 
     <div class="mb-5">
-        Por medio del presente y en referencia al oficio <b>{{ $dictamen->oficio->folio }}</b>; es necesaria la adquisición de lo siguiente:
+        Por medio del presente y en referencia al oficio <b>{{ $dictamen->versionActual->oficio->folio }}</b>; es necesaria la adquisición de lo siguiente:
     </div>
 
     <x-pdf::table class="mb-5">
@@ -114,7 +114,7 @@
             </x-pdf::table.tr>
         </x-pdf::table.thead>
         <x-pdf::table.tbody>
-            @foreach($dictamen->version->adquisiciones as $adquisicion)
+            @foreach($dictamen->versionActual->adquisiciones as $adquisicion)
                 <x-pdf::table.tr>
                     <x-pdf::table.td class="text-center">{{ $adquisicion->cantidad }}</x-pdf::table.td>
                     <x-pdf::table.td>{{ $adquisicion->descripcion }}</x-pdf::table.td>

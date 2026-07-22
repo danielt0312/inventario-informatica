@@ -97,6 +97,7 @@ class DictamenController extends Controller
     public function show(string $uuid)
     {
         return QueryBuilder::for(Dictamen::class)
+            ->with('estado', 'versionActual.oficio')
             ->allowedIncludes('versiones.adquisiciones', 'versionActual.adquisiciones')
             ->where('uuid', $uuid)
             ->firstOrFail()
@@ -109,7 +110,7 @@ class DictamenController extends Controller
             $validated = $request->validated();
 
             foreach ($validated['adquisiciones'] as $productoData) {
-                $dictamen->adquisiciones()
+                $dictamen->versionActual->adquisiciones()
                     ->where('id', $productoData['id'])
                     ->update([
                         'producto_tipo_id' => null,
@@ -118,7 +119,7 @@ class DictamenController extends Controller
                     ]);
             }
 
-            $dictamen->load('adquisiciones');
+            $dictamen->load('versionActual.adquisiciones');
 
             $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
 
@@ -131,7 +132,7 @@ class DictamenController extends Controller
                 'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
             ]);
 
-            $dictamen->documento()->associate($documento);
+            $dictamen->versionActual->documento()->associate($documento)->save();
             $dictamen->estado_id = DictamenEstadoEnum::EVIDENCIAR->value;
             $dictamen->save();
 
@@ -146,7 +147,7 @@ class DictamenController extends Controller
     public function evidenciar(EvidenciarDictamenRequest $request, Dictamen $dictamen)
     {
         $this->archivoService->store(
-            $dictamen->documento->archivo,
+            $dictamen->versionActual->documento->archivo,
             $request->file('archivo')
         );
 

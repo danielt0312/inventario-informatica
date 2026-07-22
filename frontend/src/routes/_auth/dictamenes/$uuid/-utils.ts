@@ -1,5 +1,5 @@
-import { DictamenEstadoEnum } from '@/lib/constants';
-import type { ActionDictamen, ActionDictaminar, ActionDictaminado, DetailedActionDictaminar, DetailedActionDictamen } from './-types';
+import { DictamenEstadoEnum, DictaminadoDictamenEstadoEnum } from '@/lib/constants';
+import type { ActionDictamen, ActionDictaminar, ActionDictaminado, DetailedActionDictaminar, DetailedActionDictamen, DetailedActionDictaminado as DetailedActionDictaminadoDictamen } from './-types';
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from './-constants';
 import type { DetailedSurtir as DetailedSurtirDictamen, Dictamen, Surtir as SurtirDictamen } from '@/types/dictamenes';
 
@@ -25,6 +25,10 @@ export function isActionDictaminadoDictamen(dictamen: Dictamen): dictamen is Act
 
 export function isDetailedActionDictamen(dictamen: Dictamen): dictamen is DetailedActionDictamen {
     return isActionDictamen(dictamen);
+}
+
+export function isDetailedActionDictaminadoDictamen(dictamen: Dictamen): dictamen is DetailedActionDictaminadoDictamen {
+    return dictamen.estado.id in DictaminadoDictamenEstadoEnum;
 }
 
 export function isDetailedActionDictaminarDictamen(dictamen: Dictamen): dictamen is DetailedActionDictaminar {

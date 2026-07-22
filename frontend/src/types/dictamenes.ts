@@ -1,7 +1,7 @@
 import type { DICTAMEN_ESTADO_DICTAMINAR, DICTAMEN_ESTADO_SURTIR, DictamenEstadoEnum, DictaminadoDictamenEstadoEnum } from "@/lib/constants";
 import type { Includable, TCatalogo } from "./generics";
 import type { Documento, Oficio } from "./documentos";
-import type { DetailedProductoTipo } from "./productos";
+import type { DetailedProducto, DetailedProductoTipo } from "./productos";
 import type { Articulo } from "./articulos";
 
 export type BaseEstado<T extends DictamenEstadoEnum = DictamenEstadoEnum> = TCatalogo<T>;
@@ -55,7 +55,7 @@ export type DetailedDictaminar = DetailedBase<Dictaminar, VersionActualWithAdqui
 export type DictaminadoEstado<TEstado extends DictaminadoDictamenEstadoEnum = DictaminadoDictamenEstadoEnum> = BaseEstado<TEstado>;
 export type Dictaminado<TDictaminadoEstado extends DictaminadoEstado = DictaminadoEstado> = Base<TDictaminadoEstado>;
 export type DictaminadoAdquisicion = BaseAdquisicion & {
-    producto: DetailedProductoTipo;
+    producto: DetailedProducto;
     caracteristicas: string;
 }
 export type DictaminadoVersion = BaseVersion & {

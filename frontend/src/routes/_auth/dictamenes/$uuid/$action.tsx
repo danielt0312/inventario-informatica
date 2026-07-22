@@ -22,7 +22,11 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
     beforeLoad: async ({ context, params }) => {
         const data = await context.queryClient.fetchQuery({
             queryKey: ['dictamenes', params.uuid],
-            queryFn: () => api.get<TResponse<DetailedDictamen>>(`api/dictamenes/${params.uuid}`)
+            queryFn: () => api.get<TResponse<DetailedDictamen>>(`api/dictamenes/${params.uuid}`, {
+                params: {
+                    include: 'versionActual.adquisiciones'
+                }
+            })
                 .then(r => r.data.data)
         });
 

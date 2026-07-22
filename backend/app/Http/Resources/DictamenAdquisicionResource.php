@@ -15,13 +15,23 @@ class DictamenAdquisicionResource extends JsonResource
             'id' => $this->id,
             'empleado_id' => $this->empleado_id,
             'cantidad' => $this->cantidad,
-            $this->mergeWhen($esEstadoDictaminar, [
-                'producto_tipo' => new ProductoTipoResource($this->tipo),
-            ]),
-            $this->mergeWhen(!$esEstadoDictaminar, [
-                'caracteristicas' => $this->caracteristicas,
-                'producto' => new ProductoResource($this->producto),
-            ]),
+            'producto_tipo' => $this->when(
+                $esEstadoDictaminar,
+                function () {
+                    return new ProductoTipoResource($this->tipo);
+                }
+            ),
+            $this->when(
+                !$esEstadoDictaminar,
+                function () {
+                    $this->producto->load('tipo.categoria', 'marca');
+
+                    return $this->merge([
+                        'caracteristicas' => $this->caracteristicas,
+                        'producto' => new ProductoResource($this->producto),
+                    ]);
+                }
+            ),
         ];
     }
 }

@@ -1,13 +1,13 @@
 import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
-import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedActionDictaminado as DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { CostoUnitarioField, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/views/common/articulos/form-fields";
 import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
 import type { ProductoGroupField } from "@/views/common/productos/form-fields";
 import type { CuentaContable } from "./form-fields";
 import z from "zod";
 
-type ProductoField = RecepcionFieldGroup & {
+type AdquisicionFields = RecepcionFieldGroup & {
     dictamen_producto_id: number;
     cuenta_contable: CuentaContable;
     factura_uuid: string | undefined;
@@ -20,11 +20,11 @@ type ProductoField = RecepcionFieldGroup & {
 }
 
 type Schema = {
-    productos: ProductoField[];
+    adquisiciones: AdquisicionFields[];
 }
 
 export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): Schema => ({
-    productos: dictamen.dictamen_productos.map((dictamenProducto): ProductoField => ({
+    adquisiciones: dictamen.version_actual.adquisiciones.map((adquisicion): AdquisicionFields => ({
         ...recepcionFieldGroupDefaultValues,
         es_contable: undefined,
         factura_uuid: undefined,
@@ -32,14 +32,14 @@ export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): Sche
         numero_serie: null,
         costo_unitario: null,
         numero_inventario: null,
-        dictamen_producto_id: dictamenProducto.id,
-        producto_tipo_id: dictamenProducto.producto.tipo.id,
-        producto_id: dictamenProducto.producto.id,
+        dictamen_producto_id: adquisicion.id,
+        producto_tipo_id: adquisicion.producto.tipo.id,
+        producto_id: adquisicion.producto.id,
     }))
 });
 
 export const validator = z.object({
-    productos: requiredArray(z
+    adquisiciones: requiredArray(z
         .object({
             dictamen_producto_id: selectedNumberOption,
             producto_tipo_id: selectedNumberOption,

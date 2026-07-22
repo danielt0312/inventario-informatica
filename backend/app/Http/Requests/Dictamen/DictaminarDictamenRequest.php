@@ -18,14 +18,14 @@ class DictaminarDictamenRequest extends ActionDictamenRequest
             'adquisiciones.*.id' => [
                 'required',
                 'integer',
-                Rule::exists('dictamen_productos', 'id')->where(function ($query) {
-                    $query->where('dictamen_id', $this->dictamen->id);
+                Rule::exists('dictamen_adquisiciones', 'id')->where(function ($query) {
+                    $query->where('dictamen_version_id', $this->dictamen->versionActual->id);
                 }),
             ],
             'adquisiciones.*.producto_id' => Rule::foreach(function ($_, string $attribute) {
                 $index = explode('.', $attribute)[1];
                 $adquisicionId = $this->input("adquisiciones.{$index}.id");
-                $adquisicion = $this->dictamen->adquisiciones->firstWhere('id', $adquisicionId);
+                $adquisicion = $this->dictamen->versionActual->adquisiciones->firstWhere('id', $adquisicionId);
                 $tipoId = $adquisicion?->productoTipo?->id;
 
                 return [

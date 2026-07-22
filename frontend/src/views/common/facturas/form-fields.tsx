@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PaperclipIcon } from "lucide-react";
 import { useState } from "react";
-import { Table } from "./partials/table";
+import { Table as FacturaTable } from "./partials/table";
 import { useFieldContext } from "@/components/composed/@tanstack/form/form";
 import { Field, type FieldProps } from "@/components/composed/field";
 import { useStore } from "@tanstack/react-form";
@@ -34,9 +34,12 @@ export const FacturaField = ({
                 <DialogContent className="min-w-4xl">
                     <DialogHeader>
                         <DialogTitle>Facturas</DialogTitle>
+                        <DialogDescription className="sr-only">
+                            Selección de factura
+                        </DialogDescription>
                     </DialogHeader>
 
-                    <Table
+                    <FacturaTable
                         columns={[
                             {
                                 id: 'selector',
