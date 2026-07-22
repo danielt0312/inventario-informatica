@@ -15,5 +15,5 @@ export const defaultValues: Schema = {
 
 export const validator = z.object({
     fecha_emision: requiredIsoDateLTEToday,
-    archivo: standardPdfFile
+    archivo: standardPdfFile()
 });

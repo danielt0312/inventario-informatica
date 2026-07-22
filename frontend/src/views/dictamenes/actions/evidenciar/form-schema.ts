@@ -11,6 +11,6 @@ export const defaultValues: Schema = {
 }
 
 export const validator = z.object({
-    archivo: standardPdfFile
+    archivo: standardPdfFile()
 });
 

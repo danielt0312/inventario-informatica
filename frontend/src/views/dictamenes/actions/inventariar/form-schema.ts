@@ -6,6 +6,7 @@ import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/c
 import type { ProductoGroupField } from "@/views/common/productos/form-fields";
 import type { CuentaContable } from "./form-fields";
 import z from "zod";
+import type { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
 
 type AdquisicionFields = RecepcionFieldGroup & {
     dictamen_producto_id: number;
@@ -20,10 +21,12 @@ type AdquisicionFields = RecepcionFieldGroup & {
 }
 
 type Schema = {
+    orden_compra: OrdenCompraField;
     adquisiciones: AdquisicionFields[];
 }
 
 export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): Schema => ({
+    orden_compra: undefined,
     adquisiciones: dictamen.version_actual.adquisiciones.map((adquisicion): AdquisicionFields => ({
         ...recepcionFieldGroupDefaultValues,
         es_contable: undefined,
@@ -39,6 +42,7 @@ export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): Sche
 });
 
 export const validator = z.object({
+    orden_compra: requiredString,
     adquisiciones: requiredArray(z
         .object({
             dictamen_producto_id: selectedNumberOption,

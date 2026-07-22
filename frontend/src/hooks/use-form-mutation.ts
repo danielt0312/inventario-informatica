@@ -22,6 +22,7 @@ export interface FormMutation<TResponse = any, TPayload = any>
     url: string;
     method?: FormMutationMethod;
     axiosConfig?: AxiosRequestConfig<TPayload>;
+    toFormData?: (data: TPayload) => FormData;
 }
 
 export function useFormMutation<TResponse = any, TPayload = any>({
@@ -29,20 +30,23 @@ export function useFormMutation<TResponse = any, TPayload = any>({
     axiosConfig,
     onError,
     method = 'POST',
+    toFormData,
     ...props
 }: FormMutation<TResponse, TPayload>, queryClient?: QueryClient) {
     return useMutation({
         ...props,
         mutationFn: ({ data }: FormMutationFunction<TPayload>) => {
-            if (data instanceof FormData && (method === 'PUT' || method === 'PATCH')) {
-                data.append('_method', method);
-                return api.post<TResponse>(url, data, axiosConfig);
+            const payload = toFormData ? toFormData(data) : data;
+
+            if (payload instanceof FormData && (method === 'PUT' || method === 'PATCH')) {
+                payload.append('_method', method);
+                return api.post<TResponse>(url, payload, axiosConfig);
             }
 
             return api.request<TResponse>({
                 url,
                 method,
-                data,
+                data: payload,
                 ...axiosConfig
             });
         },

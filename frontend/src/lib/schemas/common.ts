@@ -55,14 +55,17 @@ export const pdfFile = (
     .mime('application/pdf', params);
 
 export const STANDARD_MAX_FILE_SIZE = 5_000_000;
+export const STANDARD_MAX_FILE_SIZE_ERROR_MESSAGE = 'El archivo no debe de pesar más de 5MB';
 
 export const standardFile = (
-    params: Parameters<z.ZodFile['max']>[1] = 'El archivo no debe de pesar más de 5MB'
+    params: Parameters<z.ZodFile['max']>[1] = STANDARD_MAX_FILE_SIZE_ERROR_MESSAGE
 ) => file()
     .max(STANDARD_MAX_FILE_SIZE, params);
 
-export const standardPdfFile = pdfFile()
-    .max(STANDARD_MAX_FILE_SIZE);
+export const standardPdfFile = (
+    params: Parameters<z.ZodFile['max']>[1] = STANDARD_MAX_FILE_SIZE_ERROR_MESSAGE
+) => pdfFile()
+    .max(STANDARD_MAX_FILE_SIZE, params);
 
 export const requiredIsoDate = (
     params: Parameters<typeof z.iso.date>[0] = 'Debes de proporcionar una fecha'

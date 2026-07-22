@@ -7,14 +7,14 @@ import type { TResponse } from "@/types/generics";
 import type { ProductoCategoria } from "@/types/productos";
 
 export const useCreateFormMutation = (
-  props?: Omit<FormMutation<TResponse<ProductoCategoria>, OutputSchema>, 'url'>
+    props?: Omit<FormMutation<TResponse<ProductoCategoria>, OutputSchema>, 'url'>
 ) => useFormMutation<TResponse<ProductoCategoria>, OutputSchema>({
-  url: `api/producto_categorias`,
-  ...props
+    url: `api/producto_categorias`,
+    ...props
 });
 
 export const useForm = (useMutationHook = useCreateFormMutation) => {
-  const { mutate } = useMutationHook();
+    const { mutate } = useMutationHook();
 
     return useAppForm({
         defaultValues,

@@ -12,6 +12,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { CuentaContable } from "./form-fields";
 import { CostoUnitarioField, EsContableField, NumeroSerieField } from "@/views/common/articulos/form-fields";
 import type { DetailedActionDictaminado as DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -31,15 +32,21 @@ export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
 export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen }) {
     const form = useForm(dictamen);
     const slots = dictamen.version_actual.adquisiciones.flatMap((adquisicion) =>
-        Array.from({ length: adquisicion.cantidad }, (_, i) => ({
+        Array.from({ length: adquisicion.cantidad }, (_, index) => ({
             adquisicion,
-            index: i,
+            index,
         }))
     );
 
     return (
         <Form form={form}>
             <form.AppForm>
+
+                <form.AppField
+                    name="orden_compra"
+                    children={() => <OrdenCompraField />}
+                />
+
                 {slots.map((slot, index) => (
                     <form.AppField
                         key={`${slot.adquisicion.id}-${slot.index}`}

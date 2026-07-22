@@ -17,7 +17,8 @@ use App\Http\Controllers\{
     EmpleadoController,
     AdscripcionController,
     ArchivoController,
-    FacturaController
+    FacturaController,
+    OrdenCompraController,
 };
 
 // todo organizar las apiResource(s)
@@ -35,7 +36,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('documentos', DocumentoController::class)
         ->only(['index']);
 
-    Route::apiResource('facturas', FacturaController::class);
+    Route::apiResources([
+        'orden_compras' => OrdenCompraController::class,
+        'facturas' => FacturaController::class,
+    ], ['only' => ['index', 'store']]);
 
     Route::get('archivos/{archivo}/stream', [ArchivoController::class, 'stream']);
 

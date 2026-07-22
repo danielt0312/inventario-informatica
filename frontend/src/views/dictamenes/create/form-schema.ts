@@ -62,7 +62,7 @@ export const validator = z.object({
     folio: requiredString,
     fecha_solicitud: requiredIsoDateLTEToday,
     adscripcion_id: selectedNumberOption,
-    archivo: standardPdfFile,
+    archivo: standardPdfFile(),
     adquisiciones: requiredArray(z
         .object({
             cantidad: positiveInteger,

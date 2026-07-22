@@ -5,8 +5,6 @@ import { NombreField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import type { TResponse } from "@/types/generics";
 import type { Producto } from "@/types/productos";
-import { formOptions } from "@tanstack/react-form";
-import { asAnyFormApi } from "@/lib/utils";
 import { ProductoTipoField } from "../tipos/form-fields";
 import { ProductoMarcaField } from "../marcas/form-fields";
 
@@ -17,24 +15,21 @@ export const useCreateFormMutation = (
     ...props
 });
 
-export const defaultFormOptions = (useMutationHook = useCreateFormMutation) => {
-    const mutation = useMutationHook();
 
-    return formOptions({
+export const useForm = (useMutationHook = useCreateFormMutation) => {
+    const { mutate } = useMutationHook();
+
+    return useAppForm({
         defaultValues,
         validators: {
             onSubmit: validator
         },
         onSubmit: ({ value, formApi }) => {
             const data = validator.parse(value);
-            mutation.mutate({ data, formApi: asAnyFormApi(formApi) });
+            mutate({ data, formApi });
         }
-    });
-}
-
-export const useForm = (options = defaultFormOptions) => (
-    useAppForm(options())
-);
+    })
+};
 
 interface AppFormProps extends Omit<React.ComponentProps<typeof PrimitiveForm>, 'form'> {
     form: ReturnType<typeof useForm>;
@@ -48,12 +43,12 @@ export const AppForm = ({
     ...props
 }: AppFormProps) => (
     <PrimitiveForm
-        form={asAnyFormApi(form)}
+        form={form}
         {...props}
     >
-        {showTipoField && <form.AppField name="tipo_id" children={() => <ProductoTipoField />}/>}
-        <form.AppField name="marca_id" children={() => <ProductoMarcaField />}/>
-        <form.AppField name="nombre" children={() => <NombreField />}/>
+        {showTipoField && <form.AppField name="tipo_id" children={() => <ProductoTipoField />} />}
+        <form.AppField name="marca_id" children={() => <ProductoMarcaField />} />
+        <form.AppField name="nombre" children={() => <NombreField />} />
         {children}
     </PrimitiveForm>
 );

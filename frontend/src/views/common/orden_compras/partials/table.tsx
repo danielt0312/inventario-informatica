@@ -2,46 +2,40 @@ import {
     PrimitiveTable as DocumentoPrimitiveTable,
     type PrimitiveTableProps as DocumentoPrimitiveTableProps
 } from "@/views/documentos/partials/table";
-import type { Factura } from "@/types/documentos";
-import { getDefaultColumns } from "./table-cols";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { Form, useForm, useFacturaCreateFormMutation } from "../create/form";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { CreateOrdenCompraForm, useCreateOrdenCompraForm, useCreateOrdenCompraFormMutation } from "../create/form";
+import { defaultColumns } from "./table-cols";
+import type { OrdenCompra } from "@/types/orden_compras";
 
-export interface TableProps<TData extends Factura = Factura>
-    extends Omit<
-        DocumentoPrimitiveTableProps<TData>,
-        'queryKey' | 'url' | 'actionBar'
-    > { }
-
-export function Table<TData extends Factura = Factura>({
+export function OrdenCompraTable({
     columns = [],
     ...props
-}: TableProps<TData>) {
+}: Omit<DocumentoPrimitiveTableProps<OrdenCompra>, 'queryKey' | 'url' | 'actionBar'>) {
     const queryClient = useQueryClient();
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const useDialogFormMutation = () => useFacturaCreateFormMutation({
+    const useCreateFormMutation = () => useCreateOrdenCompraFormMutation({
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['facturas'] });
+            queryClient.invalidateQueries({ queryKey: ['orden_compras'] });
             setIsOpen(false);
         }
     });
 
-    const useDialogForm = () => useForm(useDialogFormMutation);
+    const createForm = () => useCreateOrdenCompraForm(useCreateFormMutation);
 
     return (
-        <DocumentoPrimitiveTable<TData>
+        <DocumentoPrimitiveTable
             {...props}
-            queryKey={['facturas']}
-            url="api/facturas"
+            queryKey={['orden_compras']}
+            url="api/orden_compras"
             columns={[
                 ...columns,
-                ...getDefaultColumns<TData>()
+                ...defaultColumns
             ]}
             actionBar={(
                 <>
@@ -58,7 +52,7 @@ export function Table<TData extends Factura = Factura>({
                                 </DialogDescription>
                             </DialogHeader>
 
-                            <Form useFormHook={useDialogForm} />
+                            <CreateOrdenCompraForm useFormHook={createForm} />
                         </DialogContent>
                     </Dialog>
                 </>

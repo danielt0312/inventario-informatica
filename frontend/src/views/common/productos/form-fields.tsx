@@ -4,11 +4,11 @@ import { toOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
 import type { ProductoWithMarca } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { AppForm, useForm, useCreateFormMutation, defaultFormOptions } from "./create/form";
+import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 import { ProductoTipoField } from "./tipos/form-fields";
 import { useFieldContext, withFieldGroup } from "@/components/composed/@tanstack/form/form";
 import { useStore } from "@tanstack/react-form";
@@ -40,7 +40,7 @@ export function ProductoField({
         enabled: !disabled
     });
 
-    const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
+    const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
     const useDialogFormMutation = () => useCreateFormMutation({
         onSuccess: (data, _, __, { client }) => {
@@ -50,7 +50,7 @@ export function ProductoField({
         }
     });
 
-    const dialogForm = useForm(() => defaultFormOptions(useDialogFormMutation));
+    const dialogForm = useForm(useDialogFormMutation);
     dialogForm.setFieldValue('tipo_id', tipo);
 
     return (

@@ -7,24 +7,19 @@ import { Form as RootForm, SubmitButton } from "@/components/composed/@tanstack/
 import { PdfFileField } from "../../archivos/form-fields";
 import { FechaEmisionField } from "./form-fields";
 
-export const useFacturaCreateFormMutation = <R extends TResponse<Factura>, P extends FormData>(props?: Omit<FormMutation, 'url' | 'method' | 'axiosConfig'>) =>
-    useFormMutation<R, P>({
-        axiosConfig: {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        },
+export const useFacturaCreateFormMutation = (
+    props?: Omit<FormMutation<TResponse<Factura>, FormData>, 'url' | 'method' | 'axiosConfig'>
+) => (
+    useFormMutation<TResponse<Factura>, FormData>({
         url: `api/facturas`,
         ...props,
-    });
+    })
+);
 
-interface UseFormOptions {
-    useMutationHook?: typeof useFacturaCreateFormMutation;
-}
 
-export const useForm = ({
+export const useForm = (
     useMutationHook = useFacturaCreateFormMutation
-}: UseFormOptions = {}) => {
+) => {
     const { mutate } = useMutationHook();
 
     return useAppForm({
@@ -41,7 +36,7 @@ export const useForm = ({
 
             mutate({ data, formApi });
         }
-    })
+    });
 }
 
 interface FormProps extends Omit<React.ComponentProps<typeof RootForm>, 'form'> {
