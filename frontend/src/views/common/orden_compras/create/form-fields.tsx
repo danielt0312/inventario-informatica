@@ -15,7 +15,7 @@ export const FechaSolicitudField = ({
 export type NumeroOrdenField = InputField;
 export const NumeroOrdenField = ({
     label = "Orden No.",
-    placeholder = "Ingresa el número de la orden",
+    placeholder = "Ingresa el número de la orden de compra",
     ...props
 }: React.ComponentProps<typeof InputField>) => (
     <InputField

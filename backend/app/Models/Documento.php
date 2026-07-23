@@ -43,4 +43,9 @@ class Documento extends Model
     {
         return $this->hasOne(Factura::class);
     }
+
+    public function ordenCompra(): HasOne
+    {
+        return $this->hasOne(OrdenCompra::class);
+    }
 }

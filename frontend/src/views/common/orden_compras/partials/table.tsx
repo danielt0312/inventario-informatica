@@ -44,11 +44,11 @@ export function OrdenCompraTable({
                     </Button>
 
                     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                        <DialogContent>
+                        <DialogContent className="min-w-2xl">
                             <DialogHeader>
-                                <DialogTitle>Crear Factura</DialogTitle>
+                                <DialogTitle>Crear Orden de Compra</DialogTitle>
                                 <DialogDescription className="sr-only">
-                                    Creación de factura
+                                    Creación de Orden de Compra
                                 </DialogDescription>
                             </DialogHeader>
 

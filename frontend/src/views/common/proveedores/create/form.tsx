@@ -10,7 +10,7 @@ export const useCreateProveedorFormMutation = (
     props?: Omit<FormMutation<TResponse<Proveedor>, OutputSchema>, 'url' | 'method' | 'axiosConfig'>
 ) => (
     useFormMutation<TResponse<Proveedor>, OutputSchema>({
-        url: `api/facturas`,
+        url: `api/proveedores`,
         ...props,
     })
 );

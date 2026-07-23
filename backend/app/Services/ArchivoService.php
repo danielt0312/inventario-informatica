@@ -10,7 +10,7 @@ use InvalidArgumentException;
 
 class ArchivoService
 {
-    public function create(string $nombre, AvailableFileExtensions $tipo): Archivo
+    public function create(string $nombre, AvailableFileExtensions $tipo = AvailableFileExtensions::PDF): Archivo
     {
         return Archivo::create([
             'nombre' => pathinfo($nombre, PATHINFO_FILENAME),

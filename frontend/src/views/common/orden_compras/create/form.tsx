@@ -13,7 +13,7 @@ export const useCreateOrdenCompraFormMutation = (
     props?: Omit<FormMutation<TResponse<OrdenCompra>, OutputSchema>, 'url' | 'method' | 'axiosConfig' | 'toFormData'>
 ) => (
     useFormMutation<TResponse<OrdenCompra>, OutputSchema>({
-        url: `api/facturas`,
+        url: `api/orden_compras`,
         toFormData: (data) => {
             const formData = new FormData;
 

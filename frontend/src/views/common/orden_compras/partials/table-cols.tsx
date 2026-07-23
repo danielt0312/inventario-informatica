@@ -3,7 +3,15 @@ import type { ColumnDef } from "@tanstack/react-table"
 
 export const defaultColumns: ColumnDef<OrdenCompra>[] = [
     {
-        header: 'Fecha de emisión',
-        accessorKey: 'fecha_emision'
+        header: 'Orden No.',
+        accessorKey: 'numero_orden'
+    },
+    {
+        header: 'Fecha de solicitud',
+        accessorKey: 'fecha_solicitud'
+    },
+    {
+        header: 'Proveedor',
+        accessorKey: 'proveedor.nombre'
     }
 ];

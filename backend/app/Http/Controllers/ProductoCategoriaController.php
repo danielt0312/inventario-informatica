@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Models\ProductoCategoria;
-use App\Http\Resources\ProductoCategoriaResource;
 use App\Http\Requests\ProductoCategoria\StoreProductoCategoriaRequest;
 
 class ProductoCategoriaController extends Controller

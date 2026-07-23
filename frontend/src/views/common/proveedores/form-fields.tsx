@@ -57,9 +57,9 @@ export const ProveedorField = ({
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Crear Modelo de Producto</DialogTitle>
+                        <DialogTitle>Registrar Proveedor</DialogTitle>
                         <DialogDescription className="sr-only">
-                            Creación de modelo de producto
+                            Registro de nuevo proveedor
                         </DialogDescription>
                     </DialogHeader>
 

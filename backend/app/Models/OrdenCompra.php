@@ -20,6 +20,6 @@ class OrdenCompra extends Model
 
     public function proveedor(): BelongsTo
     {
-        return $this->belogsTo(Proveedor::class);
+        return $this->belongsTo(Proveedor::class);
     }
 }
