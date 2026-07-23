@@ -7,7 +7,7 @@ export type Archivo = WithTimestamps<{
 }>;
 
 export type Documento = Archivo & {
-    tipo: string | undefined;
+    tipo: string;
 };
 
 export type Oficio = Documento & {
