@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests\ProductoMarca\StoreProductoMarcaRequest;
-use App\Models\ProductoMarca;
 use Spatie\QueryBuilder\{AllowedInclude, QueryBuilder};
+
+use App\Models\ProductoMarca;
+use App\Http\Requests\ProductoMarca\StoreProductoMarcaRequest;
 
 class ProductoMarcaController extends Controller
 {
@@ -26,20 +26,5 @@ class ProductoMarcaController extends Controller
             ->toResource()
             ->response()
             ->setStatusCode(201);
-    }
-
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function destroy(string $id)
-    {
-        //
     }
 }

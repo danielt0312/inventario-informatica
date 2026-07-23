@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-use App\Traits\Models\HasDocumento;
+use App\Traits\Models\HasArchivable;
 
 class Oficio extends Model
 {
-    use HasFactory, HasDocumento;
+    use HasFactory, HasArchivable;
 
     protected $fillable = [
-        'folio'
+        'folio',
     ];
 
     public $timestamps = false;

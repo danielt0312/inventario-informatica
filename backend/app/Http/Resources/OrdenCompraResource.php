@@ -14,7 +14,7 @@ class OrdenCompraResource extends JsonResource
             'fecha_solicitud' => $this->fecha_solicitud,
             'numero_orden' => $this->numero_orden,
             'proveedor' => new ProveedorResource($this->whenLoaded('proveedor')),
-            $this->merge(new DocumentoResource($this->documento))
+            'archivo' => new ArchivoResource($this->whenLoaded('archivo'))
         ];
     }
 }

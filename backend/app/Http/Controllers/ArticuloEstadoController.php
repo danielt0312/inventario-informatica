@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ArticuloEstadoEnum;
+use App\Models\ArticuloEstado;
 
 class ArticuloEstadoController extends Controller
 {
     public function index() {
-        $data = ArticuloEstadoEnum::casesToFormattedArray();
-
-        return response()->json(compact('data'));
+        return ArticuloEstado::get()
+            ->toResourceCollection();
     }
 }

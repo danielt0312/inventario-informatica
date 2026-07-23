@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -13,9 +12,7 @@ use App\Support\FilePathGenerator;
 
 class Archivo extends Model
 {
-    use SoftDeletes, HasUuids, HasFactory;
-
-    protected $table = 'archivos';
+    use HasUuids, HasFactory;
 
     protected $fillable = [
         'nombre',
@@ -23,7 +20,6 @@ class Archivo extends Model
     ];
 
     protected $attributes = [
-        'nombre' => null,
         'activo' => 1
     ];
 

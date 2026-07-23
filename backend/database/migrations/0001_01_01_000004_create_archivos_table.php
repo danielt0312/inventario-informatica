@@ -11,12 +11,10 @@ return new class extends Migration
         Schema::create('archivos', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('nombre', 64)
-                ->nullable();
+            $table->string('nombre', 64);
             $table->string('extension', 5);
             $table->boolean('activo');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

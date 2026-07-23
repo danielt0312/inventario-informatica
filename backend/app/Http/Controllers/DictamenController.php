@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
 
-use App\Services\ArchivoService;
-
 use App\Http\Requests\Dictamen\{
     StoreDictamenRequest,
     DictaminarDictamenRequest,
@@ -28,18 +26,14 @@ use App\Enums\{
     DictamenEstadoEnum
 };
 
-class DictamenController extends Controller
+class DictamenController extends ArchivableController
 {
-    public function __construct(
-        protected ArchivoService $archivoService
-    ) {}
-
     public function index(Request $request)
     {
         return QueryBuilder::for(Dictamen::class)
             ->with([
                 'estado',
-                'versionActual' => ['oficio', 'documento']
+                'versionActual' => ['oficio', 'archivo']
             ])
             ->allowedFilters(
                 AllowedFilter::partial('folio', 'versionActual.oficio.folio'),
@@ -57,7 +51,7 @@ class DictamenController extends Controller
             $adscripcionId = $validated['adscripcion_id'];
             $oficio = null;
             // todo identificar si el area de adscripcion es la interna
-            if ($adscripcionId == 1) {
+            if ($adscripcionId != 2) {
                 $archivo = $this->archivoService->createAndStore($request->file('archivo'));
 
                 $documento = $archivo->documento()->create([

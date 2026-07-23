@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Traits\Models\HasDocumento;
+use App\Traits\Models\HasArchivable;
 
 class OrdenCompra extends Model
 {
-    use HasDocumento;
+    use HasArchivable;
 
     protected $fillable = [
         'fecha_solicitud',

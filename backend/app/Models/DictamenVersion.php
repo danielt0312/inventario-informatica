@@ -8,8 +8,12 @@ use Illuminate\Database\Eloquent\Relations\{
     HasMany,
 };
 
+use App\Traits\Models\HasArchivable;
+
 class DictamenVersion extends Model
 {
+    use HasArchivable;
+
     protected $fillable = [
         'version',
         'dictamen_id',
@@ -31,11 +35,6 @@ class DictamenVersion extends Model
     public function oficio(): BelongsTo
     {
         return $this->belongsTo(Oficio::class);
-    }
-
-    public function documento(): BelongsTo
-    {
-        return $this->belongsTo(Documento::class);
     }
 
     public function adquisiciones(): HasMany

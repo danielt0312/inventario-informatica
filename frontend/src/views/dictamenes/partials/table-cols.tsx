@@ -26,7 +26,7 @@ const ActionMenuItem = ({ state, ...props }: React.ComponentProps<typeof Root.Ac
 );
 
 const ViewFileActionMenuItem = ({ dictamen }: { dictamen: DetailedActionDictaminado | DetailedDictaminado }) => {
-    const { uuid, nombre } = dictamen.version_actual.documento;
+    const { uuid, nombre } = dictamen.version_actual.archivo;
     const { mutate, isPending } = useFilePreviewWindowMutation();
 
     return (

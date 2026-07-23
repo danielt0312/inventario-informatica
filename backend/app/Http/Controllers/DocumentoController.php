@@ -11,14 +11,12 @@ class DocumentoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = QueryBuilder::for(Documento::class)
+        return QueryBuilder::for(Documento::class)
             ->with('tipo')
             ->allowedFilters(
                 AllowedFilter::exact('tipos', 'tipo_id'),
                 AllowedFilter::partial('archivo', 'archivo.nombre')
-            );
-
-        return $query
+            )
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
     }

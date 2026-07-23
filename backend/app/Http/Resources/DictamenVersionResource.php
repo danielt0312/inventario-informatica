@@ -17,9 +17,9 @@ class DictamenVersionResource extends JsonResource
             'created_at' => $this->created_at,
             'adquisiciones' => DictamenAdquisicionResource::collection($this->whenLoaded('adquisiciones')),
             'oficio' => new OficioResource($this->whenLoaded('oficio')),
-            'documento' => $this->when(
+            'archivo' => $this->when(
                 !$this->dictamen->esEstadoDictaminar(),
-                fn () => new DocumentoResource($this->whenLoaded('documento'))
+                fn () => new ArchivoResource($this->whenLoaded('archivo'))
             ),
         ];
     }

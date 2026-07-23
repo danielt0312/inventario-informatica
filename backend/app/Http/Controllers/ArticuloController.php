@@ -24,26 +24,4 @@ class ArticuloController extends Controller
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
     }
-
-    public function store(StoreArticuloRequest $request)
-    {
-        Articulo::create($request->validated());
-
-        return response(status: 201);
-    }
-
-    public function show(Articulo $articulo)
-    {
-        //
-    }
-
-    public function update(Request $request, Articulo $articulo)
-    {
-        //
-    }
-
-    public function destroy(Articulo $articulo)
-    {
-        //
-    }
 }

@@ -16,8 +16,8 @@ export function ShowInfo({ dictamen }: { dictamen: DetailedActionDictamen }) {
                     <div data-slot="label" className="col-span-2">
                         <Label className="font-bold">Dictamen tecnológico</Label>
                         <FilePreviewWindowGroup
-                            uuid={dictamen.version_actual.documento.uuid}
-                            title={dictamen.version_actual.documento.nombre ?? dictamen.version_actual.documento.uuid}
+                            uuid={dictamen.version_actual.archivo.uuid}
+                            title={dictamen.version_actual.archivo.nombre ?? dictamen.version_actual.archivo.uuid}
                         />
                     </div>
                 )}

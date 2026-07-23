@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\DocumentoTipoEnum;
+use App\Models\DocumentoTipo;
 
 class DocumentoTipoController extends Controller
 {
     public function index() {
-        $data = DocumentoTipoEnum::casesToFormattedArray();
-
-        return response()->json(compact('data'));
+        return DocumentoTipo::get()
+            ->toResourceCollection();
     }
 }

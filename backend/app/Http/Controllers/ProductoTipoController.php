@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
+
 use App\Models\ProductoTipo;
-use App\Http\Resources\ProductoTipoResource;
 use App\Http\Requests\ProductoTipo\StoreProductoTipoRequest;
 
 class ProductoTipoController extends Controller
@@ -24,20 +24,5 @@ class ProductoTipoController extends Controller
             ->toResource()
             ->response()
             ->setStatusCode(201);
-    }
-
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function destroy(string $id)
-    {
-        //
     }
 }
