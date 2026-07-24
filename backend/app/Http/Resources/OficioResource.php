@@ -11,7 +11,7 @@ class OficioResource extends JsonResource
     {
         return [
             'folio' => $this->folio,
-            $this->merge(new DocumentoResource($this->documento))
+            'archivo' => new ArchivoResource($this->whenLoaded('archivo'))
         ];
     }
 }

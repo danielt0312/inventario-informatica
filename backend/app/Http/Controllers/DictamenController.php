@@ -91,7 +91,10 @@ class DictamenController extends ArchivableController
     public function show(string $uuid)
     {
         return QueryBuilder::for(Dictamen::class)
-            ->with('estado', 'versionActual.oficio')
+            ->with([
+                'estado',
+                'versionActual' => ['oficio.archivo', 'archivo']
+            ])
             ->allowedIncludes('versiones.adquisiciones', 'versionActual.adquisiciones')
             ->where('uuid', $uuid)
             ->firstOrFail()
