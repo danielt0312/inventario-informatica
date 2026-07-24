@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PaperclipIcon } from "lucide-react";
 import { useState } from "react";
-import { Table as FacturaTable } from "./partials/table";
+import { FacturaTable as FacturaTable } from "./partials/table";
 import { useFieldContext } from "@/components/composed/@tanstack/form/form";
 import { Field, type FieldProps } from "@/components/composed/field";
 import { useStore } from "@tanstack/react-form";

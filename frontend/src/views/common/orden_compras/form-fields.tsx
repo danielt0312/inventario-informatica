@@ -7,6 +7,7 @@ import { Field, type FieldProps } from "@/components/composed/field";
 import { useStore } from "@tanstack/react-form";
 import { FilePreviewWindowGroup } from "@/components/composed/file-preview-window";
 import { OrdenCompraTable } from "./partials/table";
+import { ordenCompraInitialTableState } from "./partials/table-cols";
 
 export type OrdenCompraField = string | undefined;
 export const OrdenCompraField = ({
@@ -48,7 +49,7 @@ export const OrdenCompraField = ({
                                         <Button
                                             size="sm"
                                             onClick={() => {
-                                                field.setValue(row.original.uuid);
+                                                field.setValue(row.original.archivo.uuid);
                                                 setOpen(false);
                                             }}
                                         >
@@ -58,6 +59,12 @@ export const OrdenCompraField = ({
                                 }
                             }
                         ]}
+                        tableOptions={{
+                            initialState: {
+                                ...ordenCompraInitialTableState,
+                                columnOrder: ['selector', ...ordenCompraInitialTableState.columnOrder ?? []],
+                            }
+                        }}
                     />
                 </DialogContent>
             </Dialog>

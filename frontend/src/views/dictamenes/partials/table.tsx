@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Route as CreateRoute } from "@/routes/_auth/dictamenes/create";
+import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 
 export interface TableFilters {
     folio: string;
@@ -20,6 +21,8 @@ export function Table() {
         folio: '',
         estados: []
     });
+
+    const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
 
     const { data: ESTADOS = [] } = useQuery({
         queryKey: ['dictamen_estados'],
@@ -62,6 +65,12 @@ export function Table() {
                     </Button>
                 </Link>
             )}
+            tableOptions={{
+                meta: {
+                    previewFile: (uuid, title) => mutate({ uuid, title }),
+                    isPreviewing
+                }
+            }}
         />
     );
 }

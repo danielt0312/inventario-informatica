@@ -1,45 +1,56 @@
 import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
+import { toLocaleDateFormat } from "@/lib/utils";
 import type { Archivo } from "@/types/documentos";
-import type { ColumnDef } from "@tanstack/react-table";
+import type { TRowDataAccessFn } from "@/types/generics";
+import type { ColumnDef, TableMeta } from "@tanstack/react-table";
 import { EyeIcon } from "lucide-react";
 
-export const NombreArchivoRow = <TData extends Archivo>(props: ColumnDef<TData>): ColumnDef<TData> => ({
+type RowDataAccessFn<TRowData> = TRowDataAccessFn<TRowData, Archivo>;
+
+const NombreRow = <TRowData,>(getRowData: RowDataAccessFn<TRowData>): ColumnDef<TRowData> => ({
+    id: 'archivo.nombre',
     header: 'Nombre del Archivo',
-    ...props
+    accessorFn: (row) => getRowData(row).nombre
 });
 
-export const FechaSubidaRow = <TData extends Archivo>(props: ColumnDef<TData>): ColumnDef<TData> => ({
+const FechaSubidaRow = <TRowData,>(getRowData: RowDataAccessFn<TRowData>): ColumnDef<TRowData> => ({
+    id: 'archivo.fecha_subida',
     header: 'Fecha de Subida',
-    cell: ({ getValue }) => {
-        const date = getValue<Date>();
-
-        return new Date(date).toLocaleDateString('es-MX', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    },
-    ...props
+    accessorFn: (row) => toLocaleDateFormat(getRowData(row).created_at)
 });
 
-export const ActionRow = <TData extends Archivo>(props: ColumnDef<TData>): ColumnDef<TData> => ({
-    id: 'actions',
-    cell: ({ row, table }) => {
-        const { uuid, nombre } = row.original;
-        const { meta } = table.options;
+function PreviewActionRow<TRowData>({
+    archivo,
+    meta
+}: {
+    archivo: Archivo,
+    meta?: TableMeta<TRowData>;
+}) {
+    const { uuid, nombre } = archivo;
 
-        return (
-            <ActionMenu>
-                <ActionMenuItem
-                    disabled={meta?.isPreviewing}
-                    onClick={() => meta?.previewFile?.(uuid, nombre ?? undefined)}
-                >
-                    <EyeIcon /> Ver
-                </ActionMenuItem>
-            </ActionMenu>
-        );
-    },
-    ...props
+    return (
+        <ActionMenuItem
+            disabled={meta?.isPreviewing}
+            onClick={() => meta?.previewFile?.(uuid, nombre)}
+        >
+            <EyeIcon /> Ver documento
+        </ActionMenuItem>
+    );
+}
+
+const ActionRow = <TRowData,>(getRowData: RowDataAccessFn<TRowData>): ColumnDef<TRowData> => ({
+    id: 'archivo.actions',
+    cell: ({ row, table }) => (
+        <ActionMenu>
+            <PreviewActionRow meta={table.options.meta} archivo={getRowData(row.original)} />
+        </ActionMenu>
+    ),
 });
+
+const getDefaultColumns = <TRowData,>(getRowData: RowDataAccessFn<TRowData>): ColumnDef<TRowData>[] => ([
+    NombreRow(getRowData),
+    FechaSubidaRow(getRowData),
+    ActionRow(getRowData)
+]);
+
+export { type RowDataAccessFn as ArchivoRowDataAccessFn, getDefaultColumns as getArchivoDefaultColumns, NombreRow as ArchivoNombreRow, FechaSubidaRow as ArchivoFechaSubidaRow, ActionRow as ArchivoActionRow, PreviewActionRow as ArchivoPreviewActionRow }

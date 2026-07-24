@@ -236,4 +236,12 @@ export const DictamenProducto = {
     }
 }
 
-export const asAnyFormApi = (formApi: unknown) => formApi as AnyFormApi;
+export const toLocaleDateFormat = (value: string) => (
+    new Date(value).toLocaleDateString('es-MX', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    })
+)

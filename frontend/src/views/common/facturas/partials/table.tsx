@@ -1,26 +1,13 @@
-import {
-    PrimitiveTable as DocumentoPrimitiveTable,
-    type PrimitiveTableProps as DocumentoPrimitiveTableProps
-} from "@/views/documentos/partials/table";
-import type { Factura } from "@/types/documentos";
-import { getDefaultColumns } from "./table-cols";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Form, useForm, useFacturaCreateFormMutation } from "../create/form";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { QueryDataTable } from "@/components/custom/query-datatable";
+import { getFacturaDefaultColumns } from "./table-cols";
 
-export interface TableProps<TData extends Factura = Factura>
-    extends Omit<
-        DocumentoPrimitiveTableProps<TData>,
-        'queryKey' | 'url' | 'actionBar'
-    > { }
-
-export function Table<TData extends Factura = Factura>({
-    columns = [],
-    ...props
-}: TableProps<TData>) {
+export function FacturaTable() {
     const queryClient = useQueryClient();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -35,14 +22,10 @@ export function Table<TData extends Factura = Factura>({
     const useDialogForm = () => useForm(useDialogFormMutation);
 
     return (
-        <DocumentoPrimitiveTable<TData>
-            {...props}
+        <QueryDataTable
             queryKey={['facturas']}
             url="api/facturas"
-            columns={[
-                ...columns,
-                ...getDefaultColumns<TData>()
-            ]}
+            columns={getFacturaDefaultColumns()}
             actionBar={(
                 <>
                     <Button size="sm" onClick={() => setIsOpen(true)}>

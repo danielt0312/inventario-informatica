@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table } from "./partials/table"
+import { DocumentoTable } from "./partials/table"
 
 export function View() {
     return (
@@ -9,7 +9,7 @@ export function View() {
             </CardHeader>
 
             <CardContent>
-                <Table />
+                <DocumentoTable />
             </CardContent>
         </Card>
     )

@@ -1,20 +1,19 @@
-import {
-    PrimitiveTable as DocumentoPrimitiveTable,
-    type PrimitiveTableProps as DocumentoPrimitiveTableProps
-} from "@/views/documentos/partials/table";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { CreateOrdenCompraForm, useCreateOrdenCompraForm, useCreateOrdenCompraFormMutation } from "../create/form";
-import { defaultColumns } from "./table-cols";
+import { ordenCompraDefaultColumns, ordenCompraInitialTableState } from "./table-cols";
+import { QueryDataTable, type QueryDataTableProps } from "@/components/custom/query-datatable";
 import type { OrdenCompra } from "@/types/orden_compras";
+import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 
 export function OrdenCompraTable({
     columns = [],
+    tableOptions,
     ...props
-}: Omit<DocumentoPrimitiveTableProps<OrdenCompra>, 'queryKey' | 'url' | 'actionBar'>) {
+}: Omit<QueryDataTableProps<OrdenCompra>, 'queryKey' | 'url'>) {
     const queryClient = useQueryClient();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -25,17 +24,17 @@ export function OrdenCompraTable({
             setIsOpen(false);
         }
     });
+    const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
 
     const createForm = () => useCreateOrdenCompraForm(useCreateFormMutation);
 
     return (
-        <DocumentoPrimitiveTable
-            {...props}
+        <QueryDataTable
             queryKey={['orden_compras']}
             url="api/orden_compras"
             columns={[
+                ...ordenCompraDefaultColumns,
                 ...columns,
-                ...defaultColumns
             ]}
             actionBar={(
                 <>
@@ -57,6 +56,16 @@ export function OrdenCompraTable({
                     </Dialog>
                 </>
             )}
+            tableOptions={{
+                meta: {
+                    previewFile: (uuid, title) => mutate({ uuid, title }),
+                    isPreviewing,
+                    ...tableOptions?.meta,
+                },
+                initialState: ordenCompraInitialTableState,
+                ...tableOptions,
+            }}
+            {...props}
         />
     );
 }

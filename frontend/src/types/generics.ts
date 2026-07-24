@@ -1,4 +1,5 @@
 import type { UseQueryOptions } from "@tanstack/react-query";
+import type { ColumnDef, RowData } from "@tanstack/react-table";
 
 export type TCatalogo<TValue extends number = number> = {
     id: TValue;
@@ -41,3 +42,30 @@ export type WithTimestamps<T extends object | never = never> = ([T] extends [nev
     created_at: string;
     updated_at: string;
 }
+
+export type TRowDataAccessFn<TRowData extends RowData, TData = unknown> = (row: TRowData) => TData;
+
+type Archivo = { uuid: string; nombre: string };
+type Documento = Archivo & { tipo: 'FACTURA' | 'CONTRATO' };
+type Factura = { fecha_emision: string; archivo: Archivo };
+
+// El factory ya no asume la forma de TData: recibe un "selector" que dice
+// como llegar al Archivo dentro de esa fila. Top-level y anidado son solo
+// dos selectores distintos de la misma abstraccion.
+function nombreArchivoColumn<TData extends RowData>(
+  getArchivo: (row: TData) => Archivo
+): ColumnDef<TData, Archivo['nombre']> {
+  return {
+    id: 'nombre',
+    header: 'Nombre del Archivo',
+    accessorFn: (row) => getArchivo(row).nombre,
+  };
+}
+
+// Documento (top-level): el selector es la identidad, Documento YA ES un Archivo
+const documentoCols = [nombreArchivoColumn<Documento>((row) => row)];
+
+// Factura (nested): el selector baja un nivel
+const facturaCols = [nombreArchivoColumn<Factura>((row) => row.archivo)];
+
+console.log(documentoCols, facturaCols);
