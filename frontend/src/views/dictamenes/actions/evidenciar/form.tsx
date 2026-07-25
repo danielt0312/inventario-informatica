@@ -5,7 +5,7 @@ import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { DictamenArchivoField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import type { DetailedActionDictaminado as DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export function useForm(dictamen: DetailedActionDictaminadoDictamen) {
     const { mutate } = useActionFormMutation(dictamen);

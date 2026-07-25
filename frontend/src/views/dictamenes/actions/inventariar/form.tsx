@@ -11,7 +11,7 @@ import { FacturaField } from "@/views/common/facturas/form-fields";
 import { FieldGroup } from "@/components/ui/field";
 import { CuentaContable } from "./form-fields";
 import { CostoUnitarioField, EsContableField, NumeroSerieField } from "@/views/common/articulos/form-fields";
-import type { DetailedActionDictaminado as DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {

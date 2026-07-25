@@ -7,8 +7,8 @@ import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/d
 import { useState, type JSX } from "react";
 import { useSurtirMutation } from "../actions/surtir/form";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import type { DetailedActionDictamen, DetailedActionDictaminado } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { DetailedDictaminado, DetailedSurtir as DetailedSurtirDictamen } from "@/types/dictamenes";
+import type { DetailedActionDictamen, DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen } from "@/types/dictamenes";
 import { isActionDictamen, isActionDictaminadoDictamen, isDetailedSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { ArchivoPreviewActionRow } from "@/views/common/archivos/partials/table-cols";
 
@@ -24,7 +24,7 @@ const ActionMenuItem = ({ state, ...props }: React.ComponentProps<typeof Root.Ac
     </Root.ActionMenuItem>
 );
 
-const ViewFileActionMenuItem = ({ dictamen, meta }: ActionMenuProps<DetailedActionDictaminado | DetailedDictaminado>) => (
+const ViewFileActionMenuItem = ({ dictamen, meta }: ActionMenuProps<DetailedActionDictaminadoDictamen | DetailedDictaminadoDictamen>) => (
     <ArchivoPreviewActionRow archivo={dictamen.version_actual.archivo} meta={meta} />
 )
 
@@ -101,7 +101,7 @@ const SurtirActionMenu = ({ dictamen, meta }: ActionMenuProps<DetailedSurtirDict
     );
 }
 
-export type DictamenData = DetailedActionDictamen | DetailedDictaminado;
+export type DictamenData = DetailedActionDictamen | DetailedDictaminadoDictamen;
 
 interface ActionMenuProps<TDictamen extends DictamenData> {
     dictamen: TDictamen;

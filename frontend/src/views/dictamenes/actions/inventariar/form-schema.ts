@@ -1,6 +1,6 @@
 import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
-import type { DetailedActionDictaminado as DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type {  DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { CostoUnitarioField, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/views/common/articulos/form-fields";
 import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
 import type { ProductoGroupField } from "@/views/common/productos/form-fields";

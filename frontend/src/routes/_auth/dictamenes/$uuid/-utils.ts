@@ -1,7 +1,7 @@
 import { DictamenEstadoEnum, DictaminadoDictamenEstadoEnum } from '@/lib/constants';
-import type { ActionDictamen, ActionDictaminar, ActionDictaminado, DetailedActionDictaminar, DetailedActionDictamen, DetailedActionDictaminado as DetailedActionDictaminadoDictamen } from './-types';
+import type { ActionDictamen, ActionDictaminarDictamen, ActionDictaminadoDictamen, DetailedActionDictaminarDictamen, DetailedActionDictamen, DetailedActionDictaminadoDictamen } from './-types';
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from './-constants';
-import type { DetailedSurtir as DetailedSurtirDictamen, Dictamen, Surtir as SurtirDictamen } from '@/types/dictamenes';
+import type { DetailedSurtirDictamen, Dictamen, SurtirDictamen } from '@/types/dictamenes';
 
 export function isSurtirDictamen(dictamen: Dictamen): dictamen is SurtirDictamen {
     return dictamen.estado.id === DictamenEstadoEnum.SURTIR;
@@ -15,11 +15,11 @@ export function isActionDictamen(dictamen: Dictamen): dictamen is ActionDictamen
     return dictamen.estado.id in ActionDictamenStates;
 }
 
-export function isActionDictaminarDictamen(dictamen: Dictamen): dictamen is ActionDictaminar {
+export function isActionDictaminarDictamen(dictamen: Dictamen): dictamen is ActionDictaminarDictamen {
     return dictamen.estado.id === ActionDictamenEstadoEnum.DICTAMINAR;
 }
 
-export function isActionDictaminadoDictamen(dictamen: Dictamen): dictamen is ActionDictaminado {
+export function isActionDictaminadoDictamen(dictamen: Dictamen): dictamen is ActionDictaminadoDictamen {
     return !isActionDictaminarDictamen(dictamen);
 }
 
@@ -31,6 +31,6 @@ export function isDetailedActionDictaminadoDictamen(dictamen: Dictamen): dictame
     return dictamen.estado.id in DictaminadoDictamenEstadoEnum;
 }
 
-export function isDetailedActionDictaminarDictamen(dictamen: Dictamen): dictamen is DetailedActionDictaminar {
+export function isDetailedActionDictaminarDictamen(dictamen: Dictamen): dictamen is DetailedActionDictaminarDictamen {
     return isActionDictaminarDictamen(dictamen);
 }
