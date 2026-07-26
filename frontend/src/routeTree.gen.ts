@@ -17,6 +17,7 @@ import { Route as AuthInventarioIndexRouteImport } from './routes/_auth/inventar
 import { Route as AuthDocumentosIndexRouteImport } from './routes/_auth/documentos/index'
 import { Route as AuthDictamenesIndexRouteImport } from './routes/_auth/dictamenes/index'
 import { Route as AuthDictamenesCreateRouteImport } from './routes/_auth/dictamenes/create'
+import { Route as AuthDictamenesUuidEditarRouteImport } from './routes/_auth/dictamenes/$uuid/editar'
 import { Route as AuthDictamenesUuidActionRouteImport } from './routes/_auth/dictamenes/$uuid/$action'
 
 const GuestRoute = GuestRouteImport.update({
@@ -57,6 +58,12 @@ const AuthDictamenesCreateRoute = AuthDictamenesCreateRouteImport.update({
   path: '/dictamenes/create',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthDictamenesUuidEditarRoute =
+  AuthDictamenesUuidEditarRouteImport.update({
+    id: '/dictamenes/$uuid/editar',
+    path: '/dictamenes/$uuid/editar',
+    getParentRoute: () => AuthRoute,
+  } as any)
 const AuthDictamenesUuidActionRoute =
   AuthDictamenesUuidActionRouteImport.update({
     id: '/dictamenes/$uuid/$action',
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/documentos/': typeof AuthDocumentosIndexRoute
   '/inventario/': typeof AuthInventarioIndexRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
+  '/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -81,6 +89,7 @@ export interface FileRoutesByTo {
   '/documentos': typeof AuthDocumentosIndexRoute
   '/inventario': typeof AuthInventarioIndexRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
+  '/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -93,6 +102,7 @@ export interface FileRoutesById {
   '/_auth/documentos/': typeof AuthDocumentosIndexRoute
   '/_auth/inventario/': typeof AuthInventarioIndexRoute
   '/_auth/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
+  '/_auth/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
     | '/documentos/'
     | '/inventario/'
     | '/dictamenes/$uuid/$action'
+    | '/dictamenes/$uuid/editar'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '/documentos'
     | '/inventario'
     | '/dictamenes/$uuid/$action'
+    | '/dictamenes/$uuid/editar'
   id:
     | '__root__'
     | '/'
@@ -124,6 +136,7 @@ export interface FileRouteTypes {
     | '/_auth/documentos/'
     | '/_auth/inventario/'
     | '/_auth/dictamenes/$uuid/$action'
+    | '/_auth/dictamenes/$uuid/editar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -190,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDictamenesCreateRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/dictamenes/$uuid/editar': {
+      id: '/_auth/dictamenes/$uuid/editar'
+      path: '/dictamenes/$uuid/editar'
+      fullPath: '/dictamenes/$uuid/editar'
+      preLoaderRoute: typeof AuthDictamenesUuidEditarRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/dictamenes/$uuid/$action': {
       id: '/_auth/dictamenes/$uuid/$action'
       path: '/dictamenes/$uuid/$action'
@@ -206,6 +226,7 @@ interface AuthRouteChildren {
   AuthDocumentosIndexRoute: typeof AuthDocumentosIndexRoute
   AuthInventarioIndexRoute: typeof AuthInventarioIndexRoute
   AuthDictamenesUuidActionRoute: typeof AuthDictamenesUuidActionRoute
+  AuthDictamenesUuidEditarRoute: typeof AuthDictamenesUuidEditarRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
@@ -214,6 +235,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthDocumentosIndexRoute: AuthDocumentosIndexRoute,
   AuthInventarioIndexRoute: AuthInventarioIndexRoute,
   AuthDictamenesUuidActionRoute: AuthDictamenesUuidActionRoute,
+  AuthDictamenesUuidEditarRoute: AuthDictamenesUuidEditarRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

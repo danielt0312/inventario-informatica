@@ -1,14 +1,12 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
-import type { TResponse } from '@/types/generics';
 import {
     ActionDictamenLabels,
     ActionDictamenStates
 } from './-constants';
-import type { DetailedDictamen } from '@/types/dictamenes';
 import { View } from '@/views/dictamenes/actions/view';
 import { isDetailedActionDictamen } from './-utils';
-import api from '@/lib/axios';
+import { detailedDictamenQueryOptions } from './-queries';
 import z from 'zod';
 
 export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
@@ -20,32 +18,24 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
     },
     component: View,
     beforeLoad: async ({ context, params }) => {
-        const data = await context.queryClient.fetchQuery({
-            queryKey: ['dictamenes', params.uuid],
-            queryFn: () => api.get<TResponse<DetailedDictamen>>(`api/dictamenes/${params.uuid}`, {
-                params: {
-                    include: 'versionActual.adquisiciones'
-                }
-            })
-                .then(r => r.data.data)
-        });
+        const dictamen = await context.queryClient.fetchQuery(detailedDictamenQueryOptions(params.uuid));
 
-        if (!isDetailedActionDictamen(data)) {
+        // todo mostrar mensaje notificando que no puede realizar esto
+        if (!isDetailedActionDictamen(dictamen)) {
             throw redirect({ to: IndexRoute.to });
         }
 
-        if (ActionDictamenStates[data.estado.id] !== params.action) {
+        const actualState = ActionDictamenStates[dictamen.estado.id];
+        if (actualState !== params.action) {
             throw redirect({
                 to: Route.to,
                 params: {
-                    uuid: data.uuid,
-                    action: ActionDictamenStates[data.estado.id]
+                    uuid: dictamen.uuid,
+                    action: actualState
                 }
             });
         }
 
-        return {
-            dictamen: data
-        };
+        return { dictamen };
     }
 });

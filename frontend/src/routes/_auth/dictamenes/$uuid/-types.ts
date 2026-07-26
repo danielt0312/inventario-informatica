@@ -8,6 +8,12 @@ type DetailedDictaminar = Root.DetailedDictaminarDictamen;
 type Dictaminado = Root.DictaminadoDictamen<Root.BaseDictamenEstado<ActionDictamenEstadoEnum & DictaminadoDictamenEstadoEnum>>;
 type DetailedDictaminado = Root.DetailedDictaminadoDictamen<Dictaminado>;
 
+type Editable =
+    | Root.SurtirDictamen;
+
+type DetailedEditable =
+    | Root.DetailedSurtirDictamen;
+
 type Action =
     | Dictaminar
     | Dictaminado;
@@ -22,5 +28,7 @@ export type {
     Dictaminar as ActionDictaminarDictamen,
     DetailedDictaminar as DetailedActionDictaminarDictamen,
     Dictaminado as ActionDictaminadoDictamen,
-    DetailedDictaminado as DetailedActionDictaminadoDictamen
+    DetailedDictaminado as DetailedActionDictaminadoDictamen,
+    Editable as EditableActionDictamen,
+    DetailedEditable as DetailedEditableActionDictamen,
 }

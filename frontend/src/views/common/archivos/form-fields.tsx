@@ -1,12 +1,12 @@
-import { FileUploaderField } from "@/components/composed/@tanstack/form/file-uploader-field";
+import { FileUploadField } from "@/components/composed/@tanstack/form/file-upload-field";
 import { useFieldContext } from "@/components/composed/@tanstack/form/form";
 
-export type PdfFilesField = FileUploaderField;
+export type PdfFilesField = FileUploadField;
 export const PdfFilesField = ({
     label = 'Archivo(s)',
     ...props
-}: Omit<React.ComponentProps<typeof FileUploaderField>, 'accept'>) => (
-    <FileUploaderField
+}: Omit<React.ComponentProps<typeof FileUploadField>, 'accept'>) => (
+    <FileUploadField
         {...props}
         accept="application/pdf"
         label={label}

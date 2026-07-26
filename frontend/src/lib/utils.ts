@@ -245,3 +245,6 @@ export const toLocaleDateFormat = (value: string) => (
         minute: '2-digit'
     })
 )
+
+export const isPdfFile = (file: File) =>
+    file.type === 'application/pdf';

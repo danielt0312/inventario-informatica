@@ -9,7 +9,7 @@ import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
-import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFieldGroup } from "./form-fields";
+import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFieldGroup } from "../partials/form-fields";
 import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import { Form as PrimitiveForm } from "@/components/composed/@tanstack/form/form-components";
@@ -63,7 +63,7 @@ export function Form() {
     return (
         <PrimitiveForm form={form} className="flex flex-col gap-6">
             <form.AppForm>
-                <FieldGroup className="grid grid-cols-1 xl:grid-cols-3">
+                <FieldGroup className="flex-row">
                     <form.AppField
                         name="adscripcion_id"
                         children={() => <AdscripcionField label="Área de Adscripción solicitante" />}
