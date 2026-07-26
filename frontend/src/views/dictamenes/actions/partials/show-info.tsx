@@ -1,28 +1,10 @@
 import { FilePreviewWindowGroup } from "@/components/composed/file-preview-window";
 import { Label } from "@/components/ui/label";
 import type { DetailedActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import { isDetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 
 export function ShowInfo({ dictamen }: { dictamen: DetailedActionDictamen }) {
     return (
         <>
-            <div className="grid grid-cols-3">
-                <div data-slot="label">
-                    <Label className="font-bold">Número de Dictamen</Label>
-                    <Label>{dictamen.id}/{dictamen.version_actual.numero_version}</Label>
-                </div>
-
-                {isDetailedActionDictaminadoDictamen(dictamen) && (
-                    <div data-slot="label" className="col-span-2">
-                        <Label className="font-bold">Documento</Label>
-                        <FilePreviewWindowGroup
-                            uuid={dictamen.version_actual.archivo.uuid}
-                            title={dictamen.version_actual.archivo.nombre}
-                        />
-                    </div>
-                )}
-            </div>
-
             <div className="grid grid-cols-3">
                 <div data-slot="label">
                     <Label className="font-bold">Área Solicitante</Label>

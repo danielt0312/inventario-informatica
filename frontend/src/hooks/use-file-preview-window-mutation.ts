@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export const useFilePreviewWindowMutation = () =>
   useMutation({
-    mutationFn: ({ uuid }: { uuid: string; title?: string }) => getStreamedFile(uuid),
+    mutationFn: ({ uuid }: { uuid: string; title: string }) => getStreamedFile(uuid),
     onMutate: () => {
       const newWindow = window.open('about:blank', '_blank');
       return { newWindow };
@@ -13,7 +13,7 @@ export const useFilePreviewWindowMutation = () =>
 
       if (context?.newWindow) {
         context.newWindow.location.href = url;
-        context.newWindow.document.title = variables.title || variables.uuid;
+        context.newWindow.document.title = variables.title;
       }
     },
   });
