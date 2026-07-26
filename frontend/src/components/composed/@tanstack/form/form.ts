@@ -4,7 +4,7 @@ import { InputField } from './input-field';
 import { CreatableComboboxField } from './creatable-combobox-field';
 import { CheckboxField, CheckboxFieldItem } from './checkbox-field';
 import { DatePickerField } from './date-picker-field';
-import { FileUploaderField } from './file-uploader-field';
+import { FileUploadField } from './file-upload-field';
 import { TextareaField } from './textarea-field';
 import { RadioGroupField, RadioGroupFieldItem } from './radio-group-field';
 
@@ -21,7 +21,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
         RadioGroupField,
         RadioGroupFieldItem,
         DatePickerField,
-        FileUploaderField,
+        FileUploadField,
         TextareaField
     },
     formComponents: {

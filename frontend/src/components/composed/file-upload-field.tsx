@@ -1,10 +1,10 @@
 import { Field, type FieldProps } from "./field";
-import { FileUploader } from "./file-uploader";
+import { FileUpload } from "./file-upload";
 
-export interface FileUploaderFieldProps extends Omit<React.ComponentProps<typeof FileUploader>, 'children' | 'label'>, FieldProps {
-    fileUploaderLabel?: React.ComponentProps<typeof FileUploader>['label'];
+export interface FileUploadFieldProps extends Omit<React.ComponentProps<typeof FileUpload>, 'children' | 'label'>, FieldProps {
+    fileUploadLabel?: React.ComponentProps<typeof FileUpload>['label'];
 }
-export const FileUploaderField = ({
+export const FileUploadField = ({
     className,
     description,
     disabled,
@@ -12,15 +12,15 @@ export const FileUploaderField = ({
     label,
     required,
     orientation,
-    fileUploaderLabel,
+    fileUploadLabel,
     ...props
-}: FileUploaderFieldProps) => {
+}: FileUploadFieldProps) => {
     const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
 
     return (
         <Field {...fieldProps}>
-            <FileUploader
-                label={fileUploaderLabel}
+            <FileUpload
+                label={fileUploadLabel}
                 disabled={disabled}
                 required={required}
                 {...props}
