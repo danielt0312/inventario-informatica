@@ -87,7 +87,7 @@
     </x-slot:header>
 
     <div class="mt-2 text-right">
-        <b>DICTAMEN NO. {{ $dictamen->id.' '. $dictamen->versionActual->version }}.</b>
+        <b>DICTAMEN NO. {{ $dictamen->id.'/'. $dictamen->versionActual->numero_version }}.</b>
     </div>
 
     <div class="text-center font-bold text-2xl uppercase my-10">

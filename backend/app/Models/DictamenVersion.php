@@ -15,7 +15,7 @@ class DictamenVersion extends Model
     use HasArchivable;
 
     protected $fillable = [
-        'version',
+        'numero_version',
         'dictamen_id',
         'oficio_id',
         'adscripcion_id',
@@ -23,7 +23,7 @@ class DictamenVersion extends Model
     ];
 
     protected $attributes = [
-        'version' => 1,
+        'numero_version' => 1,
         'oficio_id' => null
     ];
 

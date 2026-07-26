@@ -37,7 +37,7 @@ return new class extends Migration
                 ->constrained('dictamenes', indexName: 'fk_dictamen_versiones_dictamenes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->unsignedInteger('version');
+            $table->unsignedInteger('numero_version');
             $table->date('fecha_solicitud');
             $table->foreignId('oficio_id')
                 ->nullable()
@@ -55,7 +55,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['dictamen_id', 'version'], 'uk_dictamen_versiones');
+            $table->unique(['dictamen_id', 'numero_version'], 'uk_dictamen_versiones');
         });
 
         Schema::table('dictamenes', function (Blueprint $table) {

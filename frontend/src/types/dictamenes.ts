@@ -11,7 +11,7 @@ type Base<TEstado extends BaseEstado = BaseEstado> = {
     estado: TEstado;
 }
 type BaseVersion = {
-    version: number;
+    numero_version: number;
     adscripcion: TCatalogo;
     fecha_solicitud: string;
     // todo revisar el caso cuando sea null

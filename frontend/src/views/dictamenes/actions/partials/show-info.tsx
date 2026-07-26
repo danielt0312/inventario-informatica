@@ -9,15 +9,15 @@ export function ShowInfo({ dictamen }: { dictamen: DetailedActionDictamen }) {
             <div className="grid grid-cols-3">
                 <div data-slot="label">
                     <Label className="font-bold">Número de Dictamen</Label>
-                    <Label>{dictamen.id}</Label>
+                    <Label>{dictamen.id}/{dictamen.version_actual.numero_version}</Label>
                 </div>
 
                 {isDetailedActionDictaminadoDictamen(dictamen) && (
                     <div data-slot="label" className="col-span-2">
-                        <Label className="font-bold">Dictamen tecnológico</Label>
+                        <Label className="font-bold">Documento</Label>
                         <FilePreviewWindowGroup
                             uuid={dictamen.version_actual.archivo.uuid}
-                            title={dictamen.version_actual.archivo.nombre ?? dictamen.version_actual.archivo.uuid}
+                            title={dictamen.version_actual.archivo.nombre}
                         />
                     </div>
                 )}
