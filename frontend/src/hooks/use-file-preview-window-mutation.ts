@@ -1,9 +1,14 @@
 import { getStreamedFile } from '@/lib/utils';
 import { useMutation } from "@tanstack/react-query";
 
+export interface FilePreviewWindowMutationFn {
+    uuid: string;
+    title: string
+}
+
 export const useFilePreviewWindowMutation = () =>
   useMutation({
-    mutationFn: ({ uuid }: { uuid: string; title: string }) => getStreamedFile(uuid),
+    mutationFn: ({ uuid }: FilePreviewWindowMutationFn) => getStreamedFile(uuid),
     onMutate: () => {
       const newWindow = window.open('about:blank', '_blank');
       return { newWindow };
