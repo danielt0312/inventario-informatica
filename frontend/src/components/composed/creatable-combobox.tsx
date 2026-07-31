@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Check, ChevronsUpDown, PlusCircle } from "lucide-react"
+import { Check, ChevronsUpDown, CirclePlusIcon, PlusCircle } from "lucide-react"
 
 import { cleanText, cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -133,8 +133,13 @@ export function CreatableCombobox({
 
                     <CommandList>
                         {!showCreateAction && filteredOptions.length === 0 && (
-                            <CommandEmpty className="py-6 text-center text-sm text-muted-foreground">
+                            <CommandEmpty className="py-6 flex flex-col gap-2 text-center text-sm text-muted-foreground">
                                 {emptyMessage}
+                                {!!onCreateRequest && (
+                                    <div>
+                                        Presiona sobre <Button size="xs" variant="outline" onClick={handleCreateClick}><CirclePlusIcon /> Crear</Button> para crear un nuevo registro o realiza una búsqueda.
+                                    </div>
+                                )}
                             </CommandEmpty>
                         )}
 
