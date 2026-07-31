@@ -70,9 +70,9 @@ export function ProductoField({
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Crear Modelo de Producto</DialogTitle>
+                        <DialogTitle>Registrar Modelo de Producto</DialogTitle>
                         <DialogDescription className="sr-only">
-                            Creación de modelo de producto
+                            Registro de nuevo modelo de producto
                         </DialogDescription>
                     </DialogHeader>
 

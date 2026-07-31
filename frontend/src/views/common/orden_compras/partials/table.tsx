@@ -39,15 +39,15 @@ export function OrdenCompraTable({
             actionBar={(
                 <>
                     <Button size="sm" onClick={() => setIsOpen(true)}>
-                        <PlusCircle /> Crear
+                        <PlusCircle /> Registrar
                     </Button>
 
                     <Dialog open={isOpen} onOpenChange={setIsOpen}>
                         <DialogContent className="min-w-2xl">
                             <DialogHeader>
-                                <DialogTitle>Crear Orden de Compra</DialogTitle>
+                                <DialogTitle>Registrar Orden de Compra</DialogTitle>
                                 <DialogDescription className="sr-only">
-                                    Creación de Orden de Compra
+                                    Registrar nueva orden de compra
                                 </DialogDescription>
                             </DialogHeader>
 

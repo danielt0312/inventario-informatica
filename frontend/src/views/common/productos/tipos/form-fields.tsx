@@ -57,9 +57,9 @@ export function ProductoTipoField({
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Crear Tipo de Producto</DialogTitle>
+                        <DialogTitle>Regitrar Tipo de Producto</DialogTitle>
                         <DialogDescription className="sr-only">
-                            Creación de tipo de producto
+                            Registrar nuevo tipo de producto
                         </DialogDescription>
                     </DialogHeader>
 

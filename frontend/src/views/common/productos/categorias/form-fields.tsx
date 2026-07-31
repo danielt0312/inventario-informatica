@@ -54,9 +54,9 @@ export function ProductoCategoriaField({
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Crear Categoría de Producto</DialogTitle>
+                        <DialogTitle>Registrar Categoría de Producto</DialogTitle>
                         <DialogDescription className="sr-only">
-                            Creación de categoría de producto
+                            Registrar nueva categoría de producto
                         </DialogDescription>
                     </DialogHeader>
 

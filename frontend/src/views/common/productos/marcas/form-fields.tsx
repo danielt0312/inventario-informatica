@@ -53,9 +53,9 @@ export function ProductoMarcaField({
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Crear Marca de Producto</DialogTitle>
+                        <DialogTitle>Registrar Marca de Producto</DialogTitle>
                         <DialogDescription className="sr-only">
-                            Creación de marca de producto
+                            Registrar nueva marca de producto
                         </DialogDescription>
                     </DialogHeader>
 
