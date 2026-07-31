@@ -7,6 +7,7 @@ import { DatePickerField } from './date-picker-field';
 import { FileUploadField } from './file-upload-field';
 import { TextareaField } from './textarea-field';
 import { RadioGroupField, RadioGroupFieldItem } from './radio-group-field';
+import { FileViewerSelectorField } from './file-viewer-selector-field';
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts();
 
@@ -22,6 +23,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
         RadioGroupFieldItem,
         DatePickerField,
         FileUploadField,
+        FileViewerSelectorField,
         TextareaField
     },
     formComponents: {
