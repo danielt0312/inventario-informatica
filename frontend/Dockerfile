@@ -4,6 +4,8 @@ WORKDIR /app
 
 RUN apk add --no-cache git
 
+RUN chown node:node /app
+
 COPY --chown=node:node package*.json .
 
 USER node
