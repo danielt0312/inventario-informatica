@@ -16,7 +16,8 @@ class Archivo extends Model
 
     protected $fillable = [
         'nombre',
-        'extension'
+        'extension',
+        'size'
     ];
 
     protected $attributes = [
@@ -25,7 +26,12 @@ class Archivo extends Model
 
     public function documento(): HasOne
     {
-        return $this->hasOne(Documento::class, 'archivo_id');
+        return $this->hasOne(Documento::class);
+    }
+
+    public function temporal(): HasOne
+    {
+        return $this->hasOne(ArchivoTemporal::class);
     }
 
     public function fileName(): Attribute

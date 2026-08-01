@@ -9,7 +9,16 @@ services:
       - backend
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      args:
+        UID: ${HOST_UID:-1000}
+        GID: ${HOST_GID:-1000}
+    environment:
+      PHP_UPLOAD_MAX_FILESIZE: ${PHP_UPLOAD_MAX_FILESIZE:-5M}
+      PHP_POST_MAX_SIZE: ${PHP_POST_MAX_SIZE:-6M}
+      PHP_MEMORY_LIMIT: ${PHP_MEMORY_LIMIT:-8M}
+      PHP_MAX_FILE_UPLOADS: ${PHP_MAX_FILE_UPLOADS:-20}
     ports:
       - 8000:8000
     volumes:
@@ -24,9 +33,9 @@ services:
     env_file:
       - ./backend/.env
     volumes:
-    - type: volume
-      source: database
-      target: /var/lib/mysql
+      - type: volume
+        source: database
+        target: /var/lib/mysql
 
 volumes:
   database:

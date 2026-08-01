@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
+import { cn, isPdfFile } from "@/lib/utils";
 import * as Root from "../ui/file-upload";
 import { Button } from "../ui/button";
-import { UploadIcon, XIcon } from "lucide-react";
+import { EyeIcon, UploadIcon, XIcon } from "lucide-react";
 
 export function FileUpload({
     value: files,
@@ -30,11 +30,27 @@ export function FileUpload({
                     <Root.FileUploadItem key={file.name} value={file}>
                         <Root.FileUploadItemPreview />
                         <Root.FileUploadItemMetadata />
-                        <Root.FileUploadItemDelete asChild>
-                            <Button variant="ghost" size="icon" className="size-7">
-                                <XIcon />
-                            </Button>
-                        </Root.FileUploadItemDelete>
+
+                        <div className="flex gap-1">
+                            {isPdfFile(file) && (
+                                <Button variant="ghost" size="icon" className="size-7" onClick={() => {
+                                    const url = URL.createObjectURL(file);
+                                    const newTab = window.open(url, '_blank');
+
+                                    if (newTab) {
+                                        newTab.addEventListener('load', () => URL.revokeObjectURL(url));
+                                    }
+                                }}>
+                                    <EyeIcon />
+                                </Button>
+                            )}
+
+                            <Root.FileUploadItemDelete asChild>
+                                <Button variant="ghost" size="icon" className="size-7">
+                                    <XIcon />
+                                </Button>
+                            </Root.FileUploadItemDelete>
+                        </div>
                     </Root.FileUploadItem>
                 ))}
             </Root.FileUploadList>

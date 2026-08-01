@@ -13,6 +13,7 @@ import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFi
 import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import { Form as PrimitiveForm } from "@/components/composed/@tanstack/form/form-components";
+import { AttachmentField } from "@/components/composed/@tanstack/form/attachment-field";
 
 export function useCreateFormMutation() {
     const navigate = useNavigate();
@@ -63,6 +64,7 @@ export function Form() {
     return (
         <PrimitiveForm form={form} className="flex flex-col gap-6">
             <form.AppForm>
+
                 <FieldGroup className="flex-row">
                     <form.AppField
                         name="adscripcion_id"
@@ -80,7 +82,7 @@ export function Form() {
 
                 <form.AppField
                     name="archivo"
-                    children={() => <OficioField className="md:max-w-1/2" />}
+                    children={() => <AttachmentField className="md:max-w-1/2" />}
                 />
 
                 <form.AppField name="adquisiciones" mode="array">

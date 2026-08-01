@@ -24,7 +24,7 @@ export const PdfFileField = ({
         <PdfFilesField
             {...props}
             label={label}
-            maxFiles={1}
+            // maxFiles={1}
             value={field.state.value ? [field.state.value] : []}
             onValueChange={(files) => field.handleChange(files[0])}
         />

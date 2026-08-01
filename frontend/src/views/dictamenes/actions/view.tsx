@@ -22,7 +22,7 @@ export function View() {
                         <ShowVersionInfo dictamen={dictamen} />
                     </CardAction>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-6 **:data-[slot='label']:grid **:data-[slot='label']:gap-2 **:data-[slot='label']:text-wrap">
+                <CardContent className="flex flex-col gap-6 **:data-[slot='label-container']:grid **:data-[slot='label-container']:gap-2 **:data-[slot='label-container']:text-wrap">
                     <ShowInfo dictamen={dictamen} />
 
                     <ActionForm dictamen={dictamen} />

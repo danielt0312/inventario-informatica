@@ -10,7 +10,7 @@ export const DictamenEditarView = () => {
             <Card>
                 <CardHeader>
                     <CardTitle>
-                        Edición de Dictamen tecnológico
+                        Edición de Dictamen
                     </CardTitle>
                 </CardHeader>
 

@@ -4,10 +4,13 @@ WORKDIR /app
 
 RUN apk add --no-cache git
 
-COPY package*.json .
+COPY --chown=node:node package*.json .
+
+USER node
+
 RUN npm install
 
-COPY . .
+COPY --chown=node:node . .
 
 EXPOSE 5173
 

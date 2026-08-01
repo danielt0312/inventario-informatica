@@ -17,6 +17,7 @@ use App\Http\Controllers\{
     EmpleadoController,
     AdscripcionController,
     ArchivoController,
+    ArchivoTemporalController,
     FacturaController,
     OrdenCompraController,
     ProveedorController,
@@ -26,7 +27,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // todo definir si se cambiara a español o inglés
     Route::get('user', fn (Request $request) => response()->json(['data' => $request->user()]));
 
-    Route::get('archivos/{archivo}/stream', [ArchivoController::class, 'stream']);
+    Route::get('archivos/{archivo}/stream', [ArchivoController::class, 'stream'])
+        ->name('archivos.stream');
+    Route::post('archivos/temporales', [ArchivoTemporalController::class, 'store'])
+        ->name('archivo_temporales.store');
+
     Route::apiResources([
         'documentos' => DocumentoController::class,
         'documento_tipos' => DocumentoTipoController::class,

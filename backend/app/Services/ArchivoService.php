@@ -10,10 +10,11 @@ use InvalidArgumentException;
 
 class ArchivoService
 {
-    public function create(string $nombre, AvailableFileExtensions $tipo = AvailableFileExtensions::PDF): Archivo
+    public function create(string $nombre, int $size, AvailableFileExtensions $tipo = AvailableFileExtensions::PDF): Archivo
     {
         return Archivo::create([
             'nombre' => pathinfo($nombre, PATHINFO_FILENAME),
+            'size' => $size,
             'extension' => $tipo->value
         ]);
     }
@@ -43,7 +44,7 @@ class ArchivoService
 
         $fileName = $fileName ?: $file->getClientOriginalName();
 
-        $archivo = $this->create($fileName, $tipo);
+        $archivo = $this->create($fileName, $file->getSize(), $tipo);
 
         $this->store($archivo, $file, $disk);
 

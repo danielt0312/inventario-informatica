@@ -45,7 +45,7 @@ class DictamenController extends ArchivableController
 
     public function store(StoreDictamenRequest $request)
     {
-        $dictamen = DB::transaction(function () use ($request) {
+        $dictamen = DB::transaction(function () use ($request): Dictamen {
             $validated = $request->validated();
 
             $adscripcionId = $validated['adscripcion_id'];

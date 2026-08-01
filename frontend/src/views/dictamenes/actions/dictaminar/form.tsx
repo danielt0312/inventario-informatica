@@ -36,16 +36,16 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
                     return (
                         <Card key={index} className="shadow-none">
                             <CardContent className="flex flex-col gap-6">
-                                <div className="flex flex-row gap-6">
-                                    <div className="w-1/3" data-slot="label">
+                                <div className="grid grid-cols-3">
+                                    <div data-slot="label-container">
                                         <Label className="font-bold">Cantidad</Label>
                                         <Label>{adquisicion.cantidad}</Label>
                                     </div>
-                                    <div className="w-1/3" data-slot="label">
+                                    <div data-slot="label-container">
                                         <Label className="font-bold">Producto</Label>
                                         <Label>{productoTipo.nombre}</Label>
                                     </div>
-                                    <div className="w-1/3" data-slot="label">
+                                    <div data-slot="label-container">
                                         <Label className="font-bold">Resguardante</Label>
                                         <Label>{adquisicion.empleado?.nombre ?? 'Juan Perez'}</Label>
                                     </div>
@@ -53,13 +53,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
 
                                 <form.AppField
                                     name={`adquisiciones[${index}].producto_id`}
-                                    children={() => (
-                                        <ProductoField
-                                            label="Modelo"
-                                            tipo={productoTipo.id}
-                                            className="max-w-1/3"
-                                        />
-                                    )}
+                                    children={() => <ProductoField tipo={productoTipo.id} className="w-1/3" />}
                                 />
 
                                 <form.AppField

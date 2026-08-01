@@ -2,6 +2,7 @@ import type { WithTimestamps } from "./generics";
 
 export type Archivo = WithTimestamps<{
     uuid: string;
+    size: number;
     nombre: string;
     extension: string;
 }>;
