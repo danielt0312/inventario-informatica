@@ -26,7 +26,7 @@ export const LinkToFile = ({
                     onClick={async () => {
                         await mutateAsync({ uuid, title });
                     }}
-                    className={cn("text-sm gap-1 text-blue-400 underline-offset-4 hover:underline w-fit justify-self-start", className)}
+                    className={cn("text-sm gap-1 text-blue-400 underline-offset-4 hover:underline w-fit justify-self-start cursor-pointer", className)}
                     {...props}
                 >
                     <EyeIcon size={iconSize} />{label}
