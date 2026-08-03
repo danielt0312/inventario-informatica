@@ -15,28 +15,16 @@ import type { FechaSolicitudField, FolioField, OficioField } from "../partials/f
 import type { NumberInputField } from "@/components/composed/@tanstack/form/input-field";
 import z from "zod";
 
-type ProductoFieldsGroup = {
+type AdquisicionFields = {
     producto_tipo_id: ProductoTipoField;
     numero_inventario: NullableNumeroInventarioField;
-}
-
-export const productoFieldsGroupDefaultValues: ProductoFieldsGroup = {
-    producto_tipo_id: undefined,
-    numero_inventario: null
-}
-
-const productoFieldsGroupValidator = z.object({
-    producto_tipo_id: selectedNumberOption,
-    numero_inventario: nullableString
-})
-
-type AdquisicionFields = ProductoFieldsGroup & {
     cantidad: NumberInputField;
     empleado_id: EmpleadoField;
 }
 
 export const productoFieldsDefaultValues: AdquisicionFields = {
-    ...productoFieldsGroupDefaultValues,
+    numero_inventario: null,
+    producto_tipo_id: undefined,
     cantidad: 1,
     empleado_id: undefined,
 } as const;
@@ -57,18 +45,20 @@ export const dictamenDefaultValues: Schema = {
     adquisiciones: [productoFieldsDefaultValues]
 } as const;
 
+const adquisicionValidator = z
+    .object({
+        cantidad: positiveInteger,
+        empleado_id: selectedNumberOption,
+        producto_tipo_id: selectedNumberOption,
+        numero_inventario: nullableString
+    });
+
 export const validator = z.object({
     folio: requiredString,
     fecha_solicitud: requiredIsoDateLTEToday,
     adscripcion_id: selectedNumberOption,
     archivo_uuid: requiredString,
-    adquisiciones: requiredArray(z
-        .object({
-            cantidad: positiveInteger,
-            empleado_id: selectedNumberOption,
-            producto_tipo_id: productoFieldsGroupValidator.shape.producto_tipo_id,
-            numero_inventario: productoFieldsGroupValidator.shape.numero_inventario
-        })
+    adquisiciones: requiredArray(adquisicionValidator
         .superRefine(({ producto_tipo_id, numero_inventario }, ctx) => {
             if (DictamenProducto.tipoRequiereNumeroInventario(producto_tipo_id)) {
                 if (numero_inventario === null || numero_inventario.length === 0) {
@@ -85,6 +75,11 @@ export const validator = z.object({
                     });
                 }
             }
+        }, {
+            when: ({ value }) =>
+                adquisicionValidator.pick({ numero_inventario: true, producto_tipo_id: true })
+                    .safeParse(value)
+                    .success
         })
     )
 });

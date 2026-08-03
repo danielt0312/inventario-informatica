@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
-import { DictamenArchivoField } from "./form-fields";
+import { DictamenArchivoField } from "../../partials/form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 

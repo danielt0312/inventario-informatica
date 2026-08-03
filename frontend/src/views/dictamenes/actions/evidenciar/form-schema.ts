@@ -1,5 +1,5 @@
 import { requiredString } from "@/lib/schemas/common";
-import type { DictamenArchivoField } from "./form-fields";
+import type { DictamenArchivoField } from "../../partials/form-fields";
 import z from "zod";
 
 export type Schema = {

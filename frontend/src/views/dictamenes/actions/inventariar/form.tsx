@@ -9,8 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { ProductoGroupField } from "@/views/common/productos/form-fields";
 import { FacturaField } from "@/views/common/facturas/form-fields";
 import { FieldGroup } from "@/components/ui/field";
-import { CuentaContable } from "./form-fields";
-import { CostoUnitarioField, EsContableField, NumeroSerieField } from "@/views/common/articulos/form-fields";
+import { CostoUnitarioField, CuentaContable, EsContableField, NumeroSerieField } from "@/views/common/articulos/form-fields";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
 

@@ -4,9 +4,9 @@ import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ProductoField } from "@/views/common/productos/form-fields";
-import { CaracteristicasField } from "./form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { CaracteristicasField } from "../../partials/form-fields";
 
 export const useForm = (dictamen: DetailedActionDictaminarDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);

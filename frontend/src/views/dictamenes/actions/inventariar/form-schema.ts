@@ -1,12 +1,11 @@
 import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
 import type {  DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { CostoUnitarioField, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/views/common/articulos/form-fields";
-import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
+import type { CostoUnitarioField, CuentaContable, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/views/common/articulos/form-fields";
 import type { ProductoGroupField } from "@/views/common/productos/form-fields";
-import type { CuentaContable } from "./form-fields";
-import z from "zod";
 import type { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
+import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
+import z from "zod";
 
 type AdquisicionFields = RecepcionFieldGroup & {
     dictamen_producto_id: number;

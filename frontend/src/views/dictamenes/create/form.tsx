@@ -2,17 +2,21 @@ import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2 } from "lucide-react";
+import { PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { dictamenDefaultValues, productoFieldsDefaultValues, validator } from "./form-schema";
 import { useStore } from "@tanstack/react-form";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
-import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFieldGroup } from "../partials/form-fields";
+import { OficioField, CantidadField, FechaSolicitudField, FolioField } from "../partials/form-fields";
 import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import { Form as PrimitiveForm } from "@/components/composed/@tanstack/form/form-components";
+import { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
+import { NumeroInventarioField } from "@/views/common/articulos/form-fields";
+import { DictamenProducto } from "@/lib/utils";
+import React from "react";
 
 export function useCreateFormMutation() {
     const navigate = useNavigate();
@@ -44,12 +48,16 @@ export function useForm() {
 export function Form() {
     const form = useForm();
     const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
+    const [showNumeroInventarioField, setShowNumeroInventarioField] = React.useState(false);
 
     return (
         <PrimitiveForm form={form} className="flex flex-col gap-6">
             <form.AppForm>
-
                 <FieldGroup className="flex-row">
+                    <form.AppField
+                        name="fecha_solicitud"
+                        children={() => <FechaSolicitudField />}
+                    />
                     <form.AppField
                         name="adscripcion_id"
                         children={() => <AdscripcionField label="Área de Adscripción solicitante" />}
@@ -57,10 +65,6 @@ export function Form() {
                     <form.AppField
                         name="folio"
                         children={() => <FolioField />}
-                    />
-                    <form.AppField
-                        name="fecha_solicitud"
-                        children={() => <FechaSolicitudField />}
                     />
                 </FieldGroup>
 
@@ -79,7 +83,7 @@ export function Form() {
                                     size="sm"
                                     onClick={() => field.pushValue(productoFieldsDefaultValues)}
                                 >
-                                    <PlusCircle /> Agregar
+                                    <PlusCircleIcon /> Agregar
                                 </Button>
                             </div>
 
@@ -91,13 +95,33 @@ export function Form() {
                                             children={() => <CantidadField className="max-w-min" />}
                                         />
 
-                                        <ProductoFieldGroup
-                                            form={form}
-                                            fields={{
-                                                producto_tipo_id: `adquisiciones[${index}].producto_tipo_id`,
-                                                numero_inventario: `adquisiciones[${index}].numero_inventario`,
-                                            }}
-                                        />
+                                        <FieldGroup>
+                                            <form.AppField
+                                                name={`adquisiciones[${index}].producto_tipo_id`}
+                                                children={() => (
+                                                    <ProductoTipoField />
+                                                )}
+                                                listeners={{
+                                                    onChange: ({ value }) => {
+                                                        const requiereNumeroInventario = DictamenProducto.tipoRequiereNumeroInventario(value);
+                                                        setShowNumeroInventarioField(requiereNumeroInventario);
+
+                                                        if (!requiereNumeroInventario) {
+                                                            form.setFieldValue(`adquisiciones[${index}].numero_inventario`, null);
+                                                        }
+                                                    }
+                                                }}
+                                            />
+
+                                            {showNumeroInventarioField && (
+                                                <form.AppField
+                                                    name={`adquisiciones[${index}].numero_inventario`}
+                                                    children={() => (
+                                                        <NumeroInventarioField />
+                                                    )}
+                                                />
+                                            )}
+                                        </FieldGroup>
 
                                         <form.AppField
                                             name={`adquisiciones[${index}].empleado_id`}
@@ -114,7 +138,7 @@ export function Form() {
                                             onClick={() => field.removeValue(index)}
                                             variant="destructive"
                                         >
-                                            <Trash2 />
+                                            <Trash2Icon />
                                         </Button>
                                     </CardContent>
                                 </Card>

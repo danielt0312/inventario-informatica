@@ -18,6 +18,7 @@ type AttachmentState = React.ComponentProps<typeof Attachment>['state'];
 
 export interface AttachmentFieldProps extends Omit<React.ComponentProps<typeof Attachment>, 'children' | 'state'>, Omit<FieldProps, 'orientation' | 'errors'> {
     fieldOrientation?: FieldProps['orientation'];
+    archivo?: Archivo | undefined;
 }
 
 export type AttachmentField = string | undefined;
@@ -28,13 +29,14 @@ export function AttachmentField({
     label,
     required,
     fieldOrientation,
+    archivo: archivoProp,
     ...props
 }: AttachmentFieldProps) {
     const field = useFieldContext<AttachmentField>();
     const value = useStore(field.store, (state) => state.value);
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [file, setFile] = React.useState<File | undefined>(undefined);
-    const [archivo, setArchivo] = React.useState<Archivo | undefined>(undefined);
+    const [archivo, setArchivo] = React.useState<Archivo | undefined>(archivoProp);
     const { mutateAsync, status } = useMutation<AxiosResponse<TResponse<Archivo>>, AxiosError<LaravelValidationErrors>, File>({
         mutationFn: (file) => {
             setArchivo(undefined);
@@ -123,7 +125,7 @@ export function AttachmentField({
                         </Tooltip>
                     )}
 
-                    {status === 'success' && !!archivo && (
+                    {!!archivo && (
                         <AttachmentActionSeeDocument archivo={archivo} />
                     )}
 
