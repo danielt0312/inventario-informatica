@@ -236,15 +236,17 @@ export const DictamenProducto = {
     }
 }
 
-export const toLocaleDateFormat = (value: string) => (
+export const toLocaleDateFormat = (
+    value: string,
+    timeOptions?: Pick<Intl.DateTimeFormatOptions, 'hour' | 'minute'>
+) => (
     new Date(value).toLocaleDateString('es-MX', {
         day: '2-digit',
-        month: '2-digit',
+        month: 'short',
         year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+        ...timeOptions
     })
-)
+);
 
 export const isPdfFile = (file: File) =>
     file.type === 'application/pdf';

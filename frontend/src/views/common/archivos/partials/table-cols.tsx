@@ -16,7 +16,7 @@ const NombreRow = <TRowData,>(getRowData: RowDataAccessFn<TRowData>): ColumnDef<
 const FechaSubidaRow = <TRowData,>(getRowData: RowDataAccessFn<TRowData>): ColumnDef<TRowData> => ({
     id: 'archivo.fecha_subida',
     header: 'Fecha de Subida',
-    accessorFn: (row) => toLocaleDateFormat(getRowData(row).created_at)
+    accessorFn: (row) => toLocaleDateFormat(getRowData(row).created_at, { hour: '2-digit' })
 });
 
 function PreviewActionRow<TRowData>({

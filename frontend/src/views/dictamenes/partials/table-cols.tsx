@@ -12,6 +12,7 @@ import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen } from "@/type
 import { isActionDictamen, isActionDictaminadoDictamen, isDetailedSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { ArchivoPreviewActionRow } from "@/views/common/archivos/partials/table-cols";
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
+import { toLocaleDateFormat } from "@/lib/utils";
 
 const ActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
@@ -138,16 +139,7 @@ export const columns: ColumnDef<DictamenData>[] = [
     {
         accessorKey: "version_actual.fecha_solicitud",
         header: "Fecha de Solicitud",
-        cell: ({ getValue }) => {
-            const date = getValue<Date>();
-
-            return new Date(date).toLocaleDateString('es-MX', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                timeZone: 'UTC'
-            });
-        }
+        cell: ({ getValue }) => toLocaleDateFormat(getValue<string>())
     },
     {
         accessorKey: "",

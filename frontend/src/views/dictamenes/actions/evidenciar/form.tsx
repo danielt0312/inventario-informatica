@@ -16,11 +16,7 @@ export function useForm(dictamen: DetailedActionDictaminadoDictamen) {
             onSubmit: validator
         },
         onSubmit: async ({ value, formApi }) => {
-            const { archivo } = validator.parse(value);
-
-            const data = new FormData;
-            data.append('archivo', archivo);
-
+            const data = validator.parse(value);
             mutate({ data, formApi });
         }
     });
@@ -34,7 +30,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen
             <form.AppForm>
                 <div className="grid grid-cols-2">
                     <form.AppField
-                        name="archivo"
+                        name="archivo_uuid"
                         children={() => <DictamenArchivoField />}
                     />
                 </div>
@@ -46,17 +42,17 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen
                         <Card key={index} className="shadow-none">
                             <CardContent className="flex flex-col gap-6">
                                 <div className="flex flex-row gap-6">
-                                    <div className="w-1/10" data-slot="label">
+                                    <div className="w-1/10" data-slot="label-container">
                                         <Label className="font-bold">Cantidad</Label>
                                         <Label>{adquisicion.cantidad}</Label>
                                     </div>
-                                    <div className="w-7/10" data-slot="label">
+                                    <div className="w-7/10" data-slot="label-container">
                                         <Label className="font-bold">Producto</Label>
                                         <Label>
                                             {producto.tipo.nombre} {producto.marca.nombre} {producto.nombre} {adquisicion.caracteristicas}
                                         </Label>
                                     </div>
-                                    <div className="w-2/10" data-slot="label">
+                                    <div className="w-2/10" data-slot="label-container">
                                         <Label className="font-bold">Resguardante</Label>
                                         <Label>{adquisicion.empleado?.nombre ?? 'Juan Perez'}</Label>
                                     </div>

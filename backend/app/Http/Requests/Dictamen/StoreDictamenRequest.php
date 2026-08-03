@@ -6,20 +6,20 @@ use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-use App\Models\Archivo;
 use App\Services\DictamenService;
 use App\Enums\ProductoTipoEnum;
 use App\Rules\NumeroInventarioRule;
+use App\Traits\Http\Requests\InteractsWithArchivo;
 
 class StoreDictamenRequest extends FormRequest
 {
+    use InteractsWithArchivo;
+
     public function __construct(
         protected DictamenService $dictamenService
     ) {
         parent::__construct();
     }
-
-    private Archivo $archivo;
 
     public function rules(): array
     {
@@ -27,7 +27,7 @@ class StoreDictamenRequest extends FormRequest
             'adscripcion_id' => ['required', 'integer'],
             'folio' => ['required', 'string', 'max:64', 'unique:oficios,folio'],
             'fecha_solicitud' => ['required', 'date', 'before_or_equal:today'],
-            'archivo_uuid' => ['bail', 'required', 'uuid', 'exists:archivos,uuid'],
+            'archivo_uuid' => $this->archivoRule(),
             'adquisiciones' => ['required', 'array', 'min:1'],
             'adquisiciones.*.cantidad' => ['required', 'integer', 'gte:1', 'lte:255'],
             'adquisiciones.*.empleado_id' => ['required', 'integer'],
@@ -47,23 +47,5 @@ class StoreDictamenRequest extends FormRequest
                 ];
             })
         ];
-    }
-
-    protected function passedValidation(): void
-    {
-        $this->setArchivo(
-            Archivo::where('uuid', $this->input('archivo_uuid'))
-                ->first()
-        );
-    }
-
-    protected function setArchivo(Archivo $archivo): void
-    {
-        $this->archivo = $archivo;
-    }
-
-    public function getArchivo(): Archivo
-    {
-        return $this->archivo;
     }
 }

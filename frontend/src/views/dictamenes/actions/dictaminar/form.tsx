@@ -9,7 +9,7 @@ import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tans
 import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export const useForm = (dictamen: DetailedActionDictaminarDictamen) => {
-    const formMutation = useActionFormMutation(dictamen);
+    const { mutate } = useActionFormMutation(dictamen);
 
     return useAppForm({
         defaultValues: defaultValues(dictamen),
@@ -18,8 +18,7 @@ export const useForm = (dictamen: DetailedActionDictaminarDictamen) => {
         },
         onSubmit: async ({ value, formApi }) => {
             const data = validator.parse(value);
-
-            formMutation.mutate({ data, formApi });
+            mutate({ data, formApi });
         }
     });
 }

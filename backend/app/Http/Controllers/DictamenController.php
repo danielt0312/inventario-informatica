@@ -54,6 +54,8 @@ class DictamenController extends ArchivableController
             if ($adscripcionId != 2) {
                 $archivo = $request->getArchivo();
 
+                $archivo->temporal->delete();
+
                 $documento = $archivo->documento()->create([
                     'tipo_id' => DocumentoTipoEnum::OFICIO->value
                 ]);
@@ -103,16 +105,16 @@ class DictamenController extends ArchivableController
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
     {
-        $dictamen = DB::transaction(function () use ($request, $dictamen) {
+        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
             $validated = $request->validated();
 
-            foreach ($validated['adquisiciones'] as $productoData) {
+            foreach ($validated['adquisiciones'] as $adquisicion) {
                 $dictamen->versionActual->adquisiciones()
-                    ->where('id', $productoData['id'])
+                    ->where('id', $adquisicion['id'])
                     ->update([
                         'producto_tipo_id' => null,
-                        'producto_id' => $productoData['producto_id'],
-                        'caracteristicas' => $productoData['caracteristicas']
+                        'producto_id' => $adquisicion['producto_id'],
+                        'caracteristicas' => $adquisicion['caracteristicas']
                     ]);
             }
 
@@ -143,14 +145,23 @@ class DictamenController extends ArchivableController
 
     public function evidenciar(EvidenciarDictamenRequest $request, Dictamen $dictamen)
     {
-        $this->archivoService->store(
-            $dictamen->versionActual->documento->archivo,
-            $request->file('archivo')
-        );
+        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
+            $documento = $dictamen->versionActual->documento;
 
-        $dictamen->update([
-            'estado_id' => DictamenEstadoEnum::SURTIR->value
-        ]);
+            $archivoOriginal = $documento->archivo;
+
+            $documento->archivo()
+                ->associate($request->getArchivo())
+                ->save();
+
+            $archivoOriginal->delete();
+
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::SURTIR->value
+            ]);
+
+            return $dictamen;
+        });
 
         return $dictamen->toResource()
             ->response()

@@ -42,9 +42,7 @@ class ArchivoService
             throw new InvalidArgumentException('You must provide `fileName` when using a `File` instance.');
         }
 
-        $fileName = $fileName ?: $file->getClientOriginalName();
-
-        $archivo = $this->create($fileName, $file->getSize(), $tipo);
+        $archivo = $this->create($fileName ?: $file->getClientOriginalName(), $file->getSize(), $tipo);
 
         $this->store($archivo, $file, $disk);
 
@@ -53,7 +51,7 @@ class ArchivoService
 
     public function createAndStoreFromRaw(string $fileName, string $content, AvailableFileExtensions $tipo = AvailableFileExtensions::PDF, string $disk = 'local'): Archivo
     {
-        $archivo = $this->create($fileName, $tipo);
+        $archivo = $this->create($fileName, strlen($content), $tipo);
 
         $this->storeFromRaw($archivo, $content, $disk);
 

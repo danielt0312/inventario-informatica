@@ -1,16 +1,16 @@
-import { standardPdfFile } from "@/lib/schemas/common";
-import type { PdfFileField } from "@/views/common/archivos/form-fields";
+import { requiredString } from "@/lib/schemas/common";
+import type { DictamenArchivoField } from "./form-fields";
 import z from "zod";
 
 export type Schema = {
-    archivo: PdfFileField;
+    archivo_uuid: DictamenArchivoField;
 }
 
 export const defaultValues: Schema = {
-    archivo: undefined
+    archivo_uuid: undefined
 }
 
 export const validator = z.object({
-    archivo: standardPdfFile()
+    archivo_uuid: requiredString
 });
 

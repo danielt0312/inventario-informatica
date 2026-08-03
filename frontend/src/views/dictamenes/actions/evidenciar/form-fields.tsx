@@ -1,11 +1,11 @@
-import { PdfFileField } from "@/views/common/archivos/form-fields";
+import { AttachmentField } from "@/components/composed/@tanstack/form/attachment-field";
 
-export type DictamenArchivoField = PdfFileField;
+export type DictamenArchivoField = AttachmentField;
 export const DictamenArchivoField = ({
     label = "Adjuntar evidencia de dictamen recibido",
     ...props
-}: React.ComponentProps<typeof PdfFileField>) => (
-    <PdfFileField
+}: React.ComponentProps<typeof AttachmentField>) => (
+    <AttachmentField
         label={label}
         {...props}
     />

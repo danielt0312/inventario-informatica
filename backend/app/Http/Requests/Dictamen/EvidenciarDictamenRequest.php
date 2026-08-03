@@ -2,8 +2,12 @@
 
 namespace App\Http\Requests\Dictamen;
 
+use App\Traits\Http\Requests\InteractsWithArchivo;
+
 class EvidenciarDictamenRequest extends ActionDictamenRequest
 {
+    use InteractsWithArchivo;
+
     public function authorize(): bool
     {
         return $this->dictamen->esEstadoEvidenciar();
@@ -12,7 +16,7 @@ class EvidenciarDictamenRequest extends ActionDictamenRequest
     public function rules(): array
     {
         return [
-            'archivo' => ['required', 'file', 'max:5120', 'mimes:pdf'],
+            'archivo_uuid' => $this->archivoRule(),
         ];
     }
 }
