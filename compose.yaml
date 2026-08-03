@@ -5,6 +5,7 @@ services:
       - 5173:5173
     volumes:
       - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
     depends_on:
       - backend
 
@@ -17,12 +18,13 @@ services:
     environment:
       PHP_UPLOAD_MAX_FILESIZE: ${PHP_UPLOAD_MAX_FILESIZE:-5M}
       PHP_POST_MAX_SIZE: ${PHP_POST_MAX_SIZE:-6M}
-      PHP_MEMORY_LIMIT: ${PHP_MEMORY_LIMIT:-8M}
+      PHP_MEMORY_LIMIT: ${PHP_MEMORY_LIMIT:-256M}
       PHP_MAX_FILE_UPLOADS: ${PHP_MAX_FILE_UPLOADS:-20}
     ports:
       - 8000:8000
     volumes:
       - ./backend:/var/www/html
+      - backend_vendor:/var/www/html/vendor
     depends_on:
       - database
 
@@ -30,8 +32,8 @@ services:
     image: mariadb:12.2.2
     ports:
       - 3306:3306
-    env_file:
-      - ./backend/.env
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
     volumes:
       - type: volume
         source: database
@@ -39,3 +41,5 @@ services:
 
 volumes:
   database:
+  backend_vendor:
+  frontend_node_modules:

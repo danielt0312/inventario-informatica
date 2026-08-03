@@ -28,8 +28,8 @@ RUN composer install
 
 EXPOSE 8000
 
-CMD php -d upload_max_filesize=${PHP_UPLOAD_MAX_FILESIZE:-5M} \
-        -d post_max_size=${PHP_POST_MAX_SIZE:-6M} \
-        -d memory_limit=${PHP_MEMORY_LIMIT:-8M} \
-        -d max_file_uploads=${PHP_MAX_FILE_UPLOADS:-20} \
+CMD php -d upload_max_filesize=${PHP_UPLOAD_MAX_FILESIZE} \
+        -d post_max_size=${PHP_POST_MAX_SIZE} \
+        -d memory_limit=${PHP_MEMORY_LIMIT} \
+        -d max_file_uploads=${PHP_MAX_FILE_UPLOADS} \
         artisan serve --host=0.0.0.0 --port=8000

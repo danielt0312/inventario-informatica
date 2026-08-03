@@ -24,14 +24,12 @@ class AppServiceProvider extends ServiceProvider
 
         View::addNamespace('pdf-view', resource_path('pdfs/views'));
 
-        if (app()->environment('local')) {
+        if (app()->environment('local') && !!env('ENABLE_QUERY_LISTENER_LOGGER', 0)) {
             DB::enableQueryLog();
 
-            if (env('ENABLE_QUERY_LISTENER_LOGGER', 0)) {
-                DB::listen(function ($query) {
-                    logger()->info("SQL: {$query->sql} [" . implode(', ', $query->bindings) . "] - Time: {$query->time}ms");
-                });
-            }
+            DB::listen(function ($query) {
+                logger()->info("SQL: {$query->sql} [" . implode(', ', $query->bindings) . "] - Time: {$query->time}ms");
+            });
         }
     }
 }
