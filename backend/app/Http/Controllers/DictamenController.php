@@ -52,7 +52,7 @@ class DictamenController extends ArchivableController
             $oficio = null;
             // todo identificar si el area de adscripcion es la interna
             if ($adscripcionId != 2) {
-                $archivo = $this->archivoService->createAndStore($request->file('archivo'));
+                $archivo = $request->getArchivo();
 
                 $documento = $archivo->documento()->create([
                     'tipo_id' => DocumentoTipoEnum::OFICIO->value

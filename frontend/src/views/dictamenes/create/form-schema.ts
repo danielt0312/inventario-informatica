@@ -2,7 +2,6 @@ import {
     requiredIsoDateLTEToday,
     requiredArray,
     selectedNumberOption,
-    standardPdfFile,
     positiveInteger,
     requiredString,
     nullableString
@@ -46,7 +45,7 @@ export type Schema = {
     folio: FolioField;
     fecha_solicitud: FechaSolicitudField;
     adscripcion_id: AdscripcionField;
-    archivo: OficioField;
+    archivo_uuid: OficioField;
     adquisiciones: AdquisicionFields[];
 }
 
@@ -54,7 +53,7 @@ export const dictamenDefaultValues: Schema = {
     folio: undefined,
     fecha_solicitud: undefined,
     adscripcion_id: undefined,
-    archivo: undefined,
+    archivo_uuid: undefined,
     adquisiciones: [productoFieldsDefaultValues]
 } as const;
 
@@ -62,7 +61,7 @@ export const validator = z.object({
     folio: requiredString,
     fecha_solicitud: requiredIsoDateLTEToday,
     adscripcion_id: selectedNumberOption,
-    archivo: standardPdfFile(),
+    archivo_uuid: requiredString,
     adquisiciones: requiredArray(z
         .object({
             cantidad: positiveInteger,

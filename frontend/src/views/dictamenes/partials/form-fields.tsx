@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { productoFieldsGroupDefaultValues } from "../create/form-schema";
 import { NullableNumeroInventarioField } from "@/views/common/articulos/form-fields";
 import { cn, DictamenProducto } from "@/lib/utils";
-import { PdfFileField } from "@/views/common/archivos/form-fields";
+import { AttachmentField } from "@/components/composed/@tanstack/form/attachment-field";
 
 export const ProductoFieldGroup = withFieldGroup({
     defaultValues: productoFieldsGroupDefaultValues,
@@ -82,12 +82,12 @@ export const FechaSolicitudField = ({
     />
 );
 
-export type OficioField = PdfFileField;
+export type OficioField = AttachmentField;
 export const OficioField = ({
     label = "Adjuntar oficio de solicitud",
     ...props
-}: React.ComponentProps<typeof PdfFileField>) => (
-    <PdfFileField
+}: React.ComponentProps<typeof AttachmentField>) => (
+    <AttachmentField
         label={label}
         {...props}
     />

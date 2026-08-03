@@ -13,7 +13,6 @@ import { OficioField, CantidadField, FechaSolicitudField, FolioField, ProductoFi
 import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import { Form as PrimitiveForm } from "@/components/composed/@tanstack/form/form-components";
-import { AttachmentField } from "@/components/composed/@tanstack/form/attachment-field";
 
 export function useCreateFormMutation() {
     const navigate = useNavigate();
@@ -28,7 +27,7 @@ export function useCreateFormMutation() {
 }
 
 export function useForm() {
-    const formMutation = useCreateFormMutation();
+    const { mutate } = useCreateFormMutation();
 
     return useAppForm({
         defaultValues: dictamenDefaultValues,
@@ -37,22 +36,7 @@ export function useForm() {
         },
         onSubmit: ({ value, formApi }) => {
             const data = validator.parse(value);
-            const formData = new FormData();
-
-            formData.append('adscripcion_id', String(data.adscripcion_id));
-            formData.append('folio', data.folio);
-            formData.append('fecha_solicitud', data.fecha_solicitud);
-
-            data.adquisiciones.forEach((adquisicion, index) => {
-                formData.append(`adquisiciones[${index}][cantidad]`, String(adquisicion.cantidad));
-                formData.append(`adquisiciones[${index}][empleado_id]`, String(adquisicion.empleado_id));
-                formData.append(`adquisiciones[${index}][producto_tipo_id]`, String(adquisicion.producto_tipo_id));
-                formData.append(`adquisiciones[${index}][numero_inventario]`, adquisicion.numero_inventario ?? '');
-            });
-
-            formData.append('archivo', data.archivo);
-
-            formMutation.mutate({ data: formData, formApi });
+            mutate({ data, formApi });
         }
     });
 }
@@ -81,8 +65,8 @@ export function Form() {
                 </FieldGroup>
 
                 <form.AppField
-                    name="archivo"
-                    children={() => <AttachmentField className="md:max-w-1/2" />}
+                    name="archivo_uuid"
+                    children={() => <OficioField className="md:max-w-1/2" />}
                 />
 
                 <form.AppField name="adquisiciones" mode="array">
