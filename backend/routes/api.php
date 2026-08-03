@@ -29,8 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('archivos/{archivo}/stream', [ArchivoController::class, 'stream'])
         ->name('archivos.stream');
-    Route::post('archivos/temporales', [ArchivoTemporalController::class, 'store'])
-        ->name('archivo_temporales.store');
+    Route::post('archivos', [ArchivoController::class, 'store'])
+        ->name('archivos.store');
 
     Route::apiResources([
         'documentos' => DocumentoController::class,

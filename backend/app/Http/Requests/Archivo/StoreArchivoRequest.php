@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\ArchivoTemporal;
+namespace App\Http\Requests\Archivo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreArchivoTemporalRequest extends FormRequest
+class StoreArchivoRequest extends FormRequest
 {
     public function rules(): array
     {

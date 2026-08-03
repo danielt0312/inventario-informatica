@@ -41,7 +41,7 @@ export function AttachmentField({
             field.setErrorMap({ onChange: undefined });
             const formData = new FormData;
             formData.append('archivo', file);
-            return api.post('api/archivos/temporales', formData);
+            return api.post('api/archivos', formData);
         },
         onSuccess: (data) => {
             const archivo = data.data.data;
