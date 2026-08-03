@@ -12,6 +12,7 @@ import { useStore } from "@tanstack/react-form";
 import { formatFileSize } from "@/lib/utils";
 import type { AxiosError, AxiosResponse } from "axios";
 import { Spinner } from "@/components/ui/spinner";
+import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 
 type AttachmentState = React.ComponentProps<typeof Attachment>['state'];
 
@@ -48,7 +49,7 @@ export function AttachmentField({
             field.handleChange(archivo.uuid);
         },
         onError: (error) => {
-            const errorMessage =  error.response?.data?.message || error.message;
+            const errorMessage = error.response?.data?.message || error.message;
             field.setErrorMap({
                 onChange: errorMessage
             });
@@ -58,14 +59,14 @@ export function AttachmentField({
     const attachmentTitle = !!archivo
         ? `${archivo.nombre}.${archivo.extension}`
         : !!file
-        ? file.name
-        : 'Subir archivo';
+            ? file.name
+            : 'Subir archivo';
 
     const attachmentDescription = !!archivo
         ? formatFileSize(archivo.size)
         : !!file
-        ? formatFileSize(file.size)
-        : 'Presiona aquí para seleccionar un archivo';
+            ? formatFileSize(file.size)
+            : 'Presiona aquí para seleccionar un archivo';
 
     const state: AttachmentState = status === 'pending'
         ? 'processing'
@@ -82,8 +83,8 @@ export function AttachmentField({
                     {status === 'idle'
                         ? <UploadIcon />
                         : status === 'pending'
-                        ? <Spinner />
-                        : <FileTextIcon />
+                            ? <Spinner />
+                            : <FileTextIcon />
                     }
                 </AttachmentMedia>
                 <AttachmentContent>
@@ -122,17 +123,8 @@ export function AttachmentField({
                         </Tooltip>
                     )}
 
-                    {status === 'success' && (
-                        <Tooltip>
-                            <TooltipContent>
-                                Ver documento
-                            </TooltipContent>
-                            <TooltipTrigger asChild>
-                                <AttachmentAction>
-                                    <EyeIcon />
-                                </AttachmentAction>
-                            </TooltipTrigger>
-                        </Tooltip>
+                    {status === 'success' && !!archivo && (
+                        <AttachmentActionSeeDocument archivo={archivo} />
                     )}
 
                     {(!!file || !!archivo) && (
@@ -150,5 +142,22 @@ export function AttachmentField({
                 </AttachmentActions>
             </Attachment>
         </Field>
+    );
+}
+
+function AttachmentActionSeeDocument({ archivo }: { archivo: Archivo }) {
+    const { mutate } = useFilePreviewWindowMutation();
+
+    return (
+        <Tooltip>
+            <TooltipContent>
+                Ver documento
+            </TooltipContent>
+            <TooltipTrigger asChild>
+                <AttachmentAction onClick={() => mutate({ title: archivo.nombre, uuid: archivo.uuid })}>
+                    <EyeIcon />
+                </AttachmentAction>
+            </TooltipTrigger>
+        </Tooltip>
     );
 }
