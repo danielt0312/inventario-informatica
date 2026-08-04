@@ -9,6 +9,7 @@ use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
 
 use App\Http\Requests\Dictamen\{
     StoreDictamenRequest,
+    UpdateDictamenRequest,
     DictaminarDictamenRequest,
     EvidenciarDictamenRequest,
     SurtirDictamenRequest,
@@ -103,6 +104,53 @@ class DictamenController extends ArchivableController
             ->toResource();
     }
 
+    public function update(UpdateDictamenRequest $request, Dictamen $dictamen)
+    {
+        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
+            $validated = $request->validated();
+
+            $adscripcionId = $validated['adscripcion_id'];
+            $oficio = null;
+            // todo identificar si el area de adscripcion es la interna
+            if ($adscripcionId != 2) {
+                $archivo = $request->getArchivo();
+
+                $archivo->temporal->delete();
+
+                $documento = $archivo->documento()->create([
+                    'tipo_id' => DocumentoTipoEnum::OFICIO->value
+                ]);
+
+                $oficio = $documento->oficio()->create([
+                    'folio' => $validated['folio']
+                ]);
+            }
+
+            //todo obtener el jefe de departamento de DTI
+            $user_id = 1;
+
+            $dictamen = Dictamen::create([
+                'user_id' => $user_id
+            ]);
+
+            $version = $dictamen->versiones()->create([
+                'fecha_solicitud' => $validated['fecha_solicitud'],
+                'oficio_id' => $oficio?->id,
+                'adscripcion_id' => $adscripcionId
+            ]);
+
+            $version->adquisiciones()->createMany($validated['adquisiciones']);
+
+            $dictamen->versionActual()->associate($version)->save();
+
+            return $dictamen;
+        });
+
+        return $dictamen->toResource()
+            ->response()
+            ->setStatusCode(200);
+    }
+
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
     {
         $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
@@ -176,7 +224,7 @@ class DictamenController extends ArchivableController
 
         return $dictamen->toResource()
             ->response()
-            ->setStatusCode(200);;
+            ->setStatusCode(200);
     }
 
     public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen)

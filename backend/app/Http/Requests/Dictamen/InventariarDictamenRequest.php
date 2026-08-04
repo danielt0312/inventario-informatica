@@ -3,10 +3,15 @@
 namespace App\Http\Requests\Dictamen;
 
 use Closure;
+use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Dictamen\Traits\InteractsWithDictamen;
+
 use App\Models\Factura;
 
-class InventariarDictamenRequest extends ActionDictamenRequest
+class InventariarDictamenRequest extends FormRequest
 {
+    use InteractsWithDictamen;
+
     private array $facturas;
 
     public function authorize(): bool

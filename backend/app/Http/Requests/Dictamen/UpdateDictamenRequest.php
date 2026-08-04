@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Dictamen;
 
-use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -10,10 +9,11 @@ use App\Services\DictamenService;
 use App\Enums\ProductoTipoEnum;
 use App\Rules\NumeroInventarioRule;
 use App\Traits\Http\Requests\InteractsWithArchivo;
+use App\Http\Requests\Dictamen\Traits\InteractsWithDictamen;
 
-class StoreDictamenRequest extends FormRequest
+class UpdateDictamenRequest extends FormRequest
 {
-    use InteractsWithArchivo;
+    use InteractsWithDictamen, InteractsWithArchivo;
 
     public function __construct(
         protected DictamenService $dictamenService
@@ -21,41 +21,22 @@ class StoreDictamenRequest extends FormRequest
         parent::__construct();
     }
 
+    public function authorize(): bool
+    {
+        return $this->dictamen->esEstadoSurtir();
+    }
+
     public function rules(): array
     {
         return [
             'adscripcion_id' => ['required', 'integer'],
-            'folio' => ['required', 'string', 'max:64', 'unique:oficios,folio'],
+            'folio' => ['required', 'string', 'max:64', Rule::unique('oficios', 'folio')->ignore($this->dictamen->versionActual->oficio_id)],
             'fecha_solicitud' => ['required', 'date', 'before_or_equal:today'],
             'archivo_uuid' => $this->archivoRule(),
             'adquisiciones' => ['required', 'array', 'min:1'],
-            'adquisiciones.*.id' => [
-                'nullable'
-                'exclude_if:adquisiciones.*.id,null'
-                'required',
-                'integer',
-                Rule::exists('dictamen_adquisiciones', 'id')->where(function ($query) {
-                    $query->where('dictamen_version_id', $this->dictamen->versionActual->id);
-                }),
-            ],
             'adquisiciones.*.cantidad' => ['required', 'integer', 'gte:1', 'lte:255'],
             'adquisiciones.*.empleado_id' => ['required', 'integer'],
             'adquisiciones.*.producto_tipo_id' => ['required', 'integer', 'exists:producto_tipos,id'],
-            'adquisiciones.*.producto_id' => Rule::foreach(function ($_, string $attribute) {
-                $index = explode('.', $attribute)[1];
-                $adquisicionId = $this->input("adquisiciones.{$index}.id");
-                $adquisicion = $this->dictamen->versionActual->adquisiciones->firstWhere('id', $adquisicionId);
-                $tipoId = $adquisicion?->productoTipo?->id;
-
-                return [
-                    'required',
-                    'integer',
-                    Rule::exists('productos', 'id')->where(function ($query) use ($tipoId) {
-                        $query->where('tipo_id', $tipoId);
-                    }),
-                ];
-            }),
-            'adquisiciones.*.caracteristicas' => ['required', 'string', 'max:255'],
             'adquisiciones.*.numero_inventario' => Rule::foreach(function ($_, string $attribute) {
                 $index = explode('.', $attribute)[1];
                 $tipo = $this->input("adquisiciones.{$index}.producto_tipo_id");

@@ -2,11 +2,13 @@
 
 namespace App\Http\Requests\Dictamen;
 
+use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\Http\Requests\InteractsWithArchivo;
+use App\Http\Requests\Dictamen\Traits\InteractsWithDictamen;
 
-class EvidenciarDictamenRequest extends ActionDictamenRequest
+class EvidenciarDictamenRequest extends FormRequest
 {
-    use InteractsWithArchivo;
+    use InteractsWithDictamen, InteractsWithArchivo;
 
     public function authorize(): bool
     {

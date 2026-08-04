@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Dictamen;
+namespace App\Http\Requests\Dictamen\Traits;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Dictamen;
 
-class ActionDictamenRequest extends FormRequest
+trait InteractsWithDictamen
 {
     protected Dictamen $dictamen;
 

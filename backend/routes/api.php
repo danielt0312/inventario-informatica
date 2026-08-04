@@ -56,7 +56,8 @@ Route::middleware('auth:sanctum')->group(function () {
         ->prefix('dictamenes')
         ->group(function () {
             Route::apiResource('', DictamenController::class)
-                ->only(['index', 'store']);
+                ->parameters(['' => 'dictamen'])
+                ->only(['index', 'store', 'update']);
 
             Route::get('{uuid}', [DictamenController::class, 'show'])
                 ->whereUuid('uuid')

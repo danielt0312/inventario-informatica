@@ -1,28 +1,58 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
-import { Route } from "@/routes/_auth/dictamenes/$uuid/editar";
+import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
+import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import { FieldError, FieldGroup } from "@/components/ui/field";
-import { CantidadField, FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
+import { CantidadField, CaracteristicasField, FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
 import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { PlusCircleIcon, Trash2Icon } from "lucide-react";
+import { PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import { DictamenProducto } from "@/lib/utils";
-import React from "react";
 import { NumeroInventarioField } from "@/views/common/articulos/form-fields";
 import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
-import { adquisicionFieldsDefaultValues, defaultValues } from "./form-schema";
+import { adquisicionFieldsDefaultValues, defaultValues, validator } from "./form-schema";
 import { useStore } from "@tanstack/react-form";
 import { ProductoField } from "@/views/common/productos/form-fields";
+import { useNavigate } from "@tanstack/react-router";
+import { useFormMutation } from "@/hooks/use-form-mutation";
+import type { DetailedSurtirDictamen, SurtirDictamen } from "@/types/dictamenes";
+import React from "react";
+
+function useEditFormMutation(dictamen: SurtirDictamen) {
+    const navigate = useNavigate();
+
+    return useFormMutation({
+        url: `api/dictamenes/${dictamen.uuid}`,
+        method: 'PATCH',
+        onSuccess: (_, __, ___, context) => {
+            context.client.invalidateQueries({ queryKey: ['dictamenes'] });
+            navigate({ to: IndexRoute.to });
+        }
+    });
+}
+
+function useForm(dictamen: DetailedSurtirDictamen) {
+    const { mutate } = useEditFormMutation(dictamen);
+
+    return useAppForm({
+        defaultValues: defaultValues(dictamen),
+        validators: {
+            onSubmit: validator
+        },
+        onSubmit: ({ value, formApi }) => {
+            const data = validator.parse(value);
+            mutate({ data, formApi });
+        }
+    });
+}
 
 export const DictamenEditarForm = () => {
-    const { dictamen } = Route.useRouteContext();
+    const { dictamen } = EditarRoute.useRouteContext();
 
-    const form = useAppForm({
-        defaultValues: defaultValues(dictamen),
-    });
+    const form = useForm(dictamen);
 
     const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
     const [showNumeroInventarioField, setShowNumeroInventarioField] = React.useState(false);
@@ -66,65 +96,72 @@ export const DictamenEditarForm = () => {
 
                             {field.state.value.map((_, index) => (
                                 <Card key={index} className="shadow-none">
-                                    <CardContent className="flex gap-6 items-center">
-                                        <form.AppField
-                                            name={`adquisiciones[${index}].cantidad`}
-                                            children={() => <CantidadField className="max-w-min" />}
-                                        />
+                                    <CardContent className="flex gap-6">
+                                        <div className="flex flex-col gap-6 grow">
+                                            <div className="flex flex-row gap-7">
+                                                <FieldGroup className="flex-row w-2/3">
+                                                    <form.AppField
+                                                        name={`adquisiciones[${index}].cantidad`}
+                                                        children={() => <CantidadField className="max-w-min" />}
+                                                    />
 
-                                            <form.AppField
-                                                name={`adquisiciones[${index}].producto_tipo_id`}
-                                                children={() => <ProductoTipoField />}
-                                                listeners={{
-                                                    onChange: ({ value }) => {
-                                                        const requiereNumeroInventario = DictamenProducto.tipoRequiereNumeroInventario(value);
-                                                        setShowNumeroInventarioField(requiereNumeroInventario);
+                                                    <form.AppField
+                                                        name={`adquisiciones[${index}].producto_tipo_id`}
+                                                        children={() => <ProductoTipoField />}
+                                                        listeners={{
+                                                            onChange: ({ value }) => {
+                                                                const requiereNumeroInventario = DictamenProducto.tipoRequiereNumeroInventario(value);
+                                                                setShowNumeroInventarioField(requiereNumeroInventario);
 
-                                                        if (!requiereNumeroInventario) {
-                                                            form.setFieldValue(`adquisiciones[${index}].numero_inventario`, null);
-                                                        }
-                                                    }
-                                                }}
-                                            />
+                                                                if (!requiereNumeroInventario) {
+                                                                    form.setFieldValue(`adquisiciones[${index}].numero_inventario`, null);
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
 
-                                            <form.AppField
-                                                name={`adquisiciones[${index}].producto_id`}
-                                                children={() => <ProductoField tipo={field.state.value.at(index)?.producto_tipo_id} />}
-                                                listeners={{
-                                                    onChange: ({ value }) => {
-                                                        const requiereNumeroInventario = DictamenProducto.tipoRequiereNumeroInventario(value);
-                                                        setShowNumeroInventarioField(requiereNumeroInventario);
+                                                    <form.AppField
+                                                        name={`adquisiciones[${index}].producto_id`}
+                                                        children={() => (
+                                                            <ProductoField tipo={field.state.value[index].producto_tipo_id} />
+                                                        )}
+                                                    />
+                                                </FieldGroup>
 
-                                                        if (!requiereNumeroInventario) {
-                                                            form.setFieldValue(`adquisiciones[${index}].numero_inventario`, null);
-                                                        }
-                                                    }
-                                                }}
-                                            />
-
-                                            {showNumeroInventarioField && (
                                                 <form.AppField
-                                                    name={`adquisiciones[${index}].numero_inventario`}
+                                                    name={`adquisiciones[${index}].empleado_id`}
                                                     children={() => (
-                                                        <NumeroInventarioField />
+                                                        <EmpleadoField
+                                                            label="Resguardante"
+                                                            adscripcion={adscripcion}
+                                                            className="w-1/3"
+                                                        />
                                                     )}
                                                 />
-                                            )}
+                                            </div>
 
-                                        <form.AppField
-                                            name={`adquisiciones[${index}].empleado_id`}
-                                            children={() => (
-                                                <EmpleadoField
-                                                    label="Resguardante"
-                                                    adscripcion={adscripcion}
+                                            <FieldGroup className="flex-row">
+                                                <form.AppField
+                                                    name={`adquisiciones[${index}].caracteristicas`}
+                                                    children={() => <CaracteristicasField className="w-1/2" />}
                                                 />
-                                            )}
-                                        />
+
+                                                <div className="w-1/2">
+                                                    {showNumeroInventarioField && (
+                                                        <form.AppField
+                                                            name={`adquisiciones[${index}].numero_inventario`}
+                                                            children={() => <NumeroInventarioField />}
+                                                        />
+                                                    )}
+                                                </div>
+                                            </FieldGroup>
+                                        </div>
 
                                         <Button
                                             disabled={field.state.value.length === 1}
                                             onClick={() => field.removeValue(index)}
                                             variant="destructive"
+                                            className="max-w-min place-self-center"
                                         >
                                             <Trash2Icon />
                                         </Button>
@@ -137,8 +174,8 @@ export const DictamenEditarForm = () => {
                     )}
                 </form.AppField>
 
-                <SubmitButton />
+                <SubmitButton label="Guardar edición" icon={<SquarePenIcon />} />
             </form.AppForm>
-        </Form>
+        </Form >
     );
 }

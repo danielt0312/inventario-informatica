@@ -1,7 +1,7 @@
 import { DictamenEstadoEnum } from '@/lib/constants';
 import type { ActionDictamen, ActionDictaminarDictamen, ActionDictaminadoDictamen, DetailedActionDictaminarDictamen, DetailedActionDictamen, DetailedActionDictaminadoDictamen, EditableActionDictamen, DetailedEditableActionDictamen } from './-types';
 import { ActionDictamenEstadoEnum, ActionDictamenStates, EditableActionDictamenEnum } from './-constants';
-import type { DetailedSurtirDictamen, Dictamen, SurtirDictamen } from '@/types/dictamenes';
+import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen, Dictamen, SurtirDictamen } from '@/types/dictamenes';
 
 export const isSurtirDictamen = (dictamen: Dictamen): dictamen is SurtirDictamen =>
     dictamen.estado.id === DictamenEstadoEnum.SURTIR;
@@ -21,8 +21,11 @@ export const isActionDictaminadoDictamen = (dictamen: Dictamen): dictamen is Act
 export const isDetailedActionDictamen = (dictamen: Dictamen): dictamen is DetailedActionDictamen =>
     isActionDictamen(dictamen);
 
-export const isDetailedActionDictaminadoDictamen = (dictamen: Dictamen): dictamen is DetailedActionDictaminadoDictamen =>
+export const isDetailedDictaminadoDictamen = (dictamen: Dictamen): dictamen is DetailedDictaminadoDictamen =>
     dictamen.estado.id !== DictamenEstadoEnum.DICTAMINAR;
+
+export const isDetailedActionDictaminadoDictamen = (dictamen: Dictamen): dictamen is DetailedActionDictaminadoDictamen =>
+    isDetailedDictaminadoDictamen(dictamen);
 
 export const isDetailedActionDictaminarDictamen = (dictamen: Dictamen): dictamen is DetailedActionDictaminarDictamen =>
     isActionDictaminarDictamen(dictamen);

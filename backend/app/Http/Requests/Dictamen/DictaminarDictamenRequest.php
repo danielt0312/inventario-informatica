@@ -2,10 +2,14 @@
 
 namespace App\Http\Requests\Dictamen;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\Dictamen\Traits\InteractsWithDictamen;
 
-class DictaminarDictamenRequest extends ActionDictamenRequest
+class DictaminarDictamenRequest extends FormRequest
 {
+    use InteractsWithDictamen;
+
     public function authorize(): bool
     {
         return $this->dictamen->esEstadoDictaminar();
