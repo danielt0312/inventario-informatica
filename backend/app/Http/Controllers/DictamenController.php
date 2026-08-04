@@ -110,11 +110,11 @@ class DictamenController extends ArchivableController
             $validated = $request->validated();
 
             $adscripcionId = $validated['adscripcion_id'];
-            $oficio = null;
-            // todo identificar si el area de adscripcion es la interna
-            if ($adscripcionId != 2) {
-                $archivo = $request->getArchivo();
+            $oficio = $dictamen->versionActual->oficio;
+            $archivo = $request->getArchivo();
 
+            // todo identificar si el area de adscripcion es la interna
+            if ($adscripcionId != 2 && $oficio?->archivo->isNot($archivo)) {
                 $archivo->temporal->delete();
 
                 $documento = $archivo->documento()->create([
@@ -129,11 +129,8 @@ class DictamenController extends ArchivableController
             //todo obtener el jefe de departamento de DTI
             $user_id = 1;
 
-            $dictamen = Dictamen::create([
-                'user_id' => $user_id
-            ]);
-
             $version = $dictamen->versiones()->create([
+                'numero_version' => $dictamen->versionActual->numero_version + 1,
                 'fecha_solicitud' => $validated['fecha_solicitud'],
                 'oficio_id' => $oficio?->id,
                 'adscripcion_id' => $adscripcionId
@@ -142,6 +139,25 @@ class DictamenController extends ArchivableController
             $version->adquisiciones()->createMany($validated['adquisiciones']);
 
             $dictamen->versionActual()->associate($version)->save();
+
+            $dictamen->load('versionActual.adquisiciones');
+
+            $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
+
+            $archivo = $this->archivoService->createAndStoreFromRaw(
+                DocumentoTipoEnum::DICTAMEN->label(),
+                $pdf->output()
+            );
+
+            $documento = $archivo->documento()->create([
+                'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
+            ]);
+
+            $dictamen->versionActual->documento()->associate($documento)->save();
+
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value
+            ]);
 
             return $dictamen;
         });
@@ -180,8 +196,9 @@ class DictamenController extends ArchivableController
             ]);
 
             $dictamen->versionActual->documento()->associate($documento)->save();
-            $dictamen->estado_id = DictamenEstadoEnum::EVIDENCIAR->value;
-            $dictamen->save();
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::SURTIR->value
+            ]);
 
             return $dictamen;
         });

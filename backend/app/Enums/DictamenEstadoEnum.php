@@ -28,19 +28,4 @@ enum DictamenEstadoEnum: int
             self::SURTIDO_CON_OBSERVACIONES => 'Surtido con Observaciones',
         };
     }
-
-    public static function esDictaminar(int $value): bool
-    {
-        return self::DICTAMINAR->value === $value;
-    }
-
-    public static function esEvidenciar(int $value): bool
-    {
-        return self::EVIDENCIAR->value === $value;
-    }
-
-    public static function esSurtir(int $value): bool
-    {
-        return self::SURTIR->value === $value;
-    }
 }

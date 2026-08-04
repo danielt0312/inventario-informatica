@@ -22,6 +22,7 @@ class DictamenAdquisicion extends Model
     ];
 
     protected $attributes = [
+        'producto_tipo_id' => null,
         'producto_id' => null,
         'articulo_id' => null,
         'caracteristicas' => null
