@@ -79,7 +79,7 @@ export interface QueryDataTableProps<TData, TFilters extends object = Record<str
     >;
 }
 
-export function QueryDataTable<TData, TFilters extends object>({
+export function QueryDataTable<TData, TFilters extends object = Record<string, unknown>>({
     queryKey,
     filter,
     columns,

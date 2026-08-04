@@ -43,7 +43,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
 
                 <form.AppField
                     name="orden_compra"
-                    children={() => <OrdenCompraField />}
+                    children={() => <OrdenCompraField className="w-1/4" />}
                 />
 
                 {slots.map((slot, index) => (
@@ -61,7 +61,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
 
                                         <div className="flex flex-col gap-7">
                                             <div className="flex gap-7">
-                                                <div data-slot="label" className="w-7/10">
+                                                <div data-slot="label-container" className="w-7/10">
                                                     <Label className="font-bold">
                                                         Características solicitadas
                                                     </Label>
@@ -70,7 +70,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                                     </Label>
                                                 </div>
 
-                                                <div data-slot="label" className="w-3/10">
+                                                <div data-slot="label-container" className="w-3/10">
                                                     <Label className="font-bold">
                                                         Resguardante
                                                     </Label>

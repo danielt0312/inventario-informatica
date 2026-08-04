@@ -6,8 +6,15 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { QueryDataTable } from "@/components/custom/query-datatable";
 import { getFacturaDefaultColumns } from "./table-cols";
+import type { Factura } from "@/types/documentos";
 
-export function FacturaTable() {
+interface FacturaFieldProps extends Omit<React.ComponentProps<typeof QueryDataTable<Factura>>, 'queryKey' | 'url'> {
+}
+
+export function FacturaTable({
+    columns = [],
+    ...props
+}: FacturaFieldProps) {
     const queryClient = useQueryClient();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +32,10 @@ export function FacturaTable() {
         <QueryDataTable
             queryKey={['facturas']}
             url="api/facturas"
-            columns={getFacturaDefaultColumns()}
+            columns={[
+                ...columns,
+                ...getFacturaDefaultColumns()
+            ]}
             actionBar={(
                 <>
                     <Button size="sm" onClick={() => setIsOpen(true)}>
@@ -46,6 +56,7 @@ export function FacturaTable() {
                     </Dialog>
                 </>
             )}
+            {...props}
         />
     );
 }

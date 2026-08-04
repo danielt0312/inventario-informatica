@@ -1,6 +1,6 @@
 import { DatePickerField } from "@/components/composed/@tanstack/form/date-picker-field";
 import { InputField, NumberInputField } from "@/components/composed/@tanstack/form/input-field";
-import { AttachmentField } from "@/components/composed/@tanstack/form/attachment-field";
+import { AttachmentField } from "@/components/composed/@tanstack/form/file-attachment-field";
 import { TextareaField } from "@/components/composed/@tanstack/form/textarea-field";
 import React from "react";
 

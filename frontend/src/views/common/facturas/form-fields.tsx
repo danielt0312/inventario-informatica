@@ -4,31 +4,25 @@ import { PaperclipIcon } from "lucide-react";
 import { useState } from "react";
 import { FacturaTable as FacturaTable } from "./partials/table";
 import { useFieldContext } from "@/components/composed/@tanstack/form/form";
-import { Field, type FieldProps } from "@/components/composed/field";
-import { useStore } from "@tanstack/react-form";
-import { FilePreviewWindowGroup } from "@/components/composed/file-preview-window";
+import { FileViewerSelectorField } from "@/components/composed/@tanstack/form/file-viewer-selector-field";
 
-export type FacturaField = string | undefined;
+export type FacturaField = FileViewerSelectorField;
 export const FacturaField = ({
     label = 'Adjuntar factura',
     ...props
-}: FieldProps) => {
+}: React.ComponentProps<typeof FileViewerSelectorField>) => {
     const field = useFieldContext<FacturaField>();
     const [open, setOpen] = useState(false);
-    const factura = useStore(field.store, (state) => state.value);
 
     return (
-        <Field
-            label={label}
-            errors={field.state.meta.errors}
-            {...props}
-        >
-            <FilePreviewWindowGroup
-                onClick={() => setOpen(true)}
-                uuid={factura}
-            >
-                <PaperclipIcon /> Adjuntar
-            </FilePreviewWindowGroup>
+        <>
+            <FileViewerSelectorField
+                selector={{
+                    onClick: () => setOpen(true)
+                }}
+                label={label}
+                {...props}
+            />
 
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="min-w-4xl">
@@ -43,24 +37,22 @@ export const FacturaField = ({
                         columns={[
                             {
                                 id: 'selector',
-                                cell: ({ row }) => {
-                                    return (
-                                        <Button
-                                            size="sm"
-                                            onClick={() => {
-                                                field.setValue(row.original.uuid);
-                                                setOpen(false);
-                                            }}
-                                        >
-                                            <PaperclipIcon /> Adjuntar
-                                        </Button>
-                                    );
-                                }
+                                cell: ({ row }) => (
+                                    <Button
+                                        size="sm"
+                                        onClick={() => {
+                                            field.setValue(row.original.archivo.uuid);
+                                            setOpen(false);
+                                        }}
+                                    >
+                                        <PaperclipIcon /> Adjuntar
+                                    </Button>
+                                )
                             }
                         ]}
                     />
                 </DialogContent>
             </Dialog>
-        </Field>
+        </>
     );
 }

@@ -3,33 +3,27 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { PaperclipIcon } from "lucide-react";
 import { useState } from "react";
 import { useFieldContext } from "@/components/composed/@tanstack/form/form";
-import { Field, type FieldProps } from "@/components/composed/field";
-import { useStore } from "@tanstack/react-form";
-import { FilePreviewWindowGroup } from "@/components/composed/file-preview-window";
 import { OrdenCompraTable } from "./partials/table";
 import { ordenCompraInitialTableState } from "./partials/table-cols";
+import { FileViewerSelectorField } from "@/components/composed/@tanstack/form/file-viewer-selector-field";
 
-export type OrdenCompraField = string | undefined;
+export type OrdenCompraField = FileViewerSelectorField;
 export const OrdenCompraField = ({
     label = 'Adjuntar orden de compra',
     ...props
-}: FieldProps) => {
+}: React.ComponentProps<typeof FileViewerSelectorField>) => {
     const field = useFieldContext<OrdenCompraField>();
     const [open, setOpen] = useState(false);
-    const factura = useStore(field.store, (state) => state.value);
 
     return (
-        <Field
-            label={label}
-            errors={field.state.meta.errors}
-            {...props}
-        >
-            <FilePreviewWindowGroup
-                onClick={() => setOpen(true)}
-                uuid={factura}
-            >
-                <PaperclipIcon /> Adjuntar
-            </FilePreviewWindowGroup>
+        <>
+            <FileViewerSelectorField
+                label={label}
+                selector={{
+                    onClick: () => setOpen(true)
+                }}
+                {...props}
+            />
 
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="min-w-4xl">
@@ -68,6 +62,6 @@ export const OrdenCompraField = ({
                     />
                 </DialogContent>
             </Dialog>
-        </Field>
+        </>
     );
 }
