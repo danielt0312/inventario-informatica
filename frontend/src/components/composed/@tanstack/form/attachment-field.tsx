@@ -1,73 +1,117 @@
-import { useStore } from "@tanstack/react-form";
-import { useFieldContext } from "./form";
 import React from "react";
+import { Attachment } from "../../attachment";
+import { useFieldContext } from "./form";
+import { useMutation } from "@tanstack/react-query";
+import type { AxiosError, AxiosResponse } from "axios";
+import type { LaravelValidationErrors, TResponse } from "@/types/generics";
 import type { Archivo } from "@/types/documentos";
-import { formatFileSize } from "@/lib/utils";
-import { Attachment, AttachmentAction, AttachmentContent, AttachmentDescription, AttachmentMedia, AttachmentTitle } from "@/components/ui/attachment";
-import { Field, type FieldProps } from "../../field";
-import { EyeIcon, UploadIcon } from "lucide-react";
-import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import api from "@/lib/axios";
 
-export interface AttachmentFieldProps extends Omit<React.ComponentProps<typeof Attachment>, 'children'>, Omit<FieldProps, 'orientation' | 'errors'> {
-    fieldOrientation?: FieldProps['orientation'];
-    initialState?: Archivo;
-    attachmentTitle?: string;
-    attachmentDescription?: string;
-    mediaVariant?: React.ComponentProps<typeof AttachmentMedia>['variant'];
-    mediaContent?: React.ReactNode;
-}
-
-export type AttachmentField = string | undefined;
+export type AttachmentField = Attachment;
 export function AttachmentField({
-    className,
-    description,
-    disabled,
-    label,
-    required,
-    fieldOrientation,
-    initialState,
-    mediaVariant,
-    mediaContent = <UploadIcon />,
-    attachmentTitle: attachmentTitleProp,
-    attachmentDescription: attachmentDescriptionProp,
+    archivo: initialState,
     ...props
 }: AttachmentFieldProps) {
     const field = useFieldContext<AttachmentField>();
-    const value = useStore(field.store, (state) => state.value);
-    const [archivo, setArchivo] = React.useState<Archivo | undefined>(initialState);
+    const inputRef = React.useRef<HTMLInputElement>(null);
+    const [file, setFile] = React.useState<File | undefined>(undefined);
+    const [archivo, setArchivo] = React.useState(initialState);
 
-    const attachmentTitle = attachmentTitleProp ?? (
-        !!archivo
-            ? `${archivo.nombre}.${archivo.extension}`
-            : 'Subir archivo'
-    );
+    const { mutateAsync, status } = useMutation<AxiosResponse<TResponse<Archivo>>, AxiosError<LaravelValidationErrors>, File>({
+        mutationFn: (file) => {
+            setArchivo(undefined);
+            field.setErrorMap({ onChange: undefined });
+            const formData = new FormData;
+            formData.append('archivo', file);
+            return api.post('api/archivos', formData);
+        },
+        onSuccess: (data) => {
+            const archivo = data.data.data;
+            setArchivo(archivo);
+            field.handleChange(archivo.uuid);
+        },
+        onError: (error) => {
+            const errorMessage = error.response?.data?.message || error.message;
+            field.setErrorMap({
+                onChange: errorMessage
+            });
+        }
+    });
 
-    const attachmentDescription = attachmentDescriptionProp ?? (
-        !!archivo
-            ? formatFileSize(archivo.size)
-            : 'Presiona aquí para seleccionar un archivo'
-    );
+    const initialStateIsDefined = initialState !== undefined;
+
+    const title = initialStateIsDefined
+        ? `${initialState.nombre}.${initialState.extension}`
+        : !!file
+            ? file.name
+            : 'Subir archivo';
+
+    const description = initialStateIsDefined
+        ? formatFileSize(initialState.size)
+        : !!file
+            ? formatFileSize(file.size)
+            : 'Presiona aquí para seleccionar un archivo';
+
+    const state: AttachmentState = status === 'pending'
+        ? 'processing'
+        : status === 'success'
+            ? 'done'
+            : status;
 
     const fieldProps: FieldProps = { className, description, disabled, errors: field.state.meta.errors, label, required, orientation: fieldOrientation };
 
     return (
         <Field {...fieldProps}>
-            <Attachment {...props}>
-                <AttachmentMedia variant={mediaVariant}>
-                    {mediaContent}
+            <Attachment state={state} {...props}>
+                <AttachmentMedia>
+                    {status === 'idle'
+                        ? <UploadIcon />
+                        : status === 'pending'
+                            ? <Spinner />
+                            : <FileTextIcon />
+                    }
                 </AttachmentMedia>
                 <AttachmentContent>
-                    <AttachmentTitle>{attachmentTitle}</AttachmentTitle>
-                    <AttachmentDescription>{attachmentDescription}</AttachmentDescription>
+                    <AttachmentTitle>{title}</AttachmentTitle>
+                    <AttachmentDescription>{description}</AttachmentDescription>
+                    <input
+                        ref={inputRef}
+                        type="file"
+                        accept="application/pdf"
+                        className="hidden"
+                        onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            setFile(file);
+
+                            if (file) {
+                                await mutateAsync(file);
+                            } else {
+                                field.handleChange(undefined);
+                            }
+                            e.target.value = '';
+                        }}
+                    />
                 </AttachmentContent>
                 {!value && <AttachmentTrigger onClick={() => inputRef.current?.click()} disabled={disabled} aria-disabled={disabled} />}
                 <AttachmentActions>
-                    {!!archivo && (
-                        <AttachmentActionSeeDocument archivo={archivo} />
+                    {status === 'error' && file && (
+                        <Tooltip>
+                            <TooltipContent>
+                                Reintentar
+                            </TooltipContent>
+                            <TooltipTrigger asChild onClick={async () => await mutateAsync(file)}>
+                                <AttachmentAction>
+                                    <RotateCcwIcon />
+                                </AttachmentAction>
+                            </TooltipTrigger>
+                        </Tooltip>
                     )}
 
-                    {(!!file || !!archivo) && (
+                    {!!initialState && (
+                        <AttachmentActionSeeDocument archivo={initialState} />
+                    )}
+
+                    {(!!file || !!initialState) && (
                         <Tooltip>
                             <TooltipContent>
                                 Elegir otro archivo
@@ -85,25 +129,17 @@ export function AttachmentField({
     );
 }
 
-function AttachmentActionSeeDocument({
-    archivo,
-    tooltipMessage = 'Ver documento',
-    icon = <EyeIcon />
-}: {
-    archivo: Archivo;
-    tooltipMessage?: string;
-    icon?: React.ReactNode;
-}) {
+function AttachmentActionSeeDocument({ archivo }: { archivo: Archivo }) {
     const { mutate } = useFilePreviewWindowMutation();
 
     return (
         <Tooltip>
             <TooltipContent>
-                {tooltipMessage}
+                Ver documento
             </TooltipContent>
             <TooltipTrigger asChild>
                 <AttachmentAction onClick={() => mutate({ title: archivo.nombre, uuid: archivo.uuid })}>
-                    {icon}
+                    <EyeIcon />
                 </AttachmentAction>
             </TooltipTrigger>
         </Tooltip>

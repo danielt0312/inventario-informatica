@@ -27,10 +27,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // todo definir si se cambiara a español o inglés
     Route::get('user', fn (Request $request) => response()->json(['data' => $request->user()]));
 
+    Route::apiResource('archivos', ArchivoController::class)
+        ->only(['show', 'store']);
     Route::get('archivos/{archivo}/stream', [ArchivoController::class, 'stream'])
         ->name('archivos.stream');
-    Route::post('archivos', [ArchivoController::class, 'store'])
-        ->name('archivos.store');
 
     Route::apiResources([
         'documentos' => DocumentoController::class,
