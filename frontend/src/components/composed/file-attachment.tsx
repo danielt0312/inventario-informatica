@@ -1,49 +1,22 @@
-import { QueryClient } from "@tanstack/react-query";
-import { Attachment, AttachmentActionSeeDocument, AttachmentActionSelector } from "./attachment";
-import type { Archivo } from "@/types/documentos";
 import React from "react";
-import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
-import type { TResponse } from "@/types/generics";
-import { Attachment, AttachmentActions, AttachmentContent, AttachmentDescription, AttachmentMedia, AttachmentTitle, AttachmentTrigger } from "../ui/attachment";
 import { formatFileSize } from "@/lib/utils";
 import { CircleXIcon, FileTextIcon, RotateCcwIcon, UploadIcon } from "lucide-react";
 import { TooltipAttachmentAction } from "./tooltip-attachment-action";
 import { Spinner } from "../ui/spinner";
+import { Attachment } from "./attachment";
+import { AttachmentContent, AttachmentMedia } from "../ui/attachment";
 
-type MutationResponse = TResponse<Archivo>;
-type MutationPayload = File;
-type MutationOptions = Omit<FormMutation<MutationResponse, MutationPayload>, 'url' | 'toFormData'>;
-
-export const useUploadFileMutation = (
-    options: MutationOptions,
-    queryClient?: QueryClient,
-) => useFormMutation<MutationResponse, MutationPayload>({
-    url: 'archivos',
-    toFormData: (file) => {
-        const formData = new FormData;
-        formData.append('archivo', file);
-        return formData;
-    },
-    ...options
-}, queryClient);
-
-interface AttachmentFileSelectorProps extends Omit<React.ComponentProps<typeof Attachment>, 'state'> {
-    mutation?: {
-        options?: MutationOptions;
-        queryClient?: QueryClient;
-    }
+export type FileAttachment = Attachment;
+interface FileAttachmentProps extends React.ComponentProps<typeof Attachment> {
 }
-
-export type AttachmentFileSelector = Attachment;
-
-export function AttachmentFileSelector({
+export function FileAttachment({
     archivoValue,
     value,
     disabled,
     mutation,
     onSelector,
     ...props
-}: AttachmentFileSelectorProps) {
+}: FileAttachmentProps) {
     const [archivo, setArchivo] = React.useState(archivoValue);
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [file, setFile] = React.useState<File | undefined>(undefined);
@@ -74,7 +47,7 @@ export function AttachmentFileSelector({
                 {status === 'idle' && <UploadIcon />}
                 {status === 'pending' && <Spinner />}
                 {status === 'error' && <CircleXIcon />}
-                {status === 'success' && <FileTextIcon /> }
+                {status === 'success' && <FileTextIcon />}
             </AttachmentMedia>
 
             <AttachmentContent>

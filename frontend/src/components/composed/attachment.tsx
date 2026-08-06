@@ -5,17 +5,19 @@ import * as Root from "@/components/ui/attachment";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import { TooltipAttachmentAction } from "./tooltip-attachment-action";
 import { useArchivoQuery, type ArchivoUuid, type UseArchivoQueryOptions } from "@/views/common/archivos/queries";
+import type { QueryClient } from "@tanstack/react-query";
 
-type UseAttachmentQueryOptions = Omit<UseArchivoQueryOptions, 'enabled'> & {
+export type UseAttachmentQueryOptions = Omit<UseArchivoQueryOptions, 'enabled'> & {
     fetchWhenValuesDiverges?: boolean;
 }
 export const useAttachmentQuery = (
     uuid?: ArchivoUuid,
-    options: UseAttachmentQueryOptions = {}
+    options: UseAttachmentQueryOptions = {},
+    queryClient?: QueryClient,
 ) => {
     const {
         fetchWhenValuesDiverges = true,
-        initialData = undefined,
+        initialData,
         ...restOptions
     } = options;
 
@@ -29,16 +31,17 @@ export const useAttachmentQuery = (
         initialData: archivo,
         enabled: fetchWhenValuesDiverges && valuesDiverges,
         ...restOptions
-    });
+    }, queryClient);
 }
 
 export type Attachment = string | undefined;
-interface AttachmentProps extends Omit<React.ComponentProps<typeof Root.Attachment>, 'children' | 'onClick'> {
+interface AttachmentProps extends Omit<React.ComponentProps<typeof Root.Attachment>, 'onClick'> {
     archivoValue?: Archivo;
     value?: Attachment;
     onSelector?: () => void;
     disabled?: boolean;
     fetchWhenValuesDiverges?: boolean;
+    queryClient?: QueryClient;
 }
 export function Attachment({
     archivoValue,
@@ -46,12 +49,14 @@ export function Attachment({
     onSelector,
     disabled,
     state,
+    queryClient,
     fetchWhenValuesDiverges = true,
     ...props
 }: AttachmentProps) {
     const { data: archivo } = useAttachmentQuery(value, {
-        initialData: archivoValue
-    });
+        initialData: archivoValue,
+        fetchWhenValuesDiverges
+    }, queryClient);
 
     const hasArchivo = archivo !== undefined;
 
@@ -63,44 +68,27 @@ export function Attachment({
                     ? 'done'
                     : 'idle'}
             {...props}
-        >
-            <AttachmentMedia archivo={archivo} />
-
-            <Root.AttachmentContent>
-                <AttachmentTitle archivo={archivo} />
-                <AttachmentDescription archivo={archivo} />
-            </Root.AttachmentContent>
-
-            {!hasArchivo && <Root.AttachmentTrigger onClick={onSelector} disabled={disabled} aria-disabled={disabled} />}
-
-            {hasArchivo && (
-                <Root.AttachmentActions>
-                    <AttachmentActionSeeDocument archivo={archivo} />
-                    <AttachmentActionSelector onClick={onSelector} />
-                </Root.AttachmentActions>
-            )}
-        </Root.Attachment>
+        />
     );
 }
 
 export const AttachmentMedia = ({
     archivo,
-    fallbackLabel = 'Adjuntar archivo',
     ...props
 }: Omit<React.ComponentProps<typeof Root.AttachmentMedia>, 'children' | 'variant'> & {
     archivo?: Archivo;
-    fallbackLabel?: string;
 }) => (
     <Root.AttachmentMedia
         variant="icon"
-        children={
-            archivo !== undefined
-                ? <FileTextIcon />
-                : <UploadIcon />
-        }
+        children={archivo
+            ? <FileTextIcon />
+            : <UploadIcon />}
         {...props}
     />
 );
+
+export const getAttachmentTitleLabel = (archivo: Archivo) =>
+    `${archivo.nombre}.${archivo.extension}`;
 
 export const AttachmentTitle = ({
     archivo,
@@ -113,7 +101,7 @@ export const AttachmentTitle = ({
     <Root.AttachmentTitle
         children={
             archivo !== undefined
-                ? `${archivo.nombre}.${archivo.extension}`
+                ? getAttachmentTitleLabel(archivo)
                 : fallbackLabel
         }
         {...props}
