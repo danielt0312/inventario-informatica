@@ -1,9 +1,9 @@
 import React from "react";
 import { formatFileSize } from "@/lib/utils";
 import { CircleXIcon, FileTextIcon, RotateCcwIcon, UploadIcon } from "lucide-react";
-import { TooltipAttachmentAction } from "./tooltip-attachment-action";
+import { TooltipAttachmentAction } from "../ui/tooltip-attachment-action";
 import { Spinner } from "../ui/spinner";
-import { Attachment } from "./attachment";
+import { Attachment } from "../ui/file-uploader";
 import { AttachmentContent, AttachmentMedia } from "../ui/attachment";
 
 export type FileAttachment = Attachment;

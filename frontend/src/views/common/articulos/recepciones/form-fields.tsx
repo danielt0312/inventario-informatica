@@ -3,7 +3,7 @@ import { NullableTextareaField } from "@/components/composed/@tanstack/form/text
 import { useStore } from "@tanstack/react-form";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
-import { BooleanField } from "@/components/custom/boolean-field";
+import { BooleanField } from "@/components/ui/forms/boolean-field";
 
 export type ObservacionesField = NullableTextareaField;
 export const ObservacionesField = ({

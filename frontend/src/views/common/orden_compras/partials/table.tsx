@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { CreateOrdenCompraForm, useCreateOrdenCompraForm, useCreateOrdenCompraFormMutation } from "../create/form";
 import { ordenCompraDefaultColumns, ordenCompraInitialTableState } from "./table-cols";
-import { QueryDataTable, type QueryDataTableProps } from "@/components/custom/query-datatable";
+import { QueryDataTable, type QueryDataTableProps } from "@/components/ui/query-datatable";
 import type { OrdenCompra } from "@/types/orden_compras";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 

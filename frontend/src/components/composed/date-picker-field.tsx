@@ -1,5 +1,5 @@
 import React from "react";
-import { DatePicker, type DatePickerProps } from "./date-picker";
+import { DatePicker, type DatePickerProps } from "../ui/date-picker";
 import type { FieldProps } from "./field";
 import { fromISO, toISODate } from "@/lib/utils";
 import { Field } from "./field";

@@ -7,9 +7,9 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger
-} from "../ui/dropdown-menu";
+} from "./dropdown-menu";
 
-import { Button } from "../ui/button";
+import { Button } from "./button";
 
 export function ActionMenu({
     children,

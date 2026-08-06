@@ -1,5 +1,5 @@
-import { AttachmentAction } from "../ui/attachment";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { AttachmentAction } from "./attachment";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 interface TooltipAttachmentActionProps extends Omit<React.ComponentProps<typeof AttachmentAction>, 'children'> {
     tooltipMessage?: string;

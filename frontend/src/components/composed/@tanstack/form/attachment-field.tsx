@@ -1,5 +1,5 @@
 import React from "react";
-import { Attachment } from "../../attachment";
+import { Attachment } from "../../../ui/file-uploader";
 import { useFieldContext } from "./form";
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError, AxiosResponse } from "axios";

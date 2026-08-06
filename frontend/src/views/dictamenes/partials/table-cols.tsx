@@ -2,7 +2,7 @@ import type { ColumnDef, TableMeta } from "@tanstack/react-table";
 import { CircleXIcon, FileInputIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon, SquarePenIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
-import * as Root from "@/components/composed/action-menu";
+import * as Root from "@/components/ui/action-menu";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { useState, type JSX } from "react";
 import { useSurtirMutation } from "../actions/surtir/form";

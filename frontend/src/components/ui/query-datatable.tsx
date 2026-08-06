@@ -1,14 +1,14 @@
 import type { PaginatedResponse } from "@/types/generics";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import { Spinner } from "../ui/spinner";
+import { Spinner } from "./spinner";
 import { getCoreRowModel, getPaginationRowModel, useReactTable, type ColumnDef, type TableOptions } from "@tanstack/react-table";
-import { DataTable, type DataTableProps } from "../composed/datatable";
+import { DataTableLayout, type DataTableLayoutProps } from "./datatable-layout";
 import { usePaginatedQuery, type UsePaginatedQueryOptions } from "@/hooks/use-paginated-query";
 import { usePagination } from "@/hooks/use-pagination";
 import { useMinSpinning } from "@/hooks/use-min-spinning";
-import { Button } from "../ui/button";
+import { Button } from "./button";
 import { RefreshCcw } from "lucide-react";
-import { Input } from "../ui/input";
+import { Input } from "./input";
 import { cn } from "@/lib/utils";
 
 export interface DataTableStatus<TData = unknown, TError = Error> {
@@ -63,7 +63,7 @@ export function useAppTable<TData>({
 }
 
 export interface QueryDataTableProps<TData, TFilters extends object = Record<string, unknown>> extends
-    Omit<DataTableProps<TData>, 'table'>,
+    Omit<DataTableLayoutProps<TData>, 'table'>,
     Pick<
         UsePaginatedQueryOptions<TData, TFilters>,
         'queryKey' | 'url' | 'filter' | 'filterTransformer'
@@ -115,7 +115,7 @@ export function QueryDataTable<TData, TFilters extends object = Record<string, u
     });
 
     return (
-        <DataTable
+        <DataTableLayout
             table={table}
             actionBar={
                 <>

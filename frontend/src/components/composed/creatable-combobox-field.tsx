@@ -1,4 +1,4 @@
-import { CreatableCombobox } from "./creatable-combobox";
+import { CreatableCombobox } from "../ui/creatable-combobox";
 import { Field, type FieldProps } from "./field";
 
 export interface CreatableComboboxFieldProps extends Omit<React.ComponentProps<typeof CreatableCombobox>, 'children'>, FieldProps {

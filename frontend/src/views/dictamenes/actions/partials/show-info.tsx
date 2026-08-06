@@ -1,4 +1,4 @@
-import { LinkToFile } from "@/components/composed/link-to-file";
+import { LinkToFile } from "@/components/ui/link-to-file";
 import { Label } from "@/components/ui/label";
 import { toLocaleDateFormat } from "@/lib/utils";
 import type { DetailedActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";

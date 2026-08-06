@@ -1,7 +1,7 @@
-import { QueryDataTable } from "@/components/custom/query-datatable";
+import { QueryDataTable } from "@/components/ui/query-datatable";
 import { columns, type Articulo } from "./table-cols";
 import { Input } from "@/components/ui/input";
-import { MultiSelect } from "@/components/custom/multiselect";
+import { MultiSelect } from "@/components/ui/multiselect";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import type { TResponse, TCatalogo } from "@/types/generics";

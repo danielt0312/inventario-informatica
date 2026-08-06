@@ -17,7 +17,7 @@ import {
 } from "date-fns"
 import { isAxiosError } from "axios";
 import { root } from "./axios";
-import type { ComboboxOption } from "@/components/composed/creatable-combobox";
+import type { ComboboxOption } from "@/components/ui/creatable-combobox";
 import { dictamenProductoTiposRequierenNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap } from "./constants";
 import type { DatePickerField } from "@/components/composed/date-picker-field";
 

@@ -1,5 +1,5 @@
 import { InputField, NullableInputField, NullableNumberInputField } from "@/components/composed/@tanstack/form/input-field";
-import { BooleanField } from "@/components/custom/boolean-field";
+import { BooleanField } from "@/components/ui/forms/boolean-field";
 
 export type CostoUnitarioField = NullableNumberInputField;
 export const CostoUnitarioField = ({

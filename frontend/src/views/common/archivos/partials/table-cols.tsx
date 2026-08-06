@@ -1,4 +1,4 @@
-import { ActionMenu, ActionMenuItem } from "@/components/composed/action-menu";
+import { ActionMenu, ActionMenuItem } from "@/components/ui/action-menu";
 import { toLocaleDateFormat } from "@/lib/utils";
 import type { Archivo } from "@/types/documentos";
 import type { TRowDataAccessFn } from "@/types/generics";

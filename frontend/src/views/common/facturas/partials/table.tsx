@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react";
 import { Form, useForm, useFacturaCreateFormMutation } from "../create/form";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { QueryDataTable } from "@/components/custom/query-datatable";
+import { QueryDataTable } from "@/components/ui/query-datatable";
 import { getFacturaDefaultColumns } from "./table-cols";
 import type { Factura } from "@/types/documentos";
 

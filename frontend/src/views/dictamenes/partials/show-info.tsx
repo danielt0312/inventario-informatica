@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
 import type { DetailedDictamen } from "@/types/dictamenes";
-import { LinkToFile } from "@/components/composed/link-to-file";
+import { LinkToFile } from "@/components/ui/link-to-file";
 import { isDetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 
 export const getLabeledVersionTitle = (dictamen: DetailedDictamen) =>

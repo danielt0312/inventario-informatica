@@ -1,6 +1,6 @@
 import { useFilePreviewWindowMutation, type FilePreviewWindowMutationFn } from "@/hooks/use-file-preview-window-mutation";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Label } from "../ui/label";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
+import { Label } from "./label";
 import { EyeIcon, type LucideProps } from "lucide-react";
 import { cn } from "@/lib/utils";
 

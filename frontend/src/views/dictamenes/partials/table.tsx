@@ -1,8 +1,8 @@
-import { QueryDataTable, SearchInput } from "@/components/custom/query-datatable";
+import { QueryDataTable, SearchInput } from "@/components/ui/query-datatable";
 import { columns, type DictamenData } from "./table-cols";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
-import { MultiSelect } from "@/components/custom/multiselect";
 import { useQuery } from "@tanstack/react-query";
+import { MultiSelect } from "@/components/ui/multiselect";
 import api from "@/lib/axios";
 import type { TResponse, TCatalogo } from "@/types/generics";
 import { Button } from "@/components/ui/button";
