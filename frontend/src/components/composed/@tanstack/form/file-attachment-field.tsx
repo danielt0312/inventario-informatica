@@ -4,7 +4,7 @@ import { ArrowLeftRightIcon, EyeIcon, FileTextIcon, RotateCcwIcon, UploadIcon } 
 import type { Archivo } from "@/types/documentos";
 import type { LaravelValidationErrors, TResponse } from "@/types/generics";
 import { Attachment, AttachmentAction, AttachmentActions, AttachmentContent, AttachmentDescription, AttachmentMedia, AttachmentTitle, AttachmentTrigger } from "@/components/ui/attachment";
-import { Field, type FieldProps } from "../../field";
+import { Field, type FieldProps } from "../../../ui/field-layout";
 import { useMutation } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import { useFieldContext } from "./form";

@@ -1,5 +1,5 @@
 import { Input } from "../ui/input";
-import { Field, type FieldProps } from "./field";
+import { Field, type FieldProps } from "../ui/field-layout";
 
 export interface InputFieldProps extends Omit<React.ComponentProps<typeof Input>, 'children'>, FieldProps {
 }

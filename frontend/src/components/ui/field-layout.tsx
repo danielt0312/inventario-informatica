@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import * as Root from "../ui/field";
+import * as Root from "./field";
 
 export const FieldRequiredMark = ({
     className,

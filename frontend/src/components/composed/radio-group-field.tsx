@@ -1,5 +1,5 @@
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { AsideField, Field, type FieldProps } from "./field";
+import { AsideField, Field, type FieldProps } from "../ui/field-layout";
 
 export interface RadioGroupFieldProps extends Omit<React.ComponentProps<typeof RadioGroup>, 'orientation'>, FieldProps {
     radioGroupOrientation?: React.ComponentProps<typeof RadioGroup>['orientation'];

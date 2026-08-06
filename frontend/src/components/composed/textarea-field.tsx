@@ -1,5 +1,5 @@
 import { Textarea } from "../ui/textarea";
-import { Field, type FieldProps } from "./field";
+import { Field, type FieldProps } from "../ui/field-layout";
 
 export interface TextareaFieldProps extends Omit<React.ComponentProps<typeof Textarea>, 'children'>, FieldProps {
 }

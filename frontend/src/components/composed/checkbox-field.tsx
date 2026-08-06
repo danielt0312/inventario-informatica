@@ -1,5 +1,5 @@
 import { Checkbox } from "../ui/checkbox";
-import { AsideField, Field, type FieldProps } from "./field";
+import { AsideField, Field, type FieldProps } from "../ui/field-layout";
 
 export interface CheckboxFieldItemProps extends Omit<React.ComponentProps<typeof Checkbox>, 'children'>, FieldProps {
 }

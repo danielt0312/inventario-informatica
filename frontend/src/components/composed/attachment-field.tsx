@@ -1,6 +1,6 @@
 import type { Archivo } from "@/types/documentos";
 import { Attachment, AttachmentAction } from "@/components/ui/attachment";
-import { Field, type FieldProps } from "./field";
+import { Field, type FieldProps } from "../ui/field-layout";
 import { EyeIcon } from "lucide-react";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
