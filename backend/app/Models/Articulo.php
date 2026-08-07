@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 use App\Enums\ArticuloEstadoEnum;
+use App\Services\NumeroInventarioService;
 
 class Articulo extends Model
 {
@@ -39,7 +40,7 @@ class Articulo extends Model
         static::created(function (Articulo $articulo) {
             if (is_null($articulo->numero_inventario)) {
                 // todo generar dinamicamente
-                $articulo->numero_inventario = '500-01-'.str_pad($articulo->id, 4, 0, STR_PAD_LEFT);
+                $articulo->numero_inventario = NumeroInventarioService::generate(500, $articulo->id);
                 $articulo->saveQuietly();
             }
         });

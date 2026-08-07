@@ -17,7 +17,7 @@ export const CostoUnitarioField = ({
 export type NumeroInventarioField = InputField;
 export const NumeroInventarioField = ({
     label = "Número de Inventario",
-    placeholder = "500-01-0000",
+    placeholder = "Ingresa el número de inventario",
     ...props
 }: React.ComponentProps<typeof InputField>) => (
     <InputField
@@ -30,7 +30,7 @@ export const NumeroInventarioField = ({
 export type NullableNumeroInventarioField = NullableInputField;
 export const NullableNumeroInventarioField = ({
     label = "Número de Inventario",
-    placeholder = "500-01-0000",
+    placeholder = "Ingresa el número de inventario",
     ...props
 }: React.ComponentProps<typeof NullableInputField>) => (
     <NullableInputField

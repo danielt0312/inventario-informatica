@@ -22,7 +22,7 @@ class StoreFacturaRequest extends FormRequest
                 'uuid',
                 function (string $attribute, string $value) {
                     $ordenCompra = OrdenCompra::query()
-                        ->join('documentos', 'documentos.id', '=', 'facturas.documento_id')
+                        ->join('documentos', 'documentos.id', '=', 'orden_compras.documento_id')
                         ->join('archivos', 'archivos.id', '=', 'documentos.archivo_id')
                         ->where('archivos.uuid', $value)
                         ->select('orden_compras.*')

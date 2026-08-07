@@ -16,13 +16,9 @@ use App\Http\Requests\Dictamen\{
     InventariarDictamenRequest
 };
 
-use App\Models\{
-    Articulo,
-    Dictamen
-};
+use App\Models\Dictamen;
 
 use App\Enums\{
-    ArticuloEstadoEnum,
     DocumentoTipoEnum,
     DictamenEstadoEnum
 };
@@ -251,13 +247,10 @@ class DictamenController extends ArchivableController
             foreach ($validated['adquisiciones'] as $payloadAdquisicion) {
                 $factura = $request->getFactura($payloadAdquisicion['factura_uuid']);
 
-                $articulo = Articulo::create([
-                    'producto_id' => $payloadAdquisicion['producto_id'],
-                    'factura_id' => $factura->id,
-                ]);
+                $articulo = $factura->articulos()->create($payloadAdquisicion);
 
                 $articulo->recepcion()->create([
-                    'resultado_esperado' => $payloadAdquisicion['resultado_esperado'],
+                    'es_resultado_esperado' => $payloadAdquisicion['es_resultado_esperado'],
                     'observaciones' => $payloadAdquisicion['observaciones'] ?? null
                 ]);
 
@@ -267,11 +260,12 @@ class DictamenController extends ArchivableController
             }
 
             $dictamen->ordenCompra()
-                ->associate($this->getArchivo()->documento->ordenCompra)
+                ->associate($request->getArchivo()->documento->ordenCompra)
                 ->save();
 
+            // todo establer estado de manera dinamica según la adquisición
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::RESGUARDAR->value
+                'estado_id' => DictamenEstadoEnum::SURTIDO->value
             ]);
 
             return $dictamen;

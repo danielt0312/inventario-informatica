@@ -27,12 +27,12 @@ class InventariarDictamenRequest extends FormRequest
                 'required',
                 'array'
             ],
-            'adquisiciones.*.resultado_esperado' => [
+            'adquisiciones.*.es_resultado_esperado' => [
                 'required',
                 'boolean'
             ],
             'adquisiciones.*.observaciones' => [
-                'exclude_unless:adquisiciones.*.resultado_esperado,false',
+                'exclude_unless:adquisiciones.*.es_resultado_esperado,false',
                 'required',
                 'string',
                 'max:255'
@@ -50,7 +50,7 @@ class InventariarDictamenRequest extends FormRequest
                 'unique:articulos,cuenta_contable'
             ],
             'adquisiciones.*.numero_serie' => [
-                'required',
+                'nullable',
                 'string',
                 'max:64',
                 'distinct',
@@ -58,17 +58,12 @@ class InventariarDictamenRequest extends FormRequest
             ],
             'adquisiciones.*.es_contable' => [
                 'required',
-                'string',
-                'max:64',
-                'distinct',
-                'unique:articulos,numero_serie'
+                'boolean',
             ],
             'adquisiciones.*.costo_unitario' => [
-                'nullable',
-                'required_if:adquisiciones.*.es_contable,true',
-                'decimal:7,2',
-                'max:64', 'distinct',
-                'unique:articulos,numero_serie'
+                'exclude_unless:adquisiciones.*.es_contable,true',
+                'required',
+                'numeric',
             ],
             'adquisiciones.*.factura_uuid' => [
                 'bail',

@@ -20,12 +20,12 @@ type AdquisicionFields = RecepcionFieldGroup & {
 }
 
 type Schema = {
-    orden_compra: OrdenCompraField;
+    archivo_uuid: OrdenCompraField;
     adquisiciones: AdquisicionFields[];
 }
 
 export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): Schema => ({
-    orden_compra: undefined,
+    archivo_uuid: undefined,
     adquisiciones: dictamen.version_actual.adquisiciones.flatMap((adquisicion) =>
         Array.from({ length: adquisicion.cantidad }, (): AdquisicionFields => ({
             ...recepcionFieldGroupDefaultValues,
@@ -58,7 +58,7 @@ const adquisicionValidator = z
     });
 
 export const validator = z.object({
-    orden_compra: requiredString,
+    archivo_uuid: requiredString,
     adquisiciones: requiredArray(adquisicionValidator
         .refine(
             ({ es_resultado_esperado, observaciones }) => !(

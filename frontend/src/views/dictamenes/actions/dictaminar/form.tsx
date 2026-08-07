@@ -35,18 +35,22 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
                     return (
                         <Card key={index} className="shadow-none">
                             <CardContent className="flex flex-col gap-6">
-                                <div className="grid grid-cols-3">
-                                    <div data-slot="label-container">
+                                <div className="flex gap-7">
+                                    <div data-slot="label-container" className="w-1/6">
                                         <Label className="font-bold">Cantidad</Label>
                                         <Label>{adquisicion.cantidad}</Label>
                                     </div>
-                                    <div data-slot="label-container">
+                                    <div data-slot="label-container" className="w-2/6">
                                         <Label className="font-bold">Producto</Label>
                                         <Label>{productoTipo.nombre}</Label>
                                     </div>
-                                    <div data-slot="label-container">
+                                    <div data-slot="label-container" className="w-2/6">
                                         <Label className="font-bold">Resguardante</Label>
                                         <Label>{adquisicion.empleado?.nombre ?? 'Juan Perez'}</Label>
+                                    </div>
+                                    <div data-slot="label-container" className="min-w-1/6">
+                                        <Label className="font-bold">Numero Inventario</Label>
+                                        <Label>{adquisicion.articulo?.numero_inventario ?? 'N/A'}</Label>
                                     </div>
                                 </div>
 
