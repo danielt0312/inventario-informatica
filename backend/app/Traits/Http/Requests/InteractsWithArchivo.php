@@ -8,7 +8,7 @@ trait InteractsWithArchivo
 {
     protected Archivo $archivo;
 
-    public function archivoRule(): array
+    public function archivoRules(): array
     {
         return [
             'bail',

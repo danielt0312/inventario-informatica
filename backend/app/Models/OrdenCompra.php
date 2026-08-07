@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use App\Traits\Models\HasArchivable;
 
 class OrdenCompra extends Model
@@ -21,5 +21,10 @@ class OrdenCompra extends Model
     public function proveedor(): BelongsTo
     {
         return $this->belongsTo(Proveedor::class);
+    }
+
+    public function facturas(): HasMany
+    {
+        return $this->hasMany(Factura::class);
     }
 }

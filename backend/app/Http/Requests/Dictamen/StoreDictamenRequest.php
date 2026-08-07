@@ -27,7 +27,7 @@ class StoreDictamenRequest extends FormRequest
             'adscripcion_id' => ['required', 'integer'],
             'folio' => ['required', 'string', 'max:64', 'unique:oficios,folio'],
             'fecha_solicitud' => ['required', 'date', 'before_or_equal:today'],
-            'archivo_uuid' => $this->archivoRule(),
+            'archivo_uuid' => $this->archivoRules(),
             'adquisiciones' => ['required', 'array', 'min:1'],
             'adquisiciones.*.cantidad' => ['required', 'integer', 'gte:1', 'lte:255'],
             'adquisiciones.*.empleado_id' => ['required', 'integer'],

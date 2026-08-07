@@ -12,6 +12,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { CostoUnitarioField, CuentaContable, EsContableField, NumeroSerieField } from "@/views/common/articulos/form-fields";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
+import { useStore } from "@tanstack/react-form";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -36,6 +37,8 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
             index,
         }))
     );
+
+    const ordenCompra = useStore(form.store, (state) => state.values.orden_compra);
 
     return (
         <Form form={form}>

@@ -18,7 +18,7 @@ class EvidenciarDictamenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'archivo_uuid' => $this->archivoRule(),
+            'archivo_uuid' => $this->archivoRules(),
         ];
     }
 }

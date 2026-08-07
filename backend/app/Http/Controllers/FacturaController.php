@@ -20,18 +20,25 @@ class FacturaController extends ArchivableController
 
     public function store(StoreFacturaRequest $request)
     {
-        DB::transaction(function () use ($request) {
-            $archivo = $this->archivoService->createAndStore($request->file('archivo'));
+        $factura = DB::transaction(function () use ($request): Factura {
+            ['fecha_emision' => $fechaEmision] = $request->validated();
+            $ordenCompra = $request->getOrdenCompra();
+            $archivoPayload = $request->getArchivo();
 
-            $documento = $archivo->documento()->create([
+            $archivoPayload->temporal?->delete();
+
+            $documento = $archivoPayload->documento()->create([
                 'tipo_id' => DocumentoTipoEnum::FACTURA->value
             ]);
 
-            $documento->factura()->create([
-                'fecha_emision' => $request->input('fecha_emision')
+            return $ordenCompra->facturas()->create([
+                'fecha_emision' => $fechaEmision,
+                'documento_id' => $documento->id
             ]);
         });
 
-        return response(status: 201);
+        return $factura->toResource()
+            ->response()
+            ->setStatusCode(201);
     }
 }

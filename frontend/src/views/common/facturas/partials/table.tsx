@@ -1,23 +1,25 @@
+import type { Factura } from "@/types/documentos";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Form, useForm, useFacturaCreateFormMutation } from "../create/form";
-import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { QueryDataTable } from "@/components/ui/query-datatable";
 import { getFacturaDefaultColumns } from "./table-cols";
-import type { Factura } from "@/types/documentos";
+import React from "react";
 
 interface FacturaFieldProps extends Omit<React.ComponentProps<typeof QueryDataTable<Factura>>, 'queryKey' | 'url'> {
+    useFormHook?: typeof useForm;
 }
 
 export function FacturaTable({
     columns = [],
+    useFormHook = useForm,
     ...props
 }: FacturaFieldProps) {
     const queryClient = useQueryClient();
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = React.useState(false);
 
     const useDialogFormMutation = () => useFacturaCreateFormMutation({
         onSuccess: () => {
@@ -26,7 +28,7 @@ export function FacturaTable({
         }
     });
 
-    const useDialogForm = () => useForm(useDialogFormMutation);
+    const useDialogForm = () => useFormHook(useDialogFormMutation);
 
     return (
         <QueryDataTable

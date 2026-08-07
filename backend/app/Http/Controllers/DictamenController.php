@@ -114,9 +114,15 @@ class DictamenController extends ArchivableController
             $archivoPayload = $request->getArchivo();
 
             // todo identificar si el area de adscripcion es la interna
-            if ($adscripcionId != 2 && $oficio?->archivo->isNot($archivoPayload)) {
-                $archivoPayload->temporal->delete();
+            if ($adscripcionId != 2 && $oficio->archivo->isNot($archivoPayload)) {
+                $archivoPayload->temporal?->delete();
                 $oficio->documento->archivo()->associate($archivoPayload);
+            }
+
+            if ($oficio->folio !== $validated['folio']) {
+                $oficio->update([
+                    'folio' => $validated['folio']
+                ]);
             }
 
             //todo obtener el jefe de departamento de DTI
@@ -239,20 +245,20 @@ class DictamenController extends ArchivableController
 
     public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen)
     {
-        DB::transaction(function () use ($request, $dictamen) {
+        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
             $validated = $request->validated();
 
-            foreach ($validated['adquisiciones'] as $payload) {
-                $factura = $request->getFactura($payload['factura_uuid']);
+            foreach ($validated['adquisiciones'] as $payloadAdquisicion) {
+                $factura = $request->getFactura($payloadAdquisicion['factura_uuid']);
 
                 $articulo = Articulo::create([
-                    'producto_id' => $payload['producto_id'],
+                    'producto_id' => $payloadAdquisicion['producto_id'],
                     'factura_id' => $factura->id,
                 ]);
 
                 $articulo->recepcion()->create([
-                    'resultado_esperado' => $payload['resultado_esperado'],
-                    'observaciones' => $payload['observaciones'] ?? null
+                    'resultado_esperado' => $payloadAdquisicion['resultado_esperado'],
+                    'observaciones' => $payloadAdquisicion['observaciones'] ?? null
                 ]);
 
                 $articulo->dictamenArticulo()->create([
@@ -260,11 +266,19 @@ class DictamenController extends ArchivableController
                 ]);
             }
 
+            $dictamen->ordenCompra()
+                ->associate($this->getArchivo()->documento->ordenCompra)
+                ->save();
+
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::RESGUARDAR->value
             ]);
+
+            return $dictamen;
         });
 
-        return response(status: 200);
+        return $dictamen->toResource()
+            ->response()
+            ->setStatusCode(200);
     }
 }

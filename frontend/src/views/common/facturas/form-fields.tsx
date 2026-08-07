@@ -11,7 +11,8 @@ export const FacturaField = ({
     value,
     label = 'Adjuntar factura',
     ...props
-}: React.ComponentProps<typeof ArchivoAttachmentField>) => {
+}: React.ComponentProps<typeof ArchivoAttachmentField> & {
+}) => {
     const field = useFieldContext<FacturaField>();
     const [open, setOpen] = useState(false);
     const [archivo, setArchivo] = useArchivoAttachmentFieldState(value);
