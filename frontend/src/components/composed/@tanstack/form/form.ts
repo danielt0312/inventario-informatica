@@ -6,8 +6,7 @@ import { CheckboxField, CheckboxFieldItem } from './checkbox-field';
 import { DatePickerField } from './date-picker-field';
 import { TextareaField } from './textarea-field';
 import { RadioGroupField, RadioGroupFieldItem } from './radio-group-field';
-import { AttachmentField } from './file-attachment-field';
-import { ArchivoSelectorField } from '@/components/features/archivos/selector-field';
+import { ArchivoAttachmentField } from '@/components/features/archivos/attachment-field';
 import { ArchivoUploaderField } from '@/components/features/archivos/uploader-field';
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts();
@@ -23,9 +22,8 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
         RadioGroupField,
         RadioGroupFieldItem,
         DatePickerField,
-        ArchivoSelectorField,
+        ArchivoAttachmentField,
         ArchivoUploaderField,
-        AttachmentField,
         TextareaField
     },
     formComponents: {

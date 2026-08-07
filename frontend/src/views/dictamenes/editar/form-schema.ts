@@ -1,5 +1,5 @@
 import type { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
-import { CaracteristicasField, type FechaSolicitudField, type FolioField, type OficioField } from "../partials/form-fields"
+import { CaracteristicasField, type FechaSolicitudField, type FolioField, type OficioFieldType } from "../partials/form-fields"
 import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import type { ProductoField } from "@/views/common/productos/form-fields";
 import type { NullableNumeroInventarioField } from "@/views/common/articulos/form-fields";
@@ -31,7 +31,7 @@ export const adquisicionFieldsDefaultValues: AdquisicionFields = {
 type Schema = {
     fecha_solicitud: FechaSolicitudField;
     adscripcion_id: AdscripcionField;
-    archivo_uuid: OficioField;
+    archivo_uuid: OficioFieldType;
     folio: FolioField;
     adquisiciones: AdquisicionFields[];
 }

@@ -1,7 +1,7 @@
 import { DatePickerField } from "@/components/composed/@tanstack/form/date-picker-field";
 import { InputField, NumberInputField } from "@/components/composed/@tanstack/form/input-field";
-import { AttachmentField } from "@/components/composed/@tanstack/form/file-attachment-field";
 import { TextareaField } from "@/components/composed/@tanstack/form/textarea-field";
+import { ArchivoUploaderField, type ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
 import React from "react";
 
 export type CantidadField = NumberInputField;
@@ -43,12 +43,12 @@ export const FechaSolicitudField = ({
     />
 );
 
-export type OficioField = AttachmentField;
+export type OficioFieldType = ArchivoUploaderFieldType;
 export const OficioField = ({
     label = "Adjuntar oficio de solicitud",
     ...props
-}: React.ComponentProps<typeof AttachmentField>) => (
-    <AttachmentField
+}: React.ComponentProps<typeof ArchivoUploaderField>) => (
+    <ArchivoUploaderField
         label={label}
         {...props}
     />
@@ -70,12 +70,12 @@ export function CaracteristicasField({
     );
 }
 
-export type DictamenArchivoField = AttachmentField;
+export type DictamenArchivoField = ArchivoUploaderFieldType;
 export const DictamenArchivoField = ({
     label = "Adjuntar evidencia de dictamen recibido",
     ...props
-}: React.ComponentProps<typeof AttachmentField>) => (
-    <AttachmentField
+}: React.ComponentProps<typeof ArchivoUploaderField>) => (
+    <ArchivoUploaderField
         label={label}
         {...props}
     />

@@ -3,7 +3,7 @@ import { handleFormValidationError } from "@/lib/utils";
 import type { LaravelValidationErrors } from "@/types/generics";
 import type { AnyFormApi } from "@tanstack/react-form";
 import { QueryClient, useMutation, type UseMutationOptions } from "@tanstack/react-query";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export interface FormMutationFunction<TPayload = any> {
     data: TPayload;
@@ -15,7 +15,7 @@ export interface FormMutation<TResponse = any, TPayload = any, TError = LaravelV
     extends Omit<
         UseMutationOptions<
             AxiosResponse<TResponse>,
-            TError,
+            AxiosError<TError>,
             FormMutationFunction<TPayload>
         >,
         'mutationFn'
@@ -30,8 +30,8 @@ export function useFormMutation<TResponse = any, TPayload = any, TError = Larave
     url,
     axiosConfig,
     onError,
-    method = 'POST',
     toFormData,
+    method = 'POST',
     ...props
 }: FormMutation<TResponse, TPayload, TError>, queryClient?: QueryClient) {
     return useMutation({

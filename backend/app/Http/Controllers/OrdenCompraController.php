@@ -21,13 +21,15 @@ class OrdenCompraController extends ArchivableController
     public function store(StoreOrdenCompraRequest $request)
     {
         $orden_compra = DB::transaction(function () use ($request): OrdenCompra {
-            $archivo = $this->archivoService->createAndStore($request->file('archivo'));
+            $archivo = $request->getArchivo();
 
             $documento = $archivo->documento()->create([
                 'tipo_id' => DocumentoTipoEnum::ORDEN_COMPRA->value
             ]);
 
-            return $orden_compra = $documento->ordenCompra()->create($request->validated());
+            $archivo->temporal->delete();
+
+            return $documento->ordenCompra()->create($request->validated());
         });
 
         return $orden_compra

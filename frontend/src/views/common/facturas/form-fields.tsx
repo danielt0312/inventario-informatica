@@ -4,23 +4,24 @@ import { PaperclipIcon } from "lucide-react";
 import { useState } from "react";
 import { FacturaTable as FacturaTable } from "./partials/table";
 import { useFieldContext } from "@/components/composed/@tanstack/form/form";
-import { FileViewerSelectorField } from "@/components/composed/@tanstack/form/file-viewer-selector-field";
+import { ArchivoAttachmentField, useArchivoAttachmentFieldState, type ArchivoAttachmentFieldType } from "@/components/features/archivos/attachment-field";
 
-export type FacturaField = FileViewerSelectorField;
+export type FacturaField = ArchivoAttachmentFieldType;
 export const FacturaField = ({
+    value,
     label = 'Adjuntar factura',
     ...props
-}: React.ComponentProps<typeof FileViewerSelectorField>) => {
+}: React.ComponentProps<typeof ArchivoAttachmentField>) => {
     const field = useFieldContext<FacturaField>();
     const [open, setOpen] = useState(false);
+    const [archivo, setArchivo] = useArchivoAttachmentFieldState(value);
 
     return (
         <>
-            <FileViewerSelectorField
-                selector={{
-                    onClick: () => setOpen(true)
-                }}
+            <ArchivoAttachmentField
                 label={label}
+                value={archivo}
+                onAttachmentClick={() => setOpen(true)}
                 {...props}
             />
 
@@ -41,7 +42,9 @@ export const FacturaField = ({
                                     <Button
                                         size="sm"
                                         onClick={() => {
-                                            field.setValue(row.original.archivo.uuid);
+                                            const archivo = row.original.archivo;
+                                            setArchivo(archivo);
+                                            field.setValue(archivo.uuid);
                                             setOpen(false);
                                         }}
                                     >

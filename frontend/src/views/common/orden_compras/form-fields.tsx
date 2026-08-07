@@ -1,27 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PaperclipIcon } from "lucide-react";
-import { useState } from "react";
+import React from "react";
 import { useFieldContext } from "@/components/composed/@tanstack/form/form";
 import { OrdenCompraTable } from "./partials/table";
 import { ordenCompraInitialTableState } from "./partials/table-cols";
-import { FileViewerSelectorField } from "@/components/composed/@tanstack/form/file-viewer-selector-field";
+import { ArchivoAttachmentField, useArchivoAttachmentFieldState, type ArchivoAttachmentFieldType } from "@/components/features/archivos/attachment-field";
 
-export type OrdenCompraField = FileViewerSelectorField;
+export type OrdenCompraField = ArchivoAttachmentFieldType;
 export const OrdenCompraField = ({
+    value,
     label = 'Adjuntar orden de compra',
     ...props
-}: React.ComponentProps<typeof FileViewerSelectorField>) => {
+}: React.ComponentProps<typeof ArchivoAttachmentField>) => {
     const field = useFieldContext<OrdenCompraField>();
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [archivo, setArchivo] = useArchivoAttachmentFieldState(value);
 
     return (
         <>
-            <FileViewerSelectorField
+            <ArchivoAttachmentField
                 label={label}
-                selector={{
-                    onClick: () => setOpen(true)
-                }}
+                onAttachmentClick={() => setOpen(true)}
+                value={archivo}
                 {...props}
             />
 
@@ -43,7 +44,9 @@ export const OrdenCompraField = ({
                                         <Button
                                             size="sm"
                                             onClick={() => {
-                                                field.setValue(row.original.archivo.uuid);
+                                                const archivo = row.original.archivo;
+                                                setArchivo(archivo);
+                                                field.setValue(archivo.uuid);
                                                 setOpen(false);
                                             }}
                                         >

@@ -9,15 +9,16 @@ interface UploaderFieldProps extends Omit<UploaderProps, 'orientation'>, FieldPr
     uploaderOrientation?: UploaderProps['orientation'];
 }
 
+type UploaderFieldType = string | undefined;
 function UploaderField({
     className,
     description,
     disabled,
     errors,
-    label,
     required,
     orientation,
     uploaderOrientation,
+    label = 'Adjuntar archivo',
     ...props
 }: UploaderFieldProps) {
     const field = useUploaderFieldContext();
@@ -38,6 +39,23 @@ function UploaderField({
         <Field {...fieldProps}>
             <ArchivoUploaderLayout
                 orientation={uploaderOrientation}
+                onValueChange={(value) => field.handleChange(value?.uuid)}
+                onMutation={{
+                    options: {
+                        onError: (error) => {
+                            const errorMessage = error.response?.data.message || error.message;
+                            field.setErrorMap({
+                                onSubmit: errorMessage
+                            })
+                        },
+                        onMutate: () => {
+                            field.setErrorMap({
+                                onSubmit: undefined
+                            });
+                        }
+                    }
+                }}
+                onRedoClick={() => field.setErrorMap({ onSubmit: undefined })}
                 {...props}
             />
         </Field>
@@ -45,6 +63,7 @@ function UploaderField({
 }
 
 export {
+    type UploaderFieldType as ArchivoUploaderFieldType,
     useUploaderFieldContext as useArchivoUploaderFieldContext,
     UploaderField as ArchivoUploaderField
 }

@@ -43,7 +43,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
 
                 <form.AppField
                     name="orden_compra"
-                    children={() => <OrdenCompraField className="w-1/4" />}
+                    children={() => <OrdenCompraField className="w-1/3" />}
                 />
 
                 {slots.map((slot, index) => (

@@ -4,26 +4,16 @@ import type { TResponse } from "@/types/generics";
 import { defaultValues, validator, type OutputSchema } from "./form-schema";
 import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import type { OrdenCompra } from "@/types/orden_compras";
-import { PdfFileField } from "../../archivos/form-fields";
 import { FieldGroup } from "@/components/ui/field";
 import { FechaSolicitudField, NumeroOrdenField } from "./form-fields";
 import { ProveedorField } from "../../proveedores/form-fields";
+import { ArchivoUploaderField } from "@/components/features/archivos/uploader-field";
 
 export const useCreateOrdenCompraFormMutation = (
     props?: Omit<FormMutation<TResponse<OrdenCompra>, OutputSchema>, 'url' | 'method' | 'axiosConfig' | 'toFormData'>
 ) => (
     useFormMutation<TResponse<OrdenCompra>, OutputSchema>({
         url: `api/orden_compras`,
-        toFormData: (data) => {
-            const formData = new FormData;
-
-            formData.append('numero_orden', data.numero_orden);
-            formData.append('fecha_solicitud', data.fecha_solicitud);
-            formData.append('proveedor_id', String(data.proveedor_id));
-            formData.append('archivo', data.archivo);
-
-            return formData;
-        },
         ...props,
     })
 );
@@ -74,8 +64,13 @@ export const AppCreateOrdenCompraForm = ({
             />
 
             <form.AppField
-                name="archivo"
-                children={() => <PdfFileField />}
+                name="archivo_uuid"
+                children={(field) => (
+                    <ArchivoUploaderField
+
+                        onValueChange={(value) => field.handleChange(value?.uuid)}
+                    />
+                )}
             />
 
             {children}

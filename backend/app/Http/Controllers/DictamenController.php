@@ -111,19 +111,12 @@ class DictamenController extends ArchivableController
 
             $adscripcionId = $validated['adscripcion_id'];
             $oficio = $dictamen->versionActual->oficio;
-            $archivo = $request->getArchivo();
+            $archivoPayload = $request->getArchivo();
 
             // todo identificar si el area de adscripcion es la interna
-            if ($adscripcionId != 2 && $oficio?->archivo->isNot($archivo)) {
-                $archivo->temporal->delete();
-
-                $documento = $archivo->documento()->create([
-                    'tipo_id' => DocumentoTipoEnum::OFICIO->value
-                ]);
-
-                $oficio = $documento->oficio()->create([
-                    'folio' => $validated['folio']
-                ]);
+            if ($adscripcionId != 2 && $oficio?->archivo->isNot($archivoPayload)) {
+                $archivoPayload->temporal->delete();
+                $oficio->documento->archivo()->associate($archivoPayload);
             }
 
             //todo obtener el jefe de departamento de DTI
@@ -197,7 +190,7 @@ class DictamenController extends ArchivableController
 
             $dictamen->versionActual->documento()->associate($documento)->save();
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::SURTIR->value
+                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value
             ]);
 
             return $dictamen;

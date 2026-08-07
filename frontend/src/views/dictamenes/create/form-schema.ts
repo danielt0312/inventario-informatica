@@ -11,7 +11,7 @@ import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fiel
 import type { NullableNumeroInventarioField } from "@/views/common/articulos/form-fields";
 import type { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import type { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
-import type { FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
+import type { FechaSolicitudField, FolioField, OficioFieldType } from "../partials/form-fields";
 import type { NumberInputField } from "@/components/composed/@tanstack/form/input-field";
 import z from "zod";
 
@@ -33,7 +33,7 @@ export type Schema = {
     folio: FolioField;
     fecha_solicitud: FechaSolicitudField;
     adscripcion_id: AdscripcionField;
-    archivo_uuid: OficioField;
+    archivo_uuid: OficioFieldType;
     adquisiciones: AdquisicionFields[];
 }
 

@@ -29,6 +29,8 @@ class UpdateDictamenRequest extends FormRequest
 
     public function rules(): array
     {
+        logger($this->dictamen->versionActual->oficio_id);
+
         return [
             'adscripcion_id' => ['required', 'integer'],
             'folio' => [

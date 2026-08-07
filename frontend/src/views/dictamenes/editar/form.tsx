@@ -77,7 +77,12 @@ export const DictamenEditarForm = () => {
 
                 <form.AppField
                     name="archivo_uuid"
-                    children={() => <OficioField className="md:max-w-1/2" archivo={dictamen.version_actual.oficio.archivo} />}
+                    children={() => (
+                        <OficioField
+                            defaultValue={dictamen.version_actual.oficio.archivo}
+                            className="md:max-w-1/2"
+                        />
+                    )}
                 />
 
                 <form.AppField name="adquisiciones" mode="array">

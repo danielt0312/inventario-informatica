@@ -1,21 +1,20 @@
 import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
-import { defaultValues, validator } from "./form-schema";
+import { defaultValues, validator, type FacturaCreateSchemaOutput } from "./form-schema";
 import type { Factura } from "@/types/documentos";
 import type { TResponse } from "@/types/generics";
 import { Form as RootForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import { PdfFileField } from "../../archivos/form-fields";
 import { FechaEmisionField } from "./form-fields";
+import { ArchivoUploaderField } from "@/components/features/archivos/uploader-field";
 
 export const useFacturaCreateFormMutation = (
-    props?: Omit<FormMutation<TResponse<Factura>, FormData>, 'url' | 'method' | 'axiosConfig'>
+    props?: Omit<FormMutation<TResponse<Factura>, FacturaCreateSchemaOutput>, 'url' | 'method' | 'axiosConfig'>
 ) => (
-    useFormMutation<TResponse<Factura>, FormData>({
+    useFormMutation<TResponse<Factura>, FacturaCreateSchemaOutput>({
         url: `api/facturas`,
         ...props,
     })
 );
-
 
 export const useForm = (
     useMutationHook = useFacturaCreateFormMutation
@@ -28,12 +27,7 @@ export const useForm = (
             onSubmit: validator
         },
         onSubmit: ({ value, formApi }) => {
-            const { fecha_emision, archivo } = validator.parse(value);
-
-            const data = new FormData;
-            data.append('fecha_emision', fecha_emision);
-            data.append('archivo', archivo);
-
+            const data = validator.parse(value);
             mutate({ data, formApi });
         }
     });
@@ -58,8 +52,12 @@ export function Form({
                 />
 
                 <form.AppField
-                    name="archivo"
-                    children={() => <PdfFileField />}
+                    name="archivo_uuid"
+                    children={(field) => (
+                        <ArchivoUploaderField
+                            onValueChange={(value) => field.handleChange(value?.uuid)}
+                        />
+                    )}
                 />
 
                 <SubmitButton className="justify-self-center" />
