@@ -4,7 +4,7 @@ import { formatFileSize } from "@/lib/utils";
 import { ArrowLeftRightIcon, EyeIcon, FileTextIcon, UploadIcon } from "lucide-react";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import { TooltipAttachmentAction } from "../../ui/tooltip-attachment-action";
-import { useArchivoQuery, type UseArchivoQueryOptions } from "./queries";
+import { useArchivoQuery, type UseArchivoQueryOptions } from "./hooks/use-query";
 import { Attachment, AttachmentContent, AttachmentDescription, AttachmentMedia, AttachmentTitle, AttachmentTrigger, AttachmentActions, AttachmentGroup } from "../../ui/attachment";
 import { getFileName } from "./utils";
 

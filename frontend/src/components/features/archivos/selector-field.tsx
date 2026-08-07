@@ -1,8 +1,8 @@
 import { Field, type FieldProps } from "@/components/ui/field-layout";
 import { ArchivoSelectorLayout } from "./selector";
-import * as f from "@/components/composed/@tanstack/form/form";
+import { useArchivoFieldContext } from "./hooks/use-field-context";
 
-const useFieldContext = () => f.useFieldContext<SelectorFieldType>();
+const useSelectorFieldContext = useArchivoFieldContext;
 
 type SelectorLayoutProps = React.ComponentProps<typeof ArchivoSelectorLayout>;
 interface SelectorFieldProps extends FieldProps, Omit<SelectorLayoutProps, 'orientation'> {
@@ -20,7 +20,7 @@ function SelectorField({
     selectorOrientation,
     ...props
 }: SelectorFieldProps) {
-    const field = useFieldContext();
+    const field = useSelectorFieldContext();
 
     const fieldProps: FieldProps = {
         className,
@@ -36,14 +36,16 @@ function SelectorField({
 
     return (
         <Field {...fieldProps}>
-            <ArchivoSelectorLayout {...props} />
+            <ArchivoSelectorLayout
+                orientation={selectorOrientation}
+                {...props}
+            />
         </Field>
     );
 }
 
 export {
-    useFieldContext as useArchivoSelectorFieldContext,
+    useSelectorFieldContext as useArchivoSelectorFieldContext,
     type SelectorFieldType as ArchivoSelectorFieldType,
     SelectorField as ArchivoSelectorField
-
 }

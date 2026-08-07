@@ -4,11 +4,11 @@ import { InputField } from './input-field';
 import { CreatableComboboxField } from './creatable-combobox-field';
 import { CheckboxField, CheckboxFieldItem } from './checkbox-field';
 import { DatePickerField } from './date-picker-field';
-import { FileUploadField } from './file-upload-field';
 import { TextareaField } from './textarea-field';
 import { RadioGroupField, RadioGroupFieldItem } from './radio-group-field';
-import { FileViewerSelectorField } from './file-viewer-selector-field';
 import { AttachmentField } from './file-attachment-field';
+import { ArchivoSelectorField } from '@/components/features/archivos/selector-field';
+import { ArchivoUploaderField } from '@/components/features/archivos/uploader-field';
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts();
 
@@ -23,8 +23,8 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
         RadioGroupField,
         RadioGroupFieldItem,
         DatePickerField,
-        FileUploadField,
-        FileViewerSelectorField,
+        ArchivoSelectorField,
+        ArchivoUploaderField,
         AttachmentField,
         TextareaField
     },
