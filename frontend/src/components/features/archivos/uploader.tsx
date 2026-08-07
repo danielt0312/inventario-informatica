@@ -31,6 +31,7 @@ const UploaderActions = AttachmentActions;
 const UploaderAction = ArchivoSelectorAction;
 const UploaderActionViewer = ArchivoSelectorActionViewer;
 const UploaderGroup = AttachmentGroup;
+type UploaderType = ArchivoSelectorType;
 
 type UseMutationOptions = Omit<FormMutation<TResponse<Archivo>, File, LaravelValidationErrors>, 'url' | 'toFormData'>;
 
@@ -54,10 +55,12 @@ const getState = (status: MutationStatus): UploaderState => {
 
 function UploaderLayout({
     value,
+    onValueChange,
     triggererDisabled,
     mutation,
     ...props
 }: Omit<React.ComponentProps<typeof Uploader>, 'children' | 'state'> & {
+    onValueChange?: (value: UploaderType) => void;
     onSelectorClick?: () => void;
     triggererDisabled?: boolean;
     mutation?: {
@@ -67,18 +70,19 @@ function UploaderLayout({
 }) {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [file, setFile] = React.useState<File | undefined>(undefined);
-    const [archivo, setArchivo] = React.useState(value);
 
     const { mutate, mutateAsync, status } = useMutation({
         onSuccess: (data, variables, onMutateResult, context) => {
             const archivo = data.data.data;
-            setArchivo(archivo);
+            onValueChange?.(archivo);
             mutation?.options?.onSuccess?.(data, variables, onMutateResult, context);
         },
         ...mutation?.options
     }, mutation?.queryClient);
 
     const state = getState(status);
+    const fileName = getFileName(file ?? value);
+    const fileSize = getFileSize(file ?? value);
 
     return (
         <Uploader
@@ -91,15 +95,19 @@ function UploaderLayout({
             <UploaderContent>
                 <UploaderTitle
                     state={state}
-                    labelState={{
-                        done: getFileName(file ?? archivo)
+                    labels={{
+                        done: fileName,
                     }}
                 />
-                <UploaderDescription archivo={value} />
+                <UploaderDescription
+                    labels={{
+                        done: fileSize
+                    }}
+                />
             </UploaderContent>
             <UploaderActions>
                 {state === 'error' && file && <UploaderActionRetrier file={file} mutate={mutate} />}
-                {archivo && <UploaderActionViewer archivo={archivo} />}
+                {value && <UploaderActionViewer archivo={value} />}
                 {file && <UploaderActionSwitcher inputRef={inputRef} />}
             </UploaderActions>
             {!triggererDisabled && <UploaderTrigger inputRef={inputRef} />}
@@ -107,56 +115,49 @@ function UploaderLayout({
     );
 }
 
-type SetState<T> = Record<UploaderState, T>;
-type IconState = SetState<React.ReactNode>;
-const defaultIconState: IconState = {
+
+type IconState = Record<UploaderState, React.ReactNode>;
+const DEFAULT_ICONS: IconState = {
     idle: <UploadIcon />,
     uploading: <Spinner />,
     processing: <Spinner />,
     error: <CircleXIcon />,
     done: <FileTextIcon />
-}
-
+} as const;
 function UploaderMedia({
-    iconState,
     state = 'idle',
     ...props
 }: Omit<React.ComponentProps<typeof AttachmentMedia>, 'children' | 'icon'> & {
     state?: React.ComponentProps<typeof Attachment>['state'];
-    iconState?: IconState;
+    icons?: Partial<IconState>;
 }) {
-    const icons = {  }
+    const icons = { ...DEFAULT_ICONS, ...props.icons };
 
     return (
         <AttachmentMedia variant="icon" {...props}>
-            {state === 'idle' && <UploadIcon />}
-            {(state === 'uploading' || state === 'processing') && <Spinner />}
-            {state === 'error' && <CircleXIcon />}
-            {state === 'done' && <FileTextIcon />}
+            {icons[state]}
         </AttachmentMedia>
     );
 }
 
-type LabelState = Partial<Record<UploaderState, string>>;
+type LabelState = Record<UploaderState, React.ReactNode>;
 
-const defaultLabelState: Record<UploaderState, string> = {
+const DEFAULT_TITLE_LABELS: LabelState = {
     idle: 'Subir archivo',
     uploading: 'Subiendo archivo...',
     processing: 'Procesando...',
     error: 'Ocurrió un error al subir el archivo',
     done: 'Archivo subido correctamente',
 } as const;
-
 function UploaderTitle({
-    labelState,
     state = 'idle',
     ...props
 }: Omit<React.ComponentProps<typeof AttachmentTitle>, 'children'> & {
     state?: UploaderState;
     file?: File;
-    labelState?: LabelState;
+    labels?: Partial<LabelState>;
 }) {
-    const labels = { ...defaultLabelState, ...labelState };
+    const labels = { ...DEFAULT_TITLE_LABELS, ...props.labels };
 
     return (
         <AttachmentTitle {...props}>
@@ -165,20 +166,25 @@ function UploaderTitle({
     );
 }
 
+const DEFAULT_DESCRIPTION_LABELS: LabelState = {
+    idle: 'Presiona aquí para subir un nuevo archivo',
+    uploading: 'Espera un momento...',
+    processing: 'Espera un momento...',
+    error: 'Reintenta de nuevo o selecciona otro archivo',
+    done: 'El archivo se subió de manera exitosa'
+} as const;
 function UploaderDescription({
-    archivo,
-    fallbackLabel,
-    file,
+    state = 'idle',
     ...props
 }: Omit<React.ComponentProps<typeof AttachmentDescription>, 'children'> & {
     state?: UploaderState;
-    archivo?: Archivo;
-    file?: File;
-    fallbackLabel?: string;
+    labels?: Partial<LabelState>;
 }) {
+    const labels = { ...DEFAULT_DESCRIPTION_LABELS, ...props.labels }
+
     return (
         <AttachmentDescription {...props}>
-            {getFileSize(archivo ?? file)}
+            {labels[state]}
         </AttachmentDescription>
     );
 }
@@ -260,7 +266,7 @@ function UploaderTrigger({
 }
 
 export {
-    type ArchivoSelectorType as ArchivoUploaderType,
+    type UploaderType as ArchivoUploaderType,
     Uploader as ArchivoUploader,
     UploaderLayout as ArchivoUploaderLayout,
     UploaderInput as ArchivoUploaderInput,
