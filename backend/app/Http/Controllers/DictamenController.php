@@ -51,7 +51,7 @@ class DictamenController extends ArchivableController
             if ($adscripcionId != 2) {
                 $archivo = $request->getArchivo();
 
-                $archivo->temporal->delete();
+                $archivo->temporal?->delete();
 
                 $documento = $archivo->documento()->create([
                     'tipo_id' => DocumentoTipoEnum::OFICIO->value
@@ -75,7 +75,21 @@ class DictamenController extends ArchivableController
                 'adscripcion_id' => $adscripcionId
             ]);
 
-            $version->adquisiciones()->createMany($validated['adquisiciones']);
+            $adquisiciones = array_map(
+                function ($adquisicion) use ($request) {
+                    $numeroInventario = $adquisicion['numero_inventario'];
+                    if (!empty($numeroInventario)) {
+                        return [
+                            'articulo_id' => $request->getArticulo($numeroInventario)->id,
+                            ...$adquisicion
+                        ];
+                    }
+                    return $adquisicion;
+                },
+                $validated['adquisiciones']
+            );
+
+            $version->adquisiciones()->createMany($adquisiciones);
 
             $dictamen->versionActual()->associate($version)->save();
 
@@ -94,7 +108,7 @@ class DictamenController extends ArchivableController
                 'estado',
                 'versionActual' => ['oficio.archivo', 'archivo']
             ])
-            ->allowedIncludes('versiones.adquisiciones', 'versionActual.adquisiciones')
+            ->allowedIncludes('versiones.adquisiciones.articulo', 'versionActual.adquisiciones.articulo')
             ->where('uuid', $uuid)
             ->firstOrFail()
             ->toResource();

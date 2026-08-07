@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+use App\Models\Articulo;
 use App\Services\DictamenService;
 use App\Enums\ProductoTipoEnum;
 use App\Rules\NumeroInventarioRule;
@@ -14,6 +15,8 @@ use App\Traits\Http\Requests\InteractsWithArchivo;
 class StoreDictamenRequest extends FormRequest
 {
     use InteractsWithArchivo;
+
+    protected array $articulos;
 
     public function __construct(
         protected DictamenService $dictamenService
@@ -43,9 +46,24 @@ class StoreDictamenRequest extends FormRequest
                     ),
                     'required',
                     new NumeroInventarioRule,
-                    'exists:articulos,numero_inventario'
+                    function (string $attribute, string $value) {
+                        $articulo = Articulo::where('numero_inventario', $value)
+                            ->firstOrFail();
+
+                        $this->setArticulo($value, $articulo);
+                    }
                 ];
             })
         ];
+    }
+
+    protected function setArticulo(string $key, Articulo $value): void
+    {
+        $this->articulos[$key] = $value;
+    }
+
+    public function getArticulo(string $key): Articulo | null
+    {
+        return $this->articulos[$key];
     }
 }

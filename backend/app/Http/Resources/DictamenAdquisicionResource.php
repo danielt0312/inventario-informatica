@@ -15,11 +15,10 @@ class DictamenAdquisicionResource extends JsonResource
             'id' => $this->id,
             'empleado_id' => $this->empleado_id,
             'cantidad' => $this->cantidad,
+            'articulo' => new ArticuloResource($this->whenLoaded('articulo')),
             'producto_tipo' => $this->when(
                 $esEstadoDictaminar,
-                function () {
-                    return new ProductoTipoResource($this->tipo);
-                }
+                fn() => new ProductoTipoResource($this->tipo)
             ),
             $this->when(
                 !$esEstadoDictaminar,

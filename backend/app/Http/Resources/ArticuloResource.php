@@ -7,13 +7,20 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ArticuloResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'producto' => new ProductoResource($this->whenLoaded('producto')),
+            'estado' => new ArticuloEstadoResource($this->whenLoaded('estado')),
+            'numero_serie' => $this->numero_serie,
+            'costo_unitario' => $this->costo_unitario,
+            'factura' => new FacturaResource($this->whenLoaded('factura')),
+            'qr_archivo' => new ArchivoResource($this->whenLoaded('qrArchivo')),
+            'numero_inventario' => $this->numero_inventario,
+            'cuenta_contable' => $this->cuenta_contable,
+            'es_contable' => $this->es_contable,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }
