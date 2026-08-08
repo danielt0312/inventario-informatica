@@ -7,7 +7,7 @@ export const detailedDictamenQueryOptions = (uuid: string) => queryOptions({
     queryKey: ['dictamenes', uuid],
     queryFn: () => api.get<TResponse<DetailedDictamen>>(`api/dictamenes/${uuid}`, {
         params: {
-            include: 'versionActual.adquisiciones'
+            include: 'versionActual.adquisiciones.articulo'
         }
     }).then(r => r.data.data)
 })

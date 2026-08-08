@@ -7,6 +7,7 @@ import { ProductoField } from "@/views/common/productos/form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { CaracteristicasField } from "../../partials/form-fields";
+import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
 
 export const useForm = (dictamen: DetailedActionDictaminarDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -50,7 +51,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
                                     </div>
                                     <div data-slot="label-container" className="min-w-1/6">
                                         <Label className="font-bold">Numero Inventario</Label>
-                                        <Label>{adquisicion.articulo?.numero_inventario ?? 'N/A'}</Label>
+                                        <Label>{adquisicionHasArticulo(adquisicion) ? adquisicion.articulo.numero_inventario : 'N/A'}</Label>
                                     </div>
                                 </div>
 

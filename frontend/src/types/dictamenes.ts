@@ -75,6 +75,13 @@ type DetailedDictamen =
     | DetailedDictaminar
     | DetailedDictaminado;
 
+type DictamenAdquisicionWithArticulo = BaseAdquisicion<Articulo>;
+
+type DictamenAdquisicion =
+    | DictaminarAdquisicion
+    | DictaminadoAdquisicion
+    | DictamenAdquisicionWithArticulo;
+
 export type {
     BaseEstado as BaseDictamenEstado,
     Dictaminar as DictaminarDictamen,
@@ -84,5 +91,7 @@ export type {
     Surtir as SurtirDictamen,
     DetailedSurtir as DetailedSurtirDictamen,
     Dictamen,
-    DetailedDictamen
+    DetailedDictamen,
+    DictamenAdquisicion,
+    DictamenAdquisicionWithArticulo
 }
