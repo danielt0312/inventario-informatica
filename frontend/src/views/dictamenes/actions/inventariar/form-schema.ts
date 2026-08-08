@@ -5,12 +5,13 @@ import type { CostoUnitarioField, CuentaContable, EsContableField, NullableNumer
 import type { ProductoGroupField } from "@/views/common/productos/form-fields";
 import type { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
 import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
+import type { FacturaFieldType } from "@/views/common/facturas/form-fields";
 import z from "zod";
 
 type AdquisicionFields = RecepcionFieldGroup & {
     id: number;
     cuenta_contable: CuentaContable;
-    factura_uuid: string | undefined;
+    factura_uuid: FacturaFieldType;
     numero_inventario: NullableNumeroInventarioField;
     producto_tipo_id: NonNullable<ProductoGroupField['tipo_id']>;
     producto_id: NonNullable<ProductoGroupField['id']>;

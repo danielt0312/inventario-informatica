@@ -77,10 +77,9 @@ class DictamenController extends ArchivableController
 
             $adquisiciones = array_map(
                 function ($adquisicion) use ($request) {
-                    $numeroInventario = $adquisicion['numero_inventario'];
-                    if (!empty($numeroInventario)) {
+                    if (!empty($adquisicion['numero_inventario'] ?? null)) {
                         return [
-                            'articulo_id' => $request->getArticulo($numeroInventario)->id,
+                            'articulo_id' => $request->getArticulo($adquisicion['numero_inventario'])->id,
                             ...$adquisicion
                         ];
                     }

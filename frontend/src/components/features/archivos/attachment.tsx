@@ -38,13 +38,14 @@ function Attachment<TValue extends AttachmentType = AttachmentType>({
 
 function AttachmentLayout({
     value,
+    disabled,
     onAttachmentClick,
     ...props
 }: Omit<React.ComponentProps<typeof Attachment<Archivo>>, 'children'> & {
     onAttachmentClick?: () => void;
 }) {
     return (
-        <Attachment value={value} {...props}>
+        <Attachment value={value} disabled={disabled} {...props}>
             <AttachmentMedia archivo={value} />
             <AttachmentContent>
                 <AttachmentTitle archivo={value} />
@@ -56,7 +57,7 @@ function AttachmentLayout({
                     <AttachmentActionSwitcher onClick={onAttachmentClick} />
                 </AttachmentActions>
             )}
-            {!value && <AttachmentTrigger onClick={onAttachmentClick} />}
+            {!disabled && !value && <AttachmentTrigger onClick={onAttachmentClick} />}
         </Attachment>
     );
 }
@@ -87,10 +88,9 @@ function AttachmentTitle({
     fallbackLabel?: string;
 }) {
     return (
-        <Root.AttachmentTitle
-            children={getAttachmentTitleLabel(archivo, fallbackLabel)}
-            {...props}
-        />
+        <Root.AttachmentTitle {...props}>
+            {getAttachmentTitleLabel(archivo, fallbackLabel)}
+        </Root.AttachmentTitle>
     )
 };
 

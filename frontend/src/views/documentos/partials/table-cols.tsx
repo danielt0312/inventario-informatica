@@ -1,5 +1,5 @@
 import type { Documento } from "@/types/documentos";
-import { getArchivoDefaultColumns } from "@/views/common/archivos/partials/table-cols";
+import { archivoTableInitialState, getArchivoDefaultColumns } from "@/views/common/archivos/partials/table-cols";
 import type { ColumnDef, InitialTableState } from "@tanstack/react-table";
 
 const getDefaultColumns = (): ColumnDef<Documento>[] => [
@@ -11,7 +11,7 @@ const getDefaultColumns = (): ColumnDef<Documento>[] => [
 ];
 
 const initialTableState: InitialTableState = {
-    columnOrder: ['documento', 'archivo.nombre', 'archivo.fecha_subida', 'archivo.actions']
+    columnOrder: ['documento', ...(archivoTableInitialState?.columnOrder ?? [])]
 }
 
 export { getDefaultColumns as documentoGetDefaultColumns, initialTableState as documentoinitialTableState }

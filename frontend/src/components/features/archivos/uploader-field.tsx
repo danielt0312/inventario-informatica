@@ -1,6 +1,7 @@
 import { Field, type FieldProps } from "@/components/ui/field-layout";
 import { useArchivoFieldContext } from "./hooks/use-field-context";
 import { ArchivoUploaderLayout } from "./uploader";
+import { useStore } from "@tanstack/react-form";
 
 const useUploaderFieldContext = useArchivoFieldContext;
 
@@ -18,6 +19,7 @@ function UploaderField({
     required,
     orientation,
     uploaderOrientation,
+    value,
     label = 'Adjuntar archivo',
     ...props
 }: UploaderFieldProps) {
@@ -35,9 +37,13 @@ function UploaderField({
         orientation
     }
 
+    const fieldValue = useStore(field.store, (state) => state.value);
+    const derivedValue = fieldValue === undefined ? undefined : value;
+
     return (
         <Field {...fieldProps}>
             <ArchivoUploaderLayout
+                value={derivedValue}
                 orientation={uploaderOrientation}
                 onValueChange={(value) => field.handleChange(value?.uuid)}
                 onMutation={{

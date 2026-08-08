@@ -2,7 +2,7 @@ import { ActionMenu, ActionMenuItem } from "@/components/ui/action-menu";
 import { toLocaleDateFormat } from "@/lib/utils";
 import type { Archivo } from "@/types/documentos";
 import type { TRowDataAccessFn } from "@/types/generics";
-import type { ColumnDef, TableMeta } from "@tanstack/react-table";
+import type { ColumnDef, InitialTableState, TableMeta } from "@tanstack/react-table";
 import { EyeIcon } from "lucide-react";
 
 type RowDataAccessFn<TRowData> = TRowDataAccessFn<TRowData, Archivo>;
@@ -53,4 +53,8 @@ const getDefaultColumns = <TRowData,>(getRowData: RowDataAccessFn<TRowData>): Co
     ActionRow(getRowData)
 ]);
 
-export { type RowDataAccessFn as ArchivoRowDataAccessFn, getDefaultColumns as getArchivoDefaultColumns, NombreRow as ArchivoNombreRow, FechaSubidaRow as ArchivoFechaSubidaRow, ActionRow as ArchivoActionRow, PreviewActionRow as ArchivoPreviewActionRow }
+const initialState: InitialTableState = {
+    columnOrder: ['archivo.nombre', 'archivo.fecha_subida', 'archivo.actions'],
+}
+
+export { type RowDataAccessFn as ArchivoRowDataAccessFn, getDefaultColumns as getArchivoDefaultColumns, NombreRow as ArchivoNombreRow, FechaSubidaRow as ArchivoFechaSubidaRow, ActionRow as ArchivoActionRow, PreviewActionRow as ArchivoPreviewActionRow, initialState as archivoTableInitialState }

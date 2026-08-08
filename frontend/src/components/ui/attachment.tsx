@@ -28,9 +28,11 @@ function Attachment({
   state = "done",
   size = "default",
   orientation = "horizontal",
+  disabled,
   ...props
 }: React.ComponentProps<"div"> &
   VariantProps<typeof attachmentVariants> & {
+    disabled?: boolean;
     state?: "idle" | "uploading" | "processing" | "error" | "done"
   }) {
   return (
@@ -39,7 +41,12 @@ function Attachment({
       data-state={state}
       data-size={size}
       data-orientation={orientation}
-      className={cn(attachmentVariants({ size, orientation }), className)}
+      data-disabled={disabled}
+      className={cn(
+        "group/attachment data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none data-[disabled=true]:select-none",
+        attachmentVariants({ size, orientation }),
+        className
+      )}
       {...props}
     />
   )

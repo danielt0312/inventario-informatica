@@ -1,6 +1,7 @@
 import { Field, type FieldProps } from "@/components/ui/field-layout";
 import { ArchivoAttachmentLayout, useArchivoAttachmentState } from "./attachment";
 import { useArchivoFieldContext } from "./hooks/use-field-context";
+import { useStore } from "@tanstack/react-form";
 
 const useAttachmentFieldContext = useArchivoFieldContext;
 
@@ -18,6 +19,7 @@ function AttachmentField({
     required,
     orientation,
     attachmentOrientation,
+    value,
     ...props
 }: AttachmentFieldProps) {
     const field = useAttachmentFieldContext();
@@ -34,10 +36,16 @@ function AttachmentField({
         orientation
     }
 
+    const fieldValue = useStore(field.store, (state) => state.value);
+    const derivedValue = fieldValue === undefined ? undefined : value;
+
     return (
         <Field {...fieldProps}>
             <ArchivoAttachmentLayout
+                disabled={disabled}
+                aria-disabled={disabled}
                 orientation={attachmentOrientation}
+                value={derivedValue}
                 {...props}
             />
         </Field>
