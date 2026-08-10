@@ -1,6 +1,6 @@
 import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
 import api from "@/lib/axios";
-import { toOptions } from "@/lib/utils";
+import { toComboboxOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
 import type { ProductoWithMarca } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
@@ -36,7 +36,7 @@ export function ProductoField({
                 }
             }
         }).then(r => r.data.data),
-        select: (data) => toOptions(data, 'marca.nombre'),
+        select: (data) => toComboboxOptions(data, 'marca.nombre'),
         enabled: !disabled
     });
 

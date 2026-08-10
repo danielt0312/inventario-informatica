@@ -1,6 +1,4 @@
-"use client";
-
-import * as React from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
     Command,
@@ -16,7 +14,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
-import { BadgeIcon, PlusCircleIcon } from "lucide-react";
+import { PlusCircleIcon } from "lucide-react";
+import { Badge } from "./badge";
 
 type Option = {
     id: number;
@@ -60,7 +59,7 @@ export function MultiSelect({
         return (
             <>
                 {withCountIndicator && selected.length > 0
-                    ? <BadgeIcon className='h-4 min-w-4 px-1 tabular-nums'>{selected.length}</BadgeIcon>
+                    ? <Badge className='h-4 min-w-4 px-1 tabular-nums'>{selected.length}</Badge>
                     : icon
                 }
                 {label}

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";
 import type { Empleado } from "@/types/externos";
-import { toOptions } from "@/lib/utils";
+import { toComboboxOptions } from "@/lib/utils";
 import type { AdscripcionField } from "../adscripciones/form-fields";
 
 export type EmpleadoField = CreatableComboboxField;
@@ -26,7 +26,7 @@ export const EmpleadoField = ({
                 }
             }
         }).then(r => r.data.data),
-        select: toOptions,
+        select: toComboboxOptions,
         enabled: !disabled
     });
 

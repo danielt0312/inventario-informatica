@@ -1,6 +1,6 @@
 import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
 import api from "@/lib/axios";
-import { toOptions } from "@/lib/utils";
+import { toComboboxOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
@@ -26,7 +26,7 @@ export function ProductoTipoField({
                 include: 'tipos'
             }
         }).then(r => r.data.data),
-        select: (data) => toOptions(data, 'tipos.nombre')
+        select: (data) => toComboboxOptions(data, 'tipos.nombre')
     });
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);

@@ -1,6 +1,6 @@
 import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
 import api from "@/lib/axios";
-import { toOptions } from "@/lib/utils";
+import { toComboboxOptions } from "@/lib/utils";
 import type { Adscripcion } from "@/types/externos";
 import type { TResponse } from "@/types/generics";
 import { useQuery } from "@tanstack/react-query";
@@ -16,7 +16,7 @@ export const AdscripcionField = ({
         queryKey: ['adscripciones'],
         queryFn: () => api.get<TResponse<Adscripcion[]>>('api/adscripciones')
             .then(r => r.data.data),
-        select: toOptions
+        select: toComboboxOptions
     });
 
     return (

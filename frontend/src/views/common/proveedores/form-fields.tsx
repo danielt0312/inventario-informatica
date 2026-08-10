@@ -1,7 +1,7 @@
 import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
 import { useFieldContext } from "@/components/composed/@tanstack/form/form";
 import api from "@/lib/axios";
-import { toOptions } from "@/lib/utils";
+import { toComboboxOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
 import type { Proveedor } from "@/types/orden_compras";
 import { useQuery } from "@tanstack/react-query";
@@ -24,7 +24,7 @@ export const ProveedorField = ({
         queryKey: ['proveedores'],
         queryFn: () => api.get<TResponse<Proveedor[]>>('api/proveedores')
             .then(r => r.data.data),
-        select: toOptions,
+        select: toComboboxOptions,
         enabled: !disabled
     });
 

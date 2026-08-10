@@ -98,9 +98,8 @@ export function handleFormValidationError(
     }
 }
 
-const getValueByPath = (obj: any, path: string): any => {
-    return path.split('.').reduce((acc, key) => acc?.[key], obj);
-};
+const getValueByPath = (obj: any, path: string): any =>
+    path.split('.').reduce((acc, key) => acc?.[key], obj);
 
 export const catalogoToComboboxOption = <T extends TCatalogo>(
     item: T,
@@ -126,7 +125,7 @@ export const catalogoToComboboxOption = <T extends TCatalogo>(
     return option;
 };
 
-export const toOptions = <T extends any>(
+export const toComboboxOptions = <T extends any>(
     list: T[],
     groupAccessor?: string | ((item: T) => any)
 ): ComboboxOption[] => {
