@@ -115,7 +115,7 @@ export function Table() {
                             marcas: [],
                             productos: []
                         }))}
-                        emptyMessage={() => debouncedFilters.categorias.length === 0
+                        emptyMessage={debouncedFilters.categorias.length === 0
                             ? 'Primero selecciona una categoría'
                             : undefined
                         }
@@ -129,7 +129,7 @@ export function Table() {
                             marcas: v.map(Number),
                             productos: []
                         }))}
-                        emptyMessage={() => debouncedFilters.productos.length === 0
+                        emptyMessage={debouncedFilters.productos.length === 0
                             ? 'Primero selecciona un producto'
                             : undefined
                         }
@@ -142,7 +142,7 @@ export function Table() {
                             ...prev,
                             productos: v.map(Number)
                         }))}
-                        emptyMessage={() => debouncedFilters.productos.length === 0
+                        emptyMessage={debouncedFilters.productos.length === 0
                             ? 'Primero selecciona un producto'
                             : undefined
                         }
