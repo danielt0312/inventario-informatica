@@ -24,6 +24,7 @@ class Articulo extends Model
         'costo_unitario',
         'factura_id',
         'qr_archivo_id',
+        'cuenta_contable',
         'es_contable'
     ];
 
@@ -32,14 +33,15 @@ class Articulo extends Model
         'estado_id' => ArticuloEstadoEnum::REVISION->value,
         'numero_serie' => null,
         'factura_id' => null,
-        'numero_inventario' => null
+        'numero_inventario' => null,
+        'cuenta_contable' => null,
     ];
 
     protected static function booted(): void
     {
         static::created(function (Articulo $articulo) {
             if (is_null($articulo->numero_inventario)) {
-                // todo generar dinamicamente
+                // todo obtener el sufijo según el tipo de producto
                 $articulo->numero_inventario = NumeroInventarioService::generate(500, $articulo->id);
                 $articulo->saveQuietly();
             }

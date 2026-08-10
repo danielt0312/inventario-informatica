@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { DictamenArchivoField } from "../../partials/form-fields";
 import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
 
 export function useForm(dictamen: DetailedActionDictaminadoDictamen) {
     const { mutate } = useActionFormMutation(dictamen);
@@ -41,20 +42,22 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen
                     return (
                         <Card key={index} className="shadow-none">
                             <CardContent className="flex flex-col gap-6">
-                                <div className="flex flex-row gap-6">
-                                    <div className="w-1/10" data-slot="label-container">
+                                <div className="flex gap-7">
+                                    <div data-slot="label-container" className="w-1/6">
                                         <Label className="font-bold">Cantidad</Label>
                                         <Label>{adquisicion.cantidad}</Label>
                                     </div>
-                                    <div className="w-7/10" data-slot="label-container">
+                                    <div data-slot="label-container" className="w-2/6">
                                         <Label className="font-bold">Producto</Label>
-                                        <Label>
-                                            {producto.tipo.nombre} {producto.marca.nombre} {producto.nombre} {adquisicion.caracteristicas}
-                                        </Label>
+                                        <Label>{producto.tipo.nombre}</Label>
                                     </div>
-                                    <div className="w-2/10" data-slot="label-container">
+                                    <div data-slot="label-container" className="w-2/6">
                                         <Label className="font-bold">Resguardante</Label>
                                         <Label>{adquisicion.empleado?.nombre ?? 'Juan Perez'}</Label>
+                                    </div>
+                                    <div data-slot="label-container" className="min-w-1/6">
+                                        <Label className="font-bold">Numero Inventario</Label>
+                                        <Label>{adquisicionHasArticulo(adquisicion) ? adquisicion.articulo.numero_inventario : 'N/A'}</Label>
                                     </div>
                                 </div>
                             </CardContent>

@@ -17,7 +17,7 @@ export const useForm = (dictamen: DetailedActionDictaminarDictamen) => {
         validators: {
             onSubmit: validator
         },
-        onSubmit: async ({ value, formApi }) => {
+        onSubmit: ({ value, formApi }) => {
             const data = validator.parse(value);
             mutate({ data, formApi });
         }

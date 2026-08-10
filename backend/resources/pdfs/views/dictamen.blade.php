@@ -119,7 +119,7 @@
                     <x-pdf::table.td class="text-center">{{ $adquisicion->cantidad }}</x-pdf::table.td>
                     <x-pdf::table.td>{{ $adquisicion->descripcion }}</x-pdf::table.td>
                     <x-pdf::table.td class="text-center">John Doe</x-pdf::table.td>
-                    <x-pdf::table.td class="text-center">{{ $adquisicion->numero_inventario ?? 'N/A' }}</x-pdf::table.td>
+                    <x-pdf::table.td class="text-center">{{ $adquisicion->articulo?->numero_inventario ?? 'N/A' }}</x-pdf::table.td>
                 </x-pdf::table.tr>
             @endforeach
         </x-pdf::table.tbody>

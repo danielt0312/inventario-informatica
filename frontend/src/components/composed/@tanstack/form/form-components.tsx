@@ -9,30 +9,23 @@ import type React from "react";
 interface FormProps extends React.ComponentProps<'form'> {
     form: AnyFormApi;
 }
+export const Form = ({ form, ...props }: FormProps) => (
+    <form
+        onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+        }}
+        className="contents"
+        {...props}
+    />
+);
 
-export const Form = ({ form, ...props }: FormProps) => {
-    return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-            }}
-            className="contents"
-            {...props}
-        />
-    );
-};
-
-export type SubmitButtonProps =
-    Omit<
-        React.ComponentProps<typeof Button>,
-        'type' | 'disabled' | 'children'
-    > & {
-        icon?: React.ReactNode;
-        label?: string;
-        children?: (isSubmitting: boolean) => React.ReactNode;
-    }
+interface SubmitButtonProps extends Omit<React.ComponentProps<typeof Button>, 'disabled' | 'children'> {
+    icon?: React.ReactNode;
+    label?: string;
+    children?: (isSubmitting: boolean) => React.ReactNode;
+}
 export const SubmitButton = ({
     label = "Guardar",
     icon = <SaveIcon />,
@@ -45,7 +38,7 @@ export const SubmitButton = ({
     return (
         <form.Subscribe selector={(state) => state.isSubmitting}>
             {(isSubmitting) => {
-                const renderChildren = typeof children === 'function'
+                const renderChildren = children
                     ? children(isSubmitting)
                     : (
                         <>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
 
 use App\Models\Factura;
 use App\Enums\DocumentoTipoEnum;
@@ -13,7 +14,14 @@ class FacturaController extends ArchivableController
 {
     public function index(Request $request)
     {
-        return Factura::with('archivo')
+        return QueryBuilder::for(Factura::class)
+            ->allowedFilters(
+                AllowedFilter::callback('ordenCompra', fn ($q, $value) =>
+                    $q->join('orden_compras', 'orden_compras.id', '=', 'facturas.orden_compra_id')
+                        ->findByArchivoUuid($value, 'orden_compras')
+                )
+            )
+            ->with('archivo')
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
     }

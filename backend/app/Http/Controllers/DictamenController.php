@@ -45,6 +45,8 @@ class DictamenController extends ArchivableController
         $dictamen = DB::transaction(function () use ($request): Dictamen {
             $validated = $request->validated();
 
+            logger($validated);
+
             $adscripcionId = $validated['adscripcion_id'];
             $oficio = null;
             // todo identificar si el area de adscripcion es la interna
@@ -75,20 +77,7 @@ class DictamenController extends ArchivableController
                 'adscripcion_id' => $adscripcionId
             ]);
 
-            $adquisiciones = array_map(
-                function ($adquisicion) use ($request) {
-                    if (!empty($adquisicion['numero_inventario'] ?? null)) {
-                        return [
-                            'articulo_id' => $request->getArticulo($adquisicion['numero_inventario'])->id,
-                            ...$adquisicion
-                        ];
-                    }
-                    return $adquisicion;
-                },
-                $validated['adquisiciones']
-            );
-
-            $version->adquisiciones()->createMany($adquisiciones);
+            $version->adquisiciones()->createMany($validated['adquisiciones']);
 
             $dictamen->versionActual()->associate($version)->save();
 
@@ -273,7 +262,7 @@ class DictamenController extends ArchivableController
             }
 
             $dictamen->ordenCompra()
-                ->associate($request->getArchivo()->documento->ordenCompra)
+                ->associate($request->getOrdenCompra())
                 ->save();
 
             // todo establer estado de manera dinamica según la adquisición

@@ -3,15 +3,18 @@
 namespace App\Http\Requests\Dictamen;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Traits\Http\Requests\InteractsWithArchivo;
 
-use App\Models\Factura;
-use App\Http\Requests\Dictamen\Traits\InteractsWithDictamen;
+use App\Models\{
+    OrdenCompra,
+    Factura,
+};
+use App\Http\Requests\Dictamen\Traits\{InteractsWithDictamen, InteractsWithArticulos};
 
 class InventariarDictamenRequest extends FormRequest
 {
-    use InteractsWithDictamen, InteractsWithArchivo;
+    use InteractsWithDictamen, InteractsWithArticulos;
 
+    private OrdenCompra $ordenCompra;
     private array $facturas;
 
     public function authorize(): bool
@@ -22,7 +25,18 @@ class InventariarDictamenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'archivo_uuid' => $this->archivoRules(),
+            'orden_compra_uuid' => [
+                'bail',
+                'uuid',
+                function (string $attribute, string $value, \Closure $fail) {
+                    $ordenCompra = OrdenCompra::findByArchivoUuid($value)
+                        ->first();
+
+                    if (empty($ordenCompra)) return $fail('Orden compra not found');
+
+                    $this->setOrdenCompra($ordenCompra);
+                }
+            ],
             'adquisiciones' => [
                 'required',
                 'array'
@@ -42,7 +56,9 @@ class InventariarDictamenRequest extends FormRequest
                 'integer',
                 'exists:productos,id'
             ],
+            'adquisiciones.*.numero_inventario' => $this->numeroInventarioRules(),
             'adquisiciones.*.cuenta_contable' => [
+                'bail',
                 'required',
                 'string',
                 'size:11',
@@ -69,18 +85,26 @@ class InventariarDictamenRequest extends FormRequest
                 'bail',
                 'required',
                 'uuid',
-                function (string $attribute, string $value) {
-                    $factura = Factura::query()
-                        ->join('documentos', 'documentos.id', '=', 'facturas.documento_id')
-                        ->join('archivos', 'archivos.id', '=', 'documentos.archivo_id')
-                        ->where('archivos.uuid', $value)
-                        ->select('facturas.*')
-                        ->firstOrFail();
+                function (string $attribute, string $value, \Closure $fail) {
+                    $factura = Factura::findByArchivoUuid($value)
+                        ->first();
+
+                    if (empty($factura)) return $fail('factura not found');
 
                     $this->setFactura($factura, $value);
                 }
             ]
         ];
+    }
+
+    protected function setOrdenCompra(OrdenCompra $ordenCompra): void
+    {
+        $this->ordenCompra = $ordenCompra;
+    }
+
+    public function getOrdenCompra(): OrdenCompra
+    {
+        return $this->ordenCompra;
     }
 
     protected function setFactura(Factura $factura, string $uuid)

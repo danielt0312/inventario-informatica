@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ArticuloRecepcion extends Model
 {
     protected $primaryKey = 'articulo_id';
-    public $incrementing = false;
     protected $keyType = 'bigint';
-    public $timestamps = false;
+    public $incrementing = false;
 
     protected $fillable = [
         'es_resultado_esperado',

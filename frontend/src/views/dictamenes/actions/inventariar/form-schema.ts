@@ -7,6 +7,7 @@ import type { OrdenCompraField } from "@/views/common/orden_compras/form-fields"
 import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
 import type { FacturaFieldType } from "@/views/common/facturas/form-fields";
 import z from "zod";
+import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
 
 type AdquisicionFields = RecepcionFieldGroup & {
     id: number;
@@ -21,12 +22,12 @@ type AdquisicionFields = RecepcionFieldGroup & {
 }
 
 type Schema = {
-    archivo_uuid: OrdenCompraField;
+    orden_compra_uuid: OrdenCompraField;
     adquisiciones: AdquisicionFields[];
 }
 
 export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): Schema => ({
-    archivo_uuid: undefined,
+    orden_compra_uuid: undefined,
     adquisiciones: dictamen.version_actual.adquisiciones.flatMap((adquisicion) =>
         Array.from({ length: adquisicion.cantidad }, (): AdquisicionFields => ({
             ...recepcionFieldGroupDefaultValues,
@@ -35,7 +36,7 @@ export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): Sche
             cuenta_contable: undefined,
             numero_serie: null,
             costo_unitario: null,
-            numero_inventario: null,
+            numero_inventario: adquisicionHasArticulo(adquisicion) ? adquisicion.articulo.numero_inventario : null,
             id: adquisicion.id,
             producto_tipo_id: adquisicion.producto.tipo.id,
             producto_id: adquisicion.producto.id,
@@ -59,7 +60,7 @@ const adquisicionValidator = z
     });
 
 export const validator = z.object({
-    archivo_uuid: requiredString,
+    orden_compra_uuid: requiredString,
     adquisiciones: requiredArray(adquisicionValidator
         .refine(
             ({ es_resultado_esperado, observaciones }) => !(

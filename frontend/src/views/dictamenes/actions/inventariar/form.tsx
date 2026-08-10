@@ -9,10 +9,11 @@ import { Separator } from "@/components/ui/separator";
 import { ProductoGroupField } from "@/views/common/productos/form-fields";
 import { FacturaField } from "@/views/common/facturas/form-fields";
 import { FieldGroup } from "@/components/ui/field";
-import { CostoUnitarioField, CuentaContable, EsContableField, NumeroSerieField } from "@/views/common/articulos/form-fields";
+import { CostoUnitarioField, CuentaContable, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/views/common/articulos/form-fields";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
 import { useStore } from "@tanstack/react-form";
+import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -38,14 +39,13 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
         }))
     );
 
-    const ordenCompra = useStore(form.store, (state) => state.values.archivo_uuid);
+    const ordenCompra = useStore(form.store, (state) => state.values.orden_compra_uuid);
 
     return (
         <Form form={form}>
             <form.AppForm>
-
                 <form.AppField
-                    name="archivo_uuid"
+                    name="orden_compra_uuid"
                     children={() => <OrdenCompraField className="w-1/3" />}
                     listeners={{
                         onChange: () => {
@@ -64,7 +64,8 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                         name="adquisiciones"
                         mode="array"
                         children={() => {
-                            const { producto, ...adquisicion } = slot.adquisicion;
+                            const adquisicion = slot.adquisicion;
+                            const { producto, } = adquisicion;
 
                             return (
                                 <Card>
@@ -117,8 +118,20 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                         <FieldGroup className="flex-row">
                                             <form.AppField
                                                 name={`adquisiciones[${index}].numero_serie`}
-                                                children={() => <NumeroSerieField />}
+                                                children={() => <NumeroSerieField className="w-1/2" />}
                                             />
+
+                                            <div className="w-1/2">
+                                                {adquisicionHasArticulo(adquisicion) && (
+                                                    <form.AppField
+                                                        name={`adquisiciones[${index}].numero_inventario`}
+                                                        children={() => <NullableNumeroInventarioField />}
+                                                    />
+                                                )}
+                                            </div>
+                                        </FieldGroup>
+
+                                        <FieldGroup className="flex-row">
                                             <form.AppField
                                                 name={`adquisiciones[${index}].costo_unitario`}
                                                 children={() => <CostoUnitarioField />}

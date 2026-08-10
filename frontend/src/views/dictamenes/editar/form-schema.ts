@@ -61,7 +61,6 @@ const adquisicionValidator = z
         caracteristicas: requiredString
     });
 
-
 export const validator = z.object({
     folio: requiredString,
     fecha_solicitud: requiredIsoDateLTEToday,

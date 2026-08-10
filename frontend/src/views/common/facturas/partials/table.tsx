@@ -9,6 +9,7 @@ import { facturaTableInitialState, getFacturaDefaultColumns } from "./table-cols
 import React from "react";
 import { formOptions } from "@tanstack/react-form";
 import type { ArchivoAttachmentFieldType } from "@/components/features/archivos/attachment-field";
+import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 
 interface FacturaFieldProps extends Omit<React.ComponentProps<typeof QueryDataTable<Factura>>, 'queryKey' | 'url'> {
     ordenCompra?: ArchivoAttachmentFieldType;
@@ -45,6 +46,8 @@ export function FacturaTable({
         dialogFormOptions
     );
 
+    const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
+
     return (
         <QueryDataTable
             queryKey={['facturas', ordenCompra]}
@@ -79,6 +82,11 @@ export function FacturaTable({
                 initialState: {
                     ...facturaTableInitialState,
                     ...tableOptions?.initialState
+                },
+                meta: {
+                    ...tableOptions?.meta,
+                    previewFile: (uuid, title) => mutate({ uuid, title }),
+                    isPreviewing,
                 }
             }}
             {...props}
