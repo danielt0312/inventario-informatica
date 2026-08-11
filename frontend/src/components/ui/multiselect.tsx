@@ -26,6 +26,7 @@ export interface MultiSelectProps {
     options: Option[];
     selected: string[];
     onChange: (values: string[]) => void;
+    onOptionRender?: (option: Option) => React.ReactNode;
     placeholder?: string;
     emptyMessage?: React.ReactNode;
     triggerer?: (selected: string[]) => React.ReactNode;
@@ -39,6 +40,7 @@ export function MultiSelect({
     selected,
     onChange,
     triggerer,
+    onOptionRender = (option) => option.nombre,
     label = 'Seleccionar',
     placeholder = "Buscar...",
     emptyMessage = "Sin resultados.",
@@ -90,17 +92,16 @@ export function MultiSelect({
                                 <CommandItem
                                     key={option.id}
                                     value={option.nombre}
-                                    onSelect={() => handleSelect(option.id.toString())}
+                                    onSelect={() => handleSelect(`${option.id}`)}
+                                    className="flex items-center gap-2 w-full"
                                 >
-                                    <div className="flex items-center gap-2 w-full">
-                                        <Checkbox
-                                            checked={selected.includes(option.id.toString())}
-                                            className="pointer-events-none"
-                                        />
-                                        <span className="flex-1 whitespace-nowrap">
-                                            {option.nombre}
-                                        </span>
-                                    </div>
+                                    <Checkbox
+                                        checked={selected.includes(`${option.id}`)}
+                                        className="pointer-events-none"
+                                    />
+                                    <span className="flex-1 whitespace-nowrap">
+                                        {onOptionRender(option)}
+                                    </span>
                                 </CommandItem>
                             ))}
                         </CommandGroup>
@@ -110,3 +111,5 @@ export function MultiSelect({
         </Popover>
     );
 }
+
+export type { Option as MultiSelectOption }

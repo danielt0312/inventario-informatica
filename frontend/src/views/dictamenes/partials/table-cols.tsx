@@ -13,6 +13,7 @@ import { isActionDictamen, isActionDictaminadoDictamen, isDetailedSurtirDictamen
 import { ArchivoPreviewActionRow } from "@/views/common/archivos/partials/table-cols";
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
 import { toLocaleDateFormat } from "@/lib/utils";
+import { dictamenEstadoVariants } from "./table";
 
 const ActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
@@ -150,8 +151,16 @@ export const columns: ColumnDef<DictamenData>[] = [
         header: "Folio de Solicitud",
     },
     {
-        accessorKey: "estado.nombre",
         header: "Estado",
+        cell: ({ row }) => {
+            const { estado } = row.original;
+
+            return (
+                <span className={dictamenEstadoVariants({ variant: estado.id })}>
+                    {estado.nombre}
+                </span>
+            )
+        }
     },
     {
         id: "actions",
