@@ -20,7 +20,6 @@ export const DatePickerField = <T extends DatePickerField = Date>({
     required,
     orientation,
     value,
-    disablerMatcher,
     parseValue = (d) => toISODate(d) as T,
     onValueChange,
     ...props
@@ -38,7 +37,7 @@ export const DatePickerField = <T extends DatePickerField = Date>({
             <DatePicker
                 value={dateValue}
                 onValueChange={(date) => onValueChange?.(parseValue(date))}
-                disabled={disablerMatcher}
+                disabled={disabled}
                 required={required}
                 {...props}
             />

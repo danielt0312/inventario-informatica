@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{HasMany, BelongsTo};
+use Illuminate\Database\Eloquent\Relations\{HasMany, BelongsToMany};
 
-use App\Traits\Models\HasArchivable;
+use App\Traits\Models\{HasArchivable, HasProveedor};
 
 class Factura extends Model
 {
-    use HasArchivable;
+    use HasArchivable, HasProveedor;
 
     protected $fillable = [
-        'orden_compra_id',
+        'folio',
         'fecha_emision',
     ];
 
@@ -23,8 +23,8 @@ class Factura extends Model
         return $this->hasMany(Articulo::class);
     }
 
-    public function ordenCompra(): BelongsTo
+    public function ordenCompras(): BelongsToMany
     {
-        return $this->belongsTo(OrdenCompra::class);
+        return $this->belongsToMany(FacturaOrdenCompra::class);
     }
 }

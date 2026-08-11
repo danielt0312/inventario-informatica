@@ -13,10 +13,11 @@ use Illuminate\Database\Eloquent\Relations\{
 };
 
 use App\Enums\DictamenEstadoEnum;
+use App\Traits\Models\HasResourceResponse;
 
 class Dictamen extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, HasResourceResponse;
 
     public function __call($method, $parameters)
     {
@@ -37,6 +38,7 @@ class Dictamen extends Model
     protected $fillable = [
         'version_actual_id',
         'estado_id',
+        'adscripcion_id',
         'orden_compra_id',
         'user_id',
     ];

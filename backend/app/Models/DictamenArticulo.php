@@ -11,13 +11,18 @@ class DictamenArticulo extends Model
     use HasFactory;
 
     protected $primaryKey = 'articulo_id';
-    public $incrementing = false;
     protected $keyType = 'bigint';
+    public $incrementing = false;
     public $timestamps = false;
 
     protected $fillable = [
         'articulo_id',
-        'dictamen_id'
+        'dictamen_id',
+        'empleado_id'
+    ];
+
+    protected $attributes = [
+        'empleado_id' => null
     ];
 
     public function dictamen(): BelongsTo

@@ -18,7 +18,6 @@ class DictamenVersion extends Model
         'numero_version',
         'dictamen_id',
         'oficio_id',
-        'adscripcion_id',
         'fecha_solicitud',
     ];
 

@@ -16,12 +16,7 @@ trait InteractsWithArchivo
             'uuid',
             function (string $attribute, string $value, \Closure $fail) {
                 $archivo = Archivo::where('uuid', $value)->first();
-
-                if (! $archivo) {
-                    $fail('validation.exists')->translate();
-                    return;
-                }
-
+                if (! $archivo) return $fail('validation.exists')->translate();
                 $this->setArchivo($archivo);
             },
         ];

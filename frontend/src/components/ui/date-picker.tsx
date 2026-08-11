@@ -14,14 +14,16 @@ import { cn } from "@/lib/utils"
 import { CalendarIcon } from "lucide-react"
 import { es } from "date-fns/locale"
 
-export type DatePickerProps =
-  Omit<React.ComponentProps<typeof Calendar>, "mode" | "selected" | "onSelect" | "defaultMonth"> & {
+type CalendarProps = React.ComponentProps<typeof Calendar>;
+export interface DatePickerProps extends Omit<CalendarProps, "mode" | "selected" | "onSelect" | "defaultMonth" | "disabled"> {
     value?: Date;
     onValueChange?: (d: Date | undefined) => void;
     placeholder?: string;
     formatStr?: string;
     widthClass?: string;
     locale?: Locale;
+    disablerMatcher?: CalendarProps['disabled'];
+    disabled?: boolean;
   }
 
 export const DatePicker = ({
@@ -31,6 +33,8 @@ export const DatePicker = ({
   formatStr = "PPP",
   widthClass = "w-44",
   locale = es,
+  disabled,
+  disablerMatcher,
   ...props
 }: DatePickerProps) => {
   const [open, setOpen] = React.useState(false)
@@ -50,6 +54,8 @@ export const DatePicker = ({
             !value && "text-muted-foreground",
             widthClass
           )}
+          disabled={disabled}
+          aria-disabled={disabled}
         >
           <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
           {value
@@ -63,6 +69,7 @@ export const DatePicker = ({
           selected={value}
           onSelect={handleSelect}
           defaultMonth={value}
+          disabled={disablerMatcher}
           locale={locale}
           {...props}
         />

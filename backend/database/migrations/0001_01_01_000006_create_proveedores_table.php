@@ -10,8 +10,9 @@ return new class extends Migration
     {
         Schema::create('proveedores', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 128)
-                ->unique('uk_proveedores');
+            $table->string('nombre', 128);
+            $table->string('rfc', 13)
+                ->unique('uk_proveedor_rfc');
             $table->timestamps();
         });
     }

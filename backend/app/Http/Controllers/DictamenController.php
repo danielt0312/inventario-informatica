@@ -45,8 +45,6 @@ class DictamenController extends ArchivableController
         $dictamen = DB::transaction(function () use ($request): Dictamen {
             $validated = $request->validated();
 
-            logger($validated);
-
             $adscripcionId = $validated['adscripcion_id'];
             $oficio = null;
             // todo identificar si el area de adscripcion es la interna
@@ -68,13 +66,13 @@ class DictamenController extends ArchivableController
             $user_id = 1;
 
             $dictamen = Dictamen::create([
-                'user_id' => $user_id
+                'user_id' => $user_id,
+                'adscripcion_id' => $adscripcionId,
             ]);
 
             $version = $dictamen->versiones()->create([
                 'fecha_solicitud' => $validated['fecha_solicitud'],
                 'oficio_id' => $oficio?->id,
-                'adscripcion_id' => $adscripcionId
             ]);
 
             $version->adquisiciones()->createMany($validated['adquisiciones']);
@@ -84,9 +82,7 @@ class DictamenController extends ArchivableController
             return $dictamen;
         });
 
-        return $dictamen->toResource()
-            ->response()
-            ->setStatusCode(201);
+        return $dictamen->toResourceResponse(201);
     }
 
     public function show(string $uuid)
@@ -107,7 +103,7 @@ class DictamenController extends ArchivableController
         $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
             $validated = $request->validated();
 
-            $adscripcionId = $validated['adscripcion_id'];
+            $adscripcionId = $dictamen->adscripcion_id;
             $oficio = $dictamen->versionActual->oficio;
             $archivoPayload = $request->getArchivo();
 
@@ -128,9 +124,8 @@ class DictamenController extends ArchivableController
 
             $version = $dictamen->versiones()->create([
                 'numero_version' => $dictamen->versionActual->numero_version + 1,
-                'fecha_solicitud' => $validated['fecha_solicitud'],
+                'fecha_solicitud' => now(),
                 'oficio_id' => $oficio?->id,
-                'adscripcion_id' => $adscripcionId
             ]);
 
             $version->adquisiciones()->createMany($validated['adquisiciones']);
@@ -159,9 +154,7 @@ class DictamenController extends ArchivableController
             return $dictamen;
         });
 
-        return $dictamen->toResource()
-            ->response()
-            ->setStatusCode(200);
+        return $dictamen->toResourceResponse();
     }
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)

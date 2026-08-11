@@ -5,22 +5,21 @@ import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { CantidadField, CaracteristicasField, FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
-import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import { DictamenProducto } from "@/lib/utils";
-import { NumeroInventarioField } from "@/views/common/articulos/form-fields";
+import { NullableNumeroInventarioField } from "@/views/common/articulos/form-fields";
 import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import { adquisicionFieldsDefaultValues, defaultValues, validator } from "./form-schema";
-import { useStore } from "@tanstack/react-form";
 import { ProductoField } from "@/views/common/productos/form-fields";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import type { DetailedSurtirDictamen, SurtirDictamen } from "@/types/dictamenes";
 import React from "react";
+import { FieldValue } from "@/components/ui/field-value";
 
 function useEditFormMutation(dictamen: SurtirDictamen) {
     const navigate = useNavigate();
@@ -54,22 +53,21 @@ export const DictamenEditarForm = () => {
     const { dictamen } = EditarRoute.useRouteContext();
 
     const form = useForm(dictamen);
+    const adscripcion = dictamen.adscripcion?.id ?? 1;
     const [showAlertDialog, setShowAlertDialog] = React.useState(false);
-
-    const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
     const [showNumeroInventarioField, setShowNumeroInventarioField] = React.useState(false);
 
     return (
         <Form form={form} className="flex flex-col gap-6">
             <form.AppForm>
                 <FieldGroup className="flex-row">
-                    <form.AppField
-                        name="fecha_solicitud"
-                        children={() => <FechaSolicitudField />}
+                    <FieldValue
+                        label="Área de Adscripción"
+                        value={dictamen.adscripcion?.nombre ?? 'Dirección de Tecnologías de la Información'}
                     />
                     <form.AppField
-                        name="adscripcion_id"
-                        children={() => <AdscripcionField label="Área de Adscripción solicitante" />}
+                        name="fecha_solicitud"
+                        children={() => <FechaSolicitudField disabled />}
                     />
                     <form.AppField
                         name="folio"
@@ -114,7 +112,7 @@ export const DictamenEditarForm = () => {
 
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].producto_tipo_id`}
-                                                        children={() => <ProductoTipoField />}
+                                                        children={() => <ProductoTipoField required />}
                                                         listeners={{
                                                             onMount: ({ fieldApi }) => fieldApi.triggerOnChangeListener(),
                                                             onChange: ({ value }) => {
@@ -131,7 +129,7 @@ export const DictamenEditarForm = () => {
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].producto_id`}
                                                         children={() => (
-                                                            <ProductoField tipo={field.state.value[index].producto_tipo_id} />
+                                                            <ProductoField tipo={field.state.value[index].producto_tipo_id} required />
                                                         )}
                                                     />
                                                 </FieldGroup>
@@ -143,6 +141,7 @@ export const DictamenEditarForm = () => {
                                                             label="Resguardante"
                                                             adscripcion={adscripcion}
                                                             className="w-1/3"
+                                                            required
                                                         />
                                                     )}
                                                 />
@@ -158,7 +157,7 @@ export const DictamenEditarForm = () => {
                                                     {showNumeroInventarioField && (
                                                         <form.AppField
                                                             name={`adquisiciones[${index}].numero_inventario`}
-                                                            children={() => <NumeroInventarioField />}
+                                                            children={() => <NullableNumeroInventarioField required />}
                                                         />
                                                     )}
                                                 </div>

@@ -25,6 +25,10 @@ return new class extends Migration
                 ->constrained('orden_compras', indexName: 'fk_dictamenes_orden_compras')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignId('adscripcion_id')
+                ->constrained('adscripciones', indexName: 'fk_dictamen_adscripciones')
+                ->restrictOnUpdate()
+                ->restrictOnDelete();
             $table->foreignId('user_id')
                 ->constrained('users', indexName: 'fk_dictamenes_users')
                 ->cascadeOnUpdate()
@@ -47,10 +51,6 @@ return new class extends Migration
             $table->foreignId('documento_id')
                 ->nullable()
                 ->constrained('documentos', indexName: 'fk_dictamen_versiones_documentos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('adscripcion_id')
-                ->constrained('adscripciones', indexName: 'fk_dictamen_versiones_adscripciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->timestamps();
@@ -108,6 +108,11 @@ return new class extends Migration
                 ->constrained('dictamenes', indexName: 'fk_dictamen_articulos_dictamenes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignId('empleado_id')
+                ->nullable()
+                ->constrained('empleados', indexName: 'fk_dictamen_articulos_empleados')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
         });
     }
 

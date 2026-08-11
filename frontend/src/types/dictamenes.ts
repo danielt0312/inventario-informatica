@@ -9,10 +9,10 @@ type Base<TEstado extends BaseEstado = BaseEstado> = {
     id: number;
     uuid: string;
     estado: TEstado;
+    adscripcion: TCatalogo;
 }
 type BaseVersion = {
     numero_version: number;
-    adscripcion: TCatalogo;
     fecha_solicitud: string;
     // todo revisar el caso cuando sea null
     oficio: Oficio;

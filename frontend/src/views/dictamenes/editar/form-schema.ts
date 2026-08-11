@@ -1,4 +1,3 @@
-import type { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import { CaracteristicasField, type FechaSolicitudField, type FolioField, type OficioFieldType } from "../partials/form-fields"
 import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import type { ProductoField } from "@/views/common/productos/form-fields";
@@ -9,6 +8,7 @@ import type { DetailedSurtirDictamen } from "@/types/dictamenes";
 import z from "zod";
 import { nullableString, positiveInteger, requiredArray, requiredIsoDateLTEToday, requiredString, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
+import { format } from "date-fns";
 
 type AdquisicionFields = {
     producto_tipo_id: ProductoTipoField;
@@ -30,15 +30,13 @@ export const adquisicionFieldsDefaultValues: AdquisicionFields = {
 
 type Schema = {
     fecha_solicitud: FechaSolicitudField;
-    adscripcion_id: AdscripcionField;
     archivo_uuid: OficioFieldType;
     folio: FolioField;
     adquisiciones: AdquisicionFields[];
 }
 
 export const defaultValues = (dictamen: DetailedSurtirDictamen): Schema => ({
-    fecha_solicitud: dictamen.version_actual.fecha_solicitud,
-    adscripcion_id: dictamen.version_actual.adscripcion?.id ?? 1,
+    fecha_solicitud: format(new Date, 'yyyy-MM-dd'),
     archivo_uuid: dictamen.version_actual.oficio.archivo.uuid,
     folio: dictamen.version_actual.oficio.folio,
     adquisiciones: dictamen.version_actual.adquisiciones.map((adquiscion): AdquisicionFields => ({
@@ -64,7 +62,6 @@ const adquisicionValidator = z
 export const validator = z.object({
     folio: requiredString,
     fecha_solicitud: requiredIsoDateLTEToday,
-    adscripcion_id: selectedNumberOption,
     archivo_uuid: requiredString,
     adquisiciones: requiredArray(adquisicionValidator
         .superRefine(({ producto_tipo_id, numero_inventario }, ctx) => {
