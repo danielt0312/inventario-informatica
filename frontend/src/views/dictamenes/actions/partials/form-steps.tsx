@@ -16,7 +16,7 @@ type OrderActionDictamenEstado = (typeof OrderActionDictamenEstado)[number];
 export function getTitle(step?: OrderActionDictamenEstado) {
     switch (step) {
         case DictamenEstadoEnum.DICTAMINAR: return 'Dictaminar Requisición';
-        case DictamenEstadoEnum.EVIDENCIAR: return 'Evidenciar confirmación de Requisición';
+        case DictamenEstadoEnum.EVIDENCIAR: return 'Evidenciar Confirmación de Recibido';
         case DictamenEstadoEnum.INVENTARIAR: return 'Inventariar Bienes Informáticos';
         default: return 'Creación de Dictamen';
     }

@@ -29,6 +29,8 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
 
     return (
         <PrimitiveForm form={form}>
+            <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
+
             <form.AppForm>
                 {dictamen.version_actual.adquisiciones.map((adquisicion, index) => {
                     const productoTipo = adquisicion.producto_tipo;
@@ -50,7 +52,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
                                         <Label>{adquisicion.empleado?.nombre ?? 'Juan Perez'}</Label>
                                     </div>
                                     <div data-slot="label-container" className="min-w-1/6">
-                                        <Label className="font-bold">Numero Inventario</Label>
+                                        <Label className="font-bold">Número de Inventario</Label>
                                         <Label>{adquisicionHasArticulo(adquisicion) ? adquisicion.articulo.numero_inventario : 'N/A'}</Label>
                                     </div>
                                 </div>

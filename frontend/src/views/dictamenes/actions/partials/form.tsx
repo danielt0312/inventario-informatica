@@ -27,9 +27,9 @@ export function useActionFormMutation(dictamen: DetailedActionDictamen) {
 
     return useFormMutation({
         url: `api/dictamenes/${dictamen.uuid}/${action}`,
-        onSuccess: async (_, __, ___, { client }) => {
-            await client.invalidateQueries({ queryKey: ['dictamenes'] });
-            await navigate({ to: IndexRoute.to });
+        onSuccess: (_, __, ___, { client }) => {
+            client.invalidateQueries({ queryKey: ['dictamenes'] });
+            navigate({ to: IndexRoute.to });
         }
     })
 }

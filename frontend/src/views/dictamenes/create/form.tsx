@@ -23,9 +23,9 @@ export function useCreateFormMutation() {
 
     return useFormMutation({
         url: 'api/dictamenes',
-        onSuccess: (_, __, ___, context) => {
-            context.client.invalidateQueries({ queryKey: ['dictamenes'] });
-            navigate({ to: IndexRoute.to });
+        onSuccess: async (_, __, ___, context) => {
+            await context.client.invalidateQueries({ queryKey: ['dictamenes'] });
+            await navigate({ to: IndexRoute.to });
         }
     });
 }
