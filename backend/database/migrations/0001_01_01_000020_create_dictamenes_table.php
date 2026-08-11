@@ -48,6 +48,8 @@ return new class extends Migration
                 ->constrained('oficios', indexName: 'fk_dictamen_versiones_oficios')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->string('motivo_cambio', 64)
+                ->nullable();
             $table->foreignId('documento_id')
                 ->nullable()
                 ->constrained('documentos', indexName: 'fk_dictamen_versiones_documentos')

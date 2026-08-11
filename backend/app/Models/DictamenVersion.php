@@ -19,11 +19,13 @@ class DictamenVersion extends Model
         'dictamen_id',
         'oficio_id',
         'fecha_solicitud',
+        'motivo_cambio'
     ];
 
     protected $attributes = [
         'numero_version' => 1,
-        'oficio_id' => null
+        'oficio_id' => null,
+        'motivo_cambio' => null
     ];
 
     public function dictamen(): BelongsTo
