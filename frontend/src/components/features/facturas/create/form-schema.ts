@@ -1,25 +1,34 @@
 import { requiredIsoDateLTEToday, requiredString } from "@/lib/schemas/common";
 import type { ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
-import type { ArchivoAttachmentFieldType } from "@/components/features/archivos/attachment-field";
-import type { FechaEmisionFieldType } from "./form-fields";
+import type { FacturaFechaEmisionFieldType, FacturaFolioFieldType } from "./form-fields";
+import type { OrdenCompraFieldType } from "../../orden_compras/form-fields";
 import z from "zod";
 
-export type Schema = {
-    orden_compra_uuid: ArchivoAttachmentFieldType;
-    fecha_emision: FechaEmisionFieldType;
+type Schema = {
+    folio: FacturaFolioFieldType;
+    orden_compra_id: OrdenCompraFieldType;
+    fecha_emision: FacturaFechaEmisionFieldType;
     archivo_uuid: ArchivoUploaderFieldType;
 }
 
-export const defaultValues: Schema = {
-    orden_compra_uuid: undefined,
+const defaultValues: Schema = {
+    folio: undefined,
+    orden_compra_id: undefined,
     fecha_emision: undefined,
     archivo_uuid: undefined
 }
 
-export const validator = z.object({
-    orden_compra_uuid: requiredString,
+const validator = z.object({
+    folio: requiredString,
+    orden_compra_id: z.number('Debes de adjuntar una orden de compra'),
     fecha_emision: requiredIsoDateLTEToday,
     archivo_uuid: requiredString
 });
 
-export type FacturaCreateSchemaOutput = z.output<typeof validator>;
+type SchemaOutput = z.output<typeof validator>;
+
+export {
+    type SchemaOutput as CreateFacturaSchemaOutput,
+    defaultValues as createFacturaDefaultValues,
+    validator as createFacturaValidator,
+}

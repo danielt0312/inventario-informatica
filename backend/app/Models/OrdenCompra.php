@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-use App\Traits\Models\{HasArchivable, HasProveedor};
+use App\Traits\Models\{HasArchivable, HasProveedor, HasResourceResponse};
 
 class OrdenCompra extends Model
 {
-    use HasArchivable, HasProveedor;
+    use HasArchivable, HasProveedor, HasResourceResponse;
 
     protected $fillable = [
         'fecha_solicitud',
@@ -20,6 +20,6 @@ class OrdenCompra extends Model
 
     public function facturas(): BelongsToMany
     {
-        return $this->belongsToMany(FacturaOrdenCompra::class);
+        return $this->belongsToMany(Factura::class);
     }
 }

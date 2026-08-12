@@ -3,18 +3,19 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { PaperclipIcon } from "lucide-react";
 import { FacturaTable as FacturaTable } from "./partials/table";
 import { useFieldContext } from "@/components/ui/form-context";
-import { ArchivoAttachmentField, useArchivoAttachmentFieldState, type ArchivoAttachmentFieldType } from "@/components/features/archivos/attachment-field";
+import { ArchivoAttachmentField, useArchivoAttachmentFieldState } from "@/components/features/archivos/attachment-field";
 import { facturaTableInitialState } from "./partials/table-cols";
 import React from "react";
+import type { OrdenCompra } from "@/types/orden_compras";
 
-export type FacturaFieldType = ArchivoAttachmentFieldType;
+export type FacturaFieldType = number | undefined;
 export const FacturaField = ({
     value,
     ordenCompra,
     label = 'Adjuntar factura',
     ...props
 }: React.ComponentProps<typeof ArchivoAttachmentField> & {
-    ordenCompra?: ArchivoAttachmentFieldType;
+    ordenCompra?: OrdenCompra;
 }) => {
     const field = useFieldContext<FacturaFieldType>();
     const [open, setOpen] = React.useState(false);
@@ -46,9 +47,9 @@ export const FacturaField = ({
                                 <Button
                                     size="sm"
                                     onClick={() => {
-                                        const archivo = row.original.archivo;
-                                        setArchivo(archivo);
-                                        field.setValue(archivo.uuid);
+                                        const { original: factura } = row;
+                                        setArchivo(factura.archivo);
+                                        field.setValue(factura.id);
                                         setOpen(false);
                                     }}
                                 >

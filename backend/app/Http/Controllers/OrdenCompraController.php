@@ -32,10 +32,7 @@ class OrdenCompraController extends ArchivableController
             return $documento->ordenCompra()->create($request->validated());
         });
 
-        return $orden_compra
-            ->load('archivo')
-            ->toResource()
-            ->response()
-            ->setStatusCode(201);
+        return $orden_compra->load(['archivo', 'proveedor'])
+            ->toResourceResponse(201);
     }
 }

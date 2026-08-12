@@ -22,7 +22,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
-        Schema::create('factura_orden_compras', function (Blueprint $table) {
+        Schema::create('factura_orden_compra', function (Blueprint $table) {
             $table->id();
             $table->foreignId('factura_id')
                 ->constrained('facturas', indexName: 'fk_factura_orden_compras_facturas')
@@ -39,7 +39,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('factura_orden_compras');
+        Schema::dropIfExists('factura_orden_compra');
         Schema::dropIfExists('facturas');
     }
 };

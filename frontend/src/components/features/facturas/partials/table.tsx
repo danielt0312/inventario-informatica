@@ -1,5 +1,4 @@
 import type { Factura } from "@/types/documentos";
-import type { ArchivoAttachmentFieldType } from "@/components/features/archivos/attachment-field";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
@@ -7,12 +6,13 @@ import { FacturaCreateForm, facturaCreateFormOptions, useFacturaCreateForm, useF
 import { useQueryClient } from "@tanstack/react-query";
 import { QueryDataTable } from "@/components/ui/query-datatable";
 import { facturaTableInitialState, getFacturaDefaultColumns } from "./table-cols";
-import { formOptions } from "@tanstack/react-form";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
+import { formOptions } from "@tanstack/react-form";
 import React from "react";
+import type { OrdenCompra } from "@/types/orden_compras";
 
 interface FacturaFieldProps extends Omit<React.ComponentProps<typeof QueryDataTable<Factura>>, 'queryKey' | 'url'> {
-    ordenCompra?: ArchivoAttachmentFieldType;
+    ordenCompra?: OrdenCompra;
 }
 
 export function FacturaTable({
@@ -37,7 +37,7 @@ export function FacturaTable({
         ...defaultDialogFormOptions,
         defaultValues: {
             ...defaultDialogFormOptions.defaultValues,
-            orden_compra_uuid: ordenCompra
+            orden_compra_id: ordenCompra?.id,
         }
     });
 
@@ -50,7 +50,7 @@ export function FacturaTable({
 
     return (
         <QueryDataTable
-            queryKey={['facturas', ordenCompra]}
+            queryKey={['facturas']}
             url="api/facturas"
             columns={[
                 ...columns,
@@ -76,7 +76,7 @@ export function FacturaTable({
                     </Dialog>
                 </>
             )}
-            filter={{ ordenCompra }}
+            filter={{ proveedor: ordenCompra?.proveedor.id }}
             tableOptions={{
                 ...tableOptions,
                 initialState: {

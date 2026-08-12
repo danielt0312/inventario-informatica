@@ -12,7 +12,7 @@ import z from "zod";
 type AdquisicionFields = RecepcionFieldGroup & {
     id: number;
     cuenta_contable: CuentaContableType;
-    factura_uuid: FacturaFieldType;
+    factura_id: FacturaFieldType;
     numero_inventario: NullableNumeroInventarioFieldType;
     producto_tipo_id: NonNullable<ProductoGroupFieldType['tipo_id']>;
     producto_id: NonNullable<ProductoGroupFieldType['id']>;
@@ -22,17 +22,17 @@ type AdquisicionFields = RecepcionFieldGroup & {
 }
 
 type Schema = {
-    orden_compra_uuid: OrdenCompraFieldType;
+    orden_compra_id: OrdenCompraFieldType;
     adquisiciones: AdquisicionFields[];
 }
 
 export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): Schema => ({
-    orden_compra_uuid: undefined,
+    orden_compra_id: undefined,
     adquisiciones: dictamen.version_actual.adquisiciones.flatMap((adquisicion) =>
         Array.from({ length: adquisicion.cantidad }, (): AdquisicionFields => ({
             ...recepcionFieldGroupDefaultValues,
             es_contable: undefined,
-            factura_uuid: undefined,
+            factura_id: undefined,
             cuenta_contable: undefined,
             numero_serie: null,
             costo_unitario: null,
@@ -49,7 +49,7 @@ const adquisicionValidator = z
         id: selectedNumberOption,
         producto_tipo_id: selectedNumberOption,
         producto_id: selectedNumberOption,
-        factura_uuid: requiredString,
+        factura_id: selectedNumberOption,
         cuenta_contable: requiredString,
         numero_serie: nullableString,
         es_contable: selectedBooleanOption,
@@ -60,7 +60,7 @@ const adquisicionValidator = z
     });
 
 export const validator = z.object({
-    orden_compra_uuid: requiredString,
+    orden_compra_id: selectedNumberOption,
     adquisiciones: requiredArray(adquisicionValidator
         .refine(
             ({ es_resultado_esperado, observaciones }) => !(

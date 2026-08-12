@@ -1,6 +1,6 @@
-import { defaultValues, validator, type FacturaCreateSchemaOutput } from "./form-schema";
+import { createFacturaDefaultValues, createFacturaValidator, type CreateFacturaSchemaOutput } from "./form-schema";
 import { Form as RootForm } from "@/components/ui/form";
-import { FechaEmisionField } from "./form-fields";
+import { FacturaFechaEmisionField, FacturaFolioField } from "./form-fields";
 import { ArchivoUploaderField } from "@/components/features/archivos/uploader-field";
 import { useAppForm } from "@/components/ui/form-context";
 import * as m from "@/hooks/use-form-mutation";
@@ -9,16 +9,16 @@ import type { Factura } from "@/types/documentos";
 import type { TResponse } from "@/types/generics";
 
 const useFormMutation = (
-    props?: Omit<m.FormMutation<TResponse<Factura>, FacturaCreateSchemaOutput>, 'url' | 'method' | 'axiosConfig'>
-) => m.useFormMutation<TResponse<Factura>, FacturaCreateSchemaOutput>({
+    props?: Omit<m.FormMutation<TResponse<Factura>, CreateFacturaSchemaOutput>, 'url' | 'method' | 'axiosConfig'>
+) => m.useFormMutation<TResponse<Factura>, CreateFacturaSchemaOutput>({
         url: `api/facturas`,
         ...props,
     });
 
 const formOptions = () => f.formOptions({
-    defaultValues,
+    defaultValues: createFacturaDefaultValues,
     validators: {
-        onSubmit: validator
+        onSubmit: createFacturaValidator
     }
 });
 
@@ -31,7 +31,7 @@ const useForm = (
     return useAppForm({
         ...options(),
         onSubmit: ({ value, formApi }) => {
-            const data = validator.parse(value);
+            const data = createFacturaValidator.parse(value);
             mutate({ data, formApi });
         }
     });
@@ -51,8 +51,13 @@ function Form({
         <RootForm form={form} {...props}>
             <form.AppForm>
                 <form.AppField
+                    name="folio"
+                    children={() => <FacturaFolioField />}
+                />
+
+                <form.AppField
                     name="fecha_emision"
-                    children={() => <FechaEmisionField />}
+                    children={() => <FacturaFechaEmisionField />}
                 />
 
                 <form.AppField

@@ -4,30 +4,28 @@ namespace App\Http\Requests\Factura;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-use App\Models\OrdenCompra;
 use App\Traits\Http\Requests\InteractsWithArchivo;
+use App\Models\OrdenCompra;
 
 class StoreFacturaRequest extends FormRequest
 {
     use InteractsWithArchivo;
 
-    protected OrdenCompra $ordenCompra;
-
     public function rules(): array
     {
         return [
-            'orden_compra_uuid' => [
-                'bail',
+            'folio' => [
                 'required',
-                'uuid',
+                'string',
+                'max:64',
+                'unique:facturas,folio'
+            ],
+            'orden_compra_id' => [
+                'required',
+                'integer',
                 function (string $attribute, string $value) {
-                    $ordenCompra = OrdenCompra::query()
-                        ->join('documentos', 'documentos.id', '=', 'orden_compras.documento_id')
-                        ->join('archivos', 'archivos.id', '=', 'documentos.archivo_id')
-                        ->where('archivos.uuid', $value)
-                        ->select('orden_compras.*')
-                        ->firstOrFail();
-
+                    $ordenCompra = OrdenCompra::find($value);
+                    if (! $ordenCompra) return $fail('validation.exists');
                     $this->setOrdenCompra($ordenCompra);
                 }
             ],

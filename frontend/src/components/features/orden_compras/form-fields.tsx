@@ -4,15 +4,19 @@ import { PaperclipIcon } from "lucide-react";
 import { useFieldContext } from "@/components/ui/form-context";
 import { OrdenCompraTable } from "./partials/table";
 import { ordenCompraInitialTableState } from "./partials/table-cols";
-import { ArchivoAttachmentField, useArchivoAttachmentFieldState, type ArchivoAttachmentFieldType } from "@/components/features/archivos/attachment-field";
+import { ArchivoAttachmentField, useArchivoAttachmentFieldState } from "@/components/features/archivos/attachment-field";
 import React from "react";
+import type { OrdenCompra } from "@/types/orden_compras";
 
-export type OrdenCompraFieldType = ArchivoAttachmentFieldType;
+export type OrdenCompraFieldType = number | undefined;
 export const OrdenCompraField = ({
     value,
+    onValueChange,
     label = 'Adjuntar orden de compra',
     ...props
-}: React.ComponentProps<typeof ArchivoAttachmentField>) => {
+}: Omit<React.ComponentProps<typeof ArchivoAttachmentField>, 'onSelect'> & {
+    onValueChange?: (orden: OrdenCompra) => void;
+}) => {
     const field = useFieldContext<OrdenCompraFieldType>();
     const [open, setOpen] = React.useState(false);
     const [archivo, setArchivo] = useArchivoAttachmentFieldState(value);
@@ -36,26 +40,26 @@ export const OrdenCompraField = ({
                     </DialogHeader>
 
                     <OrdenCompraTable
-                        columns={[
-                            {
-                                id: 'selector',
-                                cell: ({ row }) => {
-                                    return (
-                                        <Button
-                                            size="sm"
-                                            onClick={() => {
-                                                const archivo = row.original.archivo;
-                                                setArchivo(archivo);
-                                                field.setValue(archivo.uuid);
-                                                setOpen(false);
-                                            }}
-                                        >
-                                            <PaperclipIcon /> Adjuntar
-                                        </Button>
-                                    );
-                                }
+                        columns={[{
+                            id: 'selector',
+                            cell: ({ row }) => {
+                                const { original: ordenCompra } = row;
+
+                                return (
+                                    <Button
+                                        size="sm"
+                                        onClick={() => {
+                                            setArchivo(ordenCompra.archivo);
+                                            field.setValue(ordenCompra.id);
+                                            setOpen(false);
+                                            onValueChange?.(ordenCompra);
+                                        }}
+                                    >
+                                        <PaperclipIcon /> Adjuntar
+                                    </Button>
+                                );
                             }
-                        ]}
+                        }]}
                         tableOptions={{
                             initialState: {
                                 ...ordenCompraInitialTableState,

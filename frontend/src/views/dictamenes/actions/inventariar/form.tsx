@@ -11,9 +11,10 @@ import { FacturaField } from "@/components/features/facturas/form-fields";
 import { FieldGroup } from "@/components/ui/field";
 import { CostoUnitarioField, CuentaContable, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/components/features/articulos/form-fields";
 import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
-import { useStore } from "@tanstack/react-form";
 import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import React from "react";
+import type { OrdenCompra } from "@/types/orden_compras";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -39,20 +40,19 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
         }))
     );
 
-    const ordenCompra = useStore(form.store, (state) => state.values.orden_compra_uuid);
+    const [ordenCompra, setOrdenCompra] = React.useState<OrdenCompra | undefined>(undefined);
 
     return (
         <Form form={form}>
             <form.AppForm>
                 <form.AppField
-                    name="orden_compra_uuid"
-                    children={() => <OrdenCompraField className="w-1/3" />}
+                    name="orden_compra_id"
+                    children={() => <OrdenCompraField className="w-1/3" onValueChange={setOrdenCompra} />}
                     listeners={{
                         onChange: () => {
                             const adquisiciones = form.getFieldValue('adquisiciones');
-                            console.log(adquisiciones);
                             adquisiciones.forEach((_, index) => {
-                                form.setFieldValue(`adquisiciones[${index}].factura_uuid`, undefined);
+                                form.setFieldValue(`adquisiciones[${index}].factura_id`, undefined);
                             });
                         }
                     }}
@@ -149,13 +149,8 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                             />
 
                                             <form.AppField
-                                                name={`adquisiciones[${index}].factura_uuid`}
-                                                children={() => (
-                                                    <FacturaField
-                                                        ordenCompra={ordenCompra}
-                                                        disabled={!ordenCompra}
-                                                    />
-                                                )}
+                                                name={`adquisiciones[${index}].factura_id`}
+                                                children={() => <FacturaField ordenCompra={ordenCompra} disabled={!ordenCompra} />}
                                             />
                                         </FieldGroup>
                                     </CardContent>
