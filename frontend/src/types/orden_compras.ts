@@ -1,7 +1,9 @@
 import type { Archivo } from "./documentos";
 import type { TCatalogo } from "./generics";
 
-export type Proveedor = TCatalogo;
+export type Proveedor = TCatalogo & {
+    rfc: string;
+}
 
 export type OrdenCompra = {
     id: number;

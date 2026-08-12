@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{HasMany, BelongsToMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany};
 
 use App\Traits\Models\{HasArchivable, HasProveedor};
 

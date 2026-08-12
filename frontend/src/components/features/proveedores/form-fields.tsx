@@ -11,13 +11,13 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import api from "@/lib/axios";
 
-export type ProveedorField = CreatableComboboxFieldType;
+export type ProveedorFieldType = CreatableComboboxFieldType;
 export const ProveedorField = ({
     label = "Proveedor",
     disabled,
     ...props
 }: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options'>) => {
-    const field = useFieldContext<ProveedorField>();
+    const field = useFieldContext<ProveedorFieldType>();
 
     const { data: options = [] } = useQuery({
         queryKey: ['proveedores'],

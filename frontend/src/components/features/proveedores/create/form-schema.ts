@@ -1,17 +1,27 @@
 import { requiredString } from "@/lib/schemas/common";
-import type { ProveedorNombreFieldType } from "./form-fields"
+import type { ProveedorNombreFieldType, ProveedorRfcFieldType } from "./form-fields"
 import z from "zod";
 
-export type Schema = {
+type Schema = {
     nombre: ProveedorNombreFieldType;
+    rfc: ProveedorRfcFieldType;
 }
 
-export const defaultValues: Schema = {
-    nombre: undefined
+const defaultValues: Schema = {
+    nombre: undefined,
+    rfc: undefined,
 }
 
-export const validator = z.object({
-    nombre: requiredString
+const validator = z.object({
+    nombre: requiredString,
+    rfc: requiredString
 });
 
-export type OutputSchema = z.output<typeof validator>;
+type OutputSchema = z.output<typeof validator>;
+
+export {
+    type Schema as CreateProveedorSchema,
+    type OutputSchema as CreateProveedorOutputSchema,
+    defaultValues as createProveedorDefaultValues,
+    validator as createProveedorValidator
+}

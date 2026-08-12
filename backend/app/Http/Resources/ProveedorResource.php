@@ -12,6 +12,7 @@ class ProveedorResource extends JsonResource
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
+            'rfc' => $this->rfc,
         ];
     }
 }

@@ -10,8 +10,11 @@ class FacturaResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
+            'folio' => $this->folio,
             'fecha_emision' => $this->fecha_emision,
-            'archivo' => $this->whenLoaded('archivo')
+            'proveedor' => new ProveedorResource($this->whenLoaded('proveedor')),
+            'archivo' => $this->whenLoaded('archivo'),
         ];
     }
 }

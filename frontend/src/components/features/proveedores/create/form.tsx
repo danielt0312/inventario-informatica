@@ -1,15 +1,15 @@
 import { useAppForm } from "@/components/ui/form-context";
 import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
-import { defaultValues, validator, type OutputSchema } from "./form-schema";
+import { createProveedorDefaultValues, createProveedorValidator, type CreateProveedorOutputSchema } from "./form-schema";
 import { Form } from "@/components/ui/form";
-import { ProveedorNombreField } from "./form-fields";
+import { ProveedorNombreField, ProveedorRfcField } from "./form-fields";
 import type { TResponse } from "@/types/generics";
 import type { Proveedor } from "@/types/orden_compras";
 
 export const useCreateProveedorFormMutation = (
-    props?: Omit<FormMutation<TResponse<Proveedor>, OutputSchema>, 'url' | 'method' | 'axiosConfig'>
+    props?: Omit<FormMutation<TResponse<Proveedor>, CreateProveedorOutputSchema>, 'url' | 'method' | 'axiosConfig'>
 ) => (
-    useFormMutation<TResponse<Proveedor>, OutputSchema>({
+    useFormMutation<TResponse<Proveedor>, CreateProveedorOutputSchema>({
         url: `api/proveedores`,
         ...props,
     })
@@ -21,12 +21,12 @@ export const useCreateProveedorForm = (
     const { mutate } = useMutationHook();
 
     return useAppForm({
-        defaultValues,
+        defaultValues: createProveedorDefaultValues,
         validators: {
-            onSubmit: validator
+            onSubmit: createProveedorValidator
         },
         onSubmit: ({ value, formApi }) => {
-            const data = validator.parse(value);
+            const data = createProveedorValidator.parse(value);
             mutate({ data, formApi });
         }
     });
@@ -46,6 +46,11 @@ export const AppCreateProveedorForm = ({
             <form.AppField
                 name="nombre"
                 children={() => <ProveedorNombreField />}
+            />
+
+            <form.AppField
+                name="rfc"
+                children={() => <ProveedorRfcField />}
             />
 
             {children}

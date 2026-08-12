@@ -17,8 +17,6 @@ class ProveedorController extends Controller
     public function store(StoreProveedorRequest $request)
     {
         return (Proveedor::create($request->validated()))
-            ->toResource()
-            ->response()
-            ->setStatusCode(201);
+            ->toResourceResponse(201);
     }
 }

@@ -38,7 +38,7 @@ export function SubmitFormButton({
                         type="submit"
                         disabled={isSubmitting}
                         children={renderChildren}
-                        className={cn("max-w-fit self-center", className)}
+                        className={cn("max-w-fit self-center justify-self-center-safe", className)}
                         {...props}
                     />
                 );

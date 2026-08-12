@@ -67,7 +67,6 @@ export const AppCreateOrdenCompraForm = ({
                 name="archivo_uuid"
                 children={(field) => (
                     <ArchivoUploaderField
-
                         onValueChange={(value) => field.handleChange(value?.uuid)}
                     />
                 )}

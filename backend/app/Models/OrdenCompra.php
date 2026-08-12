@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-use App\Traits\Models\{HasArchivable, BelongsToMany};
+use App\Traits\Models\{HasArchivable, HasProveedor};
 
 class OrdenCompra extends Model
 {
