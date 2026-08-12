@@ -1,4 +1,4 @@
-import { DatePickerField } from "@/components/composed/@tanstack/form/date-picker-field";
+import { DatePickerField } from "@/components/ui/date-picker-field";
 
 export type FechaEmisionField = DatePickerField;
 export const FechaEmisionField = ({

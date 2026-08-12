@@ -1,8 +1,8 @@
-import { useAppForm } from "@/components/composed/@tanstack/form/form";
+import { useAppForm } from "@/components/ui/form-context";
 import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
 import type { TResponse } from "@/types/generics";
 import { defaultValues, validator, type OutputSchema } from "./form-schema";
-import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { Form } from "@/components/ui/form";
 import { NombreField } from "./form-fields";
 import type { Proveedor } from "@/types/orden_compras";
 
@@ -65,7 +65,7 @@ export function CreateProveedorForm({
 
     return (
         <AppCreateProveedorForm form={form} {...props}>
-            <SubmitButton className="justify-self-center" />
+            <form.SubmitFormButton />
         </AppCreateProveedorForm>
     );
 }

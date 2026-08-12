@@ -1,14 +1,14 @@
-import { useFieldContext } from "../composed/@tanstack/form/form";
 import { FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
 import { Input } from "@/components/ui/input";
+import { useFieldContext } from "./form-context";
 import React from "react";
 
-interface CoreInputFieldProps extends Omit<React.ComponentProps<typeof Input>, 'children'>, CoreFieldLayoutProps {
+interface CoreInputFieldProps extends Omit<React.ComponentProps<typeof Input>, 'children' | 'name' | 'value' | 'onChange'>, Omit<CoreFieldLayoutProps, 'children' | 'errors'> {
 }
 
 type InputFieldType = string | undefined;
 function InputField({
-    className, description, disabled, label, errors, required, orientation, ...inputProps
+    className, description, disabled, label, required, orientation, ...inputProps
 }: CoreInputFieldProps) {
     const field = useFieldContext<InputFieldType>();
 
@@ -18,17 +18,16 @@ function InputField({
             description={description}
             disabled={disabled}
             label={label}
-            errors={errors !== undefined ? errors : field.state.meta.errors}
+            errors={field.state.meta.errors}
             required={required}
             orientation={orientation}
         >
             <Input
                 name={field.name}
                 value={field.state.value ?? ''}
-                onChange={(e) => field.handleChange(
-                    e.target.value.trim() !== ''
-                        ? e.target.value
-                        : undefined
+                onChange={(e) => field.handleChange(e.target.value.trim() !== ''
+                    ? e.target.value
+                    : undefined
                 )}
                 {...inputProps}
             />
@@ -38,7 +37,7 @@ function InputField({
 
 type NullableInputFieldType = string | null;
 function NullableInputField({
-    className, description, disabled, label, errors, required, orientation, ...inputProps
+    className, description, disabled, label, required, orientation, ...inputProps
 }: CoreInputFieldProps) {
     const field = useFieldContext<NullableInputFieldType>();
 
@@ -48,17 +47,16 @@ function NullableInputField({
             description={description}
             disabled={disabled}
             label={label}
-            errors={errors !== undefined ? errors : field.state.meta.errors}
+            errors={field.state.meta.errors}
             required={required}
             orientation={orientation}
         >
             <Input
                 name={field.name}
                 value={field.state.value ?? ''}
-                onChange={(e) => field.handleChange(
-                    e.target.value.trim() !== ''
-                        ? e.target.value
-                        : null
+                onChange={(e) => field.handleChange(e.target.value.trim() !== ''
+                    ? e.target.value
+                    : null
                 )}
                 {...inputProps}
             />
@@ -72,7 +70,7 @@ const hasNumberValue = (value: string) =>
 
 type NumberInputFieldType = number | undefined;
 function NumberInputField({
-    className, description, disabled, label, errors, required, orientation, ...inputProps
+    className, description, disabled, label, required, orientation, ...inputProps
 }: CoreInputFieldProps) {
     const field = useFieldContext<NumberInputFieldType>();
     const [rawValue, setRawValue] = React.useState(
@@ -85,7 +83,7 @@ function NumberInputField({
             description={description}
             disabled={disabled}
             label={label}
-            errors={errors !== undefined ? errors : field.state.meta.errors}
+            errors={field.state.meta.errors}
             required={required}
             orientation={orientation}
         >
@@ -109,7 +107,7 @@ function NumberInputField({
 
 type NullableNumberInputFieldType = number | null;
 function NullableNumberInputField({
-    className, description, disabled, label, errors, required, orientation, ...inputProps
+    className, description, disabled, label, required, orientation, ...inputProps
 }: CoreInputFieldProps) {
     const field = useFieldContext<NullableNumberInputFieldType>();
     const [rawValue, setRawValue] = React.useState(
@@ -122,7 +120,7 @@ function NullableNumberInputField({
             description={description}
             disabled={disabled}
             label={label}
-            errors={errors !== undefined ? errors : field.state.meta.errors}
+            errors={field.state.meta.errors}
             required={required}
             orientation={orientation}
         >

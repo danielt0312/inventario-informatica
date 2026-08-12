@@ -1,8 +1,8 @@
-import { useAppForm } from "@/components/composed/@tanstack/form/form";
+import { useAppForm } from "@/components/ui/form-context";
 import { type FormMutation, useFormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator, type OutputSchema } from "./form-schema";
 import { NombreField } from "./form-fields";
-import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { Form as PrimitiveForm } from "@/components/ui/form";
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
 
@@ -65,7 +65,7 @@ export const Form = ({
     return (
         <AppForm form={form} {...props}>
             {children?.(form)}
-            <SubmitButton />
+            <form.SubmitFormButton />
         </AppForm>
     );
 }

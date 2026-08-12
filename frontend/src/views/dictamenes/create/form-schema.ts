@@ -7,15 +7,15 @@ import {
     nullableString
 } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
-import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
+import type { ProductoTipoFieldType } from "@/views/common/productos/tipos/form-fields";
 import type { NullableNumeroInventarioFieldType } from "@/views/common/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/views/common/externos/empleados/form-fields";
 import type { AdscripcionFieldType } from "@/views/common/externos/adscripciones/form-fields";
-import type { CantidadFieldType, FechaSolicitudField, FolioFieldType, OficioFieldType } from "../partials/form-fields";
+import type { CantidadFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
 import z from "zod";
 
 type AdquisicionFields = {
-    producto_tipo_id: ProductoTipoField;
+    producto_tipo_id: ProductoTipoFieldType;
     numero_inventario: NullableNumeroInventarioFieldType;
     cantidad: CantidadFieldType;
     empleado_id: EmpleadoFieldType;
@@ -30,7 +30,7 @@ export const productoFieldsDefaultValues: AdquisicionFields = {
 
 export type Schema = {
     folio: FolioFieldType;
-    fecha_solicitud: FechaSolicitudField;
+    fecha_solicitud: FechaSolicitudFieldType;
     adscripcion_id: AdscripcionFieldType;
     archivo_uuid: OficioFieldType;
     adquisiciones: AdquisicionFields[];

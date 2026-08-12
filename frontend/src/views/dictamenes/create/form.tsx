@@ -1,4 +1,4 @@
-import { useAppForm } from "@/components/composed/@tanstack/form/form";
+import { useAppForm } from "@/components/ui/form-context";
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { OficioField, CantidadField, FechaSolicitudField, FolioField } from "../partials/form-fields";
 import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
 import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
-import { Form as PrimitiveForm } from "@/components/composed/@tanstack/form/form-components";
+import { Form as PrimitiveForm } from "@/components/ui/form";
 import { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import { NumeroInventarioField } from "@/views/common/articulos/form-fields";
 import { DictamenProducto } from "@/lib/utils";
@@ -150,7 +150,7 @@ export function Form() {
                     )}
                 </form.AppField>
 
-                <form.SubmitButton />
+                <form.SubmitFormButton />
             </form.AppForm>
         </PrimitiveForm>
     );

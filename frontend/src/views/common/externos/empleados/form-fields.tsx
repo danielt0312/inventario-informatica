@@ -1,14 +1,14 @@
-import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
-import { useQuery } from "@tanstack/react-query";
-import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";
 import type { Empleado } from "@/types/externos";
+import type { AdscripcionFieldType } from "../adscripciones/form-fields";
 import { toComboboxOptions } from "@/lib/utils";
-import type { AdscripcionField } from "../adscripciones/form-fields";
+import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
+import { useQuery } from "@tanstack/react-query";
+import api from "@/lib/axios";
 
-export type EmpleadoFieldType = CreatableComboboxField;
+export type EmpleadoFieldType = CreatableComboboxFieldType;
 interface EmpleadoFieldProps extends Omit<React.ComponentProps<typeof CreatableComboboxField>, 'enabled' | 'options'> {
-    adscripcion: AdscripcionField;
+    adscripcion: AdscripcionFieldType;
 }
 export const EmpleadoField = ({
     adscripcion,

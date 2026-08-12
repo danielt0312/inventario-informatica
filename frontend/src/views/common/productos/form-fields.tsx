@@ -1,4 +1,4 @@
-import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
+import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
 import api from "@/lib/axios";
 import { toComboboxOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
@@ -9,20 +9,19 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation } from "./create/form";
-import { ProductoTipoField } from "./tipos/form-fields";
-import { useFieldContext, withFieldGroup } from "@/components/composed/@tanstack/form/form";
+import { ProductoTipoField, type ProductoTipoFieldType } from "./tipos/form-fields";
+import { useFieldContext, withFieldGroup } from "@/components/ui/form-context";
 import { useStore } from "@tanstack/react-form";
 import { FieldGroup } from "@/components/ui/field";
-import { SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 
-export type ProductoField = CreatableComboboxField;
+export type ProductoField = CreatableComboboxFieldType;
 export function ProductoField({
     label = "Modelo de Producto",
     tipo,
     disabled,
     ...props
 }: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options' | 'onCreateRequest'> & {
-    tipo: ProductoTipoField;
+    tipo: ProductoTipoFieldType;
 }) {
     const field = useFieldContext<ProductoField>();
 
@@ -78,7 +77,7 @@ export function ProductoField({
 
                     <AppForm form={dialogForm} className="contents" showTipoField={false}>
                         <DialogFooter>
-                            <SubmitButton />
+                            <dialogForm.SubmitFormButton />
 
                             <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar
@@ -91,12 +90,12 @@ export function ProductoField({
     );
 }
 
-export type ProductoGroupField = {
-    tipo_id: ProductoTipoField;
+export type ProductoGroupFieldType = {
+    tipo_id: ProductoTipoFieldType;
     id: ProductoField;
 };
 
-const productoGroupDefaultValues: ProductoGroupField = {
+const productoGroupDefaultValues: ProductoGroupFieldType = {
     id: undefined,
     tipo_id: undefined,
 };

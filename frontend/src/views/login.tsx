@@ -7,8 +7,7 @@ import { useNavigate } from "@tanstack/react-router"
 import { useQueryClient } from "@tanstack/react-query"
 
 import type { TResponse } from "@/types/generics"
-import z from "zod"
-import { useAppForm } from "@/components/composed/@tanstack/form/form"
+import { useAppForm } from "@/components/ui/form-context"
 import { handleFormValidationError } from "@/lib/utils"
 import { InputField } from "@/components/ui/input-field"
 import { requiredInstitutionalEmail, requiredString } from "@/lib/schemas/common"
@@ -16,6 +15,7 @@ import { DoorOpen } from "lucide-react"
 import { useState } from "react"
 import { FieldError } from "@/components/ui/field"
 import type { User } from "@/types/auth"
+import z from "zod"
 
 interface Schema {
     email: string | undefined;
@@ -110,7 +110,7 @@ export function View() {
 
                         <FieldError errors={[globalError]} />
 
-                        <form.SubmitButton
+                        <form.SubmitFormButton
                             label="Ingresar"
                             icon={<DoorOpen />}
                             className="max-w-full w-1/2"
@@ -119,5 +119,5 @@ export function View() {
                 </form>
             </CardContent>
         </Card>
-    )
+    );
 }

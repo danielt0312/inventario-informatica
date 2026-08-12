@@ -1,7 +1,7 @@
-import { useAppForm } from "@/components/composed/@tanstack/form/form";
+import { useAppForm } from "@/components/ui/form-context";
 import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
-import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { Form } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
@@ -165,7 +165,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                     />
                 ))}
 
-                <SubmitButton />
+                <form.SubmitFormButton />
             </form.AppForm>
         </Form>
     );

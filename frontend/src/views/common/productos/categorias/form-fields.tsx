@@ -1,4 +1,4 @@
-import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
+import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
 import api from "@/lib/axios";
 import { toComboboxOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
@@ -9,10 +9,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation } from "./create/form";
-import { SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import { useFieldContext } from "@/components/composed/@tanstack/form/form";
+import { useFieldContext } from "@/components/ui/form-context";
 
-export type ProductoCategoriaField = CreatableComboboxField;
+export type ProductoCategoriaField = CreatableComboboxFieldType;
 export function ProductoCategoriaField({
     label = "Categoría de Producto",
     ...props
@@ -62,7 +61,7 @@ export function ProductoCategoriaField({
 
                     <AppForm form={dialogForm} className="contents">
                         <DialogFooter>
-                            <SubmitButton />
+                            <dialogForm.SubmitFormButton />
 
                             <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar

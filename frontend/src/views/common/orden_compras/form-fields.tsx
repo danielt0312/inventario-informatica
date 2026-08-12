@@ -2,18 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PaperclipIcon } from "lucide-react";
 import React from "react";
-import { useFieldContext } from "@/components/composed/@tanstack/form/form";
+import { useFieldContext } from "@/components/ui/form-context";
 import { OrdenCompraTable } from "./partials/table";
 import { ordenCompraInitialTableState } from "./partials/table-cols";
 import { ArchivoAttachmentField, useArchivoAttachmentFieldState, type ArchivoAttachmentFieldType } from "@/components/features/archivos/attachment-field";
 
-export type OrdenCompraField = ArchivoAttachmentFieldType;
+export type OrdenCompraFieldType = ArchivoAttachmentFieldType;
 export const OrdenCompraField = ({
     value,
     label = 'Adjuntar orden de compra',
     ...props
 }: React.ComponentProps<typeof ArchivoAttachmentField>) => {
-    const field = useFieldContext<OrdenCompraField>();
+    const field = useFieldContext<OrdenCompraFieldType>();
     const [open, setOpen] = React.useState(false);
     const [archivo, setArchivo] = useArchivoAttachmentFieldState(value);
 

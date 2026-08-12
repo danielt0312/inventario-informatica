@@ -1,6 +1,6 @@
-import { DatePickerField } from "@/components/composed/@tanstack/form/date-picker-field";
+import { DatePickerField, type DatePickerFieldType } from "@/components/ui/date-picker-field";
 import { InputField, NumberInputField, type InputFieldType, type NumberInputFieldType } from "@/components/ui/input-field";
-import { TextareaField } from "@/components/composed/@tanstack/form/textarea-field";
+import { TextareaField, type TextareaFieldType } from "@/components/ui/textarea-field";
 import { ArchivoUploaderField, type ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
 import React from "react";
 
@@ -34,7 +34,7 @@ export const FolioField = ({
     />
 );
 
-export type FechaSolicitudField = DatePickerField;
+export type FechaSolicitudFieldType = DatePickerFieldType;
 export const FechaSolicitudField = ({
     label = "Fecha de solicitud",
     placeholder = "Selecciona la fecha de la solicitud",
@@ -63,7 +63,7 @@ export const OficioField = ({
 );
 
 
-export type CaracteristicasField = TextareaField;
+export type CaracteristicasFieldType = TextareaFieldType;
 export function CaracteristicasField({
     label = "Especificaciones técnicas",
     placeholder = "Ingresa las especificaciones técnicas",
@@ -80,7 +80,7 @@ export function CaracteristicasField({
     );
 }
 
-export type DictamenArchivoField = ArchivoUploaderFieldType;
+export type DictamenArchivoFieldType = ArchivoUploaderFieldType;
 export const DictamenArchivoField = ({
     label = "Adjuntar evidencia de dictamen recibido",
     required = true,

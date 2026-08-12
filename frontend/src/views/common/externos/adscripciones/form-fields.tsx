@@ -1,4 +1,4 @@
-import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
+import { CreatableComboboxField } from "@/components/ui/creatable-combobox-field";
 import api from "@/lib/axios";
 import { toComboboxOptions } from "@/lib/utils";
 import type { Adscripcion } from "@/types/externos";

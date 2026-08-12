@@ -1,8 +1,8 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { useAppForm } from "@/components/composed/@tanstack/form/form";
+import { useAppForm } from "@/components/ui/form-context";
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
-import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { Form } from "@/components/ui/form";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { CantidadField, CaracteristicasField, FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
 import { Label } from "@/components/ui/label";
@@ -181,7 +181,7 @@ export const DictamenEditarForm = () => {
                     )}
                 </form.AppField>
 
-                <SubmitButton
+                <form.SubmitFormButton
                     label="Guardar edición"
                     icon={<SquarePenIcon />}
                     type="button"

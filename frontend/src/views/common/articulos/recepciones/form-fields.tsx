@@ -1,11 +1,11 @@
-import { withFieldGroup } from "@/components/composed/@tanstack/form/form";
-import { NullableTextareaField } from "@/components/composed/@tanstack/form/textarea-field";
+import { withFieldGroup } from "@/components/ui/form-context";
+import { NullableTextareaField, type NullableTextareaFieldType } from "@/components/ui/textarea-field";
 import { useStore } from "@tanstack/react-form";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
-import { BooleanField } from "@/components/ui/forms/boolean-field";
+import { BooleanField, type BooleanFieldType } from "@/components/ui/boolean-field";
 
-export type ObservacionesField = NullableTextareaField;
+export type ObservacionesFieldType = NullableTextareaFieldType;
 export const ObservacionesField = ({
     label = "Observaciones/Aclaraciones",
     placeholder = "Ingresa cualquier observación, aclaración, o nota importante a declarar",
@@ -18,7 +18,7 @@ export const ObservacionesField = ({
     />
 );
 
-export type EsResultadoEsperadoField = BooleanField;
+export type EsResultadoEsperadoFieldType = BooleanFieldType;
 export const EsResultadoEsperadoField = ({
     label = "¿Es el resultado esperado?",
     ...props
@@ -28,8 +28,8 @@ export const EsResultadoEsperadoField = ({
 
 
 export type RecepcionFieldGroup = {
-    es_resultado_esperado: EsResultadoEsperadoField;
-    observaciones: ObservacionesField;
+    es_resultado_esperado: EsResultadoEsperadoFieldType;
+    observaciones: ObservacionesFieldType;
 }
 
 export const recepcionFieldGroupDefaultValues: RecepcionFieldGroup = {

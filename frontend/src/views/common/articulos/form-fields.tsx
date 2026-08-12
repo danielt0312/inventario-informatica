@@ -1,7 +1,7 @@
 import { InputField, NullableInputField, NullableNumberInputField, type InputFieldType, type NullableInputFieldType, type NullableNumberInputFieldType } from "@/components/ui/input-field";
-import { BooleanField, type BooleanFieldType } from "@/components/ui/forms/boolean-field";
+import { BooleanField, type BooleanFieldType } from "@/components/ui/boolean-field";
 
-export type CostoUnitarioField = NullableNumberInputFieldType;
+export type CostoUnitarioFieldType = NullableNumberInputFieldType;
 export const CostoUnitarioField = ({
     label = "Costo unitario",
     placeholder = "Ingresa el costo unitario",

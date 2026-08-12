@@ -1,28 +1,28 @@
 import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
-import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { CostoUnitarioField, CuentaContable, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/views/common/articulos/form-fields";
-import type { ProductoGroupField } from "@/views/common/productos/form-fields";
-import type { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
-import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
-import type { FacturaFieldType } from "@/views/common/facturas/form-fields";
-import z from "zod";
 import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
+import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { CostoUnitarioFieldType, CuentaContableType, EsContableFieldType, NullableNumeroInventarioFieldType, NumeroSerieFieldType } from "@/views/common/articulos/form-fields";
+import type { FacturaFieldType } from "@/views/common/facturas/form-fields";
+import type { ProductoGroupFieldType } from "@/views/common/productos/form-fields";
+import type { OrdenCompraFieldType } from "@/views/common/orden_compras/form-fields";
+import z from "zod";
 
 type AdquisicionFields = RecepcionFieldGroup & {
     id: number;
-    cuenta_contable: CuentaContable;
+    cuenta_contable: CuentaContableType;
     factura_uuid: FacturaFieldType;
-    numero_inventario: NullableNumeroInventarioField;
-    producto_tipo_id: NonNullable<ProductoGroupField['tipo_id']>;
-    producto_id: NonNullable<ProductoGroupField['id']>;
-    costo_unitario: CostoUnitarioField;
-    es_contable: EsContableField;
-    numero_serie: NumeroSerieField;
+    numero_inventario: NullableNumeroInventarioFieldType;
+    producto_tipo_id: NonNullable<ProductoGroupFieldType['tipo_id']>;
+    producto_id: NonNullable<ProductoGroupFieldType['id']>;
+    costo_unitario: CostoUnitarioFieldType;
+    es_contable: EsContableFieldType;
+    numero_serie: NumeroSerieFieldType;
 }
 
 type Schema = {
-    orden_compra_uuid: OrdenCompraField;
+    orden_compra_uuid: OrdenCompraFieldType;
     adquisiciones: AdquisicionFields[];
 }
 

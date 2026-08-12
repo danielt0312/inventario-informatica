@@ -1,38 +1,22 @@
-import { Button } from "@/components/ui/button";
 import { SaveIcon } from "lucide-react";
-import { useFormContext } from "./form";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "./spinner";
+import { Button } from "./button";
 import { cn } from "@/lib/utils";
-import { type AnyFormApi } from "@tanstack/react-form";
-import type React from "react";
+import { useFormContext } from "./form-context";
 
-interface FormProps extends React.ComponentProps<'form'> {
-    form: AnyFormApi;
-}
-export const Form = ({ form, ...props }: FormProps) => (
-    <form
-        onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            form.handleSubmit();
-        }}
-        className="contents"
-        {...props}
-    />
-);
-
-interface SubmitButtonProps extends Omit<React.ComponentProps<typeof Button>, 'disabled' | 'children'> {
+interface SubmitFormButtonProps extends Omit<React.ComponentProps<typeof Button>, 'disabled' | 'children'> {
     icon?: React.ReactNode;
     label?: string;
     children?: (isSubmitting: boolean) => React.ReactNode;
 }
-export const SubmitButton = ({
-    label = "Guardar",
-    icon = <SaveIcon />,
+
+export function SubmitFormButton({
     className,
     children,
+    label = "Guardar",
+    icon = <SaveIcon />,
     ...props
-}: SubmitButtonProps) => {
+}: SubmitFormButtonProps) {
     const form = useFormContext();
 
     return (

@@ -1,4 +1,4 @@
-import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
+import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
 import api from "@/lib/axios";
 import { toComboboxOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
@@ -9,15 +9,14 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 import type { ProductoCategoriaWithTipos } from "@/types/productos";
-import { SubmitButton } from "@/components/composed/@tanstack/form/form-components";
-import { useFieldContext } from "@/components/composed/@tanstack/form/form";
+import { useFieldContext } from "@/components/ui/form-context";
 
-export type ProductoTipoField = CreatableComboboxField;
+export type ProductoTipoFieldType = CreatableComboboxFieldType;
 export function ProductoTipoField({
     label = "Tipo de Producto",
     ...props
 }: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options' | 'onCreateRequest'>) {
-    const field = useFieldContext<ProductoTipoField>();
+    const field = useFieldContext<ProductoTipoFieldType>();
 
     const { data: options = [] } = useQuery({
         queryKey: ['producto_categorias_tipos'],
@@ -65,7 +64,7 @@ export function ProductoTipoField({
 
                     <AppForm form={dialogForm} className="contents">
                         <DialogFooter>
-                            <SubmitButton />
+                            <dialogForm.SubmitFormButton />
 
                             <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar

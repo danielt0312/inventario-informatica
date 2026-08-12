@@ -1,8 +1,8 @@
-import { useAppForm } from "@/components/composed/@tanstack/form/form";
+import { useAppForm } from "@/components/ui/form-context";
 import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
 import type { TResponse } from "@/types/generics";
 import { defaultValues, validator, type OutputSchema } from "./form-schema";
-import { Form, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { Form } from "@/components/ui/form";
 import type { OrdenCompra } from "@/types/orden_compras";
 import { FieldGroup } from "@/components/ui/field";
 import { FechaSolicitudField, NumeroOrdenField } from "./form-fields";
@@ -90,7 +90,7 @@ export function CreateOrdenCompraForm({
 
     return (
         <AppCreateOrdenCompraForm form={form} {...props}>
-            <SubmitButton className="justify-self-center" />
+            <form.SubmitFormButton />
         </AppCreateOrdenCompraForm>
     );
 }

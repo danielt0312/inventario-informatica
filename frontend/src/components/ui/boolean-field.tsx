@@ -1,6 +1,5 @@
-import { RadioGroupField, RadioGroupFieldItem } from "@/components/composed/@tanstack/form/radio-group-field";
+import { RadioGroupField, RadioGroupFieldItem, type RadioGroupFieldItemProps } from "@/components/ui/radio-group-field";
 import { cn } from "@/lib/utils";
-import type { RadioGroupFieldItemProps } from "../../composed/radio-group-field";
 
 export type BooleanFieldType = boolean | undefined;
 export const BooleanField = ({

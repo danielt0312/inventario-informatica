@@ -1,12 +1,12 @@
-import { useAppForm } from "@/components/composed/@tanstack/form/form";
 import { defaultValues, validator, type FacturaCreateSchemaOutput } from "./form-schema";
 import type { Factura } from "@/types/documentos";
 import type { TResponse } from "@/types/generics";
-import { Form as RootForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { Form as RootForm } from "@/components/ui/form";
 import { FechaEmisionField } from "./form-fields";
 import { ArchivoUploaderField } from "@/components/features/archivos/uploader-field";
 import * as m from "@/hooks/use-form-mutation";
 import * as f from "@tanstack/react-form";
+import { useAppForm } from "@/components/ui/form-context";
 
 const useFormMutation = (
     props?: Omit<m.FormMutation<TResponse<Factura>, FacturaCreateSchemaOutput>, 'url' | 'method' | 'axiosConfig'>
@@ -64,7 +64,7 @@ function Form({
                     )}
                 />
 
-                <SubmitButton className="justify-self-center" />
+                <form.SubmitFormButton />
             </form.AppForm>
         </RootForm>
     );

@@ -1,21 +1,21 @@
-import { CaracteristicasField, type FechaSolicitudField, type FolioField, type OficioFieldType } from "../partials/form-fields"
-import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import type { ProductoField } from "@/views/common/productos/form-fields";
-import type { NullableNumeroInventarioField } from "@/views/common/articulos/form-fields";
+import type { ProductoTipoFieldType } from "@/views/common/productos/tipos/form-fields";
+import type { NullableNumeroInventarioFieldType } from "@/views/common/articulos/form-fields";
 import type { NumberInputFieldType } from "@/components/ui/input-field";
-import type { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
+import type { EmpleadoFieldType } from "@/views/common/externos/empleados/form-fields";
+import type { CaracteristicasFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
 import type { DetailedSurtirDictamen } from "@/types/dictamenes";
-import z from "zod";
 import { nullableString, positiveInteger, requiredArray, requiredIsoDateLTEToday, requiredString, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
 import { format } from "date-fns";
+import z from "zod";
 
 type AdquisicionFields = {
-    producto_tipo_id: ProductoTipoField;
-    numero_inventario: NullableNumeroInventarioField;
-    cantidad: NumberInputField;
-    empleado_id: EmpleadoField;
-    caracteristicas: CaracteristicasField;
+    producto_tipo_id: ProductoTipoFieldType;
+    numero_inventario: NullableNumeroInventarioFieldType;
+    cantidad: NumberInputFieldType;
+    empleado_id: EmpleadoFieldType;
+    caracteristicas: CaracteristicasFieldType;
     producto_id: ProductoField;
 }
 
@@ -29,9 +29,9 @@ export const adquisicionFieldsDefaultValues: AdquisicionFields = {
 } as const;
 
 type Schema = {
-    fecha_solicitud: FechaSolicitudField;
+    fecha_solicitud: FechaSolicitudFieldType;
     archivo_uuid: OficioFieldType;
-    folio: FolioField;
+    folio: FolioFieldType;
     adquisiciones: AdquisicionFields[];
 }
 

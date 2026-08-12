@@ -1,5 +1,5 @@
-import { CreatableComboboxField } from "@/components/composed/@tanstack/form/creatable-combobox-field";
-import { useFieldContext } from "@/components/composed/@tanstack/form/form";
+import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
+import { useFieldContext } from "@/components/ui/form-context";
 import api from "@/lib/axios";
 import { toComboboxOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
@@ -8,11 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useCreateProveedorForm, useCreateProveedorFormMutation, AppCreateProveedorForm } from "./create/form";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { SubmitButton } from "@/components/composed/@tanstack/form/form-components";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 
-export type ProveedorField = CreatableComboboxField;
+export type ProveedorField = CreatableComboboxFieldType;
 export const ProveedorField = ({
     label = "Proveedor",
     disabled,
@@ -65,7 +64,7 @@ export const ProveedorField = ({
 
                     <AppCreateProveedorForm form={createForm} className="contents">
                         <DialogFooter>
-                            <SubmitButton />
+                            <createForm.SubmitFormButton />
 
                             <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar

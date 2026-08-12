@@ -1,10 +1,10 @@
-import { useAppForm } from "@/components/composed/@tanstack/form/form";
+import { useAppForm } from "@/components/ui/form-context";
 import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ProductoField } from "@/views/common/productos/form-fields";
-import { Form as PrimitiveForm, SubmitButton } from "@/components/composed/@tanstack/form/form-components";
+import { Form as PrimitiveForm } from "@/components/ui/form";
 import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { CaracteristicasField } from "../../partials/form-fields";
 import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
@@ -71,7 +71,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
                     );
                 })}
 
-                <SubmitButton />
+                <form.SubmitFormButton />
             </form.AppForm>
         </PrimitiveForm>
     );

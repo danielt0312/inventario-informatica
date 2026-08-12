@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { PaperclipIcon } from "lucide-react";
 import React from "react";
 import { FacturaTable as FacturaTable } from "./partials/table";
-import { useFieldContext } from "@/components/composed/@tanstack/form/form";
+import { useFieldContext } from "@/components/ui/form-context";
 import { ArchivoAttachmentField, useArchivoAttachmentFieldState, type ArchivoAttachmentFieldType } from "@/components/features/archivos/attachment-field";
 import { facturaTableInitialState } from "./partials/table-cols";
 
