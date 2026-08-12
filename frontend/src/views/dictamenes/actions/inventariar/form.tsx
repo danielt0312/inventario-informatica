@@ -4,16 +4,16 @@ import { useActionFormMutation } from "../partials/form";
 import { Form } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
+import { RecepcionFieldGroup } from "@/components/features/articulos/recepciones/form-fields";
 import { Separator } from "@/components/ui/separator";
-import { ProductoGroupField } from "@/views/common/productos/form-fields";
-import { FacturaField } from "@/views/common/facturas/form-fields";
+import { ProductoGroupField } from "@/components/features/productos/form-fields";
+import { FacturaField } from "@/components/features/facturas/form-fields";
 import { FieldGroup } from "@/components/ui/field";
-import { CostoUnitarioField, CuentaContable, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/views/common/articulos/form-fields";
-import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import { OrdenCompraField } from "@/views/common/orden_compras/form-fields";
+import { CostoUnitarioField, CuentaContable, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/components/features/articulos/form-fields";
+import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
 import { useStore } from "@tanstack/react-form";
 import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);

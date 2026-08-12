@@ -1,12 +1,12 @@
+import type { TResponse, TCatalogo } from "@/types/generics";
 import { QueryDataTable } from "@/components/ui/query-datatable";
 import { columns, type Articulo } from "./table-cols";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multiselect";
 import { useQuery } from "@tanstack/react-query";
-import api from "@/lib/axios";
-import type { TResponse, TCatalogo } from "@/types/generics";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import { type Producto, type ProductoCategoria, type ProductoMarca, type ProductoTipo } from "@/types/productos";
+import api from "@/lib/axios";
 
 interface TableFilters {
     categorias: number[];

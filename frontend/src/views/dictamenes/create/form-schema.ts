@@ -7,10 +7,10 @@ import {
     nullableString
 } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
-import type { ProductoTipoFieldType } from "@/views/common/productos/tipos/form-fields";
-import type { NullableNumeroInventarioFieldType } from "@/views/common/articulos/form-fields";
-import type { EmpleadoFieldType } from "@/views/common/externos/empleados/form-fields";
-import type { AdscripcionFieldType } from "@/views/common/externos/adscripciones/form-fields";
+import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
+import type { NullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
+import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
+import type { AdscripcionFieldType } from "@/components/features/externos/adscripciones/form-fields";
 import type { CantidadFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
 import z from "zod";
 

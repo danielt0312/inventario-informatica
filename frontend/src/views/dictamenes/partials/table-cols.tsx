@@ -10,7 +10,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import type { DetailedActionDictamen, DetailedActionDictaminadoDictamen, DetailedEditableActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen } from "@/types/dictamenes";
 import { isActionDictamen, isActionDictaminadoDictamen, isDetailedSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
-import { ArchivoPreviewActionRow } from "@/views/common/archivos/partials/table-cols";
+import { ArchivoPreviewActionRow } from "@/components/features/archivos/table-cols";
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
 import { toLocaleDateFormat } from "@/lib/utils";
 import { dictamenEstadoVariants } from "./table";

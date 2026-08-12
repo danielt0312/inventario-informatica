@@ -1,8 +1,8 @@
-import type { ProductoField } from "@/views/common/productos/form-fields";
-import type { ProductoTipoFieldType } from "@/views/common/productos/tipos/form-fields";
-import type { NullableNumeroInventarioFieldType } from "@/views/common/articulos/form-fields";
+import type { ProductoField } from "@/components/features/productos/form-fields";
+import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
+import type { NullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { NumberInputFieldType } from "@/components/ui/input-field";
-import type { EmpleadoFieldType } from "@/views/common/externos/empleados/form-fields";
+import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
 import type { CaracteristicasFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
 import type { DetailedSurtirDictamen } from "@/types/dictamenes";
 import { nullableString, positiveInteger, requiredArray, requiredIsoDateLTEToday, requiredString, selectedNumberOption } from "@/lib/schemas/common";

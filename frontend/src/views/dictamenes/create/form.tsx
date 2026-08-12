@@ -10,11 +10,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
 import { OficioField, CantidadField, FechaSolicitudField, FolioField } from "../partials/form-fields";
-import { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
-import { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
+import { AdscripcionField } from "@/components/features/externos/adscripciones/form-fields";
+import { EmpleadoField } from "@/components/features/externos/empleados/form-fields";
 import { Form as PrimitiveForm } from "@/components/ui/form";
-import { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
-import { NumeroInventarioField } from "@/views/common/articulos/form-fields";
+import { ProductoTipoField } from "@/components/features/productos/tipos/form-fields";
+import { NumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { DictamenProducto } from "@/lib/utils";
 import React from "react";
 

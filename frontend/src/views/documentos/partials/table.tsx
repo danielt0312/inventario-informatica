@@ -2,10 +2,10 @@ import { QueryDataTable, SearchInput } from "@/components/ui/query-datatable";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import type { CatalogoListResponse } from "@/types/generics";
 import { MultiSelect } from "@/components/ui/multiselect";
-import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import { documentoGetDefaultColumns, documentoinitialTableState } from "./table-cols";
+import api from "@/lib/axios";
 
 type TableFilters = {
     archivo: string;

@@ -1,12 +1,12 @@
 import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
 import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
-import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/views/common/articulos/recepciones/form-fields";
+import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/components/features/articulos/recepciones/form-fields";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { CostoUnitarioFieldType, CuentaContableType, EsContableFieldType, NullableNumeroInventarioFieldType, NumeroSerieFieldType } from "@/views/common/articulos/form-fields";
-import type { FacturaFieldType } from "@/views/common/facturas/form-fields";
-import type { ProductoGroupFieldType } from "@/views/common/productos/form-fields";
-import type { OrdenCompraFieldType } from "@/views/common/orden_compras/form-fields";
+import type { CostoUnitarioFieldType, CuentaContableType, EsContableFieldType, NullableNumeroInventarioFieldType, NumeroSerieFieldType } from "@/components/features/articulos/form-fields";
+import type { FacturaFieldType } from "@/components/features/facturas/form-fields";
+import type { ProductoGroupFieldType } from "@/components/features/productos/form-fields";
+import type { OrdenCompraFieldType } from "@/components/features/orden_compras/form-fields";
 import z from "zod";
 
 type AdquisicionFields = RecepcionFieldGroup & {

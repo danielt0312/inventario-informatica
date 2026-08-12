@@ -1,5 +1,5 @@
 import type { Documento } from "@/types/documentos";
-import { archivoTableInitialState, getArchivoDefaultColumns } from "@/views/common/archivos/partials/table-cols";
+import { archivoTableInitialState, getArchivoDefaultColumns } from "@/components/features/archivos/table-cols";
 import type { ColumnDef, InitialTableState } from "@tanstack/react-table";
 
 const getDefaultColumns = (): ColumnDef<Documento>[] => [

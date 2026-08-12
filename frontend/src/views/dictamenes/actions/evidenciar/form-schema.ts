@@ -1,9 +1,9 @@
 import { requiredString } from "@/lib/schemas/common";
-import type { DictamenArchivoField } from "../../partials/form-fields";
+import type { DictamenArchivoFieldType } from "../../partials/form-fields";
 import z from "zod";
 
 export type Schema = {
-    archivo_uuid: DictamenArchivoField;
+    archivo_uuid: DictamenArchivoFieldType;
 }
 
 export const defaultValues: Schema = {

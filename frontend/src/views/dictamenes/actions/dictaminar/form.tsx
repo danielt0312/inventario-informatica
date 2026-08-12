@@ -3,7 +3,7 @@ import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ProductoField } from "@/views/common/productos/form-fields";
+import { ProductoField } from "@/components/features/productos/form-fields";
 import { Form as PrimitiveForm } from "@/components/ui/form";
 import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { CaracteristicasField } from "../../partials/form-fields";
