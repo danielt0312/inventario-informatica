@@ -6,7 +6,7 @@ import { useStore } from "@tanstack/react-form";
 const useAttachmentFieldContext = useArchivoFieldContext;
 
 type AttachmentLayoutProps = React.ComponentProps<typeof ArchivoAttachmentLayout>;
-interface AttachmentFieldProps extends CoreFieldLayoutProps, Omit<AttachmentLayoutProps, 'orientation'> {
+interface AttachmentFieldProps extends Omit<CoreFieldLayoutProps, 'errors'>, Omit<AttachmentLayoutProps, 'orientation'> {
     attachmentOrientation?: AttachmentLayoutProps['orientation'];
 }
 type AttachmentFieldType = string | undefined;
@@ -14,7 +14,6 @@ function AttachmentField({
     className,
     description,
     disabled,
-    errors,
     label,
     required,
     orientation,
@@ -23,24 +22,19 @@ function AttachmentField({
     ...props
 }: AttachmentFieldProps) {
     const field = useAttachmentFieldContext();
-
-    const fieldProps: CoreFieldLayoutProps = {
-        className,
-        description,
-        disabled,
-        errors: errors !== undefined
-            ? errors
-            : field.state.meta.errors,
-        label,
-        required,
-        orientation
-    }
-
     const fieldValue = useStore(field.store, (state) => state.value);
     const derivedValue = fieldValue === undefined ? undefined : value;
 
     return (
-        <FieldLayout {...fieldProps}>
+        <FieldLayout
+            className={className}
+            description={description}
+            disabled={disabled}
+            errors={field.state.meta.errors}
+            label={label}
+            required={required}
+            orientation={orientation}
+        >
             <ArchivoAttachmentLayout
                 disabled={disabled}
                 aria-disabled={disabled}
@@ -53,8 +47,8 @@ function AttachmentField({
 }
 
 export {
+    type AttachmentFieldType as ArchivoAttachmentFieldType,
     useArchivoAttachmentState as useArchivoAttachmentFieldState,
     useAttachmentFieldContext as useArchivoAttachmentFieldContext,
-    type AttachmentFieldType as ArchivoAttachmentFieldType,
     AttachmentField as ArchivoAttachmentField
 }

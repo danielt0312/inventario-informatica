@@ -1,12 +1,11 @@
 import { FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
 import { useArchivoFieldContext } from "./hooks/use-field-context";
 import { ArchivoUploaderLayout } from "./uploader";
-import { useStore } from "@tanstack/react-form";
 
 const useUploaderFieldContext = useArchivoFieldContext;
 
 type UploaderProps = React.ComponentProps<typeof ArchivoUploaderLayout>;
-interface UploaderFieldProps extends Omit<UploaderProps, 'orientation'>, CoreFieldLayoutProps {
+interface UploaderFieldProps extends Omit<UploaderProps, 'orientation'>, Omit<CoreFieldLayoutProps, 'errors'> {
     uploaderOrientation?: UploaderProps['orientation'];
 }
 
@@ -15,7 +14,6 @@ function UploaderField({
     className,
     description,
     disabled,
-    errors,
     required,
     orientation,
     uploaderOrientation,
@@ -24,24 +22,19 @@ function UploaderField({
     ...props
 }: UploaderFieldProps) {
     const field = useUploaderFieldContext();
-
-    const fieldProps: CoreFieldLayoutProps = {
-        className,
-        description,
-        disabled,
-        errors: errors !== undefined
-            ? errors
-            : field.state.meta.errors,
-        label,
-        required,
-        orientation
-    }
-
-    const fieldValue = useStore(field.store, (state) => state.value);
+    const fieldValue = field.state.value;
     const derivedValue = fieldValue === undefined ? undefined : value;
 
     return (
-        <FieldLayout {...fieldProps}>
+        <FieldLayout
+            className={className}
+            description={description}
+            disabled={disabled}
+            errors={field.state.meta.errors}
+            label={label}
+            required={required}
+            orientation={orientation}
+        >
             <ArchivoUploaderLayout
                 value={derivedValue}
                 orientation={uploaderOrientation}
