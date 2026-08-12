@@ -1,7 +1,7 @@
 import { CreatableCombobox } from "../ui/creatable-combobox";
-import { Field, type FieldProps } from "../ui/field-layout";
+import { FieldLayout, type CoreFieldLayoutProps } from "../ui/field-layout";
 
-export interface CreatableComboboxFieldProps extends Omit<React.ComponentProps<typeof CreatableCombobox>, 'children'>, FieldProps {
+export interface CreatableComboboxFieldProps extends Omit<React.ComponentProps<typeof CreatableCombobox>, 'children'>, CoreFieldLayoutProps {
 }
 export const CreatableComboboxField = ({
     className,
@@ -13,14 +13,14 @@ export const CreatableComboboxField = ({
     orientation,
     ...props
 }: CreatableComboboxFieldProps) => {
-    const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
+    const fieldProps: CoreFieldLayoutProps = { className, description, disabled, errors, label, required, orientation };
 
     return (
-        <Field {...fieldProps}>
+        <FieldLayout {...fieldProps}>
             <CreatableCombobox
                 disabled={disabled}
                 {...props}
             />
-        </Field>
+        </FieldLayout>
     );
 }

@@ -1,4 +1,4 @@
-import { InputField } from "@/components/composed/@tanstack/form/input-field";
+import { InputField } from "@/components/ui/input-field";
 
 export type NombreField = InputField;
 export const NombreField = ({

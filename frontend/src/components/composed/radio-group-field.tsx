@@ -1,7 +1,7 @@
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { AsideField, Field, type FieldProps } from "../ui/field-layout";
+import { AsideFieldLayout, FieldLayout, type CoreFieldLayoutProps } from "../ui/field-layout";
 
-export interface RadioGroupFieldProps extends Omit<React.ComponentProps<typeof RadioGroup>, 'orientation'>, FieldProps {
+export interface RadioGroupFieldProps extends Omit<React.ComponentProps<typeof RadioGroup>, 'orientation'>, CoreFieldLayoutProps {
     radioGroupOrientation?: React.ComponentProps<typeof RadioGroup>['orientation'];
 }
 export const RadioGroupField = ({
@@ -15,21 +15,21 @@ export const RadioGroupField = ({
     radioGroupOrientation,
     ...props
 }: RadioGroupFieldProps) => {
-    const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
+    const fieldProps: CoreFieldLayoutProps = { className, description, disabled, errors, label, required, orientation };
 
     return (
-        <Field {...fieldProps}>
+        <FieldLayout {...fieldProps}>
             <RadioGroup
                 orientation={radioGroupOrientation}
                 disabled={disabled}
                 required={required}
                 {...props}
             />
-        </Field>
+        </FieldLayout>
     );
 }
 
-export interface RadioGroupFieldItemProps extends Omit<React.ComponentProps<typeof RadioGroupItem>, 'children'>, FieldProps {
+export interface RadioGroupFieldItemProps extends Omit<React.ComponentProps<typeof RadioGroupItem>, 'children'>, CoreFieldLayoutProps {
 }
 export const RadioGroupFieldItem = ({
     className,
@@ -41,15 +41,15 @@ export const RadioGroupFieldItem = ({
     orientation,
     ...props
 }: RadioGroupFieldItemProps) => {
-    const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
+    const fieldProps: CoreFieldLayoutProps = { className, description, disabled, errors, label, required, orientation };
 
     return (
-        <AsideField {...fieldProps}>
+        <AsideFieldLayout {...fieldProps}>
             <RadioGroupItem
                 required={required}
                 disabled={disabled}
                 {...props}
             />
-        </AsideField>
+        </AsideFieldLayout>
     );
 }

@@ -1,4 +1,4 @@
-import { InputField } from "@/components/composed/@tanstack/form/input-field";
+import { InputField } from "@/components/ui/input-field";
 import React from "react";
 
 export type NombreField = InputField;

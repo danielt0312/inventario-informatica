@@ -1,6 +1,6 @@
 import type { Archivo } from "@/types/documentos";
 import { Attachment, AttachmentAction } from "@/components/ui/attachment";
-import { Field, type FieldProps } from "../ui/field-layout";
+import { FieldLayout, type CoreFieldLayoutProps } from "../ui/field-layout";
 import { EyeIcon } from "lucide-react";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 interface AttachmentProps extends React.ComponentProps<typeof Attachment> {
 }
 
-interface AttachmentFieldProps extends AttachmentProps, Omit<FieldProps, 'orientation'> {
+interface AttachmentFieldProps extends AttachmentProps, Omit<CoreFieldLayoutProps, 'orientation'> {
     attachmentOrientation?: AttachmentProps['orientation'];
 }
 export function AttachmentField({
@@ -22,15 +22,15 @@ export function AttachmentField({
     attachmentOrientation,
     ...props
 }: AttachmentFieldProps) {
-    const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
+    const fieldProps: CoreFieldLayoutProps = { className, description, disabled, errors, label, required, orientation };
 
     return (
-        <Field {...fieldProps}>
+        <FieldLayout {...fieldProps}>
             <Attachment
                 orientation={attachmentOrientation}
                 {...props}
             />
-        </Field>
+        </FieldLayout>
     );
 }
 

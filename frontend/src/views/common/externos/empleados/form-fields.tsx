@@ -6,7 +6,7 @@ import type { Empleado } from "@/types/externos";
 import { toComboboxOptions } from "@/lib/utils";
 import type { AdscripcionField } from "../adscripciones/form-fields";
 
-export type EmpleadoField = CreatableComboboxField;
+export type EmpleadoFieldType = CreatableComboboxField;
 interface EmpleadoFieldProps extends Omit<React.ComponentProps<typeof CreatableComboboxField>, 'enabled' | 'options'> {
     adscripcion: AdscripcionField;
 }

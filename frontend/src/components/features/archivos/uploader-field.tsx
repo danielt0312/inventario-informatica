@@ -1,4 +1,4 @@
-import { Field, type FieldProps } from "@/components/ui/field-layout";
+import { FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
 import { useArchivoFieldContext } from "./hooks/use-field-context";
 import { ArchivoUploaderLayout } from "./uploader";
 import { useStore } from "@tanstack/react-form";
@@ -6,7 +6,7 @@ import { useStore } from "@tanstack/react-form";
 const useUploaderFieldContext = useArchivoFieldContext;
 
 type UploaderProps = React.ComponentProps<typeof ArchivoUploaderLayout>;
-interface UploaderFieldProps extends Omit<UploaderProps, 'orientation'>, FieldProps {
+interface UploaderFieldProps extends Omit<UploaderProps, 'orientation'>, CoreFieldLayoutProps {
     uploaderOrientation?: UploaderProps['orientation'];
 }
 
@@ -25,7 +25,7 @@ function UploaderField({
 }: UploaderFieldProps) {
     const field = useUploaderFieldContext();
 
-    const fieldProps: FieldProps = {
+    const fieldProps: CoreFieldLayoutProps = {
         className,
         description,
         disabled,
@@ -41,7 +41,7 @@ function UploaderField({
     const derivedValue = fieldValue === undefined ? undefined : value;
 
     return (
-        <Field {...fieldProps}>
+        <FieldLayout {...fieldProps}>
             <ArchivoUploaderLayout
                 value={derivedValue}
                 orientation={uploaderOrientation}
@@ -64,7 +64,7 @@ function UploaderField({
                 onRedoClick={() => field.setErrorMap({ onSubmit: undefined })}
                 {...props}
             />
-        </Field>
+        </FieldLayout>
     );
 }
 

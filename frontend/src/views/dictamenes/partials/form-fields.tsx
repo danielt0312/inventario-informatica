@@ -1,10 +1,10 @@
 import { DatePickerField } from "@/components/composed/@tanstack/form/date-picker-field";
-import { InputField, NumberInputField } from "@/components/composed/@tanstack/form/input-field";
+import { InputField, NumberInputField, type InputFieldType, type NumberInputFieldType } from "@/components/ui/input-field";
 import { TextareaField } from "@/components/composed/@tanstack/form/textarea-field";
 import { ArchivoUploaderField, type ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
 import React from "react";
 
-export type CantidadField = NumberInputField;
+export type CantidadFieldType = NumberInputFieldType;
 export const CantidadField = ({
     label = "Cantidad",
     placeholder = "Ingresa la cantidad solicitada",
@@ -19,7 +19,7 @@ export const CantidadField = ({
     />
 );
 
-export type FolioField = InputField;
+export type FolioFieldType = InputFieldType;
 export const FolioField = ({
     label = "Folio del oficio de solicitud",
     placeholder = "Ingresa el folio del oficio de la solicitud",

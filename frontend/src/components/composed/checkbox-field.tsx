@@ -1,7 +1,7 @@
 import { Checkbox } from "../ui/checkbox";
-import { AsideField, Field, type FieldProps } from "../ui/field-layout";
+import { AsideFieldLayout, FieldLayout, type CoreFieldLayoutProps } from "../ui/field-layout";
 
-export interface CheckboxFieldItemProps extends Omit<React.ComponentProps<typeof Checkbox>, 'children'>, FieldProps {
+export interface CheckboxFieldItemProps extends Omit<React.ComponentProps<typeof Checkbox>, 'children'>, CoreFieldLayoutProps {
 }
 export const CheckboxFieldItem = ({
     className,
@@ -13,21 +13,21 @@ export const CheckboxFieldItem = ({
     orientation,
     ...props
 }: CheckboxFieldItemProps) => {
-    const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
+    const fieldProps: CoreFieldLayoutProps = { className, description, disabled, errors, label, required, orientation };
 
     return (
-        <AsideField {...fieldProps}>
+        <AsideFieldLayout {...fieldProps}>
             <Checkbox
                 required={required}
                 disabled={disabled}
                 {...props}
             />
-        </AsideField>
+        </AsideFieldLayout>
     );
 }
 
-export interface CheckboxFieldProps extends React.ComponentProps<typeof Field> {
+export interface CheckboxFieldProps extends React.ComponentProps<typeof FieldLayout> {
 }
 export const CheckboxField = (props: CheckboxFieldProps) => (
-    <Field {...props} />
+    <FieldLayout {...props} />
 );

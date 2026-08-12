@@ -5,9 +5,9 @@ import type { Adscripcion } from "@/types/externos";
 import type { TResponse } from "@/types/generics";
 import { useQuery } from "@tanstack/react-query";
 
-export type AdscripcionField = CreatableComboboxField;
 interface AdscripcionFieldProps extends Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options'> {
 }
+export type AdscripcionFieldType = CreatableComboboxField;
 export const AdscripcionField = ({
     label = "Área de Adscripción",
     ...props

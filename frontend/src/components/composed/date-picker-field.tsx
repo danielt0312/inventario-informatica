@@ -1,11 +1,11 @@
 import React from "react";
 import { DatePicker, type DatePickerProps } from "../ui/date-picker";
-import type { FieldProps } from "../ui/field-layout";
+import type { CoreFieldLayoutProps } from "../ui/field-layout";
 import { fromISO, toISODate } from "@/lib/utils";
-import { Field } from "../ui/field-layout";
+import { FieldLayout } from "../ui/field-layout";
 
 export type DatePickerField = Date | string | undefined;
-export interface DatePickerFieldProps<T extends DatePickerField = Date> extends Omit<DatePickerProps, 'disabled' | 'value' | 'onValueChange'>, FieldProps {
+export interface DatePickerFieldProps<T extends DatePickerField = Date> extends Omit<DatePickerProps, 'disabled' | 'value' | 'onValueChange'>, CoreFieldLayoutProps {
     value?: T;
     onValueChange?: (value: T) => void;
     parseValue?: (d: DatePickerProps['value']) => T;
@@ -30,10 +30,10 @@ export const DatePickerField = <T extends DatePickerField = Date>({
         return fromISO(value);
     }, [value]);
 
-    const fieldProps: FieldProps = { className, description, disabled, errors, label, required, orientation };
+    const fieldProps: CoreFieldLayoutProps = { className, description, disabled, errors, label, required, orientation };
 
     return (
-        <Field {...fieldProps}>
+        <FieldLayout {...fieldProps}>
             <DatePicker
                 value={dateValue}
                 onValueChange={(date) => onValueChange?.(parseValue(date))}
@@ -41,6 +41,6 @@ export const DatePickerField = <T extends DatePickerField = Date>({
                 required={required}
                 {...props}
             />
-        </Field>
+        </FieldLayout>
     );
 }

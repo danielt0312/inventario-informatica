@@ -60,7 +60,7 @@ export function Form() {
                     />
                     <form.AppField
                         name="adscripcion_id"
-                        children={() => <AdscripcionField label="Área de Adscripción solicitante" />}
+                        children={() => <AdscripcionField label="Área de Adscripción solicitante" required />}
                     />
                     <form.AppField
                         name="folio"
@@ -99,7 +99,7 @@ export function Form() {
                                             <form.AppField
                                                 name={`adquisiciones[${index}].producto_tipo_id`}
                                                 children={() => (
-                                                    <ProductoTipoField />
+                                                    <ProductoTipoField required />
                                                 )}
                                                 listeners={{
                                                     onChange: ({ value }) => {
@@ -129,6 +129,7 @@ export function Form() {
                                                 <EmpleadoField
                                                     label="Resguardante"
                                                     adscripcion={adscripcion}
+                                                    required
                                                 />
                                             )}
                                         />

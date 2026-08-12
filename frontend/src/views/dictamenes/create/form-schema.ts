@@ -8,18 +8,17 @@ import {
 } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
 import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
-import type { NullableNumeroInventarioField } from "@/views/common/articulos/form-fields";
-import type { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
-import type { AdscripcionField } from "@/views/common/externos/adscripciones/form-fields";
-import type { FechaSolicitudField, FolioField, OficioFieldType } from "../partials/form-fields";
-import type { NumberInputField } from "@/components/composed/@tanstack/form/input-field";
+import type { NullableNumeroInventarioFieldType } from "@/views/common/articulos/form-fields";
+import type { EmpleadoFieldType } from "@/views/common/externos/empleados/form-fields";
+import type { AdscripcionFieldType } from "@/views/common/externos/adscripciones/form-fields";
+import type { CantidadFieldType, FechaSolicitudField, FolioFieldType, OficioFieldType } from "../partials/form-fields";
 import z from "zod";
 
 type AdquisicionFields = {
     producto_tipo_id: ProductoTipoField;
-    numero_inventario: NullableNumeroInventarioField;
-    cantidad: NumberInputField;
-    empleado_id: EmpleadoField;
+    numero_inventario: NullableNumeroInventarioFieldType;
+    cantidad: CantidadFieldType;
+    empleado_id: EmpleadoFieldType;
 }
 
 export const productoFieldsDefaultValues: AdquisicionFields = {
@@ -30,9 +29,9 @@ export const productoFieldsDefaultValues: AdquisicionFields = {
 } as const;
 
 export type Schema = {
-    folio: FolioField;
+    folio: FolioFieldType;
     fecha_solicitud: FechaSolicitudField;
-    adscripcion_id: AdscripcionField;
+    adscripcion_id: AdscripcionFieldType;
     archivo_uuid: OficioFieldType;
     adquisiciones: AdquisicionFields[];
 }

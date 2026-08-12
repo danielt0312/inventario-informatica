@@ -2,7 +2,7 @@ import { RadioGroupField, RadioGroupFieldItem } from "@/components/composed/@tan
 import { cn } from "@/lib/utils";
 import type { RadioGroupFieldItemProps } from "../../composed/radio-group-field";
 
-export type BooleanField = boolean | undefined;
+export type BooleanFieldType = boolean | undefined;
 export const BooleanField = ({
     className,
     truthyLabel = "Sí",

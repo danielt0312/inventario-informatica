@@ -1,6 +1,6 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { SubmitButton } from './form-components';
-import { InputField } from './input-field';
+import { InputField } from '../../../ui/input-field';
 import { CreatableComboboxField } from './creatable-combobox-field';
 import { CheckboxField, CheckboxFieldItem } from './checkbox-field';
 import { DatePickerField } from './date-picker-field';

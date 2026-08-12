@@ -2,7 +2,7 @@ import { CaracteristicasField, type FechaSolicitudField, type FolioField, type O
 import type { ProductoTipoField } from "@/views/common/productos/tipos/form-fields";
 import type { ProductoField } from "@/views/common/productos/form-fields";
 import type { NullableNumeroInventarioField } from "@/views/common/articulos/form-fields";
-import type { NumberInputField } from "@/components/composed/@tanstack/form/input-field";
+import type { NumberInputFieldType } from "@/components/ui/input-field";
 import type { EmpleadoField } from "@/views/common/externos/empleados/form-fields";
 import type { DetailedSurtirDictamen } from "@/types/dictamenes";
 import z from "zod";
