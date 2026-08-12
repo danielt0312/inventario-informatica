@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Dictamen;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 use App\Models\{
     OrdenCompra,
@@ -25,15 +26,12 @@ class InventariarDictamenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'orden_compra_uuid' => [
-                'bail',
-                'uuid',
+            'orden_compra_id' => [
+                'required',
+                'integer',
                 function (string $attribute, string $value, \Closure $fail) {
-                    $ordenCompra = OrdenCompra::findByArchivoUuid($value)
-                        ->first();
-
-                    if (empty($ordenCompra)) return $fail('Orden compra not found');
-
+                    $ordenCompra = OrdenCompra::find($value);
+                    if (empty($ordenCompra)) return $fail('validation.exists');
                     $this->setOrdenCompra($ordenCompra);
                 }
             ],
@@ -81,20 +79,39 @@ class InventariarDictamenRequest extends FormRequest
                 'required',
                 'numeric',
             ],
-            'adquisiciones.*.factura_uuid' => [
-                'bail',
+            'adquisiciones.*.factura_id' => [
                 'required',
-                'uuid',
-                function (string $attribute, string $value, \Closure $fail) {
-                    $factura = Factura::findByArchivoUuid($value)
-                        ->first();
-
-                    if (empty($factura)) return $fail('factura not found');
-
-                    $this->setFactura($factura, $value);
-                }
+                'integer',
+                'exists:facturas,id'
             ]
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            $errors = $validator->errors();
+
+            if ($errors->has('orden_compra_id')) return;
+
+            foreach ($this->input('adquisiciones', []) as $index => $adquisiciones) {
+                if ($errors->has("adquisiciones.$index.factura_id") ||  $errors->has("adquisiciones.$index.cuenta_contable")) return;
+
+                $factura = Factura::query()
+                    ->join('factura_orden_compra', 'factura_orden_compra.factura_id', '=', 'facturas.id')
+                    ->join('orden_compras', 'orden_compras.id', '=', 'factura_orden_compra.orden_compra_id')
+                    ->where('facturas.id', $adquisiciones['factura_id'])
+                    ->where('orden_compras.id', $this->orden_compra_id)
+                    ->select('facturas.*')
+                    ->first();
+
+                if (! $factura) {
+                   return $errors->add("adquisiciones.$index.factura_id", 'Debes de proporcionar una factura relacionada con la orden de compra seleccionada');
+                }
+
+                $this->setFacturas($adquisiciones['cuenta_contable'], $factura);
+            }
+        });
     }
 
     protected function setOrdenCompra(OrdenCompra $ordenCompra): void
@@ -107,13 +124,15 @@ class InventariarDictamenRequest extends FormRequest
         return $this->ordenCompra;
     }
 
-    protected function setFactura(Factura $factura, string $uuid)
+    protected function setFacturas(string $key, Factura $factura): void
     {
-        $this->facturas[$uuid] = $factura;
+        $this->facturas[$key] = $factura;
     }
 
-    public function getFactura(string $uuid): Factura | null
+    public function getFacturas(null|string $key = null): array | Factura | null
     {
-        return $this->facturas[$uuid];
+        return $key !== null
+            ? $this->facturas[$key]
+            : $this->facturas;
     }
 }

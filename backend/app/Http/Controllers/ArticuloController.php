@@ -15,11 +15,11 @@ class ArticuloController extends Controller
         return QueryBuilder::for(Articulo::class)
             ->with(['estado', 'producto.tipo.categoria', 'producto.marca'])
             ->allowedFilters(
-                AllowedFilter::exact('categorias', 'producto.tipo.categoria.id'),
-                AllowedFilter::exact('tipos', 'producto.tipo.id'),
-                AllowedFilter::exact('marcas', 'producto.marca.id'),
-                AllowedFilter::exact('productos', 'producto_id'),
-                AllowedFilter::exact('estados', 'estado_id'),
+                AllowedFilter::belongsTo('categorias', 'producto.tipo.categoria.id'),
+                AllowedFilter::belongsTo('tipos', 'producto.tipo.id'),
+                AllowedFilter::belongsTo('marcas', 'producto.marca.id'),
+                AllowedFilter::belongsTo('productos'),
+                AllowedFilter::belongsTo('estados'),
             )
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();

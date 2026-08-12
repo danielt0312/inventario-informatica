@@ -240,7 +240,7 @@ class DictamenController extends ArchivableController
             $validated = $request->validated();
 
             foreach ($validated['adquisiciones'] as $payloadAdquisicion) {
-                $factura = $request->getFactura($payloadAdquisicion['factura_uuid']);
+                $factura = $request->getFacturas($payloadAdquisicion['cuenta_contable']);
 
                 $articulo = $factura->articulos()->create($payloadAdquisicion);
 
