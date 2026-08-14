@@ -150,7 +150,12 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
 
                                             <form.AppField
                                                 name={`adquisiciones[${index}].factura_id`}
-                                                children={() => <FacturaField ordenCompra={ordenCompra} disabled={!ordenCompra} />}
+                                                children={() => (
+                                                    <FacturaField
+                                                        proveedorId={ordenCompra?.proveedor.id}
+                                                        disabled={!ordenCompra}
+                                                    />
+                                                )}
                                             />
                                         </FieldGroup>
                                     </CardContent>

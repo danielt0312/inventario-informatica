@@ -16,7 +16,14 @@ class InventariarDictamenRequest extends FormRequest
     use InteractsWithDictamen, InteractsWithArticulos;
 
     private OrdenCompra $ordenCompra;
-    private array $facturas;
+    /**
+     * Facturas únicas que fueron enviadas en el payload
+     */
+    private array $facturas = [];
+    /**
+     * Facturas únicas relacionadas a la adquisición
+     */
+    private array $facturaAdquisiciones = [];
 
     public function authorize(): bool
     {
@@ -92,24 +99,45 @@ class InventariarDictamenRequest extends FormRequest
         $validator->after(function (Validator $validator) {
             $errors = $validator->errors();
 
-            if ($errors->has('orden_compra_id')) return;
+            if ($errors->has('orden_compra_id') || $errors->has('adquisiciones')) return;
 
             foreach ($this->input('adquisiciones', []) as $index => $adquisiciones) {
-                if ($errors->has("adquisiciones.$index.factura_id") ||  $errors->has("adquisiciones.$index.cuenta_contable")) return;
+                if ($errors->has("adquisiciones.$index.factura_id") || $errors->has("adquisiciones.$index.cuenta_contable")) return;
+
+                [
+                    'factura_id' => $facturaId,
+                    'cuenta_contable' => $cuentaContable,
+                ] = $adquisiciones;
+
+                $esFacturaValida = false;
+                foreach ($this->getFacturas() as $factura) {
+                    if ($factura->id === $facturaId) {
+                        $esFacturaValida = true;
+                        break;
+                    }
+                }
+                if ($esFacturaValida) break;
 
                 $factura = Factura::query()
-                    ->join('factura_orden_compra', 'factura_orden_compra.factura_id', '=', 'facturas.id')
-                    ->join('orden_compras', 'orden_compras.id', '=', 'factura_orden_compra.orden_compra_id')
-                    ->where('facturas.id', $adquisiciones['factura_id'])
+                    ->join('proveedores', 'proveedores.id', '=', 'facturas.proveedor_id')
+                    ->join('orden_compras', 'orden_compras.proveedor_id', '=', 'proveedores.id')
+                    ->where('facturas.id', $facturaId)
                     ->where('orden_compras.id', $this->orden_compra_id)
                     ->select('facturas.*')
                     ->first();
 
                 if (! $factura) {
-                   return $errors->add("adquisiciones.$index.factura_id", 'Debes de proporcionar una factura relacionada con la orden de compra seleccionada');
+                    logger()->warning('Factura no pertenece a Proveedor de Orden de Compra', [
+                        'payload' => $validator->getData(),
+                        'user_id' => auth()->id(),
+                        'ip' => $this->ip(),
+                    ]);
+
+                   return $errors->add("adquisiciones.$index.factura_id", 'La factura proporcionada no pertenece al mismo proveedor que la orden de compra indicada');
                 }
 
-                $this->setFacturas($adquisiciones['cuenta_contable'], $factura);
+                $this->setFacturas($factura);
+                $this->setFacturaAdquisiciones($cuentaContable, $factura);
             }
         });
     }
@@ -124,15 +152,25 @@ class InventariarDictamenRequest extends FormRequest
         return $this->ordenCompra;
     }
 
-    protected function setFacturas(string $key, Factura $factura): void
+    protected function setFacturas(Factura $factura): void
     {
-        $this->facturas[$key] = $factura;
+        $this->facturas[] = $factura;
     }
 
-    public function getFacturas(null|string $key = null): array | Factura | null
+    public function getFacturas(): array
     {
-        return $key !== null
-            ? $this->facturas[$key]
-            : $this->facturas;
+        return $this->facturas;
+    }
+
+    protected function setFacturaAdquisiciones(string $cuentaContable, Factura $factura): void
+    {
+        $this->facturaAdquisiciones[$cuentaContable] = $factura;
+    }
+
+    public function getFacturaAdquisiciones(string|null $cuentaContable = null): array | Factura | null
+    {
+        return $cuentaContable !== null
+            ? $this->facturaAdquisiciones[$cuentaContable]
+            : $this->facturaAdquisiciones;
     }
 }

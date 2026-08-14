@@ -20,14 +20,10 @@ class StoreFacturaRequest extends FormRequest
                 'max:64',
                 'unique:facturas,folio'
             ],
-            'orden_compra_id' => [
+            'proveedor_id' => [
                 'required',
                 'integer',
-                function (string $attribute, string $value) {
-                    $ordenCompra = OrdenCompra::find($value);
-                    if (! $ordenCompra) return $fail('validation.exists');
-                    $this->setOrdenCompra($ordenCompra);
-                }
+                'exists:proveedores,id'
             ],
             'fecha_emision' => [
                 'required',
@@ -36,15 +32,5 @@ class StoreFacturaRequest extends FormRequest
             ],
             'archivo_uuid' => $this->archivoRules(),
         ];
-    }
-
-    protected function setOrdenCompra(OrdenCompra $ordenCompra)
-    {
-        $this->ordenCompra = $ordenCompra;
-    }
-
-    public function getOrdenCompra(): OrdenCompra
-    {
-        return $this->ordenCompra;
     }
 }

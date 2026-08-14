@@ -6,16 +6,16 @@ import { useFieldContext } from "@/components/ui/form-context";
 import { ArchivoAttachmentField, useArchivoAttachmentFieldState } from "@/components/features/archivos/attachment-field";
 import { facturaTableInitialState } from "./partials/table-cols";
 import React from "react";
-import type { OrdenCompra } from "@/types/orden_compras";
+import type { ProveedorFieldType } from "../proveedores/form-fields";
 
 export type FacturaFieldType = number | undefined;
 export const FacturaField = ({
     value,
-    ordenCompra,
+    proveedorId,
     label = 'Adjuntar factura',
     ...props
 }: React.ComponentProps<typeof ArchivoAttachmentField> & {
-    ordenCompra?: OrdenCompra;
+    proveedorId?: ProveedorFieldType;
 }) => {
     const field = useFieldContext<FacturaFieldType>();
     const [open, setOpen] = React.useState(false);
@@ -40,7 +40,7 @@ export const FacturaField = ({
                     </DialogHeader>
 
                     <FacturaTable
-                        ordenCompra={ordenCompra}
+                        proveedorId={proveedorId}
                         columns={[{
                             id: 'factura.selector',
                             cell: ({ row }) => (

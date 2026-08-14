@@ -229,18 +229,17 @@ class DictamenController extends ArchivableController
             'estado_id' => DictamenEstadoEnum::INVENTARIAR->value
         ]);
 
-        return $dictamen->toResource()
-            ->response()
-            ->setStatusCode(200);
+        return $dictamen->toResourceResponse();
     }
 
     public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen)
     {
         $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
             $validated = $request->validated();
+            $ordenCompra = $request->getOrdenCompra();
 
             foreach ($validated['adquisiciones'] as $payloadAdquisicion) {
-                $factura = $request->getFacturas($payloadAdquisicion['cuenta_contable']);
+                $factura = $request->getFacturaAdquisiciones($payloadAdquisicion['cuenta_contable']);
 
                 $articulo = $factura->articulos()->create($payloadAdquisicion);
 
@@ -254,9 +253,11 @@ class DictamenController extends ArchivableController
                 ]);
             }
 
-            $dictamen->ordenCompra()
-                ->associate($request->getOrdenCompra())
-                ->save();
+            foreach ($request->getFacturas() as $factura) {
+                $factura->ordenCompras()->syncWithoutDetaching($ordenCompra);
+            }
+
+            $dictamen->ordenCompra()->associate($ordenCompra)->save();
 
             // todo establer estado de manera dinamica según la adquisición
             $dictamen->update([
@@ -266,8 +267,6 @@ class DictamenController extends ArchivableController
             return $dictamen;
         });
 
-        return $dictamen->toResource()
-            ->response()
-            ->setStatusCode(200);
+        return $dictamen->toResourceResponse();
     }
 }

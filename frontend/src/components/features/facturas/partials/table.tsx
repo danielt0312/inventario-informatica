@@ -8,15 +8,15 @@ import { QueryDataTable } from "@/components/ui/query-datatable";
 import { facturaTableInitialState, getFacturaDefaultColumns } from "./table-cols";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import { formOptions } from "@tanstack/react-form";
+import type { ProveedorFieldType } from "../../proveedores/form-fields";
 import React from "react";
-import type { OrdenCompra } from "@/types/orden_compras";
 
 interface FacturaFieldProps extends Omit<React.ComponentProps<typeof QueryDataTable<Factura>>, 'queryKey' | 'url'> {
-    ordenCompra?: OrdenCompra;
+    proveedorId?: ProveedorFieldType;
 }
 
 export function FacturaTable({
-    ordenCompra,
+    proveedorId,
     tableOptions,
     columns = [],
     ...props
@@ -37,7 +37,7 @@ export function FacturaTable({
         ...defaultDialogFormOptions,
         defaultValues: {
             ...defaultDialogFormOptions.defaultValues,
-            orden_compra_id: ordenCompra?.id,
+            proveedor_id: proveedorId,
         }
     });
 
@@ -76,7 +76,7 @@ export function FacturaTable({
                     </Dialog>
                 </>
             )}
-            filter={{ proveedor: ordenCompra?.proveedor.id }}
+            filter={{ proveedor: proveedorId }}
             tableOptions={{
                 ...tableOptions,
                 initialState: {

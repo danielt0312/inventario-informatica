@@ -16,7 +16,7 @@ class FacturaController extends ArchivableController
     {
         return QueryBuilder::for(Factura::class)
             ->allowedFilters(
-                AllowedFilter::exact('proveedor', 'ordenCompras.proveedor.id'),
+                AllowedFilter::belongsTo('proveedor'),
             )
             ->with('archivo')
             ->paginate($request->query('per_page', 10))
@@ -26,27 +26,19 @@ class FacturaController extends ArchivableController
     public function store(StoreFacturaRequest $request)
     {
         $factura = DB::transaction(function () use ($request): Factura {
-            $ordenCompra = $request->getOrdenCompra();
             $archivoPayload = $request->getArchivo();
-
-            $archivoPayload->temporal?->delete();
+            $archivoPayload->temporal->delete();
 
             $documento = $archivoPayload->documento()->create([
                 'tipo_id' => DocumentoTipoEnum::FACTURA->value
             ]);
 
-            $factura = $documento->factura()->create([
-                ...$request->validated(),
-                'proveedor_id' => $ordenCompra->proveedor_id,
-                'documento_id' => $documento->id
-            ]);
-
-            $factura->ordenCompras()->attach($ordenCompra);
+            $factura = $documento->factura()->create($request->validated());
 
             return $factura;
         });
 
-        return $factura->load('archivo')
+        return $factura->load(['archivo', 'proveedor'])
             ->toResourceResponse(201);
     }
 }
