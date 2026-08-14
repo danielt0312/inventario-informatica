@@ -5,7 +5,6 @@ import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { Form } from "@/components/ui/form";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { CantidadField, CaracteristicasField, FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,6 +19,7 @@ import { useFormMutation } from "@/hooks/use-form-mutation";
 import type { DetailedSurtirDictamen, SurtirDictamen } from "@/types/dictamenes";
 import React from "react";
 import { FieldValue } from "@/components/ui/field-value";
+import { ShowBienesInformaticosTitle } from "../partials/show-info";
 
 function useEditFormMutation(dictamen: SurtirDictamen) {
     const navigate = useNavigate();
@@ -89,7 +89,7 @@ export const DictamenEditarForm = () => {
                     {(field) => (
                         <>
                             <div className="flex flex-row justify-between">
-                                <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
+                                <ShowBienesInformaticosTitle />
                                 <Button
                                     variant="outline"
                                     size="sm"

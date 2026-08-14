@@ -1,9 +1,33 @@
 import { FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
-import { Input } from "@/components/ui/input";
+import { Input as InputPrimitive } from "@/components/ui/input";
 import { useFieldContext } from "./form-context";
+import { InputGroup, InputGroupInput } from "./input-group";
 import React from "react";
 
-interface CoreInputFieldProps extends Omit<React.ComponentProps<typeof Input>, 'children' | 'name' | 'value' | 'onChange'>, Omit<CoreFieldLayoutProps, 'children' | 'errors'> {
+type InputType = string | undefined;
+function Input({
+    children,
+    ...props
+}: React.ComponentProps<typeof InputGroupInput>) {
+    const field = useFieldContext<InputType>();
+
+    return (
+        <InputGroup>
+            <InputGroupInput
+                name={field.name}
+                value={field.state.value ?? ''}
+                onChange={(e) => field.handleChange(e.target.value.trim() !== ''
+                    ? e.target.value
+                    : undefined
+                )}
+                {...props}
+            />
+            {children}
+        </InputGroup>
+    );
+}
+
+interface CoreInputFieldProps extends Omit<React.ComponentProps<typeof InputPrimitive>, 'name' | 'value' | 'onChange'>, Omit<CoreFieldLayoutProps, 'errors'> {
 }
 
 type InputFieldType = string | undefined;
@@ -22,15 +46,7 @@ function InputField({
             required={required}
             orientation={orientation}
         >
-            <Input
-                name={field.name}
-                value={field.state.value ?? ''}
-                onChange={(e) => field.handleChange(e.target.value.trim() !== ''
-                    ? e.target.value
-                    : undefined
-                )}
-                {...inputProps}
-            />
+            <Input {...inputProps} />
         </FieldLayout>
     );
 };
@@ -51,7 +67,7 @@ function NullableInputField({
             required={required}
             orientation={orientation}
         >
-            <Input
+            <InputPrimitive
                 name={field.name}
                 value={field.state.value ?? ''}
                 onChange={(e) => field.handleChange(e.target.value.trim() !== ''
@@ -87,7 +103,7 @@ function NumberInputField({
             required={required}
             orientation={orientation}
         >
-            <Input
+            <InputPrimitive
                 name={field.name}
                 value={rawValue}
                 onChange={(e) => {
@@ -124,7 +140,7 @@ function NullableNumberInputField({
             required={required}
             orientation={orientation}
         >
-            <Input
+            <InputPrimitive
                 name={field.name}
                 value={rawValue}
                 onChange={(e) => {
@@ -148,6 +164,8 @@ export {
     type NumberInputFieldType,
     type NullableInputFieldType,
     type NullableNumberInputFieldType,
+    type InputType,
+    Input,
     InputField,
     NumberInputField,
     NullableInputField,

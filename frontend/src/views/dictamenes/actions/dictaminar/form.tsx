@@ -8,6 +8,7 @@ import { Form as PrimitiveForm } from "@/components/ui/form";
 import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { CaracteristicasField } from "../../partials/form-fields";
 import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 
 export const useForm = (dictamen: DetailedActionDictaminarDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -29,7 +30,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
 
     return (
         <PrimitiveForm form={form}>
-            <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
+            <ShowBienesInformaticosTitle />
 
             <form.AppForm>
                 {dictamen.version_actual.adquisiciones.map((adquisicion, index) => {

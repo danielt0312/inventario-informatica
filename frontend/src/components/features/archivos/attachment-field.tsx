@@ -22,8 +22,7 @@ function AttachmentField({
     ...props
 }: AttachmentFieldProps) {
     const field = useAttachmentFieldContext();
-    const fieldValue = useStore(field.store, (state) => state.value);
-    const derivedValue = fieldValue === undefined ? undefined : value;
+    const derivedValue = field.state.value === undefined ? undefined : value;
 
     return (
         <FieldLayout

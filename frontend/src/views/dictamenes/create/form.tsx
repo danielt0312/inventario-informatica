@@ -1,7 +1,6 @@
 import { useAppForm } from "@/components/ui/form-context";
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
-import { Label } from "@/components/ui/label";
 import { PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { dictamenDefaultValues, productoFieldsDefaultValues, validator } from "./form-schema";
 import { useStore } from "@tanstack/react-form";
@@ -17,6 +16,7 @@ import { ProductoTipoField } from "@/components/features/productos/tipos/form-fi
 import { NumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { DictamenProducto } from "@/lib/utils";
 import React from "react";
+import { ShowBienesInformaticosTitle } from "../partials/show-info";
 
 export function useCreateFormMutation() {
     const navigate = useNavigate();
@@ -77,7 +77,7 @@ export function Form() {
                     {(field) => (
                         <>
                             <div className="flex flex-row justify-between">
-                                <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
+                                <ShowBienesInformaticosTitle />
                                 <Button
                                     variant="outline"
                                     size="sm"

@@ -10,12 +10,12 @@ import type { OrdenCompraFieldType } from "@/components/features/orden_compras/f
 import z from "zod";
 
 type AdquisicionFields = RecepcionFieldGroup & {
-    id: number;
+    id: number | undefined;
     cuenta_contable: CuentaContableType;
     factura_id: FacturaFieldType;
     numero_inventario: NullableNumeroInventarioFieldType;
-    producto_tipo_id: NonNullable<ProductoGroupFieldType['tipo_id']>;
-    producto_id: NonNullable<ProductoGroupFieldType['id']>;
+    producto_tipo_id: ProductoGroupFieldType['tipo_id'];
+    producto_id: ProductoGroupFieldType['id'];
     costo_unitario: CostoUnitarioFieldType;
     es_contable: EsContableFieldType;
     numero_serie: NumeroSerieFieldType;
@@ -26,23 +26,23 @@ type Schema = {
     adquisiciones: AdquisicionFields[];
 }
 
-export const defaultValues = (dictamen: DetailedActionDictaminadoDictamen): Schema => ({
+export const adquisicionFieldsDefaultValues: AdquisicionFields = {
+    ...recepcionFieldGroupDefaultValues,
+    es_contable: undefined,
+    factura_id: undefined,
+    cuenta_contable: undefined,
+    numero_serie: null,
+    costo_unitario: null,
+    numero_inventario: null,
+    id: undefined,
+    producto_tipo_id: undefined,
+    producto_id: undefined,
+}
+
+export const defaultValues: Schema = {
     orden_compra_id: undefined,
-    adquisiciones: dictamen.version_actual.adquisiciones.flatMap((adquisicion) =>
-        Array.from({ length: adquisicion.cantidad }, (): AdquisicionFields => ({
-            ...recepcionFieldGroupDefaultValues,
-            es_contable: undefined,
-            factura_id: undefined,
-            cuenta_contable: undefined,
-            numero_serie: null,
-            costo_unitario: null,
-            numero_inventario: adquisicionHasArticulo(adquisicion) ? adquisicion.articulo.numero_inventario : null,
-            id: adquisicion.id,
-            producto_tipo_id: adquisicion.producto.tipo.id,
-            producto_id: adquisicion.producto.id,
-        }))
-    )
-});
+    adquisiciones: [adquisicionFieldsDefaultValues]
+};
 
 const adquisicionValidator = z
     .object({

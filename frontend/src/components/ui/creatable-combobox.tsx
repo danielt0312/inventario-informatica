@@ -17,6 +17,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import { Separator } from "./separator"
 
 export type ComboboxOption = {
     value: string;
@@ -29,6 +30,7 @@ export interface CreatableComboboxProps {
     value?: string;
     onValueChange?: (value: string) => void;
     onCreateRequest?: (searchValue: string) => void;
+    itemToStringLabel?: (option: ComboboxOption) => React.ReactNode;
     placeholder?: string;
     searchPlaceholder?: string;
     emptyMessage?: string;
@@ -42,6 +44,7 @@ export function CreatableCombobox({
     value,
     onValueChange,
     onCreateRequest,
+    itemToStringLabel = (option) => option.label,
     placeholder = "Selecciona una opción",
     searchPlaceholder = "Buscar...",
     emptyMessage = "No se encontraron resultados.",
@@ -106,6 +109,8 @@ export function CreatableCombobox({
         }
     }
 
+    const groupItems = [...groups.entries()];
+
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -143,7 +148,7 @@ export function CreatableCombobox({
                             </CommandEmpty>
                         )}
 
-                        {[...groups.entries()].map(([groupName, items]) => (
+                        {groupItems.map(([groupName, items], index) => (
                             <CommandGroup key={groupName ?? "__ungrouped"} heading={groupName}>
                                 {items.map((o) => (
                                     <CommandItem
@@ -157,9 +162,10 @@ export function CreatableCombobox({
                                                 value === o.value ? "opacity-100" : "opacity-0"
                                             )}
                                         />
-                                        {o.label}
+                                        {itemToStringLabel(o)}
                                     </CommandItem>
                                 ))}
+                                {index < groupItems.length -1 && <Separator className="mt-1" />}
                             </CommandGroup>
                         ))}
 

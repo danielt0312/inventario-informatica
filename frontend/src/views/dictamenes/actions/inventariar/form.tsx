@@ -1,26 +1,39 @@
 import { useAppForm } from "@/components/ui/form-context";
-import { defaultValues, validator } from "./form-schema";
+import { adquisicionFieldsDefaultValues, defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Form } from "@/components/ui/form";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RecepcionFieldGroup } from "@/components/features/articulos/recepciones/form-fields";
 import { Separator } from "@/components/ui/separator";
 import { ProductoGroupField } from "@/components/features/productos/form-fields";
 import { FacturaField } from "@/components/features/facturas/form-fields";
-import { FieldGroup } from "@/components/ui/field";
+import { Field, FieldGroup } from "@/components/ui/field";
 import { CostoUnitarioField, CuentaContable, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/components/features/articulos/form-fields";
 import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
 import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import React from "react";
 import type { OrdenCompra } from "@/types/orden_compras";
+import { ShowBienesInformaticosTitle } from "../../partials/show-info";
+import { Button } from "@/components/ui/button";
+import { PlusCircleIcon, QrCodeIcon, ScanQrCodeIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import { CreatableComboboxField } from "@/components/ui/creatable-combobox-field";
+import { FieldLayout } from "@/components/ui/field-layout";
+import { CreatableCombobox } from "@/components/ui/creatable-combobox";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
+import { Input } from "@/components/ui/input";
+import { Input as A } from "@/components/ui/input-field";
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
 
     return useAppForm({
-        defaultValues: defaultValues(dictamen),
+        defaultValues: defaultValues,
         validators: {
             onSubmit: validator
         },
@@ -33,12 +46,6 @@ export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
 
 export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen }) {
     const form = useForm(dictamen);
-    const slots = dictamen.version_actual.adquisiciones.flatMap((adquisicion) =>
-        Array.from({ length: adquisicion.cantidad }, (_, index) => ({
-            adquisicion,
-            index,
-        }))
-    );
 
     const [ordenCompra, setOrdenCompra] = React.useState<OrdenCompra | undefined>(undefined);
 
@@ -58,37 +65,58 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                     }}
                 />
 
-                {slots.map((slot, index) => (
-                    <form.AppField
-                        key={`${slot.adquisicion.id}-${slot.index}`}
-                        name="adquisiciones"
-                        mode="array"
-                        children={() => {
-                            const adquisicion = slot.adquisicion;
-                            const { producto, } = adquisicion;
+                <form.AppField name="adquisiciones" mode="array">
+                    {(field) => (
+                        <>
+                            <div className="flex flex-row justify-between">
+                                <ShowBienesInformaticosTitle />
+                                <div className="flex flex-row gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                    >
+                                        <ScanQrCodeIcon /> Escanear cuentas contables
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            field.pushValue(adquisicionFieldsDefaultValues)
+                                        }}
+                                        variant="outline"
+                                        size="sm"
+                                    >
+                                        <PlusCircleIcon /> Registrar manualmente
+                                    </Button>
+                                </div>
+                            </div>
 
-                            return (
-                                <Card>
+                            {field.state.value.map((adquisicionField, index) => (
+                                <Card key={index}>
+                                    <CardHeader>
+                                        <CardTitle className="text-lg">Bien Informático #{index + 1}</CardTitle>
+                                        <CardAction>
+                                            <Button
+                                                size="sm"
+                                                variant="destructive"
+                                                onClick={() => field.removeValue(index)}
+                                                disabled={field.state.value.length === 1}
+                                            >
+                                                <Trash2Icon />Eliminar
+                                            </Button>
+                                        </CardAction>
+                                    </CardHeader>
                                     <CardContent className="flex flex-col gap-4">
-                                        <Label className="font-bold text-base capitalize">Bien Informático #{index + 1}</Label>
-
                                         <div className="flex flex-col gap-7">
                                             <div className="flex gap-7">
-                                                <div data-slot="label-container" className="w-7/10">
-                                                    <Label className="font-bold">
-                                                        Características solicitadas
-                                                    </Label>
-                                                    <Label>
-                                                        {producto.tipo.nombre} {producto.marca.nombre} {producto.nombre} {adquisicion.caracteristicas}
-                                                    </Label>
-                                                </div>
+                                                <FieldLayout label="Características solicitadas">
+                                                    <CreatableCombobox options={[]} />
+                                                </FieldLayout>
 
                                                 <div data-slot="label-container" className="w-3/10">
                                                     <Label className="font-bold">
                                                         Resguardante
                                                     </Label>
                                                     <Label>
-                                                        {adquisicion.empleado?.nombre ?? 'Juan Pérez'}
+                                                        {/* {adquisicion.empleado?.nombre ?? 'Juan Pérez'} */}
                                                     </Label>
                                                 </div>
                                             </div>
@@ -106,6 +134,11 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                     </CardContent>
                                     <Separator />
                                     <CardContent className="flex flex-col gap-7">
+                                        <form.AppField
+                                            name={`adquisiciones[${index}].cuenta_contable`}
+                                            children={() => <CuentaContable />}
+                                        />
+
                                         <ProductoGroupField
                                             form={form}
                                             fields={{
@@ -121,14 +154,14 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                                 children={() => <NumeroSerieField className="w-1/2" />}
                                             />
 
-                                            <div className="w-1/2">
-                                                {adquisicionHasArticulo(adquisicion) && (
-                                                    <form.AppField
-                                                        name={`adquisiciones[${index}].numero_inventario`}
-                                                        children={() => <NullableNumeroInventarioField />}
-                                                    />
-                                                )}
-                                            </div>
+                                            {/* <div className="w-1/2">
+                                            {adquisicionHasArticulo(adquisicion) && (
+                                                <form.AppField
+                                                    name={`adquisiciones[${index}].numero_inventario`}
+                                                    children={() => <NullableNumeroInventarioField />}
+                                                />
+                                            )}
+                                        </div> */}
                                         </FieldGroup>
 
                                         <FieldGroup className="flex-row">
@@ -142,28 +175,21 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                             />
                                         </FieldGroup>
 
-                                        <FieldGroup className="flex-row">
-                                            <form.AppField
-                                                name={`adquisiciones[${index}].cuenta_contable`}
-                                                children={() => <CuentaContable />}
-                                            />
-
-                                            <form.AppField
-                                                name={`adquisiciones[${index}].factura_id`}
-                                                children={() => (
-                                                    <FacturaField
-                                                        proveedorId={ordenCompra?.proveedor.id}
-                                                        disabled={!ordenCompra}
-                                                    />
-                                                )}
-                                            />
-                                        </FieldGroup>
+                                        <form.AppField
+                                            name={`adquisiciones[${index}].factura_id`}
+                                            children={() => (
+                                                <FacturaField
+                                                    proveedorId={ordenCompra?.proveedor.id}
+                                                    disabled={!ordenCompra}
+                                                />
+                                            )}
+                                        />
                                     </CardContent>
                                 </Card>
-                            );
-                        }}
-                    />
-                ))}
+                            ))}
+                        </>
+                    )}
+                </form.AppField>
 
                 <form.SubmitFormButton />
             </form.AppForm>

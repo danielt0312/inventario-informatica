@@ -7,6 +7,7 @@ import { DictamenArchivoField } from "../../partials/form-fields";
 import { Form as PrimitiveForm } from "@/components/ui/form";
 import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 
 export function useForm(dictamen: DetailedActionDictaminadoDictamen) {
     const { mutate } = useActionFormMutation(dictamen);
@@ -35,6 +36,8 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen
                         children={() => <DictamenArchivoField />}
                     />
                 </div>
+
+                <ShowBienesInformaticosTitle />
 
                 {dictamen.version_actual.adquisiciones.map((adquisicion, index) => {
                     const producto = adquisicion.producto;

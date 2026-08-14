@@ -19,3 +19,6 @@ export const ShowVersionInfo = ({ dictamen }: { dictamen: DetailedDictamen }) =>
         </Label>
     );
 }
+
+export const ShowBienesInformaticosTitle = () =>
+    <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
