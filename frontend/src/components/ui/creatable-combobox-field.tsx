@@ -31,6 +31,7 @@ function CreatableComboboxField ({
                 ? undefined
                 : Number(v))
             }
+            disabled={disabled}
             {...creatableComboboxProps}
         />
         </FieldLayout>
