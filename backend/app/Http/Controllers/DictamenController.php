@@ -63,10 +63,10 @@ class DictamenController extends ArchivableController
             }
 
             //todo obtener el jefe de departamento de DTI
-            $user_id = 1;
+            $empleadoId = 1;
 
             $dictamen = Dictamen::create([
-                'user_id' => $user_id,
+                'empleado_id' => $empleadoId,
                 'adscripcion_id' => $adscripcionId,
             ]);
 
@@ -118,9 +118,6 @@ class DictamenController extends ArchivableController
                     'folio' => $validated['folio']
                 ]);
             }
-
-            //todo obtener el jefe de departamento de DTI
-            $user_id = 1;
 
             $version = $dictamen->versiones()->create([
                 'numero_version' => $dictamen->versionActual->numero_version + 1,

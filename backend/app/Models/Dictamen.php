@@ -40,7 +40,7 @@ class Dictamen extends Model
         'estado_id',
         'adscripcion_id',
         'orden_compra_id',
-        'user_id',
+        'empleado_id',
     ];
 
     protected $attributes = [
