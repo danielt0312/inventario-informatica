@@ -16,8 +16,6 @@ export const DictamenEstadoEnum = {
     SURTIR: DICTAMEN_ESTADO_SURTIR,
     INVENTARIAR: 4,
     SURTIDO: 5,
-    SURTIDO_PARCIAL: 6,
-    SURTIDO_CON_OBSERVACIONES: 7,
 } as const;
 export type DictamenEstadoEnum = (typeof DictamenEstadoEnum)[keyof typeof DictamenEstadoEnum];
 

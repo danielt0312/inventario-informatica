@@ -28,6 +28,7 @@ import { Input as A } from "@/components/ui/input-field";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { ScannerButton } from "@/components/ui/scanner-button";
 
 export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -121,24 +122,24 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                                 </div>
                                             </div>
 
-                                            <div>
-                                                <RecepcionFieldGroup
-                                                    form={form}
-                                                    fields={{
-                                                        observaciones: `adquisiciones[${index}].observaciones`,
-                                                        es_resultado_esperado: `adquisiciones[${index}].es_resultado_esperado`
-                                                    }}
-                                                />
-                                            </div>
+                                            <ScannerButton />
+
+                                            <form.AppField
+                                                name={`adquisiciones[${index}].cuenta_contable`}
+                                                children={() => <CuentaContable />}
+                                            />
+
+                                            <RecepcionFieldGroup
+                                                form={form}
+                                                fields={{
+                                                    observaciones: `adquisiciones[${index}].observaciones`,
+                                                    es_resultado_esperado: `adquisiciones[${index}].es_resultado_esperado`
+                                                }}
+                                            />
                                         </div>
                                     </CardContent>
                                     <Separator />
                                     <CardContent className="flex flex-col gap-7">
-                                        <form.AppField
-                                            name={`adquisiciones[${index}].cuenta_contable`}
-                                            children={() => <CuentaContable />}
-                                        />
-
                                         <ProductoGroupField
                                             form={form}
                                             fields={{

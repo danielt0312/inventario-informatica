@@ -19,6 +19,9 @@ class ArticuloResource extends JsonResource
             'numero_inventario' => $this->numero_inventario,
             'cuenta_contable' => $this->cuenta_contable,
             'es_contable' => $this->es_contable,
+            'es_resultado_esperado' => $this->es_resultado_esperado,
+            'observaciones' => $this->observaciones,
+            'dictamen' => new DictamenResource($this->whenLoaded('dictamen')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasOne};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,7 +12,7 @@ use App\Services\NumeroInventarioService;
 
 class Articulo extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory;
 
     protected $table = 'articulos';
 
@@ -25,16 +24,19 @@ class Articulo extends Model
         'factura_id',
         'qr_archivo_id',
         'cuenta_contable',
-        'es_contable'
+        'es_contable',
+        'es_resultado_esperado',
+        'observaciones',
     ];
 
     protected $attributes = [
-        'activo' => 1,
         'estado_id' => ArticuloEstadoEnum::REVISION->value,
         'numero_serie' => null,
         'factura_id' => null,
         'numero_inventario' => null,
         'cuenta_contable' => null,
+        'es_resultado_esperado' => null,
+        'observaciones' => null
     ];
 
     protected static function booted(): void
@@ -53,16 +55,9 @@ class Articulo extends Model
         return $this->hasOne(DictamenArticulo::class);
     }
 
-    public function dictamen(): HasOneThrough
+    public function dictamen(): BelongsTo
     {
-        return $this->hasOneThrough(
-            Dictamen::class,
-            DictamenArticulo::class,
-            // 'articulo_id',
-            // 'id',
-            // 'id',
-            // 'dictamen_id'
-        );
+        return $this->belongsTo(Dictamen::class);
     }
 
     public function recepcion(): HasOne

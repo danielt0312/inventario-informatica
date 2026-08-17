@@ -53,6 +53,11 @@ class DictamenAdquisicion extends Model
         return $this->belongsTo(Articulo::class);
     }
 
+    public function articulos(): HasMany
+    {
+        return $this->hasMany(Articulo::class);
+    }
+
     public function tipo(): Attribute
     {
         return Attribute::make(

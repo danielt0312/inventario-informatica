@@ -94,52 +94,47 @@ class InventariarDictamenRequest extends FormRequest
         ];
     }
 
-    public function withValidator(Validator $validator): void
+    public function after(): array
     {
-        $validator->after(function (Validator $validator) {
-            $errors = $validator->errors();
-
-            if ($errors->has('orden_compra_id') || $errors->has('adquisiciones')) return;
-
-            foreach ($this->input('adquisiciones', []) as $index => $adquisiciones) {
-                if ($errors->has("adquisiciones.$index.factura_id") || $errors->has("adquisiciones.$index.cuenta_contable")) return;
-
-                [
-                    'factura_id' => $facturaId,
-                    'cuenta_contable' => $cuentaContable,
-                ] = $adquisiciones;
-
-                $esFacturaValida = false;
-                foreach ($this->getFacturas() as $factura) {
-                    if ($factura->id === $facturaId) {
-                        $esFacturaValida = true;
-                        break;
+        return [
+            function (Validator $validator) {
+                foreach ($this->input('adquisiciones', []) as $index => [
+                        'factura_id' => $facturaId,
+                        'cuenta_contable' => $cuentaContable,
+                    ])
+                {
+                    $esFacturaValida = false;
+                    foreach ($this->getFacturas() as $factura) {
+                        if ($factura->id === $facturaId) {
+                            $esFacturaValida = true;
+                            break;
+                        }
                     }
+                    if ($esFacturaValida) break;
+
+                    $factura = Factura::query()
+                        ->join('proveedores', 'proveedores.id', '=', 'facturas.proveedor_id')
+                        ->join('orden_compras', 'orden_compras.proveedor_id', '=', 'proveedores.id')
+                        ->where('facturas.id', $facturaId)
+                        ->where('orden_compras.id', $this->orden_compra_id)
+                        ->select('facturas.*')
+                        ->first();
+
+                    if (! $factura) {
+                        logger()->warning('Factura no pertenece a Proveedor de Orden de Compra', [
+                            'payload' => $validator->getData(),
+                            'user_id' => auth()->id(),
+                            'ip' => $this->ip(),
+                        ]);
+
+                        return $validator->errors->add("adquisiciones.$index.factura_id", 'La factura proporcionada no pertenece al mismo proveedor que la orden de compra indicada');
+                    }
+
+                    $this->setFacturas($factura);
+                    $this->setFacturaAdquisiciones($cuentaContable, $factura);
                 }
-                if ($esFacturaValida) break;
-
-                $factura = Factura::query()
-                    ->join('proveedores', 'proveedores.id', '=', 'facturas.proveedor_id')
-                    ->join('orden_compras', 'orden_compras.proveedor_id', '=', 'proveedores.id')
-                    ->where('facturas.id', $facturaId)
-                    ->where('orden_compras.id', $this->orden_compra_id)
-                    ->select('facturas.*')
-                    ->first();
-
-                if (! $factura) {
-                    logger()->warning('Factura no pertenece a Proveedor de Orden de Compra', [
-                        'payload' => $validator->getData(),
-                        'user_id' => auth()->id(),
-                        'ip' => $this->ip(),
-                    ]);
-
-                   return $errors->add("adquisiciones.$index.factura_id", 'La factura proporcionada no pertenece al mismo proveedor que la orden de compra indicada');
-                }
-
-                $this->setFacturas($factura);
-                $this->setFacturaAdquisiciones($cuentaContable, $factura);
             }
-        });
+        ];
     }
 
     protected function setOrdenCompra(OrdenCompra $ordenCompra): void

@@ -29,10 +29,13 @@ return new class extends Migration
                 ->constrained('adscripciones', indexName: 'fk_dictamen_adscripciones')
                 ->restrictOnUpdate()
                 ->restrictOnDelete();
-            $table->foreignId('user_id')
-                ->constrained('users', indexName: 'fk_dictamenes_users')
+            $table->foreignId('empleado_id')
+                ->constrained('empleados', indexName: 'fk_dictamenes_empleado')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->unsignedBigInteger('version_actual_id')
+                ->nullable();
+            $table->timestamps();
         });
 
         Schema::create('dictamen_versiones', function (Blueprint $table) {
@@ -61,12 +64,11 @@ return new class extends Migration
         });
 
         Schema::table('dictamenes', function (Blueprint $table) {
-            $table->foreignId('version_actual_id')
-                ->nullable()
-                ->constrained('dictamen_versiones', indexName: 'fk_dictamenes_dictamen_versiones')
+            $table->foreign('version_actual_id', 'fk_dictamenes_dictamen_versiones')
+                ->references('id')
+                ->on('dictamen_versiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->timestamps();
         });
 
         Schema::create('dictamen_adquisiciones', function (Blueprint $table) {
@@ -100,27 +102,17 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('dictamen_articulos', function (Blueprint $table) {
-            $table->foreignId('articulo_id')
-                ->primary()
-                ->constrained('articulos', indexName: 'fk_dictamen_articulos_articulos')
+        Schema::table('articulos', function (Blueprint $table) {
+            $table->foreign('dictamen_adquisicion_id', 'fk_articulos_dictamen_adquisiciones')
+                ->references('id')
+                ->on('dictamen_adquisiciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('dictamen_id')
-                ->constrained('dictamenes', indexName: 'fk_dictamen_articulos_dictamenes')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('empleado_id')
-                ->nullable()
-                ->constrained('empleados', indexName: 'fk_dictamen_articulos_empleados')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('dictamen_articulos');
         Schema::dropIfExists('dictamen_adquisiciones');
         Schema::dropIfExists('dictamen_versiones');
         Schema::dropIfExists('dictamenes');

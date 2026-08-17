@@ -45,18 +45,10 @@ return new class extends Migration
                 ->nullable()
                 ->unique('uk_articulos_cuenta_contable', 11);
             $table->boolean('es_contable');
-            $table->boolean('activo');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('articulo_recepciones', function (Blueprint $table) {
-            $table->foreignId('articulo_id')
-                ->primary()
-                ->constrained('articulos', indexName: 'fk_articulo_recepciones_articulos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->boolean('es_resultado_esperado');
+            $table->unsignedBigInteger('dictamen_adquisicion_id')
+                ->nullable();
+            $table->boolean('es_resultado_esperado')
+                ->nullable();
             $table->string('observaciones', 255)
                 ->nullable();
             $table->timestamps();

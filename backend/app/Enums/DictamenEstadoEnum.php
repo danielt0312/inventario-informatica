@@ -13,19 +13,15 @@ enum DictamenEstadoEnum: int
     case SURTIR = 3;
     case INVENTARIAR = 4;
     case SURTIDO = 5;
-    case SURTIDO_PARCIAL = 6;
-    case SURTIDO_CON_OBSERVACIONES = 7;
 
     public function label(): string
     {
         return match($this) {
             self::DICTAMINAR => 'Por Dictaminar',
-            self::EVIDENCIAR => 'Evidenciar Requisición',
+            self::EVIDENCIAR => 'Evidenciar Confirmado de Recibido',
             self::SURTIR => 'Por Surtir',
             self::INVENTARIAR => 'Por Inventariar',
             self::SURTIDO => 'Surtido',
-            self::SURTIDO_PARCIAL => 'Surtido Parcial',
-            self::SURTIDO_CON_OBSERVACIONES => 'Surtido con Observaciones',
         };
     }
 }

@@ -16,6 +16,7 @@ class DictamenAdquisicionResource extends JsonResource
             'empleado_id' => $this->empleado_id,
             'cantidad' => $this->cantidad,
             'articulo' => new ArticuloResource($this->whenLoaded('articulo')),
+            'articulos' => ArticuloResource::collection($this->whenLoaded('articulos')),
             'producto_tipo' => $this->when(
                 $esEstadoDictaminar,
                 fn() => new ProductoTipoResource($this->tipo)
