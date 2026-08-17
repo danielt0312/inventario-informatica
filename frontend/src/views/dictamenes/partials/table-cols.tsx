@@ -8,12 +8,14 @@ import { useState, type JSX } from "react";
 import { useSurtirMutation } from "../actions/surtir/form";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import type { DetailedActionDictamen, DetailedActionDictaminadoDictamen, DetailedEditableActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen } from "@/types/dictamenes";
+import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen, DictamenEstado } from "@/types/dictamenes";
 import { isActionDictamen, isActionDictaminadoDictamen, isDetailedSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { ArchivoPreviewActionRow } from "@/components/features/archivos/table-cols";
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
-import { toLocaleDateFormat } from "@/lib/utils";
-import { dictamenEstadoVariants } from "./table";
+import { cn, toLocaleDateFormat } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { cva } from "class-variance-authority";
+import { DictamenEstadoEnum } from "@/lib/constants";
 
 const ActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
@@ -136,6 +138,44 @@ const ActionMenu = ({ dictamen, meta }: ActionProps<DictamenData>) => {
     );
 }
 
+const estadoColorVariants = cva(
+    "",
+    {
+        variants: {
+            variant: {
+                default: undefined,
+                [DictamenEstadoEnum.DICTAMINAR]: "bg-red-400/90",
+                [DictamenEstadoEnum.EVIDENCIAR]: "bg-yellow-400/70",
+                [DictamenEstadoEnum.SURTIR]: "bg-yellow-300/50",
+                [DictamenEstadoEnum.INVENTARIAR]: "bg-lime-400/50",
+                [DictamenEstadoEnum.SURTIDO]: "bg-lime-400",
+            }
+        },
+        defaultVariants: {
+            variant: "default"
+        }
+    }
+);
+
+const EstadoBadge = ({
+    estado,
+    className,
+    ...props
+}: React.ComponentProps<typeof Badge> & {
+    estado: DictamenEstado
+}) => (
+    <Badge
+        {...props}
+        className={cn(
+            estadoColorVariants({ variant: estado.id }),
+            "text-foreground",
+            className
+        )}
+    >
+        {estado.nombre}
+    </Badge>
+)
+
 export const columns: ColumnDef<DictamenData>[] = [
     {
         accessorKey: "version_actual.fecha_solicitud",
@@ -152,15 +192,9 @@ export const columns: ColumnDef<DictamenData>[] = [
     },
     {
         header: "Estado",
-        cell: ({ row }) => {
-            const { estado } = row.original;
-
-            return (
-                <span className={dictamenEstadoVariants({ variant: estado.id })}>
-                    {estado.nombre}
-                </span>
-            )
-        }
+        cell: ({ row }) => (
+            <EstadoBadge estado={row.original.estado} />
+        )
     },
     {
         id: "actions",
@@ -169,3 +203,8 @@ export const columns: ColumnDef<DictamenData>[] = [
         )
     },
 ];
+
+export {
+    estadoColorVariants as dictamenEstadoColorVariants,
+    EstadoBadge as DictamenEstadoBadge,
+}

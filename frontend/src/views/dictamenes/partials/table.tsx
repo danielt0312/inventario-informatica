@@ -1,5 +1,5 @@
 import { QueryDataTable, SearchInput } from "@/components/ui/query-datatable";
-import { columns } from "./table-cols";
+import { columns, DictamenEstadoBadge } from "./table-cols";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import { useQuery } from "@tanstack/react-query";
 import { MultiSelect } from "@/components/ui/multiselect";
@@ -10,35 +10,12 @@ import { PlusCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Route as CreateRoute } from "@/routes/_auth/dictamenes/create";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
-import { DictamenEstadoEnum } from "@/lib/constants";
-import { cva } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import type { DictamenEstado } from "@/types/dictamenes";
 
 interface TableFilters {
     folio: string;
     estados: string[];
 }
-
-const estadoVariants = cva(
-    "px-1.5 py-1 rounded-sm",
-    {
-        variants: {
-            variant: {
-                default: undefined,
-                [DictamenEstadoEnum.DICTAMINAR]: "bg-red-400/90",
-                [DictamenEstadoEnum.EVIDENCIAR]: "bg-orange-400/80",
-                [DictamenEstadoEnum.SURTIR]: "bg-yellow-300",
-                [DictamenEstadoEnum.INVENTARIAR]: "bg-yellow-400",
-                [DictamenEstadoEnum.SURTIDO]: "bg-lime-400",
-                [DictamenEstadoEnum.SURTIDO_PARCIAL]: "bg-green-400",
-                [DictamenEstadoEnum.SURTIDO_CON_OBSERVACIONES]: "bg-emerald-400",
-            }
-        },
-        defaultVariants: {
-            variant: "default"
-        }
-    }
-);
 
 export function Table() {
     const { debouncedFilters, filters, setFilters } = useDebouncedFilters<TableFilters>({
@@ -75,9 +52,7 @@ export function Table() {
                         label="Estado"
                         options={ESTADOS}
                         onOptionRender={(option) => (
-                            <span className={cn(estadoVariants({ variant: option.id as DictamenEstadoEnum }))}>
-                                {option.nombre}
-                            </span>
+                            <DictamenEstadoBadge estado={option as DictamenEstado} />
                         )}
                         selected={filters.estados}
                         onChange={(v) => setFilters(prev => ({
@@ -102,8 +77,4 @@ export function Table() {
             }}
         />
     );
-}
-
-export {
-    estadoVariants as dictamenEstadoVariants
 }
