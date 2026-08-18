@@ -35,6 +35,8 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->unsignedBigInteger('version_actual_id')
                 ->nullable();
+            $table->boolean('tiene_observaciones')
+                ->nullable();
             $table->timestamps();
         });
 

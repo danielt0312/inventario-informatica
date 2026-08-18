@@ -9,7 +9,7 @@ class DictamenAdquisicionResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $esEstadoDictaminar = $this->version->dictamen->esEstadoDictaminar();
+        $dictamen = $this->version->dictamen;
 
         return [
             'id' => $this->id,
@@ -18,11 +18,11 @@ class DictamenAdquisicionResource extends JsonResource
             'articulo' => new ArticuloResource($this->whenLoaded('articulo')),
             'articulos' => ArticuloResource::collection($this->whenLoaded('articulos')),
             'producto_tipo' => $this->when(
-                $esEstadoDictaminar,
+                $dictamen->esEstadoDictaminar(),
                 fn() => new ProductoTipoResource($this->tipo)
             ),
             $this->when(
-                !$esEstadoDictaminar,
+                ! $dictamen->esEstadoDictaminar(),
                 function () {
                     $this->producto->load('tipo.categoria', 'marca');
 
@@ -32,6 +32,17 @@ class DictamenAdquisicionResource extends JsonResource
                     ]);
                 }
             ),
+            $this->when(
+                $dictamen->esEstadoInventariar(),
+                function () {
+                    $this->loadCount('articulos');
+
+                    return $this->merge([
+                        'cantidad_surtida' => $this->articulos_count,
+                        'cantidad_restante' => $this->cantidad - $this->articulos_count,
+                    ]);
+                }
+            )
         ];
     }
 }

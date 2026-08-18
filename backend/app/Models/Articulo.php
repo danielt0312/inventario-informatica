@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasOne};
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
@@ -24,6 +24,7 @@ class Articulo extends Model
         'factura_id',
         'qr_archivo_id',
         'cuenta_contable',
+        'dictamen_adquisicion_id',
         'es_contable',
         'es_resultado_esperado',
         'observaciones',
@@ -35,6 +36,7 @@ class Articulo extends Model
         'factura_id' => null,
         'numero_inventario' => null,
         'cuenta_contable' => null,
+        'dictamen_adquisicion_id' => null,
         'es_resultado_esperado' => null,
         'observaciones' => null
     ];
@@ -50,21 +52,15 @@ class Articulo extends Model
         });
     }
 
-    public function dictamenArticulo(): HasOne
+    public function dictamenAdquisicion(): BelongsTo
     {
-        return $this->hasOne(DictamenArticulo::class);
+        return $this->belongsTo(DictamenArticulo::class);
     }
 
     public function dictamen(): BelongsTo
     {
         return $this->belongsTo(Dictamen::class);
     }
-
-    public function recepcion(): HasOne
-    {
-        return $this->hasOne(ArticuloRecepcion::class);
-    }
-
     public function producto(): BelongsTo
     {
         return $this->belongsTo(Producto::class);

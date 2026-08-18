@@ -6,11 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\{
-    BelongsTo,
-    HasMany,
-    HasManyThrough
-};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 
 use App\Enums\DictamenEstadoEnum;
 use App\Traits\Models\HasResourceResponse;
@@ -41,12 +37,14 @@ class Dictamen extends Model
         'adscripcion_id',
         'orden_compra_id',
         'empleado_id',
+        'tiene_observaciones',
     ];
 
     protected $attributes = [
         'estado_id' => DictamenEstadoEnum::DICTAMINAR->value,
         'version_actual_id' => null,
         'orden_compra_id' => null,
+        'tiene_observaciones' => null
     ];
 
     public function versiones(): HasMany
@@ -67,18 +65,6 @@ class Dictamen extends Model
     public function dictamenArticulos(): HasMany
     {
         return $this->hasMany(DictamenArticulo::class);
-    }
-
-    public function articulos(): HasManyThrough
-    {
-        return $this->hasManyThrough(
-            Articulo::class,
-            DictamenArticulo::class,
-            // 'dictamen_id',
-            // 'id',
-            // 'id',
-            // 'articulo_id'
-        );
     }
 
     public function estado(): BelongsTo

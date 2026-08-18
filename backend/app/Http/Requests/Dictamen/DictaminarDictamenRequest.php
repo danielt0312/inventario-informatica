@@ -18,7 +18,11 @@ class DictaminarDictamenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'adquisiciones' => ['required', 'array', 'min:1'],
+            'adquisiciones' => [
+                'required',
+                'array',
+                'min:1'
+            ],
             'adquisiciones.*.id' => [
                 'required',
                 'integer',
@@ -40,7 +44,11 @@ class DictaminarDictamenRequest extends FormRequest
                     }),
                 ];
             }),
-            'adquisiciones.*.caracteristicas' => ['required', 'string', 'max:255']
+            'adquisiciones.*.caracteristicas' => [
+                'required',
+                'string',
+                'max:255'
+            ]
         ];
     }
 }

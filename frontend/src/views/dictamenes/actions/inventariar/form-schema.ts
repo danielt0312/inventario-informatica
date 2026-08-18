@@ -103,3 +103,8 @@ export const validator = z.object({
         )
     )
 });
+
+
+export {
+    type Schema as InventariarDictamenSchema
+}

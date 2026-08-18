@@ -16,7 +16,10 @@ use App\Http\Requests\Dictamen\{
     InventariarDictamenRequest
 };
 
-use App\Models\Dictamen;
+use App\Models\{
+    Dictamen,
+    DictamenAdquisicion
+};
 
 use App\Enums\{
     DocumentoTipoEnum,
@@ -89,6 +92,7 @@ class DictamenController extends ArchivableController
     {
         return QueryBuilder::for(Dictamen::class)
             ->with([
+                'ordenCompra.archivo',
                 'estado',
                 'versionActual' => ['oficio.archivo', 'archivo']
             ])
@@ -190,9 +194,7 @@ class DictamenController extends ArchivableController
             return $dictamen;
         });
 
-        return $dictamen->toResource()
-            ->response()
-            ->setStatusCode(200);
+        return $dictamen->toResourceResponse();
     }
 
     public function evidenciar(EvidenciarDictamenRequest $request, Dictamen $dictamen)
@@ -215,9 +217,7 @@ class DictamenController extends ArchivableController
             return $dictamen;
         });
 
-        return $dictamen->toResource()
-            ->response()
-            ->setStatusCode(200);
+        return $dictamen->toResourceResponse();
     }
 
     public function surtir(SurtirDictamenRequest $request, Dictamen $dictamen)
@@ -233,37 +233,55 @@ class DictamenController extends ArchivableController
     {
         $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
             $validated = $request->validated();
-            $ordenCompra = $request->getOrdenCompra();
 
             foreach ($validated['adquisiciones'] as $payloadAdquisicion) {
-                $factura = $request->getFacturaAdquisiciones($payloadAdquisicion['cuenta_contable']);
+                $request->getFacturaAdquisiciones($cuentaContable)
+                    ->articulos()
+                    ->create([
+                        ...$payloadAdquisicion,
+                        'dictamen_adquisicion_id' => $payloadAdquisicion['id'],
+                        'producto_id' => $payloadAdquisicion['es_resultado_esperado']
+                            ? DictamenAdquisicion::find($payloadAdquisicion['id'])->producto_id
+                            : $payloadAdquisicion['producto_id']
+                    ]);
+            }
 
-                $articulo = $factura->articulos()->create($payloadAdquisicion);
+            $ordenCompra = $request->getOrdenCompra();
 
-                $articulo->recepcion()->create([
-                    'es_resultado_esperado' => $payloadAdquisicion['es_resultado_esperado'],
-                    'observaciones' => $payloadAdquisicion['observaciones'] ?? null
-                ]);
-
-                $articulo->dictamenArticulo()->create([
-                    'dictamen_id' => $dictamen->id
-                ]);
+            if ($dictamen->orden_compra_id === null) {
+                $dictamen->ordenCompra()->associate($ordenCompra)->save();
             }
 
             foreach ($request->getFacturas() as $factura) {
                 $factura->ordenCompras()->syncWithoutDetaching($ordenCompra);
             }
 
-            $dictamen->ordenCompra()->associate($ordenCompra)->save();
+            $adquisiciones = $dictamen->versionActual->adquisiciones()
+                ->withCount('articulos')
+                ->get();
 
-            // todo establer estado de manera dinamica según la adquisición
+            if ($adquisiciones->contains(fn ($a) => $a->articulos_count < $a->cantidad)) {
+                $dictamen->update(['estado_id' => DictamenEstadoEnum::SURTIDO_PARCIAL->value]);
+                return $dictamen;
+            }
+
+            $conObservaciones = $dictamen->versionActual->adquisiciones()
+                ->whereHas('articulos', fn ($q) => $q->where('es_resultado_esperado', false))
+                ->exists();
+
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::SURTIDO->value
+                'estado_id' => DictamenEstadoEnum::SURTIDO->value,
+                'tiene_observaciones' => $conObservaciones,
             ]);
 
             return $dictamen;
         });
 
-        return $dictamen->toResourceResponse();
+        return $dictamen->load([
+                'estado',
+                'ordenCompra' => ['proveedor'],
+                'versionActual' => ['adquisiciones', 'oficio']
+            ])
+            ->toResourceResponse();
     }
 }

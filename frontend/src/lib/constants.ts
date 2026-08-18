@@ -10,12 +10,14 @@ export type DocumentoTipoEnum = (typeof DocumentoTipoEnum)[keyof typeof Document
 
 export const DICTAMEN_ESTADO_DICTAMINAR = 1;
 export const DICTAMEN_ESTADO_SURTIR = 3;
+export const DICTAMEN_ESTADO_INVENTARIAR = 4;
 export const DictamenEstadoEnum = {
     DICTAMINAR: DICTAMEN_ESTADO_DICTAMINAR,
     EVIDENCIAR: 2,
     SURTIR: DICTAMEN_ESTADO_SURTIR,
-    INVENTARIAR: 4,
+    INVENTARIAR: DICTAMEN_ESTADO_INVENTARIAR,
     SURTIDO: 5,
+    SURTIDO_PARCIAL: 6
 } as const;
 export type DictamenEstadoEnum = (typeof DictamenEstadoEnum)[keyof typeof DictamenEstadoEnum];
 

@@ -1,6 +1,6 @@
 import * as Root from "../../ui/attachment";
 import type { Archivo } from "@/types/documentos";
-import { formatFileSize } from "@/lib/utils";
+import { cn, formatFileSize } from "@/lib/utils";
 import { ArrowLeftRightIcon, EyeIcon, FileTextIcon, UploadIcon } from "lucide-react";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import { TooltipAttachmentAction } from "../../ui/tooltip-attachment-action";
@@ -24,13 +24,18 @@ type AttachmentType = Archivo | undefined;
 
 function Attachment<TValue extends AttachmentType = AttachmentType>({
     value,
+    className,
     ...props
-}: Omit<React.ComponentProps<typeof Root.Attachment>, 'defaultValue'> & {
+}: Omit<React.ComponentProps<typeof Root.Attachment>, 'value' | 'defaultValue'> & {
     value?: TValue;
 }) {
     return (
         <Root.Attachment
             state={value ? 'done' : 'idle'}
+            className={cn(
+                "w-full",
+                className
+            )}
             {...props}
         />
     );
@@ -44,6 +49,8 @@ function AttachmentLayout({
 }: Omit<React.ComponentProps<typeof Attachment<Archivo>>, 'children'> & {
     onAttachmentClick?: () => void;
 }) {
+    const hasClickHandler = onAttachmentClick !== undefined;
+
     return (
         <Attachment value={value} disabled={disabled} {...props}>
             <AttachmentMedia archivo={value} />
@@ -54,10 +61,10 @@ function AttachmentLayout({
             {value && (
                 <AttachmentActions>
                     <AttachmentActionViewer archivo={value} />
-                    <AttachmentActionSwitcher onClick={onAttachmentClick} />
+                    {hasClickHandler && <AttachmentActionSwitcher onClick={onAttachmentClick} />}
                 </AttachmentActions>
             )}
-            {!disabled && !value && <AttachmentTrigger onClick={onAttachmentClick} />}
+            {hasClickHandler && !disabled && !value && <AttachmentTrigger onClick={onAttachmentClick} />}
         </Attachment>
     );
 }

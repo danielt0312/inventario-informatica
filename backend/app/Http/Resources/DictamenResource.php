@@ -15,10 +15,7 @@ class DictamenResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'estado' => new DictamenEstadoResource($this->whenLoaded('estado')),
-            'orden_compra' => $this->when(
-                $this->esEstadoSurtido(),
-                fn () => new OrdenCompraResource($this->whenLoaded('ordenCompra'))
-            ),
+            'orden_compra' => new OrdenCompraResource($this->whenLoaded('ordenCompra')),
             'version_actual' => new DictamenVersionResource($this->whenLoaded('versionActual')),
             'versiones' => DictamenVersionResource::collection($this->whenLoaded('versiones'))
         ];

@@ -33,7 +33,7 @@ trait InteractsWithArticulos
                 'required',
                 new NumeroInventarioRule,
                 function (string $attribute, string $value, \Closure $fail) {
-                    $articulo = Articulo::where('numero_inventario', $value)->first();
+                    $articulo = Articulo::firstWhere('numero_inventario', $value);
                     if (empty($articulo)) return $fail('Número de inventario inexistente');
                     $this->setArticulos($value, $articulo);
                 }

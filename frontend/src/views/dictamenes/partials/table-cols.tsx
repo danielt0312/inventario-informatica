@@ -145,10 +145,11 @@ const estadoColorVariants = cva(
             variant: {
                 default: undefined,
                 [DictamenEstadoEnum.DICTAMINAR]: "bg-red-400/90",
-                [DictamenEstadoEnum.EVIDENCIAR]: "bg-yellow-400/70",
+                [DictamenEstadoEnum.EVIDENCIAR]: "bg-orange-300",
                 [DictamenEstadoEnum.SURTIR]: "bg-yellow-300/50",
-                [DictamenEstadoEnum.INVENTARIAR]: "bg-lime-400/50",
+                [DictamenEstadoEnum.INVENTARIAR]: "bg-yellow-400/70",
                 [DictamenEstadoEnum.SURTIDO]: "bg-lime-400",
+                [DictamenEstadoEnum.SURTIDO_PARCIAL]: "bg-lime-400/60",
             }
         },
         defaultVariants: {

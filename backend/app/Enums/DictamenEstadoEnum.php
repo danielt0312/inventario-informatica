@@ -13,6 +13,7 @@ enum DictamenEstadoEnum: int
     case SURTIR = 3;
     case INVENTARIAR = 4;
     case SURTIDO = 5;
+    case SURTIDO_PARCIAL = 6;
 
     public function label(): string
     {
@@ -22,6 +23,7 @@ enum DictamenEstadoEnum: int
             self::SURTIR => 'Por Surtir',
             self::INVENTARIAR => 'Por Inventariar',
             self::SURTIDO => 'Surtido',
+            self::SURTIDO_PARCIAL => 'Surtido Parcial'
         };
     }
 }

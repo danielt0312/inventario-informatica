@@ -1,5 +1,5 @@
 import { useAppForm } from "@/components/ui/form-context";
-import { adquisicionFieldsDefaultValues, defaultValues, validator } from "./form-schema";
+import { adquisicionFieldsDefaultValues, defaultValues, validator, type InventariarDictamenSchema } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Form } from "@/components/ui/form";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,33 +8,31 @@ import { RecepcionFieldGroup } from "@/components/features/articulos/recepciones
 import { Separator } from "@/components/ui/separator";
 import { ProductoGroupField } from "@/components/features/productos/form-fields";
 import { FacturaField } from "@/components/features/facturas/form-fields";
-import { Field, FieldGroup } from "@/components/ui/field";
-import { CostoUnitarioField, CuentaContable, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/components/features/articulos/form-fields";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { CostoUnitarioField, CuentaContable, EsContableField, NumeroSerieField } from "@/components/features/articulos/form-fields";
 import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
-import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
-import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import React from "react";
+import { hasOrdenCompra } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import type { OrdenCompra } from "@/types/orden_compras";
 import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 import { Button } from "@/components/ui/button";
-import { PlusCircleIcon, QrCodeIcon, ScanQrCodeIcon, SearchIcon, Trash2Icon } from "lucide-react";
-import { CreatableComboboxField } from "@/components/ui/creatable-combobox-field";
+import { PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { FieldLayout } from "@/components/ui/field-layout";
 import { CreatableCombobox } from "@/components/ui/creatable-combobox";
-import { ButtonGroup } from "@/components/ui/button-group";
-import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
-import { Input } from "@/components/ui/input";
-import { Input as A } from "@/components/ui/input-field";
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
-import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ScannerButton } from "@/components/ui/scanner-button";
+import type { DetailedInventariarDictamen } from "@/types/dictamenes";
+import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachment";
+import React from "react";
+import { FieldValue } from "@/components/ui/field-value";
 
-export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
+export const useForm = (dictamen: DetailedInventariarDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
 
+    const cleanedDefaultValues: InventariarDictamenSchema = hasOrdenCompra(dictamen)
+        ? { ...defaultValues, orden_compra_id: dictamen.orden_compra.id }
+        : defaultValues;
+
     return useAppForm({
-        defaultValues: defaultValues,
+        defaultValues: cleanedDefaultValues,
         validators: {
             onSubmit: validator
         },
@@ -45,26 +43,39 @@ export const useForm = (dictamen: DetailedActionDictaminadoDictamen) => {
     });
 }
 
-export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictaminadoDictamen }) {
+export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }) {
     const form = useForm(dictamen);
 
     const [ordenCompra, setOrdenCompra] = React.useState<OrdenCompra | undefined>(undefined);
 
+    const adquisicionesFaltantes = dictamen.version_actual.adquisiciones.map((adquisicion) => ({
+        [adquisicion.id]: adquisicion.cantidad_restante
+    }));
+
     return (
         <Form form={form}>
             <form.AppForm>
-                <form.AppField
-                    name="orden_compra_id"
-                    children={() => <OrdenCompraField className="w-1/3" onValueChange={setOrdenCompra} />}
-                    listeners={{
-                        onChange: () => {
-                            const adquisiciones = form.getFieldValue('adquisiciones');
-                            adquisiciones.forEach((_, index) => {
-                                form.setFieldValue(`adquisiciones[${index}].factura_id`, undefined);
-                            });
-                        }
-                    }}
-                />
+                {hasOrdenCompra(dictamen) ? (
+                    <Field className="max-w-1/3">
+                        <FieldLabel className="font-bold">Orden de Compra</FieldLabel>
+                        <ArchivoAttachmentLayout
+                            value={dictamen.orden_compra.archivo}
+                        />
+                    </Field>
+                ) : (
+                    <form.AppField
+                        name="orden_compra_id"
+                        children={() => <OrdenCompraField className="max-w-1/3" onValueChange={setOrdenCompra} />}
+                        listeners={{
+                            onChange: () => {
+                                form.getFieldValue('adquisiciones')
+                                    .forEach((_, index) => {
+                                        form.setFieldValue(`adquisiciones[${index}].factura_id`, undefined);
+                                    });
+                            }
+                        }}
+                    />
+                )}
 
                 <form.AppField name="adquisiciones" mode="array">
                     {(field) => (
@@ -72,12 +83,12 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                             <div className="flex flex-row justify-between">
                                 <ShowBienesInformaticosTitle />
                                 <div className="flex flex-row gap-2">
-                                    <Button
+                                    {/* <Button
                                         variant="outline"
                                         size="sm"
                                     >
                                         <ScanQrCodeIcon /> Escanear cuentas contables
-                                    </Button>
+                                    </Button> */}
                                     <Button
                                         onClick={() => {
                                             field.pushValue(adquisicionFieldsDefaultValues)
@@ -85,7 +96,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedActionDictamin
                                         variant="outline"
                                         size="sm"
                                     >
-                                        <PlusCircleIcon /> Registrar manualmente
+                                        <PlusCircleIcon /> Registrar
                                     </Button>
                                 </div>
                             </div>

@@ -4,16 +4,23 @@ namespace App\Http\Requests\Dictamen;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
+use Illuminate\Validation\Rule;
 
 use App\Models\{
     OrdenCompra,
     Factura,
+    DictamenAdquisicion,
+    Producto
 };
 use App\Http\Requests\Dictamen\Traits\{InteractsWithDictamen, InteractsWithArticulos};
 
 class InventariarDictamenRequest extends FormRequest
 {
-    use InteractsWithDictamen, InteractsWithArticulos;
+    use InteractsWithDictamen {
+        prepareForValidation as protected traitPrepareForValidation;
+    }
+
+    use InteractsWithArticulos;
 
     private OrdenCompra $ordenCompra;
     /**
@@ -30,10 +37,21 @@ class InventariarDictamenRequest extends FormRequest
         return $this->dictamen->esEstadoInventariar();
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->traitPrepareForValidation();
+
+        if ($this->dictamen->orden_compra_id !== null) {
+            $this->merge(['orden_compra_id' => $this->dictamen->orden_compra_id]);
+            $this->setOrdenCompra($this->dictamen->ordenCompra);
+        }
+    }
+
     public function rules(): array
     {
         return [
             'orden_compra_id' => [
+                Rule::excludeIf(fn () => $this->dictamen->orden_compra_id !== null),
                 'required',
                 'integer',
                 function (string $attribute, string $value, \Closure $fail) {
@@ -44,7 +62,13 @@ class InventariarDictamenRequest extends FormRequest
             ],
             'adquisiciones' => [
                 'required',
-                'array'
+                'array',
+                'min:1',
+            ],
+            'adquisiciones.*.id' => [
+                'required',
+                'integer',
+                'exists:dictamen_adquisiciones,id'
             ],
             'adquisiciones.*.es_resultado_esperado' => [
                 'required',
@@ -57,13 +81,13 @@ class InventariarDictamenRequest extends FormRequest
                 'max:255'
             ],
             'adquisiciones.*.producto_id' => [
+                'exclude_unless:adquisiciones.*.es_resultado_esperado,false',
                 'required',
                 'integer',
                 'exists:productos,id'
             ],
             'adquisiciones.*.numero_inventario' => $this->numeroInventarioRules(),
             'adquisiciones.*.cuenta_contable' => [
-                'bail',
                 'required',
                 'string',
                 'size:11',
@@ -98,19 +122,52 @@ class InventariarDictamenRequest extends FormRequest
     {
         return [
             function (Validator $validator) {
-                foreach ($this->input('adquisiciones', []) as $index => [
-                        'factura_id' => $facturaId,
-                        'cuenta_contable' => $cuentaContable,
-                    ])
-                {
-                    $esFacturaValida = false;
+                $validatorErrors = $validator->errors();
+
+                if ($validatorErrors->isNotEmpty()) return;
+
+                $adquisicionesPayload = collection($this->input('adquisiciones', []));
+
+                $adquisiciones = DictamenAdquisicion::with('producto:id,tipo_id')
+                    ->withCount('articulos')
+                    ->whereIn('id', $adquisicionesPayload->pluck('id')->unique())
+                    ->get()
+                    ->keyBy('id');
+
+                $productos = Producto::select('id', 'tipo_id')
+                    ->whereIn('id', $adquisicionesPayload->pluck('producto_id')->filter())
+                    ->get()
+                    ->keyBy('id');
+
+                foreach ($adquisicionesPayload as $index => $adquisicionPayload) {
+                    if ($adquisicionPayload['es_resultado_esperado']) continue;
+
+                    $adquisicion = $adquisiciones->get($adquisicionPayload['id']);
+                    $producto = $productos->get($adquisicionPayload['producto_id'] ?? null);
+
+                    if (!$adquisicion || !$productoEnviado) continue;
+
+                    if ($enviado->tipo_id !== $adquisicion->producto->tipo->id) {
+                        $validatorErrors->add("adquisiciones.$index.producto_id", 'El producto debe serl del mismo tipo que el solicitado');
+                    }
+
+                    $pendiente = $adquisicion->cantidad - $adquisicion->articulos_count;
+                    if ($adquisicion->count() > $pendiente) {
+                        $validatorErrors->add("adquisiciones.$index.id", "Este bien informático excede lo pendiente a surtir ({$pendiente})");
+                    }
+                }
+
+                foreach ($adquisicionesPayload as $index => [
+                    'id' => $id,
+                    'factura_id' => $facturaId,
+                    'cuenta_contable' => $cuentaContable,
+                ]) {
                     foreach ($this->getFacturas() as $factura) {
                         if ($factura->id === $facturaId) {
-                            $esFacturaValida = true;
-                            break;
+                            $this->setFacturaAdquisiciones($cuentaContable, $factura);
+                            continue;
                         }
                     }
-                    if ($esFacturaValida) break;
 
                     $factura = Factura::query()
                         ->join('proveedores', 'proveedores.id', '=', 'facturas.proveedor_id')
@@ -127,7 +184,8 @@ class InventariarDictamenRequest extends FormRequest
                             'ip' => $this->ip(),
                         ]);
 
-                        return $validator->errors->add("adquisiciones.$index.factura_id", 'La factura proporcionada no pertenece al mismo proveedor que la orden de compra indicada');
+                        $validatorErrors->add("adquisiciones.$index.factura_id", 'La factura proporcionada no pertenece al mismo proveedor que la orden de compra indicada');
+                        continue;
                     }
 
                     $this->setFacturas($factura);

@@ -11,6 +11,6 @@ class SurtirDictamenRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->dictamen->esEstadoSurtir();
+        return $this->dictamen->esEstadoSurtir() || $this->dictamen->esEstadoSurtidoParcial();
     }
 }

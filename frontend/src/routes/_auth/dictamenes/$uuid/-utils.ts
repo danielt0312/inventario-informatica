@@ -1,14 +1,43 @@
 import { DictamenEstadoEnum } from '@/lib/constants';
-import type { ActionDictamen, ActionDictaminarDictamen, ActionDictaminadoDictamen, DetailedActionDictaminarDictamen, DetailedActionDictamen, DetailedActionDictaminadoDictamen, EditableActionDictamen, DetailedEditableActionDictamen } from './-types';
-import { ActionDictamenEstadoEnum, ActionDictamenStates, EditableActionDictamenEnum } from './-constants';
-import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen, Dictamen, DictamenAdquisicion, DictamenAdquisicionWithArticulo, SurtirDictamen } from '@/types/dictamenes';
 import { DictamenProducto } from '@/lib/utils';
+import {
+    ActionDictamenEstadoEnum,
+    ActionDictamenStates,
+    EditableActionDictamenEnum
+} from './-constants';
+import type {
+    DetailedDictaminadoDictamen,
+    DetailedInventariarDictamen,
+    DetailedSurtirDictamen,
+    Dictamen,
+    DictamenAdquisicion,
+    DictamenAdquisicionWithArticulo,
+    InventariarDictamen,
+    InventariarDictamenWithOrdenCompra,
+    SurtirDictamen
+} from '@/types/dictamenes';
+import type {
+    ActionDictamen,
+    ActionDictaminarDictamen,
+    ActionDictaminadoDictamen,
+    DetailedActionDictaminarDictamen,
+    DetailedActionDictamen,
+    DetailedActionDictaminadoDictamen,
+    EditableActionDictamen,
+    DetailedEditableActionDictamen
+} from './-types';
 
 export const isSurtirDictamen = (dictamen: Dictamen): dictamen is SurtirDictamen =>
     dictamen.estado.id === DictamenEstadoEnum.SURTIR;
 
+export const isInventariarDictamen = (dictamen: Dictamen): dictamen is InventariarDictamen =>
+    dictamen.estado.id === DictamenEstadoEnum.INVENTARIAR;
+
 export const isDetailedSurtirDictamen = (dictamen: Dictamen): dictamen is DetailedSurtirDictamen =>
     isSurtirDictamen(dictamen);
+
+export const isDetailedInventariarDictamen = (dictamen: Dictamen): dictamen is DetailedInventariarDictamen =>
+    isInventariarDictamen(dictamen);
 
 export const isActionDictamen = (dictamen: Dictamen): dictamen is ActionDictamen =>
     dictamen.estado.id in ActionDictamenStates;
@@ -41,3 +70,6 @@ export const isDetailedEditableActionDictamen = (dictamen: Dictamen): dictamen i
 export const adquisicionHasArticulo = (adquisicion: DictamenAdquisicion): adquisicion is DictamenAdquisicionWithArticulo =>
     'producto_tipo' in adquisicion && DictamenProducto.tipoRequiereNumeroInventario(adquisicion.producto_tipo.id)
     || 'producto' in adquisicion && DictamenProducto.tipoRequiereNumeroInventario(adquisicion.producto.tipo.id);
+
+export const hasOrdenCompra = (dictamen: InventariarDictamen): dictamen is InventariarDictamenWithOrdenCompra =>
+    !!dictamen.orden_compra;

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class DictamenAdquisicion extends Model
@@ -84,7 +84,7 @@ class DictamenAdquisicion extends Model
     public function descripcion(): Attribute
     {
         return Attribute::make(
-            fn (mixed $value, array $attributes) =>
+            fn (mixed $value, array $attributes): string =>
                 implode(' ', array_filter([
                     $this->tipo->nombre,
                     $this->marca?->nombre,
