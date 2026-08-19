@@ -1,8 +1,6 @@
 import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
-import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/components/features/articulos/recepciones/form-fields";
-import type { DetailedActionDictaminadoDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { CostoUnitarioFieldType, CuentaContableType, EsContableFieldType, NullableNumeroInventarioFieldType, NumeroSerieFieldType } from "@/components/features/articulos/form-fields";
 import type { FacturaFieldType } from "@/components/features/facturas/form-fields";
 import type { ProductoGroupFieldType } from "@/components/features/productos/form-fields";
@@ -31,7 +29,7 @@ export const adquisicionFieldsDefaultValues: AdquisicionFields = {
     es_contable: undefined,
     factura_id: undefined,
     cuenta_contable: undefined,
-    numero_serie: null,
+    numero_serie: undefined,
     costo_unitario: null,
     numero_inventario: null,
     id: undefined,
@@ -51,7 +49,7 @@ const adquisicionValidator = z
         producto_id: selectedNumberOption,
         factura_id: selectedNumberOption,
         cuenta_contable: requiredString,
-        numero_serie: nullableString,
+        numero_serie: requiredString,
         es_contable: selectedBooleanOption,
         costo_unitario: nullableNumber,
         numero_inventario: nullableString,

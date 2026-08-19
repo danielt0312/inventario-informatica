@@ -8,7 +8,6 @@ import { useFieldContext } from "@/components/ui/form-context";
 import { Button } from "@/components/ui/button";
 import { ScanQrCodeIcon } from "lucide-react";
 import React from "react";
-import { Spinner } from "@/components/ui/spinner";
 
 export type CostoUnitarioFieldType = NullableNumberInputFieldType;
 export const CostoUnitarioField = ({
@@ -60,7 +59,7 @@ export const EsContableField = ({
     />
 );
 
-export type NumeroSerieFieldType = NullableInputFieldType;
+export type NumeroSerieFieldType = InputFieldType;
 export const NumeroSerieField = ({
     label = "Número de serie",
     placeholder = "Ingresa el número de serie",

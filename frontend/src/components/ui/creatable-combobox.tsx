@@ -27,8 +27,8 @@ export type ComboboxOption = {
 
 export interface CreatableComboboxProps {
     options: ComboboxOption[];
-    value?: string;
-    onValueChange?: (value: string) => void;
+    value?: ComboboxOption | undefined;
+    onValueChange?: (option: ComboboxOption | undefined) => void;
     onCreateRequest?: (searchValue: string) => void;
     itemToStringLabel?: (option: ComboboxOption) => React.ReactNode;
     placeholder?: string;
@@ -55,7 +55,7 @@ export function CreatableCombobox({
     const [open, setOpen] = React.useState(false);
     const [search, setSearch] = React.useState('');
 
-    const selectedOption = options.find((o) => o.value === value);
+    const selectedOption = options.find((o) => o.value === value?.value);
 
     const filteredOptions = React.useMemo(() => {
         if (!search) return options;
@@ -95,8 +95,8 @@ export function CreatableCombobox({
 
     const showCreateAction = !!onCreateRequest && search.trim().length > 0 && !exactMatchExists;
 
-    function handleSelect(optionValue: string) {
-        onValueChange?.(optionValue === value ? '' : optionValue);
+    function handleSelect(option: ComboboxOption) {
+        onValueChange?.(option);
         setOpen(false);
         setSearch('');
     }
@@ -119,7 +119,7 @@ export function CreatableCombobox({
                     role="combobox"
                     aria-expanded={open}
                     disabled={disabled}
-                    className={cn("justify-between font-normal", widthClass, className)}
+                    className={cn("justify-between font-normal", className)}
                 >
                     <span className={cn("truncate", !selectedOption && "text-muted-foreground")}>
                         {selectedOption?.label ?? placeholder}
@@ -154,12 +154,12 @@ export function CreatableCombobox({
                                     <CommandItem
                                         key={o.value}
                                         value={o.value}
-                                        onSelect={() => handleSelect(o.value)}
+                                        onSelect={() => handleSelect(o)}
                                     >
                                         <Check
                                             className={cn(
                                                 "mr-2 h-4 w-4",
-                                                value === o.value ? "opacity-100" : "opacity-0"
+                                                value?.value === o.value ? "opacity-100" : "opacity-0"
                                             )}
                                         />
                                         {itemToStringLabel(o)}

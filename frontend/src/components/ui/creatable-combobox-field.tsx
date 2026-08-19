@@ -1,16 +1,21 @@
 import { FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
-import { CreatableCombobox } from "@/components/ui/creatable-combobox";
+import { CreatableCombobox, type ComboboxOption } from "@/components/ui/creatable-combobox";
 import { useFieldContext } from "./form-context";
+import { isStringNumber } from "@/lib/utils";
+import React from "react";
 
 type CreatableComboboxFieldType = number | undefined;
 
-interface CreatableComboboxFieldProps extends Omit<React.ComponentProps<typeof CreatableCombobox>, 'children' | 'value' | 'onValueChange'>, Omit<CoreFieldLayoutProps, 'children' | 'errors'> {
+interface CreatableComboboxFieldProps extends Omit<React.ComponentProps<typeof CreatableCombobox>, 'children'>, Omit<CoreFieldLayoutProps, 'children' | 'errors'> {
 }
 
-function CreatableComboboxField ({
+function CreatableComboboxField({
+    value,
     className, description, disabled, label, required, orientation, ...creatableComboboxProps
 }: CreatableComboboxFieldProps) {
     const field = useFieldContext<CreatableComboboxFieldType>();
+    const [actualOption, setActualOption] = React.useState<ComboboxOption | undefined>(value);
+    const derivedValue = field.state.value === undefined ? undefined : actualOption;
 
     return (
         <FieldLayout
@@ -22,18 +27,19 @@ function CreatableComboboxField ({
             required={required}
             orientation={orientation}
         >
-        <CreatableCombobox
-            value={field.state.value === undefined
-                ? undefined
-                : String(field.state.value)
-            }
-            onValueChange={(v) => field.handleChange(v === ''
-                ? undefined
-                : Number(v))
-            }
-            disabled={disabled}
-            {...creatableComboboxProps}
-        />
+            <CreatableCombobox
+                {...creatableComboboxProps}
+                value={derivedValue}
+                onValueChange={(v) => {
+                    const value = v?.value;
+                    field.handleChange(value === undefined || !isStringNumber(value)
+                        ? undefined
+                        : Number(value)
+                    );
+                    setActualOption(v);
+                }}
+                disabled={disabled}
+            />
         </FieldLayout>
     );
 }

@@ -60,7 +60,7 @@ export function Form({ dictamen }: { dictamen: DetailedActionDictaminarDictamen 
 
                                 <form.AppField
                                     name={`adquisiciones[${index}].producto_id`}
-                                    children={() => <ProductoField tipo={productoTipo.id} className="w-1/3" />}
+                                    children={() => <ProductoField tipo={productoTipo.id} className="w-1/3" required />}
                                 />
 
                                 <form.AppField

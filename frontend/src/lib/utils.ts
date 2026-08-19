@@ -256,3 +256,5 @@ export function formatFileSize(bytes: number): string {
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${units[i]}`;
 }
+
+export const isStringNumber = (value: string) => value.trim() !== '' && !isNaN(Number(value)) && !/[.,]$/.test(value);

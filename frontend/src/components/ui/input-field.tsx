@@ -3,6 +3,7 @@ import { Input as InputPrimitive } from "@/components/ui/input";
 import { useFieldContext } from "./form-context";
 import { InputGroup, InputGroupInput } from "./input-group";
 import React from "react";
+import { isStringNumber } from "@/lib/utils";
 
 type InputType = string | undefined;
 function Input({
@@ -81,9 +82,6 @@ function NullableInputField({
     );
 };
 
-const hasNumberValue = (value: string) =>
-    value.trim() !== '' && !isNaN(Number(value)) && !/[.,]$/.test(value);
-
 type NumberInputFieldType = number | undefined;
 function NumberInputField({
     className, description, disabled, label, required, orientation, ...inputProps
@@ -109,7 +107,7 @@ function NumberInputField({
                 onChange={(e) => {
                     const value = e.target.value;
                     setRawValue(value);
-                    field.handleChange(hasNumberValue(value)
+                    field.handleChange(isStringNumber(value)
                         ? Number(value)
                         : undefined
                     );
@@ -146,7 +144,7 @@ function NullableNumberInputField({
                 onChange={(e) => {
                     const value = e.target.value;
                     setRawValue(value);
-                    field.handleChange(hasNumberValue(value)
+                    field.handleChange(isStringNumber(value)
                         ? Number(value)
                         : null
                     );

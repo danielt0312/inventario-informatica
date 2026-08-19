@@ -116,6 +116,7 @@ export type {
     DetailedSurtir as DetailedSurtirDictamen,
     BaseInventariar as InventariarDictamen,
     BaseDetailedInventariar as DetailedInventariarDictamen,
+    InventariarAdquisicion as InventariarAdquisicionDictamen,
     InventariarWithOrdenCompra as InventariarDictamenWithOrdenCompra,
     Dictamen,
     DictamenEstado,

@@ -1,7 +1,6 @@
 import { FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
 import { ArchivoAttachmentLayout, useArchivoAttachmentState } from "./attachment";
 import { useArchivoFieldContext } from "./hooks/use-field-context";
-import { useStore } from "@tanstack/react-form";
 
 const useAttachmentFieldContext = useArchivoFieldContext;
 

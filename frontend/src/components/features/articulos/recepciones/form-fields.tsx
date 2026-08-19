@@ -20,7 +20,7 @@ export const ObservacionesField = ({
 
 export type EsResultadoEsperadoFieldType = BooleanFieldType;
 export const EsResultadoEsperadoField = ({
-    label = "¿Es el resultado esperado?",
+    label = "¿Cumplió con las características solicitadas?",
     ...props
 }: React.ComponentProps<typeof BooleanField>) => (
     <BooleanField label={label} {...props} />

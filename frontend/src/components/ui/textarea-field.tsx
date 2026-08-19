@@ -22,7 +22,6 @@ function TextareaField({
         >
             <Textarea
                 disabled={disabled}
-                required={required}
                 name={field.name}
                 value={field.state.value === undefined
                     ? ''
@@ -59,7 +58,6 @@ function NullableTextareaField({
         >
             <Textarea
                 disabled={disabled}
-                required={required}
                 name={field.name}
                 value={field.state.value === null
                     ? ''
