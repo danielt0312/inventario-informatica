@@ -15,7 +15,6 @@ import { Form as PrimitiveForm } from "@/components/ui/form";
 import { ProductoTipoField } from "@/components/features/productos/tipos/form-fields";
 import { NumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { DictamenProducto } from "@/lib/utils";
-import React from "react";
 import { ShowBienesInformaticosTitle } from "../partials/show-info";
 
 export function useCreateFormMutation() {
@@ -48,7 +47,6 @@ export function useForm() {
 export function Form() {
     const form = useForm();
     const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
-    const [showNumeroInventarioField, setShowNumeroInventarioField] = React.useState(false);
 
     return (
         <PrimitiveForm form={form} className="flex flex-col gap-6">
@@ -98,29 +96,19 @@ export function Form() {
                                         <FieldGroup>
                                             <form.AppField
                                                 name={`adquisiciones[${index}].producto_tipo_id`}
-                                                children={() => (
-                                                    <ProductoTipoField required />
-                                                )}
-                                                listeners={{
-                                                    onChange: ({ value }) => {
-                                                        const requiereNumeroInventario = DictamenProducto.tipoRequiereNumeroInventario(value);
-                                                        setShowNumeroInventarioField(requiereNumeroInventario);
-
-                                                        if (!requiereNumeroInventario) {
-                                                            form.setFieldValue(`adquisiciones[${index}].numero_inventario`, null);
-                                                        }
-                                                    }
-                                                }}
+                                                children={() => <ProductoTipoField required />}
                                             />
 
-                                            {showNumeroInventarioField && (
-                                                <form.AppField
-                                                    name={`adquisiciones[${index}].numero_inventario`}
-                                                    children={() => (
-                                                        <NumeroInventarioField />
-                                                    )}
-                                                />
-                                            )}
+                                            <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_tipo_id}>
+                                                {(productoTipoId) => DictamenProducto.tipoRequiereNumeroInventario(productoTipoId) && (
+                                                    <form.AppField
+                                                        name={`adquisiciones[${index}].numero_inventario`}
+                                                        children={() => (
+                                                            <NumeroInventarioField />
+                                                        )}
+                                                    />
+                                                )}
+                                            </form.Subscribe>
                                         </FieldGroup>
 
                                         <form.AppField
