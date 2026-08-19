@@ -24,13 +24,17 @@ class InventariarDictamenRequest extends FormRequest
 
     private OrdenCompra $ordenCompra;
     /**
-     * Facturas únicas que fueron enviadas en el payload
+     * Facturas válidas únicas que fueron enviadas en el payload
      */
     private array $facturas = [];
     /**
-     * Facturas únicas relacionadas a la adquisición
+     * Facturas válidas únicas relacionadas a la adquisición
      */
     private array $facturaAdquisiciones = [];
+    /**
+     * Facturas inválidas que fueron enviadas en el payload
+     */
+    private array $facturasIdInvalidas = [];
 
     public function authorize(): bool
     {
@@ -126,7 +130,7 @@ class InventariarDictamenRequest extends FormRequest
 
                 if ($validatorErrors->isNotEmpty()) return;
 
-                $adquisicionesPayload = collection($this->input('adquisiciones', []));
+                $adquisicionesPayload = collect($this->input('adquisiciones', []));
 
                 $adquisiciones = DictamenAdquisicion::with('producto:id,tipo_id')
                     ->withCount('articulos')
@@ -139,40 +143,50 @@ class InventariarDictamenRequest extends FormRequest
                     ->get()
                     ->keyBy('id');
 
-                foreach ($adquisicionesPayload as $index => $adquisicionPayload) {
-                    if ($adquisicionPayload['es_resultado_esperado']) continue;
+                $conteoPorAdquisicion = $adquisicionesPayload->countBy('id');
 
+                $validarProducto = function ($adquisicionPayload, $index) use ($adquisiciones, $productos, $conteoPorAdquisicion, $validatorErrors) {
                     $adquisicion = $adquisiciones->get($adquisicionPayload['id']);
-                    $producto = $productos->get($adquisicionPayload['producto_id'] ?? null);
+                    if (!$adquisicion) return;
 
-                    if (!$adquisicion || !$productoEnviado) continue;
+                    if (! $adquisicionPayload['es_resultado_esperado']) {
+                        $producto = $productos->get($adquisicionPayload['producto_id'] ?? null);
 
-                    if ($enviado->tipo_id !== $adquisicion->producto->tipo->id) {
-                        $validatorErrors->add("adquisiciones.$index.producto_id", 'El producto debe serl del mismo tipo que el solicitado');
+                        if ($producto && $producto->tipo_id !== $adquisicion->producto->tipo_id) {
+                            $validatorErrors->add("adquisiciones.$index.producto_id", 'El producto debe ser del mismo tipo que el solicitado');
+                        }
                     }
 
                     $pendiente = $adquisicion->cantidad - $adquisicion->articulos_count;
-                    if ($adquisicion->count() > $pendiente) {
+                    $enviado = $conteoPorAdquisicion->get($adquisicionPayload['id']);
+
+                    if ($enviado > $pendiente) {
                         $validatorErrors->add("adquisiciones.$index.id", "Este bien informático excede lo pendiente a surtir ({$pendiente})");
                     }
-                }
+                };
 
-                foreach ($adquisicionesPayload as $index => [
-                    'id' => $id,
-                    'factura_id' => $facturaId,
-                    'cuenta_contable' => $cuentaContable,
-                ]) {
+                $validarFactura = function ($adquisicionPayload, $index) use ($validator, $validatorErrors) {
                     foreach ($this->getFacturas() as $factura) {
-                        if ($factura->id === $facturaId) {
-                            $this->setFacturaAdquisiciones($cuentaContable, $factura);
-                            continue;
+                        if ($factura->id === $adquisicionPayload['factura_id']) {
+                            $this->setFacturaAdquisiciones($adquisicionPayload['cuenta_contable'], $factura);
+                            return;
+                        }
+                    }
+
+                    $setValidatorError = fn () =>
+                        $validatorErrors->add("adquisiciones.$index.factura_id", 'La factura proporcionada no pertenece al mismo proveedor que la orden de compra indicada');
+
+                    foreach ($this->getFacturasInvalidas() as $facturaIdInvalida) {
+                        if ($facturaIdInvalida === $adquisicionPayload['factura_id']) {
+                            $setValidatorError();
+                            return;
                         }
                     }
 
                     $factura = Factura::query()
                         ->join('proveedores', 'proveedores.id', '=', 'facturas.proveedor_id')
                         ->join('orden_compras', 'orden_compras.proveedor_id', '=', 'proveedores.id')
-                        ->where('facturas.id', $facturaId)
+                        ->where('facturas.id', $adquisicionPayload['factura_id'])
                         ->where('orden_compras.id', $this->orden_compra_id)
                         ->select('facturas.*')
                         ->first();
@@ -184,12 +198,18 @@ class InventariarDictamenRequest extends FormRequest
                             'ip' => $this->ip(),
                         ]);
 
-                        $validatorErrors->add("adquisiciones.$index.factura_id", 'La factura proporcionada no pertenece al mismo proveedor que la orden de compra indicada');
-                        continue;
+                        $setValidatorError();
+                        $this->setFacturasIdInvalidas($adquisicionPayload['factura_id']);
+                        return;
                     }
 
                     $this->setFacturas($factura);
-                    $this->setFacturaAdquisiciones($cuentaContable, $factura);
+                    $this->setFacturaAdquisiciones($adquisicionPayload['cuenta_contable'], $factura);
+                };
+
+                foreach ($adquisicionesPayload as $index => $adquisicionPayload) {
+                    $validarProducto($adquisicionPayload, $index);
+                    $validarFactura($adquisicionPayload, $index);
                 }
             }
         ];
@@ -220,10 +240,20 @@ class InventariarDictamenRequest extends FormRequest
         $this->facturaAdquisiciones[$cuentaContable] = $factura;
     }
 
-    public function getFacturaAdquisiciones(string|null $cuentaContable = null): array | Factura | null
+    public function getFacturaAdquisiciones(?string $cuentaContable = null): array | Factura | null
     {
         return $cuentaContable !== null
             ? $this->facturaAdquisiciones[$cuentaContable]
             : $this->facturaAdquisiciones;
+    }
+
+    private function setFacturasIdInvalidas($id): void
+    {
+        $this->facturasIdInvalidas[] = $id;
+    }
+
+    private function getFacturasInvalidas(): array
+    {
+        return $this->facturasIdInvalidas;
     }
 }

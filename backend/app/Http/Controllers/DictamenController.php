@@ -235,7 +235,7 @@ class DictamenController extends ArchivableController
             $validated = $request->validated();
 
             foreach ($validated['adquisiciones'] as $payloadAdquisicion) {
-                $request->getFacturaAdquisiciones($cuentaContable)
+                $request->getFacturaAdquisiciones($payloadAdquisicion['cuenta_contable'])
                     ->articulos()
                     ->create([
                         ...$payloadAdquisicion,
