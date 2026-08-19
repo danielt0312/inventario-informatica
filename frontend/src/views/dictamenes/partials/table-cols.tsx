@@ -1,65 +1,71 @@
-import type { ColumnDef, TableMeta } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { DetailedActionDictamen, DetailedEditableActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen, DictamenEstado } from "@/types/dictamenes";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { isDetailedActionDictamen,isDetailedDictaminadoDictamen, isDetailedEditableActionDictamen, isDetailedSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { CircleXIcon, FileInputIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon, SquarePenIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
-import * as Root from "@/components/ui/action-menu";
+import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { useState, type JSX } from "react";
 import { useSurtirMutation } from "../actions/surtir/form";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import type { DetailedActionDictamen, DetailedActionDictaminadoDictamen, DetailedEditableActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen, DictamenEstado } from "@/types/dictamenes";
-import { isActionDictamen, isActionDictaminadoDictamen, isDetailedSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { ArchivoPreviewActionRow } from "@/components/features/archivos/table-cols";
-import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
 import { cn, toLocaleDateFormat } from "@/lib/utils";
+import { DictamenEstadoEnum } from "@/lib/constants";
+import { TooltipButton } from "@/components/ui/tooltip-button";
 import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
-import { DictamenEstadoEnum } from "@/lib/constants";
 
-const ActionIcon = {
+const FormActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
     [ActionDictamenEstadoEnum.EVIDENCIAR]: <PaperclipIcon />,
     [ActionDictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
-const ActionMenuItem = ({ state, ...props }: React.ComponentProps<typeof Root.ActionMenuItem> & { state: ActionDictamenEstadoEnum }) => (
-    <Root.ActionMenuItem className="capitalize" {...props}>
-        {ActionIcon[state]} {ActionDictamenStates[state]}
-    </Root.ActionMenuItem>
-);
-
-const ViewFileActionMenuItem = ({ dictamen, meta }: ActionProps<DetailedActionDictaminadoDictamen | DetailedDictaminadoDictamen>) => (
-    <ArchivoPreviewActionRow archivo={dictamen.version_actual.archivo} meta={meta} />
+const ActionButton = (props?: React.ComponentProps<typeof TooltipButton>) => (
+    <TooltipButton
+        variant="outline"
+        size="icon"
+        {...props}
+    />
 )
 
-const EditableActionMenuItem = ({ dictamen }: { dictamen: DetailedEditableActionDictamen }) => (
+const FormActionItemRow = ({ state }: { state: ActionDictamenEstadoEnum }) => (
+    <ActionButton
+        tooltip={{
+            message: <span className="capitalize">{ActionDictamenStates[state]}</span>
+        }}
+    >
+        {FormActionIcon[state]}
+    </ActionButton>
+);
+
+const EdicionActionItemRow = ({ dictamen }: { dictamen: DetailedEditableActionDictamen }) => (
     <Link to={EditarRoute.to} params={{ uuid: dictamen.uuid }}>
-        <Root.ActionMenuItem><SquarePenIcon /> Editar</Root.ActionMenuItem>
+        <ActionButton
+            tooltip={{
+                message: "Editar"
+            }}
+        >
+            <SquarePenIcon />
+        </ActionButton>
     </Link>
 );
 
-const FormActionMenu = ({ dictamen, meta }: ActionProps<DetailedActionDictamen>) => (
-    <Root.ActionMenu>
-        <Link
-            to={ActionRoute.to}
-            params={{
-                uuid: dictamen.uuid,
-                action: ActionDictamenStates[dictamen.estado.id]
-            }}
-        >
-            <ActionMenuItem state={dictamen.estado.id} />
-        </Link>
-        {isActionDictaminadoDictamen(dictamen) && (
-            <>
-                <Root.ActionMenuSeparator />
-                <ViewFileActionMenuItem dictamen={dictamen} meta={meta} />
-            </>
-        )}
-    </Root.ActionMenu>
+const FormActionRow = ({ dictamen }: ActionProps<DetailedActionDictamen>) => (
+    <Link
+        to={ActionRoute.to}
+        params={{
+            uuid: dictamen.uuid,
+            action: ActionDictamenStates[dictamen.estado.id]
+        }}
+    >
+        <FormActionItemRow state={dictamen.estado.id} />
+    </Link>
 );
 
-const SurtirActionMenu = ({ dictamen, meta }: ActionProps<DetailedSurtirDictamen>) => {
+const SurtirActionRow = ({ dictamen }: ActionProps<DetailedSurtirDictamen>) => {
     const [open, setOpen] = useState(false);
     const mutation = useSurtirMutation(dictamen);
     const navigate = useNavigate();
@@ -67,16 +73,12 @@ const SurtirActionMenu = ({ dictamen, meta }: ActionProps<DetailedSurtirDictamen
 
     return (
         <>
-            <Root.ActionMenu>
-                <Root.ActionMenuItem onClick={() => setOpen(true)}>
-                    <PackagePlusIcon /> Surtir
-                </Root.ActionMenuItem>
-                <EditableActionMenuItem dictamen={dictamen} />
-
-                <Root.ActionMenuSeparator />
-
-                <ViewFileActionMenuItem dictamen={dictamen} meta={meta} />
-            </Root.ActionMenu>
+            <ActionButton
+                onClick={() => setOpen(true)}
+                tooltip={{ message: "Surtir" }}
+            >
+                <PackagePlusIcon />
+            </ActionButton>
 
             <AlertDialog open={open} onOpenChange={setOpen}>
                 <AlertDialogContent>
@@ -103,7 +105,7 @@ const SurtirActionMenu = ({ dictamen, meta }: ActionProps<DetailedSurtirDictamen
                                 });
                             }}
                         >
-                            {ActionIcon[nextState]} Confirmar e Inventariar
+                            {FormActionIcon[nextState]} Confirmar e Inventariar
                         </AlertDialogAction>
                         <AlertDialogCancel onClick={() => setOpen(false)}>
                             <CircleXIcon /> Cancelar
@@ -119,23 +121,6 @@ export type DictamenData = DetailedActionDictamen | DetailedDictaminadoDictamen;
 
 interface ActionProps<TDictamen extends DictamenData> {
     dictamen: TDictamen;
-    meta?: TableMeta<TDictamen>;
-}
-
-const ActionMenu = ({ dictamen, meta }: ActionProps<DictamenData>) => {
-    if (isDetailedSurtirDictamen(dictamen)) {
-        return <SurtirActionMenu dictamen={dictamen} meta={meta} />;
-    }
-
-    if (isActionDictamen(dictamen)) {
-        return <FormActionMenu dictamen={dictamen} meta={meta} />
-    }
-
-    return (
-        <Root.ActionMenu>
-            <ViewFileActionMenuItem dictamen={dictamen} meta={meta} />
-        </Root.ActionMenu>
-    );
 }
 
 const estadoColorVariants = cva(
@@ -199,9 +184,27 @@ export const columns: ColumnDef<DictamenData>[] = [
     },
     {
         id: "actions",
-        cell: ({ row, table }) => (
-            <ActionMenu dictamen={row.original} meta={table.options.meta} />
-        )
+        cell: ({ row, table }) => {
+            const dictamen = row.original;
+
+            return (
+                <div className="flex gap-1">
+                    {isDetailedEditableActionDictamen(dictamen) && (
+                        <EdicionActionItemRow dictamen={dictamen} />
+                    )}
+                    {isDetailedActionDictamen(dictamen) && (
+                        <FormActionRow dictamen={dictamen} />
+                    )}
+                    {isDetailedSurtirDictamen(dictamen) && <SurtirActionRow dictamen={dictamen} />}
+                    {isDetailedDictaminadoDictamen(dictamen) && (
+                        <ArchivoPreviewActionRow
+                            archivo={dictamen.version_actual.archivo}
+                            meta={table.options.meta}
+                        />
+                    )}
+                </div>
+            );
+        }
     },
 ];
 
