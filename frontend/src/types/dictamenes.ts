@@ -9,7 +9,7 @@ type IncludableArticulo = Includable<Articulo>;
 type IncludableOrdenCompra = Includable<OrdenCompra>;
 type IncludableOficio = Includable<Oficio>;
 
-type BaseEstado<T extends DictamenEstadoEnum = DictamenEstadoEnum> = TCatalogo<T>;
+type BaseEstado<TEstado extends DictamenEstadoEnum = DictamenEstadoEnum> = TCatalogo<TEstado>;
 type Base<TEstado extends BaseEstado = BaseEstado> = {
     id: number;
     uuid: string;
@@ -162,4 +162,5 @@ export type {
     InventariarWithOrdenCompra as InventariarDictamenWithOrdenCompra,
     InventariarAdquisicion as InventariarDictamenAdquisicion,
     VersionWithArchivo as DictamenVersionWithArchivo,
+    SurtidoAdquisicion as SurtidoDictamenAdquisicion
 }

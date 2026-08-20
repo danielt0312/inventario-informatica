@@ -1,3 +1,12 @@
+export const ArticuloEstadoEnum = {
+    ACTIVO: 1,
+    BAJA: 2,
+    BAJA_PREVENTIVA: 3,
+    REVISION: 4,
+    MANTENIMIENTO: 5,
+}
+export type ArticuloEstadoEnum = (typeof ArticuloEstadoEnum)[keyof typeof ArticuloEstadoEnum];
+
 export const DocumentoTipoEnum = {
     FACTURA: 1,
     OFICIO: 2,

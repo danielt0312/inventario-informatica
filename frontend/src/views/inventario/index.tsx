@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table } from "./partials/table"
+import { ArticuloTable } from "../../components/features/articulos/table"
 
 function Inventario() {
     return (
@@ -10,7 +10,7 @@ function Inventario() {
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <Table />
+                <ArticuloTable />
             </CardContent>
         </Card>
     )

@@ -1,6 +1,6 @@
 import type { TResponse, TCatalogo } from "@/types/generics";
 import { QueryDataTable } from "@/components/ui/query-datatable";
-import { columns, type Articulo } from "./table-cols";
+import { ArticuloEstadoBadge, articuloTableColumns } from "./table-cols";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multiselect";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +17,7 @@ interface TableFilters {
     numero_inventario: string;
 }
 
-export function Table() {
+export function ArticuloTable() {
     const { filters, setFilters, debouncedFilters } = useDebouncedFilters<TableFilters>({
         categorias: [],
         tipos: [],
@@ -77,11 +77,11 @@ export function Table() {
     });
 
     return (
-        <QueryDataTable<Articulo, TableFilters>
+        <QueryDataTable
             queryKey={["articulos"]}
             url="api/articulos"
             filter={debouncedFilters}
-            columns={columns}
+            columns={articuloTableColumns}
             filterBar={(
                 <>
                     <Input
@@ -150,6 +150,9 @@ export function Table() {
                     <MultiSelect
                         label="Estado"
                         options={PRODUCTO_ESTADOS}
+                        onOptionRender={(option) => (
+                            <ArticuloEstadoBadge estado={option} />
+                        )}
                         selected={filters.estados.map(String)}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,

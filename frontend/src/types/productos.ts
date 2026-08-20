@@ -15,7 +15,7 @@ export type ProductoWithMarca = Producto & {
 export type DetailedProductoTipo = ProductoTipo & {
     categoria: ProductoCategoria;
 }
-export type DetailedProducto<TTipo extends ProductoTipo = ProductoTipo> = Producto & {
+export type DetailedProducto<TTipo extends DetailedProductoTipo = DetailedProductoTipo> = Producto & {
     tipo: TTipo;
     marca: ProductoMarca;
 }
