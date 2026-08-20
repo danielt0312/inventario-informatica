@@ -26,6 +26,8 @@ use App\Enums\{
     DictamenEstadoEnum
 };
 
+use App\Services\ArticuloService;
+
 class DictamenController extends ArchivableController
 {
     public function index(Request $request)
@@ -229,20 +231,22 @@ class DictamenController extends ArchivableController
         return $dictamen->toResourceResponse();
     }
 
-    public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen)
+    public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen, ArticuloService $articuloService)
     {
-        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
+        $dictamen = DB::transaction(function () use ($request, $dictamen, $articuloService): Dictamen {
             $validated = $request->validated();
 
             foreach ($validated['adquisiciones'] as $payloadAdquisicion) {
-                $request->getFacturaAdquisiciones($payloadAdquisicion['cuenta_contable'])
+                ['cuenta_contable' => $cuentaContable] = $payloadAdquisicion;
+                $producto = $request->getProductos($cuentaContable);
+
+                $request->getFacturaAdquisiciones($cuentaContable)
                     ->articulos()
                     ->create([
                         ...$payloadAdquisicion,
+                        'estado_id' => $articuloService->getEstadoEnum($producto->tipo_id)->value,
                         'dictamen_adquisicion_id' => $payloadAdquisicion['id'],
-                        'producto_id' => $payloadAdquisicion['es_resultado_esperado']
-                            ? DictamenAdquisicion::find($payloadAdquisicion['id'])->producto_id
-                            : $payloadAdquisicion['producto_id']
+                        'producto_id' => $producto->id
                     ]);
             }
 

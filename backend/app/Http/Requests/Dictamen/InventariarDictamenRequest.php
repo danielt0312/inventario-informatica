@@ -24,17 +24,21 @@ class InventariarDictamenRequest extends FormRequest
 
     private OrdenCompra $ordenCompra;
     /**
-     * Facturas válidas únicas que fueron enviadas en el payload
+     * Facturas válidas que fueron enviadas en el payload
      */
     private array $facturas = [];
     /**
-     * Facturas válidas únicas relacionadas a la adquisición
+     * Facturas válidas relacionadas a la adquisición
      */
     private array $facturaAdquisiciones = [];
     /**
      * Facturas inválidas que fueron enviadas en el payload
      */
     private array $facturasIdInvalidas = [];
+    /**
+     * Productos válidos que fueron enviados al payload
+     */
+    private array $productos = [];
 
     public function authorize(): bool
     {
@@ -50,6 +54,7 @@ class InventariarDictamenRequest extends FormRequest
             $this->setOrdenCompra($this->dictamen->ordenCompra);
         }
     }
+
 
     public function rules(): array
     {
@@ -152,9 +157,13 @@ class InventariarDictamenRequest extends FormRequest
                     if (! $adquisicionPayload['es_resultado_esperado']) {
                         $producto = $productos->get($adquisicionPayload['producto_id'] ?? null);
 
-                        if ($producto && $producto->tipo_id !== $adquisicion->producto->tipo_id) {
+                        if ($producto->tipo_id !== $adquisicion->producto->tipo_id) {
                             $validatorErrors->add("adquisiciones.$index.producto_id", 'El producto debe ser del mismo tipo que el solicitado');
+                        } else {
+                            $this->setProductos($adquisicionPayload['cuenta_contable'], $producto);
                         }
+                    } else {
+                        $this->setProductos($adquisicionPayload['cuenta_contable'], $adquisicion->producto);
                     }
 
                     $pendiente = $adquisicion->cantidad - $adquisicion->articulos_count;
@@ -215,6 +224,16 @@ class InventariarDictamenRequest extends FormRequest
         ];
     }
 
+    protected function setProductos(string $cuentaContable, Producto $producto): void
+    {
+        $this->productos[$cuentaContable] = $producto;
+    }
+
+    public function getProductos(string $cuentaContable): Producto | null
+    {
+        return $this->productos[$cuentaContable];
+    }
+
     protected function setOrdenCompra(OrdenCompra $ordenCompra): void
     {
         $this->ordenCompra = $ordenCompra;
@@ -240,11 +259,9 @@ class InventariarDictamenRequest extends FormRequest
         $this->facturaAdquisiciones[$cuentaContable] = $factura;
     }
 
-    public function getFacturaAdquisiciones(?string $cuentaContable = null): array | Factura | null
+    public function getFacturaAdquisiciones(string $cuentaContable = null): Factura | null
     {
-        return $cuentaContable !== null
-            ? $this->facturaAdquisiciones[$cuentaContable]
-            : $this->facturaAdquisiciones;
+        return $this->facturaAdquisiciones[$cuentaContable];
     }
 
     private function setFacturasIdInvalidas($id): void

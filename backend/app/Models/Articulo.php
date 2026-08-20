@@ -31,7 +31,6 @@ class Articulo extends Model
     ];
 
     protected $attributes = [
-        'estado_id' => ArticuloEstadoEnum::REVISION->value,
         'numero_serie' => null,
         'factura_id' => null,
         'numero_inventario' => null,
