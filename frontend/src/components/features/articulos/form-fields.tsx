@@ -5,8 +5,8 @@ import { Field } from "@/components/ui/field";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useFieldContext } from "@/components/ui/form-context";
-import { Button } from "@/components/ui/button";
-import { ScanQrCodeIcon } from "lucide-react";
+import { ScannerButton } from "@/components/ui/scanner-button";
+import { isStringNumber } from "@/lib/utils";
 import React from "react";
 
 export type CostoUnitarioFieldType = NullableNumberInputFieldType;
@@ -80,12 +80,13 @@ const formatCuentaContable = (value: string) =>
 export type CuentaContableType = InputFieldType;
 export const CuentaContable = ({
     label = 'Cuenta contable',
-    withSearchableButton = true,
+    withScannerButton = true,
     className, description, disabled, required, orientation,
 }: Omit<CoreFieldLayoutProps, 'errors'> & {
-    withSearchableButton?: boolean;
+    withScannerButton?: boolean;
 }) => {
     const field = useFieldContext<CuentaContableType>();
+    const [inputValue, setInputValue] = React.useState<string | undefined>();
 
     return (
         <FieldLayout
@@ -99,9 +100,11 @@ export const CuentaContable = ({
         >
             <Field orientation="horizontal">
                 <InputOTP
+                    value={inputValue}
                     maxLength={9}
                     pattern={REGEXP_ONLY_DIGITS}
                     onChange={(value) => {
+                        setInputValue(value);
                         const format = formatCuentaContable(value);
                         if (format !== undefined) {
                             field.handleChange(format);
@@ -129,10 +132,22 @@ export const CuentaContable = ({
                         <InputOTPSlot index={8} />
                     </InputOTPGroup>
                 </InputOTP>
-                {withSearchableButton && (
-                    <Button variant="outline">
-                        <ScanQrCodeIcon />Escanear QR
-                    </Button>
+                {withScannerButton && (
+                    <ScannerButton
+                        timeout={5000}
+                        onScannedCode={(code) => {
+                            const trimmedCode = code.trim();
+                            const value = trimmedCode.slice(0, 4) + trimmedCode.slice(5, 6) + trimmedCode.slice(7, 11)
+                            if (trimmedCode === '' || trimmedCode.length !== 11 || !isStringNumber(value)) {
+                                field.setErrorMap({
+                                    onSubmit: 'El código escaneado es inválido'
+                                });
+                                return;
+                            }
+                            setInputValue(value);
+                            field.handleChange(trimmedCode);
+                        }}
+                    />
                 )}
             </Field>
         </FieldLayout>
