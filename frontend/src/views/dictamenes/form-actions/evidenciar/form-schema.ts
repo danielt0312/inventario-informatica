@@ -1,6 +1,6 @@
 import { requiredString } from "@/lib/schemas/common";
-import type { DictamenArchivoFieldType } from "../../partials/form-fields";
 import z from "zod";
+import type { DictamenArchivoFieldType } from "../../partials/form-fields";
 
 export type Schema = {
     archivo_uuid: DictamenArchivoFieldType;

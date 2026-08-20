@@ -1,21 +1,21 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { DetailedActionDictamen, DetailedEditableActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { DetailedDictaminadoDictamen, DetailedSurtirDictamen, DictamenEstado } from "@/types/dictamenes";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { isDetailedActionDictamen,isDetailedDictaminadoDictamen, isDetailedEditableActionDictamen, isDetailedSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedPorSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { CircleXIcon, FileInputIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon, SquarePenIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { useState, type JSX } from "react";
-import { useSurtirMutation } from "../actions/surtir/form";
+import { useSurtirMutation } from "../form-actions/surtir/form";
 import { ArchivoPreviewActionRow } from "@/components/features/archivos/table-cols";
 import { cn, toLocaleDateFormat } from "@/lib/utils";
 import { DictamenEstadoEnum } from "@/lib/constants";
 import { TooltipButton } from "@/components/ui/tooltip-button";
 import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
+import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedDictamen, DetailedPorSurtirDictamen, DictamenEstado } from "@/types/dictamenes";
 
 const FormActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
@@ -41,7 +41,7 @@ const FormActionItemRow = ({ state }: { state: ActionDictamenEstadoEnum }) => (
     </ActionButton>
 );
 
-const EdicionActionItemRow = ({ dictamen }: { dictamen: DetailedEditableActionDictamen }) => (
+const EdicionActionItemRow = ({ dictamen }: { dictamen: DetailedEditableFormActionDictamen }) => (
     <Link to={EditarRoute.to} params={{ uuid: dictamen.uuid }}>
         <ActionButton
             tooltip={{
@@ -53,7 +53,7 @@ const EdicionActionItemRow = ({ dictamen }: { dictamen: DetailedEditableActionDi
     </Link>
 );
 
-const FormActionRow = ({ dictamen }: ActionProps<DetailedActionDictamen>) => (
+const FormActionRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) => (
     <Link
         to={ActionRoute.to}
         params={{
@@ -65,7 +65,7 @@ const FormActionRow = ({ dictamen }: ActionProps<DetailedActionDictamen>) => (
     </Link>
 );
 
-const SurtirActionRow = ({ dictamen }: ActionProps<DetailedSurtirDictamen>) => {
+const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen>) => {
     const [open, setOpen] = useState(false);
     const mutation = useSurtirMutation(dictamen);
     const navigate = useNavigate();
@@ -117,9 +117,7 @@ const SurtirActionRow = ({ dictamen }: ActionProps<DetailedSurtirDictamen>) => {
     );
 }
 
-export type DictamenData = DetailedActionDictamen | DetailedDictaminadoDictamen;
-
-interface ActionProps<TDictamen extends DictamenData> {
+interface ActionProps<TDictamen extends DetailedDictamen> {
     dictamen: TDictamen;
 }
 
@@ -131,7 +129,7 @@ const estadoColorVariants = cva(
                 default: undefined,
                 [DictamenEstadoEnum.DICTAMINAR]: "bg-red-400/90",
                 [DictamenEstadoEnum.EVIDENCIAR]: "bg-orange-300",
-                [DictamenEstadoEnum.SURTIR]: "bg-yellow-300/50",
+                [DictamenEstadoEnum.POR_SURTIR]: "bg-yellow-300/50",
                 [DictamenEstadoEnum.INVENTARIAR]: "bg-yellow-400/70",
                 [DictamenEstadoEnum.SURTIDO]: "bg-lime-400",
                 [DictamenEstadoEnum.SURTIDO_PARCIAL]: "bg-lime-400/60",
@@ -162,7 +160,7 @@ const EstadoBadge = ({
     </Badge>
 )
 
-export const columns: ColumnDef<DictamenData>[] = [
+export const columns: ColumnDef<DetailedDictamen>[] = [
     {
         accessorKey: "version_actual.fecha_solicitud",
         header: "Fecha de Solicitud",
@@ -189,14 +187,14 @@ export const columns: ColumnDef<DictamenData>[] = [
 
             return (
                 <div className="flex gap-1">
-                    {isDetailedEditableActionDictamen(dictamen) && (
+                    {isDetailedEditableFormActionDictamen(dictamen) && (
                         <EdicionActionItemRow dictamen={dictamen} />
                     )}
-                    {isDetailedActionDictamen(dictamen) && (
+                    {isDetailedActionFormDictamen(dictamen) && (
                         <FormActionRow dictamen={dictamen} />
                     )}
-                    {isDetailedSurtirDictamen(dictamen) && <SurtirActionRow dictamen={dictamen} />}
-                    {isDetailedDictaminadoDictamen(dictamen) && (
+                    {isDetailedPorSurtirDictamen(dictamen) && <SurtirActionRow dictamen={dictamen} />}
+                    {dictamenVersionHasArchivo(dictamen.version_actual) && (
                         <ArchivoPreviewActionRow
                             archivo={dictamen.version_actual.archivo}
                             meta={table.options.meta}

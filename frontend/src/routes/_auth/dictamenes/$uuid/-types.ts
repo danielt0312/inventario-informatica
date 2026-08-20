@@ -1,34 +1,24 @@
-import * as Root from "@/types/dictamenes";
-import { ActionDictamenEstadoEnum } from "./-constants";
-import type { DictaminadoDictamenEstadoEnum } from "@/lib/constants";
+import type { DetailedDictaminarDictamen, DetailedEvidenciarDictamen, DetailedInventariarDictamen, DetailedPorSurtirDictamen, DictaminarDictamen, EvidenciarDictamen, InventariarDictamen, PorSurtirDictamen } from "@/types/dictamenes";
 
-type Dictaminar = Root.DictaminarDictamen;
-type DetailedDictaminar = Root.DetailedDictaminarDictamen;
+type FormAction =
+    | DictaminarDictamen
+    | EvidenciarDictamen
+    | InventariarDictamen;
 
-type Dictaminado = Root.DictaminadoDictamen<Root.BaseDictamenEstado<ActionDictamenEstadoEnum & DictaminadoDictamenEstadoEnum>>;
-type DetailedDictaminado = Root.DetailedDictaminadoDictamen<Dictaminado>;
+type DetailedFormAction =
+    | DetailedDictaminarDictamen
+    | DetailedEvidenciarDictamen
+    | DetailedInventariarDictamen;
 
-type Editable =
-    | Root.SurtirDictamen;
+type EditableFormAction =
+    | PorSurtirDictamen;
 
-type DetailedEditable =
-    | Root.DetailedSurtirDictamen;
-
-type Action =
-    | Dictaminar
-    | Dictaminado;
-
-type DetailedAction =
-    | DetailedDictaminar
-    | DetailedDictaminado;
+type DetailedEditableFormAction =
+    | DetailedPorSurtirDictamen;
 
 export type {
-    Action as ActionDictamen,
-    DetailedAction as DetailedActionDictamen,
-    Dictaminar as ActionDictaminarDictamen,
-    DetailedDictaminar as DetailedActionDictaminarDictamen,
-    Dictaminado as ActionDictaminadoDictamen,
-    DetailedDictaminado as DetailedActionDictaminadoDictamen,
-    Editable as EditableActionDictamen,
-    DetailedEditable as DetailedEditableActionDictamen,
+    FormAction as FormActionDictamen,
+    DetailedFormAction as DetailedFormActionDictamen,
+    EditableFormAction as EditableFormActionDictamen,
+    DetailedEditableFormAction as DetailedEditableFormActionDictamen
 }

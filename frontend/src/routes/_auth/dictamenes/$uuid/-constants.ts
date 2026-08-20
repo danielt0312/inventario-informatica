@@ -3,7 +3,7 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 export const ActionDictamenLabels = ['dictaminar', 'evidenciar', 'inventariar'] as const;
 export type ActionDictamenLabels = (typeof ActionDictamenLabels)[number];
 
-const { DICTAMINAR, EVIDENCIAR, SURTIR, INVENTARIAR } = DictamenEstadoEnum;
+const { DICTAMINAR, EVIDENCIAR, INVENTARIAR } = DictamenEstadoEnum;
 export const ActionDictamenEstadoEnum = {
     DICTAMINAR,
     EVIDENCIAR,
@@ -17,7 +17,3 @@ export const ActionDictamenStates = {
     [ActionDictamenEstadoEnum.INVENTARIAR]: 'inventariar',
 } as const satisfies Record<ActionDictamenEstadoEnum, ActionDictamenLabels>;
 
-// todo revisar si es solo en un estado o si se puede tambien en el estado 'evidenciar'
-export const EditableActionDictamenEnum = {
-    SURTIR,
-}

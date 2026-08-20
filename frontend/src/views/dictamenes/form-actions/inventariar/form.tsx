@@ -9,23 +9,22 @@ import { FacturaField } from "@/components/features/facturas/form-fields";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { CostoUnitarioField, CuentaContable, EsContableField, NumeroSerieField } from "@/components/features/articulos/form-fields";
 import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
-import { hasOrdenCompra } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { inventariarDictamenHasOrdenCompra } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import type { OrdenCompra } from "@/types/orden_compras";
 import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 import { Button } from "@/components/ui/button";
 import { PlusCircleIcon, Trash2Icon } from "lucide-react";
-import type { DetailedInventariarDictamen, InventariarAdquisicionDictamen } from "@/types/dictamenes";
+import type { DetailedInventariarDictamen, InventariarDictamenAdquisicion } from "@/types/dictamenes";
 import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachment";
 import React from "react";
 import { isStringNumber } from "@/lib/utils";
 import { AdquisicionIdField } from "./form-fields";
 import type { ComboboxOption } from "@/components/ui/creatable-combobox";
-import { useStore } from "@tanstack/react-form";
 
 export const useForm = (dictamen: DetailedInventariarDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
 
-    const cleanedDefaultValues: InventariarDictamenSchema = hasOrdenCompra(dictamen)
+    const cleanedDefaultValues: InventariarDictamenSchema = inventariarDictamenHasOrdenCompra(dictamen)
         ? { ...defaultValues, orden_compra_id: dictamen.orden_compra.id }
         : defaultValues;
 
@@ -41,7 +40,7 @@ export const useForm = (dictamen: DetailedInventariarDictamen) => {
     });
 }
 
-function useAdquisicionesOptions(initialValues: InventariarAdquisicionDictamen[]) {
+function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]) {
     const initialOptions = React.useMemo(() =>
         initialValues
             .filter((adquisicion) => adquisicion.cantidad_restante > 0)
@@ -104,7 +103,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
     return (
         <Form form={form}>
             <form.AppForm>
-                {hasOrdenCompra(dictamen) ? (
+                {inventariarDictamenHasOrdenCompra(dictamen) ? (
                     <Field className="max-w-1/3">
                         <FieldLabel className="font-bold">Orden de Compra</FieldLabel>
                         <ArchivoAttachmentLayout
@@ -144,7 +143,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                 </div>
                             </div>
 
-                            {field.state.value.map((adquisicionFieldValue, index) => (
+                            {field.state.value.map((_, index) => (
                                 <Card key={index}>
                                     <CardHeader>
                                         <CardTitle className="text-lg">Bien Informático #{index + 1}</CardTitle>

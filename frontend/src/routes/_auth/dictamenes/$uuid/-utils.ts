@@ -1,75 +1,45 @@
 import { DictamenEstadoEnum } from '@/lib/constants';
 import { DictamenProducto } from '@/lib/utils';
-import {
-    ActionDictamenEstadoEnum,
-    ActionDictamenStates,
-    EditableActionDictamenEnum
-} from './-constants';
-import type {
-    DetailedDictaminadoDictamen,
-    DetailedInventariarDictamen,
-    DetailedSurtirDictamen,
-    Dictamen,
-    DictamenAdquisicion,
-    DictamenAdquisicionWithArticulo,
-    InventariarDictamen,
-    InventariarDictamenWithOrdenCompra,
-    SurtirDictamen
-} from '@/types/dictamenes';
-import type {
-    ActionDictamen,
-    ActionDictaminarDictamen,
-    ActionDictaminadoDictamen,
-    DetailedActionDictaminarDictamen,
-    DetailedActionDictamen,
-    DetailedActionDictaminadoDictamen,
-    EditableActionDictamen,
-    DetailedEditableActionDictamen
-} from './-types';
+import { ActionDictamenStates } from './-constants';
+import type { DetailedDictaminarDictamen, DetailedInventariarDictamen, DetailedPorSurtirDictamen, Dictamen, DictamenAdquisicion, DictamenAdquisicionWithArticulo, DictamenVersion, DictamenVersionWithArchivo, DictaminarDictamen, InventariarDictamen, InventariarDictamenWithOrdenCompra, PorSurtirDictamen } from '@/types/dictamenes';
+import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen, EditableFormActionDictamen, FormActionDictamen } from './-types';
 
-export const isSurtirDictamen = (dictamen: Dictamen): dictamen is SurtirDictamen =>
-    dictamen.estado.id === DictamenEstadoEnum.SURTIR;
+export const isDictaminarDictamen = (dictamen: Dictamen): dictamen is DictaminarDictamen =>
+    dictamen.estado.id === DictamenEstadoEnum.DICTAMINAR;
+
+export const isDetailedDictaminarDictamen = (dictamen: Dictamen): dictamen is DetailedDictaminarDictamen =>
+    isDictaminarDictamen(dictamen);
+
+export const isPorSurtirDictamen = (dictamen: Dictamen): dictamen is PorSurtirDictamen =>
+    dictamen.estado.id === DictamenEstadoEnum.POR_SURTIR;
+
+export const isDetailedPorSurtirDictamen = (dictamen: Dictamen): dictamen is DetailedPorSurtirDictamen =>
+    isPorSurtirDictamen(dictamen);
 
 export const isInventariarDictamen = (dictamen: Dictamen): dictamen is InventariarDictamen =>
     dictamen.estado.id === DictamenEstadoEnum.INVENTARIAR;
 
-export const isDetailedSurtirDictamen = (dictamen: Dictamen): dictamen is DetailedSurtirDictamen =>
-    isSurtirDictamen(dictamen);
-
 export const isDetailedInventariarDictamen = (dictamen: Dictamen): dictamen is DetailedInventariarDictamen =>
     isInventariarDictamen(dictamen);
 
-export const isActionDictamen = (dictamen: Dictamen): dictamen is ActionDictamen =>
+export const isActionFormDictamen = (dictamen: Dictamen): dictamen is FormActionDictamen =>
     dictamen.estado.id in ActionDictamenStates;
 
-export const isActionDictaminarDictamen = (dictamen: Dictamen): dictamen is ActionDictaminarDictamen =>
-    dictamen.estado.id === ActionDictamenEstadoEnum.DICTAMINAR;
+export const isDetailedActionFormDictamen = (dictamen: Dictamen): dictamen is DetailedFormActionDictamen =>
+    isActionFormDictamen(dictamen);
 
-export const isActionDictaminadoDictamen = (dictamen: Dictamen): dictamen is ActionDictaminadoDictamen =>
-    !isActionDictaminarDictamen(dictamen);
+export const isEditableFormActionDictamen = (dictamen: Dictamen): dictamen is EditableFormActionDictamen =>
+    isPorSurtirDictamen(dictamen);
 
-export const isDetailedActionDictamen = (dictamen: Dictamen): dictamen is DetailedActionDictamen =>
-    isActionDictamen(dictamen);
-
-export const isDetailedDictaminadoDictamen = (dictamen: Dictamen): dictamen is DetailedDictaminadoDictamen =>
-    dictamen.estado.id !== DictamenEstadoEnum.DICTAMINAR;
-
-export const isDetailedActionDictaminadoDictamen = (dictamen: Dictamen): dictamen is DetailedActionDictaminadoDictamen =>
-    isDetailedDictaminadoDictamen(dictamen);
-
-export const isDetailedActionDictaminarDictamen = (dictamen: Dictamen): dictamen is DetailedActionDictaminarDictamen =>
-    isActionDictaminarDictamen(dictamen);
-
-const DictaminadoValues = new Set<number>(Object.values(EditableActionDictamenEnum));
-export const isEditableActionDictamen = (dictamen: Dictamen): dictamen is EditableActionDictamen =>
-    DictaminadoValues.has(dictamen.estado.id);
-
-export const isDetailedEditableActionDictamen = (dictamen: Dictamen): dictamen is DetailedEditableActionDictamen =>
-    isEditableActionDictamen(dictamen);
+export const isDetailedEditableFormActionDictamen = (dictamen: Dictamen): dictamen is DetailedEditableFormActionDictamen =>
+    isDetailedPorSurtirDictamen(dictamen);
 
 export const adquisicionHasArticulo = (adquisicion: DictamenAdquisicion): adquisicion is DictamenAdquisicionWithArticulo =>
     'producto_tipo' in adquisicion && DictamenProducto.tipoRequiereNumeroInventario(adquisicion.producto_tipo.id)
     || 'producto' in adquisicion && DictamenProducto.tipoRequiereNumeroInventario(adquisicion.producto.tipo.id);
 
-export const hasOrdenCompra = (dictamen: InventariarDictamen): dictamen is InventariarDictamenWithOrdenCompra =>
+export const inventariarDictamenHasOrdenCompra = (dictamen: InventariarDictamen): dictamen is InventariarDictamenWithOrdenCompra =>
     !!dictamen.orden_compra;
+
+export const dictamenVersionHasArchivo = (version: DictamenVersion): version is DictamenVersionWithArchivo =>
+    'archivo' in version && !!version.archivo;

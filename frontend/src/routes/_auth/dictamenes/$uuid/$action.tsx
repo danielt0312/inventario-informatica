@@ -4,8 +4,8 @@ import {
     ActionDictamenLabels,
     ActionDictamenStates
 } from './-constants';
-import { View } from '@/views/dictamenes/actions/view';
-import { isDetailedActionDictamen } from './-utils';
+import { View } from '@/views/dictamenes/form-actions/view';
+import { isDetailedActionFormDictamen } from './-utils';
 import { detailedDictamenQueryOptions } from './-queries';
 import z from 'zod';
 
@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
         const dictamen = await context.queryClient.fetchQuery(detailedDictamenQueryOptions(params.uuid));
 
         // todo mostrar mensaje notificando que no puede realizar esto
-        if (!isDetailedActionDictamen(dictamen)) {
+        if (!isDetailedActionFormDictamen(dictamen)) {
             throw redirect({ to: IndexRoute.to });
         }
 

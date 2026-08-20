@@ -11,7 +11,7 @@ export type DocumentoTipoEnum = (typeof DocumentoTipoEnum)[keyof typeof Document
 export const DictamenEstadoEnum = {
     DICTAMINAR: 1,
     EVIDENCIAR: 2,
-    SURTIR: 3,
+    POR_SURTIR: 3,
     INVENTARIAR: 4,
     SURTIDO: 5,
     SURTIDO_PARCIAL: 6
