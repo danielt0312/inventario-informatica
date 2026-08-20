@@ -9,21 +9,21 @@ import { type Producto, type ProductoCategoria, type ProductoMarca, type Product
 import api from "@/lib/axios";
 
 interface TableFilters {
-    categorias: number[];
-    tipos: number[];
-    marcas: number[];
-    productos: number[];
-    estados: number[];
+    categoria: number[];
+    tipo: number[];
+    marca: number[];
+    producto: number[];
+    estado: number[];
     numero_inventario: string;
 }
 
 export function ArticuloTable() {
     const { filters, setFilters, debouncedFilters } = useDebouncedFilters<TableFilters>({
-        categorias: [],
-        tipos: [],
-        marcas: [],
-        productos: [],
-        estados: [],
+        categoria: [],
+        tipo: [],
+        marca: [],
+        producto: [],
+        estado: [],
         numero_inventario: '',
     });
 
@@ -34,40 +34,40 @@ export function ArticuloTable() {
     });
 
     const { data: PRODUCTO_TIPOS = [] } = useQuery({
-        queryKey: ['producto_tipos', debouncedFilters.categorias],
+        queryKey: ['producto_tipos', debouncedFilters.categoria],
         queryFn: () => api.get<TResponse<ProductoTipo[]>>('api/producto_tipos', {
             params: {
                 filters: {
-                    categorias: debouncedFilters.categorias
+                    categoria: debouncedFilters.categoria
                 }
             }
         }).then(r => r.data.data),
-        enabled: debouncedFilters.categorias.length > 0
+        enabled: debouncedFilters.categoria.length > 0
     });
 
     const { data: PRODUCTO_MARCAS = [] } = useQuery({
-        queryKey: ['producto_marcas', debouncedFilters.tipos],
+        queryKey: ['producto_marcas', debouncedFilters.tipo],
         queryFn: () => api.get<TResponse<ProductoMarca[]>>('api/producto_marcas', {
             params: {
                 filters: {
-                    tipos: debouncedFilters.tipos,
+                    tipo: debouncedFilters.tipo,
                 }
             }
         }).then(r => r.data.data),
-        enabled: debouncedFilters.tipos.length > 0
+        enabled: debouncedFilters.tipo.length > 0
     });
 
     const { data: PRODUCTOS = [] } = useQuery({
-        queryKey: ['productos', debouncedFilters.tipos, debouncedFilters.marcas],
+        queryKey: ['productos', debouncedFilters.tipo, debouncedFilters.marca],
         queryFn: () => api.get<TResponse<Producto[]>>('api/productos', {
             params: {
                 filters: {
-                    tipos: debouncedFilters.tipos,
-                    marcas: debouncedFilters.marcas,
+                    tipo: debouncedFilters.tipo,
+                    marca: debouncedFilters.marca,
                 }
             }
         }).then(r => r.data.data),
-        enabled: debouncedFilters.tipos.length > 0
+        enabled: debouncedFilters.tipo.length > 0
     });
 
     const { data: PRODUCTO_ESTADOS = [] } = useQuery({
@@ -96,26 +96,26 @@ export function ArticuloTable() {
                     <MultiSelect
                         label="Categoría"
                         options={PRODUCTO_CATEGORIAS}
-                        selected={filters.categorias.map(String)}
+                        selected={filters.categoria.map(String)}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,
-                            categorias: v.map(Number),
-                            tipos: [],
-                            marcas: [],
-                            productos: []
+                            categoria: v.map(Number),
+                            tipo: [],
+                            marca: [],
+                            producto: []
                         }))}
                     />
                     <MultiSelect
                         label="Producto"
                         options={PRODUCTO_TIPOS}
-                        selected={filters.tipos.map(String)}
+                        selected={filters.tipo.map(String)}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,
-                            tipos: v.map(Number),
-                            marcas: [],
-                            productos: []
+                            tipo: v.map(Number),
+                            marca: [],
+                            producto: []
                         }))}
-                        emptyMessage={debouncedFilters.categorias.length === 0
+                        emptyMessage={debouncedFilters.categoria.length === 0
                             ? 'Primero selecciona una categoría'
                             : undefined
                         }
@@ -123,13 +123,13 @@ export function ArticuloTable() {
                     <MultiSelect
                         label="Marca"
                         options={PRODUCTO_MARCAS}
-                        selected={filters.marcas.map(String)}
+                        selected={filters.marca.map(String)}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,
-                            marcas: v.map(Number),
-                            productos: []
+                            marca: v.map(Number),
+                            producto: []
                         }))}
-                        emptyMessage={debouncedFilters.productos.length === 0
+                        emptyMessage={debouncedFilters.producto.length === 0
                             ? 'Primero selecciona un producto'
                             : undefined
                         }
@@ -137,12 +137,12 @@ export function ArticuloTable() {
                     <MultiSelect
                         label="Modelo"
                         options={PRODUCTOS}
-                        selected={filters.productos.map(String)}
+                        selected={filters.producto.map(String)}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,
-                            productos: v.map(Number)
+                            producto: v.map(Number)
                         }))}
-                        emptyMessage={debouncedFilters.productos.length === 0
+                        emptyMessage={debouncedFilters.producto.length === 0
                             ? 'Primero selecciona un producto'
                             : undefined
                         }
@@ -153,10 +153,10 @@ export function ArticuloTable() {
                         onOptionRender={(option) => (
                             <ArticuloEstadoBadge estado={option} />
                         )}
-                        selected={filters.estados.map(String)}
+                        selected={filters.estado.map(String)}
                         onChange={(v) => setFilters(prev => ({
                             ...prev,
-                            estados: v.map(Number)
+                            estado: v.map(Number)
                         }))}
                     />
                 </>

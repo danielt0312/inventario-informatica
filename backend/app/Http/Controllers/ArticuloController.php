@@ -13,13 +13,19 @@ class ArticuloController extends Controller
     public function index(Request $request)
     {
         return QueryBuilder::for(Articulo::class)
-            ->with(['estado', 'producto.tipo.categoria', 'producto.marca'])
+            ->with([
+                'estado',
+                'producto' => [
+                    'tipo.categoria',
+                    'marca'
+                ]
+            ])
             ->allowedFilters(
-                AllowedFilter::belongsTo('categorias', 'producto.tipo.categoria.id'),
-                AllowedFilter::belongsTo('tipos', 'producto.tipo.id'),
-                AllowedFilter::belongsTo('marcas', 'producto.marca.id'),
-                AllowedFilter::belongsTo('productos'),
-                AllowedFilter::belongsTo('estados'),
+                AllowedFilter::belongsTo('categoria', 'producto.tipo.categoria'),
+                AllowedFilter::belongsTo('tipo', 'producto.tipo'),
+                AllowedFilter::belongsTo('marca', 'producto.marca'),
+                AllowedFilter::belongsTo('producto'),
+                AllowedFilter::belongsTo('estado'),
             )
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
