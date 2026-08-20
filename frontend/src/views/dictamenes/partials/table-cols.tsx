@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedPorSurtirDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedPorSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { CircleXIcon, FileInputIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon, SquarePenIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
@@ -15,7 +15,7 @@ import { TooltipButton } from "@/components/ui/tooltip-button";
 import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
 import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { DetailedDictamen, DetailedPorSurtirDictamen, DictamenEstado } from "@/types/dictamenes";
+import type { DetailedDictamen, DetailedPorSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
 
 const FormActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
@@ -65,7 +65,7 @@ const FormActionRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) =>
     </Link>
 );
 
-const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen>) => {
+const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | DetailedSurtidoParcialDictamen>) => {
     const [open, setOpen] = useState(false);
     const mutation = useSurtirMutation(dictamen);
     const navigate = useNavigate();
@@ -176,9 +176,18 @@ export const columns: ColumnDef<DetailedDictamen>[] = [
     },
     {
         header: "Estado",
-        cell: ({ row }) => (
-            <EstadoBadge estado={row.original.estado} />
-        )
+        cell: ({ row }) => {
+            const dictamen = row.original;
+
+            return (
+                <div className="flex flex-col gap-2">
+                    <EstadoBadge estado={row.original.estado} />
+                    {(isSurtidoDictamen(dictamen) && dictamen.tiene_observaciones) && (
+                        <Badge variant="outline">Tiene observaciones</Badge>
+                    )}
+                </div>
+            );
+        }
     },
     {
         id: "actions",
@@ -193,7 +202,7 @@ export const columns: ColumnDef<DetailedDictamen>[] = [
                     {isDetailedActionFormDictamen(dictamen) && (
                         <FormActionRow dictamen={dictamen} />
                     )}
-                    {isDetailedPorSurtirDictamen(dictamen) && <SurtirActionRow dictamen={dictamen} />}
+                    {(isDetailedPorSurtirDictamen(dictamen) || isDetailedSurtidoParcialDictamen(dictamen)) && <SurtirActionRow dictamen={dictamen} />}
                     {dictamenVersionHasArchivo(dictamen.version_actual) && (
                         <ArchivoPreviewActionRow
                             archivo={dictamen.version_actual.archivo}

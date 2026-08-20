@@ -81,4 +81,11 @@ class Dictamen extends Model
     {
         return 'uuid';
     }
+
+    public function casts(): array
+    {
+        return [
+            'tiene_observaciones' => 'boolean'
+        ];
+    }
 }

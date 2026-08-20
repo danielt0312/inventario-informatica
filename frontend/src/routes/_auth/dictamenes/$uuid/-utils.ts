@@ -1,7 +1,7 @@
 import { DictamenEstadoEnum } from '@/lib/constants';
 import { DictamenProducto } from '@/lib/utils';
 import { ActionDictamenStates } from './-constants';
-import type { DetailedDictaminarDictamen, DetailedInventariarDictamen, DetailedPorSurtirDictamen, Dictamen, DictamenAdquisicion, DictamenAdquisicionWithArticulo, DictamenVersion, DictamenVersionWithArchivo, DictaminarDictamen, InventariarDictamen, InventariarDictamenWithOrdenCompra, PorSurtirDictamen } from '@/types/dictamenes';
+import type { DetailedDictaminarDictamen, DetailedInventariarDictamen, DetailedPorSurtirDictamen, DetailedSurtidoDictamen, DetailedSurtidoParcialDictamen, Dictamen, DictamenAdquisicion, DictamenAdquisicionWithArticulo, DictamenVersion, DictamenVersionWithArchivo, DictaminarDictamen, InventariarDictamen, InventariarDictamenWithOrdenCompra, PorSurtirDictamen, SurtidoDictamen, SurtidoParcialDictamen } from '@/types/dictamenes';
 import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen, EditableFormActionDictamen, FormActionDictamen } from './-types';
 
 export const isDictaminarDictamen = (dictamen: Dictamen): dictamen is DictaminarDictamen =>
@@ -21,6 +21,18 @@ export const isInventariarDictamen = (dictamen: Dictamen): dictamen is Inventari
 
 export const isDetailedInventariarDictamen = (dictamen: Dictamen): dictamen is DetailedInventariarDictamen =>
     isInventariarDictamen(dictamen);
+
+export const isSurtidoDictamen = (dictamen: Dictamen): dictamen is SurtidoDictamen =>
+    dictamen.estado.id === DictamenEstadoEnum.SURTIDO;
+
+export const isDetailedSurtidoDictamen = (dictamen: Dictamen): dictamen is DetailedSurtidoDictamen =>
+    isSurtidoDictamen(dictamen);
+
+export const isSurtidoParcialDictamen = (dictamen: Dictamen): dictamen is SurtidoParcialDictamen =>
+    dictamen.estado.id === DictamenEstadoEnum.SURTIDO_PARCIAL;
+
+export const isDetailedSurtidoParcialDictamen = (dictamen: Dictamen): dictamen is DetailedSurtidoParcialDictamen =>
+    isSurtidoParcialDictamen(dictamen);
 
 export const isActionFormDictamen = (dictamen: Dictamen): dictamen is FormActionDictamen =>
     dictamen.estado.id in ActionDictamenStates;

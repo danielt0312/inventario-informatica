@@ -103,26 +103,28 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
     return (
         <Form form={form}>
             <form.AppForm>
-                {inventariarDictamenHasOrdenCompra(dictamen) ? (
-                    <Field className="max-w-1/3">
-                        <FieldLabel className="font-bold">Orden de Compra</FieldLabel>
-                        <ArchivoAttachmentLayout
-                            value={dictamen.orden_compra.archivo}
+                <div className="max-w-1/3">
+                    {inventariarDictamenHasOrdenCompra(dictamen) ? (
+                        <Field>
+                            <FieldLabel className="font-bold">Orden de Compra</FieldLabel>
+                            <ArchivoAttachmentLayout
+                                value={dictamen.orden_compra.archivo}
+                            />
+                        </Field>
+                    ) : (
+                        <form.AppField
+                            name="orden_compra_id"
+                            children={() => <OrdenCompraField onValueChange={setOrdenCompra} />}
+                            listeners={{
+                                onChange: () =>
+                                    form.getFieldValue('adquisiciones')
+                                        .forEach((_, index) => {
+                                            form.setFieldValue(`adquisiciones[${index}].factura_id`, undefined);
+                                        })
+                            }}
                         />
-                    </Field>
-                ) : (
-                    <form.AppField
-                        name="orden_compra_id"
-                        children={() => <OrdenCompraField className="max-w-1/3" onValueChange={setOrdenCompra} />}
-                        listeners={{
-                            onChange: () =>
-                                form.getFieldValue('adquisiciones')
-                                    .forEach((_, index) => {
-                                        form.setFieldValue(`adquisiciones[${index}].factura_id`, undefined);
-                                    })
-                        }}
-                    />
-                )}
+                    )}
+                </div>
 
                 <form.AppField name="adquisiciones" mode="array">
                     {(field) => (
@@ -217,12 +219,25 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                             </form.Subscribe>
                                         </FieldGroup>
 
-                                        <form.Subscribe selector={(state) => state.values.adquisiciones[index].es_resultado_esperado}>
-                                            {(esResultadoEsperado) => esResultadoEsperado === false && (
+                                        <form.Subscribe
+                                            selector={(state) => {
+                                                const adquisicionField = state.values.adquisiciones[index];
+                                                return {
+                                                    esResultadoEsperado: adquisicionField.es_resultado_esperado,
+                                                    adquisicionId: adquisicionField.id
+                                                };
+                                            }}
+                                        >
+                                            {({esResultadoEsperado, adquisicionId}) => esResultadoEsperado === false && (
                                                 <FieldGroup className="flex-row">
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].producto_id`}
-                                                        children={() => <ProductoField tipo={undefined} required />}
+                                                        children={() => {
+                                                            const adquisicion = adquisiciones.find(a => a.id === adquisicionId);
+                                                            return (
+                                                                <ProductoField tipo={adquisicion?.producto.tipo.id} required />
+                                                            );
+                                                        }}
                                                     />
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].observaciones`}

@@ -31,7 +31,7 @@ function Attachment<TValue extends AttachmentType = AttachmentType>({
 }) {
     return (
         <Root.Attachment
-            state={value ? 'done' : 'idle'}
+            state={value !== undefined ? 'done' : 'idle'}
             className={cn(
                 "w-full",
                 className
