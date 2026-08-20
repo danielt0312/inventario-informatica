@@ -7,9 +7,9 @@ import { EsResultadoEsperadoField, ObservacionesField } from "@/components/featu
 import { ProductoField } from "@/components/features/productos/form-fields";
 import { FacturaField } from "@/components/features/facturas/form-fields";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { CostoUnitarioField, CuentaContable, EsContableField, NullableNumeroInventarioField, NumeroSerieField } from "@/components/features/articulos/form-fields";
+import { CostoUnitarioField, CuentaContable, EsContableField, NumeroSerieField } from "@/components/features/articulos/form-fields";
 import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
-import { adquisicionHasArticulo, hasOrdenCompra } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { hasOrdenCompra } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import type { OrdenCompra } from "@/types/orden_compras";
 import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import React from "react";
 import { isStringNumber } from "@/lib/utils";
 import { AdquisicionIdField } from "./form-fields";
 import type { ComboboxOption } from "@/components/ui/creatable-combobox";
+import { useStore } from "@tanstack/react-form";
 
 export const useForm = (dictamen: DetailedInventariarDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -46,7 +47,7 @@ function useAdquisicionesOptions(initialValues: InventariarAdquisicionDictamen[]
             .filter((adquisicion) => adquisicion.cantidad_restante > 0)
             .map((adquisicion) => ({
                 id: adquisicion.id,
-                label: `${adquisicion.producto.tipo.nombre} ${adquisicion.producto.marca.nombre} ${adquisicion.producto.nombre} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
+                label: `${adquisicion.producto.tipo.nombre} ${adquisicion.producto.marca.nombre} ${adquisicion.producto.nombre} ${adquisicion.caracteristicas} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
                 cantidad_restante: adquisicion.cantidad_restante,
             })),
         [initialValues]);
@@ -87,7 +88,7 @@ function useAdquisicionesOptions(initialValues: InventariarAdquisicionDictamen[]
 export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }) {
     const form = useForm(dictamen);
 
-    const [ordenCompra, setOrdenCompra] = React.useState<OrdenCompra | undefined>(undefined);
+    const [ordenCompra, setOrdenCompra] = React.useState<OrdenCompra | undefined>(dictamen.orden_compra ?? undefined);
 
     const adquisiciones = dictamen.version_actual.adquisiciones;
 
@@ -165,57 +166,65 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                         </CardAction>
                                     </CardHeader>
                                     <CardContent className="flex flex-col gap-7">
-                                        <form.AppField
-                                            name={`adquisiciones[${index}].id`}
-                                            children={(field) => (
-                                                <AdquisicionIdField
-                                                    options={adquisicionesOptions}
-                                                    onValueChange={(v) => {
-                                                        const value = v && isStringNumber(v.value) ? Number(v.value) : undefined;
-                                                        const previousValue = field.state.value;
-
-                                                        if (previousValue !== undefined && previousValue !== value) {
-                                                            adquisicionRestoreOptions(previousValue);
-                                                        }
-
-                                                        if (value !== undefined && previousValue !== value) {
-                                                            adquisicionRemoveOptions(value);
-                                                        }
-
-                                                        field.handleChange(value);
-                                                    }}
-                                                    required
-                                                />
-                                            )}
-                                            listeners={{
-                                                onChange: ({value}) => console.log(value)
-                                            }}
-                                        />
-
-                                        <FieldGroup className="flex-row">
+                                        <FieldGroup className="grid grid-cols-2">
                                             <form.AppField
-                                                name={`adquisiciones[${index}].cuenta_contable`}
-                                                children={() => <CuentaContable required />}
-                                            />
+                                                name={`adquisiciones[${index}].id`}
+                                                children={(field) => (
+                                                    <AdquisicionIdField
+                                                        options={adquisicionesOptions}
+                                                        onValueChange={(v) => {
+                                                            const value = v && isStringNumber(v.value) ? Number(v.value) : undefined;
+                                                            const previousValue = field.state.value;
 
-                                            <form.AppField
-                                                name={`adquisiciones[${index}].es_resultado_esperado`}
-                                                children={() => <EsResultadoEsperadoField required />}
+                                                            if (previousValue !== undefined && previousValue !== value) {
+                                                                adquisicionRestoreOptions(previousValue);
+                                                            }
+
+                                                            if (value !== undefined && previousValue !== value) {
+                                                                adquisicionRemoveOptions(value);
+                                                            }
+
+                                                            field.handleChange(value);
+                                                        }}
+                                                        required
+                                                    />
+                                                )}
                                                 listeners={{
-                                                    onChange: ({ value }) =>
-                                                        value && form.setFieldValue(`adquisiciones[${index}].observaciones`, null)
+                                                    onChange: () => {
+                                                        form.setFieldValue(`adquisiciones[${index}].es_resultado_esperado`, undefined);
+                                                    }
                                                 }}
                                             />
+
+                                            <form.Subscribe selector={(state) => state.values.adquisiciones[index].id}>
+                                                {(adquisicionId) => (
+                                                    <form.AppField
+                                                        name={`adquisiciones[${index}].es_resultado_esperado`}
+                                                        children={() => <EsResultadoEsperadoField required />}
+                                                        listeners={{
+                                                            onChange: ({ value }) => {
+                                                                form.setFieldValue(`adquisiciones[${index}].observaciones`, null);
+
+                                                                if (value) {
+                                                                    const adquisicion = adquisiciones.find(a => a.id === adquisicionId);
+                                                                    form.setFieldValue(`adquisiciones[${index}].producto_id`, adquisicion?.producto.id);
+                                                                } else {
+                                                                    form.setFieldValue(`adquisiciones[${index}].producto_id`, undefined);
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                )}
+                                            </form.Subscribe>
                                         </FieldGroup>
 
                                         <form.Subscribe selector={(state) => state.values.adquisiciones[index].es_resultado_esperado}>
                                             {(esResultadoEsperado) => esResultadoEsperado === false && (
-                                                <FieldGroup className="grid grid-cols-3">
+                                                <FieldGroup className="flex-row">
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].producto_id`}
-                                                        children={() => <ProductoField tipo={adquisicionFieldValue.producto_tipo_id} required />}
+                                                        children={() => <ProductoField tipo={undefined} required />}
                                                     />
-
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].observaciones`}
                                                         children={() => <ObservacionesField className="col-span-2" required />}
@@ -223,6 +232,12 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                 </FieldGroup>
                                             )}
                                         </form.Subscribe>
+
+                                        <form.AppField
+                                            name={`adquisiciones[${index}].cuenta_contable`}
+                                            children={() => <CuentaContable required />}
+                                        />
+
                                         <FieldGroup className="flex-row">
                                             <form.AppField
                                                 name={`adquisiciones[${index}].numero_serie`}
@@ -235,33 +250,16 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                             />
                                         </FieldGroup>
 
-                                        <FieldGroup className="flex-row">
+                                        <FieldGroup className="grid grid-cols-2">
                                             <form.Subscribe selector={(state) => state.values.adquisiciones[index].es_contable}>
                                                 {(esContable) => (
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].costo_unitario`}
-                                                        children={() => <CostoUnitarioField className="w-1/2" required={esContable} />}
+                                                        children={() => <CostoUnitarioField required={esContable} />}
                                                     />
                                                 )}
                                             </form.Subscribe>
-                                            <div className="w-1/2">
-                                                <form.Subscribe selector={(state) => state.values.adquisiciones[index].id}>
-                                                    {(adquisicionId) => {
-                                                        const adquisicion = adquisiciones.find((a) => a.id === adquisicionId)
-                                                        if (adquisicion && adquisicionHasArticulo(adquisicion)) {
-                                                            return (
-                                                                <form.AppField
-                                                                    name={`adquisiciones[${index}].numero_inventario`}
-                                                                    children={() => <NullableNumeroInventarioField />}
-                                                                />
-                                                            );
-                                                        }
-                                                    }}
-                                                </form.Subscribe>
-                                            </div>
-                                        </FieldGroup>
 
-                                        <FieldGroup className="grid grid-cols-2">
                                             <form.AppField
                                                 name={`adquisiciones[${index}].factura_id`}
                                                 children={() => (
@@ -282,6 +280,6 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
 
                 <form.SubmitFormButton />
             </form.AppForm>
-        </Form>
+        </Form >
     );
 }

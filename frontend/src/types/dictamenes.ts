@@ -1,4 +1,4 @@
-import type { DICTAMEN_ESTADO_DICTAMINAR, DICTAMEN_ESTADO_INVENTARIAR, DICTAMEN_ESTADO_SURTIR, DictamenEstadoEnum, DictaminadoDictamenEstadoEnum } from "@/lib/constants";
+import type { DictamenEstadoEnum, DictaminadoDictamenEstadoEnum } from "@/lib/constants";
 import type { Includable, TCatalogo } from "./generics";
 import type { Archivo, Oficio } from "./documentos";
 import type { DetailedProducto, DetailedProductoTipo } from "./productos";
@@ -27,6 +27,9 @@ type BaseAdquisicion<TArticulo extends IncludableArticulo = IncludableArticulo> 
     empleado: TCatalogo;
     articulo: TArticulo;
 }
+type BaseOrdenCompra<TOrdenCompra extends IncludableOrdenCompra = IncludableOrdenCompra> = {
+    orden_compra: TOrdenCompra;
+}
 type VersionActual<TVersion extends BaseVersion = BaseVersion> = {
     version_actual: TVersion;
 }
@@ -49,7 +52,7 @@ type DetailedBase<TDictamen extends Base = Base, TVersionActualWithAdquisiciones
 // contrario a lo anterior, entonces todas las versiones serian "dictaminado", i.e., `FullyDetailedDictaminadoDictamen`
 // export type FullyDetailedBase<TDictamen extends Base = Base, TVersionesWithAdquisiciones extends VersionesWithAdquisiciones = VersionesWithAdquisiciones, TVersionActualWithAdquisiciones extends VersionActualWithAdquisiciones = VersionActualWithAdquisiciones> = DetailedBase<TDictamen & TVersionesWithAdquisiciones, TVersionActualWithAdquisiciones>
 
-type Dictaminar = Base<BaseEstado<typeof DICTAMEN_ESTADO_DICTAMINAR>>;
+type Dictaminar = Base<BaseEstado<typeof DictamenEstadoEnum.DICTAMINAR>>;
 type DictaminarAdquisicion = BaseAdquisicion & {
     producto_tipo: DetailedProductoTipo;
 }
@@ -69,16 +72,14 @@ type BaseDetailedDictaminado<TDictaminado extends BaseDictaminado = BaseDictamin
 
 type DetailedDictaminado = BaseDetailedDictaminado;
 
-type SurtirEstado = DictaminadoEstado<typeof DICTAMEN_ESTADO_SURTIR>;
+type SurtirEstado = DictaminadoEstado<typeof DictamenEstadoEnum.SURTIR>;
 type Surtir = BaseDictaminado<SurtirEstado>;
 type DetailedSurtir = DetailedBase<Surtir, VersionActualWithAdquisiciones<VersionWithAdquisiciones<DictaminadoVersion, Adquisiciones<DictaminadoAdquisicion>>>>;
 
-type InventariarEstado = DictaminadoEstado<typeof DICTAMEN_ESTADO_INVENTARIAR>;
-type BaseInventariar<TOrdenCompra extends IncludableOrdenCompra = IncludableOrdenCompra> = BaseDictaminado<InventariarEstado> & {
-    orden_compra: TOrdenCompra;
-};
+type InventariarEstado = DictaminadoEstado<typeof DictamenEstadoEnum.INVENTARIAR>;
+type BaseInventariar<TOrdenCompra extends BaseOrdenCompra = BaseOrdenCompra> = BaseDictaminado<InventariarEstado> & TOrdenCompra;
 type Inventariar = BaseInventariar;
-type InventariarWithOrdenCompra = BaseInventariar<OrdenCompra>;
+type InventariarWithOrdenCompra = BaseInventariar<BaseOrdenCompra<OrdenCompra>>;
 type InventariarAdquisicion = DictaminadoAdquisicion & {
     cantidad_surtida: number;
     cantidad_restante: number;

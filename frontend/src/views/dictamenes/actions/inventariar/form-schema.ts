@@ -1,9 +1,8 @@
 import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
-import { DictamenProducto } from "@/lib/utils";
 import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/components/features/articulos/recepciones/form-fields";
-import type { CostoUnitarioFieldType, CuentaContableType, EsContableFieldType, NullableNumeroInventarioFieldType, NumeroSerieFieldType } from "@/components/features/articulos/form-fields";
+import type { CostoUnitarioFieldType, CuentaContableType, EsContableFieldType, NumeroSerieFieldType } from "@/components/features/articulos/form-fields";
 import type { FacturaFieldType } from "@/components/features/facturas/form-fields";
-import type { ProductoGroupFieldType } from "@/components/features/productos/form-fields";
+import type { ProductoFieldType } from "@/components/features/productos/form-fields";
 import type { OrdenCompraFieldType } from "@/components/features/orden_compras/form-fields";
 import z from "zod";
 
@@ -11,9 +10,7 @@ type AdquisicionFields = RecepcionFieldGroup & {
     id: number | undefined;
     cuenta_contable: CuentaContableType;
     factura_id: FacturaFieldType;
-    numero_inventario: NullableNumeroInventarioFieldType;
-    producto_tipo_id: ProductoGroupFieldType['tipo_id'];
-    producto_id: ProductoGroupFieldType['id'];
+    producto_id: ProductoFieldType;
     costo_unitario: CostoUnitarioFieldType;
     es_contable: EsContableFieldType;
     numero_serie: NumeroSerieFieldType;
@@ -31,9 +28,7 @@ export const adquisicionFieldsDefaultValues: AdquisicionFields = {
     cuenta_contable: undefined,
     numero_serie: undefined,
     costo_unitario: null,
-    numero_inventario: null,
     id: undefined,
-    producto_tipo_id: undefined,
     producto_id: undefined,
 }
 
@@ -45,14 +40,12 @@ export const defaultValues: Schema = {
 const adquisicionValidator = z
     .object({
         id: selectedNumberOption,
-        producto_tipo_id: selectedNumberOption,
         producto_id: selectedNumberOption,
         factura_id: selectedNumberOption,
         cuenta_contable: requiredString,
         numero_serie: requiredString,
         es_contable: selectedBooleanOption,
         costo_unitario: nullableNumber,
-        numero_inventario: nullableString,
         es_resultado_esperado: selectedBooleanOption,
         observaciones: nullableString,
     });
@@ -69,19 +62,6 @@ export const validator = z.object({
                 path: ['observaciones'],
                 when: ({ value }) =>
                     adquisicionValidator.pick({ es_resultado_esperado: true, observaciones: true })
-                        .safeParse(value)
-                        .success
-            }
-        )
-        .refine(
-            ({ producto_tipo_id, numero_inventario }) => !(
-                DictamenProducto.tipoRequiereNumeroInventario(producto_tipo_id) && (numero_inventario === null || numero_inventario.length === 0)
-            ),
-            {
-                error: 'Este campo es requerido',
-                path: ['numero_inventario'],
-                when: ({ value }) =>
-                    adquisicionValidator.pick({ producto_id: true, numero_inventario: true })
                         .safeParse(value)
                         .success
             }

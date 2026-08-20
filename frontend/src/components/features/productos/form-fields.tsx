@@ -14,7 +14,7 @@ import { FieldGroup } from "@/components/ui/field";
 import React from "react";
 import api from "@/lib/axios";
 
-export type ProductoField = CreatableComboboxFieldType;
+export type ProductoFieldType = CreatableComboboxFieldType;
 export function ProductoField({
     label = "Modelo de Producto",
     tipo,
@@ -23,7 +23,7 @@ export function ProductoField({
 }: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options' | 'onCreateRequest'> & {
     tipo: ProductoTipoFieldType;
 }) {
-    const field = useFieldContext<ProductoField>();
+    const field = useFieldContext<ProductoFieldType>();
 
     const { data: options = [] } = useQuery({
         queryKey: ['productos', tipo],
@@ -92,7 +92,7 @@ export function ProductoField({
 
 export type ProductoGroupFieldType = {
     tipo_id: ProductoTipoFieldType;
-    id: ProductoField;
+    id: ProductoFieldType;
 };
 
 const productoGroupDefaultValues: ProductoGroupFieldType = {

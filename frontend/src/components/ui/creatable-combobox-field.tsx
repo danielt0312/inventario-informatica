@@ -11,6 +11,7 @@ interface CreatableComboboxFieldProps extends Omit<React.ComponentProps<typeof C
 
 function CreatableComboboxField({
     value,
+    onValueChange,
     className, description, disabled, label, required, orientation, ...creatableComboboxProps
 }: CreatableComboboxFieldProps) {
     const field = useFieldContext<CreatableComboboxFieldType>();
@@ -37,6 +38,7 @@ function CreatableComboboxField({
                         : Number(value)
                     );
                     setActualOption(v);
+                    onValueChange?.(v);
                 }}
                 disabled={disabled}
             />
