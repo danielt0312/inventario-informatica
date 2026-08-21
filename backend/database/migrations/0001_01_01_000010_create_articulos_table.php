@@ -15,6 +15,7 @@ return new class extends Migration
 
         Schema::create('articulos', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->foreignId('producto_id')
                 ->constrained('productos', indexName: 'fk_articulos_productos')
                 ->cascadeOnUpdate()

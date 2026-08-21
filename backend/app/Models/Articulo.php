@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 use App\Enums\ArticuloEstadoEnum;
 use App\Services\NumeroInventarioService;
 
 class Articulo extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $table = 'articulos';
 
@@ -78,6 +79,17 @@ class Articulo extends Model
     public function qr(): BelongsTo {
         return $this->belongsTo(Archivo::class, 'qr_archivo_id');
     }
+
+    public function uniqueIds(): array
+    {
+        return ['uuid'];
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
 
     public function casts(): array {
         return [

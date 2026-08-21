@@ -30,4 +30,19 @@ class ArticuloController extends Controller
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
     }
+
+    public function show(string $uuid)
+    {
+        return QueryBuilder::for(Articulo::class)
+            ->with([
+                'estado',
+                'producto' => [
+                    'tipo.categoria',
+                    'marca'
+                ]
+            ])
+            ->where('uuid', $uuid)
+            ->firstOrFail()
+            ->toResource();
+    }
 }

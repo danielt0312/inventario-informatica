@@ -11,25 +11,17 @@ import { useSurtirMutation } from "../form-actions/surtir/form";
 import { ArchivoPreviewActionRow } from "@/components/features/archivos/table-cols";
 import { cn, toLocaleDateFormat } from "@/lib/utils";
 import { DictamenEstadoEnum } from "@/lib/constants";
-import { TooltipButton } from "@/components/ui/tooltip-button";
 import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
 import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { DetailedDictamen, DetailedPorSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
+import { ActionButton } from "@/components/ui/action-row";
 
 const FormActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
     [ActionDictamenEstadoEnum.EVIDENCIAR]: <PaperclipIcon />,
     [ActionDictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
-
-const ActionButton = (props?: React.ComponentProps<typeof TooltipButton>) => (
-    <TooltipButton
-        variant="outline"
-        size="icon"
-        {...props}
-    />
-)
 
 const FormActionItemRow = ({ state }: { state: ActionDictamenEstadoEnum }) => (
     <ActionButton

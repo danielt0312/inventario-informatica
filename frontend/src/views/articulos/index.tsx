@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArticuloTable } from "../../components/features/articulos/table"
+import { ArticuloTable } from "./partials/table";
 
-function Inventario() {
+function View() {
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -13,7 +13,9 @@ function Inventario() {
                 <ArticuloTable />
             </CardContent>
         </Card>
-    )
+    );
 }
 
-export default Inventario
+export {
+    View as ArticuloIndexView
+}

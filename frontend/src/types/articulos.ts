@@ -7,6 +7,7 @@ type IncludableDictamenAdquisicion = Includable<SurtidoDictamenAdquisicion>;
 
 type BaseEstado<TEstado extends ArticuloEstadoEnum = ArticuloEstadoEnum> = TCatalogo<TEstado>;
 type Attributes<TEstado extends BaseEstado = BaseEstado, TProducto extends DetailedProducto = DetailedProducto> = WithTimestamps<{
+    uuid: string;
     estado: TEstado;
     numero_inventario: string;
     producto: TProducto;
@@ -21,14 +22,12 @@ type StrictAttributes = {
 
 type LooseAttributes = Partial<StrictAttributes>;
 
-type DiscriminatedAttributes<TDictamenAdquisicion extends IncludableDictamenAdquisicion> = Attributes & (TDictamenAdquisicion extends null ? LooseAttributes : StrictAttributes) & {
+type Base<TDictamenAdquisicion extends IncludableDictamenAdquisicion, TEstado extends BaseEstado = BaseEstado> = Attributes<TEstado> & (TDictamenAdquisicion extends null ? LooseAttributes : StrictAttributes) & {
     dictamen_adquisicion: TDictamenAdquisicion;
 }
 
-type Base<TDictamenAdquisicion extends IncludableDictamenAdquisicion> = DiscriminatedAttributes<TDictamenAdquisicion>;
-
-type Articulo = Base<null>;
 type ArticuloEstado = BaseEstado;
+type Articulo = Base<null, ArticuloEstado>;
 
 export type {
     Articulo,

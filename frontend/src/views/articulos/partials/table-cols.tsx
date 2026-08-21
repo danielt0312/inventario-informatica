@@ -1,9 +1,14 @@
+import type { ColumnDef } from "@tanstack/react-table"
+import type { Articulo, ArticuloEstado } from "@/types/articulos";
+import { ActionButton } from "@/components/ui/action-row";
 import { Badge } from "@/components/ui/badge";
 import { ArticuloEstadoEnum } from "@/lib/constants";
 import { cn, toLocaleDateFormat } from "@/lib/utils";
-import type { Articulo, ArticuloEstado } from "@/types/articulos";
-import type { ColumnDef } from "@tanstack/react-table"
+import { Link } from "@tanstack/react-router";
 import { cva } from "class-variance-authority";
+import { SettingsIcon } from "lucide-react";
+import { isArticuloEstadoRevision } from "@/components/features/articulos/utils";
+import { Route as RevisionRoute } from "@/routes/_auth/articulos/$uuid/verificar-y-configurar";
 
 const estadoColorVariants = cva(
     "text-black",
@@ -40,7 +45,17 @@ const EstadoBadge = ({
     >
         {estado.nombre}
     </Badge>
-)
+);
+
+const RevisionActionRow = ({ articulo }: { articulo: Articulo }) => {
+    return (
+        <Link to={RevisionRoute.to} params={{ uuid: articulo.uuid }}>
+            <ActionButton tooltip={{ message: "Verificar y Configurar"}}>
+                <SettingsIcon />
+            </ActionButton>
+        </Link>
+    );
+}
 
 const columns: ColumnDef<Articulo>[] = [
     {
@@ -66,13 +81,25 @@ const columns: ColumnDef<Articulo>[] = [
     {
         header: "Estado",
         cell: ({ row }) => (
-            <EstadoBadge  estado={row.original.estado} />
+            <EstadoBadge estado={row.original.estado} />
         )
     },
     {
         header: "Fecha de creación",
         accessorFn: (row) => toLocaleDateFormat(row.created_at)
     },
+    {
+        id: "action",
+        cell: ({ row }) => {
+            const articulo = row.original;
+
+            return (
+                <div className="flex gap-1">
+                    {isArticuloEstadoRevision(articulo.estado.id) && <RevisionActionRow articulo={articulo} />}
+                </div>
+            );
+        }
+    }
 ];
 
 export { columns as articuloTableColumns, estadoColorVariants as articuloEstadoColorVariants, EstadoBadge as ArticuloEstadoBadge }

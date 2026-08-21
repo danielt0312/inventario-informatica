@@ -13,12 +13,13 @@ import { Route as GuestRouteImport } from './routes/_guest'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuestLoginRouteImport } from './routes/_guest/login'
-import { Route as AuthInventarioIndexRouteImport } from './routes/_auth/inventario/index'
 import { Route as AuthDocumentosIndexRouteImport } from './routes/_auth/documentos/index'
 import { Route as AuthDictamenesIndexRouteImport } from './routes/_auth/dictamenes/index'
+import { Route as AuthArticulosIndexRouteImport } from './routes/_auth/articulos/index'
 import { Route as AuthDictamenesCreateRouteImport } from './routes/_auth/dictamenes/create'
 import { Route as AuthDictamenesUuidEditarRouteImport } from './routes/_auth/dictamenes/$uuid/editar'
 import { Route as AuthDictamenesUuidActionRouteImport } from './routes/_auth/dictamenes/$uuid/$action'
+import { Route as AuthArticulosUuidVerificarYConfigurarRouteImport } from './routes/_auth/articulos/$uuid/verificar-y-configurar'
 
 const GuestRoute = GuestRouteImport.update({
   id: '/_guest',
@@ -38,11 +39,6 @@ const GuestLoginRoute = GuestLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => GuestRoute,
 } as any)
-const AuthInventarioIndexRoute = AuthInventarioIndexRouteImport.update({
-  id: '/inventario/',
-  path: '/inventario/',
-  getParentRoute: () => AuthRoute,
-} as any)
 const AuthDocumentosIndexRoute = AuthDocumentosIndexRouteImport.update({
   id: '/documentos/',
   path: '/documentos/',
@@ -51,6 +47,11 @@ const AuthDocumentosIndexRoute = AuthDocumentosIndexRouteImport.update({
 const AuthDictamenesIndexRoute = AuthDictamenesIndexRouteImport.update({
   id: '/dictamenes/',
   path: '/dictamenes/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthArticulosIndexRoute = AuthArticulosIndexRouteImport.update({
+  id: '/articulos/',
+  path: '/articulos/',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthDictamenesCreateRoute = AuthDictamenesCreateRouteImport.update({
@@ -70,14 +71,21 @@ const AuthDictamenesUuidActionRoute =
     path: '/dictamenes/$uuid/$action',
     getParentRoute: () => AuthRoute,
   } as any)
+const AuthArticulosUuidVerificarYConfigurarRoute =
+  AuthArticulosUuidVerificarYConfigurarRouteImport.update({
+    id: '/articulos/$uuid/verificar-y-configurar',
+    path: '/articulos/$uuid/verificar-y-configurar',
+    getParentRoute: () => AuthRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof GuestLoginRoute
   '/dictamenes/create': typeof AuthDictamenesCreateRoute
+  '/articulos/': typeof AuthArticulosIndexRoute
   '/dictamenes/': typeof AuthDictamenesIndexRoute
   '/documentos/': typeof AuthDocumentosIndexRoute
-  '/inventario/': typeof AuthInventarioIndexRoute
+  '/articulos/$uuid/verificar-y-configurar': typeof AuthArticulosUuidVerificarYConfigurarRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
   '/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
 }
@@ -85,9 +93,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof GuestLoginRoute
   '/dictamenes/create': typeof AuthDictamenesCreateRoute
+  '/articulos': typeof AuthArticulosIndexRoute
   '/dictamenes': typeof AuthDictamenesIndexRoute
   '/documentos': typeof AuthDocumentosIndexRoute
-  '/inventario': typeof AuthInventarioIndexRoute
+  '/articulos/$uuid/verificar-y-configurar': typeof AuthArticulosUuidVerificarYConfigurarRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
   '/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
 }
@@ -98,9 +107,10 @@ export interface FileRoutesById {
   '/_guest': typeof GuestRouteWithChildren
   '/_guest/login': typeof GuestLoginRoute
   '/_auth/dictamenes/create': typeof AuthDictamenesCreateRoute
+  '/_auth/articulos/': typeof AuthArticulosIndexRoute
   '/_auth/dictamenes/': typeof AuthDictamenesIndexRoute
   '/_auth/documentos/': typeof AuthDocumentosIndexRoute
-  '/_auth/inventario/': typeof AuthInventarioIndexRoute
+  '/_auth/articulos/$uuid/verificar-y-configurar': typeof AuthArticulosUuidVerificarYConfigurarRoute
   '/_auth/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
   '/_auth/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
 }
@@ -110,9 +120,10 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/dictamenes/create'
+    | '/articulos/'
     | '/dictamenes/'
     | '/documentos/'
-    | '/inventario/'
+    | '/articulos/$uuid/verificar-y-configurar'
     | '/dictamenes/$uuid/$action'
     | '/dictamenes/$uuid/editar'
   fileRoutesByTo: FileRoutesByTo
@@ -120,9 +131,10 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/dictamenes/create'
+    | '/articulos'
     | '/dictamenes'
     | '/documentos'
-    | '/inventario'
+    | '/articulos/$uuid/verificar-y-configurar'
     | '/dictamenes/$uuid/$action'
     | '/dictamenes/$uuid/editar'
   id:
@@ -132,9 +144,10 @@ export interface FileRouteTypes {
     | '/_guest'
     | '/_guest/login'
     | '/_auth/dictamenes/create'
+    | '/_auth/articulos/'
     | '/_auth/dictamenes/'
     | '/_auth/documentos/'
-    | '/_auth/inventario/'
+    | '/_auth/articulos/$uuid/verificar-y-configurar'
     | '/_auth/dictamenes/$uuid/$action'
     | '/_auth/dictamenes/$uuid/editar'
   fileRoutesById: FileRoutesById
@@ -175,13 +188,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestLoginRouteImport
       parentRoute: typeof GuestRoute
     }
-    '/_auth/inventario/': {
-      id: '/_auth/inventario/'
-      path: '/inventario'
-      fullPath: '/inventario/'
-      preLoaderRoute: typeof AuthInventarioIndexRouteImport
-      parentRoute: typeof AuthRoute
-    }
     '/_auth/documentos/': {
       id: '/_auth/documentos/'
       path: '/documentos'
@@ -194,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/dictamenes'
       fullPath: '/dictamenes/'
       preLoaderRoute: typeof AuthDictamenesIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/articulos/': {
+      id: '/_auth/articulos/'
+      path: '/articulos'
+      fullPath: '/articulos/'
+      preLoaderRoute: typeof AuthArticulosIndexRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_auth/dictamenes/create': {
@@ -217,23 +230,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDictamenesUuidActionRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/articulos/$uuid/verificar-y-configurar': {
+      id: '/_auth/articulos/$uuid/verificar-y-configurar'
+      path: '/articulos/$uuid/verificar-y-configurar'
+      fullPath: '/articulos/$uuid/verificar-y-configurar'
+      preLoaderRoute: typeof AuthArticulosUuidVerificarYConfigurarRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
 
 interface AuthRouteChildren {
   AuthDictamenesCreateRoute: typeof AuthDictamenesCreateRoute
+  AuthArticulosIndexRoute: typeof AuthArticulosIndexRoute
   AuthDictamenesIndexRoute: typeof AuthDictamenesIndexRoute
   AuthDocumentosIndexRoute: typeof AuthDocumentosIndexRoute
-  AuthInventarioIndexRoute: typeof AuthInventarioIndexRoute
+  AuthArticulosUuidVerificarYConfigurarRoute: typeof AuthArticulosUuidVerificarYConfigurarRoute
   AuthDictamenesUuidActionRoute: typeof AuthDictamenesUuidActionRoute
   AuthDictamenesUuidEditarRoute: typeof AuthDictamenesUuidEditarRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthDictamenesCreateRoute: AuthDictamenesCreateRoute,
+  AuthArticulosIndexRoute: AuthArticulosIndexRoute,
   AuthDictamenesIndexRoute: AuthDictamenesIndexRoute,
   AuthDocumentosIndexRoute: AuthDocumentosIndexRoute,
-  AuthInventarioIndexRoute: AuthInventarioIndexRoute,
+  AuthArticulosUuidVerificarYConfigurarRoute:
+    AuthArticulosUuidVerificarYConfigurarRoute,
   AuthDictamenesUuidActionRoute: AuthDictamenesUuidActionRoute,
   AuthDictamenesUuidEditarRoute: AuthDictamenesUuidEditarRoute,
 }

@@ -39,8 +39,11 @@ Route::middleware('auth:sanctum')->group(function () {
         'dictamen_estados' => DictamenEstadoController::class,
         'empleados' => EmpleadoController::class,
         'adscripciones' => AdscripcionController::class,
-        'articulos' => ArticuloController::class
     ], ['only' => 'index']);
+
+    Route::apiResources([
+        'articulos' => ArticuloController::class,
+    ], ['only' => ['index', 'show']]);
 
     Route::apiResources([
         'producto_categorias' => ProductoCategoriaController::class,

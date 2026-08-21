@@ -10,6 +10,7 @@ class ArticuloResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'uuid' => $this->uuid,
             'producto' => new ProductoResource($this->whenLoaded('producto')),
             'estado' => new ArticuloEstadoResource($this->whenLoaded('estado')),
             'numero_serie' => $this->numero_serie,
@@ -21,7 +22,6 @@ class ArticuloResource extends JsonResource
             'es_contable' => $this->es_contable,
             'es_resultado_esperado' => $this->es_resultado_esperado,
             'observaciones' => $this->observaciones,
-            'dictamen' => new DictamenResource($this->whenLoaded('dictamen')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
