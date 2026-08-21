@@ -12,18 +12,19 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        // todo eliminar esta invocación, solo es para debug
-        $this->call([
-            AdscripcionSeeder::class,
-            EmpleadoSeeder::class,
-            UserSeeder::class
-        ]);
-
         $this->call([
             ProductoSeeder::class,
             ArticuloEstadoSeeder::class,
             DocumentoTipoSeeder::class,
             DictamenEstadoSeeder::class
+        ]);
+
+        // todo eliminar esta invocación, solo es para debug
+        $this->call([
+            AdscripcionSeeder::class,
+            EmpleadoSeeder::class,
+            UserSeeder::class,
+            ArticuloSeeder::class
         ]);
     }
 }
