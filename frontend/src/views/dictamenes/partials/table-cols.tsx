@@ -15,7 +15,8 @@ import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
 import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { DetailedDictamen, DetailedPorSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
-import { ActionButton } from "@/components/ui/action-row";
+import { ActionTableRow, RouterActionTableRow } from "@/components/ui/action-row";
+import { RouterButton } from "@/components/ui/router-button";
 
 const FormActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
@@ -24,25 +25,20 @@ const FormActionIcon = {
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
 const FormActionItemRow = ({ state }: { state: ActionDictamenEstadoEnum }) => (
-    <ActionButton
+    <RouterActionTableRow
         tooltip={{
             message: <span className="capitalize">{ActionDictamenStates[state]}</span>
         }}
+        variant="outline"
     >
         {FormActionIcon[state]}
-    </ActionButton>
+    </RouterActionTableRow>
 );
 
-const EdicionActionItemRow = ({ dictamen }: { dictamen: DetailedEditableFormActionDictamen }) => (
-    <Link to={EditarRoute.to} params={{ uuid: dictamen.uuid }}>
-        <ActionButton
-            tooltip={{
-                message: "Editar"
-            }}
-        >
-            <SquarePenIcon />
-        </ActionButton>
-    </Link>
+const EdicionActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormActionDictamen>) => (
+    <RouterButton to={EditarRoute.to} params={{ uuid: dictamen.uuid }} tooltip={{ message: "Editar" }} >
+        <SquarePenIcon />
+    </RouterButton>
 );
 
 const FormActionRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) => (
@@ -65,12 +61,12 @@ const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | D
 
     return (
         <>
-            <ActionButton
+            <ActionTableRow
                 onClick={() => setOpen(true)}
                 tooltip={{ message: "Surtir" }}
             >
                 <PackagePlusIcon />
-            </ActionButton>
+            </ActionTableRow>
 
             <AlertDialog open={open} onOpenChange={setOpen}>
                 <AlertDialogContent>

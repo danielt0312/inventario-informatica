@@ -72,7 +72,7 @@ export function Table() {
             tableOptions={{
                 meta: {
                     previewFile: (uuid, title) => mutate({ uuid, title }),
-                    isPreviewing
+                    isPreviewing,
                 }
             }}
         />

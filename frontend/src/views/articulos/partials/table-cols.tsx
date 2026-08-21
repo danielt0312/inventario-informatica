@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { Articulo, ArticuloEstado } from "@/types/articulos";
-import { ActionButton } from "@/components/ui/action-row";
+import { ActionTableRow } from "@/components/ui/action-row";
 import { Badge } from "@/components/ui/badge";
 import { ArticuloEstadoEnum } from "@/lib/constants";
 import { cn, toLocaleDateFormat } from "@/lib/utils";
@@ -50,9 +50,9 @@ const EstadoBadge = ({
 const RevisionActionRow = ({ articulo }: { articulo: Articulo }) => {
     return (
         <Link to={RevisionRoute.to} params={{ uuid: articulo.uuid }}>
-            <ActionButton tooltip={{ message: "Verificar y Configurar"}}>
+            <ActionTableRow tooltip={{ message: "Verificar y Configurar"}}>
                 <SettingsIcon />
-            </ActionButton>
+            </ActionTableRow>
         </Link>
     );
 }
