@@ -1,14 +1,13 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type { Articulo, ArticuloEstado } from "@/types/articulos";
-import { ActionTableRow } from "@/components/ui/action-row";
 import { Badge } from "@/components/ui/badge";
 import { ArticuloEstadoEnum } from "@/lib/constants";
 import { cn, toLocaleDateFormat } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
 import { cva } from "class-variance-authority";
 import { SettingsIcon } from "lucide-react";
 import { isArticuloEstadoRevision } from "@/components/features/articulos/utils";
 import { Route as RevisionRoute } from "@/routes/_auth/articulos/$uuid/verificar-y-configurar";
+import { RouterButton } from "@/components/ui/router-button";
 
 const estadoColorVariants = cva(
     "text-black",
@@ -49,11 +48,19 @@ const EstadoBadge = ({
 
 const RevisionActionRow = ({ articulo }: { articulo: Articulo }) => {
     return (
-        <Link to={RevisionRoute.to} params={{ uuid: articulo.uuid }}>
-            <ActionTableRow tooltip={{ message: "Verificar y Configurar"}}>
-                <SettingsIcon />
-            </ActionTableRow>
-        </Link>
+        <RouterButton
+            to={RevisionRoute.to}
+            params={{
+                uuid: articulo.uuid
+            }}
+            tooltip={{
+                message: "Verificar y Configurar"
+            }}
+            size="icon"
+            variant="outline"
+        >
+            <SettingsIcon />
+        </RouterButton>
     );
 }
 

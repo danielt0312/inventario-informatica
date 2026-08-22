@@ -5,12 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { MultiSelect } from "@/components/ui/multiselect";
 import api from "@/lib/axios";
 import type { TResponse, TCatalogo } from "@/types/generics";
-import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import { Route as CreateRoute } from "@/routes/_auth/dictamenes/create";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import type { DictamenEstado } from "@/types/dictamenes";
+import { RouterButton } from "@/components/ui/router-button";
 
 interface TableFilters {
     folio: string;
@@ -63,11 +62,9 @@ export function Table() {
                 </>
             )}
             actionBar={(
-                <Link to={CreateRoute.to}>
-                    <Button size="sm">
-                        <PlusCircle /> Crear
-                    </Button>
-                </Link>
+                <RouterButton to={CreateRoute.to} size="sm">
+                    <PlusCircle /> Crear
+                </RouterButton>
             )}
             tableOptions={{
                 meta: {

@@ -2,7 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedPorSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { CircleXIcon, FileInputIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon, SquarePenIcon } from "lucide-react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
 import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { DetailedDictamen, DetailedPorSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
-import { ActionTableRow, RouterActionTableRow } from "@/components/ui/action-row";
+import { ActionRow } from "@/components/ui/action-row";
 import { RouterButton } from "@/components/ui/router-button";
 
 const FormActionIcon = {
@@ -24,33 +24,33 @@ const FormActionIcon = {
     [ActionDictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
-const FormActionItemRow = ({ state }: { state: ActionDictamenEstadoEnum }) => (
-    <RouterActionTableRow
+const FormActionItemRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) => (
+    <RouterButton
         tooltip={{
-            message: <span className="capitalize">{ActionDictamenStates[state]}</span>
+            message: <span className="capitalize">{ActionDictamenStates[dictamen.estado.id]}</span>
         }}
-        variant="outline"
-    >
-        {FormActionIcon[state]}
-    </RouterActionTableRow>
-);
-
-const EdicionActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormActionDictamen>) => (
-    <RouterButton to={EditarRoute.to} params={{ uuid: dictamen.uuid }} tooltip={{ message: "Editar" }} >
-        <SquarePenIcon />
-    </RouterButton>
-);
-
-const FormActionRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) => (
-    <Link
         to={ActionRoute.to}
         params={{
             uuid: dictamen.uuid,
             action: ActionDictamenStates[dictamen.estado.id]
         }}
+        variant="outline"
+        size="icon"
     >
-        <FormActionItemRow state={dictamen.estado.id} />
-    </Link>
+        {FormActionIcon[dictamen.estado.id]}
+    </RouterButton>
+);
+
+const EdicionActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormActionDictamen>) => (
+    <RouterButton
+        to={EditarRoute.to}
+        params={{ uuid: dictamen.uuid }}
+        tooltip={{ message: "Editar" }}
+        variant="outline"
+        size="icon"
+    >
+        <SquarePenIcon />
+    </RouterButton>
 );
 
 const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | DetailedSurtidoParcialDictamen>) => {
@@ -61,12 +61,12 @@ const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | D
 
     return (
         <>
-            <ActionTableRow
+            <ActionRow
                 onClick={() => setOpen(true)}
                 tooltip={{ message: "Surtir" }}
             >
                 <PackagePlusIcon />
-            </ActionTableRow>
+            </ActionRow>
 
             <AlertDialog open={open} onOpenChange={setOpen}>
                 <AlertDialogContent>
@@ -188,7 +188,7 @@ export const columns: ColumnDef<DetailedDictamen>[] = [
                         <EdicionActionItemRow dictamen={dictamen} />
                     )}
                     {isDetailedActionFormDictamen(dictamen) && (
-                        <FormActionRow dictamen={dictamen} />
+                        <FormActionItemRow dictamen={dictamen} />
                     )}
                     {(isDetailedPorSurtirDictamen(dictamen) || isDetailedSurtidoParcialDictamen(dictamen)) && <SurtirActionRow dictamen={dictamen} />}
                     {dictamenVersionHasArchivo(dictamen.version_actual) && (
