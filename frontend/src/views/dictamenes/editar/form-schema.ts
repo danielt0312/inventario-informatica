@@ -1,14 +1,14 @@
-import type { ProductoField } from "@/components/features/productos/form-fields";
 import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
 import type { NullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { NumberInputFieldType } from "@/components/ui/input-field";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
 import type { CaracteristicasFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
-import type { DetailedSurtirDictamen } from "@/types/dictamenes";
+import type { ProductoFieldType } from "@/components/features/productos/form-fields";
 import { nullableString, positiveInteger, requiredArray, requiredIsoDateLTEToday, requiredString, selectedNumberOption } from "@/lib/schemas/common";
 import { DictamenProducto } from "@/lib/utils";
 import { format } from "date-fns";
 import z from "zod";
+import type { DetailedPorSurtirDictamen } from "@/types/dictamenes";
 
 type AdquisicionFields = {
     producto_tipo_id: ProductoTipoFieldType;
@@ -16,7 +16,7 @@ type AdquisicionFields = {
     cantidad: NumberInputFieldType;
     empleado_id: EmpleadoFieldType;
     caracteristicas: CaracteristicasFieldType;
-    producto_id: ProductoField;
+    producto_id: ProductoFieldType;
 }
 
 export const adquisicionFieldsDefaultValues: AdquisicionFields = {
@@ -35,10 +35,10 @@ type Schema = {
     adquisiciones: AdquisicionFields[];
 }
 
-export const defaultValues = (dictamen: DetailedSurtirDictamen): Schema => ({
+export const defaultValues = (dictamen: DetailedPorSurtirDictamen): Schema => ({
     fecha_solicitud: format(new Date, 'yyyy-MM-dd'),
-    archivo_uuid: dictamen.version_actual.oficio.archivo.uuid,
-    folio: dictamen.version_actual.oficio.folio,
+    archivo_uuid: dictamen.version_actual.oficio?.archivo.uuid,
+    folio: dictamen.version_actual.oficio?.folio,
     adquisiciones: dictamen.version_actual.adquisiciones.map((adquiscion): AdquisicionFields => ({
         cantidad: adquiscion.cantidad,
         producto_tipo_id: adquiscion.producto.tipo.id,

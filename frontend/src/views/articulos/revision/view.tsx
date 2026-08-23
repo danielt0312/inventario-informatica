@@ -1,19 +1,40 @@
-import Goback from "@/components/Goback";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ComboboxLayoutSimple, toComboboxItems } from "@/components/ui/combobox-layout";
+import { ComboboxLayoutGrouped, toComboboxGroups } from "@/components/ui/combobox-layout-grouped";
+import api from "@/lib/axios";
+import type { TResponse } from "@/types/generics";
+import type { ProductoCategoriaWithTipos } from "@/types/productos";
+import { useQuery } from "@tanstack/react-query";
 
 function View() {
+    const { data = [] } = useQuery({
+        queryKey: ['producto_categorias_tipos'],
+        queryFn: () => api.get<TResponse<ProductoCategoriaWithTipos[]>>('api/producto_categorias', {
+            params: {
+                include: 'tipos'
+            }
+        }).then(r => r.data.data),
+    });
+
+    const options = toComboboxItems(data, (item) => ({
+        label: item.nombre,
+        value: item.id,
+        ...item
+    }))
+
+    const groupedOptions = toComboboxGroups(data, (item) => ({
+        items: item.tipos.map(t => ({ label: t.nombre, value: t.id })),
+        label: item.nombre
+    }))
+
     return (
         <>
-            <Goback />
+            <ComboboxLayoutSimple
+                items={options}
+            />
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Revisión y Configuración</CardTitle>
-                </CardHeader>
-
-                <CardContent>
-                </CardContent>
-            </Card>
+            <ComboboxLayoutGrouped
+                items={groupedOptions}
+            />
         </>
     );
 }

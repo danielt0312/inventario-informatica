@@ -16,12 +16,12 @@ import { adquisicionFieldsDefaultValues, defaultValues, validator } from "./form
 import { ProductoField } from "@/components/features/productos/form-fields";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
-import type { DetailedSurtirDictamen, SurtirDictamen } from "@/types/dictamenes";
-import React from "react";
 import { FieldValue } from "@/components/ui/field-value";
 import { ShowBienesInformaticosTitle } from "../partials/show-info";
+import type { DetailedPorSurtirDictamen, PorSurtirDictamen } from "@/types/dictamenes";
+import React from "react";
 
-function useEditFormMutation(dictamen: SurtirDictamen) {
+function useEditFormMutation(dictamen: PorSurtirDictamen) {
     const navigate = useNavigate();
 
     return useFormMutation({
@@ -34,7 +34,7 @@ function useEditFormMutation(dictamen: SurtirDictamen) {
     });
 }
 
-function useForm(dictamen: DetailedSurtirDictamen) {
+function useForm(dictamen: DetailedPorSurtirDictamen) {
     const { mutate } = useEditFormMutation(dictamen);
 
     return useAppForm({
@@ -53,9 +53,9 @@ export const DictamenEditarForm = () => {
     const { dictamen } = EditarRoute.useRouteContext();
 
     const form = useForm(dictamen);
-    const adscripcion = dictamen.adscripcion?.id ?? 1;
     const [showAlertDialog, setShowAlertDialog] = React.useState(false);
     const [showNumeroInventarioField, setShowNumeroInventarioField] = React.useState(false);
+    const adquisiciones = dictamen.version_actual.adquisiciones;
 
     return (
         <Form form={form} className="flex flex-col gap-6">
@@ -79,7 +79,7 @@ export const DictamenEditarForm = () => {
                     name="archivo_uuid"
                     children={() => (
                         <OficioField
-                            defaultValue={dictamen.version_actual.oficio.archivo}
+                            defaultValue={dictamen.version_actual.oficio!.archivo}
                             className="md:max-w-1/2"
                         />
                     )}
@@ -139,7 +139,7 @@ export const DictamenEditarForm = () => {
                                                     children={() => (
                                                         <EmpleadoField
                                                             label="Resguardante"
-                                                            adscripcion={adscripcion}
+                                                            adscripcion={dictamen.adscripcion.id}
                                                             className="w-1/3"
                                                             required
                                                         />
