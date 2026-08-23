@@ -13,7 +13,7 @@ import type { ComboboxRoot } from "@base-ui/react/combobox"
  */
 export type ComboboxLayoutItem<TValue extends React.Key = React.Key> = {
   value: TValue
-  label: React.ReactNode
+  label: string
 }
 
 /**

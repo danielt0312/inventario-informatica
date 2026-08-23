@@ -52,11 +52,11 @@ export function ComboboxLayoutSimple<
     className,
     contentClassName,
     multiple,
+    trigger,
     renderItem = (item: TItem) => item.label,
     autoHighlight = true,
     renderChipsOnMultiple = false,
     placeholderSearch = "Buscar...",
-    trigger,
     ...rootProps
   } = props
 
