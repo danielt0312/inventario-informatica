@@ -4,9 +4,12 @@ import { ArchivoUploaderField } from '@/components/features/archivos/uploader-fi
 import { NullableTextareaField, TextareaField } from '@/components/ui/textarea-field';
 import { SubmitFormButton } from '@/components/ui/submit-form-button';
 import { InputField } from './input-field';
-import { CreatableComboboxField } from './creatable-combobox-field';
 import { RadioGroupField, RadioGroupFieldItem } from './radio-group-field';
 import { DatePickerField } from './date-picker-field';
+import { ComboboxFieldSimple } from './combobox-field-simple';
+import { ComboboxFieldGrouped } from './combobox-field-grouped';
+import { CreatableComboboxFieldSimple } from './creatable-combobox-field-simple';
+import { CreatableComboboxFieldGrouped } from './creatable-combobox-field-grouped';
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts();
 
@@ -15,14 +18,17 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     formContext,
     fieldComponents: {
         InputField,
-        CreatableComboboxField,
         RadioGroupField,
         RadioGroupFieldItem,
         DatePickerField,
         ArchivoAttachmentField,
         ArchivoUploaderField,
         TextareaField,
-        NullableTextareaField
+        NullableTextareaField,
+        ComboboxFieldSimple,
+        ComboboxFieldGrouped,
+        CreatableComboboxFieldSimple,
+        CreatableComboboxFieldGrouped
     },
     formComponents: {
         SubmitFormButton
