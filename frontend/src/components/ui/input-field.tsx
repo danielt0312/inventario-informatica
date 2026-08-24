@@ -1,171 +1,137 @@
-import { FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
-import { Input as InputPrimitive } from "@/components/ui/input";
+import { FieldLayout, type FieldLayoutProps } from "@/components/ui/field-layout";
 import { useFieldContext } from "./form-context";
 import { InputGroup, InputGroupInput } from "./input-group";
-import React from "react";
 import { isStringNumber } from "@/lib/utils";
+import React from "react";
 
-type InputType = string | undefined;
-function Input({
-    children,
-    ...props
-}: React.ComponentProps<typeof InputGroupInput>) {
-    const field = useFieldContext<InputType>();
-
-    return (
-        <InputGroup>
-            <InputGroupInput
-                name={field.name}
-                value={field.state.value ?? ''}
-                onChange={(e) => field.handleChange(e.target.value.trim() !== ''
-                    ? e.target.value
-                    : undefined
-                )}
-                {...props}
-            />
-            {children}
-        </InputGroup>
-    );
+interface CoreInputFieldProps extends React.ComponentProps<typeof InputGroupInput>, FieldLayoutProps {
 }
 
-interface CoreInputFieldProps extends Omit<React.ComponentProps<typeof InputPrimitive>, 'name' | 'value' | 'onChange'>, Omit<CoreFieldLayoutProps, 'errors'> {
+type CoreInputFieldType = string | number | undefined | null;
+
+function CoreInputField({
+    children,
+    className,
+    required,
+    disabled,
+    fieldLayout = {},
+    ...props
+}: CoreInputFieldProps) {
+    const field = useFieldContext<CoreInputFieldType>();
+
+    return (
+        <FieldLayout
+            className={className}
+            fieldLayout={{
+                required,
+                disabled,
+                errors: field.state.meta.errors,
+                ...fieldLayout
+            }}
+        >
+            <InputGroup>
+                <InputGroupInput
+                    required={required}
+                    disabled={disabled}
+                    name={field.name}
+                    value={field.state.value ?? ''}
+                    {...props}
+                />
+                {children}
+            </InputGroup>
+        </FieldLayout>
+    );
 }
 
 type InputFieldType = string | undefined;
-function InputField({
-    className, description, disabled, label, required, orientation, ...inputProps
-}: CoreInputFieldProps) {
+function InputField(props: CoreInputFieldProps) {
     const field = useFieldContext<InputFieldType>();
 
     return (
-        <FieldLayout
-            className={className}
-            description={description}
-            disabled={disabled}
-            label={label}
-            errors={field.state.meta.errors}
-            required={required}
-            orientation={orientation}
-        >
-            <Input {...inputProps} />
-        </FieldLayout>
+        <CoreInputField
+            onChange={(e) => {
+                const value = e.target.value.trim();
+                field.handleChange(value === ''
+                    ? undefined
+                    : value
+                );
+            }}
+            {...props}
+        />
     );
-};
+}
 
 type NullableInputFieldType = string | null;
-function NullableInputField({
-    className, description, disabled, label, required, orientation, ...inputProps
-}: CoreInputFieldProps) {
+function NullableInputField(props: CoreInputFieldProps) {
     const field = useFieldContext<NullableInputFieldType>();
 
     return (
-        <FieldLayout
-            className={className}
-            description={description}
-            disabled={disabled}
-            label={label}
-            errors={field.state.meta.errors}
-            required={required}
-            orientation={orientation}
-        >
-            <InputPrimitive
-                name={field.name}
-                value={field.state.value ?? ''}
-                onChange={(e) => field.handleChange(e.target.value.trim() !== ''
-                    ? e.target.value
-                    : null
-                )}
-                {...inputProps}
-            />
-        </FieldLayout>
-
+        <CoreInputField
+            onChange={(e) => {
+                const value = e.target.value.trim();
+                field.handleChange(value === ''
+                    ? null
+                    : value
+                );
+            }}
+            {...props}
+        />
     );
-};
+}
 
 type NumberInputFieldType = number | undefined;
-function NumberInputField({
-    className, description, disabled, label, required, orientation, ...inputProps
-}: CoreInputFieldProps) {
+function NumberInputField(props: CoreInputFieldProps) {
     const field = useFieldContext<NumberInputFieldType>();
     const [rawValue, setRawValue] = React.useState(
         field.state.value === undefined ? '' : String(field.state.value)
     );
 
     return (
-        <FieldLayout
-            className={className}
-            description={description}
-            disabled={disabled}
-            label={label}
-            errors={field.state.meta.errors}
-            required={required}
-            orientation={orientation}
-        >
-            <InputPrimitive
-                name={field.name}
-                value={rawValue}
-                onChange={(e) => {
-                    const value = e.target.value;
-                    setRawValue(value);
-                    field.handleChange(isStringNumber(value)
-                        ? Number(value)
-                        : undefined
-                    );
-                }}
-                inputMode="decimal"
-                {...inputProps}
-            />
-        </FieldLayout>
+        <CoreInputField
+            value={rawValue}
+            onChange={(e) => {
+                const value = e.target.value.trim();
+                setRawValue(value);
+                field.handleChange(isStringNumber(value)
+                    ? Number(value)
+                    : undefined
+                );
+            }}
+            {...props}
+        />
     );
 }
 
 type NullableNumberInputFieldType = number | null;
-function NullableNumberInputField({
-    className, description, disabled, label, required, orientation, ...inputProps
-}: CoreInputFieldProps) {
+function NullableNumberInputField(props: CoreInputFieldProps) {
     const field = useFieldContext<NullableNumberInputFieldType>();
     const [rawValue, setRawValue] = React.useState(
         field.state.value === null ? '' : String(field.state.value)
     );
 
     return (
-        <FieldLayout
-            className={className}
-            description={description}
-            disabled={disabled}
-            label={label}
-            errors={field.state.meta.errors}
-            required={required}
-            orientation={orientation}
-        >
-            <InputPrimitive
-                name={field.name}
-                value={rawValue}
-                onChange={(e) => {
-                    const value = e.target.value;
-                    setRawValue(value);
-                    field.handleChange(isStringNumber(value)
-                        ? Number(value)
-                        : null
-                    );
-                }}
-                inputMode="decimal"
-                {...inputProps}
-            />
-        </FieldLayout>
+        <CoreInputField
+            value={rawValue}
+            onChange={(e) => {
+                const value = e.target.value.trim();
+                setRawValue(value);
+                field.handleChange(isStringNumber(value)
+                    ? Number(value)
+                    : null
+                );
+            }}
+            {...props}
+        />
     );
 }
 
 export {
-    type CoreInputFieldProps,
+    InputField,
+    NumberInputField,
+    NullableInputField,
+    NullableNumberInputField,
     type InputFieldType,
     type NumberInputFieldType,
     type NullableInputFieldType,
     type NullableNumberInputFieldType,
-    type InputType,
-    Input,
-    InputField,
-    NumberInputField,
-    NullableInputField,
-    NullableNumberInputField
 }

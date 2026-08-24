@@ -10,40 +10,34 @@ import { isStringNumber } from "@/lib/utils";
 import React from "react";
 
 export type CostoUnitarioFieldType = NullableNumberInputFieldType;
-export const CostoUnitarioField = ({
-    label = "Costo unitario",
-    placeholder = "Ingresa el costo unitario",
-    ...props
-}: React.ComponentProps<typeof NullableNumberInputField>) => (
+export const CostoUnitarioField = (props: React.ComponentProps<typeof NullableNumberInputField>) => (
     <NullableNumberInputField
-        label={label}
-        placeholder={placeholder}
+        fieldLayout={{
+            label: "Costo Unitario"
+        }}
+        placeholder={"Ingresa el costo unitario"}
         {...props}
     />
 );
 
 export type NumeroInventarioFieldType = InputFieldType;
-export const NumeroInventarioField = ({
-    label = "Número de Inventario",
-    placeholder = "Ingresa el número de inventario",
-    ...props
-}: React.ComponentProps<typeof InputField>) => (
+export const NumeroInventarioField = (props: React.ComponentProps<typeof InputField>) => (
     <InputField
-        label={label}
-        placeholder={placeholder}
+        fieldLayout={{
+            label: "Número de Inventario"
+        }}
+        placeholder="Ingresa el número de inventario"
         {...props}
     />
 );
 
 export type NullableNumeroInventarioFieldType = NullableInputFieldType;
-export const NullableNumeroInventarioField = ({
-    label = "Número de Inventario",
-    placeholder = "Ingresa el número de inventario",
-    ...props
-}: React.ComponentProps<typeof NullableInputField>) => (
+export const NullableNumeroInventarioField = (props: React.ComponentProps<typeof NullableInputField>) => (
     <NullableInputField
-        label={label}
-        placeholder={placeholder}
+        fieldLayout={{
+            label: "Número de Inventario"
+        }}
+        placeholder="Ingresa el número de inventario"
         {...props}
     />
 );
@@ -60,14 +54,12 @@ export const EsContableField = ({
 );
 
 export type NumeroSerieFieldType = InputFieldType;
-export const NumeroSerieField = ({
-    label = "Número de serie",
-    placeholder = "Ingresa el número de serie",
-    ...props
-}: React.ComponentProps<typeof NullableInputField>) => (
+export const NumeroSerieField = (props: React.ComponentProps<typeof NullableInputField>) => (
     <NullableInputField
-        label={label}
-        placeholder={placeholder}
+        fieldLayout={{
+            label: "Número de serie"
+        }}
+        placeholder="Ingresa el número de serie"
         {...props}
     />
 );

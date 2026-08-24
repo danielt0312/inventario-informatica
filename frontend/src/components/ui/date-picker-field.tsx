@@ -1,15 +1,19 @@
 import { format } from "date-fns";
 import { DatePicker, type DatePickerProps } from "./date-picker";
-import { FieldLayout, type CoreFieldLayoutProps } from "./field-layout";
+import { FieldLayout, type FieldLayoutProps } from "./field-layout";
 import { fromISO } from "@/lib/utils";
 import { useFieldContext } from "./form-context";
 import React from "react";
 
 type DatePickerFieldType = string | undefined;
-interface DatePickerFieldProps extends Omit<DatePickerProps, 'children' | 'disabled' | 'value' | 'onValueChange'>, Omit<CoreFieldLayoutProps, 'children' | 'errors'> {
+interface DatePickerFieldProps extends DatePickerProps, FieldLayoutProps {
 }
 function DatePickerField({
-    className, description, disabled, label, required, orientation, ...datePickerFieldProps
+    className,
+    required,
+    disabled,
+    fieldLayout = {},
+    ...props
 }: DatePickerFieldProps) {
     const field = useFieldContext<DatePickerFieldType>();
     const fieldValue = field.state.value;
@@ -22,12 +26,12 @@ function DatePickerField({
     return (
         <FieldLayout
             className={className}
-            description={description}
-            disabled={disabled}
-            label={label}
-            required={required}
-            orientation={orientation}
-            errors={field.state.meta.errors}
+            fieldLayout={{
+                required,
+                disabled,
+                errors: field.state.meta.errors,
+                ...fieldLayout
+            }}
         >
             <DatePicker
                 disabled={disabled}
@@ -37,7 +41,7 @@ function DatePickerField({
                     ? format(date, 'yyyy-MM-dd')
                     : undefined
                 )}
-                {...datePickerFieldProps}
+                {...props}
             />
         </FieldLayout>
     );

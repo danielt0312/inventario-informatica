@@ -16,13 +16,14 @@ export const FacturaFechaEmisionField = ({
 
 export type FacturaFolioFieldType = InputFieldType;
 export const FacturaFolioField = ({
-    label = "Folio de factura",
-    placeholder = "Ingresa el folio de la factura",
+
     ...props
 }: React.ComponentProps<typeof InputField>) => (
     <InputField
-        label={label}
-        placeholder={placeholder}
+        fieldLayout={{
+            label: "Folio de factura"
+        }}
+        placeholder="Ingresa el folio de la factura"
         {...props}
     />
 )

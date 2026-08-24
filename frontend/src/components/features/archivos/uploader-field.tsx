@@ -1,24 +1,18 @@
-import { FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
+import { FieldLayout, type FieldLayoutProps } from "@/components/ui/field-layout";
 import { useArchivoFieldContext } from "./hooks/use-field-context";
 import { ArchivoUploaderLayout } from "./uploader";
 
 const useUploaderFieldContext = useArchivoFieldContext;
 
 type UploaderProps = React.ComponentProps<typeof ArchivoUploaderLayout>;
-interface UploaderFieldProps extends Omit<UploaderProps, 'orientation'>, Omit<CoreFieldLayoutProps, 'errors'> {
-    uploaderOrientation?: UploaderProps['orientation'];
+interface UploaderFieldProps extends UploaderProps, FieldLayoutProps {
 }
 
 type UploaderFieldType = string | undefined;
 function UploaderField({
-    className,
-    description,
-    disabled,
-    required,
-    orientation,
-    uploaderOrientation,
     value,
-    label = 'Adjuntar archivo',
+    className,
+    fieldLayout = {},
     ...props
 }: UploaderFieldProps) {
     const field = useUploaderFieldContext();
@@ -28,24 +22,21 @@ function UploaderField({
     return (
         <FieldLayout
             className={className}
-            description={description}
-            disabled={disabled}
-            errors={field.state.meta.errors}
-            label={label}
-            required={required}
-            orientation={orientation}
+            fieldLayout={{
+                label: "Adjuntar archivo",
+                ...fieldLayout
+            }}
         >
             <ArchivoUploaderLayout
                 value={derivedValue}
-                orientation={uploaderOrientation}
                 onValueChange={(value) => field.handleChange(value?.uuid)}
                 onMutation={{
                     options: {
                         onError: (error) => {
                             const errorMessage = error.response?.data.message || error.message;
                             field.setErrorMap({
-                                onSubmit: errorMessage
-                            })
+                                onSubmit: errorMessage,
+                            });
                         },
                         onMutate: () => {
                             field.setErrorMap({

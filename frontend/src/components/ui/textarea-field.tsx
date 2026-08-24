@@ -1,77 +1,80 @@
-import { FieldLayout, type CoreFieldLayoutProps } from "./field-layout";
+import { FieldLayout, type FieldLayoutProps } from "./field-layout";
 import { useFieldContext } from "./form-context";
-import { Textarea } from "./textarea";
+import { InputGroup, InputGroupTextarea } from "./input-group";
 
-type TextareaFieldType = string | undefined;
-interface CoreTextareaFieldProps extends Omit<React.ComponentProps<typeof Textarea>, 'children' | 'name' | 'value' | 'onChange'>, Omit<CoreFieldLayoutProps, 'children' | 'errors'> {
+interface CoreTextareaFieldProps extends React.ComponentProps<typeof InputGroupTextarea>, FieldLayoutProps {
 }
-function TextareaField({
-    className, description, disabled, label, required, orientation, ...textareaProps
+
+type CoreTextAreaFieldType = string | undefined | null;
+
+function CoreTextareaField({
+    children,
+    className,
+    required,
+    disabled,
+    fieldLayout = {},
+    ...props
 }: CoreTextareaFieldProps) {
-    const field = useFieldContext<TextareaFieldType>();
+    const field = useFieldContext<CoreTextAreaFieldType>();
 
     return (
         <FieldLayout
             className={className}
-            description={description}
-            disabled={disabled}
-            label={label}
-            errors={field.state.meta.errors}
-            required={required}
-            orientation={orientation}
+            fieldLayout={{
+                required,
+                disabled,
+                errors: field.state.meta.errors,
+                ...fieldLayout
+            }}
         >
-            <Textarea
-                disabled={disabled}
-                name={field.name}
-                value={field.state.value === undefined
-                    ? ''
-                    : field.state.value
-                }
-                onChange={(e) =>
-                    field.handleChange(
-                        e.target.value.trim() === ''
-                            ? undefined
-                            : e.target.value
-                    )
-                }
-                {...textareaProps}
-            />
+            <InputGroup>
+                <InputGroupTextarea
+                    required={required}
+                    disabled={disabled}
+                    name={field.name}
+                    value={field.state.value ?? ''}
+                    {...props}
+                />
+                {children}
+            </InputGroup>
         </FieldLayout>
     );
 }
 
+type TextareaFieldType = string | undefined;
+
+function TextareaField(props: CoreTextareaFieldProps) {
+    const field = useFieldContext<TextareaFieldType>();
+
+    return (
+        <CoreTextareaField
+            onChange={(e) => {
+                const value = e.target.value.trim();
+                field.handleChange(value === ''
+                    ? undefined
+                    : value
+                );
+            }}
+            {...props}
+        />
+    );
+}
+
 type NullableTextareaFieldType = string | null;
-function NullableTextareaField({
-    className, description, disabled, label, required, orientation, ...textareaProps
-}: CoreTextareaFieldProps) {
+function NullableTextareaField(props: CoreTextareaFieldProps) {
     const field = useFieldContext<NullableTextareaFieldType>();
 
     return (
-        <FieldLayout
-            className={className}
-            description={description}
-            disabled={disabled}
-            label={label}
-            errors={field.state.meta.errors}
-            required={required}
-            orientation={orientation}
-        >
-            <Textarea
-                disabled={disabled}
-                name={field.name}
-                value={field.state.value === null
-                    ? ''
-                    : field.state.value
-                }
-                onChange={(e) => field.handleChange(
-                    e.target.value.trim() === ''
-                        ? null
-                        : e.target.value
+        <CoreTextareaField
+            onChange={(e) => {
+                const value = e.target.value.trim();
+                field.handleChange(value === ''
+                    ? null
+                    : value
                 )
-                }
-                {...textareaProps}
-            />
-        </FieldLayout>
+            }}
+            {...props}
+        />
     )
 }
 

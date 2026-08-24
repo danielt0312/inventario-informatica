@@ -22,64 +22,58 @@ const Label = ({
 
 interface FieldProps extends React.ComponentProps<typeof Root.Field> {
     disabled?: boolean;
-    required?: boolean;
 }
 const Field = ({
     disabled,
-    required,
     ...props
 }: FieldProps) => (
     <Root.Field
         data-disabled={disabled}
-        aria-disabled={disabled}
-        aria-required={required}
         {...props}
     />
 );
 
-interface CoreFieldLayoutProps extends Pick<FieldProps, 'className' | 'orientation' | 'required' | 'disabled'> {
+interface CoreFieldLayoutProps extends Pick<FieldProps, 'orientation' | 'disabled'> {
+    required?: boolean;
     label?: React.ReactNode;
     description?: React.ReactNode;
     errors?: React.ComponentProps<typeof Root.FieldError>['errors'];
 }
 
-const FieldLayout = ({
-    label,
-    description,
-    children,
-    errors,
-    required,
-    ...props
-}: FieldProps & CoreFieldLayoutProps) => (
-    <Field required={required} {...props}>
-        {label && <Label required={required}>{label}</Label>}
-        {description && <Root.FieldDescription>{description}</Root.FieldDescription>}
-        {children}
-        {errors && <Root.FieldError errors={errors} />}
-    </Field>
-);
+interface FieldLayoutProps {
+    className?: string;
+    children?: React.ReactNode;
+    fieldLayout?: CoreFieldLayoutProps;
+}
 
-const AsideFieldLayout = ({
-    label,
-    description,
+const FieldLayout = ({
     children,
-    errors,
-    required,
-    orientation = 'horizontal',
-    ...props
-}: FieldProps & CoreFieldLayoutProps) => (
-    <Field required={required} orientation={orientation} {...props}>
-        {children}
-        <Root.FieldContent>
+    className,
+    fieldLayout = {},
+}: FieldLayoutProps) => {
+    const {
+        required,
+        label,
+        description,
+        errors,
+        ...fieldLayoutProps
+    } = fieldLayout;
+
+    return (
+        <Field
+            className={className}
+            {...fieldLayoutProps}
+        >
             {label && <Label required={required}>{label}</Label>}
             {description && <Root.FieldDescription>{description}</Root.FieldDescription>}
+            {children}
             {errors && <Root.FieldError errors={errors} />}
-        </Root.FieldContent>
-    </Field>
-);
+        </Field>
+    );
+}
 
 export {
     type CoreFieldLayoutProps,
+    type FieldLayoutProps,
     FieldLayout,
-    AsideFieldLayout,
 }

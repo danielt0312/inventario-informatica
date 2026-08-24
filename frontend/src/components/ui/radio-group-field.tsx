@@ -1,27 +1,32 @@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { AsideFieldLayout, FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
 import { useFieldContext } from "./form-context";
+import { FieldLayout, type FieldLayoutProps } from "./field-layout";
 
-export interface RadioGroupFieldProps extends Omit<React.ComponentProps<typeof RadioGroup>, 'orientation'>, CoreFieldLayoutProps {
-    radioGroupOrientation?: React.ComponentProps<typeof RadioGroup>['orientation'];
+export interface RadioGroupFieldProps extends React.ComponentProps<typeof RadioGroup>, FieldLayoutProps {
 }
 export type RadioGroupFieldType = string | number | boolean | undefined;
 export const RadioGroupField = ({
-    className, description, disabled, label, errors, required, orientation, radioGroupOrientation, ...radioGroupProps
+    className,
+    required,
+    disabled,
+    fieldLayout = {},
+    ...props
 }: RadioGroupFieldProps) => {
     const field = useFieldContext<RadioGroupFieldType>();
 
     return (
         <FieldLayout
             className={className}
-            description={description}
-            disabled={disabled}
-            label={label}
-            errors={field.state.meta.errors}
-            required={required}
-            orientation={orientation}
+            fieldLayout={{
+                required,
+                disabled,
+                errors: field.state.meta.errors,
+                ...fieldLayout
+            }}
         >
             <RadioGroup
+                required={required}
+                disabled={disabled}
                 name={field.name}
                 value={field.state.value !== undefined
                     ? String(field.state.value)
@@ -35,35 +40,11 @@ export const RadioGroupField = ({
                             : typeof field.state.value === 'number' || !isNaN(Number(value)) && value !== null
                                 ? Number(value)
                                 : value
-                )
-                }
-                orientation={radioGroupOrientation}
-                {...radioGroupProps}
+                )}
+                {...props}
             />
         </FieldLayout>
     );
 }
 
-export interface RadioGroupFieldItemProps extends Omit<React.ComponentProps<typeof RadioGroupItem>, 'children'>, CoreFieldLayoutProps {
-}
-export const RadioGroupFieldItem = ({
-    className, description, disabled, errors,label, required,orientation, ...radioGroupItemProps
-}: RadioGroupFieldItemProps) => {
-    return (
-        <AsideFieldLayout
-            className={className}
-            description={description}
-            disabled={disabled}
-            label={label}
-            errors={errors}
-            required={required}
-            orientation={orientation}
-        >
-            <RadioGroupItem
-                required={required}
-                disabled={disabled}
-                {...radioGroupItemProps}
-            />
-        </AsideFieldLayout>
-    );
-}
+export const RadioGroupFieldItem = RadioGroupItem;
