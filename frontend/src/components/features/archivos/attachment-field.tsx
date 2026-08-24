@@ -1,5 +1,5 @@
 import { FieldLayout, type FieldLayoutProps } from "@/components/ui/field-layout";
-import { ArchivoAttachmentLayout, useArchivoAttachmentState } from "./attachment";
+import { ArchivoAttachmentLayout, useArchivoAttachmentState } from "./attachment-layout";
 import { useArchivoFieldContext } from "./hooks/use-field-context";
 
 const useAttachmentFieldContext = useArchivoFieldContext;

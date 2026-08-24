@@ -7,25 +7,32 @@ import { BooleanField, type BooleanFieldType } from "@/components/ui/boolean-fie
 
 export type ObservacionesFieldType = NullableTextareaFieldType;
 export const ObservacionesField = ({
-    label = "Observaciones/Aclaraciones",
-    placeholder = "Ingresa cualquier observación, aclaración, o nota importante a declarar",
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof NullableTextareaField>) => (
     <NullableTextareaField
-        label={label}
-        placeholder={placeholder}
+        fieldLayout={{
+            label: "Observaciones/Aclaraciones",
+            ...fieldLayout
+        }}
+        placeholder="Ingresa cualquier observación, aclaración, o nota importante a declarar"
         {...props}
     />
 );
 
 export type EsResultadoEsperadoFieldType = BooleanFieldType;
 export const EsResultadoEsperadoField = ({
-    label = "¿Cumplió con las características solicitadas?",
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof BooleanField>) => (
-    <BooleanField label={label} {...props} />
+    <BooleanField
+        fieldLayout={{
+            label: "¿Cumplió con las características solicitadas?",
+            ...fieldLayout
+        }}
+        {...props}
+    />
 );
-
 
 export type RecepcionFieldGroup = {
     es_resultado_esperado: EsResultadoEsperadoFieldType;

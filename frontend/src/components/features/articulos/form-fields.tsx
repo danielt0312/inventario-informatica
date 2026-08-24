@@ -1,6 +1,6 @@
 import { InputField, NullableInputField, NullableNumberInputField, type InputFieldType, type NullableInputFieldType, type NullableNumberInputFieldType } from "@/components/ui/input-field";
 import { BooleanField, type BooleanFieldType } from "@/components/ui/boolean-field";
-import { FieldLayout, type CoreFieldLayoutProps } from "@/components/ui/field-layout";
+import { FieldLayout, type FieldLayoutProps } from "@/components/ui/field-layout";
 import { Field } from "@/components/ui/field";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
@@ -10,10 +10,14 @@ import { isStringNumber } from "@/lib/utils";
 import React from "react";
 
 export type CostoUnitarioFieldType = NullableNumberInputFieldType;
-export const CostoUnitarioField = (props: React.ComponentProps<typeof NullableNumberInputField>) => (
+export const CostoUnitarioField = ({
+    fieldLayout,
+    ...props
+}: React.ComponentProps<typeof NullableNumberInputField>) => (
     <NullableNumberInputField
         fieldLayout={{
-            label: "Costo Unitario"
+            label: "Costo Unitario",
+            ...fieldLayout
         }}
         placeholder={"Ingresa el costo unitario"}
         {...props}
@@ -21,10 +25,14 @@ export const CostoUnitarioField = (props: React.ComponentProps<typeof NullableNu
 );
 
 export type NumeroInventarioFieldType = InputFieldType;
-export const NumeroInventarioField = (props: React.ComponentProps<typeof InputField>) => (
+export const NumeroInventarioField = ({
+    fieldLayout,
+    ...props
+}: React.ComponentProps<typeof InputField>) => (
     <InputField
         fieldLayout={{
-            label: "Número de Inventario"
+            label: "Número de Inventario",
+            ...fieldLayout
         }}
         placeholder="Ingresa el número de inventario"
         {...props}
@@ -32,10 +40,14 @@ export const NumeroInventarioField = (props: React.ComponentProps<typeof InputFi
 );
 
 export type NullableNumeroInventarioFieldType = NullableInputFieldType;
-export const NullableNumeroInventarioField = (props: React.ComponentProps<typeof NullableInputField>) => (
+export const NullableNumeroInventarioField = ({
+    fieldLayout,
+    ...props
+}: React.ComponentProps<typeof NullableInputField>) => (
     <NullableInputField
         fieldLayout={{
-            label: "Número de Inventario"
+            label: "Número de Inventario",
+            ...fieldLayout
         }}
         placeholder="Ingresa el número de inventario"
         {...props}
@@ -44,20 +56,26 @@ export const NullableNumeroInventarioField = (props: React.ComponentProps<typeof
 
 export type EsContableFieldType = BooleanFieldType;
 export const EsContableField = ({
-    label = "¿Es contable?",
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof BooleanField>) => (
     <BooleanField
-        label={label}
+        fieldLayout={{
+            label: "¿Es contable?"
+        }}
         {...props}
     />
 );
 
 export type NumeroSerieFieldType = InputFieldType;
-export const NumeroSerieField = (props: React.ComponentProps<typeof NullableInputField>) => (
+export const NumeroSerieField = ({
+    fieldLayout,
+    ...props
+}: React.ComponentProps<typeof NullableInputField>) => (
     <NullableInputField
         fieldLayout={{
-            label: "Número de serie"
+            label: "Número de serie",
+            ...fieldLayout
         }}
         placeholder="Ingresa el número de serie"
         {...props}
@@ -67,14 +85,19 @@ export const NumeroSerieField = (props: React.ComponentProps<typeof NullableInpu
 const formatCuentaContable = (value: string) =>
     value.length === 9
         ? `${value.slice(0, 4)}-${value.charAt(4)}-${value.slice(5, 9)}`
-        : undefined
+        : undefined;
 
 export type CuentaContableType = InputFieldType;
 export const CuentaContable = ({
-    label = 'Cuenta contable',
+    className,
+    fieldLayout,
+    required,
+    disabled,
+    maxLength = 9,
+    pattern = REGEXP_ONLY_DIGITS,
     withScannerButton = true,
-    className, description, disabled, required, orientation,
-}: Omit<CoreFieldLayoutProps, 'errors'> & {
+    ...props
+}: Omit<FieldLayoutProps, 'errors'> & Omit<React.ComponentProps<typeof InputOTP>, 'render'> & {
     withScannerButton?: boolean;
 }) => {
     const field = useFieldContext<CuentaContableType>();
@@ -82,19 +105,19 @@ export const CuentaContable = ({
 
     return (
         <FieldLayout
-            label={label}
             className={className}
-            description={description}
-            disabled={disabled}
-            required={required}
-            orientation={orientation}
-            errors={field.state.meta.errors}
+            fieldLayout={{
+                required,
+                disabled,
+                errors: field.state.meta.errors,
+                ...fieldLayout
+            }}
         >
             <Field orientation="horizontal">
                 <InputOTP
                     value={inputValue}
-                    maxLength={9}
-                    pattern={REGEXP_ONLY_DIGITS}
+                    maxLength={maxLength}
+                    pattern={pattern}
                     onChange={(value) => {
                         setInputValue(value);
                         const format = formatCuentaContable(value);
@@ -105,6 +128,8 @@ export const CuentaContable = ({
                         }
                     }}
                     disabled={disabled}
+                    required={required}
+                    {...props}
                 >
                     <InputOTPGroup>
                         <InputOTPSlot index={0} />

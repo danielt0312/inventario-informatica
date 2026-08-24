@@ -1,4 +1,4 @@
-import { ArchivoAttachment, ArchivoAttachmentAction, ArchivoAttachmentActionViewer, type ArchivoAttachmentType, ArchivoAttachmentActionSwitcher } from "@/components/features/archivos/attachment";
+import { ArchivoAttachment, ArchivoAttachmentAction, ArchivoAttachmentActionViewer, type ArchivoAttachmentType, ArchivoAttachmentActionSwitcher } from "@/components/features/archivos/attachment-layout";
 import { Attachment, AttachmentContent, AttachmentDescription, AttachmentGroup, AttachmentActions, AttachmentMedia, AttachmentTitle, AttachmentTrigger } from "@/components/ui/attachment";
 import { Spinner } from "@/components/ui/spinner";
 import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";

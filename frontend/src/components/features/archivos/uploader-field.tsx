@@ -1,6 +1,6 @@
 import { FieldLayout, type FieldLayoutProps } from "@/components/ui/field-layout";
 import { useArchivoFieldContext } from "./hooks/use-field-context";
-import { ArchivoUploaderLayout } from "./uploader";
+import { ArchivoUploaderLayout } from "./uploader-layout";
 
 const useUploaderFieldContext = useArchivoFieldContext;
 

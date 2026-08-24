@@ -15,7 +15,7 @@ import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 import { Button } from "@/components/ui/button";
 import { PlusCircleIcon, Trash2Icon } from "lucide-react";
 import type { DetailedInventariarDictamen, InventariarDictamenAdquisicion } from "@/types/dictamenes";
-import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachment";
+import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachment-layout";
 import React from "react";
 import { isStringNumber } from "@/lib/utils";
 import { AdquisicionIdField } from "./form-fields";
