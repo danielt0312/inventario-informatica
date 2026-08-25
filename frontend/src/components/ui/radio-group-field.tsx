@@ -1,6 +1,7 @@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useFieldContext } from "./form-context";
 import { FieldLayout, type FieldLayoutProps } from "./field-layout";
+import { Field, FieldLabel } from "./field";
 
 export interface RadioGroupFieldProps extends React.ComponentProps<typeof RadioGroup>, FieldLayoutProps {
 }
@@ -47,4 +48,14 @@ export const RadioGroupField = ({
     );
 }
 
-export const RadioGroupFieldItem = RadioGroupItem;
+export const RadioGroupFieldItem = ({
+    label,
+    ...props
+}: React.ComponentProps<typeof RadioGroupItem> & {
+    label?: string;
+}) => (
+    <Field orientation="horizontal">
+        <RadioGroupItem {...props} />
+        {label && <FieldLabel>{label}</FieldLabel>}
+    </Field>
+)

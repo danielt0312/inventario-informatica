@@ -15,7 +15,7 @@ export const BooleanField = ({
         className={cn("**:data-[slot='radio-group']:flex **:data-[slot='radio-group']:gap-7 **:data-[slot='field']:max-w-fit", className)}
         {...props}
     >
-        <RadioGroupFieldItem value="true">{truthyLabel}</RadioGroupFieldItem>
-        <RadioGroupFieldItem value="false">{falsyLabel}</RadioGroupFieldItem>
+        <RadioGroupFieldItem value="true" label={truthyLabel} />
+        <RadioGroupFieldItem value="false" label={falsyLabel} />
     </RadioGroupField>
 );
