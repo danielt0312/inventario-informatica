@@ -32,7 +32,7 @@ export function ProductoField({
             params: {
                 include: ['marca'],
                 filter: {
-                    tipos: tipo,
+                    tipo,
                 }
             }
         }).then(r => r.data.data),

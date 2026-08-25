@@ -59,7 +59,7 @@ function createComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyType>(emptyV
                     items={items}
                     // required={required}
                     disabled={disabled}
-                    value={derivedValue as never}
+                    value={(derivedValue ?? null) as never}
                     onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}
                 />
             </FieldLayout>

@@ -12,19 +12,13 @@ class ProductoMarcaController extends Controller
 {
     public function index()
     {
-        return QueryBuilder::for(ProductoMarca::class)
-            ->allowedIncludes(
-                AllowedInclude::belongsTo('productos', 'tipos'),
-            )
-            ->get()
+        return ProductoMarca::get()
             ->toResourceCollection();
     }
 
     public function store(StoreProductoMarcaRequest $request)
     {
         return (ProductoMarca::create($request->validated()))
-            ->toResource()
-            ->response()
-            ->setStatusCode(201);
+            ->toResourceResponse(201);
     }
 }
