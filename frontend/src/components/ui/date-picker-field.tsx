@@ -35,7 +35,7 @@ function DatePickerField({
         >
             <DatePicker
                 disabled={disabled}
-                required={required}
+                // required={required}
                 value={dateValue}
                 onValueChange={(date) => field.handleChange(date
                     ? format(date, 'yyyy-MM-dd')

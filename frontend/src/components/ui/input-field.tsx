@@ -31,7 +31,7 @@ function CoreInputField({
         >
             <InputGroup>
                 <InputGroupInput
-                    required={required}
+                    // required={required}
                     disabled={disabled}
                     name={field.name}
                     value={field.state.value ?? ''}

@@ -19,8 +19,7 @@ import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachme
 import React from "react";
 import { isStringNumber } from "@/lib/utils";
 import { AdquisicionIdField } from "./form-fields";
-import type { ComboboxOption } from "@/components/ui/creatable-combobox";
-import type { ComboboxLayoutItem } from "@/components/ui/combobox-layout.shared";
+import { toComboboxItems } from "@/components/ui/combobox-layout.shared";
 
 export const useForm = (dictamen: DetailedInventariarDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -54,13 +53,13 @@ function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]
 
     const [options, setOptions] = React.useState(initialOptions);
 
-    const availableOptions = React.useMemo(
-        () =>
-            options
-                .filter((o) => o.cantidad_restante > 0)
-                .map((o): ComboboxOption => ({ label: o.label, value: `${o.id}` })),
-        [options]
-    );
+    const availableOptions = React.useMemo(() => {
+        const filtered = options.filter((o) => o.cantidad_restante > 0);
+        return toComboboxItems(filtered, (item) => ({
+            label: item.label,
+            value: item.id
+        }))
+    }, [options]);
 
     const removeOption = (id: number) => {
         setOptions((prev) =>
@@ -174,9 +173,13 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                 children={(field) => (
                                                     <AdquisicionIdField
                                                         items={adquisicionesOptions}
-                                                        onFieldValueChange={(v) => {
-                                                            const val = v as number | undefined;
-                                                            const value = v && isStringNumber(val?.value) ? Number(val?.value) : undefined;
+                                                        onFieldValueChange={(item) => {
+                                                            const itemValue = item?.value;
+                                                            const value = itemValue === undefined
+                                                                ? itemValue
+                                                                : (typeof itemValue === 'string' && !isStringNumber(itemValue))
+                                                                    ? undefined
+                                                                    : Number(itemValue);
                                                             const previousValue = field.state.value;
 
                                                             if (previousValue !== undefined && previousValue !== value) {
@@ -187,7 +190,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                                 adquisicionRemoveOptions(value);
                                                             }
 
-                                                            field.handleChange(value);
+                                                            return value;
                                                         }}
                                                         required
                                                     />
@@ -230,7 +233,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                 };
                                             }}
                                         >
-                                            {({esResultadoEsperado, adquisicionId}) => esResultadoEsperado === false && (
+                                            {({ esResultadoEsperado, adquisicionId }) => esResultadoEsperado === false && (
                                                 <FieldGroup className="flex-row">
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].producto_id`}

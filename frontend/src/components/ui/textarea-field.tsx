@@ -29,7 +29,7 @@ function CoreTextareaField({
         >
             <InputGroup>
                 <InputGroupTextarea
-                    required={required}
+                    // required={required}
                     disabled={disabled}
                     name={field.name}
                     value={field.state.value ?? ''}

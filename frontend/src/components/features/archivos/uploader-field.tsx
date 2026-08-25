@@ -24,6 +24,7 @@ function UploaderField({
             className={className}
             fieldLayout={{
                 label: "Adjuntar archivo",
+                errors: field.state.meta.errors,
                 ...fieldLayout
             }}
         >

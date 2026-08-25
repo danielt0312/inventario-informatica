@@ -191,13 +191,3 @@ export function ComboboxLayoutGrouped<
     )
 }
 
-export function toComboboxGroups<
-    TSource,
-    TItem extends ComboboxLayoutItem,
-    TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
->(
-    source: readonly TSource[],
-    toGroup: (source: TSource, index: number) => TGroup
-): TGroup[] {
-    return source.map(toGroup)
-}

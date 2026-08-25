@@ -68,7 +68,7 @@ function createCreatableComboboxFieldGrouped<TEmpty extends ComboboxFieldEmptyTy
                 <CreatableComboboxGrouped<TItem, TGroup, Multiple>
                     {...comboboxProps}
                     items={items}
-                    required={required}
+                    // required={required}
                     disabled={disabled}
                     value={derivedValue as never}
                     onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}

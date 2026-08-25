@@ -1,20 +1,27 @@
 import { ComboboxFieldSimple } from "@/components/ui/combobox-field-simple";
+import { useComboboxFieldContext, useComboboxFieldValue } from "@/components/ui/combobox-field.shared";
+import type { ComboboxLayoutItem } from "@/components/ui/combobox-layout.shared";
 import React from "react";
 
 export function AdquisicionIdField({
     items,
     layout,
-    onValueChange,
     ...props
-}: React.ComponentProps<typeof ComboboxFieldSimple>) {
-    const [actualOption, setActualOption] = React.useState<Combobox>();
+}: React.ComponentProps<typeof ComboboxFieldSimple<ComboboxLayoutItem, false>>) {
+    const field = useComboboxFieldContext();
+    const derivedValue = useComboboxFieldValue(
+        items,
+        field.state.value,
+        false,
+        undefined
+    );
 
     const availableOptions = React.useMemo(() => {
-        if (!actualOption) return items;
-        return items.some(o => o.value === actualOption.value)
+        if (!derivedValue) return items;
+        return items.some(o => o.value === field.state.value)
             ? items
-            : [...items, actualOption];
-    }, [items, actualOption]);
+            : [...items, derivedValue];
+    }, [items, field.state.value]);
 
     return (
         <ComboboxFieldSimple
@@ -22,12 +29,7 @@ export function AdquisicionIdField({
                 label: "Caracteristicas solicitadas",
                 ...layout
             }}
-            value={actualOption}
-            options={availableOptions}
-            onValueChange={(option) => {
-                setActualOption(option);
-                onValueChange?.(option);
-            }}
+            items={availableOptions}
             {...props}
         />
     );

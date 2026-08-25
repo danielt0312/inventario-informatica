@@ -1,6 +1,6 @@
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
-import { toComboboxOptions } from "@/lib/utils";
+import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -19,12 +19,13 @@ export function ProductoMarcaField({
 }: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
     const field = useFieldContext<ProductoMarcaFieldType>();
 
-    const { data: items = [] } = useQuery({
+    const { data = [] } = useQuery({
         queryKey: ['producto_marcas'],
         queryFn: () => api.get<TResponse<ProductoMarca[]>>('api/producto_marcas')
             .then(r => r.data.data),
-        select: toComboboxOptions
     });
+
+    const items = React.useMemo(() => toComboboxCatalogItems(data), [data]);
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 

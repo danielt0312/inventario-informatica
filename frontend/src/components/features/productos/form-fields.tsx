@@ -13,6 +13,7 @@ import React from "react";
 import api from "@/lib/axios";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { CreatableComboboxFieldGrouped } from "@/components/ui/creatable-combobox-field-grouped";
+import { toComboboxGroups, toComboboxItems } from "@/components/ui/combobox-layout.shared";
 
 export type ProductoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 export function ProductoField({
@@ -25,7 +26,7 @@ export function ProductoField({
 }) {
     const field = useFieldContext<ProductoFieldType>();
 
-    const { data: items = [] } = useQuery({
+    const { data = [] } = useQuery({
         queryKey: ['productos', tipo],
         queryFn: () => api.get<TResponse<ProductoWithMarca[]>>('api/productos', {
             params: {
@@ -37,6 +38,23 @@ export function ProductoField({
         }).then(r => r.data.data),
         enabled: !disabled
     });
+
+    const items = React.useMemo(() => {
+        const marcasDisponibles: ProductoMarca[] = [];
+        data.forEach((productoWithMarca) => {
+            if (marcasDisponibles.some((marcaDisponible) => marcaDisponible.id === productoWithMarca.marca.id)) {
+                return;
+            }
+            marcasDisponibles.push(productoWithMarca.marca);
+        });
+        return toComboboxGroups(marcasDisponibles, (marcaDisponible) => ({
+            label: marcaDisponible.nombre,
+            items: toComboboxItems(data, (productoWithMarca) => ({
+                label: productoWithMarca.nombre,
+                value: productoWithMarca.id
+            }))
+        }));
+    }, [data]);
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 

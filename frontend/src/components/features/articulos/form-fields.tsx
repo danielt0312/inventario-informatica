@@ -127,7 +127,7 @@ export const CuentaContable = ({
                         }
                     }}
                     disabled={disabled}
-                    required={required}
+                    // required={required}
                     {...props}
                 >
                     <InputOTPGroup>

@@ -1,5 +1,6 @@
 import * as React from "react"
 import type { ComboboxLayoutItem } from "./combobox-layout.shared"
+import { useFieldContext } from "./form-context"
 
 export type ComboboxFieldEmptyType = undefined | null
 
@@ -41,3 +42,5 @@ export function defaultFieldValueFromItem<TEmpty extends ComboboxFieldEmptyType>
             ? value.map((v) => v.value)
             : (value?.value ?? emptyValue)
 }
+
+export const useComboboxFieldContext = <Multiple extends boolean | undefined = false, TEmpty extends ComboboxFieldEmptyType = undefined>() => useFieldContext<ComboboxFieldType<Multiple, TEmpty>>();

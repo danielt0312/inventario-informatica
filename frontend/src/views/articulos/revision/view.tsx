@@ -1,5 +1,7 @@
-import { ComboboxLayoutSimple, toComboboxItems } from "@/components/ui/combobox-layout-simple";
-import { ComboboxLayoutGrouped, toComboboxGroups } from "@/components/ui/combobox-layout-grouped";
+import { ComboboxLayoutSimple } from "@/components/ui/combobox-layout-simple";
+import { toComboboxItems } from "@/components/ui/combobox-layout.shared";
+import { ComboboxLayoutGrouped } from "@/components/ui/combobox-layout-grouped";
+import { toComboboxGroups } from "@/components/ui/combobox-layout.shared";
 import { CreatableComboboxGrouped } from "@/components/ui/creatable-combobox-grouped";
 import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";

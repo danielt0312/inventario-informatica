@@ -59,3 +59,21 @@ export type ComboboxLayoutGroupedProps<
   TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
   Multiple extends boolean | undefined = false,
 > = BaseLayoutProps<TItem, Multiple, readonly TGroup[]>
+
+export function toComboboxItems<TSource, TItem extends ComboboxLayoutItem>(
+    source: readonly TSource[],
+    toItem: (source: TSource, index: number) => TItem
+): TItem[] {
+    return source.map(toItem)
+}
+
+export function toComboboxGroups<
+    TSource,
+    TItem extends ComboboxLayoutItem,
+    TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>
+>(
+    source: readonly TSource[],
+    toGroup: (source: TSource, index: number) => TGroup
+): TGroup[] {
+    return source.map(toGroup)
+}

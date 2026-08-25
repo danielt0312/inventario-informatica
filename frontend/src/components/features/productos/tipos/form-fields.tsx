@@ -10,8 +10,8 @@ import api from "@/lib/axios";
 import React from "react";
 import { CreatableComboboxFieldGrouped } from "@/components/ui/creatable-combobox-field-grouped";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
-import { toComboboxGroups } from "@/components/ui/combobox-layout-grouped";
-import { toComboboxItems } from "@/components/ui/combobox-layout-simple";
+import { toComboboxGroups } from "@/components/ui/combobox-layout.shared";
+import { toComboboxItems } from "@/components/ui/combobox-layout.shared";
 
 export type ProductoTipoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 export function ProductoTipoField({
@@ -34,7 +34,6 @@ export function ProductoTipoField({
             items: toComboboxItems(group.tipos, (item) => ({
                 label: item.nombre,
                 value: item.id,
-                group: group.nombre
             })),
             label: group.nombre,
         })), [items]);
@@ -70,7 +69,7 @@ export function ProductoTipoField({
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Regitrar Tipo de Producto</DialogTitle>
+                        <DialogTitle>Registrar Tipo de Producto</DialogTitle>
                         <DialogDescription className="sr-only">
                             Registrar nuevo tipo de producto
                         </DialogDescription>

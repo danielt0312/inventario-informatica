@@ -109,10 +109,3 @@ export function ComboboxLayoutSimple<
     </Combobox>
   )
 }
-
-export function toComboboxItems<TSource, TItem extends ComboboxLayoutItem>(
-    source: readonly TSource[],
-    toItem: (source: TSource, index: number) => TItem
-): TItem[] {
-    return source.map(toItem)
-}

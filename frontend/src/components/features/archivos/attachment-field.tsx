@@ -23,6 +23,7 @@ function AttachmentField({
             className={className}
             fieldLayout={{
                 disabled,
+                errors: field.state.meta.errors,
                 ...fieldLayout
             }}
         >

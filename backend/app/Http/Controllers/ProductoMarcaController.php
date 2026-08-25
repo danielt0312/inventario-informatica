@@ -14,7 +14,7 @@ class ProductoMarcaController extends Controller
     {
         return QueryBuilder::for(ProductoMarca::class)
             ->allowedIncludes(
-                AllowedInclude::relationship('productos', 'tipos'),
+                AllowedInclude::belongsTo('productos', 'tipos'),
             )
             ->get()
             ->toResourceCollection();

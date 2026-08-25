@@ -18,7 +18,6 @@ import {
 } from "date-fns"
 import { isAxiosError } from "axios";
 import { root } from "./axios";
-import type { ComboboxOption } from "@/components/ui/creatable-combobox";
 import { dictamenProductoTiposRequierenNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap } from "./constants";
 import type { DatePickerFieldType } from "@/components/ui/date-picker-field";
 
@@ -98,57 +97,6 @@ export function handleFormValidationError(
         setFormValidationErrors(formApi, localErrors);
     }
 }
-
-const getValueByPath = (obj: any, path: string): any =>
-    path.split('.').reduce((acc, key) => acc?.[key], obj);
-
-export const catalogoToComboboxOption = <T extends TCatalogo>(
-    item: T,
-    groupAccessor?: string | ((item: T) => any)
-): ComboboxOption => {
-    const option: ComboboxOption = {
-        value: String(item.id),
-        label: item.nombre,
-    };
-
-    if (groupAccessor) {
-        const resolvedGroup = typeof groupAccessor === 'function'
-            ? groupAccessor(item)
-            : getValueByPath(item, groupAccessor);
-
-        if (typeof resolvedGroup === 'string') {
-            option.group = resolvedGroup;
-        } else if (resolvedGroup && typeof resolvedGroup === 'object' && 'nombre' in resolvedGroup) {
-            option.group = String(resolvedGroup.nombre);
-        }
-    }
-
-    return option;
-};
-
-export const toComboboxOptions = <T extends any>(
-    list: T[],
-    groupAccessor?: string | ((item: T) => any)
-): ComboboxOption[] => {
-    if (typeof groupAccessor === 'string' && groupAccessor.includes('.')) {
-        const [arrayKey] = groupAccessor.split('.');
-
-        if (list.length > 0 && Array.isArray((list[0] as any)[arrayKey])) {
-            return list.flatMap((parent: any) => {
-                const children = parent[arrayKey] || [];
-                const groupName = parent.nombre || '';
-
-                return children.map((child: any) => ({
-                    value: String(child.id),
-                    label: child.nombre,
-                    group: groupName,
-                }));
-            });
-        }
-    }
-
-    return list.map((item) => catalogoToComboboxOption(item as any, groupAccessor));
-};
 
 export function toComboboxCatalogItems<TItem extends TCatalogo>(
   items: readonly TItem[]

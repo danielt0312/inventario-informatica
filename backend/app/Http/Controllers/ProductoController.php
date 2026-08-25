@@ -15,8 +15,8 @@ class ProductoController extends Controller
         return QueryBuilder::for(Producto::class)
             ->allowedIncludes('tipo.categoria', 'marca')
             ->allowedFilters(
-                AllowedFilter::exact('tipos', 'tipo_id'),
-                AllowedFilter::exact('marcas', 'marca_id')
+                AllowedFilter::belongsTo('tipo'),
+                AllowedFilter::belongsTo('marca')
             )
             ->get()
             ->toResourceCollection();

@@ -2,12 +2,12 @@ import { ComboboxLayoutSimple } from "./combobox-layout-simple"
 import type { ComboboxLayoutSimpleComponentProps } from "./combobox-layout-simple"
 import type { ComboboxLayoutItem } from "./combobox-layout.shared"
 import { FieldLayout, type CoreFieldLayoutProps } from "./field-layout"
-import { useFieldContext } from "./form-context"
 import {
     useComboboxFieldValue,
     defaultFieldValueFromItem,
     type ComboboxFieldEmptyType,
     type ComboboxFieldType,
+    useComboboxFieldContext,
 } from "./combobox-field.shared"
 
 type ComboboxFieldSimpleProps<
@@ -36,7 +36,7 @@ function createComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyType>(emptyV
             ...comboboxProps
         } = props
 
-        const field = useFieldContext<ComboboxFieldType<Multiple, TEmpty>>()
+        const field = useComboboxFieldContext<Multiple, TEmpty>()
         const derivedValue = useComboboxFieldValue(
             items,
             field.state.value,
@@ -57,7 +57,7 @@ function createComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyType>(emptyV
                 <ComboboxLayoutSimple<TItem, Multiple>
                     {...comboboxProps}
                     items={items}
-                    required={required}
+                    // required={required}
                     disabled={disabled}
                     value={derivedValue as never}
                     onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}

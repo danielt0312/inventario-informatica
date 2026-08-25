@@ -25,7 +25,7 @@ export const RadioGroupField = ({
             }}
         >
             <RadioGroup
-                required={required}
+                // required={required}
                 disabled={disabled}
                 name={field.name}
                 value={field.state.value !== undefined
