@@ -18,8 +18,7 @@ const estadoColorVariants = cva(
                 [ArticuloEstadoEnum.ACTIVO]: "bg-lime-400",
                 [ArticuloEstadoEnum.BAJA]: "bg-red-400",
                 [ArticuloEstadoEnum.BAJA_PREVENTIVA]: "bg-red-400/80",
-                [ArticuloEstadoEnum.MANTENIMIENTO]: "bg-yellow-400",
-                [ArticuloEstadoEnum.REVISION]: "bg-yellow-400/50"
+                [ArticuloEstadoEnum.MANTENIMIENTO]: "bg-yellow-400/50",
             }
         },
         defaultVariants: {

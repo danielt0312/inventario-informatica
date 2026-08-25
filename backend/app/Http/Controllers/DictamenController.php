@@ -26,8 +26,6 @@ use App\Enums\{
     DictamenEstadoEnum
 };
 
-use App\Services\ArticuloService;
-
 class DictamenController extends ArchivableController
 {
     public function index(Request $request)
@@ -231,9 +229,9 @@ class DictamenController extends ArchivableController
         return $dictamen->toResourceResponse();
     }
 
-    public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen, ArticuloService $articuloService)
+    public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen)
     {
-        $dictamen = DB::transaction(function () use ($request, $dictamen, $articuloService): Dictamen {
+        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
             $validated = $request->validated();
 
             foreach ($validated['adquisiciones'] as $payloadAdquisicion) {
@@ -244,7 +242,7 @@ class DictamenController extends ArchivableController
                     ->articulos()
                     ->create([
                         ...$payloadAdquisicion,
-                        'estado_id' => $articuloService->getEstadoEnum($producto->tipo_id)->value,
+                        'estado_id' => ArticuloEstadoEnum::POR_RESGUARDAR->value,
                         'dictamen_adquisicion_id' => $payloadAdquisicion['id'],
                         'producto_id' => $producto->id
                     ]);

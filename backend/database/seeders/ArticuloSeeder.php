@@ -24,7 +24,7 @@ class ArticuloSeeder extends Seeder
 
         Articulo::create([
             'producto_id' => 1,
-            'estado_id' => ArticuloEstadoEnum::REVISION->value,
+            'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
             'es_contable' => true,
             'numero_inventario' => NumeroInventarioService::generate(500,2),
         ]);

@@ -2,8 +2,7 @@ export const ArticuloEstadoEnum = {
     ACTIVO: 1,
     BAJA: 2,
     BAJA_PREVENTIVA: 3,
-    REVISION: 4,
-    MANTENIMIENTO: 5,
+    MANTENIMIENTO: 4,
 }
 export type ArticuloEstadoEnum = (typeof ArticuloEstadoEnum)[keyof typeof ArticuloEstadoEnum];
 
