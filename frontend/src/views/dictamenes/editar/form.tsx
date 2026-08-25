@@ -125,12 +125,16 @@ export const DictamenEditarForm = () => {
                                                         }}
                                                     />
 
-                                                    <form.AppField
-                                                        name={`adquisiciones[${index}].producto_id`}
-                                                        children={() => (
-                                                            <ProductoField tipo={field.state.value[index].producto_tipo_id} required />
+                                                    <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_tipo_id}>
+                                                        {(productoTipoId) => (
+                                                            <form.AppField
+                                                                name={`adquisiciones[${index}].producto_id`}
+                                                                children={() => (
+                                                                    <ProductoField tipo={productoTipoId} required />
+                                                                )}
+                                                            />
                                                         )}
-                                                    />
+                                                    </form.Subscribe>
                                                 </FieldGroup>
 
                                                 <form.AppField

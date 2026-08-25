@@ -12,6 +12,11 @@ class DictamenResource extends JsonResource
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
+            //debug
+            'adscripcion' => [
+                'id' => $this->adscripcion_id,
+                'nombre' => fake()->jobTitle()
+            ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'estado' => new DictamenEstadoResource($this->whenLoaded('estado')),

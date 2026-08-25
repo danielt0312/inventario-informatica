@@ -13,7 +13,8 @@ import React from "react";
 import api from "@/lib/axios";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { CreatableComboboxFieldGrouped } from "@/components/ui/creatable-combobox-field-grouped";
-import { toComboboxGroups, toComboboxItems } from "@/components/ui/combobox-layout.shared";
+import { toComboboxGroups } from "@/components/ui/combobox-layout.shared";
+import { toComboboxCatalogItems } from "@/lib/utils";
 
 export type ProductoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 export function ProductoField({
@@ -47,13 +48,13 @@ export function ProductoField({
             }
             marcasDisponibles.push(productoWithMarca.marca);
         });
-        return toComboboxGroups(marcasDisponibles, (marcaDisponible) => ({
-            label: marcaDisponible.nombre,
-            items: toComboboxItems(data, (productoWithMarca) => ({
-                label: productoWithMarca.nombre,
-                value: productoWithMarca.id
-            }))
-        }));
+        return toComboboxGroups(marcasDisponibles, (marcaDisponible) => {
+            const productos = data.filter((productoWithMarca) => marcaDisponible.id === productoWithMarca.marca.id);
+            return {
+                label: marcaDisponible.nombre,
+                items: toComboboxCatalogItems(productos)
+            };
+        });
     }, [data]);
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
