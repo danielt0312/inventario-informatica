@@ -5,12 +5,15 @@ import React from "react";
 
 export function AdquisicionIdField({
     items,
+    allItems,
     layout,
     ...props
-}: React.ComponentProps<typeof ComboboxFieldSimple<ComboboxLayoutItem, false>>) {
+}: React.ComponentProps<typeof ComboboxFieldSimple<ComboboxLayoutItem, false>> & {
+    allItems: ComboboxLayoutItem[];
+}) {
     const field = useComboboxFieldContext();
     const derivedValue = useComboboxFieldValue(
-        items,
+        allItems,
         field.state.value,
         false,
         undefined

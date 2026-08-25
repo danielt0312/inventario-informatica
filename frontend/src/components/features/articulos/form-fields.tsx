@@ -106,6 +106,7 @@ export const CuentaContable = ({
         <FieldLayout
             className={className}
             fieldLayout={{
+                label: "Cuenta contable",
                 required,
                 disabled,
                 errors: field.state.meta.errors,

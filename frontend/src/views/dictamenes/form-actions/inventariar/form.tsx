@@ -61,6 +61,11 @@ function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]
         }))
     }, [options]);
 
+    const allOptions = React.useMemo(
+        () => toComboboxItems(options, (item) => ({ label: item.label, value: item.id })),
+        [options]
+    );
+
     const removeOption = (id: number) => {
         setOptions((prev) =>
             prev.map((o) =>
@@ -81,7 +86,7 @@ function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]
         );
     };
 
-    return { options: availableOptions, removeOption, restoreOption };
+    return { options: availableOptions, allOptions, removeOption, restoreOption };
 }
 
 export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }) {
@@ -93,6 +98,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
 
     const {
         options: adquisicionesOptions,
+        allOptions: adquisicionesAllOptions,
         removeOption: adquisicionRemoveOptions,
         restoreOption: adquisicionRestoreOptions
     } = useAdquisicionesOptions(adquisiciones);
@@ -173,6 +179,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                 children={(field) => (
                                                     <AdquisicionIdField
                                                         items={adquisicionesOptions}
+                                                        allItems={adquisicionesAllOptions}
                                                         onFieldValueChange={(item) => {
                                                             const itemValue = item?.value;
                                                             const value = itemValue === undefined
@@ -195,11 +202,6 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                         required
                                                     />
                                                 )}
-                                                listeners={{
-                                                    onChange: () => {
-                                                        form.setFieldValue(`adquisiciones[${index}].es_resultado_esperado`, undefined);
-                                                    }
-                                                }}
                                             />
 
                                             <form.Subscribe selector={(state) => state.values.adquisiciones[index].id}>
@@ -266,6 +268,9 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                             <form.AppField
                                                 name={`adquisiciones[${index}].es_contable`}
                                                 children={() => <EsContableField required />}
+                                                listeners={{
+                                                    onChange: () => form.validateField(`adquisiciones[${index}].costo_unitario`, 'change')
+                                                }}
                                             />
                                         </FieldGroup>
 
@@ -297,7 +302,10 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                     )}
                 </form.AppField>
 
-                <form.SubmitFormButton />
+                <form.SubmitFormButton onClick={() => {
+                    console.log('formsubmit', form.state.errorMap);
+
+                }} />
             </form.AppForm>
         </Form >
     );
