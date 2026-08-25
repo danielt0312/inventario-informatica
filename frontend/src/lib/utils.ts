@@ -7,6 +7,7 @@ import {
 } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type {
+    ComboboxCatalogoItem,
     LaravelValidationErrors,
     WithPrefix
 } from "@/types/generics";
@@ -148,6 +149,16 @@ export const toComboboxOptions = <T extends any>(
 
     return list.map((item) => catalogoToComboboxOption(item as any, groupAccessor));
 };
+
+export function toComboboxCatalogItems<TItem extends TCatalogo>(
+  items: readonly TItem[]
+): ComboboxCatalogoItem<TItem>[] {
+  return items.map((item) => ({
+    ...item,
+    value: item.id,
+    label: item.nombre,
+  }))
+}
 
 export const toISODate = (date: DatePickerFieldType): string =>
     date === undefined ? '' : new Date(date).toISOString().slice(0, 10) ?? "";

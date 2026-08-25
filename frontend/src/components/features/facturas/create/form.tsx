@@ -62,11 +62,7 @@ function Form({
 
                 <form.AppField
                     name="archivo_uuid"
-                    children={(field) => (
-                        <ArchivoUploaderField
-                            onValueChange={(value) => field.handleChange(value?.uuid)}
-                        />
-                    )}
+                    children={() => <ArchivoUploaderField />}
                 />
 
                 <form.SubmitFormButton />

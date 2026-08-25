@@ -139,7 +139,7 @@ export const DictamenEditarForm = () => {
                                                     children={() => (
                                                         <EmpleadoField
                                                             label="Resguardante"
-                                                            adscripcion={dictamen.adscripcion.id}
+                                                            adscripcionId={dictamen.adscripcion.id}
                                                             className="w-1/3"
                                                             required
                                                         />

@@ -116,7 +116,7 @@ export function Form() {
                                             children={() => (
                                                 <EmpleadoField
                                                     label="Resguardante"
-                                                    adscripcion={adscripcion}
+                                                    adscripcionId={adscripcion}
                                                     required
                                                 />
                                             )}

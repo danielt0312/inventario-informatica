@@ -2,27 +2,28 @@ import type { TResponse } from "@/types/generics";
 import type { Empleado } from "@/types/externos";
 import type { AdscripcionFieldType } from "../adscripciones/form-fields";
 import { toComboboxOptions } from "@/lib/utils";
-import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
+import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import { ComboboxFieldSimple } from "@/components/ui/combobox-field-simple";
 
-export type EmpleadoFieldType = CreatableComboboxFieldType;
-interface EmpleadoFieldProps extends Omit<React.ComponentProps<typeof CreatableComboboxField>, 'enabled' | 'options'> {
-    adscripcion: AdscripcionFieldType;
-}
+export type EmpleadoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
+
 export const EmpleadoField = ({
-    adscripcion,
-    label = "Empleado",
+    adscripcionId,
+    layout,
     ...props
-}: EmpleadoFieldProps) => {
-    const disabled = adscripcion === undefined;
+}: Omit<React.ComponentProps<typeof ComboboxFieldSimple>, 'enabled' | 'items'> & {
+    adscripcionId: AdscripcionFieldType<false>;
+}) => {
+    const disabled = adscripcionId === undefined;
 
-    const { data: options = [] } = useQuery({
-        queryKey: ['empleados', adscripcion],
+    const { data: items = [] } = useQuery({
+        queryKey: ['empleados', adscripcionId],
         queryFn: () => api.get<TResponse<Empleado[]>>('api/empleados', {
             params: {
                 filter: {
-                    adscripciones: Number(adscripcion)
+                    adscripciones: adscripcionId
                 }
             }
         }).then(r => r.data.data),
@@ -31,10 +32,13 @@ export const EmpleadoField = ({
     });
 
     return (
-        <CreatableComboboxField
-            options={options}
-            label={label}
+        <ComboboxFieldSimple
+            items={items}
             disabled={disabled}
+            layout={{
+                label: "Resguardante",
+                ...layout
+            }}
             {...props}
         />
     );

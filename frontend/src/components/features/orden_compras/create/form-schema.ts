@@ -1,14 +1,14 @@
 import { requiredIsoDateLTEToday, requiredString, selectedNumberOption } from "@/lib/schemas/common";
 import type { ProveedorFieldType } from "../../proveedores/form-fields";
 import type { ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
-import type { FechaSolicitudFieldType, NumeroOrdenFieldType } from "./form-fields";
+import type { OrdenCompraFechaSolicitudFieldType, OrdenCompraNumeroOrdenFieldType } from "./form-fields";
 import z from "zod";
 
 export type Schema = {
     proveedor_id: ProveedorFieldType;
     archivo_uuid: ArchivoUploaderFieldType;
-    fecha_solicitud: FechaSolicitudFieldType;
-    numero_orden: NumeroOrdenFieldType;
+    fecha_solicitud: OrdenCompraFechaSolicitudFieldType;
+    numero_orden: OrdenCompraNumeroOrdenFieldType;
 }
 
 export const defaultValues: Schema = {

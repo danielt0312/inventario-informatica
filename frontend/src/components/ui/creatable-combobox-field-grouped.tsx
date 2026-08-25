@@ -8,23 +8,23 @@ import { useFieldContext } from "./form-context"
 import {
     useComboboxFieldValue,
     defaultFieldValueFromItem,
-    type ComboboxFieldEmpty,
-    type ComboboxFieldPrimitive,
+    type ComboboxFieldEmptyType,
+    type ComboboxFieldType,
 } from "./combobox-field.shared"
 
 type CreatableComboboxFieldGroupedProps<
     TItem extends ComboboxLayoutItem,
     TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
     Multiple extends boolean | undefined = false,
-    TEmpty extends ComboboxFieldEmpty = undefined,
+    TEmpty extends ComboboxFieldEmptyType = undefined,
 > = Omit<CreatableComboboxGroupedProps<TItem, TGroup, Multiple>, "value" | "onValueChange"> & {
     layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">
     onFieldValueChange?: (
         value: Multiple extends true ? TItem[] : TItem | TEmpty
-    ) => ComboboxFieldPrimitive<Multiple, TEmpty>
+    ) => ComboboxFieldType<Multiple, TEmpty>
 }
 
-function createCreatableComboboxFieldGrouped<TEmpty extends ComboboxFieldEmpty>(
+function createCreatableComboboxFieldGrouped<TEmpty extends ComboboxFieldEmptyType>(
     emptyValue: TEmpty
 ) {
     return function CreatableComboboxFieldGroupedImpl<
@@ -47,7 +47,7 @@ function createCreatableComboboxFieldGrouped<TEmpty extends ComboboxFieldEmpty>(
             [items]
         )
 
-        const field = useFieldContext<ComboboxFieldPrimitive<Multiple, TEmpty>>()
+        const field = useFieldContext<ComboboxFieldType<Multiple, TEmpty>>()
         const derivedValue = useComboboxFieldValue(
             flatItems,
             field.state.value,

@@ -1,10 +1,15 @@
+import type { ComboboxLayoutItem } from "@/components/ui/combobox-layout.shared";
 import type { UseQueryOptions } from "@tanstack/react-query";
 import type { RowData } from "@tanstack/react-table";
 
-export type TCatalogo<TValue extends number = number> = {
+export type TCatalogo<TValue extends React.Key = number> = {
     id: TValue;
     nombre: string;
 }
+
+export type ComboboxCatalogoItem<TItem extends TCatalogo> =
+  TItem & ComboboxLayoutItem<TItem["id"]>
+
 
 export type TResponse<T> = {
     data: T;

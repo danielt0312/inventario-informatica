@@ -6,22 +6,22 @@ import { useFieldContext } from "./form-context"
 import {
     useComboboxFieldValue,
     defaultFieldValueFromItem,
-    type ComboboxFieldEmpty,
-    type ComboboxFieldPrimitive,
+    type ComboboxFieldEmptyType,
+    type ComboboxFieldType,
 } from "./combobox-field.shared"
 
 type ComboboxFieldSimpleProps<
     TItem extends ComboboxLayoutItem,
     Multiple extends boolean | undefined = false,
-    TEmpty extends ComboboxFieldEmpty = undefined,
+    TEmpty extends ComboboxFieldEmptyType = undefined,
 > = Omit<ComboboxLayoutSimpleComponentProps<TItem, Multiple>, "value" | "onValueChange"> & {
     layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">
     onFieldValueChange?: (
         value: Multiple extends true ? TItem[] : TItem | TEmpty
-    ) => ComboboxFieldPrimitive<Multiple, TEmpty>
+    ) => ComboboxFieldType<Multiple, TEmpty>
 }
 
-function createComboboxFieldSimple<TEmpty extends ComboboxFieldEmpty>(emptyValue: TEmpty) {
+function createComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyType>(emptyValue: TEmpty) {
     return function ComboboxFieldSimpleImpl<
         TItem extends ComboboxLayoutItem,
         Multiple extends boolean | undefined = false,
@@ -36,7 +36,7 @@ function createComboboxFieldSimple<TEmpty extends ComboboxFieldEmpty>(emptyValue
             ...comboboxProps
         } = props
 
-        const field = useFieldContext<ComboboxFieldPrimitive<Multiple, TEmpty>>()
+        const field = useFieldContext<ComboboxFieldType<Multiple, TEmpty>>()
         const derivedValue = useComboboxFieldValue(
             items,
             field.state.value,

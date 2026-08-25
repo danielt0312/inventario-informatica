@@ -12,7 +12,7 @@ export type FacturaFieldType = number | undefined;
 export const FacturaField = ({
     value,
     proveedorId,
-    label = 'Adjuntar factura',
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof ArchivoAttachmentField> & {
     proveedorId?: ProveedorFieldType;
@@ -24,9 +24,12 @@ export const FacturaField = ({
     return (
         <>
             <ArchivoAttachmentField
-                label={label}
                 value={archivo}
                 onAttachmentClick={() => setOpen(true)}
+                fieldLayout={{
+                    label: 'Adjuntar factura',
+                    ...fieldLayout
+                }}
                 {...props}
             />
 

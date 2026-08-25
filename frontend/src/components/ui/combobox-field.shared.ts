@@ -1,11 +1,11 @@
 import * as React from "react"
 import type { ComboboxLayoutItem } from "./combobox-layout.shared"
 
-export type ComboboxFieldEmpty = undefined | null
+export type ComboboxFieldEmptyType = undefined | null
 
-export type ComboboxFieldPrimitive<
+export type ComboboxFieldType<
     Multiple extends boolean | undefined,
-    TEmpty extends ComboboxFieldEmpty,
+    TEmpty extends ComboboxFieldEmptyType,
 > = Multiple extends true ? React.Key[] | TEmpty : React.Key | TEmpty
 
 /** Deriva el TItem (o TItem[]) real a partir del primitivo que vive en
@@ -14,10 +14,10 @@ export type ComboboxFieldPrimitive<
 export function useComboboxFieldValue<
     TItem extends ComboboxLayoutItem,
     Multiple extends boolean | undefined,
-    TEmpty extends ComboboxFieldEmpty,
+    TEmpty extends ComboboxFieldEmptyType,
 >(
     items: readonly TItem[],
-    fieldValue: ComboboxFieldPrimitive<Multiple, TEmpty>,
+    fieldValue: ComboboxFieldType<Multiple, TEmpty>,
     multiple: Multiple,
     emptyValue: TEmpty
 ): Multiple extends true ? TItem[] : TItem | TEmpty {
@@ -33,7 +33,7 @@ export function useComboboxFieldValue<
     }, [items, fieldValue, multiple, emptyValue])
 }
 
-export function defaultFieldValueFromItem<TEmpty extends ComboboxFieldEmpty>(
+export function defaultFieldValueFromItem<TEmpty extends ComboboxFieldEmptyType>(
     emptyValue: TEmpty
 ) {
     return (value: ComboboxLayoutItem | ComboboxLayoutItem[] | null) =>

@@ -3,7 +3,7 @@ import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator, type OutputSchema } from "./form-schema";
 import { Form } from "@/components/ui/form";
 import { FieldGroup } from "@/components/ui/field";
-import { FechaSolicitudField, NumeroOrdenField } from "./form-fields";
+import { OrdenCompraFechaSolicitudField, OrdenCompraNumeroOrdenField } from "./form-fields";
 import { ProveedorField } from "../../proveedores/form-fields";
 import { ArchivoUploaderField } from "@/components/features/archivos/uploader-field";
 import type { TResponse } from "@/types/generics";
@@ -49,12 +49,12 @@ export const AppCreateOrdenCompraForm = ({
             <FieldGroup className="flex-row">
                 <form.AppField
                     name="numero_orden"
-                    children={() => <NumeroOrdenField />}
+                    children={() => <OrdenCompraNumeroOrdenField />}
                 />
 
                 <form.AppField
                     name="fecha_solicitud"
-                    children={() => <FechaSolicitudField />}
+                    children={() => <OrdenCompraFechaSolicitudField />}
                 />
             </FieldGroup>
 
