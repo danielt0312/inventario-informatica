@@ -1,6 +1,5 @@
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
-import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
 import { toComboboxOptions } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -10,15 +9,17 @@ import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 import { useFieldContext } from "@/components/ui/form-context";
 import api from "@/lib/axios";
 import React from "react";
+import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
+import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 
-export type ProductoMarcaFieldType = CreatableComboboxFieldType;
+export type ProductoMarcaFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 export function ProductoMarcaField({
-    label = "Marca del Producto",
+    layout,
     ...props
-}: Omit<React.ComponentProps<typeof CreatableComboboxField>,'options' | 'onCreateRequest'>) {
+}: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
     const field = useFieldContext<ProductoMarcaFieldType>();
 
-    const { data: options = [] } = useQuery({
+    const { data: items = [] } = useQuery({
         queryKey: ['producto_marcas'],
         queryFn: () => api.get<TResponse<ProductoMarca[]>>('api/producto_marcas')
             .then(r => r.data.data),
@@ -39,10 +40,13 @@ export function ProductoMarcaField({
 
     return (
         <>
-            <CreatableComboboxField
-                options={options}
-                label={label}
-                onCreateRequest={(searchValue) => {
+            <CreatableComboboxFieldSimple
+                items={items}
+                layout={{
+                    label: "Marca del Producto",
+                    ...layout
+                }}
+                onCreate={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
                     field.handleChange(undefined);

@@ -1,12 +1,10 @@
 import { ComboboxLayoutSimple, toComboboxItems } from "@/components/ui/combobox-layout-simple";
 import { ComboboxLayoutGrouped, toComboboxGroups } from "@/components/ui/combobox-layout-grouped";
 import { CreatableComboboxGrouped } from "@/components/ui/creatable-combobox-grouped";
-import { CreatableComboboxSimple } from "@/components/ui/creatable-combobox-simple";
 import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";
 import type { ProductoCategoriaWithTipos } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 
 function View() {
     const { data = [] } = useQuery({

@@ -91,7 +91,9 @@ export function View() {
                             name="email"
                             children={() => (
                                 <InputField
-                                    label="Correo institucional"
+                                    fieldLayout={{
+                                        label: "Correo institucional"
+                                    }}
                                     placeholder="Ingresa tu correo institucional"
                                 />
                             )}
@@ -101,7 +103,9 @@ export function View() {
                             name="password"
                             children={() => (
                                 <InputField
-                                    label="Contraseña"
+                                    fieldLayout={{
+                                        label: "Contraseña"
+                                    }}
                                     type="password"
                                     placeholder="Ingresa tu contraseña"
                                 />

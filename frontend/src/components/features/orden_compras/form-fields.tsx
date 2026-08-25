@@ -5,14 +5,18 @@ import { useFieldContext } from "@/components/ui/form-context";
 import { OrdenCompraTable } from "./partials/table";
 import { ordenCompraInitialTableState } from "./partials/table-cols";
 import { ArchivoAttachmentField, useArchivoAttachmentFieldState } from "@/components/features/archivos/attachment-field";
+import type { OrdenCompra } from "@/types/orden_compras";
 import React from "react";
 
 export type OrdenCompraFieldType = number | undefined;
 export const OrdenCompraField = ({
     value,
+    onValueChange,
     fieldLayout,
     ...props
-}: Omit<React.ComponentProps<typeof ArchivoAttachmentField>, 'onAttachmentClick'>) => {
+}: Omit<React.ComponentProps<typeof ArchivoAttachmentField>, 'onAttachmentClick'> & {
+    onValueChange?: (value: OrdenCompra) => void;
+}) => {
     const field = useFieldContext<OrdenCompraFieldType>();
     const [open, setOpen] = React.useState(false);
     const [archivo, setArchivo] = useArchivoAttachmentFieldState(value);
@@ -51,6 +55,7 @@ export const OrdenCompraField = ({
                                             setArchivo(ordenCompra.archivo);
                                             field.setValue(ordenCompra.id);
                                             setOpen(false);
+                                            onValueChange?.(ordenCompra);
                                         }}
                                     >
                                         <PaperclipIcon /> Adjuntar

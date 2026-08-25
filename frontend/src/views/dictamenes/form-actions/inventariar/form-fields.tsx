@@ -1,24 +1,27 @@
-import type { ComboboxOption } from "@/components/ui/creatable-combobox";
-import { CreatableComboboxField } from "@/components/ui/creatable-combobox-field";
+import { ComboboxFieldSimple } from "@/components/ui/combobox-field-simple";
 import React from "react";
 
 export function AdquisicionIdField({
-    options,
+    items,
+    layout,
     onValueChange,
     ...props
-}: React.ComponentProps<typeof CreatableComboboxField>) {
-    const [actualOption, setActualOption] = React.useState<ComboboxOption | undefined>();
+}: React.ComponentProps<typeof ComboboxFieldSimple>) {
+    const [actualOption, setActualOption] = React.useState<Combobox>();
 
     const availableOptions = React.useMemo(() => {
-        if (!actualOption) return options;
-        return options.some(o => o.value === actualOption.value)
-            ? options
-            : [...options, actualOption];
-    }, [options, actualOption]);
+        if (!actualOption) return items;
+        return items.some(o => o.value === actualOption.value)
+            ? items
+            : [...items, actualOption];
+    }, [items, actualOption]);
 
     return (
-        <CreatableComboboxField
-            label="Caracteristicas solicitadas"
+        <ComboboxFieldSimple
+            layout={{
+                label: "Caracteristicas solicitadas",
+                ...layout
+            }}
             value={actualOption}
             options={availableOptions}
             onValueChange={(option) => {

@@ -1,11 +1,10 @@
 import { LinkToFile } from "@/components/ui/link-to-file";
 import { Label } from "@/components/ui/label";
 import { toLocaleDateFormat } from "@/lib/utils";
-import type { DetailedActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedDictamen } from "@/types/dictamenes";
 
-export function ShowInfo({ dictamen }: { dictamen: DetailedActionDictamen }) {
+export function ShowInfo({ dictamen }: { dictamen: DetailedDictamen }) {
     const oficio = dictamen.version_actual.oficio;
-    const { uuid, nombre }  = oficio.archivo;
 
     return (
         <div className="grid grid-cols-4">
@@ -19,7 +18,7 @@ export function ShowInfo({ dictamen }: { dictamen: DetailedActionDictamen }) {
             </div>
             <div data-slot="label-container">
                 <Label className="font-bold">Folio de solicitud</Label>
-                <LinkToFile uuid={uuid} title={nombre} label={oficio.folio} />
+                {oficio && <LinkToFile uuid={oficio.archivo.uuid} title={oficio.archivo.nombre} label={oficio.folio} />}
             </div>
         </div>
     );

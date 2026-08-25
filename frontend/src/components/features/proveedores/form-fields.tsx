@@ -1,31 +1,31 @@
 import type { TResponse } from "@/types/generics";
 import type { Proveedor } from "@/types/orden_compras";
-import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
 import { useFieldContext } from "@/components/ui/form-context";
-import { toComboboxOptions } from "@/lib/utils";
+import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useCreateProveedorForm, useCreateProveedorFormMutation, AppCreateProveedorForm } from "./create/form";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import api from "@/lib/axios";
+import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
+import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 
-export type ProveedorFieldType = CreatableComboboxFieldType;
+export type ProveedorFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 export const ProveedorField = ({
-    label = "Proveedor",
-    disabled,
+    layout,
     ...props
-}: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options'>) => {
+}: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) => {
     const field = useFieldContext<ProveedorFieldType>();
 
-    const { data: options = [] } = useQuery({
+    const { data = [] } = useQuery({
         queryKey: ['proveedores'],
         queryFn: () => api.get<TResponse<Proveedor[]>>('api/proveedores')
             .then(r => r.data.data),
-        select: toComboboxOptions,
-        enabled: !disabled
     });
+
+    const items = React.useMemo(() => toComboboxCatalogItems(data), [data]);
 
     const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
@@ -41,15 +41,17 @@ export const ProveedorField = ({
 
     return (
         <>
-            <CreatableComboboxField
-                options={options}
-                label={label}
-                onCreateRequest={(searchValue) => {
+            <CreatableComboboxFieldSimple
+                items={items}
+                layout={{
+                    label: "Proveedor",
+                    ...layout
+                }}
+                onCreate={(searchValue) => {
                     createForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
                     field.handleChange(undefined);
                 }}
-                disabled={disabled}
                 {...props}
             />
 

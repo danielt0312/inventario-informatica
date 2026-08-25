@@ -93,11 +93,10 @@ export const CuentaContable = ({
     fieldLayout,
     required,
     disabled,
-    maxLength = 9,
     pattern = REGEXP_ONLY_DIGITS,
     withScannerButton = true,
     ...props
-}: Omit<FieldLayoutProps, 'errors'> & Omit<React.ComponentProps<typeof InputOTP>, 'render'> & {
+}: Omit<FieldLayoutProps, 'errors'> & Omit<React.ComponentProps<typeof InputOTP>, 'render' | 'maxLength'> & {
     withScannerButton?: boolean;
 }) => {
     const field = useFieldContext<CuentaContableType>();
@@ -116,7 +115,7 @@ export const CuentaContable = ({
             <Field orientation="horizontal">
                 <InputOTP
                     value={inputValue}
-                    maxLength={maxLength}
+                    maxLength={9}
                     pattern={pattern}
                     onChange={(value) => {
                         setInputValue(value);

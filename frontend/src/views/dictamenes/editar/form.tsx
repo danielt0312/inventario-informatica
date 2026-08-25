@@ -55,7 +55,6 @@ export const DictamenEditarForm = () => {
     const form = useForm(dictamen);
     const [showAlertDialog, setShowAlertDialog] = React.useState(false);
     const [showNumeroInventarioField, setShowNumeroInventarioField] = React.useState(false);
-    const adquisiciones = dictamen.version_actual.adquisiciones;
 
     return (
         <Form form={form} className="flex flex-col gap-6">
@@ -138,7 +137,6 @@ export const DictamenEditarForm = () => {
                                                     name={`adquisiciones[${index}].empleado_id`}
                                                     children={() => (
                                                         <EmpleadoField
-                                                            label="Resguardante"
                                                             adscripcionId={dictamen.adscripcion.id}
                                                             className="w-1/3"
                                                             required

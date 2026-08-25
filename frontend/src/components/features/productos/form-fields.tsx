@@ -1,7 +1,5 @@
-import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
-import { toComboboxOptions } from "@/lib/utils";
 import type { TResponse } from "@/types/generics";
-import type { ProductoWithMarca } from "@/types/productos";
+import type { ProductoMarca, ProductoWithMarca } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -13,19 +11,21 @@ import { useStore } from "@tanstack/react-form";
 import { FieldGroup } from "@/components/ui/field";
 import React from "react";
 import api from "@/lib/axios";
+import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import { CreatableComboboxFieldGrouped } from "@/components/ui/creatable-combobox-field-grouped";
 
-export type ProductoFieldType = CreatableComboboxFieldType;
+export type ProductoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 export function ProductoField({
-    label = "Modelo de Producto",
+    layout,
     tipo,
     disabled,
     ...props
-}: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options' | 'onCreateRequest'> & {
+}: Omit<React.ComponentProps<typeof CreatableComboboxFieldGrouped>, 'items' | 'onCreate'> & {
     tipo: ProductoTipoFieldType;
 }) {
     const field = useFieldContext<ProductoFieldType>();
 
-    const { data: options = [] } = useQuery({
+    const { data: items = [] } = useQuery({
         queryKey: ['productos', tipo],
         queryFn: () => api.get<TResponse<ProductoWithMarca[]>>('api/productos', {
             params: {
@@ -35,7 +35,6 @@ export function ProductoField({
                 }
             }
         }).then(r => r.data.data),
-        select: (data) => toComboboxOptions(data, 'marca.nombre'),
         enabled: !disabled
     });
 
@@ -54,10 +53,13 @@ export function ProductoField({
 
     return (
         <>
-            <CreatableComboboxField
-                options={options}
-                label={label}
-                onCreateRequest={(searchValue) => {
+            <CreatableComboboxFieldGrouped
+                items={items}
+                layout={{
+                    label: "Modelo de Producto",
+                    ...layout
+                }}
+                onCreate={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
                     field.handleChange(undefined);

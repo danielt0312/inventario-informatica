@@ -3,14 +3,16 @@ import type React from "react";
 
 export type ProductoMarcaNombreFieldType = InputFieldType;
 export function ProductoMarcaNombreField({
-    label = "Marca del Producto",
-    placeholder = "Ingresa el nombre de la marca del producto",
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof InputField>) {
     return (
         <InputField
-            label={label}
-            placeholder={placeholder}
+            fieldLayout={{
+                label: "Marca del Producto",
+                ...fieldLayout
+            }}
+            placeholder="Ingresa el nombre de la marca del producto"
             {...props}
         />
     );

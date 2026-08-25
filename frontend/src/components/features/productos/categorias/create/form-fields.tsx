@@ -1,5 +1,4 @@
 import { InputField, type InputFieldType } from "@/components/ui/input-field";
-import type React from "react";
 
 export type ProductoCategoriaNombreFieldType = InputFieldType;
 export function ProductoCategoriaNombreField({

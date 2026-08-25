@@ -6,58 +6,63 @@ import React from "react";
 
 export type CantidadFieldType = NumberInputFieldType;
 export const CantidadField = ({
-    label = "Cantidad",
-    placeholder = "Ingresa la cantidad solicitada",
-    required = true,
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof InputField>) => (
     <NumberInputField
-        label={label}
-        placeholder={placeholder}
-        required={required}
+        fieldLayout={{
+            label: "Cantidad",
+            ...fieldLayout
+        }}
+        placeholder="Ingresa la cantidad solicitada"
+        required
         {...props}
     />
 );
 
 export type FolioFieldType = InputFieldType;
 export const FolioField = ({
-    label = "Folio del oficio de solicitud",
-    placeholder = "Ingresa el folio del oficio de la solicitud",
-    required = true,
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof InputField>) => (
     <InputField
-        required={required}
-        label={label}
-        placeholder={placeholder}
+        fieldLayout={{
+            label: "Folio del oficio de solicitud",
+            ...fieldLayout
+        }}
+        placeholder="Ingresa el folio del oficio de la solicitud"
+        required
         {...props}
     />
 );
 
 export type FechaSolicitudFieldType = DatePickerFieldType;
 export const FechaSolicitudField = ({
-    label = "Fecha de solicitud",
-    placeholder = "Selecciona la fecha de la solicitud",
-    required = true,
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof DatePickerField>) => (
     <DatePickerField
-        label={label}
-        placeholder={placeholder}
-        required={required}
+        fieldLayout={{
+            label: "Fecha de solicitud",
+            ...fieldLayout
+        }}
+        placeholder="Selecciona la fecha de la solicitud"
+        required
         {...props}
     />
 );
 
 export type OficioFieldType = ArchivoUploaderFieldType;
 export const OficioField = ({
-    label = "Adjuntar oficio de solicitud",
-    required = true,
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof ArchivoUploaderField>) => (
     <ArchivoUploaderField
-        label={label}
-        required={required}
+        fieldLayout={{
+            label: "Adjuntar oficio de solicitud",
+            required: true,
+            ...fieldLayout
+        }}
         {...props}
     />
 );
@@ -65,16 +70,17 @@ export const OficioField = ({
 
 export type CaracteristicasFieldType = TextareaFieldType;
 export function CaracteristicasField({
-    label = "Especificaciones técnicas",
-    placeholder = "Ingresa las especificaciones técnicas",
-    required = true,
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof TextareaField>) {
     return (
         <TextareaField
-            label={label}
-            placeholder={placeholder}
-            required={required}
+            fieldLayout={{
+                label: "Especificaciones técnicas",
+                ...fieldLayout
+            }}
+            placeholder="Ingresa las especificaciones técnicas"
+            required
             {...props}
         />
     );
@@ -82,13 +88,15 @@ export function CaracteristicasField({
 
 export type DictamenArchivoFieldType = ArchivoUploaderFieldType;
 export const DictamenArchivoField = ({
-    label = "Adjuntar evidencia de dictamen recibido",
-    required = true,
+    fieldLayout,
     ...props
 }: React.ComponentProps<typeof ArchivoUploaderField>) => (
     <ArchivoUploaderField
-        label={label}
-        required={required}
+        fieldLayout={{
+            label: "Adjuntar evidencia de dictamen recibido",
+            required: true,
+            ...fieldLayout
+        }}
         {...props}
     />
 );

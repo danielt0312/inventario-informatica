@@ -1,18 +1,18 @@
 import { requiredArray, requiredString, selectedNumberOption } from "@/lib/schemas/common";
-import type { ProductoField } from "@/components/features/productos/form-fields";
-import type { DetailedActionDictaminarDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { CaracteristicasFieldType } from "../../partials/form-fields";
+import type { ProductoFieldType } from "@/components/features/productos/form-fields";
+import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
 import z from "zod";
 
 export type Schema = {
     adquisiciones: {
         id: number;
         caracteristicas: CaracteristicasFieldType;
-        producto_id: ProductoField;
+        producto_id: ProductoFieldType;
     }[];
 }
 
-export const defaultValues = (dictamen: DetailedActionDictaminarDictamen): Schema => ({
+export const defaultValues = (dictamen: DetailedDictaminarDictamen): Schema => ({
     adquisiciones: dictamen.version_actual.adquisiciones.map((adquisicion) => ({
         id: adquisicion.id,
         caracteristicas: undefined,

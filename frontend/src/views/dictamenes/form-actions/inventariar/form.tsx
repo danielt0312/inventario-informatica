@@ -20,6 +20,7 @@ import React from "react";
 import { isStringNumber } from "@/lib/utils";
 import { AdquisicionIdField } from "./form-fields";
 import type { ComboboxOption } from "@/components/ui/creatable-combobox";
+import type { ComboboxLayoutItem } from "@/components/ui/combobox-layout.shared";
 
 export const useForm = (dictamen: DetailedInventariarDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
@@ -172,9 +173,10 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                 name={`adquisiciones[${index}].id`}
                                                 children={(field) => (
                                                     <AdquisicionIdField
-                                                        options={adquisicionesOptions}
-                                                        onValueChange={(v) => {
-                                                            const value = v && isStringNumber(v.value) ? Number(v.value) : undefined;
+                                                        items={adquisicionesOptions}
+                                                        onFieldValueChange={(v) => {
+                                                            const val = v as number | undefined;
+                                                            const value = v && isStringNumber(val?.value) ? Number(val?.value) : undefined;
                                                             const previousValue = field.state.value;
 
                                                             if (previousValue !== undefined && previousValue !== value) {
@@ -280,7 +282,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                     <FacturaField
                                                         proveedorId={ordenCompra?.proveedor.id}
                                                         disabled={!ordenCompra}
-                                                        required
+                                                        fieldLayout={{ required: true }}
                                                     />
                                                 )}
                                             />

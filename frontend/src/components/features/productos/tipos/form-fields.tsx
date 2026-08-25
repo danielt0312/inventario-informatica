@@ -1,7 +1,5 @@
 import type { ProductoCategoriaWithTipos } from "@/types/productos";
 import type { TResponse } from "@/types/generics";
-import { CreatableComboboxField, type CreatableComboboxFieldType } from "@/components/ui/creatable-combobox-field";
-import { toComboboxOptions } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -10,23 +8,36 @@ import { AppForm, useForm, useCreateFormMutation } from "./create/form";
 import { useFieldContext } from "@/components/ui/form-context";
 import api from "@/lib/axios";
 import React from "react";
+import { CreatableComboboxFieldGrouped } from "@/components/ui/creatable-combobox-field-grouped";
+import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import { toComboboxGroups } from "@/components/ui/combobox-layout-grouped";
+import { toComboboxItems } from "@/components/ui/combobox-layout-simple";
 
-export type ProductoTipoFieldType = CreatableComboboxFieldType;
+export type ProductoTipoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 export function ProductoTipoField({
-    label = "Tipo de Producto",
+    layout,
     ...props
-}: Omit<React.ComponentProps<typeof CreatableComboboxField>, 'options' | 'onCreateRequest'>) {
+}: Omit<React.ComponentProps<typeof CreatableComboboxFieldGrouped>, 'items' | 'onCreate'>) {
     const field = useFieldContext<ProductoTipoFieldType>();
 
-    const { data: options = [] } = useQuery({
+    const { data: items = [] } = useQuery({
         queryKey: ['producto_categorias_tipos'],
         queryFn: () => api.get<TResponse<ProductoCategoriaWithTipos[]>>('api/producto_categorias', {
             params: {
                 include: 'tipos'
             }
         }).then(r => r.data.data),
-        select: (data) => toComboboxOptions(data, 'tipos.nombre')
     });
+
+    const groupedItems = React.useMemo(() =>
+        toComboboxGroups(items, (group) => ({
+            items: toComboboxItems(group.tipos, (item) => ({
+                label: item.nombre,
+                value: item.id,
+                group: group.nombre
+            })),
+            label: group.nombre,
+        })), [items]);
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
@@ -42,10 +53,13 @@ export function ProductoTipoField({
 
     return (
         <>
-            <CreatableComboboxField
-                options={options}
-                label={label}
-                onCreateRequest={(searchValue) => {
+            <CreatableComboboxFieldGrouped
+                items={groupedItems}
+                layout={{
+                    label: "Tipo de Producto",
+                    ...layout
+                }}
+                onCreate={(searchValue) => {
                     dialogForm.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
                     field.handleChange(undefined);

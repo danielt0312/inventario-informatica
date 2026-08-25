@@ -58,7 +58,7 @@ export function Form() {
                     />
                     <form.AppField
                         name="adscripcion_id"
-                        children={() => <AdscripcionField label="Área de Adscripción solicitante" required />}
+                        children={() => <AdscripcionField layout={{ label: "Área de Adscripción solicitante" }} required />}
                     />
                     <form.AppField
                         name="folio"
@@ -115,7 +115,6 @@ export function Form() {
                                             name={`adquisiciones[${index}].empleado_id`}
                                             children={() => (
                                                 <EmpleadoField
-                                                    label="Resguardante"
                                                     adscripcionId={adscripcion}
                                                     required
                                                 />
