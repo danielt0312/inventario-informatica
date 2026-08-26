@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\Dictamen\Traits;
 
-use Illuminate\Validation\{Rule};
+use Illuminate\Validation\Rule;
 
 use App\Models\Articulo;
 use App\Services\DictamenService;
-use App\Rules\NumeroInventario3Rule;
+use App\Rules\NumeroInventarioRule;
 use App\Enums\ProductoTipoEnum;
 
 trait InteractsWithArticulos
@@ -29,11 +29,9 @@ trait InteractsWithArticulos
         return [
             'bail',
             'nullable',
-            Rule::excludeIf(fn () =>
-                $tipoEnum === null ||
-                !$this->dictamenService->productoRequiereNumeroInventario($tipoEnum) ||
-                $value === null
-            ),
+            Rule::excludeIf(function () {
+
+            }),
             'required',
             new NumeroInventarioFormatRule,
             function (string $attribute, string $value, \Closure $fail) {

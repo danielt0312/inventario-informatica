@@ -6,16 +6,17 @@ use App\Enums\ProductoTipoEnum;
 
 class DictamenService
 {
-    public function productoRequiereNumeroInventario(ProductoTipoEnum $tipo)
+    public function productoTipoPuedeRequerirNumeroInventario(ProductoTipoEnum $tipo)
     {
         return match($tipo) {
-            ProductoTipoEnum::RAM,
-            ProductoTipoEnum::MONITOR,
             ProductoTipoEnum::DISCO,
-            ProductoTipoEnum::TECLADO,
-            ProductoTipoEnum::CAMARA_WEB,
+            ProductoTipoEnum::RAM,
             ProductoTipoEnum::BOCINA_AMBIENTAL,
-            ProductoTipoEnum::UNIDAD_DISCO_OPTICO => true,
+            ProductoTipoEnum::CAMARA_WEB,
+            ProductoTipoEnum::MONITOR,
+            ProductoTipoEnum::UNIDAD_DISCO_OPTICO,
+            ProductoTipoEnum::TECLADO,
+            ProductoTipoEnum::MOUSE => true,
             default => false
         };
     }
