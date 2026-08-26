@@ -51,7 +51,7 @@ class StoreDictamenRequest extends FormRequest
                 'integer',
                 'exists:producto_tipos,id'
             ],
-            'adquisiciones.*.numero_inventario' => $this->numeroInventarioRules()
+            'adquisiciones.*.numero_inventario' => $this->numeroInventarioFormatRules()
         ];
     }
 }

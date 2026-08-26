@@ -48,7 +48,7 @@ class UpdateDictamenRequest extends FormRequest
                 'integer',
                 'exists:productos,id'
             ],
-            'adquisiciones.*.numero_inventario' => $this->numeroInventarioRules()
+            'adquisiciones.*.numero_inventario' => $this->numeroInventarioFormatRules()
         ];
     }
 }

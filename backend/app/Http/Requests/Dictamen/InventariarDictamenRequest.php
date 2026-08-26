@@ -95,7 +95,6 @@ class InventariarDictamenRequest extends FormRequest
                 'integer',
                 'exists:productos,id'
             ],
-            'adquisiciones.*.numero_inventario' => $this->numeroInventarioRules(),
             'adquisiciones.*.cuenta_contable' => [
                 'required',
                 'string',

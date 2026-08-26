@@ -2,16 +2,18 @@
 
 namespace App\Http\Requests\Dictamen\Traits;
 
-use Illuminate\Validation\{NestedRules, Rule};
+use Illuminate\Validation\{Rule};
 
 use App\Models\Articulo;
 use App\Services\DictamenService;
-use App\Rules\NumeroInventarioRule;
+use App\Rules\NumeroInventario3Rule;
 use App\Enums\ProductoTipoEnum;
 
 trait InteractsWithArticulos
 {
     protected array $articulos;
+    protected array $invalidNumeroInventarios;
+    protected array $articuloNumeroInventario;
 
     public function __construct(
         protected DictamenService $dictamenService
@@ -19,72 +21,76 @@ trait InteractsWithArticulos
         parent::__construct();
     }
 
-    protected function numeroInventarioRules(): NestedRules
-    {
-        return Rule::foreach(function ($_, string $attribute) {
-            $index = explode('.', $attribute)[1];
-            $tipo = $this->input("adquisiciones.{$index}.producto_tipo_id");
-            $tipoEnum = ProductoTipoEnum::tryFrom($tipo);
+    abstract protected function setProductoTipo(string $numeroInventario, int $productoTipoId): void;
+    abstract protected function getProductoTipo(string $numeroInventario): int | null;
 
-            return [
-                Rule::excludeIf(fn () =>
-                    $tipoEnum === null || !$this->dictamenService->productoRequiereNumeroInventario($tipoEnum)
-                ),
-                'required',
-                new NumeroInventarioRule,
-                function (string $attribute, string $value, \Closure $fail) {
-                    $articulo = Articulo::firstWhere('numero_inventario', $value);
-                    if (empty($articulo)) return $fail('Número de inventario inexistente');
-                    $this->setArticulos($value, $articulo);
-                }
-            ];
-        });
-    }
-
-    public function validated($key = null, $default = null): array
+    protected function numeroInventarioFormatRules(): array
     {
         return [
-            ...parent::validated(),
-            ...$this->getValidatorInstance()->getData()
+            'bail',
+            'nullable',
+            Rule::excludeIf(fn () =>
+                $tipoEnum === null ||
+                !$this->dictamenService->productoRequiereNumeroInventario($tipoEnum) ||
+                $value === null
+            ),
+            'required',
+            new NumeroInventarioFormatRule,
+            function (string $attribute, string $value, \Closure $fail) {
+                const $validationFails = fn () => $fail('validation.exists')->translate();
+
+                foreach ($this->getInvalidNumeroInventarios() as $invalidNumeroInventario) {
+                    if ($value === $invalidNumeroInventario) {
+                        return $validationFails();
+                    }
+                }
+
+                foreach ($this->getArticulos() as $articulo) {
+                    if ($value === $articulo->numero_inventario) {
+                        $this->setArticuloNumeroInventario($value, $articulo);
+                        return;
+                    }
+                }
+
+                $articulo = Articulo::firstWhere('numero_inventario', $value);
+                if (empty($articulo)) {
+                    $this->setInvalidNumeroInventarios($value);
+                    return $validationFails();
+                }
+
+                $this->setArticulos($articulo);
+                $this->setArticuloNumeroInventario($value, $articulo);
+            }
         ];
     }
 
-
-    protected function passedValidation(): void
+    protected function setArticuloNumeroInventario(string $numeroInventario, Articulo $articulo): void
     {
-        $this->normalizeAdquisicionesData();
+        $this->articuloNumeroInventario[$numeroInventario] = $articulo;
     }
 
-    protected function normalizeAdquisicionData(array $adquisicion): array
+    public function getArticuloNumeroInventario(string $numeroInventario): Articulo | null
     {
-        return !empty($adquisicion['numero_inventario'] ?? null)
-            ? [
-                ...$adquisicion,
-                'articulo_id' => $this->getArticulos($adquisicion['numero_inventario'])->id,
-            ]
-            : $adquisicion;
+        return $this->articuloNumeroInventario[$numeroInventario];
     }
 
-    protected function normalizeAdquisicionesData(): void
+    protected function setInvalidNumeroInventarios(string $numeroInventario): void
     {
-        $validator = $this->getValidatorInstance();
-        $data = $validator->getData();
-
-        $validator->setData([
-            ...$data,
-            ...['adquisiciones' => array_map($this->normalizeAdquisicionData(...), $data['adquisiciones'])]
-        ]);
+        $this->invalidNumeroInventarios[] = $numeroInventario;
     }
 
-    private function setArticulos(string $key, Articulo $value): void
+    protected function getInvalidNumeroInventarios(): array
     {
-        $this->articulos[$key] = $value;
+        return $this->invalidNumeroInventarios[];
     }
 
-    protected function getArticulos(?string $key = null): Articulo | array | null
+    protected function setArticulos(Articulo $articulo): void
     {
-        return $key !== null
-            ? $this->articulos[$key]
-            : $this->articulos;
+        $this->articulos[] = $articulo;
+    }
+
+    protected function getArticulos(): array
+    {
+        return $this->articulos;
     }
 }
