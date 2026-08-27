@@ -62,7 +62,7 @@ type DetailedDictaminar = DetailedBase<Dictaminar, VersionActualWithAdquisicione
 
 type BaseDictaminadoAdquisicion = BaseAdquisicion & {
     producto: DetailedProducto;
-    caracteristicas: string;
+    especificaciones_tecnicas: string;
 }
 type BaseDictaminadoVersion = BaseVersion & {
     archivo: Archivo;

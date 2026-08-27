@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ProductoField } from "@/components/features/productos/form-fields";
 import { Form as PrimitiveForm } from "@/components/ui/form";
-import { CaracteristicasField } from "../../partials/form-fields";
+import { DictamenEspecificacionesTecnicasField } from "../../partials/form-fields";
 import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
@@ -64,8 +64,8 @@ export function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
                                 />
 
                                 <form.AppField
-                                    name={`adquisiciones[${index}].caracteristicas`}
-                                    children={() => <CaracteristicasField />}
+                                    name={`adquisiciones[${index}].especificaciones_tecnicas`}
+                                    children={() => <DictamenEspecificacionesTecnicasField />}
                                 />
                             </CardContent>
                         </Card>

@@ -50,8 +50,8 @@ function InputField(props: CoreInputFieldProps) {
     return (
         <CoreInputField
             onChange={(e) => {
-                const value = e.target.value.trim();
-                field.handleChange(value === ''
+                const value = e.target.value;
+                field.handleChange(value.trim() === ''
                     ? undefined
                     : value
                 );
@@ -68,8 +68,8 @@ function NullableInputField(props: CoreInputFieldProps) {
     return (
         <CoreInputField
             onChange={(e) => {
-                const value = e.target.value.trim();
-                field.handleChange(value === ''
+                const value = e.target.value;
+                field.handleChange(value.trim() === ''
                     ? null
                     : value
                 );

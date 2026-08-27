@@ -139,12 +139,13 @@ export const ProductoTipoProductoCategoriaMap: Record<ProductoTipoEnum, Producto
     [ProductoTipoEnum.ESCANER]: ProductoCategoriaEnum.ESCANER
 }
 
-export const dictamenProductoTiposRequierenNumeroInventario: ProductoTipoEnum[] = [
-    ProductoTipoEnum.RAM,
-    ProductoTipoEnum.MONITOR,
+export const dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario: ProductoTipoEnum[] = [
     ProductoTipoEnum.DISCO,
-    ProductoTipoEnum.TECLADO,
-    ProductoTipoEnum.CAMARA_WEB,
+    ProductoTipoEnum.RAM,
     ProductoTipoEnum.BOCINA_AMBIENTAL,
-    ProductoTipoEnum.UNIDAD_DISCO_OPTICO
+    ProductoTipoEnum.CAMARA_WEB,
+    ProductoTipoEnum.MONITOR,
+    ProductoTipoEnum.UNIDAD_DISCO_OPTICO,
+    ProductoTipoEnum.TECLADO,
+    ProductoTipoEnum.MOUSE,
 ] as const;

@@ -1,5 +1,5 @@
 import { DictamenEstadoEnum } from '@/lib/constants';
-import { DictamenProducto } from '@/lib/utils';
+import { DictamenAdquisicion } from '@/lib/utils';
 import { ActionDictamenStates } from './-constants';
 import type { DetailedDictaminarDictamen, DetailedInventariarDictamen, DetailedPorSurtirDictamen, DetailedSurtidoDictamen, DetailedSurtidoParcialDictamen, Dictamen, DictamenAdquisicion, DictamenAdquisicionWithArticulo, DictamenVersion, DictamenVersionWithArchivo, DictaminarDictamen, InventariarDictamen, InventariarDictamenWithOrdenCompra, PorSurtirDictamen, SurtidoDictamen, SurtidoParcialDictamen } from '@/types/dictamenes';
 import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen, EditableFormActionDictamen, FormActionDictamen } from './-types';
@@ -47,8 +47,8 @@ export const isDetailedEditableFormActionDictamen = (dictamen: Dictamen): dictam
     isDetailedPorSurtirDictamen(dictamen);
 
 export const adquisicionHasArticulo = (adquisicion: DictamenAdquisicion): adquisicion is DictamenAdquisicionWithArticulo =>
-    'producto_tipo' in adquisicion && DictamenProducto.tipoRequiereNumeroInventario(adquisicion.producto_tipo.id)
-    || 'producto' in adquisicion && DictamenProducto.tipoRequiereNumeroInventario(adquisicion.producto.tipo.id);
+    'producto_tipo' in adquisicion && DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(adquisicion.producto_tipo.id)
+    || 'producto' in adquisicion && DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(adquisicion.producto.tipo.id);
 
 export const inventariarDictamenHasOrdenCompra = (dictamen: InventariarDictamen): dictamen is InventariarDictamenWithOrdenCompra =>
     !!dictamen.orden_compra;

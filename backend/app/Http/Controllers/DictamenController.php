@@ -78,15 +78,7 @@ class DictamenController extends ArchivableController
                 'oficio_id' => $oficio?->id,
             ]);
 
-            $adquisiciones = array_map(fn (array $adquisicion) =>
-                [
-                    ...$adquisicion,
-                    'articulo_id' => $request->getArticuloNumeroInventario($adquisicion['numero_inventario'])
-                ],
-                $validated['adquisiciones']
-            );
-
-            $version->adquisiciones()->createMany($adquisiciones);
+            $version->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
 
             $dictamen->versionActual()->associate($version)->save();
 
@@ -131,13 +123,15 @@ class DictamenController extends ArchivableController
                 ]);
             }
 
+            $dictamen->versionActual()->update(['motivo_cambio' => $validated['motivo_cambio']]);
+
             $version = $dictamen->versiones()->create([
                 'numero_version' => $dictamen->versionActual->numero_version + 1,
                 'fecha_solicitud' => now(),
                 'oficio_id' => $oficio?->id,
             ]);
 
-            $version->adquisiciones()->createMany($validated['adquisiciones']);
+            $version->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
 
             $dictamen->versionActual()->associate($version)->save();
 
@@ -177,7 +171,7 @@ class DictamenController extends ArchivableController
                     ->update([
                         'producto_tipo_id' => null,
                         'producto_id' => $adquisicion['producto_id'],
-                        'caracteristicas' => $adquisicion['caracteristicas']
+                        'especificaciones_tecnicas' => $adquisicion['especificaciones_tecnicas']
                     ]);
             }
 

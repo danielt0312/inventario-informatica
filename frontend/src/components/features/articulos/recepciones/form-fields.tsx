@@ -15,7 +15,7 @@ export const ObservacionesField = ({
             label: "Observaciones/Aclaraciones",
             ...fieldLayout
         }}
-        placeholder="Ingresa cualquier observación, aclaración, o nota importante a declarar"
+        placeholder="Ingresa cualquier observación, aclaración, o nota importante a mencionar"
         {...props}
     />
 );

@@ -68,8 +68,8 @@ export const OficioField = ({
 );
 
 
-export type CaracteristicasFieldType = TextareaFieldType;
-export function CaracteristicasField({
+export type DictamenEspecificacionesTecnicasFieldType = TextareaFieldType;
+export function DictamenEspecificacionesTecnicasField({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof TextareaField>) {
@@ -100,3 +100,18 @@ export const DictamenArchivoField = ({
         {...props}
     />
 );
+
+export type DictamenMotivoCambioFieldType = TextareaFieldType;
+export const DictamenMotivoCambioField = ({
+    fieldLayout,
+    ...props
+}: React.ComponentProps<typeof TextareaField>) => (
+    <TextareaField
+        fieldLayout={{
+            label: "Motivo de Cambio",
+            ...fieldLayout,
+        }}
+        placeholder="Ingresa alguna observacion o notación sobre el motivo de cambio"
+        {...props}
+    />
+)

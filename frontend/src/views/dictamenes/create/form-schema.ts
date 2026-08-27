@@ -6,7 +6,7 @@ import {
     requiredString,
     nullableString
 } from "@/lib/schemas/common";
-import { DictamenProducto } from "@/lib/utils";
+import { DictamenAdquisicion } from "@/lib/utils";
 import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
 import type { NullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
@@ -59,7 +59,7 @@ export const validator = z.object({
     archivo_uuid: requiredString,
     adquisiciones: requiredArray(adquisicionValidator
         .superRefine(({ producto_tipo_id, numero_inventario }, ctx) => {
-            if (DictamenProducto.tipoRequiereNumeroInventario(producto_tipo_id)) {
+            if (DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(producto_tipo_id)) {
                 if (numero_inventario === null || numero_inventario.length === 0) {
                     ctx.addIssue({
                         code: 'custom',

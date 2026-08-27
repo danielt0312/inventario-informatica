@@ -18,7 +18,7 @@ import {
 } from "date-fns"
 import { isAxiosError } from "axios";
 import { root } from "./axios";
-import { dictamenProductoTiposRequierenNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap } from "./constants";
+import { dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap } from "./constants";
 import type { DatePickerFieldType } from "@/components/ui/date-picker-field";
 
 export function cn(...inputs: ClassValue[]) {
@@ -185,10 +185,10 @@ export const Producto = {
     }
 }
 
-export const DictamenProducto = {
+export const DictamenAdquisicion = {
     ...Producto,
-    tipos_requieren_numero_inventario: dictamenProductoTiposRequierenNumeroInventario,
-    tipoRequiereNumeroInventario(tipo: unknown): boolean {
+    tipos_requieren_numero_inventario: dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario,
+    productoTipoPuedeRequerirNumeroInventario(tipo: unknown): boolean {
         const validTipo = this.getTipo(tipo);
         return validTipo !== undefined && this.tipos_requieren_numero_inventario.includes(validTipo);
     }

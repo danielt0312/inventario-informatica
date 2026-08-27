@@ -59,14 +59,16 @@ export function ComboboxLayoutTriggerShell<TItem extends ComboboxLayoutItem>({
     <ComboboxTrigger
       render={
         trigger ?? (
-          <Button variant="outline" className="justify-between font-normal">
+          <Button variant="outline" className="justify-between font-normal truncate">
             <ComboboxValue>
               {(selectedValue: TItem | null) =>
-                selectedValue ? (
+                <div className="truncate">
+                   {selectedValue ? (
                   renderItem(selectedValue)
                 ) : (
-                  <span className="text-muted-foreground">{placeholder}</span>
-                )
+                  <span className="text-muted-foreground truncate">{placeholder}</span>
+                )}
+                </div>
               }
             </ComboboxValue>
             <ChevronsUpDownIcon className="text-muted-foreground" />

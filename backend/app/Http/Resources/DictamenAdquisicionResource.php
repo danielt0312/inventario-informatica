@@ -27,7 +27,7 @@ class DictamenAdquisicionResource extends JsonResource
                     $this->producto->load('tipo.categoria', 'marca');
 
                     return $this->merge([
-                        'caracteristicas' => $this->caracteristicas,
+                        'especificaciones_tecnicas' => $this->especificaciones_tecnicas,
                         'producto' => new ProductoResource($this->producto),
                     ]);
                 }

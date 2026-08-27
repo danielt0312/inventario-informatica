@@ -13,8 +13,8 @@ import { AdscripcionField } from "@/components/features/externos/adscripciones/f
 import { EmpleadoField } from "@/components/features/externos/empleados/form-fields";
 import { Form as PrimitiveForm } from "@/components/ui/form";
 import { ProductoTipoField } from "@/components/features/productos/tipos/form-fields";
-import { NumeroInventarioField } from "@/components/features/articulos/form-fields";
-import { DictamenProducto } from "@/lib/utils";
+import { NullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
+import { DictamenAdquisicion } from "@/lib/utils";
 import { ShowBienesInformaticosTitle } from "../partials/show-info";
 
 export function useCreateFormMutation() {
@@ -100,12 +100,10 @@ export function Form() {
                                             />
 
                                             <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_tipo_id}>
-                                                {(productoTipoId) => DictamenProducto.tipoRequiereNumeroInventario(productoTipoId) && (
+                                                {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].numero_inventario`}
-                                                        children={() => (
-                                                            <NumeroInventarioField />
-                                                        )}
+                                                        children={() => <NullableNumeroInventarioField />}
                                                     />
                                                 )}
                                             </form.Subscribe>

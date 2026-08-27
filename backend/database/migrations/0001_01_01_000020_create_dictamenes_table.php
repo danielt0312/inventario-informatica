@@ -99,7 +99,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->unsignedTinyInteger('cantidad');
-            $table->string('caracteristicas', 255)
+            $table->string('especificaciones_tecnicas', 255)
                 ->nullable();
             $table->timestamps();
         });

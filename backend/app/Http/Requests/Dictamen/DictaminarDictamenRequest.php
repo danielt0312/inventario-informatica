@@ -39,12 +39,12 @@ class DictaminarDictamenRequest extends FormRequest
                 return [
                     'required',
                     'integer',
-                    Rule::exists('productos', 'id')->where(function ($query) use ($tipoId) {
-                        $query->where('tipo_id', $tipoId);
-                    }),
+                    Rule::exists('productos', 'id')->where(
+                        fn ($q) => $q->where('tipo_id', $tipoId)
+                    )
                 ];
             }),
-            'adquisiciones.*.caracteristicas' => [
+            'adquisiciones.*.especificaciones_tecnicas' => [
                 'required',
                 'string',
                 'max:255'

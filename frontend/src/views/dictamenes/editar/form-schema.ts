@@ -2,10 +2,9 @@ import type { ProductoTipoFieldType } from "@/components/features/productos/tipo
 import type { NullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { NumberInputFieldType } from "@/components/ui/input-field";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
-import type { CaracteristicasFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
+import type { DictamenEspecificacionesTecnicasFieldType, DictamenMotivoCambioFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
 import type { ProductoFieldType } from "@/components/features/productos/form-fields";
 import { nullableString, positiveInteger, requiredArray, requiredIsoDateLTEToday, requiredString, selectedNumberOption } from "@/lib/schemas/common";
-import { DictamenProducto } from "@/lib/utils";
 import { format } from "date-fns";
 import z from "zod";
 import type { DetailedPorSurtirDictamen } from "@/types/dictamenes";
@@ -15,7 +14,7 @@ type AdquisicionFields = {
     numero_inventario: NullableNumeroInventarioFieldType;
     cantidad: NumberInputFieldType;
     empleado_id: EmpleadoFieldType;
-    caracteristicas: CaracteristicasFieldType;
+    especificaciones_tecnicas: DictamenEspecificacionesTecnicasFieldType;
     producto_id: ProductoFieldType;
 }
 
@@ -25,17 +24,19 @@ export const adquisicionFieldsDefaultValues: AdquisicionFields = {
     producto_id: undefined,
     cantidad: 1,
     empleado_id: undefined,
-    caracteristicas: undefined,
+    especificaciones_tecnicas: undefined,
 } as const;
 
 type Schema = {
     fecha_solicitud: FechaSolicitudFieldType;
     archivo_uuid: OficioFieldType;
     folio: FolioFieldType;
+    motivo_cambio: DictamenMotivoCambioFieldType;
     adquisiciones: AdquisicionFields[];
 }
 
 export const defaultValues = (dictamen: DetailedPorSurtirDictamen): Schema => ({
+    motivo_cambio: undefined,
     fecha_solicitud: format(new Date, 'yyyy-MM-dd'),
     archivo_uuid: dictamen.version_actual.oficio?.archivo.uuid,
     folio: dictamen.version_actual.oficio?.folio,
@@ -45,46 +46,22 @@ export const defaultValues = (dictamen: DetailedPorSurtirDictamen): Schema => ({
         producto_id: adquiscion.producto.id,
         empleado_id: adquiscion.empleado?.id ?? 1,
         numero_inventario: adquiscion.articulo?.numero_inventario ?? null,
-        caracteristicas: adquiscion.caracteristicas ?? undefined
+        especificaciones_tecnicas: adquiscion.especificaciones_tecnicas ?? undefined
     }))
 });
 
-const adquisicionValidator = z
-    .object({
-        numero_inventario: nullableString,
-        producto_tipo_id: selectedNumberOption,
-        producto_id: selectedNumberOption,
-        cantidad: positiveInteger,
-        empleado_id: selectedNumberOption,
-        caracteristicas: requiredString
-    });
-
 export const validator = z.object({
+    motivo_cambio: requiredString,
     folio: requiredString,
     fecha_solicitud: requiredIsoDateLTEToday,
     archivo_uuid: requiredString,
-    adquisiciones: requiredArray(adquisicionValidator
-        .superRefine(({ producto_tipo_id, numero_inventario }, ctx) => {
-            if (DictamenProducto.tipoRequiereNumeroInventario(producto_tipo_id)) {
-                if (numero_inventario === null || numero_inventario.length === 0) {
-                    ctx.addIssue({
-                        code: 'custom',
-                        message: 'Este campo es requerido',
-                        path: ['numero_inventario']
-                    });
-                } else if (numero_inventario.length != 11) {
-                    ctx.addIssue({
-                        code: 'custom',
-                        message: 'El número de inventario debe de contener 11 caracteres',
-                        path: ['numero_inventario']
-                    });
-                }
-            }
-        }, {
-            when: ({ value }) =>
-                adquisicionValidator.pick({ numero_inventario: true, producto_tipo_id: true })
-                    .safeParse(value)
-                    .success
-        })
-    )
+    adquisiciones: requiredArray(z
+        .object({
+            numero_inventario: nullableString,
+            producto_tipo_id: selectedNumberOption,
+            producto_id: selectedNumberOption,
+            cantidad: positiveInteger,
+            empleado_id: selectedNumberOption,
+            especificaciones_tecnicas: requiredString
+        }))
 });

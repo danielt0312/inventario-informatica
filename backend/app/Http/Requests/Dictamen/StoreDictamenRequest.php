@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Dictamen;
 
-use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -67,7 +66,7 @@ class StoreDictamenRequest extends FormRequest
 
                 $adquisicionesPayload = collect($this->input('adquisiciones'));
 
-                $numerosInventarioPayload = $adquisicionPayload->pluck('numero_inventario')
+                $numerosInventarioPayload = $adquisicionesPayload->pluck('numero_inventario')
                     ->filter()
                     ->unique();
 
@@ -81,6 +80,7 @@ class StoreDictamenRequest extends FormRequest
                         $validator,
                         $articulos,
                         $adquisicionPayload['producto_tipo_id'],
+                        $adquisicionPayload['numero_inventario'],
                         "adquisiciones.$index.numero_inventario"
                     );
                 }

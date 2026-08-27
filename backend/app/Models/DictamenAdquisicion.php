@@ -18,14 +18,14 @@ class DictamenAdquisicion extends Model
         'producto_tipo_id',
         'articulo_id',
         'cantidad',
-        'caracteristicas'
+        'especificaciones_tecnicas'
     ];
 
     protected $attributes = [
         'producto_tipo_id' => null,
         'producto_id' => null,
         'articulo_id' => null,
-        'caracteristicas' => null
+        'especificaciones_tecnicas' => null
     ];
 
     public function version(): BelongsTo
@@ -89,7 +89,7 @@ class DictamenAdquisicion extends Model
                     $this->tipo->nombre,
                     $this->marca?->nombre,
                     $this->producto?->nombre,
-                    $attributes['caracteristicas']
+                    $attributes['especificaciones_tecnicas']
                 ]))
         );
     }

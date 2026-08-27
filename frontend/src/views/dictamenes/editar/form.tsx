@@ -4,12 +4,12 @@ import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { Form } from "@/components/ui/form";
 import { FieldError, FieldGroup } from "@/components/ui/field";
-import { CantidadField, CaracteristicasField, FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
+import { CantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField, FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProductoTipoField } from "@/components/features/productos/tipos/form-fields";
-import { DictamenProducto } from "@/lib/utils";
+import { DictamenAdquisicion } from "@/lib/utils";
 import { NullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { EmpleadoField } from "@/components/features/externos/empleados/form-fields";
 import { adquisicionFieldsDefaultValues, defaultValues, validator } from "./form-schema";
@@ -54,7 +54,6 @@ export const DictamenEditarForm = () => {
 
     const form = useForm(dictamen);
     const [showAlertDialog, setShowAlertDialog] = React.useState(false);
-    const [showNumeroInventarioField, setShowNumeroInventarioField] = React.useState(false);
 
     return (
         <Form form={form} className="flex flex-col gap-6">
@@ -112,17 +111,6 @@ export const DictamenEditarForm = () => {
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].producto_tipo_id`}
                                                         children={() => <ProductoTipoField required />}
-                                                        listeners={{
-                                                            onMount: ({ fieldApi }) => fieldApi.triggerOnChangeListener(),
-                                                            onChange: ({ value }) => {
-                                                                const requiereNumeroInventario = DictamenProducto.tipoRequiereNumeroInventario(value);
-                                                                setShowNumeroInventarioField(requiereNumeroInventario);
-
-                                                                if (!requiereNumeroInventario) {
-                                                                    form.setFieldValue(`adquisiciones[${index}].numero_inventario`, null);
-                                                                }
-                                                            }
-                                                        }}
                                                     />
 
                                                     <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_tipo_id}>
@@ -151,17 +139,19 @@ export const DictamenEditarForm = () => {
 
                                             <FieldGroup className="flex-row">
                                                 <form.AppField
-                                                    name={`adquisiciones[${index}].caracteristicas`}
-                                                    children={() => <CaracteristicasField className="w-1/2" />}
+                                                    name={`adquisiciones[${index}].especificaciones_tecnicas`}
+                                                    children={() => <DictamenEspecificacionesTecnicasField className="w-1/2" />}
                                                 />
 
                                                 <div className="w-1/2">
-                                                    {showNumeroInventarioField && (
-                                                        <form.AppField
-                                                            name={`adquisiciones[${index}].numero_inventario`}
-                                                            children={() => <NullableNumeroInventarioField required />}
-                                                        />
-                                                    )}
+                                                    <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_tipo_id}>
+                                                        {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
+                                                            <form.AppField
+                                                                name={`adquisiciones[${index}].numero_inventario`}
+                                                                children={() => <NullableNumeroInventarioField />}
+                                                            />
+                                                        )}
+                                                    </form.Subscribe>
                                                 </div>
                                             </FieldGroup>
                                         </div>
@@ -182,6 +172,11 @@ export const DictamenEditarForm = () => {
                         </>
                     )}
                 </form.AppField>
+
+                <form.AppField
+                    name="motivo_cambio"
+                    children={() => <DictamenMotivoCambioField required />}
+                />
 
                 <form.SubmitFormButton
                     label="Guardar edición"

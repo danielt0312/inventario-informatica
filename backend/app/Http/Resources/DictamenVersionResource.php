@@ -13,7 +13,6 @@ class DictamenVersionResource extends JsonResource
             'id' => $this->id,
             'numero_version' => $this->numero_version,
             'fecha_solicitud' => $this->fecha_solicitud->format('Y-m-d'),
-            'adscripcion_id' => $this->adscripcion_id,
             'created_at' => $this->created_at,
             'adquisiciones' => DictamenAdquisicionResource::collection($this->whenLoaded('adquisiciones')),
             'oficio' => new OficioResource($this->whenLoaded('oficio')),

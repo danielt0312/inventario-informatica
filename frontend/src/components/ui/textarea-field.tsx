@@ -49,8 +49,8 @@ function TextareaField(props: CoreTextareaFieldProps) {
     return (
         <CoreTextareaField
             onChange={(e) => {
-                const value = e.target.value.trim();
-                field.handleChange(value === ''
+                const value = e.target.value;
+                field.handleChange(value.trim() === ''
                     ? undefined
                     : value
                 );
@@ -67,8 +67,8 @@ function NullableTextareaField(props: CoreTextareaFieldProps) {
     return (
         <CoreTextareaField
             onChange={(e) => {
-                const value = e.target.value.trim();
-                field.handleChange(value === ''
+                const value = e.target.value;
+                field.handleChange(value.trim() === ''
                     ? null
                     : value
                 )
