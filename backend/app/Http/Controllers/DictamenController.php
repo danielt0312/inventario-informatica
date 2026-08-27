@@ -78,7 +78,15 @@ class DictamenController extends ArchivableController
                 'oficio_id' => $oficio?->id,
             ]);
 
-            $version->adquisiciones()->createMany($validated['adquisiciones']);
+            $adquisiciones = array_map(fn (array $adquisicion) =>
+                [
+                    ...$adquisicion,
+                    'articulo_id' => $request->getArticuloNumeroInventario($adquisicion['numero_inventario'])
+                ],
+                $validated['adquisiciones']
+            );
+
+            $version->adquisiciones()->createMany($adquisiciones);
 
             $dictamen->versionActual()->associate($version)->save();
 
