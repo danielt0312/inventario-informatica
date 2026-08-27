@@ -10,6 +10,14 @@ use InvalidArgumentException;
 
 class ArchivoService
 {
+    public function getFullPath(Archivo $archivo): string
+    {
+        if (!$archivo->exists)
+            throw new \LogicException('No se puede obtener el file path para una instancia que no exista');
+
+        return storage_path("app/private/{$archivo->relativePath}");
+    }
+
     public function create(string $nombre, int $size, AvailableFileExtensions $tipo = AvailableFileExtensions::PDF): Archivo
     {
         return Archivo::create([

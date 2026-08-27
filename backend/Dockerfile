@@ -3,9 +3,15 @@ FROM php:8.4-fpm-alpine
 COPY --from=composer:2.9.5 /usr/bin/composer /usr/bin/composer
 
 RUN apk add --no-cache \
+    openjdk8-jre-base \
     freetype-dev \
     libjpeg-turbo-dev \
     libpng-dev
+
+COPY ./pdftk-all.jar /usr/share/java/pdftk-all.jar
+
+RUN printf '#!/bin/sh\nexec /usr/bin/java -jar /usr/share/java/pdftk-all.jar "$@"\n' > /usr/bin/pdftk && \
+    chmod +x /usr/bin/pdftk
 
 RUN apk add mariadb-client
 

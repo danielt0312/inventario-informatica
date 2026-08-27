@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf as DomPdf;
 use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
 
 use App\Http\Requests\Dictamen\{
@@ -18,13 +18,16 @@ use App\Http\Requests\Dictamen\{
 
 use App\Models\{
     Dictamen,
-    DictamenAdquisicion
+    DictamenAdquisicion,
+    Archivo
 };
 
 use App\Enums\{
     DocumentoTipoEnum,
     DictamenEstadoEnum
 };
+
+use App\Services\PdfWatermarkService;
 
 class DictamenController extends ArchivableController
 {
@@ -102,9 +105,9 @@ class DictamenController extends ArchivableController
             ->toResource();
     }
 
-    public function update(UpdateDictamenRequest $request, Dictamen $dictamen)
+    public function update(UpdateDictamenRequest $request, Dictamen $dictamen, PdfWatermarkService $watermarkService)
     {
-        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
+        $dictamen = DB::transaction(function () use ($request, $dictamen, $watermarkService): Dictamen {
             $validated = $request->validated();
 
             $adscripcionId = $dictamen->adscripcion_id;
@@ -123,6 +126,13 @@ class DictamenController extends ArchivableController
                 ]);
             }
 
+            $versionCanceladaArchivoPath = $this->archivoService->getFullPath($dictamen->versionActual->archivo);
+            $watermarkService->apply(
+                $versionCanceladaArchivoPath,
+                $versionCanceladaArchivoPath,
+                'CANCELADO'
+            );
+
             $dictamen->versionActual()->update(['motivo_cambio' => $validated['motivo_cambio']]);
 
             $version = $dictamen->versiones()->create([
@@ -137,7 +147,7 @@ class DictamenController extends ArchivableController
 
             $dictamen->load('versionActual.adquisiciones');
 
-            $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
+            $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
 
             $archivo = $this->archivoService->createAndStoreFromRaw(
                 DocumentoTipoEnum::DICTAMEN->label(),
@@ -177,7 +187,7 @@ class DictamenController extends ArchivableController
 
             $dictamen->load('versionActual.adquisiciones');
 
-            $pdf = Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
+            $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
 
             $archivo = $this->archivoService->createAndStoreFromRaw(
                 DocumentoTipoEnum::DICTAMEN->label(),
