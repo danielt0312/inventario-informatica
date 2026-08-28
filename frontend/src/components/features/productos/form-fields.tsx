@@ -100,7 +100,6 @@ export function ProductoField({
                     </DialogHeader>
 
                     <Form form={form} className="contents">
-                        <form.AppField name="tipo_id" children={() => <ProductoTipoField disabled />} />
                         <form.AppField name="marca_id" children={() => <ProductoMarcaField />} />
                         <form.AppField name="nombre" children={() => <ProductoNombreField />} />
 

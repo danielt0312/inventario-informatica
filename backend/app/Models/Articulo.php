@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    HasOne
+};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -15,8 +18,6 @@ class Articulo extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $table = 'articulos';
-
     protected $fillable = [
         'producto_id',
         'estado_id',
@@ -25,7 +26,7 @@ class Articulo extends Model
         'factura_id',
         'qr_archivo_id',
         'cuenta_contable',
-        'dictamen_adquisicion_id',
+        'dictamen_id',
         'es_contable',
         'es_resultado_esperado',
         'observaciones',
@@ -36,7 +37,7 @@ class Articulo extends Model
         'factura_id' => null,
         'numero_inventario' => null,
         'cuenta_contable' => null,
-        'dictamen_adquisicion_id' => null,
+        'dictamen_id' => null,
         'es_resultado_esperado' => null,
         'observaciones' => null
     ];
@@ -52,15 +53,16 @@ class Articulo extends Model
         });
     }
 
-    public function dictamenAdquisicion(): BelongsTo
-    {
-        return $this->belongsTo(DictamenArticulo::class);
-    }
-
     public function dictamen(): BelongsTo
     {
         return $this->belongsTo(Dictamen::class);
     }
+
+    public function cumplimientoAdquisicion(): HasOne
+    {
+        return $this->hasOne(DictamenAdquisicionArticulo::class);
+    }
+
     public function producto(): BelongsTo
     {
         return $this->belongsTo(Producto::class);
@@ -76,7 +78,8 @@ class Articulo extends Model
         return $this->belongsTo(Factura::class);
     }
 
-    public function qr(): BelongsTo {
+    public function qr(): BelongsTo
+    {
         return $this->belongsTo(Archivo::class, 'qr_archivo_id');
     }
 
@@ -93,8 +96,8 @@ class Articulo extends Model
 
     public function casts(): array {
         return [
-            'activo' => 'boolean',
             'es_contable' => 'boolean',
+            'es_resultado_esperado' => 'boolean',
         ];
     }
 }

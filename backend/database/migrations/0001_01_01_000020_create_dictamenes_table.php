@@ -104,10 +104,25 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('dictamen_adquisicion_articulos', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('articulo_id')
+                ->constrained('articulos', indexName: 'fk_dictamen_adquisicion_articulos_articulos')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('dictamen_adquisicion_id')
+                ->constrained('dictamen_adquisiciones', indexName: 'fk_dictamen_adquisicion_articulos_dictamen_adquisiciones')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->timestamps();
+
+            $table->unique(['articulo_id'], 'uk_dictamen_adquisicion_articulos');
+        });
+
         Schema::table('articulos', function (Blueprint $table) {
-            $table->foreign('dictamen_adquisicion_id', 'fk_articulos_dictamen_adquisiciones')
+            $table->foreign('dictamen_id', 'fk_articulos_dictamenes')
                 ->references('id')
-                ->on('dictamen_adquisiciones')
+                ->on('dictamenes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -115,6 +130,7 @@ return new class extends Migration
 
     public function down(): void
     {
+        Schema::dropIfExists('dictamen_adquisicion_articulos');
         Schema::dropIfExists('dictamen_adquisiciones');
         Schema::dropIfExists('dictamen_versiones');
         Schema::dropIfExists('dictamenes');

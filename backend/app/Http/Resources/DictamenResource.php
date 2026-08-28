@@ -33,7 +33,7 @@ class DictamenResource extends JsonResource
                 }
             ),
             $this->when(
-                $this->esEstadoSurtido(),
+                $this->esEstadoSurtido() || $this->esEstadoSurtidoParcial(),
                 fn () => $this->merge([
                     'tiene_observaciones' => $this->tiene_observaciones
                 ])

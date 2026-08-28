@@ -1,9 +1,9 @@
 import type { ArticuloEstadoEnum } from "@/lib/constants"
 import type { Includable, TCatalogo, WithTimestamps } from "./generics"
-import type { SurtidoDictamenAdquisicion } from "./dictamenes";
+import type { SurtidoDictamen, SurtidoParcialDictamen } from "./dictamenes";
 import type { DetailedProducto } from "./productos";
 
-type IncludableDictamenAdquisicion = Includable<SurtidoDictamenAdquisicion>;
+type IncludableDictamen = Includable<SurtidoDictamen | SurtidoParcialDictamen>;
 
 type BaseEstado<TEstado extends ArticuloEstadoEnum = ArticuloEstadoEnum> = TCatalogo<TEstado>;
 type Attributes<TEstado extends BaseEstado = BaseEstado, TProducto extends DetailedProducto = DetailedProducto> = WithTimestamps<{
@@ -22,8 +22,8 @@ type StrictAttributes = {
 
 type LooseAttributes = Partial<StrictAttributes>;
 
-type Base<TDictamenAdquisicion extends IncludableDictamenAdquisicion, TEstado extends BaseEstado = BaseEstado> = Attributes<TEstado> & (TDictamenAdquisicion extends null ? LooseAttributes : StrictAttributes) & {
-    dictamen_adquisicion: TDictamenAdquisicion;
+type Base<TDictamen extends IncludableDictamen, TEstado extends BaseEstado = BaseEstado> = Attributes<TEstado> & (TDictamen extends null ? LooseAttributes : StrictAttributes) & {
+    dictamen: TDictamen;
 }
 
 type ArticuloEstado = BaseEstado;

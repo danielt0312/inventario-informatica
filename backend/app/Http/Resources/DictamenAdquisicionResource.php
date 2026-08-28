@@ -16,7 +16,6 @@ class DictamenAdquisicionResource extends JsonResource
             'empleado_id' => $this->empleado_id,
             'cantidad' => $this->cantidad,
             'articulo' => new ArticuloResource($this->whenLoaded('articulo')),
-            'articulos' => ArticuloResource::collection($this->whenLoaded('articulos')),
             'producto_tipo' => $this->when(
                 $dictamen->esEstadoDictaminar(),
                 fn() => new ProductoTipoResource($this->tipo)
@@ -35,11 +34,11 @@ class DictamenAdquisicionResource extends JsonResource
             $this->when(
                 $dictamen->esEstadoInventariar(),
                 function () {
-                    $this->loadCount('articulos');
+                    $this->loadCount('articulosSurtidos');
 
                     return $this->merge([
-                        'cantidad_surtida' => $this->articulos_count,
-                        'cantidad_restante' => $this->cantidad - $this->articulos_count,
+                        'cantidad_surtida' => $this->articulos_surtidos_count,
+                        'cantidad_restante' => $this->cantidad - $this->articulos_surtidos_count,
                     ]);
                 }
             )

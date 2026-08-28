@@ -251,13 +251,18 @@ class DictamenController extends ArchivableController
                 ['cuenta_contable' => $cuentaContable] = $payloadAdquisicion;
                 $producto = $request->getProductos($cuentaContable);
 
-                $request->getFacturaAdquisiciones($cuentaContable)
+                $articulo = $request->getFacturaAdquisiciones($cuentaContable)
                     ->articulos()
                     ->create([
                         ...$payloadAdquisicion,
                         'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-                        'dictamen_adquisicion_id' => $payloadAdquisicion['id'],
+                        'dictamen_id' => $dictamen->id,
                         'producto_id' => $producto->id
+                    ]);
+
+                $articulo->cumplimientoAdquisicion()
+                    ->create([
+                        'dictamen_adquisicion_id' => $payloadAdquisicion['id']
                     ]);
             }
 
@@ -272,21 +277,35 @@ class DictamenController extends ArchivableController
             }
 
             $adquisiciones = $dictamen->versionActual->adquisiciones()
-                ->withCount('articulos')
+                ->withCount('articulosSurtidos')
                 ->get();
 
-            if ($adquisiciones->contains(fn ($a) => $a->articulos_count < $a->cantidad)) {
-                $dictamen->update(['estado_id' => DictamenEstadoEnum::SURTIDO_PARCIAL->value]);
+            $faltaPorSurtirAdquisiciones = $adquisiciones->contains(fn ($a) => $a->articulos_surtidos_count < $a->cantidad);
+            $dictamenEstadoId = $faltaPorSurtirAdquisiciones
+                ? DictamenEstadoEnum::SURTIDO_PARCIAL->value
+                : DictamenEstadoEnum::SURTIDO->value;
+
+            if ($dictamen->tiene_observaciones) {
+                $dictamen->update(['estado_id' => $dictamenEstadoId]);
                 return $dictamen;
             }
 
-            $conObservaciones = $dictamen->versionActual->adquisiciones()
-                ->whereHas('articulos', fn ($q) => $q->where('es_resultado_esperado', false))
+            $algunArticuloTieneObservaciones = $dictamen->whereHas('articulos', fn ($q) => $q->where('es_resultado_esperado', false))
                 ->exists();
 
+            if ($algunArticuloTieneObservaciones) {
+                $dictamen->update([
+                    'estado_id' => $dictamenEstadoId,
+                    'tiene_observaciones' => true
+                ]);
+                return $dictamen;
+            }
+
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::SURTIDO->value,
-                'tiene_observaciones' => $conObservaciones,
+                'estado_id' => $dictamenEstadoId,
+                'tiene_observaciones' => $faltaPorSurtirAdquisiciones
+                    ? null
+                    : false
             ]);
 
             return $dictamen;

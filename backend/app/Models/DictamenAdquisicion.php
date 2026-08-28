@@ -4,7 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    BelongsToMany,
+    HasMany
+};
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class DictamenAdquisicion extends Model
@@ -53,9 +57,16 @@ class DictamenAdquisicion extends Model
         return $this->belongsTo(Articulo::class);
     }
 
-    public function articulos(): HasMany
+    public function articulosSurtidos(): HasMany
     {
-        return $this->hasMany(Articulo::class);
+        return $this->hasMany(DictamenAdquisicionArticulo::class);
+    }
+
+    public function articulos(): BelongsToMany
+    {
+        return $this->belongsToMany(Articulo::class, 'dictamen_adquisicion_articulos')
+            ->using(DictamenAdquisicionArticulo::class)
+            ->withTimestamps();
     }
 
     public function tipo(): Attribute

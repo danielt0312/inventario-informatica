@@ -62,9 +62,9 @@ class Dictamen extends Model
         return $this->belongsTo(OrdenCompra::class);
     }
 
-    public function dictamenArticulos(): HasMany
+    public function articulos(): HasMany
     {
-        return $this->hasMany(DictamenArticulo::class);
+        return $this->hasMany(Articulo::class);
     }
 
     public function estado(): BelongsTo

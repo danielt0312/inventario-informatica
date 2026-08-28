@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedPorSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedPorSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { CircleXIcon, FileInputIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon, SquarePenIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
@@ -171,7 +171,7 @@ export const columns: ColumnDef<DetailedDictamen>[] = [
             return (
                 <div className="flex flex-col gap-2">
                     <EstadoBadge estado={row.original.estado} />
-                    {(isSurtidoDictamen(dictamen) && dictamen.tiene_observaciones) && (
+                    {((isSurtidoDictamen(dictamen) || isSurtidoParcialDictamen(dictamen)) && dictamen.tiene_observaciones) && (
                         <Badge variant="outline">Tiene observaciones</Badge>
                     )}
                 </div>

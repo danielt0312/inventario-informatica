@@ -89,16 +89,18 @@ type InventariarAdquisicion = BaseDictaminadoAdquisicion & {
 type InventariarVersion = BaseDictaminadoVersion;
 type DetailedInventariar = DetailedBase<Inventariar, VersionActualWithAdquisiciones<VersionWithAdquisiciones<InventariarVersion, Adquisiciones<InventariarAdquisicion>>>>;
 
-type SurtidoEstado = BaseEstado<typeof DictamenEstadoEnum.SURTIDO>;
-type Surtido = Base<SurtidoEstado> & {
-    tiene_observaciones: boolean;
+type BaseTieneObservacionesAttribute<TValue extends boolean | null> = {
+    tiene_observaciones: TValue;
 }
+
+type SurtidoEstado = BaseEstado<typeof DictamenEstadoEnum.SURTIDO>;
+type Surtido = Base<SurtidoEstado> & BaseOrdenCompra<OrdenCompra> & BaseTieneObservacionesAttribute<boolean>;
 type SurtidoAdquisicion = BaseDictaminadoAdquisicion;
 type SurtidoVersion = BaseDictaminadoVersion;
 type DetailedSurtido = DetailedBase<Surtido, VersionActualWithAdquisiciones<VersionWithAdquisiciones<SurtidoVersion, Adquisiciones<SurtidoAdquisicion>>>>;
 
 type SurtidoParcialEstado = BaseEstado<typeof DictamenEstadoEnum.SURTIDO_PARCIAL>;
-type SurtidoParcial = Base<SurtidoParcialEstado> & BaseOrdenCompra<OrdenCompra>;
+type SurtidoParcial = Base<SurtidoParcialEstado> & BaseOrdenCompra<OrdenCompra> & BaseTieneObservacionesAttribute<boolean | null>;
 type SurtidoParcialAdquisicion = BaseDictaminadoAdquisicion;
 type SurtidoParcialVersion = BaseDictaminadoVersion;
 type DetailedSurtidoParcial = DetailedBase<SurtidoParcial, VersionActualWithAdquisiciones<VersionWithAdquisiciones<SurtidoParcialVersion, Adquisiciones<SurtidoParcialAdquisicion>>>>;

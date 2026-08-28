@@ -130,14 +130,12 @@ class InventariarDictamenRequest extends FormRequest
     {
         return [
             function (Validator $validator) {
-                $validatorErrors = $validator->errors();
-
-                if ($validatorErrors->isNotEmpty()) return;
+                if ($validator->errors()->isNotEmpty()) return;
 
                 $adquisicionesPayload = collect($this->input('adquisiciones', []));
 
                 $adquisiciones = DictamenAdquisicion::with('producto:id,tipo_id')
-                    ->withCount('articulos')
+                    ->withCount('articulosSurtidos')
                     ->whereIn('id', $adquisicionesPayload->pluck('id')->unique())
                     ->get()
                     ->keyBy('id');
@@ -149,7 +147,7 @@ class InventariarDictamenRequest extends FormRequest
 
                 $conteoPorAdquisicion = $adquisicionesPayload->countBy('id');
 
-                $validarProducto = function ($adquisicionPayload, $index) use ($adquisiciones, $productos, $conteoPorAdquisicion, $validatorErrors) {
+                $validarProducto = function ($adquisicionPayload, $index) use ($adquisiciones, $productos, $conteoPorAdquisicion, $validator) {
                     $adquisicion = $adquisiciones->get($adquisicionPayload['id']);
                     if (!$adquisicion) return;
 
@@ -157,7 +155,7 @@ class InventariarDictamenRequest extends FormRequest
                         $producto = $productos->get($adquisicionPayload['producto_id'] ?? null);
 
                         if ($producto->tipo_id !== $adquisicion->producto->tipo_id) {
-                            $validatorErrors->add("adquisiciones.$index.producto_id", 'El producto debe ser del mismo tipo que el solicitado');
+                            $validator->addFailure("adquisiciones.$index.producto_id", "El adquisiciones.$index.producto_id debe ser del mismo tipo que el solicitado en el dictamen");
                         } else {
                             $this->setProductos($adquisicionPayload['cuenta_contable'], $producto);
                         }
@@ -165,15 +163,15 @@ class InventariarDictamenRequest extends FormRequest
                         $this->setProductos($adquisicionPayload['cuenta_contable'], $adquisicion->producto);
                     }
 
-                    $pendiente = $adquisicion->cantidad - $adquisicion->articulos_count;
+                    $pendiente = $adquisicion->cantidad - $adquisicion->articulos_surtidos_count;
                     $enviado = $conteoPorAdquisicion->get($adquisicionPayload['id']);
 
                     if ($enviado > $pendiente) {
-                        $validatorErrors->add("adquisiciones.$index.id", "Este bien informático excede lo pendiente a surtir ({$pendiente})");
+                        $validator->addFailure("adquisiciones.$index.id", "El adquisiciones.$index.id excede lo pendiente a surtir ({$pendiente})");
                     }
                 };
 
-                $validarFactura = function ($adquisicionPayload, $index) use ($validator, $validatorErrors) {
+                $validarFactura = function ($adquisicionPayload, $index) use ($validator) {
                     foreach ($this->getFacturas() as $factura) {
                         if ($factura->id === $adquisicionPayload['factura_id']) {
                             $this->setFacturaAdquisiciones($adquisicionPayload['cuenta_contable'], $factura);
@@ -182,7 +180,7 @@ class InventariarDictamenRequest extends FormRequest
                     }
 
                     $setValidatorError = fn () =>
-                        $validatorErrors->add("adquisiciones.$index.factura_id", 'La factura proporcionada no pertenece al mismo proveedor que la orden de compra indicada');
+                        $validator->addFailure("adquisiciones.$index.factura_id", "La adquisiciones.$index.factura_id no pertenece al mismo proveedor que la orden_compra indicada");
 
                     foreach ($this->getFacturasInvalidas() as $facturaIdInvalida) {
                         if ($facturaIdInvalida === $adquisicionPayload['factura_id']) {
