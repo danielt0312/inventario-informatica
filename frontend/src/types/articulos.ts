@@ -3,10 +3,10 @@ import type { Includable, TCatalogo, WithTimestamps } from "./generics"
 import type { SurtidoDictamen, SurtidoParcialDictamen } from "./dictamenes";
 import type { DetailedProducto } from "./productos";
 
-type IncludableDictamen = Includable<SurtidoDictamen | SurtidoParcialDictamen>;
+type IncludableDictamen = Includable<SurtidoDictamen | SurtidoParcialDictamen> | undefined;
 
 type BaseEstado<TEstado extends ArticuloEstadoEnum = ArticuloEstadoEnum> = TCatalogo<TEstado>;
-type Attributes<TEstado extends BaseEstado = BaseEstado, TProducto extends DetailedProducto = DetailedProducto> = WithTimestamps<{
+type CoreAttributes<TEstado extends BaseEstado = BaseEstado, TProducto extends DetailedProducto = DetailedProducto> = WithTimestamps<{
     uuid: string;
     estado: TEstado;
     numero_inventario: string;
@@ -20,14 +20,31 @@ type StrictAttributes = {
     numero_serie: string;
 }
 
-type LooseAttributes = Partial<StrictAttributes>;
+type LooseAttributes = {
+  [K in keyof StrictAttributes]: StrictAttributes[K] | null;
+};
 
-type Base<TDictamen extends IncludableDictamen, TEstado extends BaseEstado = BaseEstado> = Attributes<TEstado> & (TDictamen extends null ? LooseAttributes : StrictAttributes) & {
-    dictamen: TDictamen;
-}
+type AttributesDefiner<TDictamen extends IncludableDictamen> =
+  TDictamen extends null | undefined
+    ? (LooseAttributes & {
+        es_resultado_esperado: boolean | null;
+        observaciones: string | null;
+        dictamen?: TDictamen;
+      })
+    : (StrictAttributes & {
+        es_resultado_esperado: true;
+        observaciones: string;
+        dictamen: TDictamen;
+      });
+
+type Base<
+  TDictamen extends IncludableDictamen,
+  TProducto extends DetailedProducto = DetailedProducto,
+  TEstado extends BaseEstado = BaseEstado
+> = CoreAttributes<TEstado, TProducto> & AttributesDefiner<TDictamen>;
 
 type ArticuloEstado = BaseEstado;
-type Articulo = Base<null, ArticuloEstado>;
+type Articulo = Base<IncludableDictamen, DetailedProducto, ArticuloEstado>;
 
 export type {
     Articulo,

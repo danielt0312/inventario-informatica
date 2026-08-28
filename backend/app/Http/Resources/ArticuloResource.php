@@ -19,7 +19,7 @@ class ArticuloResource extends JsonResource
             'qr_archivo' => new ArchivoResource($this->whenLoaded('qrArchivo')),
             'numero_inventario' => $this->numero_inventario,
             'cuenta_contable' => $this->cuenta_contable,
-            'es_contable' => $this->es_contable,
+            'es_inventariable' => $this->es_inventariable,
             'es_resultado_esperado' => $this->es_resultado_esperado,
             'observaciones' => $this->observaciones,
             'created_at' => $this->created_at,

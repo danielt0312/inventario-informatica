@@ -66,29 +66,33 @@ const RevisionActionRow = ({ articulo }: { articulo: Articulo }) => {
 const columns: ColumnDef<Articulo>[] = [
     {
         header: "No. de Inventario",
-        accessorKey: "numero_inventario"
+        accessorFn: (row) => row.numero_inventario
     },
     {
-        header: "Categoría",
-        accessorFn: (row) => row.producto.tipo.categoria.nombre
-    },
-    {
-        header: "Producto",
-        accessorFn: (row) => row.producto.tipo.nombre
-    },
-    {
-        header: "Marca",
-        accessorFn: (row) => row.producto.marca.nombre
+        header: "Tipo de Producto",
+        accessorFn: (row) => `${row.producto.tipo.categoria.nombre} — ${row.producto.tipo.nombre}`
     },
     {
         header: "Modelo",
-        accessorFn: (row) => row.producto.nombre
+        accessorFn: ( row ) => `${row.producto.marca.nombre} — ${row.producto.nombre}`
     },
     {
         header: "Estado",
-        cell: ({ row }) => (
-            <EstadoBadge estado={row.original.estado} />
-        )
+        cell: ({ row }) => {
+            const articulo = row.original;
+
+            return (
+                <div className="flex flex-col gap-1">
+                    <EstadoBadge estado={articulo.estado} />
+                    {articulo.es_inventariable !== null && (
+                        <Badge variant="outline">
+                            {articulo.es_inventariable ? 'Es inventariable' : 'No es inventariable'}
+                        </Badge>
+                    )}
+                    {articulo.observaciones && <Badge className="bg-red-400/80 text-black">Tiene observaciones</Badge>}
+                </div>
+            );
+        }
     },
     {
         header: "Fecha de creación",
