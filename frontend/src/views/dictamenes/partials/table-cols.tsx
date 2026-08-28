@@ -55,7 +55,7 @@ const EdicionActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormActi
 
 const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | DetailedSurtidoParcialDictamen>) => {
     const [open, setOpen] = useState(false);
-    const mutation = useSurtirMutation(dictamen);
+    const { mutateAsync, status } = useSurtirMutation(dictamen);
     const navigate = useNavigate();
     const nextState = ActionDictamenEstadoEnum.INVENTARIAR;
 
@@ -83,7 +83,7 @@ const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | D
                     <AlertDialogFooter>
                         <AlertDialogAction
                             onClick={async () => {
-                                await mutation.mutateAsync();
+                                await mutateAsync();
                                 await navigate({
                                     to: ActionRoute.to,
                                     params: {
@@ -92,10 +92,11 @@ const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | D
                                     }
                                 });
                             }}
+                            disabled={status === 'pending'}
                         >
                             {FormActionIcon[nextState]} Confirmar e Inventariar
                         </AlertDialogAction>
-                        <AlertDialogCancel onClick={() => setOpen(false)}>
+                        <AlertDialogCancel onClick={() => setOpen(false)} autoFocus>
                             <CircleXIcon /> Cancelar
                         </AlertDialogCancel>
                     </AlertDialogFooter>

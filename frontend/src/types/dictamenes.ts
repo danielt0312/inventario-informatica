@@ -135,7 +135,6 @@ type DictamenVersion =
     | SurtidoVersion
     | SurtidoParcialVersion;
 
-type AdquisicionWithArticulo = DictamenAdquisicion & BaseAdquisicion<Articulo>;
 type InventariarWithOrdenCompra = Base<InventariarEstado> & BaseOrdenCompra<OrdenCompra>;
 type VersionWithArchivo = DictamenVersion & BaseDictaminadoVersion;
 
@@ -157,7 +156,6 @@ export type {
     DetailedSurtido as DetailedSurtidoDictamen,
     DetailedSurtidoParcial as DetailedSurtidoParcialDictamen,
     BaseDictaminadoVersion as DictaminadoVersionDictamen,
-    AdquisicionWithArticulo as DictamenAdquisicionWithArticulo,
     BaseEstado as DictamenEstado,
     InventariarWithOrdenCompra as InventariarDictamenWithOrdenCompra,
     InventariarAdquisicion as InventariarDictamenAdquisicion,

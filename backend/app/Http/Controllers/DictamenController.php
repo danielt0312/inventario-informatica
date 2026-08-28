@@ -24,7 +24,8 @@ use App\Models\{
 
 use App\Enums\{
     DocumentoTipoEnum,
-    DictamenEstadoEnum
+    DictamenEstadoEnum,
+    ArticuloEstadoEnum
 };
 
 use App\Services\PdfWatermarkService;
@@ -254,7 +255,7 @@ class DictamenController extends ArchivableController
                     ->articulos()
                     ->create([
                         ...$payloadAdquisicion,
-                        'estado_id' => ArticuloEstadoEnum::POR_RESGUARDAR->value,
+                        'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
                         'dictamen_adquisicion_id' => $payloadAdquisicion['id'],
                         'producto_id' => $producto->id
                     ]);

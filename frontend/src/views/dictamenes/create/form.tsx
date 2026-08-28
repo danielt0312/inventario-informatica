@@ -2,7 +2,7 @@ import { useAppForm } from "@/components/ui/form-context";
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { PlusCircleIcon, Trash2Icon } from "lucide-react";
-import { dictamenDefaultValues, productoFieldsDefaultValues, validator } from "./form-schema";
+import { createDictamenFormDefaultValues, createDictamenFormAdquisicionFieldsDefaultValues, createDictamenFormValidator } from "./form-schema";
 import { useStore } from "@tanstack/react-form";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
@@ -17,7 +17,7 @@ import { NullableNumeroInventarioField } from "@/components/features/articulos/f
 import { DictamenAdquisicion } from "@/lib/utils";
 import { ShowBienesInformaticosTitle } from "../partials/show-info";
 
-export function useCreateFormMutation() {
+function useCreateFormMutation() {
     const navigate = useNavigate();
 
     return useFormMutation({
@@ -29,22 +29,22 @@ export function useCreateFormMutation() {
     });
 }
 
-export function useForm() {
+function useForm() {
     const { mutate } = useCreateFormMutation();
 
     return useAppForm({
-        defaultValues: dictamenDefaultValues,
+        defaultValues: createDictamenFormDefaultValues,
         validators: {
-            onSubmit: validator
+            onSubmit: createDictamenFormValidator
         },
         onSubmit: ({ value, formApi }) => {
-            const data = validator.parse(value);
+            const data = createDictamenFormValidator.parse(value);
             mutate({ data, formApi });
         }
     });
 }
 
-export function Form() {
+function Form() {
     const form = useForm();
     const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
 
@@ -79,7 +79,7 @@ export function Form() {
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => field.pushValue(productoFieldsDefaultValues)}
+                                    onClick={() => field.pushValue(createDictamenFormAdquisicionFieldsDefaultValues)}
                                 >
                                     <PlusCircleIcon /> Agregar
                                 </Button>
@@ -140,3 +140,5 @@ export function Form() {
         </PrimitiveForm>
     );
 }
+
+export { Form as CreateDictamenForm }

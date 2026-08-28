@@ -1,6 +1,6 @@
 import { ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { Form as EvidenciarForm } from "../evidenciar/form";
-import { Form as DictaminarForm } from "../dictaminar/form";
+import { DictaminarDictamenForm as DictaminarForm } from "../dictaminar/form";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";

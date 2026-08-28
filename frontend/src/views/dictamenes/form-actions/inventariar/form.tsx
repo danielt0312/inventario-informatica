@@ -302,10 +302,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                     )}
                 </form.AppField>
 
-                <form.SubmitFormButton onClick={() => {
-                    console.log('formsubmit', form.state.errorMap);
-
-                }} />
+                <form.SubmitFormButton />
             </form.AppForm>
         </Form >
     );

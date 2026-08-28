@@ -1,7 +1,7 @@
 import Goback from "@/components/Goback"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTitle, SidebarSteps } from "../form-actions/partials/form-steps";
-import { Form } from "./form";
+import { CreateDictamenForm } from "./form";
 
 export function View() {
     return (
@@ -14,7 +14,7 @@ export function View() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Form />
+                    <CreateDictamenForm />
                 </CardContent>
             </SidebarSteps>
         </>

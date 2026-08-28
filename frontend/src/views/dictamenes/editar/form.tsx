@@ -6,7 +6,7 @@ import { Form } from "@/components/ui/form";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { CantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField, FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
 import { Button } from "@/components/ui/button";
-import { CircleArrowRightIcon, PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
+import { CircleArrowRightIcon, CircleXIcon, PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProductoTipoField } from "@/components/features/productos/tipos/form-fields";
 import { DictamenAdquisicion } from "@/lib/utils";
@@ -18,8 +18,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { FieldValue } from "@/components/ui/field-value";
 import { ShowBienesInformaticosTitle } from "../partials/show-info";
-import type { DetailedPorSurtirDictamen, PorSurtirDictamen } from "@/types/dictamenes";
+import type { PorSurtirDictamen } from "@/types/dictamenes";
 import React from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 function useEditFormMutation(dictamen: PorSurtirDictamen) {
     const navigate = useNavigate();
@@ -34,25 +35,21 @@ function useEditFormMutation(dictamen: PorSurtirDictamen) {
     });
 }
 
-function useForm(dictamen: DetailedPorSurtirDictamen) {
-    const { mutate } = useEditFormMutation(dictamen);
+export const DictamenEditarForm = () => {
+    const { dictamen } = EditarRoute.useRouteContext();
 
-    return useAppForm({
+    const { mutate, status } = useEditFormMutation(dictamen);
+
+    const form = useAppForm({
         defaultValues: defaultValues(dictamen),
         validators: {
             onSubmit: validator
         },
-        onSubmit: ({ value, formApi }) => {
+        onSubmit: async ({ value, formApi }) => {
             const data = validator.parse(value);
-            mutate({ data, formApi });
+            await mutate({ data, formApi });
         }
     });
-}
-
-export const DictamenEditarForm = () => {
-    const { dictamen } = EditarRoute.useRouteContext();
-
-    const form = useForm(dictamen);
     const [showAlertDialog, setShowAlertDialog] = React.useState(false);
 
     return (
@@ -178,17 +175,18 @@ export const DictamenEditarForm = () => {
                     children={() => <DictamenMotivoCambioField required />}
                 />
 
-                <form.SubmitFormButton
-                    label="Guardar edición"
-                    icon={<SquarePenIcon />}
-                    type="button"
+
+                <Button
                     onClick={async () => {
                         form.validateSync('submit');
                         await form.validateAsync('submit');
                         if (!form.state.isValid) return;
                         setShowAlertDialog(true);
                     }}
-                />
+                    className="self-center max-w-min"
+                >
+                    <SquarePenIcon /> Guardar edición
+                </Button>
 
                 <AlertDialog onOpenChange={setShowAlertDialog} open={showAlertDialog}>
                     <AlertDialogContent>
@@ -197,18 +195,27 @@ export const DictamenEditarForm = () => {
                                 ¿Estás seguro de continuar?
                             </AlertDialogTitle>
                             <AlertDialogDescription>
-                                Al continuar, el número de dictamen será actualizado y el documento será regenerado con los cambios solicitados.
+                                Al continuar, el número de dictamen será actualizado y el documento será regenerado con los cambios realizados.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => form.handleSubmit()}>
-                                Continuar <CircleArrowRightIcon />
+                            <AlertDialogAction onClick={() => form.handleSubmit()} disabled={status === 'pending'}>
+                                {status === 'pending' ? (
+                                    <>
+                                        Actualizando <Spinner />
+                                    </>) : (
+                                    <>
+                                        Continuar <CircleArrowRightIcon />
+                                    </>
+                                )}
                             </AlertDialogAction>
+                            <AlertDialogCancel autoFocus>
+                                <CircleXIcon /> Cancelar
+                            </AlertDialogCancel>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
             </form.AppForm>
-        </Form >
+        </Form>
     );
 }

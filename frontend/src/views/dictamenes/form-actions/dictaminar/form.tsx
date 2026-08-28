@@ -6,11 +6,10 @@ import { Label } from "@/components/ui/label";
 import { ProductoField } from "@/components/features/productos/form-fields";
 import { Form as PrimitiveForm } from "@/components/ui/form";
 import { DictamenEspecificacionesTecnicasField } from "../../partials/form-fields";
-import { adquisicionHasArticulo } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
 
-export const useForm = (dictamen: DetailedDictaminarDictamen) => {
+const useForm = (dictamen: DetailedDictaminarDictamen) => {
     const { mutate } = useActionFormMutation(dictamen);
 
     return useAppForm({
@@ -25,7 +24,7 @@ export const useForm = (dictamen: DetailedDictaminarDictamen) => {
     });
 }
 
-export function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
+function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
     const form = useForm(dictamen);
 
     return (
@@ -54,7 +53,7 @@ export function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
                                     </div>
                                     <div data-slot="label-container" className="min-w-1/6">
                                         <Label className="font-bold">Número de Inventario</Label>
-                                        <Label>{adquisicionHasArticulo(adquisicion) ? adquisicion.articulo.numero_inventario : 'N/A'}</Label>
+                                        <Label>{adquisicion.articulo?.numero_inventario ?? 'N/A'}</Label>
                                     </div>
                                 </div>
 
@@ -77,3 +76,5 @@ export function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
         </PrimitiveForm>
     );
 }
+
+export { Form as DictaminarDictamenForm }

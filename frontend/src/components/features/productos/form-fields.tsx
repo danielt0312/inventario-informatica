@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { AppForm, useForm, useCreateFormMutation } from "./create/form";
+import { useCreateProductoForm, useCreateProductoFormMutation } from "./create/form";
 import { ProductoTipoField, type ProductoTipoFieldType } from "./tipos/form-fields";
 import { useFieldContext, withFieldGroup } from "@/components/ui/form-context";
 import { useStore } from "@tanstack/react-form";
@@ -15,6 +15,9 @@ import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { CreatableComboboxFieldGrouped } from "@/components/ui/creatable-combobox-field-grouped";
 import { toComboboxGroups } from "@/components/ui/combobox-layout.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
+import { ProductoMarcaField } from "./marcas/form-fields";
+import { ProductoNombreField } from "./create/form-fields";
+import { Form } from "@/components/ui/form";
 
 export type ProductoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 export function ProductoField({
@@ -59,7 +62,7 @@ export function ProductoField({
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
-    const useDialogFormMutation = () => useCreateFormMutation({
+    const useDialogFormMutation = () => useCreateProductoFormMutation({
         onSuccess: (data, _, __, { client }) => {
             setDialogIsOpen(false)
             client.invalidateQueries({ queryKey: ['productos'] });
@@ -67,8 +70,8 @@ export function ProductoField({
         }
     });
 
-    const dialogForm = useForm(useDialogFormMutation);
-    dialogForm.setFieldValue('tipo_id', tipo);
+    const form = useCreateProductoForm(useDialogFormMutation);
+    form.setFieldValue('tipo_id', tipo);
 
     return (
         <>
@@ -79,7 +82,7 @@ export function ProductoField({
                     ...layout
                 }}
                 onCreate={(searchValue) => {
-                    dialogForm.setFieldValue('nombre', searchValue);
+                    form.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
                     field.handleChange(undefined);
                 }}
@@ -96,15 +99,19 @@ export function ProductoField({
                         </DialogDescription>
                     </DialogHeader>
 
-                    <AppForm form={dialogForm} className="contents" showTipoField={false}>
+                    <Form form={form} className="contents">
+                        <form.AppField name="tipo_id" children={() => <ProductoTipoField disabled />} />
+                        <form.AppField name="marca_id" children={() => <ProductoMarcaField />} />
+                        <form.AppField name="nombre" children={() => <ProductoNombreField />} />
+
                         <DialogFooter>
-                            <dialogForm.SubmitFormButton />
+                            <form.SubmitFormButton />
 
                             <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar
                             </Button>
                         </DialogFooter>
-                    </AppForm>
+                    </Form>
                 </DialogContent>
             </Dialog>
         </>

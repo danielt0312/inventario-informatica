@@ -6,7 +6,6 @@ import {
     requiredString,
     nullableString
 } from "@/lib/schemas/common";
-import { DictamenAdquisicion } from "@/lib/utils";
 import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
 import type { NullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
@@ -21,7 +20,7 @@ type AdquisicionFields = {
     empleado_id: EmpleadoFieldType;
 }
 
-export const productoFieldsDefaultValues: AdquisicionFields = {
+const adquisicionFieldsDefaultValues: AdquisicionFields = {
     numero_inventario: null,
     producto_tipo_id: undefined,
     cantidad: 1,
@@ -36,49 +35,27 @@ export type Schema = {
     adquisiciones: AdquisicionFields[];
 }
 
-export const dictamenDefaultValues: Schema = {
+const defaultValues: Schema = {
     folio: undefined,
     fecha_solicitud: undefined,
     adscripcion_id: undefined,
     archivo_uuid: undefined,
-    adquisiciones: [productoFieldsDefaultValues]
+    adquisiciones: [adquisicionFieldsDefaultValues]
 } as const;
 
-const adquisicionValidator = z
-    .object({
-        cantidad: positiveInteger,
-        empleado_id: selectedNumberOption,
-        producto_tipo_id: selectedNumberOption,
-        numero_inventario: nullableString
-    });
-
-export const validator = z.object({
+const validator = z.object({
     folio: requiredString,
     fecha_solicitud: requiredIsoDateLTEToday,
     adscripcion_id: selectedNumberOption,
     archivo_uuid: requiredString,
-    adquisiciones: requiredArray(adquisicionValidator
-        .superRefine(({ producto_tipo_id, numero_inventario }, ctx) => {
-            if (DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(producto_tipo_id)) {
-                if (numero_inventario === null || numero_inventario.length === 0) {
-                    ctx.addIssue({
-                        code: 'custom',
-                        message: 'Este campo es requerido',
-                        path: ['numero_inventario']
-                    });
-                } else if (numero_inventario.length != 11) {
-                    ctx.addIssue({
-                        code: 'custom',
-                        message: 'El número de inventario debe de contener 11 caracteres',
-                        path: ['numero_inventario']
-                    });
-                }
-            }
-        }, {
-            when: ({ value }) =>
-                adquisicionValidator.pick({ numero_inventario: true, producto_tipo_id: true })
-                    .safeParse(value)
-                    .success
+    adquisiciones: requiredArray(z
+        .object({
+            cantidad: positiveInteger,
+            empleado_id: selectedNumberOption,
+            producto_tipo_id: selectedNumberOption,
+            numero_inventario: nullableString
         })
     )
 });
+
+export { adquisicionFieldsDefaultValues as createDictamenFormAdquisicionFieldsDefaultValues, defaultValues as createDictamenFormDefaultValues, validator as createDictamenFormValidator }
