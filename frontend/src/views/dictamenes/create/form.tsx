@@ -13,7 +13,7 @@ import { AdscripcionField } from "@/components/features/externos/adscripciones/f
 import { EmpleadoField } from "@/components/features/externos/empleados/form-fields";
 import { Form as PrimitiveForm } from "@/components/ui/form";
 import { ProductoTipoField } from "@/components/features/productos/tipos/form-fields";
-import { NullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
+import { ArticuloNullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { DictamenAdquisicion } from "@/lib/utils";
 import { ShowBienesInformaticosTitle } from "../partials/show-info";
 
@@ -103,7 +103,7 @@ function Form() {
                                                 {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
                                                     <form.AppField
                                                         name={`adquisiciones[${index}].numero_inventario`}
-                                                        children={() => <NullableNumeroInventarioField />}
+                                                        children={() => <ArticuloNullableNumeroInventarioField />}
                                                     />
                                                 )}
                                             </form.Subscribe>

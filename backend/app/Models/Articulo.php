@@ -27,7 +27,7 @@ class Articulo extends Model
         'qr_archivo_id',
         'cuenta_contable',
         'dictamen_id',
-        'es_contable',
+        'es_inventariable',
         'es_resultado_esperado',
         'observaciones',
     ];
@@ -96,7 +96,7 @@ class Articulo extends Model
 
     public function casts(): array {
         return [
-            'es_contable' => 'boolean',
+            'es_inventariable' => 'boolean',
             'es_resultado_esperado' => 'boolean',
         ];
     }

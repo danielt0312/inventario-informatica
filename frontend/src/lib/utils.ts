@@ -18,7 +18,7 @@ import {
 } from "date-fns"
 import { isAxiosError } from "axios";
 import { root } from "./axios";
-import { dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap } from "./constants";
+import { ArticuloCuentaContableInventariableRegex, ArticuloCuentaContableNoInventariable, dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap } from "./constants";
 import type { DatePickerFieldType } from "@/components/ui/date-picker-field";
 
 export function cn(...inputs: ClassValue[]) {
@@ -217,3 +217,12 @@ export function formatFileSize(bytes: number): string {
 }
 
 export const isStringNumber = (value: string) => value.trim() !== '' && !isNaN(Number(value)) && !/[.,]$/.test(value);
+
+export const esCuentaContableInventariable = (value: string) =>
+    ArticuloCuentaContableInventariableRegex.test(value);
+
+export const esCuentaContableNoInventariable = (value: string) =>
+    value === ArticuloCuentaContableNoInventariable;
+
+export const esCuentaContable = (value:string) =>
+    esCuentaContableNoInventariable(value) || esCuentaContableInventariable(value);

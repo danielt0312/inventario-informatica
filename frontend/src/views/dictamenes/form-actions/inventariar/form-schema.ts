@@ -1,19 +1,20 @@
 import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
-import { recepcionFieldGroupDefaultValues, RecepcionFieldGroup } from "@/components/features/articulos/recepciones/form-fields";
-import type { CostoUnitarioFieldType, CuentaContableType, EsContableFieldType, NumeroSerieFieldType } from "@/components/features/articulos/form-fields";
+import type { ArticuloCostoUnitarioFieldType, ArticuloCuentaContableType, ArticuloNumeroSerieFieldType, EsResultadoEsperadoFieldType, ObservacionesFieldType } from "@/components/features/articulos/form-fields";
 import type { FacturaFieldType } from "@/components/features/facturas/form-fields";
 import type { ProductoFieldType } from "@/components/features/productos/form-fields";
 import type { OrdenCompraFieldType } from "@/components/features/orden_compras/form-fields";
+import { esCuentaContable } from "@/lib/utils";
 import z from "zod";
 
-type AdquisicionFields = RecepcionFieldGroup & {
+type AdquisicionFields = {
+    es_resultado_esperado: EsResultadoEsperadoFieldType;
+    observaciones: ObservacionesFieldType;
     id: number | undefined;
-    cuenta_contable: CuentaContableType;
+    cuenta_contable: ArticuloCuentaContableType;
     factura_id: FacturaFieldType;
     producto_id: ProductoFieldType;
-    costo_unitario: CostoUnitarioFieldType;
-    es_contable: EsContableFieldType;
-    numero_serie: NumeroSerieFieldType;
+    costo_unitario: ArticuloCostoUnitarioFieldType;
+    numero_serie: ArticuloNumeroSerieFieldType;
 }
 
 type Schema = {
@@ -22,8 +23,8 @@ type Schema = {
 }
 
 export const adquisicionFieldsDefaultValues: AdquisicionFields = {
-    ...recepcionFieldGroupDefaultValues,
-    es_contable: undefined,
+    es_resultado_esperado: undefined,
+    observaciones: null,
     factura_id: undefined,
     cuenta_contable: undefined,
     numero_serie: undefined,
@@ -42,9 +43,17 @@ const adquisicionValidator = z
         id: selectedNumberOption,
         producto_id: selectedNumberOption,
         factura_id: selectedNumberOption,
-        cuenta_contable: requiredString,
+        cuenta_contable: requiredString
+            .refine(
+                v => esCuentaContable(v),
+                {
+                    error: "Debes de ingresar una cuenta contable válida",
+                    when: ({ value }) => requiredString
+                        .safeParse(value)
+                        .success
+                }
+            ),
         numero_serie: requiredString,
-        es_contable: selectedBooleanOption,
         costo_unitario: nullableNumber,
         es_resultado_esperado: selectedBooleanOption,
         observaciones: nullableString,
@@ -67,14 +76,14 @@ export const validator = z.object({
             }
         )
         .refine(
-            ({ es_contable, costo_unitario }) => !(
-                es_contable === true && (costo_unitario === null || isNaN(costo_unitario))
+            ({ cuenta_contable, costo_unitario }) => !(
+                esCuentaContable(cuenta_contable) && (costo_unitario === null || isNaN(costo_unitario))
             ),
             {
                 error: 'Este campo es requerido',
                 path: ['costo_unitario'],
                 when: ({ value }) =>
-                    adquisicionValidator.pick({ es_contable: true, costo_unitario: true })
+                    adquisicionValidator.pick({ cuenta_contable: true, costo_unitario: true })
                         .safeParse(value)
                         .success
             }

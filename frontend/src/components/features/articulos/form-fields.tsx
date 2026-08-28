@@ -1,16 +1,46 @@
 import { InputField, NullableInputField, NullableNumberInputField, type InputFieldType, type NullableInputFieldType, type NullableNumberInputFieldType } from "@/components/ui/input-field";
-import { BooleanField, type BooleanFieldType } from "@/components/ui/boolean-field";
-import { FieldLayout, type FieldLayoutProps } from "@/components/ui/field-layout";
-import { Field } from "@/components/ui/field";
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
-import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useFieldContext } from "@/components/ui/form-context";
 import { ScannerButton } from "@/components/ui/scanner-button";
-import { isStringNumber } from "@/lib/utils";
+import { FieldLayout } from "@/components/ui/field-layout";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { BarcodeIcon, DollarSignIcon, LandmarkIcon } from "lucide-react";
+import { NullableTextareaField, type NullableTextareaFieldType } from "@/components/ui/textarea-field";
+import { BooleanField, type BooleanFieldType } from "@/components/ui/boolean-field";
 import React from "react";
 
-export type CostoUnitarioFieldType = NullableNumberInputFieldType;
-export const CostoUnitarioField = ({
+export type ObservacionesFieldType = NullableTextareaFieldType;
+export const ObservacionesField = ({
+    fieldLayout,
+    ...props
+}: React.ComponentProps<typeof NullableTextareaField>) => (
+    <NullableTextareaField
+        fieldLayout={{
+            label: "Observaciones/Aclaraciones",
+            ...fieldLayout
+        }}
+        placeholder="Ingresa cualquier observación, aclaración, o nota importante a mencionar"
+        {...props}
+    />
+);
+
+export type EsResultadoEsperadoFieldType = BooleanFieldType;
+export const EsResultadoEsperadoField = ({
+    fieldLayout,
+    ...props
+}: React.ComponentProps<typeof BooleanField>) => (
+    <BooleanField
+        fieldLayout={{
+            label: "¿Cumplió con las características solicitadas?",
+            ...fieldLayout
+        }}
+        {...props}
+    />
+);
+
+
+export type ArticuloCostoUnitarioFieldType = NullableNumberInputFieldType;
+export const ArticuloCostoUnitarioField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof NullableNumberInputField>) => (
@@ -21,11 +51,15 @@ export const CostoUnitarioField = ({
         }}
         placeholder={"Ingresa el costo unitario"}
         {...props}
-    />
+    >
+        <InputGroupAddon>
+            <DollarSignIcon />
+        </InputGroupAddon>
+    </NullableNumberInputField>
 );
 
-export type NumeroInventarioFieldType = InputFieldType;
-export const NumeroInventarioField = ({
+export type ArticuloNumeroInventarioFieldType = InputFieldType;
+export const ArticuloNumeroInventarioField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof InputField>) => (
@@ -39,8 +73,8 @@ export const NumeroInventarioField = ({
     />
 );
 
-export type NullableNumeroInventarioFieldType = NullableInputFieldType;
-export const NullableNumeroInventarioField = ({
+export type ArticuloNullableNumeroInventarioFieldType = NullableInputFieldType;
+export const ArticuloNullableNumeroInventarioField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof NullableInputField>) => (
@@ -54,21 +88,8 @@ export const NullableNumeroInventarioField = ({
     />
 );
 
-export type EsContableFieldType = BooleanFieldType;
-export const EsContableField = ({
-    fieldLayout,
-    ...props
-}: React.ComponentProps<typeof BooleanField>) => (
-    <BooleanField
-        fieldLayout={{
-            label: "¿Es contable?"
-        }}
-        {...props}
-    />
-);
-
-export type NumeroSerieFieldType = InputFieldType;
-export const NumeroSerieField = ({
+export type ArticuloNumeroSerieFieldType = InputFieldType;
+export const ArticuloNumeroSerieField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof NullableInputField>) => (
@@ -79,94 +100,69 @@ export const NumeroSerieField = ({
         }}
         placeholder="Ingresa el número de serie"
         {...props}
-    />
+    >
+        <InputGroupAddon>
+            <BarcodeIcon />
+        </InputGroupAddon>
+    </NullableInputField>
 );
 
-const formatCuentaContable = (value: string) =>
-    value.length === 9
-        ? `${value.slice(0, 4)}-${value.charAt(4)}-${value.slice(5, 9)}`
-        : undefined;
-
-export type CuentaContableType = InputFieldType;
-export const CuentaContable = ({
+export type ArticuloCuentaContableType = InputFieldType;
+export const ArticuloCuentaContable = ({
     className,
     fieldLayout,
     required,
     disabled,
-    pattern = REGEXP_ONLY_DIGITS,
-    withScannerButton = true,
+    placeholder = "Ingresa o escanea la cuenta contable",
+    timeout = 3500,
     ...props
-}: Omit<FieldLayoutProps, 'errors'> & Omit<React.ComponentProps<typeof InputOTP>, 'render' | 'maxLength'> & {
-    withScannerButton?: boolean;
+}: React.ComponentProps<typeof InputField> & {
+    timeout?: number;
 }) => {
-    const field = useFieldContext<CuentaContableType>();
-    const [inputValue, setInputValue] = React.useState<string | undefined>();
+    const field = useFieldContext<ArticuloCuentaContableType>();
 
     return (
-        <FieldLayout
-            className={className}
-            fieldLayout={{
-                label: "Cuenta contable",
-                required,
-                disabled,
-                errors: field.state.meta.errors,
-                ...fieldLayout
-            }}
-        >
-            <Field orientation="horizontal">
-                <InputOTP
-                    value={inputValue}
-                    maxLength={9}
-                    pattern={pattern}
-                    onChange={(value) => {
-                        setInputValue(value);
-                        const format = formatCuentaContable(value);
-                        if (format !== undefined) {
-                            field.handleChange(format);
-                        } else if (field.state.value !== undefined) {
-                            field.handleChange(undefined);
-                        }
-                    }}
-                    disabled={disabled}
-                    // required={required}
-                    {...props}
-                >
-                    <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                        <InputOTPSlot index={3} />
-                    </InputOTPGroup>
-                    <InputOTPSeparator />
-                    <InputOTPGroup>
-                        <InputOTPSlot index={4} />
-                    </InputOTPGroup>
-                    <InputOTPSeparator />
-                    <InputOTPGroup>
-                        <InputOTPSlot index={5} />
-                        <InputOTPSlot index={6} />
-                        <InputOTPSlot index={7} />
-                        <InputOTPSlot index={8} />
-                    </InputOTPGroup>
-                </InputOTP>
-                {withScannerButton && (
+        <>
+            <FieldLayout
+                className={className}
+                fieldLayout={{
+                    required,
+                    disabled,
+                    label: "Cuenta contable",
+                    errors: field.state.meta.errors,
+                    ...fieldLayout
+                }}
+            >
+                <ButtonGroup>
+                    <InputGroup>
+                        <InputGroupInput
+                            name={field.name}
+                            value={field.state.value ?? ''}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                field.handleChange(value.trim() === ''
+                                    ? undefined
+                                    : value.trim());
+                            }}
+                            placeholder={placeholder}
+                            {...props}
+                        >
+                        </InputGroupInput>
+                        <InputGroupAddon>
+                            <LandmarkIcon />
+                        </InputGroupAddon>
+                    </InputGroup>
+
                     <ScannerButton
-                        timeout={5000}
                         onScannedCode={(code) => {
-                            const trimmedCode = code.trim();
-                            const value = trimmedCode.slice(0, 4) + trimmedCode.slice(5, 6) + trimmedCode.slice(7, 11)
-                            if (trimmedCode === '' || trimmedCode.length !== 11 || !isStringNumber(value)) {
-                                field.setErrorMap({
-                                    onSubmit: 'El código escaneado es inválido'
-                                });
-                                return;
-                            }
-                            setInputValue(value);
-                            field.handleChange(trimmedCode);
+                            const value = code.trim();
+                            field.handleChange(value.trim() === ''
+                                ? undefined
+                                : value)
                         }}
                     />
-                )}
-            </Field>
-        </FieldLayout>
+                </ButtonGroup>
+            </FieldLayout>
+        </>
     );
 }

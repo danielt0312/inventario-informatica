@@ -149,3 +149,6 @@ export const dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario: Pro
     ProductoTipoEnum.TECLADO,
     ProductoTipoEnum.MOUSE,
 ] as const;
+
+export const ArticuloCuentaContableInventariableRegex = /^\d{4}-\d{1}-\d{4}$/;
+export const ArticuloCuentaContableNoInventariable = '2000';

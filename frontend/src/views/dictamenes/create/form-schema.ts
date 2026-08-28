@@ -7,7 +7,7 @@ import {
     nullableString
 } from "@/lib/schemas/common";
 import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
-import type { NullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
+import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
 import type { AdscripcionFieldType } from "@/components/features/externos/adscripciones/form-fields";
 import type { CantidadFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
@@ -15,7 +15,7 @@ import z from "zod";
 
 type AdquisicionFields = {
     producto_tipo_id: ProductoTipoFieldType;
-    numero_inventario: NullableNumeroInventarioFieldType;
+    numero_inventario: ArticuloNullableNumeroInventarioFieldType;
     cantidad: CantidadFieldType;
     empleado_id: EmpleadoFieldType;
 }

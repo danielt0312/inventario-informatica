@@ -17,7 +17,6 @@ function useScannerInput({
     const start = React.useCallback(() => {
         onWaiting?.(true);
 
-        // focus on next tick so the element is definitely mounted/visible
         requestAnimationFrame(() => inputRef.current?.focus());
 
         timeoutRef.current = setTimeout(() => {
@@ -26,11 +25,11 @@ function useScannerInput({
         }, timeout);
     }, [onScan, timeout]);
 
-    // const stop = React.useCallback(() => {
-    //     onWaiting?.(false);
-    //     clearTimeout(timeoutRef.current);
-    //     if (inputRef.current) inputRef.current.value = "";
-    // }, []);
+    const stop = React.useCallback(() => {
+        onWaiting?.(false);
+        clearTimeout(timeoutRef.current);
+        if (inputRef.current) inputRef.current.value = "";
+    }, []);
 
     function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === "Enter") {
@@ -43,7 +42,7 @@ function useScannerInput({
         }
     }
 
-    return { inputRef, start, handleKeyDown };
+    return { inputRef, start, handleKeyDown, stop };
 }
 
 export {

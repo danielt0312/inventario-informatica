@@ -44,8 +44,6 @@ function ScannerButton({
     }, [setStatus, onStatusChange]);
 
     const handleScan = React.useCallback((code: string) => {
-        console.log(code);
-
         if (!code) {
             handleStatusChange("timeout");
             return;
@@ -61,25 +59,23 @@ function ScannerButton({
     });
 
     return (
-        <>
-            <Button
-                onClick={(e) => {
-                    start();
-                    onClick?.(e);
-                }}
-                disabled={status === 'waiting'}
-                variant="outline"
-                {...props}
-            >
-                {children(status)}
-            </Button>
-
+        <Button
+            onClick={(e) => {
+                start();
+                onClick?.(e);
+            }}
+            disabled={status === 'waiting'}
+            variant="outline"
+            {...props}
+        >
+            {children(status)}
             <input
                 ref={inputRef}
                 onKeyDown={handleKeyDown}
                 className="absolute opacity-0 pointer-events-none"
+                tabIndex={-1}
             />
-        </>
+        </Button>
     );
 }
 

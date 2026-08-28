@@ -10,7 +10,7 @@ import { CircleArrowRightIcon, CircleXIcon, PlusCircleIcon, SquarePenIcon, Trash
 import { Card, CardContent } from "@/components/ui/card";
 import { ProductoTipoField } from "@/components/features/productos/tipos/form-fields";
 import { DictamenAdquisicion } from "@/lib/utils";
-import { NullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
+import { ArticuloNullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { EmpleadoField } from "@/components/features/externos/empleados/form-fields";
 import { adquisicionFieldsDefaultValues, defaultValues, validator } from "./form-schema";
 import { ProductoField } from "@/components/features/productos/form-fields";
@@ -145,7 +145,7 @@ export const DictamenEditarForm = () => {
                                                         {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
                                                             <form.AppField
                                                                 name={`adquisiciones[${index}].numero_inventario`}
-                                                                children={() => <NullableNumeroInventarioField />}
+                                                                children={() => <ArticuloNullableNumeroInventarioField />}
                                                             />
                                                         )}
                                                     </form.Subscribe>

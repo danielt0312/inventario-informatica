@@ -5,26 +5,26 @@ import React from "react";
 
 export function AdquisicionIdField({
     items,
-    allItems,
+    availableItems,
     layout,
     ...props
 }: React.ComponentProps<typeof ComboboxFieldSimple<ComboboxLayoutItem, false>> & {
-    allItems: ComboboxLayoutItem[];
+    availableItems: ComboboxLayoutItem[];
 }) {
     const field = useComboboxFieldContext();
     const derivedValue = useComboboxFieldValue(
-        allItems,
+        items,
         field.state.value,
         false,
         undefined
     );
 
     const availableOptions = React.useMemo(() => {
-        if (!derivedValue) return items;
-        return items.some(o => o.value === field.state.value)
-            ? items
-            : [...items, derivedValue];
-    }, [items, field.state.value]);
+        if (!derivedValue) return availableItems;
+        return availableItems.some(o => o.value === field.state.value)
+            ? availableItems
+            : [...availableItems, derivedValue];
+    }, [availableItems, field.state.value]);
 
     return (
         <ComboboxFieldSimple
@@ -33,6 +33,7 @@ export function AdquisicionIdField({
                 ...layout
             }}
             items={availableOptions}
+            required
             {...props}
         />
     );

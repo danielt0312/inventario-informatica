@@ -12,7 +12,13 @@ use App\Models\{
     DictamenAdquisicion,
     Producto
 };
-use App\Http\Requests\Dictamen\Traits\{InteractsWithDictamen, InteractsWithArticulos};
+
+use App\Http\Requests\Dictamen\Traits\{
+    InteractsWithDictamen,
+    InteractsWithArticulos
+};
+
+use App\Rules\CuentaContableFormat;
 
 class InventariarDictamenRequest extends FormRequest
 {
@@ -97,8 +103,7 @@ class InventariarDictamenRequest extends FormRequest
             ],
             'adquisiciones.*.cuenta_contable' => [
                 'required',
-                'string',
-                'size:11',
+                new CuentaContableFormat,
                 'distinct',
                 'unique:articulos,cuenta_contable'
             ],
@@ -109,13 +114,9 @@ class InventariarDictamenRequest extends FormRequest
                 'distinct',
                 'unique:articulos,numero_serie'
             ],
-            'adquisiciones.*.es_contable' => [
-                'required',
-                'boolean',
-            ],
             'adquisiciones.*.costo_unitario' => [
-                'exclude_unless:adquisiciones.*.es_contable,true',
-                'required',
+                'nullable',
+                'required_if:adquisiciones.*.es_contable,true',
                 'numeric',
             ],
             'adquisiciones.*.factura_id' => [

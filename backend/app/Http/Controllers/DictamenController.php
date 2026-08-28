@@ -28,7 +28,10 @@ use App\Enums\{
     ArticuloEstadoEnum
 };
 
-use App\Services\PdfWatermarkService;
+use App\Services\{
+    ArticuloService,
+    PdfWatermarkService,
+};
 
 class DictamenController extends ArchivableController
 {
@@ -255,6 +258,7 @@ class DictamenController extends ArchivableController
                     ->articulos()
                     ->create([
                         ...$payloadAdquisicion,
+                        'es_inventariable' => !ArticuloService::esCuentaContableNoInventariable($payloadAdquisicion['cuenta_contable']),
                         'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
                         'dictamen_id' => $dictamen->id,
                         'producto_id' => $producto->id

@@ -18,14 +18,14 @@ class ArticuloSeeder extends Seeder
         Articulo::create([
             'producto_id' => 1,
             'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-            'es_contable' => true,
+            'es_inventariable' => true,
             'numero_inventario' => NumeroInventarioService::generate(500,1),
         ]);
 
         Articulo::create([
             'producto_id' => 1,
             'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-            'es_contable' => true,
+            'es_inventariable' => true,
             'numero_inventario' => NumeroInventarioService::generate(500,2),
         ]);
     }

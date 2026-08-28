@@ -15,7 +15,7 @@ type Attributes<TEstado extends BaseEstado = BaseEstado, TProducto extends Detai
 
 type StrictAttributes = {
     cuenta_contable: string;
-    es_contable: boolean;
+    es_inventariable: boolean;
     costo_unitario: number;
     numero_serie: string;
 }

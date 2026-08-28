@@ -1,5 +1,5 @@
 import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
-import type { NullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
+import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { NumberInputFieldType } from "@/components/ui/input-field";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
 import type { DictamenEspecificacionesTecnicasFieldType, DictamenMotivoCambioFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
@@ -11,7 +11,7 @@ import type { DetailedPorSurtirDictamen } from "@/types/dictamenes";
 
 type AdquisicionFields = {
     producto_tipo_id: ProductoTipoFieldType;
-    numero_inventario: NullableNumeroInventarioFieldType;
+    numero_inventario: ArticuloNullableNumeroInventarioFieldType;
     cantidad: NumberInputFieldType;
     empleado_id: EmpleadoFieldType;
     especificaciones_tecnicas: DictamenEspecificacionesTecnicasFieldType;

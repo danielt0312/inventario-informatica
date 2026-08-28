@@ -45,7 +45,7 @@ return new class extends Migration
             $table->string('cuenta_contable', 11)
                 ->nullable()
                 ->unique('uk_articulos_cuenta_contable', 11);
-            $table->boolean('es_contable');
+            $table->boolean('es_inventariable');
             $table->unsignedBigInteger('dictamen_id')
                 ->nullable();
             $table->boolean('es_resultado_esperado')
