@@ -114,6 +114,7 @@ function Form() {
                                             children={() => (
                                                 <EmpleadoField
                                                     adscripcionId={adscripcion}
+                                                    disabled={adscripcion === undefined}
                                                     required
                                                 />
                                             )}

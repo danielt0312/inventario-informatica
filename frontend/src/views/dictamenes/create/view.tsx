@@ -1,4 +1,4 @@
-import Goback from "@/components/Goback"
+import GoBackButton from "@/components/Goback"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTitle, SidebarSteps } from "../form-actions/partials/form-steps";
 import { CreateDictamenForm } from "./form";
@@ -6,7 +6,7 @@ import { CreateDictamenForm } from "./form";
 export function View() {
     return (
         <>
-            <Goback />
+            <GoBackButton />
             <SidebarSteps>
                 <CardHeader>
                     <CardTitle>

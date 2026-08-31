@@ -21,6 +21,7 @@ use App\Http\Controllers\{
     FacturaController,
     OrdenCompraController,
     ProveedorController,
+    ResguardoController
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -54,6 +55,10 @@ Route::middleware('auth:sanctum')->group(function () {
         'facturas' => FacturaController::class,
         'proveedores' => ProveedorController::class,
     ], ['only' => ['index', 'store']]);
+
+    Route::apiResources([
+        'resguardos' => ResguardoController::class,
+    ], ['only' => ['index', 'store', 'update']]);
 
     Route::name('dictamenes.')
         ->prefix('dictamenes')

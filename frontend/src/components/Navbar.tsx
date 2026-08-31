@@ -3,6 +3,7 @@ import { Route as AuthRoute } from "@/routes/_auth";
 import { Route as InventarioRoute } from "@/routes/_auth/articulos";
 import { Route as DictamenRoute } from "@/routes/_auth/dictamenes";
 import { Route as DocumentosRoute } from "@/routes/_auth/documentos";
+import { Route as ResguardosRoute } from "@/routes/_auth/resguardos";
 import { Route as LoginRoute } from "@/routes/_guest/login";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
@@ -26,6 +27,7 @@ function Navbar() {
                     <div className="flex-1">
                         <Link to={InventarioRoute.to}><NavbarItem>Inventario</NavbarItem></Link>
                         <Link to={DictamenRoute.to}><NavbarItem>Dictámenes Tecnológicos</NavbarItem></Link>
+                        <Link to={ResguardosRoute.to}><NavbarItem>Resguardos</NavbarItem></Link>
                         <Link to={DocumentosRoute.to}><NavbarItem>Documentos</NavbarItem></Link>
                     </div>
                     <div>

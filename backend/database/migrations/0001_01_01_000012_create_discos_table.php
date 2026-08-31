@@ -55,8 +55,8 @@ return new class extends Migration
         });
 
         Schema::create('articulo_discos', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('articulo_id')
-                ->primary()
                 ->constrained('articulos', indexName: 'fk_articulo_discos_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
@@ -73,10 +73,14 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('disco_articulo_id')
-                ->constrained('articulo_discos', 'articulo_id', 'fk_articulo_computadora_discos_articulos_disco')
+                ->constrained('articulo_discos', indexName: 'fk_articulo_computadora_discos_articulos_disco')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('principal');
+            $table->boolean('es_principal');
+            $table->date('fecha_instalacion');
+            $table->date('fecha_desinstalacion')
+                ->nullable();
+            $table->timestamps();
         });
     }
 

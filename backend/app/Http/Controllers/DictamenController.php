@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf as DomPdf;
-use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
+use Spatie\QueryBuilder\{
+    AllowedFilter,
+    QueryBuilder
+};
 
 use App\Http\Requests\Dictamen\{
     StoreDictamenRequest,

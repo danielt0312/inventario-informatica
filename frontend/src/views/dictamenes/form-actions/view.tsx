@@ -1,4 +1,4 @@
-import Goback from "@/components/Goback"
+import GoBackButton from "@/components/Goback"
 import { CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Route } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { getTitle, SidebarSteps } from "./partials/form-steps";
@@ -11,7 +11,7 @@ export function View() {
 
     return (
         <>
-            <Goback />
+            <GoBackButton />
 
             <SidebarSteps step={dictamen.estado.id}>
                 <CardHeader>

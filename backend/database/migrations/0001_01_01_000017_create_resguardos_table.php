@@ -8,21 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('custodias', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('articulo_id')
-                ->constrained('articulos', indexName: 'fk_custodias_articulos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->date('fecha_asignacion');
-        });
-
         Schema::create('resguardos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained('users', indexName: 'fk_resguardos_users')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('empleado_id');
             $table->date('fecha_actualizacion');
             $table->date('fecha_cancelacion')
                 ->nullable();
@@ -30,30 +18,31 @@ return new class extends Migration
                 ->constrained('documentos', indexName: 'fk_resguardos_documentos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('activo');
+            $table->boolean('es_cancelado');
             $table->timestamps();
-            $table->softDeletes();
         });
 
-        Schema::create('resguardo_custodia', function (Blueprint $table) {
+        Schema::create('resguardo_articulos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('resguardo_id')
-                ->constrained('resguardos', indexName: 'fk_resguardo_custodia_resguardos')
+                ->constrained('resguardos', indexName: 'fk_resguardo_articulos_resguardos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('custodia_id')
-                ->constrained('custodias', indexName: 'fk_resguardo_custodia_custodias')
+            $table->foreignId('articulo_id')
+                ->constrained('articulos', indexName: 'fk_resguardo_articulos_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->date('fecha_asignacion');
+            $table->date('fecha_cancelacion')
+                ->nullable();
 
-            $table->unique(['resguardo_id', 'custodia_id'], 'uk_resguardo_custodia');
+            $table->unique(['resguardo_id', 'articulo_id'], 'uk_resguardo_articulos');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('resguardo_custodia');
+        Schema::dropIfExists('resguardo_articulos');
         Schema::dropIfExists('resguardos');
-        Schema::dropIfExists('custodias');
     }
 };

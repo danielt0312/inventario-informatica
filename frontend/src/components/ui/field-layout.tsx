@@ -46,34 +46,38 @@ interface FieldLayoutProps {
     fieldLayout?: CoreFieldLayoutProps;
 }
 
-const FieldLayout = ({
+const BaseFieldLayout = ({
+    label,
+    required,
+    description,
+    errors,
     children,
-    className,
+    ...props
+}: CoreFieldLayoutProps & FieldProps) => (
+    <Field {...props}>
+        {label && <Label required={required}>{label}</Label>}
+        {description && <Root.FieldDescription>{description}</Root.FieldDescription>}
+        {children}
+        {errors && <Root.FieldError errors={errors} />}
+    </Field>
+)
+
+const FieldLayout = ({
     fieldLayout = {},
+    ...props
 }: FieldLayoutProps) => {
-    const {
-        required,
-        label,
-        description,
-        errors,
-        ...fieldLayoutProps
-    } = fieldLayout;
 
     return (
-        <Field
-            className={className}
-            {...fieldLayoutProps}
-        >
-            {label && <Label required={required}>{label}</Label>}
-            {description && <Root.FieldDescription>{description}</Root.FieldDescription>}
-            {children}
-            {errors && <Root.FieldError errors={errors} />}
-        </Field>
+        <BaseFieldLayout
+            {...fieldLayout}
+            {...props}
+        />
     );
 }
 
 export {
     type CoreFieldLayoutProps,
     type FieldLayoutProps,
+    BaseFieldLayout,
     FieldLayout,
 }

@@ -3,43 +3,31 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\{
+    HasMany,
+};
+
+use App\Traits\Models\{
+    HasArchivable,
+    HasResourceResponse
+};
 
 class Resguardo extends Model
 {
-    use SoftDeletes, HasFactory;
-
-    protected $table = 'resguardos';
+    use HasArchivable, HasResourceResponse;
 
     protected $fillable = [
-        'user_id',
-        'fecha_solicitud',
+        'empleado_id',
+        'fecha_actualizacion',
         'fecha_cancelacion',
-        'documento_id',
     ];
 
     protected $attributes = [
-        'activo' => 1,
+        'fecha_cancelacion' => null
     ];
 
-    public function user(): BelongsTo {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function documento(): BelongsTo {
-        return $this->belongsTo(Documento::class, 'documento_id');
-    }
-
-    public function custodias(): BelongsToMany {
-        return $this->belongsToMany(Custodia::class, 'resguardo_custodia', 'resguardo_id', 'custodia_id');
-    }
-
-    public function casts(): array {
-        return [
-            'activo' => 'boolean',
-        ];
+    public function articulosResguardados(): HasMany
+    {
+        return $this->hasMany(ResguardoArticulo::class);
     }
 }

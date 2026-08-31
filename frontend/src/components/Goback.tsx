@@ -1,29 +1,33 @@
+import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
 import { ArrowLeftCircle } from "lucide-react";
 
 // ! This is experimental
-function Goback({ children, className, ...props }: React.ComponentProps<"div">) {
-    const router = useRouter()
-    const canGoBack = useCanGoBack()
+function GoBackButton({
+    className,
+    ...props
+}: React.ComponentProps<typeof Button>) {
+    const router = useRouter();
+    const canGoBack = useCanGoBack();
 
     const navigateToLocation = () => canGoBack
         ? router.history.back()
-        : '/'
+        : '/';
 
     return (
-        <div
-            className={cn("flex justify-between", className)}
+        <Button
+            onClick={navigateToLocation}
+            className={cn(
+                "max-w-fit",
+                className
+            )}
+            variant="outline"
             {...props}
         >
-            <Button variant={"outline"} onClick={navigateToLocation}>
-                <ArrowLeftCircle /> Regresar
-            </Button>
-
-            {children}
-        </div>
+            <ArrowLeftCircle /> Regresar
+        </Button>
     )
 }
 
-export default Goback
+export default GoBackButton
