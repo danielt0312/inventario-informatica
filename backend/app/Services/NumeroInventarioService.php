@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
-use App\Enums\NumeroInventarioEnum;
+use App\Enums\{
+    NumeroInventarioEnum,
+    ClasificadorEnum
+};
 
 class NumeroInventarioService
 {
@@ -18,9 +21,9 @@ class NumeroInventarioService
         return $case->matches($value);
     }
 
-    public static function generate(int $prefix, int $suffix, NumeroInventarioEnum $case = self::DEFAULT): string
+    public static function generate(ClasificadorEnum $clasificador, int $consecutivo, NumeroInventarioEnum $case = self::DEFAULT): string
     {
-        return $case->generate($prefix, $suffix);
+        return $case->generate($clasificador->value, $consecutivo);
     }
 
 }

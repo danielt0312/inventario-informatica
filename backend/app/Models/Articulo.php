@@ -11,7 +11,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-use App\Enums\ArticuloEstadoEnum;
+use App\Enums\{
+    ArticuloEstadoEnum,
+    ProductoTipoEnum
+};
 use App\Services\NumeroInventarioService;
 
 class Articulo extends Model
@@ -46,8 +49,11 @@ class Articulo extends Model
     {
         static::created(function (Articulo $articulo) {
             if (is_null($articulo->numero_inventario)) {
-                // todo obtener el sufijo según el tipo de producto
-                $articulo->numero_inventario = NumeroInventarioService::generate(500, $articulo->id);
+                $productoTipoEnum = ProductoTipoEnum::tryFrom($articulo->producto?->tipo_id ?? '');
+                if ($productoTipoEnum === null) {
+                    throw new \Exception("No se pudo generar el número de inventario");
+                }
+                $articulo->numero_inventario = NumeroInventarioService::generate($productoTipoEnum->clasificador(), $articulo->id);
                 $articulo->saveQuietly();
             }
         });

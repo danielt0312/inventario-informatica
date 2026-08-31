@@ -6,7 +6,10 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\Articulo;
-use App\Enums\ArticuloEstadoEnum;
+use App\Enums\{
+    ArticuloEstadoEnum,
+    ClasificadorEnum
+};
 use App\Services\NumeroInventarioService;
 
 class ArticuloSeeder extends Seeder
@@ -19,14 +22,14 @@ class ArticuloSeeder extends Seeder
             'producto_id' => 1,
             'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
             'es_inventariable' => true,
-            'numero_inventario' => NumeroInventarioService::generate(500,1),
+            'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION, 1),
         ]);
 
         Articulo::create([
             'producto_id' => 1,
             'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
             'es_inventariable' => true,
-            'numero_inventario' => NumeroInventarioService::generate(500,2),
+            'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION, 2),
         ]);
     }
 }

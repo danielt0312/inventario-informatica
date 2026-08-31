@@ -125,4 +125,20 @@ enum ProductoTipoEnum: int
             self::ESCANER => 'Escáner'
         };
     }
+
+    public function clasificador(): ClasificadorEnum
+    {
+        return match($this) {
+            self::CONSOLA,
+            self::MICROFONO,
+            self::PANTALLA_RETRACTIL,
+            self::PROYECTOR,
+            self::BOCINA => ClasificadorEnum::AUDIOVISUAL,
+            self::CAMARA_FOTOGRAFICA,
+            self::CAMARA_VIDEO => ClasificadorEnum::CAMARA_FOTOGRAFICA_VIDEO,
+            self::TELEFONO => ClasificadorEnum::COMUNICACION_TELECOMUNICACION,
+            self::UPS => ClasificadorEnum::ELECTRICO_GENERACION_ELECTRICA,
+            default => ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION,
+        };
+    }
 }
