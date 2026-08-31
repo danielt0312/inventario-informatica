@@ -4,11 +4,11 @@ import type { Includable } from "./generics";
 
 type IncludableArticulo = Includable<Articulo>;
 
-type ResguardoArticulo = {
+type ResguardoArticulo<TArticulo extends IncludableArticulo = IncludableArticulo> = {
     id: number;
     fecha_asignacion: string;
-    fecha_cancelacion: string;
-    articulo: IncludableArticulo;
+    fecha_cancelacion: string | null;
+    articulo: TArticulo;
 }
 
 type Resguardo = {

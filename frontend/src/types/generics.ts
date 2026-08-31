@@ -48,4 +48,4 @@ export type WithTimestamps<T extends object | never = never> = ([T] extends [nev
     updated_at: string;
 }
 
-export type TRowDataAccessFn<TRowData extends RowData, TData = unknown> = (row: TRowData) => TData;
+export type RowDataAccessorFn<TRowData extends RowData, TData = unknown> = (row: TRowData) => TData;

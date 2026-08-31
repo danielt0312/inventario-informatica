@@ -1,7 +1,7 @@
 import { CreateResguardoForm } from '@/components/features/resguardos/create/form';
-import GoBackButton from '@/components/Goback';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { createFileRoute } from '@tanstack/react-router'
+import GoBackButton from '@/components/Goback';
 
 export const Route = createFileRoute('/_auth/resguardos/crear')({
     component: RouteComponent,

@@ -13,7 +13,7 @@ function GoBackButton({
 
     const navigateToLocation = () => canGoBack
         ? router.history.back()
-        : '/';
+        : router.navigate({ to: '/' });
 
     return (
         <Button

@@ -1,13 +1,10 @@
-import type { ColumnDef } from "@tanstack/react-table"
+import type { ColumnDef, RowData } from "@tanstack/react-table"
 import type { Articulo, ArticuloEstado } from "@/types/articulos";
+import type { RowDataAccessorFn } from "@/types/generics";
 import { Badge } from "@/components/ui/badge";
 import { ArticuloEstadoEnum } from "@/lib/constants";
-import { cn, toLocaleDateFormat } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
-import { SettingsIcon } from "lucide-react";
-import { isArticuloEstadoRevision } from "@/components/features/articulos/utils";
-import { Route as RevisionRoute } from "@/routes/_auth/articulos/$uuid/verificar-y-configurar";
-import { RouterButton } from "@/components/ui/router-button";
 
 const estadoColorVariants = cva(
     "text-black",
@@ -45,71 +42,79 @@ const EstadoBadge = ({
     </Badge>
 );
 
-const RevisionActionRow = ({ articulo }: { articulo: Articulo }) => {
-    return (
-        <RouterButton
-            to={RevisionRoute.to}
-            params={{
-                uuid: articulo.uuid
-            }}
-            tooltip={{
-                message: "Verificar y Configurar"
-            }}
-            size="icon"
-            variant="outline"
-        >
-            <SettingsIcon />
-        </RouterButton>
-    );
-}
+type AccessorFn<TRowData extends RowData> = RowDataAccessorFn<TRowData, Articulo>;
+
+const NumeroInventarioRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
+    id: 'articulo.numero_inventario',
+    header: 'No. Inventario',
+    accessorFn: (row) => getRowData(row).numero_inventario
+});
+
+const NumeroSerieRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
+    id: 'articulo.numero_serie',
+    header: 'No. Serie',
+    cell: ({ row: { original } }) => {
+        const numeroSerie = getRowData(original).numero_serie;
+        return (
+            numeroSerie === null
+                ? <span className="text-muted-foreground italic">N/A</span>
+                : numeroSerie
+        );
+    }
+});
+
+const DescripcionRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
+    id: 'articulo.descripcion',
+    header: 'Descripción',
+    accessorFn: (row) => getRowData(row).producto.tipo.nombre
+});
+
+const MarcaRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
+    id: 'articulo.marca',
+    header: 'Marca',
+    accessorFn: (row) => getRowData(row).producto.marca.nombre
+});
+
+const ModeloRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
+    id: 'articulo.modelo',
+    header: 'Modelo',
+    accessorFn: (row) => getRowData(row).producto.nombre
+});
+
+const EstadoRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
+    id: 'articulo.estado',
+    header: 'Estado',
+    cell: ({ row }) => {
+        const articulo = getRowData(row.original);
+        return (
+            <div className="flex flex-col gap-1">
+                <EstadoBadge estado={articulo.estado} />
+                {articulo.es_inventariable !== null && (
+                    <Badge variant="outline">
+                        {articulo.es_inventariable ? 'Es inventariable' : 'No es inventariable'}
+                    </Badge>
+                )}
+                {articulo.observaciones && (
+                    <Badge className="bg-red-400/80 text-black">
+                        Tiene observaciones
+                    </Badge>
+                )}
+            </div>
+        );
+    }
+});
+
+const defaultColumnsBuilder = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData>[] => ([
+    NumeroInventarioRow(getRowData),
+    NumeroSerieRow(getRowData),
+    DescripcionRow(getRowData),
+    MarcaRow(getRowData),
+    ModeloRow(getRowData),
+    EstadoRow(getRowData)
+]);
 
 const columns: ColumnDef<Articulo>[] = [
-    {
-        header: "No. de Inventario",
-        accessorFn: (row) => row.numero_inventario
-    },
-    {
-        header: "Tipo de Producto",
-        accessorFn: (row) => `${row.producto.tipo.categoria.nombre} — ${row.producto.tipo.nombre}`
-    },
-    {
-        header: "Modelo",
-        accessorFn: ( row ) => `${row.producto.marca.nombre} — ${row.producto.nombre}`
-    },
-    {
-        header: "Estado",
-        cell: ({ row }) => {
-            const articulo = row.original;
-
-            return (
-                <div className="flex flex-col gap-1">
-                    <EstadoBadge estado={articulo.estado} />
-                    {articulo.es_inventariable !== null && (
-                        <Badge variant="outline">
-                            {articulo.es_inventariable ? 'Es inventariable' : 'No es inventariable'}
-                        </Badge>
-                    )}
-                    {articulo.observaciones && <Badge className="bg-red-400/80 text-black">Tiene observaciones</Badge>}
-                </div>
-            );
-        }
-    },
-    {
-        header: "Fecha de creación",
-        accessorFn: (row) => toLocaleDateFormat(row.created_at)
-    },
-    {
-        id: "action",
-        cell: ({ row }) => {
-            const articulo = row.original;
-
-            return (
-                <div className="flex gap-1">
-                    {isArticuloEstadoRevision(articulo.estado.id) && <RevisionActionRow articulo={articulo} />}
-                </div>
-            );
-        }
-    }
+    ...defaultColumnsBuilder<Articulo>(row => row)
 ];
 
-export { columns as articuloTableColumns, estadoColorVariants as articuloEstadoColorVariants, EstadoBadge as ArticuloEstadoBadge }
+export { columns as articuloTableColumns, estadoColorVariants as articuloEstadoColorVariants, EstadoBadge as ArticuloEstadoBadge, defaultColumnsBuilder as articuloDefaultColumnsBuilder, type AccessorFn as ArticuloRowDataAccessorFn }

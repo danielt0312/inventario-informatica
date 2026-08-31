@@ -195,7 +195,7 @@ export const DictamenAdquisicion = {
 }
 
 export const toLocaleDateFormat = (
-    value: string,
+    value: string | number | Date,
     timeOptions?: Pick<Intl.DateTimeFormatOptions, 'hour' | 'minute'>
 ) => (
     new Date(value).toLocaleDateString('es-MX', {
