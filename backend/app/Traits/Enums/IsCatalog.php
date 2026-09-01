@@ -4,7 +4,7 @@ namespace App\Traits\Enums;
 
 trait IsCatalog
 {
-    public function toFormattedArray(): array
+    public function toFormattedCatalog(): array
     {
         return [
             'id' => $this->value,
@@ -12,28 +12,28 @@ trait IsCatalog
         ];
     }
 
-    public static function casesToFormattedArray(): array
+    public static function casesToFormattedCatalog(): array
     {
         return array_map(
-            fn (self $case) => $case->toFormattedArray(),
+            fn (self $case) => $case->toFormattedCatalog(),
             self::cases()
         );
     }
 
     public function getLabelValue(): string
     {
-        if (!method_exists($this, 'label')) {
-            return $this->getFormattedLabel();
+        if (!method_exists($this, 'formattedLabel')) {
+            return $this->nameToFormattedLabel();
         }
 
         try {
-            return $this->label();
+            return $this->formattedLabel();
         } catch (\UnhandledMatchError) {
-            return $this->getFormattedLabel();
+            return $this->nameToFormattedLabel();
         }
     }
 
-    public function getFormattedLabel(): string
+    public function nameToFormattedLabel(): string
     {
         return ucwords(str_replace('_', ' ', strtolower($this->name)));
     }

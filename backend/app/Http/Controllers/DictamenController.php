@@ -157,7 +157,7 @@ class DictamenController extends ArchivableController
             $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
 
             $archivo = $this->archivoService->createAndStoreFromRaw(
-                DocumentoTipoEnum::DICTAMEN->label(),
+                DocumentoTipoEnum::DICTAMEN->getLabelValue(),
                 $pdf->output()
             );
 
@@ -197,7 +197,7 @@ class DictamenController extends ArchivableController
             $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
 
             $archivo = $this->archivoService->createAndStoreFromRaw(
-                DocumentoTipoEnum::DICTAMEN->label(),
+                DocumentoTipoEnum::DICTAMEN->getLabelValue(),
                 $pdf->output()
             );
 

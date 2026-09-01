@@ -17,7 +17,7 @@ class ProductoTipoSeeder extends Seeder
 
         foreach (ProductoTipoEnum::cases() as $case) {
             ProductoTipo::insert([
-                ...$case->toFormattedArray(),
+                ...$case->toFormattedCatalog(),
                 'categoria_id' => $case->categoria()->value
             ]);
         }

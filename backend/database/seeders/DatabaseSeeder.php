@@ -16,13 +16,12 @@ class DatabaseSeeder extends Seeder
             ProductoSeeder::class,
             ArticuloEstadoSeeder::class,
             DocumentoTipoSeeder::class,
-            DictamenEstadoSeeder::class
+            DictamenEstadoSeeder::class,
+            ResguardoEstadoSeeder::class,
         ]);
 
         // todo eliminar esta invocación, solo es para debug
         $this->call([
-            AdscripcionSeeder::class,
-            EmpleadoSeeder::class,
             UserSeeder::class,
             ArticuloSeeder::class
         ]);

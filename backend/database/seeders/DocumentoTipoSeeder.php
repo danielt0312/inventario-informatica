@@ -14,11 +14,7 @@ class DocumentoTipoSeeder extends Seeder
 
     public function run(): void
     {
-        foreach (DocumentoTipoEnum::cases() as $tipo) {
-            DocumentoTipo::insertOrIgnore([
-                'id' => $tipo->value,
-                'nombre' => $tipo->label(),
-            ]);
-        }
+        foreach (DocumentoTipoEnum::casesToFormattedCatalog() as $case)
+            DocumentoTipo::insertOrIgnore($case);
     }
 }

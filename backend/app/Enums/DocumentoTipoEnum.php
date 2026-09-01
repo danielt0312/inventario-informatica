@@ -16,9 +16,8 @@ enum DocumentoTipoEnum: int
     case DICTAMEN = 6;
     case ORDEN_COMPRA = 7;
 
-    public function label(): string {
+    public function formattedLabel(): string {
         return match ($this) {
-            self::FACTURA       => 'Factura',
             self::OFICIO        => 'Oficio solicitante',
             self::ADQUISICION   => 'Adquisición de Bienes Informáticos',
             self::RESGUARDO     => 'Resguardo de Bienes Informáticos',

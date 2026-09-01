@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Enums\DictamenEstadoEnum;
 
-class DictamenEstado extends Model
+class ResguardoEstado extends Model
 {
     public $timestamps = false;
 }

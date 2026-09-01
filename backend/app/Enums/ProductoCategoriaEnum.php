@@ -2,12 +2,12 @@
 
 namespace App\Enums;
 
-use App\Traits\HasLabel;
+use App\Traits\HasFormattedLabel;
 use App\Traits\Enums\IsCatalog;
 
 enum ProductoCategoriaEnum: int
 {
-    use HasLabel, IsCatalog;
+    use HasFormattedLabel, IsCatalog;
 
     case COMPUTADORA = 1;
     case DISPOSITIVO_ALMACENAMIENTO = 2;
@@ -23,7 +23,7 @@ enum ProductoCategoriaEnum: int
     case ELECTRICO = 12;
     case ESCANER = 13;
 
-    public function label(): string
+    public function formattedLabel(): string
     {
         return match($this) {
             self::DISPOSITIVO_ALMACENAMIENTO => 'Dispositivo de Almacenamiento',

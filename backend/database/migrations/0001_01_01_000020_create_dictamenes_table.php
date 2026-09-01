@@ -25,14 +25,8 @@ return new class extends Migration
                 ->constrained('orden_compras', indexName: 'fk_dictamenes_orden_compras')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('adscripcion_id')
-                ->constrained('adscripciones', indexName: 'fk_dictamen_adscripciones')
-                ->restrictOnUpdate()
-                ->restrictOnDelete();
-            $table->foreignId('empleado_id')
-                ->constrained('empleados', indexName: 'fk_dictamenes_empleado')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('adscripcion_id'); // todo cambiar por definicion real
+            $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->unsignedBigInteger('version_actual_id')
                 ->nullable();
             $table->boolean('tiene_observaciones')
@@ -79,10 +73,7 @@ return new class extends Migration
                 ->constrained('dictamen_versiones', indexName: 'fk_dictamen_adquisiciones_dictamen_versiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('empleado_id')
-                ->constrained('empleados', indexName: 'fk_dictamen_adquisiciones_empleados')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->foreignId('producto_tipo_id')
                 ->nullable()
                 ->constrained('producto_tipos', indexName: 'fk_dictamen_adquisiciones_producto_tipos')

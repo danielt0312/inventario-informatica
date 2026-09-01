@@ -15,7 +15,7 @@ enum DictamenEstadoEnum: int
     case SURTIDO = 5;
     case SURTIDO_PARCIAL = 6;
 
-    public function label(): string
+    public function formattedLabel(): string
     {
         return match($this) {
             self::DICTAMINAR => 'Por Dictaminar',

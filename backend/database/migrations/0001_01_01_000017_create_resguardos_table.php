@@ -8,9 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('resguardo_estados', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', 64);
+        });
+
         Schema::create('resguardos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('empleado_id');
+            $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
+            $table->foreignId('estado_id')
+                ->constrained('resguardo_estados', indexName: 'fk_resguardos_resguardo_estados')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->date('fecha_actualizacion');
             $table->date('fecha_cancelacion')
                 ->nullable();

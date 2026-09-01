@@ -11,8 +11,7 @@ class ProductoCategoriaSeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (ProductoCategoriaEnum::casesToFormattedArray() as $data) {
-            ProductoCategoria::insert($data);
-        }
+        foreach (ProductoCategoriaEnum::casesToFormattedCatalog() as $case)
+            ProductoCategoria::insert($case);
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
                 ->constrained('articulos', indexName: 'fk_revisiones_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->unsignedBigInteger('empleado_id');
+            $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->foreignId('documento_id')
                 ->constrained('documentos', indexName: 'fk_revisiones_documentos')
                 ->cascadeOnUpdate()
@@ -32,7 +32,7 @@ return new class extends Migration
                 ->constrained('revisiones', indexName: 'fk_revision_funcionalidades_revisiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->unsignedBigInteger('empleado_id');
+            $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->boolean('garantia');
             $table->boolean('monitor');
             $table->boolean('teclado');
@@ -61,7 +61,7 @@ return new class extends Migration
                 ->constrained('revisiones', indexName: 'fk_revision_configuraciones_revisiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->unsignedBigInteger('empleado_id');
+            $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->boolean('garantia');
             $table->boolean('basica_equipo');
             $table->boolean('impresora');
@@ -81,7 +81,7 @@ return new class extends Migration
                 ->constrained('revisiones', indexName: 'fk_revision_aplicaciones_revisiones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->unsignedBigInteger('empleado_id');
+            $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->boolean('sicysa');
             $table->boolean('sacg');
             $table->timestamps();
