@@ -17,25 +17,18 @@ class DictamenVersion extends Model
     protected $fillable = [
         'numero_version',
         'dictamen_id',
-        'oficio_id',
         'fecha_solicitud',
         'motivo_cambio'
     ];
 
     protected $attributes = [
         'numero_version' => 1,
-        'oficio_id' => null,
         'motivo_cambio' => null
     ];
 
     public function dictamen(): BelongsTo
     {
         return $this->belongsTo(Dictamen::class);
-    }
-
-    public function oficio(): BelongsTo
-    {
-        return $this->belongsTo(Oficio::class);
     }
 
     public function adquisiciones(): HasMany

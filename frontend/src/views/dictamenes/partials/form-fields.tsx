@@ -52,8 +52,8 @@ export const FechaSolicitudField = ({
     />
 );
 
-export type OficioFieldType = ArchivoUploaderFieldType;
-export const OficioField = ({
+export type OficioArchivoFieldType = ArchivoUploaderFieldType;
+export const OficioArchivoField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof ArchivoUploaderField>) => (
@@ -93,7 +93,7 @@ export const DictamenArchivoField = ({
 }: React.ComponentProps<typeof ArchivoUploaderField>) => (
     <ArchivoUploaderField
         fieldLayout={{
-            label: "Adjuntar evidencia de dictamen recibido",
+            label: "Adjuntar acuse de recibido del dictamen tecnológico",
             required: true,
             ...fieldLayout
         }}

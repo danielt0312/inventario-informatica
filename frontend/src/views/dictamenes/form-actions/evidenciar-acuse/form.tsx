@@ -1,18 +1,21 @@
 import { useAppForm } from "@/components/ui/form-context";
 import { Label } from "@/components/ui/label";
-import { defaultValues, validator } from "./form-schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form as PrimitiveForm } from "@/components/ui/form";
 import type { DetailedPendienteAcuseDictamen } from "@/types/dictamenes";
 import { useActionFormMutation } from "../partials/form";
-import { DictamenArchivoField } from "../../partials/form-fields";
+import { DictamenArchivoField, OficioArchivoField } from "../../partials/form-fields";
 import { ShowBienesInformaticosTitle } from "../../partials/show-info";
+import { evidenciarAcuseFormDefaultValues, evidenciarAcuseFormValidator } from "./form-schema";
 
 export function useForm(dictamen: DetailedPendienteAcuseDictamen) {
     const { mutate } = useActionFormMutation(dictamen);
 
+    // TODO validar cuando el oficio no existe debido a la adscripcion
+    const validator = evidenciarAcuseFormValidator(!(dictamen.oficio && dictamen.oficio.verified_at !== null));
+
     return useAppForm({
-        defaultValues,
+        defaultValues: evidenciarAcuseFormDefaultValues,
         validators: {
             onSubmit: validator
         },
@@ -26,15 +29,21 @@ export function useForm(dictamen: DetailedPendienteAcuseDictamen) {
 export function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen }) {
     const form = useForm(dictamen);
 
+
     return (
         <PrimitiveForm form={form}>
             <form.AppForm>
-                <div className="grid grid-cols-2">
+                <form.AppField
+                    name="dictamen_archivo_uuid"
+                    children={() => <DictamenArchivoField className="w-1/2" />}
+                />
+
+                {dictamen.oficio && dictamen.oficio.verified_at === null && (
                     <form.AppField
-                        name="archivo_uuid"
-                        children={() => <DictamenArchivoField />}
+                        name="oficio_archivo_uuid"
+                        children={() => <OficioArchivoField fieldLayout={{ label: "Adjuntar acuse de recibido del oficio de solicitud" }} className="w-1/2" />}
                     />
-                </div>
+                )}
 
                 <ShowBienesInformaticosTitle />
 

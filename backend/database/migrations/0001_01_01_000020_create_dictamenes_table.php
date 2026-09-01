@@ -20,6 +20,11 @@ return new class extends Migration
                 ->constrained('dictamen_estados', indexName: 'fk_dictamenes_dictamen_estados')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignId('oficio_id')
+                ->unique('uk_dictamenes_oficio')
+                ->constrained('oficios', indexName: 'fk_dictamen_versiones_oficios')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->foreignId('orden_compra_id')
                 ->nullable()
                 ->constrained('orden_compras', indexName: 'fk_dictamenes_orden_compras')
@@ -42,11 +47,6 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->unsignedInteger('numero_version');
             $table->date('fecha_solicitud');
-            $table->foreignId('oficio_id')
-                ->nullable()
-                ->constrained('oficios', indexName: 'fk_dictamen_versiones_oficios')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->string('motivo_cambio', 64)
                 ->nullable();
             $table->foreignId('documento_id')

@@ -12,13 +12,14 @@ class DictamenVersionResource extends JsonResource
         return [
             'id' => $this->id,
             'numero_version' => $this->numero_version,
-            'fecha_solicitud' => $this->fecha_solicitud->format('Y-m-d'),
+            'fecha_solicitud' => $this->fecha_solicitud,
             'created_at' => $this->created_at,
             'adquisiciones' => DictamenAdquisicionResource::collection($this->whenLoaded('adquisiciones')),
-            'oficio' => new OficioResource($this->whenLoaded('oficio')),
-            'archivo' => $this->when(
+            $this->when(
                 !$this->dictamen->esEstadoDictaminar(),
-                fn () => new ArchivoResource($this->whenLoaded('archivo'))
+                fn () => $this->merge(
+                    ['archivo' => new ArchivoResource($this->whenLoaded('archivo'))]
+                )
             ),
         ];
     }

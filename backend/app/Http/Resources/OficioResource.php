@@ -11,7 +11,8 @@ class OficioResource extends JsonResource
     {
         return [
             'folio' => $this->folio,
-            'archivo' => new ArchivoResource($this->whenLoaded('archivo'))
+            'verified_at' => $this->verified_at,
+            'archivo' => new ArchivoResource($this->whenLoaded('archivo')),
         ];
     }
 }

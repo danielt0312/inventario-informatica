@@ -35,17 +35,24 @@ class Dictamen extends Model
         'version_actual_id',
         'estado_id',
         'adscripcion_id',
+        'oficio_id',
         'orden_compra_id',
         'empleado_id',
         'tiene_observaciones',
     ];
 
     protected $attributes = [
+        'oficio_id' => null,
         'estado_id' => DictamenEstadoEnum::DICTAMINAR->value,
         'version_actual_id' => null,
         'orden_compra_id' => null,
         'tiene_observaciones' => null
     ];
+
+    public function oficio(): BelongsTo
+    {
+        return $this->belongsTo(Oficio::class);
+    }
 
     public function versiones(): HasMany
     {

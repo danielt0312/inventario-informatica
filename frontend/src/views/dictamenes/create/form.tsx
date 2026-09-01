@@ -8,7 +8,7 @@ import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
-import { OficioField, CantidadField, FechaSolicitudField, FolioField } from "../partials/form-fields";
+import { OficioArchivoField, CantidadField, FechaSolicitudField, FolioField } from "../partials/form-fields";
 import { AdscripcionField } from "@/components/features/externos/adscripciones/form-fields";
 import { EmpleadoField } from "@/components/features/externos/empleados/form-fields";
 import { Form as PrimitiveForm } from "@/components/ui/form";
@@ -68,7 +68,7 @@ function Form() {
 
                 <form.AppField
                     name="archivo_uuid"
-                    children={() => <OficioField className="md:max-w-1/2" />}
+                    children={() => <OficioArchivoField className="md:max-w-1/2" />}
                 />
 
                 <form.AppField name="adquisiciones" mode="array">

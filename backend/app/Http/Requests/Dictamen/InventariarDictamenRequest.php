@@ -55,10 +55,7 @@ class InventariarDictamenRequest extends FormRequest
     {
         $this->traitPrepareForValidation();
 
-        if ($this->dictamen->orden_compra_id !== null) {
-            $this->merge(['orden_compra_id' => $this->dictamen->orden_compra_id]);
-            $this->setOrdenCompra($this->dictamen->ordenCompra);
-        }
+        if ($this->dictamen->orden_compra_id !== null) $this->setOrdenCompra($this->dictamen->ordenCompra);
     }
 
 

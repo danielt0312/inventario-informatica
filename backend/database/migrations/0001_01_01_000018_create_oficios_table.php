@@ -16,6 +16,9 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('folio', 64)
                 ->unique('uk_oficios_folio');
+            $table->timestamp('verified_at')
+                ->nullable();
+            $table->timestamps();
         });
     }
 

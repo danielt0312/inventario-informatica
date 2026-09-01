@@ -41,13 +41,10 @@ class DictamenController extends ArchivableController
     public function index(Request $request)
     {
         return QueryBuilder::for(Dictamen::class)
-            ->with([
-                'estado',
-                'versionActual' => ['oficio', 'archivo']
-            ])
+            ->with(['oficio', 'estado', 'versionActual.archivo'])
             ->allowedFilters(
-                AllowedFilter::partial('folio', 'versionActual.oficio.folio'),
-                AllowedFilter::exact('estados', 'estado.id')
+                AllowedFilter::partial('folio', 'oficio.folio'),
+                AllowedFilter::belongsTo('estado')
             )
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
@@ -81,11 +78,11 @@ class DictamenController extends ArchivableController
             $dictamen = Dictamen::create([
                 'empleado_id' => $empleadoId,
                 'adscripcion_id' => $adscripcionId,
+                'oficio_id' => $oficio?->id
             ]);
 
             $version = $dictamen->versiones()->create([
                 'fecha_solicitud' => $validated['fecha_solicitud'],
-                'oficio_id' => $oficio?->id,
             ]);
 
             $version->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
@@ -102,9 +99,10 @@ class DictamenController extends ArchivableController
     {
         return QueryBuilder::for(Dictamen::class)
             ->with([
-                'ordenCompra.archivo',
+                'oficio.archivo',
                 'estado',
-                'versionActual' => ['oficio.archivo', 'archivo']
+                'ordenCompra.archivo',
+                'versionActual.archivo'
             ])
             ->allowedIncludes('versiones.adquisiciones.articulo', 'versionActual.adquisiciones.articulo')
             ->where('uuid', $uuid)
@@ -116,22 +114,6 @@ class DictamenController extends ArchivableController
     {
         $dictamen = DB::transaction(function () use ($request, $dictamen, $watermarkService): Dictamen {
             $validated = $request->validated();
-
-            $adscripcionId = $dictamen->adscripcion_id;
-            $oficio = $dictamen->versionActual->oficio;
-            $archivoPayload = $request->getArchivo();
-
-            // todo identificar si el area de adscripcion es la interna
-            if ($adscripcionId != 2 && $oficio->archivo->isNot($archivoPayload)) {
-                $archivoPayload->temporal?->delete();
-                $oficio->documento->archivo()->associate($archivoPayload);
-            }
-
-            if ($oficio->folio !== $validated['folio']) {
-                $oficio->update([
-                    'folio' => $validated['folio']
-                ]);
-            }
 
             $versionCanceladaArchivoPath = $this->archivoService->getFullPath($dictamen->versionActual->archivo);
             $watermarkService->apply(
@@ -145,7 +127,6 @@ class DictamenController extends ArchivableController
             $version = $dictamen->versiones()->create([
                 'numero_version' => $dictamen->versionActual->numero_version + 1,
                 'fecha_solicitud' => now(),
-                'oficio_id' => $oficio?->id,
             ]);
 
             $version->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
@@ -174,7 +155,7 @@ class DictamenController extends ArchivableController
             return $dictamen;
         });
 
-        return $dictamen->toResourceResponse();
+        return $dictamen->toResourceResponse(201);
     }
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
@@ -213,22 +194,36 @@ class DictamenController extends ArchivableController
             return $dictamen;
         });
 
-        return $dictamen->toResourceResponse();
+        return $dictamen->toResource();
     }
 
     public function evidenciarAcuse(EvidenciarAcuseDictamenRequest $request, Dictamen $dictamen)
     {
         $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
-            $documento = $dictamen->versionActual->documento;
+            if ($dictamen->oficio && $dictamen->oficio->verified_at === null) {
+                $oficioArchivoRequest = $request->getOficioArchivo();
+                $oficioArchivoOriginal = $dictamen->oficio->documento->archivo;
 
-            $archivoOriginal = $documento->archivo;
+                $dictamen->oficio->documento->archivo()
+                    ->associate($oficioArchivoRequest)
+                    ->save();
 
-            $documento->archivo()
-                ->associate($request->getArchivo())
+                $oficioArchivoOriginal->delete();
+                $oficioArchivoRequest->temporal->delete();
+                $dictamen->oficio->update([
+                    'verified_at' => now()
+                ]);
+            }
+
+            $dictamenArchivoRequest = $request->getDictamenArchivo();
+            $dictamenArchivoOriginal = $dictamen->versionActual->documento->archivo;
+
+            $dictamen->versionActual->documento->archivo()
+                ->associate($dictamenArchivoRequest)
                 ->save();
 
-            $archivoOriginal->delete();
-
+            $dictamenArchivoOriginal->delete();
+            $dictamenArchivoRequest->temporal->delete();
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::SURTIR->value
             ]);

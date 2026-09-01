@@ -101,7 +101,7 @@
     </div>
 
     <div class="mb-5">
-        Por medio del presente y en referencia al oficio <b>{{ $dictamen->versionActual->oficio->folio }}</b>; es necesaria la adquisición de lo siguiente:
+        Por medio del presente y en referencia al oficio <b>{{ $dictamen->oficio->folio }}</b>; es necesaria la adquisición de lo siguiente:
     </div>
 
     <x-pdf::table class="mb-5">

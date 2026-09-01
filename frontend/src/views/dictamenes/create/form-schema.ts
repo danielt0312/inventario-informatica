@@ -10,7 +10,7 @@ import type { ProductoTipoFieldType } from "@/components/features/productos/tipo
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
 import type { AdscripcionFieldType } from "@/components/features/externos/adscripciones/form-fields";
-import type { CantidadFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
+import type { CantidadFieldType, FechaSolicitudFieldType, FolioFieldType, OficioArchivoFieldType } from "../partials/form-fields";
 import z from "zod";
 
 type AdquisicionFields = {
@@ -31,7 +31,7 @@ export type Schema = {
     folio: FolioFieldType;
     fecha_solicitud: FechaSolicitudFieldType;
     adscripcion_id: AdscripcionFieldType;
-    archivo_uuid: OficioFieldType;
+    archivo_uuid: OficioArchivoFieldType;
     adquisiciones: AdquisicionFields[];
 }
 

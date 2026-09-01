@@ -14,6 +14,7 @@ export type Documento = Archivo & {
 export type Oficio = {
     folio: string;
     archivo: Archivo;
+    verified_at: string | null;
 };
 
 export type Factura = {

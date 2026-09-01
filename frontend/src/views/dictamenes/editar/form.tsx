@@ -4,7 +4,7 @@ import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { Form } from "@/components/ui/form";
 import { FieldError, FieldGroup } from "@/components/ui/field";
-import { CantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField, FechaSolicitudField, FolioField, OficioField } from "../partials/form-fields";
+import { CantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField } from "../partials/form-fields";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, CircleXIcon, PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,13 +21,16 @@ import { ShowBienesInformaticosTitle } from "../partials/show-info";
 import type { PorSurtirDictamen } from "@/types/dictamenes";
 import React from "react";
 import { Spinner } from "@/components/ui/spinner";
+import { ShowOficioInfo } from "../form-actions/partials/show-info";
+import { BaseFieldLayout } from "@/components/ui/field-layout";
+import { DatePicker } from "@/components/ui/date-picker";
 
 function useEditFormMutation(dictamen: PorSurtirDictamen) {
     const navigate = useNavigate();
 
     return useFormMutation({
         url: `api/dictamenes/${dictamen.uuid}`,
-        method: 'PATCH',
+        method: 'PUT',
         onSuccess: async (_, __, ___, context) => {
             await context.client.invalidateQueries({ queryKey: ['dictamenes'] });
             await navigate({ to: IndexRoute.to });
@@ -45,11 +48,12 @@ export const DictamenEditarForm = () => {
         validators: {
             onSubmit: validator
         },
-        onSubmit: async ({ value, formApi }) => {
+        onSubmit: ({ value, formApi }) => {
             const data = validator.parse(value);
-            await mutate({ data, formApi });
+            mutate({ data, formApi });
         }
     });
+
     const [showAlertDialog, setShowAlertDialog] = React.useState(false);
 
     return (
@@ -58,27 +62,16 @@ export const DictamenEditarForm = () => {
                 <FieldGroup className="flex-row">
                     <FieldValue
                         label="Área de Adscripción"
-                        value={dictamen.adscripcion?.nombre ?? 'Dirección de Tecnologías de la Información'}
+                        value={dictamen.adscripcion.nombre}
                     />
-                    <form.AppField
-                        name="fecha_solicitud"
-                        children={() => <FechaSolicitudField disabled />}
-                    />
-                    <form.AppField
-                        name="folio"
-                        children={() => <FolioField />}
-                    />
-                </FieldGroup>
-
-                <form.AppField
-                    name="archivo_uuid"
-                    children={() => (
-                        <OficioField
-                            defaultValue={dictamen.version_actual.oficio!.archivo}
-                            className="md:max-w-1/2"
-                        />
+                    <BaseFieldLayout label="Fecha de solicitud" required disabled>
+                        <DatePicker value={new Date} disabled />
+                    </BaseFieldLayout>
+                    {/* todo cambiar esto por el layout utilizando el field */}
+                    {dictamen.oficio && (
+                        <ShowOficioInfo oficio={dictamen.oficio} className="w-full flex flex-col gap-3" />
                     )}
-                />
+                </FieldGroup>
 
                 <form.AppField name="adquisiciones" mode="array">
                     {(field) => (

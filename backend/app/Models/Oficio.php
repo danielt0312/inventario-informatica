@@ -4,7 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    HasOne
+};
 
 use App\Traits\Models\HasArchivable;
 
@@ -14,7 +17,11 @@ class Oficio extends Model
 
     protected $fillable = [
         'folio',
+        'verified_at'
     ];
 
-    public $timestamps = false;
+    public function dictamen(): HasOne
+    {
+        return $this->hasOne(Dictamen::class);
+    }
 }

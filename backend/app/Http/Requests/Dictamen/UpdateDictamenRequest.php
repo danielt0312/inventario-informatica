@@ -6,11 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
-use App\Traits\Http\Requests\InteractsWithArchivo;
 use App\Http\Requests\Dictamen\Traits\{
     InteractsWithDictamen,
     InteractsWithArticulos
 };
+
 use App\Models\{
     Articulo,
     Producto
@@ -18,7 +18,7 @@ use App\Models\{
 
 class UpdateDictamenRequest extends FormRequest
 {
-    use InteractsWithDictamen, InteractsWithArchivo, InteractsWithArticulos;
+    use InteractsWithDictamen, InteractsWithArticulos;
 
     public function authorize(): bool
     {
@@ -28,18 +28,10 @@ class UpdateDictamenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'folio' => [
-                'required',
-                'string',
-                'max:64',
-                Rule::unique('oficios', 'folio')
-                    ->ignore($this->dictamen->versionActual->oficio_id)
-            ],
             'motivo_cambio' => [
                 'string',
                 'max:64'
             ],
-            'archivo_uuid' => $this->archivoRules(),
             'adquisiciones' => [
                 'required',
                 'array',

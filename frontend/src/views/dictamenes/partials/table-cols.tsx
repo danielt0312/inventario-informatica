@@ -161,17 +161,18 @@ const EstadoBadge = ({
 
 export const columns: ColumnDef<DetailedDictamen>[] = [
     {
-        accessorKey: "version_actual.fecha_solicitud",
         header: "Fecha de Solicitud",
-        cell: ({ getValue }) => toLocaleDateFormat(getValue<string>())
+        cell: ({ row }) => toLocaleDateFormat(row.original.version_actual.fecha_solicitud)
     },
     {
-        accessorKey: "",
         header: "Área Solicitante",
+        accessorKey: "",
     },
     {
-        accessorKey: "version_actual.oficio.folio",
         header: "Folio de Solicitud",
+        cell: ({ row }) => (
+            row.original.oficio?.folio ?? <span className="text-muted-foreground italic">N/A</span>
+        )
     },
     {
         header: "Estado",

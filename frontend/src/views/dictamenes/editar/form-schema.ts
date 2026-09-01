@@ -2,12 +2,11 @@ import type { ProductoTipoFieldType } from "@/components/features/productos/tipo
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { NumberInputFieldType } from "@/components/ui/input-field";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
-import type { DictamenEspecificacionesTecnicasFieldType, DictamenMotivoCambioFieldType, FechaSolicitudFieldType, FolioFieldType, OficioFieldType } from "../partials/form-fields";
+import type { DictamenEspecificacionesTecnicasFieldType, DictamenMotivoCambioFieldType } from "../partials/form-fields";
 import type { ProductoFieldType } from "@/components/features/productos/form-fields";
-import { nullableString, positiveInteger, requiredArray, requiredIsoDateLTEToday, requiredString, selectedNumberOption } from "@/lib/schemas/common";
-import { format } from "date-fns";
-import z from "zod";
 import type { DetailedPorSurtirDictamen } from "@/types/dictamenes";
+import { nullableString, positiveInteger, requiredArray, requiredString, selectedNumberOption } from "@/lib/schemas/common";
+import z from "zod";
 
 type AdquisicionFields = {
     producto_tipo_id: ProductoTipoFieldType;
@@ -28,18 +27,12 @@ export const adquisicionFieldsDefaultValues: AdquisicionFields = {
 } as const;
 
 type Schema = {
-    fecha_solicitud: FechaSolicitudFieldType;
-    archivo_uuid: OficioFieldType;
-    folio: FolioFieldType;
     motivo_cambio: DictamenMotivoCambioFieldType;
     adquisiciones: AdquisicionFields[];
 }
 
 export const defaultValues = (dictamen: DetailedPorSurtirDictamen): Schema => ({
     motivo_cambio: undefined,
-    fecha_solicitud: format(new Date, 'yyyy-MM-dd'),
-    archivo_uuid: dictamen.version_actual.oficio?.archivo.uuid,
-    folio: dictamen.version_actual.oficio?.folio,
     adquisiciones: dictamen.version_actual.adquisiciones.map((adquiscion): AdquisicionFields => ({
         cantidad: adquiscion.cantidad,
         producto_tipo_id: adquiscion.producto.tipo.id,
@@ -52,13 +45,10 @@ export const defaultValues = (dictamen: DetailedPorSurtirDictamen): Schema => ({
 
 export const validator = z.object({
     motivo_cambio: requiredString,
-    folio: requiredString,
-    fecha_solicitud: requiredIsoDateLTEToday,
-    archivo_uuid: requiredString,
     adquisiciones: requiredArray(z
         .object({
             numero_inventario: nullableString,
-            producto_tipo_id: selectedNumberOption,
+            producto_tipo_id: selectedNumberOption, // TODO no enviar en payload, solo validar
             producto_id: selectedNumberOption,
             cantidad: positiveInteger,
             empleado_id: selectedNumberOption,

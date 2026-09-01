@@ -10,16 +10,16 @@ type IncludableOrdenCompra = Includable<OrdenCompra>;
 type IncludableOficio = Includable<Oficio>;
 
 type BaseEstado<TEstado extends DictamenEstadoEnum = DictamenEstadoEnum> = TCatalogo<TEstado>;
-type Base<TEstado extends BaseEstado = BaseEstado> = {
+type Base<TEstado extends BaseEstado = BaseEstado, TOficio extends IncludableOficio = IncludableOficio> = {
     id: number;
     uuid: string;
     estado: TEstado;
     adscripcion: TCatalogo;
+    oficio: TOficio;
 }
-type BaseVersion<TOficio extends IncludableOficio = IncludableOficio> = {
+type BaseVersion = {
     numero_version: number;
     fecha_solicitud: string;
-    oficio: TOficio;
 }
 type BaseAdquisicion<TArticulo extends IncludableArticulo = IncludableArticulo> = {
     id: number;
