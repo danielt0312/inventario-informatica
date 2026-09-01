@@ -42,8 +42,12 @@ interface DataTableProps<TData>
 
 function DataTable<TData>({
   table,
-  contentStatus = 'Sin información',
   className,
+  contentStatus = (
+    <span className="text-muted-foreground italic">
+      No se encontró información.
+    </span>
+  ),
   ...props
 }: DataTableProps<TData>) {
   return (
@@ -121,7 +125,7 @@ function DataTablePagination<TData>({
               table.setPageSize(Number(value))
             }}
           >
-            <SelectTrigger className="h-8 w-[70px]">
+            <SelectTrigger className="h-8 w-17.5">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
@@ -134,7 +138,7 @@ function DataTablePagination<TData>({
           </Select>
           <p className="text-sm font-medium">filas por página</p>
         </div>
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        <div className="flex w-25 items-center justify-center text-sm font-medium">
           Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
         </div>
         <div className="flex items-center space-x-2">

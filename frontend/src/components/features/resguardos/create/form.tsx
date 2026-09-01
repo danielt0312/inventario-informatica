@@ -14,17 +14,42 @@ import { articuloDefaultColumnsBuilder } from "@/views/articulos/partials/table-
 import type { Articulo } from "@/types/articulos";
 import type { ResguardoArticulo } from "@/types/resguardos";
 import { toLocaleDateFormat } from "@/lib/utils";
+import { useStore } from "@tanstack/react-form";
+import { useQuery } from "@tanstack/react-query";
+import api from "@/lib/axios";
+import type { TResponse } from "@/types/generics";
+import React from "react";
 
 type ArticuloResguardado = ResguardoArticulo<Articulo> | {
     id: undefined;
     articulo: Articulo;
 }
 
-function TableArticulosResguardados({
-    data
-}: {
-    data: ArticuloResguardado[]
-}) {
+function CreateForm() {
+    const form = useAppForm({
+        defaultValues: createResguardoDefaultValues,
+        validators: {
+            onSubmit: createResguardoValidator
+        }
+    });
+
+    const empleadoId = useStore(form.store, (state) => state.values.empleado_id);
+
+    // const { data: articulosResguardadosPrevios = [] } = useQuery({
+    //     enabled: empleadoId !== undefined,
+    //     queryKey: ['resguardos', empleadoId],
+    //     queryFn: () => api.get<TResponse<ResguardoArticulo<Articulo>>>(`api/resguardos/${empleadoId}`, {
+    //         params: {
+    //             include: [
+    //                 'articulosResguardados.articulo.producto.marca',
+    //                 'articulosResguardados.articulo.producto.tipo',
+    //             ]
+    //         }
+    //     }).then(r => r.data.data)
+    // });
+
+    const [articulosResguardados, setArticulosResguardados] = React.useState([]);
+
     const table = useReactTable({
         columns: [
             {
@@ -38,21 +63,8 @@ function TableArticulosResguardados({
             },
             ...articuloDefaultColumnsBuilder<ArticuloResguardado>(row => row.articulo)
         ],
-        data,
+        data: [],
         getCoreRowModel: getCoreRowModel()
-    });
-
-    return (
-        <DataTable table={table} />
-    );
-}
-
-function CreateForm() {
-    const form = useAppForm({
-        defaultValues: createResguardoDefaultValues,
-        validators: {
-            onSubmit: createResguardoValidator
-        }
     });
 
     return (
@@ -85,10 +97,9 @@ function CreateForm() {
                     </form.Subscribe>
                 </div>
 
-                <TableArticulosResguardados
-                    data={[
 
-                    ]}
+                <DataTable
+                    table={table}
                 />
 
                 <form.SubmitFormButton />

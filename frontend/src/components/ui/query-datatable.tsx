@@ -17,8 +17,8 @@ export interface DataTableStatus<TData = unknown, TError = Error> {
 
 export function getContentStatus<TData, TError>({
     query
-}: DataTableStatus<TData, TError>): React.ReactNode {
-    const { isError, isPending, isFetching, data } = query;
+}: DataTableStatus<TData, TError>) {
+    const { isError, isPending, isFetching } = query;
 
     if (isFetching && isPending) {
         return <Spinner className="size-6 md:size-8" />;
@@ -32,15 +32,7 @@ export function getContentStatus<TData, TError>({
         );
     }
 
-    const isEmpty = !!data && data.data.length === 0;
-
-    return isEmpty
-        ? (
-            <span className="text-muted-foreground italic">
-                No se encontró información.
-            </span>
-        )
-        : undefined;
+    return undefined;
 }
 
 export interface UseTableOptions<TData> extends
