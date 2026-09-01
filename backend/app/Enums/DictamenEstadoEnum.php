@@ -9,7 +9,7 @@ enum DictamenEstadoEnum: int
     use IsCatalog;
 
     case DICTAMINAR = 1;
-    case EVIDENCIAR = 2;
+    case PENDIENTE_ACUSE = 2;
     case SURTIR = 3;
     case INVENTARIAR = 4;
     case SURTIDO = 5;
@@ -19,7 +19,7 @@ enum DictamenEstadoEnum: int
     {
         return match($this) {
             self::DICTAMINAR => 'Por Dictaminar',
-            self::EVIDENCIAR => 'Evidenciar Confirmado de Recibido',
+            self::PENDIENTE_ACUSE => 'Pendiente de Acuse',
             self::SURTIR => 'Por Surtir',
             self::INVENTARIAR => 'Por Inventariar',
             self::SURTIDO => 'Surtido',

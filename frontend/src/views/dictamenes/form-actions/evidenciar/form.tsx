@@ -3,12 +3,12 @@ import { Label } from "@/components/ui/label";
 import { defaultValues, validator } from "./form-schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form as PrimitiveForm } from "@/components/ui/form";
-import type { DetailedEvidenciarDictamen } from "@/types/dictamenes";
+import type { DetailedPendienteAcuseDictamen } from "@/types/dictamenes";
 import { useActionFormMutation } from "../partials/form";
 import { DictamenArchivoField } from "../../partials/form-fields";
 import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 
-export function useForm(dictamen: DetailedEvidenciarDictamen) {
+export function useForm(dictamen: DetailedPendienteAcuseDictamen) {
     const { mutate } = useActionFormMutation(dictamen);
 
     return useAppForm({
@@ -23,7 +23,7 @@ export function useForm(dictamen: DetailedEvidenciarDictamen) {
     });
 }
 
-export function Form({ dictamen }: { dictamen: DetailedEvidenciarDictamen }) {
+export function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen }) {
     const form = useForm(dictamen);
 
     return (

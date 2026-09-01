@@ -6,13 +6,13 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\Http\Requests\InteractsWithArchivo;
 use App\Http\Requests\Dictamen\Traits\InteractsWithDictamen;
 
-class EvidenciarDictamenRequest extends FormRequest
+class EvidenciarAcuseDictamenRequest extends FormRequest
 {
     use InteractsWithDictamen, InteractsWithArchivo;
 
     public function authorize(): bool
     {
-        return $this->dictamen->esEstadoEvidenciar();
+        return $this->dictamen->esEstadoPendienteAcuse();
     }
 
     public function rules(): array

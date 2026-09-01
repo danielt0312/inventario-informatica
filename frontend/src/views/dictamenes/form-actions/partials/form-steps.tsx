@@ -4,22 +4,20 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CheckIcon } from "lucide-react";
+import { DictamenFormActionLabel } from "../../partials/table-cols";
 
 const OrderActionDictamenEstado = [
     undefined,
     DictamenEstadoEnum.DICTAMINAR,
-    DictamenEstadoEnum.EVIDENCIAR,
+    DictamenEstadoEnum.PENDIENTE_ACUSE,
     DictamenEstadoEnum.INVENTARIAR,
 ] as const;
 type OrderActionDictamenEstado = (typeof OrderActionDictamenEstado)[number];
 
-export function getTitle(step?: OrderActionDictamenEstado) {
-    switch (step) {
-        case DictamenEstadoEnum.DICTAMINAR: return 'Dictaminar Requisición';
-        case DictamenEstadoEnum.EVIDENCIAR: return 'Evidenciar Confirmación de Recibido';
-        case DictamenEstadoEnum.INVENTARIAR: return 'Inventariar Bienes Informáticos';
-        default: return 'Creación de Dictamen';
-    }
+export function dictamenFormActionGetTitle(step?: OrderActionDictamenEstado) {
+    return step === undefined
+        ? 'Creación de Dictamen'
+        : DictamenFormActionLabel[step];
 }
 
 const stepVariants = cva(
@@ -55,7 +53,7 @@ export function Step({
                 {icon}
             </div>
             <div className="flex-1" data-slot="title">
-                {getTitle(step)}
+                {dictamenFormActionGetTitle(step)}
             </div>
         </div>
     );

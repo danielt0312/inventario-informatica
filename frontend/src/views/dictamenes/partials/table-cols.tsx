@@ -20,26 +20,36 @@ import { RouterButton } from "@/components/ui/router-button";
 
 const FormActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
-    [ActionDictamenEstadoEnum.EVIDENCIAR]: <PaperclipIcon />,
+    [ActionDictamenEstadoEnum.PENDIENTE_ACUSE]: <PaperclipIcon />,
     [ActionDictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
-const FormActionItemRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) => (
-    <RouterButton
-        tooltip={{
-            message: <span className="capitalize">{ActionDictamenStates[dictamen.estado.id]}</span>
-        }}
-        to={ActionRoute.to}
-        params={{
-            uuid: dictamen.uuid,
-            action: ActionDictamenStates[dictamen.estado.id]
-        }}
-        variant="outline"
-        size="icon"
-    >
-        {FormActionIcon[dictamen.estado.id]}
-    </RouterButton>
-);
+const FormActionLabel = {
+    [ActionDictamenEstadoEnum.DICTAMINAR]: 'Dictaminar Bienes Informáticos',
+    [ActionDictamenEstadoEnum.PENDIENTE_ACUSE]: 'Evidenciar Acuse de Recibido',
+    [ActionDictamenEstadoEnum.INVENTARIAR]: 'Inventariar Bienes Informáticos',
+} as const satisfies Record<ActionDictamenEstadoEnum, string>;
+
+const FormActionItemRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) => {
+    const estadoId = dictamen.estado.id;
+
+    return (
+        <RouterButton
+            tooltip={{
+                message: FormActionLabel[estadoId]
+            }}
+            to={ActionRoute.to}
+            params={{
+                uuid: dictamen.uuid,
+                action: ActionDictamenStates[estadoId]
+            }}
+            variant="outline"
+            size="icon"
+        >
+            {FormActionIcon[estadoId]}
+        </RouterButton>
+    );
+}
 
 const EdicionActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormActionDictamen>) => (
     <RouterButton
@@ -117,7 +127,7 @@ const estadoColorVariants = cva(
             variant: {
                 default: undefined,
                 [DictamenEstadoEnum.DICTAMINAR]: "bg-red-400/90",
-                [DictamenEstadoEnum.EVIDENCIAR]: "bg-orange-300",
+                [DictamenEstadoEnum.PENDIENTE_ACUSE]: "bg-orange-300",
                 [DictamenEstadoEnum.POR_SURTIR]: "bg-yellow-300/50",
                 [DictamenEstadoEnum.INVENTARIAR]: "bg-yellow-400/70",
                 [DictamenEstadoEnum.SURTIDO]: "bg-lime-400",
@@ -207,4 +217,5 @@ export const columns: ColumnDef<DetailedDictamen>[] = [
 export {
     estadoColorVariants as dictamenEstadoColorVariants,
     EstadoBadge as DictamenEstadoBadge,
+    FormActionLabel as DictamenFormActionLabel
 }

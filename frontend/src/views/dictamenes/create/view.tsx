@@ -1,6 +1,6 @@
 import GoBackButton from "@/components/Goback"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTitle, SidebarSteps } from "../form-actions/partials/form-steps";
+import { dictamenFormActionGetTitle, SidebarSteps } from "../form-actions/partials/form-steps";
 import { CreateDictamenForm } from "./form";
 
 export function View() {
@@ -10,7 +10,7 @@ export function View() {
             <SidebarSteps>
                 <CardHeader>
                     <CardTitle>
-                        {getTitle().toUpperCase()}
+                        {dictamenFormActionGetTitle().toUpperCase()}
                     </CardTitle>
                 </CardHeader>
                 <CardContent>

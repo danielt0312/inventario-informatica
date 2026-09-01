@@ -1,13 +1,13 @@
-import type { DetailedDictaminarDictamen, DetailedEvidenciarDictamen, DetailedInventariarDictamen, DetailedPorSurtirDictamen, DictaminarDictamen, EvidenciarDictamen, InventariarDictamen, PorSurtirDictamen } from "@/types/dictamenes";
+import type { DetailedDictaminarDictamen, DetailedPendienteAcuseDictamen, DetailedInventariarDictamen, DetailedPorSurtirDictamen, DictaminarDictamen, PendienteAcuseDictamen, InventariarDictamen, PorSurtirDictamen } from "@/types/dictamenes";
 
 type FormAction =
     | DictaminarDictamen
-    | EvidenciarDictamen
+    | PendienteAcuseDictamen
     | InventariarDictamen;
 
 type DetailedFormAction =
     | DetailedDictaminarDictamen
-    | DetailedEvidenciarDictamen
+    | DetailedPendienteAcuseDictamen
     | DetailedInventariarDictamen;
 
 type EditableFormAction =

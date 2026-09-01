@@ -74,9 +74,11 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::controller(DictamenController::class)
                 ->prefix('{dictamen}')
                 ->group(function () {
-                    foreach (['dictaminar', 'evidenciar', 'surtir', 'inventariar'] as $action) {
+                    foreach (['dictaminar', 'surtir', 'inventariar'] as $action) {
                         Route::post($action, $action)->name($action);
                     }
+
+                    Route::post('evidenciar-acuse', 'evidenciarAcuse')->name('evidenciar-acuse');
                 });
         });
 });

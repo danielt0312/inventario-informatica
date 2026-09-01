@@ -1,7 +1,7 @@
 import GoBackButton from "@/components/Goback"
 import { CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Route } from "@/routes/_auth/dictamenes/$uuid/$action";
-import { getTitle, SidebarSteps } from "./partials/form-steps";
+import { dictamenFormActionGetTitle, SidebarSteps } from "./partials/form-steps";
 import { ActionForm } from "./partials/form";
 import { ShowInfo } from "./partials/show-info";
 import { ShowVersionInfo } from "../partials/show-info";
@@ -16,7 +16,7 @@ export function View() {
             <SidebarSteps step={dictamen.estado.id}>
                 <CardHeader>
                     <CardTitle>
-                        {getTitle(dictamen.estado.id).toUpperCase()}
+                        {dictamenFormActionGetTitle(dictamen.estado.id).toUpperCase()}
                     </CardTitle>
                     <CardAction>
                         <ShowVersionInfo dictamen={dictamen} />

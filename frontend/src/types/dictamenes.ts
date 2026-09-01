@@ -68,11 +68,11 @@ type BaseDictaminadoVersion = BaseVersion & {
     archivo: Archivo;
 }
 
-type EvidenciarEstado = BaseEstado<typeof DictamenEstadoEnum.EVIDENCIAR>;
-type Evidenciar = Base<EvidenciarEstado>;
-type EvidenciarAdquisicion = BaseDictaminadoAdquisicion
-type EvidenciarVersion = BaseDictaminadoVersion;
-type DetailedEvidenciar = DetailedBase<Evidenciar, VersionActualWithAdquisiciones<VersionWithAdquisiciones<EvidenciarVersion, Adquisiciones<EvidenciarAdquisicion>>>>;
+type PendienteAcuseEstado = BaseEstado<typeof DictamenEstadoEnum.PENDIENTE_ACUSE>;
+type PendienteAcuse = Base<PendienteAcuseEstado>;
+type PendienteAcuseAdquisicion = BaseDictaminadoAdquisicion
+type PendienteAcuseVersion = BaseDictaminadoVersion;
+type PendienteAcuseEvidenciar = DetailedBase<PendienteAcuse, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PendienteAcuseVersion, Adquisiciones<PendienteAcuseAdquisicion>>>>;
 
 type PorSurtirEstado = BaseEstado<typeof DictamenEstadoEnum.POR_SURTIR>;
 type PorSurtir = Base<PorSurtirEstado>;
@@ -107,7 +107,7 @@ type DetailedSurtidoParcial = DetailedBase<SurtidoParcial, VersionActualWithAdqu
 
 type Dictamen =
     | Dictaminar
-    | Evidenciar
+    | PendienteAcuse
     | PorSurtir
     | Inventariar
     | Surtido
@@ -115,7 +115,7 @@ type Dictamen =
 
 type DetailedDictamen =
     | DetailedDictaminar
-    | DetailedEvidenciar
+    | PendienteAcuseEvidenciar
     | DetailedPorSurtir
     | DetailedInventariar
     | DetailedSurtido
@@ -123,7 +123,7 @@ type DetailedDictamen =
 
 type DictamenAdquisicion =
     | DictaminarAdquisicion
-    | EvidenciarAdquisicion
+    | PendienteAcuseAdquisicion
     | PorSurtirAdquisicion
     | InventariarAdquisicion
     | SurtidoAdquisicion
@@ -131,7 +131,7 @@ type DictamenAdquisicion =
 
 type DictamenVersion =
     | DictaminarVersion
-    | EvidenciarVersion
+    | PendienteAcuseVersion
     | PorSurtirVersion
     | InventariarVersion
     | SurtidoVersion
@@ -146,14 +146,14 @@ export type {
     DictamenAdquisicion,
     DictamenVersion,
     Dictaminar as DictaminarDictamen,
-    Evidenciar as EvidenciarDictamen,
+    PendienteAcuse as PendienteAcuseDictamen,
     PorSurtir as PorSurtirDictamen,
     Inventariar as InventariarDictamen,
     Surtido as SurtidoDictamen,
     SurtidoParcial as SurtidoParcialDictamen,
     DetailedDictaminar as DetailedDictaminarDictamen,
     DetailedPorSurtir as DetailedPorSurtirDictamen,
-    DetailedEvidenciar as DetailedEvidenciarDictamen,
+    PendienteAcuseEvidenciar as DetailedPendienteAcuseDictamen,
     DetailedInventariar as DetailedInventariarDictamen,
     DetailedSurtido as DetailedSurtidoDictamen,
     DetailedSurtidoParcial as DetailedSurtidoParcialDictamen,

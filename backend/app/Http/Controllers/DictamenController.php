@@ -14,7 +14,7 @@ use App\Http\Requests\Dictamen\{
     StoreDictamenRequest,
     UpdateDictamenRequest,
     DictaminarDictamenRequest,
-    EvidenciarDictamenRequest,
+    EvidenciarAcuseDictamenRequest,
     SurtirDictamenRequest,
     InventariarDictamenRequest
 };
@@ -168,7 +168,7 @@ class DictamenController extends ArchivableController
             $dictamen->versionActual->documento()->associate($documento)->save();
 
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value
+                'estado_id' => DictamenEstadoEnum::PENDIENTE_ACUSE->value
             ]);
 
             return $dictamen;
@@ -207,7 +207,7 @@ class DictamenController extends ArchivableController
 
             $dictamen->versionActual->documento()->associate($documento)->save();
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::EVIDENCIAR->value
+                'estado_id' => DictamenEstadoEnum::PENDIENTE_ACUSE->value
             ]);
 
             return $dictamen;
@@ -216,7 +216,7 @@ class DictamenController extends ArchivableController
         return $dictamen->toResourceResponse();
     }
 
-    public function evidenciar(EvidenciarDictamenRequest $request, Dictamen $dictamen)
+    public function evidenciarAcuse(EvidenciarAcuseDictamenRequest $request, Dictamen $dictamen)
     {
         $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
             $documento = $dictamen->versionActual->documento;
