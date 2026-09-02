@@ -44,14 +44,32 @@
             font-size: 9px;
         }
 
+        .align-top { vertical-align: top; }
+        .align-middle { vertical-align: middle; }
+        .align-bottom { vertical-align: bottom; }
+
+        .white-space-nowrap { white-space: nowrap; }
+
+        .w-full { width: 100%; }
+
+        .table { display: table; }
+        .block { display: block; }
+        .table-cell { display: table-cell; }
+
+        .tracking-widest { letter-spacing: 3px; }
+
         .uppercase { text-transform: uppercase; }
-        .font-bold { font-weight: bold; }
+
         .text-center { text-align: center; }
+        .text-left { text-align: left; }
         .text-right { text-align: right; }
-        .text-around { letter-spacing: 3px; }
+
+        .font-bold { font-weight: bold; }
+
         .text-xs { font-size: 12px; }
         .text-2xl { font-size: 24px; }
         .text-3xl { font-size: 30px; }
+
         .my-10 { margin: 40px 0 }
         .mt-1 { margin-top: 4px; }
         .mt-2 { margin-top: 8px; }

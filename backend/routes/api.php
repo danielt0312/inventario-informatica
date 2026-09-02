@@ -21,7 +21,8 @@ use App\Http\Controllers\{
     FacturaController,
     OrdenCompraController,
     ProveedorController,
-    ResguardoController
+    ResguardoController,
+    EmpleadoResguardoController
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -40,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'dictamen_estados' => DictamenEstadoController::class,
         'empleados' => EmpleadoController::class,
         'adscripciones' => AdscripcionController::class,
+        'resguardos' => ResguardoController::class,
     ], ['only' => 'index']);
 
     Route::apiResources([
@@ -56,9 +58,12 @@ Route::middleware('auth:sanctum')->group(function () {
         'proveedores' => ProveedorController::class,
     ], ['only' => ['index', 'store']]);
 
-    Route::apiResources([
-        'resguardos' => ResguardoController::class,
-    ], ['only' => ['index', 'store', 'update']]);
+
+    // TODO definir si el parametro sera un id, uuid, u otro como identificable del empleado
+    // TODO definir si un empleado puede ver los resguardos de otros (permisos de usuario)
+    Route::apiSingleton('empleados.resguardo', EmpleadoResguardoController::class)
+        ->destroyable()
+        ->parameters(['empleados' => 'empleadoId']);
 
     Route::name('dictamenes.')
         ->prefix('dictamenes')

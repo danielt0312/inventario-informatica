@@ -1,9 +1,8 @@
 @use('App\Enums\DocumentoTipoEnum')
-@use('App\Models\Dictamen')
 
 {{--
 /**
- * @var Dictamen $dictamen
+ * @var \App\Models\Dictamen $dictamen
  * @var string|null $title
  * @var string|null $location
  * @var string|null $date
@@ -97,7 +96,7 @@
     <div class="subtitle mb-5">
         <span>C.P. FERNANDO MARTÍN CASTILLO DE ANDA</span>
         <span>DIRECTOR GENERAL DE ADMINISTRACIÓN Y FINANZAS</span>
-        <span class="text-around">PRESENTE</span>
+        <span class="tracking-widest">PRESENTE</span>
     </div>
 
     <div class="mb-5">
@@ -138,7 +137,7 @@
     </div>
 
     <div class="font-bold text-center">
-        <div class="text-around">ATENTAMENTE</div>
+        <div class="tracking-widest">ATENTAMENTE</div>
         <div class="mt-20">
             <div>MTRO. JESÚS ALBERTO MATA ACOSTA</div>
             <div>DIRECTOR DE TECNOLOGÍAS DE LA INFORMACIÓN</div>

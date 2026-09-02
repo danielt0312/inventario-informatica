@@ -13,10 +13,11 @@ class ResguardoResource extends JsonResource
             'id' => $this->id,
             'fecha_actualizacion' => $this->fecha_actualizacion,
             'fecha_cancelacion' => $this->fecha_cancelacion,
+            'estado' => new ResguardoEstadoResource($this->whenLoaded('estado')),
             'archivo' => new ArchivoResource($this->whenLoaded('archivo')),
             'articulos_resguardados' => ResguardoArticuloResource::collection($this->whenLoaded('articulosResguardados')),
-            'empleado' => \Database\Factories\EmpleadoFactory::create(),
-            'adscripcion' => \Database\Factories\Adscripcion::create(),
+            'empleado' => \Database\Factories\EmpleadoFactory::create(), // TODO cambiar por datos reales
+            'adscripcion' => \Database\Factories\Adscripcion::create(), // TODO cambiar por datos reales
         ];
     }
 }

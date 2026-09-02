@@ -22,10 +22,6 @@ class Resguardo extends Model
         'fecha_cancelacion',
     ];
 
-    protected $attributes = [
-        'fecha_cancelacion' => null
-    ];
-
     public function articulosResguardados(): HasMany
     {
         return $this->hasMany(ResguardoArticulo::class);

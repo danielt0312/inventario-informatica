@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Resguardo;
+use App\Services\ResguardoService;
 use Illuminate\Http\Request;
 
 use Spatie\QueryBuilder\QueryBuilder;
@@ -12,23 +13,13 @@ class ResguardoController extends Controller
     public function index(Request $request)
     {
         return QueryBuilder::for(Resguardo::class)
-            // ->with('empleado')
+            ->allowedFilters(
+                AllowedFilter::belongsTo('estado'),
+                // TODO realizar filtrados por empleado y adscripción (de empleado)
+                // AllowedFilter::exact('empleado', 'empleado_id'),
+                // AllowedFilter::exact('adscripcion', 'empleado.adscripcion_id'),
+            )
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(Resguardo $resguardo)
-    {
-        //
-    }
-
-    public function update(Request $request, Resguardo $resguardo)
-    {
-        //
     }
 }

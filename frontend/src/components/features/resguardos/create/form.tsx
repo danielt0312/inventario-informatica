@@ -35,20 +35,21 @@ function CreateForm() {
 
     const empleadoId = useStore(form.store, (state) => state.values.empleado_id);
 
-    // const { data: articulosResguardadosPrevios = [] } = useQuery({
-    //     enabled: empleadoId !== undefined,
-    //     queryKey: ['resguardos', empleadoId],
-    //     queryFn: () => api.get<TResponse<ResguardoArticulo<Articulo>>>(`api/resguardos/${empleadoId}`, {
-    //         params: {
-    //             include: [
-    //                 'articulosResguardados.articulo.producto.marca',
-    //                 'articulosResguardados.articulo.producto.tipo',
-    //             ]
-    //         }
-    //     }).then(r => r.data.data)
-    // });
+    const { data: articulosResguardadosPrevios = [] } = useQuery({
+        enabled: empleadoId !== undefined,
+        queryKey: ['resguardos', empleadoId],
+        queryFn: () => api.get<TResponse<ResguardoArticulo<Articulo>[]>>(`api/resguardos`, {
+            params: {
+                include: [
+                    'articulosResguardados.articulo.producto.marca',
+                    'articulosResguardados.articulo.producto.tipo.categoria',
+                ],
+                filter: { empleado: empleadoId }
+            }
+        }).then(r => r.data.data)
+    });
 
-    const [articulosResguardados, setArticulosResguardados] = React.useState([]);
+    const [articulosResguardados, setArticulosResguardados] = React.useState<ArticuloResguardado[]>(articulosResguardadosPrevios);
 
     const table = useReactTable({
         columns: [
@@ -61,9 +62,17 @@ function CreateForm() {
                     )
                 )
             },
-            ...articuloDefaultColumnsBuilder<ArticuloResguardado>(row => row.articulo)
+            ...articuloDefaultColumnsBuilder<ArticuloResguardado>(row => row.articulo),
+            {
+                id: "actions",
+                cell: () => (
+                    <Button>
+                        Remover
+                    </Button>
+                )
+            }
         ],
-        data: [],
+        data: articulosResguardados,
         getCoreRowModel: getCoreRowModel()
     });
 
@@ -84,17 +93,13 @@ function CreateForm() {
                 <div className="flex justify-between">
                     <Label className="font-bold text-lg">Bienes Informáticos Resguardados</Label>
 
-                    <form.Subscribe selector={(state) => state.values.empleado_id}>
-                        {(empleadoId) => (
-                            <Button
-                                disabled={empleadoId === undefined}
-                                variant="outline"
-                                size="sm"
-                            >
-                                <PlusCircleIcon /> Agregar
-                            </Button>
-                        )}
-                    </form.Subscribe>
+                    <Button
+                        disabled={empleadoId === undefined}
+                        variant="outline"
+                        size="sm"
+                    >
+                        <PlusCircleIcon /> Agregar
+                    </Button>
                 </div>
 
 
