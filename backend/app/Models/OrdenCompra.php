@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-use App\Traits\Models\{HasArchivable, HasProveedor, HasResourceResponse};
+use App\Traits\Models\{HasDocumentable, HasProveedor, HasResourceResponse};
 
 class OrdenCompra extends Model
 {
-    use HasArchivable, HasProveedor, HasResourceResponse;
+    use HasDocumentable, HasProveedor, HasResourceResponse;
 
     protected $fillable = [
         'fecha_solicitud',

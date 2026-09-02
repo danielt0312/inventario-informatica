@@ -2,29 +2,25 @@
 
 namespace App\Traits\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
+use Znck\Eloquent\Relations\BelongsToThrough;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Builder;
-
 use App\Models\{
     Documento,
     Archivo
 };
 
-trait HasArchivable
+trait HasDocumentable
 {
-    use \Znck\Eloquent\Traits\BelongsToThrough;
+    use BelongsToThroughTrait;
 
-    public function initializeHasArchivable(): void
+    public function documento(): MorphOne
     {
-        $this->fillable(array_merge($this->getFillable(), ['documento_id']));
+        return $this->morphOne(Documento::class, 'documentable');
     }
 
-    public function documento(): BelongsTo
-    {
-        return $this->belongsTo(Documento::class);
-    }
-
-    public function archivo(): \Znck\Eloquent\Relations\BelongsToThrough
+    public function archivo(): BelongsToThrough
     {
         return $this->belongsToThrough(Archivo::class, Documento::class);
     }

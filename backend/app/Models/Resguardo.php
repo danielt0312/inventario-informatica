@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Relations\{
 };
 
 use App\Traits\Models\{
-    HasArchivable,
+    HasDocumentable,
     HasResourceResponse
 };
 
 class Resguardo extends Model
 {
-    use HasArchivable, HasResourceResponse;
+    use HasDocumentable, HasResourceResponse;
 
     protected $fillable = [
         'empleado_id',

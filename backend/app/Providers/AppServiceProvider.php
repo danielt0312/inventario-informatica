@@ -3,9 +3,20 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\{Blade, DB, View};
+use Illuminate\Support\Facades\{
+    Blade,
+    DB,
+    View
+};
 use Illuminate\Support\Pluralizer;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use App\Models\{
+    Oficio,
+    Dictamen,
+    Factura,
+    Resguardo,
+};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,6 +29,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Pluralizer::useLanguage('spanish');
         Carbon::setLocale('es');
+
+        Relation::enforceMorphMap([
+            'oficio'    => Oficio::class,
+            'dictamen'  => Dictamen::class,
+            'factura'   => Factura::class,
+            'resguardo' => Resguardo::class,
+        ]);
 
         Blade::anonymousComponentPath(resource_path('pdfs/components'), 'pdf');
         Blade::anonymousComponentPath(resource_path('pdfs/layouts'), 'pdf-layout');

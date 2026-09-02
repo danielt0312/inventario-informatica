@@ -2,26 +2,20 @@
 
 namespace App\Models;
 
+use App\Support\FilePathGenerator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-use App\Support\FilePathGenerator;
-
 class Archivo extends Model
 {
-    use HasUuids, HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'nombre',
         'extension',
         'size'
-    ];
-
-    protected $attributes = [
-        'activo' => 1
     ];
 
     public function documento(): HasOne
@@ -48,13 +42,6 @@ class Archivo extends Model
             fn (mixed $value, array $attributes)
                 => FilePathGenerator::forUuid($attributes['uuid'], $attributes['extension'])
         );
-    }
-
-    public function casts(): array
-    {
-        return [
-            'activo' => 'boolean',
-        ];
     }
 
     public function uniqueIds(): array

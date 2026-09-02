@@ -23,6 +23,7 @@ return new class extends Migration
                 ->constrained('archivos', indexName: 'fk_documentos_archivos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->morphs('documentable');
         });
     }
 

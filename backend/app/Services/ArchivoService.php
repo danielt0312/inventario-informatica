@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use InvalidArgumentException;
 use App\Models\Archivo;
 use App\Enums\AvailableFileExtensions;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\{File, UploadedFile};
-use InvalidArgumentException;
+use Illuminate\Http\{
+    File,
+    UploadedFile,
+};
 
 class ArchivoService
 {
@@ -18,16 +21,12 @@ class ArchivoService
         return storage_path("app/private/{$archivo->relativePath}");
     }
 
-    public function create(string $nombre, int $size, AvailableFileExtensions $tipo = AvailableFileExtensions::PDF): Archivo
+    public function create(array $fillable): Archivo
     {
-        return Archivo::create([
-            'nombre' => pathinfo($nombre, PATHINFO_FILENAME),
-            'size' => $size,
-            'extension' => $tipo->value
-        ]);
+        return Archivo::create($fillable);
     }
 
-    public function store(Archivo $archivo, UploadedFile|File $file, string $disk = 'local')
+    public function storeFile(Archivo $archivo, UploadedFile|File $file, string $disk): string | false
     {
         return Storage::disk($disk)->putFileAs(
             dirname($archivo->relative_path),
@@ -36,7 +35,7 @@ class ArchivoService
         );
     }
 
-    public function storeFromRaw(Archivo $archivo, string $content, string $disk = 'local')
+    public function storeFileFromRaw(Archivo $archivo, string $content, string $disk): bool
     {
         return Storage::disk($disk)->put(
             $archivo->relativePath,
@@ -44,24 +43,35 @@ class ArchivoService
         );
     }
 
-    public function createAndStore(UploadedFile|File $file, string|null $fileName = null, AvailableFileExtensions $tipo = AvailableFileExtensions::PDF, string $disk = 'local'): Archivo
+    public function createAndStore(UploadedFile|File $file, string $disk, string|null $fileName = null): Archivo
     {
-        if (is_null($fileName) && !($file instanceof UploadedFile)) {
-            throw new InvalidArgumentException('You must provide `fileName` when using a `File` instance.');
-        }
+        $fileName ??= pathinfo(
+            $file instanceof UploadedFile
+                ? $file->guessClientOriginalName()
+                : $file->getFileName(),
+            PATHINFO_FILENAME
+        );
 
-        $archivo = $this->create($fileName ?: $file->getClientOriginalName(), $file->getSize(), $tipo);
+        $archivo = $this->create([
+            'nombre' => $fileName,
+            'size' => $file->getSize(),
+            'extension' => $file->extension()
+        ]);
 
-        $this->store($archivo, $file, $disk);
+        $this->storeFile($archivo, $file, $disk);
 
         return $archivo;
     }
 
-    public function createAndStoreFromRaw(string $fileName, string $content, AvailableFileExtensions $tipo = AvailableFileExtensions::PDF, string $disk = 'local'): Archivo
+    public function createAndStoreFromRaw(string $fileName, string $content, string $extension, string $disk): Archivo
     {
-        $archivo = $this->create($fileName, strlen($content), $tipo);
+        $archivo = $this->create([
+            'nombre' => $fileName,
+            'size' => strlen($content),
+            'extension' => $extension
+        ]);
 
-        $this->storeFromRaw($archivo, $content, $disk);
+        $this->storeFileFromRaw($archivo, $content, $disk);
 
         return $archivo;
     }

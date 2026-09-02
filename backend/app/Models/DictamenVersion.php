@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Relations\{
     HasMany,
 };
 
-use App\Traits\Models\HasArchivable;
+use App\Traits\Models\HasDocumentable;
 
 class DictamenVersion extends Model
 {
-    use HasArchivable;
+    use HasDocumentable;
 
     protected $fillable = [
         'numero_version',

@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Traits\Models\HasArchivable;
+use App\Traits\Models\HasDocumentable;
 
 class Revision extends Model
 {
-    use HasArchivable;
+    use HasDocumentable;
 
     protected $fillable = [
         'empleado_id',

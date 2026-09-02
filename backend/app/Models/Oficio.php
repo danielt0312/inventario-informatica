@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\{
     HasOne
 };
 
-use App\Traits\Models\HasArchivable;
+use App\Traits\Models\HasDocumentable;
 
 class Oficio extends Model
 {
-    use HasFactory, HasArchivable;
+    use HasFactory, HasDocumentable;
 
     protected $fillable = [
         'folio',

@@ -2,25 +2,21 @@
 
 namespace App\Services;
 
+use RuntimeException;
 use Barryvdh\DomPDF\Facade\Pdf as DomPdf;
+use mikehaertl\pdftk\Pdf as PdftkPdf;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use mikehaertl\pdftk\Pdf as PdftkPdf;
-use RuntimeException;
 
 class PdfWatermarkService
 {
-    /**
-     * Aplica la marca de agua a un PDF existente y genera el archivo de salida.
-     * El PDF de marca de agua se genera al vuelo en cada llamada.
-     */
     public function apply(string $sourcePath, string $outputPath, string $text, ?string $paper = 'a4'): string
     {
         if (! File::exists($sourcePath)) {
             throw new RuntimeException("El archivo origen no existe: {$sourcePath}");
         }
 
-        $watermarkPath = $this->generateWatermarkPdf($text, $paper);
+        $watermarkPath = $this->generate($text, $paper);
 
         try {
             File::ensureDirectoryExists(dirname($outputPath));
@@ -37,7 +33,7 @@ class PdfWatermarkService
         return $outputPath;
     }
 
-    public function generateWatermarkPdf(string $text, string $paper): string
+    public function generate(string $text, string $paper): string
     {
         $tmpPath = storage_path('app/tmp/watermark-'.Str::uuid().'.pdf');
 
