@@ -20,14 +20,14 @@ export interface FormMutation<TResponse = any, TPayload = any, TError = LaravelV
         >,
         'mutationFn'
     > {
-    url: string;
+    url: string | ((data: TPayload) => string);
     method?: FormMutationMethod;
     axiosConfig?: Omit<AxiosRequestConfig<TPayload>, 'url' | 'data' | 'method'>;
     toFormData?: (data: TPayload) => FormData;
 }
 
 export function useFormMutation<TResponse = any, TPayload = any, TError = LaravelValidationErrors>({
-    url,
+    url: urlProp,
     axiosConfig,
     onError,
     toFormData,
@@ -38,6 +38,7 @@ export function useFormMutation<TResponse = any, TPayload = any, TError = Larave
         ...props,
         mutationFn: ({ data }: FormMutationFunction<TPayload>) => {
             const payload = toFormData ? toFormData(data) : data;
+            const url = typeof urlProp === 'string' ? urlProp : urlProp(data);
 
             if (payload instanceof FormData) {
                 payload.append('_method', method);

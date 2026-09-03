@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ResguardoArticulo extends Model
 {
@@ -12,10 +12,6 @@ class ResguardoArticulo extends Model
         'articulo_id',
         'fecha_asignacion',
         'fecha_cancelacion'
-    ];
-
-    protected $attributes = [
-        'fecha_cancelacion' => null
     ];
 
     public function articulo(): BelongsTo

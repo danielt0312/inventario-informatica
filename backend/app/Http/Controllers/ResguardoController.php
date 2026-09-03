@@ -6,7 +6,10 @@ use App\Models\Resguardo;
 use App\Services\ResguardoService;
 use Illuminate\Http\Request;
 
-use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\{
+    QueryBuilder,
+    AllowedFilter
+};
 
 class ResguardoController extends Controller
 {
@@ -20,6 +23,6 @@ class ResguardoController extends Controller
                 // AllowedFilter::exact('adscripcion', 'empleado.adscripcion_id'),
             )
             ->paginate($request->query('per_page', 10))
-            ->toResourceCollection();
+            ->toResourceCollection();   
     }
 }

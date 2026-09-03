@@ -23,7 +23,6 @@ return new class extends Migration
             $table->date('fecha_actualizacion');
             $table->date('fecha_cancelacion')
                 ->nullable();
-            $table->boolean('es_cancelado');
             $table->timestamps();
         });
 
@@ -40,6 +39,7 @@ return new class extends Migration
             $table->date('fecha_asignacion');
             $table->date('fecha_cancelacion')
                 ->nullable();
+            $table->timestamps();
 
             $table->unique(['resguardo_id', 'articulo_id'], 'uk_resguardo_articulos');
         });

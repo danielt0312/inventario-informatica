@@ -23,9 +23,10 @@ class UpdateEmpleadoResguardoRequest extends FormRequest
 
             // TODO validar que su estado sea apto y que no se trate de un producto tipo ram|discos|...
             'articulos.*' => [
+                'bail',
                 'required',
-                'integer',
-                'exists:articulos,id'
+                'uuid',
+                'exists:articulos,uuid'
             ],
         ];
     }

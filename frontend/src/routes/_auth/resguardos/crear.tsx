@@ -1,5 +1,4 @@
-import { CreateResguardoForm } from '@/components/features/resguardos/create/form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CreateResguardoView } from '@/components/features/resguardos/create/form';
 import { createFileRoute } from '@tanstack/react-router'
 import GoBackButton from '@/components/Goback';
 
@@ -12,17 +11,7 @@ function RouteComponent() {
         <>
             <GoBackButton />
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>
-                        Creación de Resguardo
-                    </CardTitle>
-                </CardHeader>
-
-                <CardContent>
-                    <CreateResguardoForm />
-                </CardContent>
-            </Card>
+            <CreateResguardoView />
         </>
     );
 }

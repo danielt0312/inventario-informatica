@@ -5,7 +5,7 @@ import {
     useEffect
 } from "react";
 
-export function useMinSpinning(isFetching: boolean, minDuration = 500) {
+export function useMinSpinning(isWaiting: boolean, minDuration = 500) {
     const [isSpinning, setIsSpinning] = useState(false);
     const spinStartRef = useRef<number | null>(null);
     const stopTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -18,7 +18,7 @@ export function useMinSpinning(isFetching: boolean, minDuration = 500) {
     }, [isSpinning]);
 
     useEffect(() => {
-        if (!isFetching && isSpinning && spinStartRef.current !== null) {
+        if (!isWaiting && isSpinning && spinStartRef.current !== null) {
             const elapsed = Date.now() - spinStartRef.current;
             const remaining = minDuration - elapsed;
 
@@ -39,7 +39,7 @@ export function useMinSpinning(isFetching: boolean, minDuration = 500) {
                 stopTimeoutRef.current = null;
             }
         };
-    }, [isFetching, isSpinning, minDuration]);
+    }, [isWaiting, isSpinning, minDuration]);
 
     return { isSpinning, startSpin };
 }

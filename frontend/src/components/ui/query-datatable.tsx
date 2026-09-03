@@ -40,7 +40,7 @@ export interface UseTableOptions<TData> extends
     getCoreRowModel?: TableOptions<TData>["getCoreRowModel"];
 }
 
-export function useAppTable<TData>({
+function useAppTable<TData>({
     rowCount,
     getCoreRowModel: coreRowModelFn = getCoreRowModel(),
     ...params
@@ -149,3 +149,5 @@ export function SearchInput({
         />
     )
 }
+
+export { useAppTable as useAppQueryTable }

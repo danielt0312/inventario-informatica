@@ -19,8 +19,8 @@ type Resguardo = {
     adscripcion: Adscripcion;
 }
 
-type DetailedResguardo = Resguardo & {
-    articulos_resguardados: ResguardoArticulo[];
+type DetailedResguardo<TArticulo extends IncludableArticulo = IncludableArticulo> = Resguardo & {
+    articulos_resguardados: ResguardoArticulo<TArticulo>[];
 }
 
 export type {

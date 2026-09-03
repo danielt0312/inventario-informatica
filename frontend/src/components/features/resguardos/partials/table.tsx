@@ -1,9 +1,8 @@
 import { Route as RouteCreate } from "@/routes/_auth/resguardos/crear";
-import { QueryDataTable } from "@/components/ui/query-datatable";
+import { QueryDataTable, SearchInput } from "@/components/ui/query-datatable";
 import { resguardoTableColumns } from "./table-cols";
 import { RouterButton } from "@/components/ui/router-button";
 import { CirclePlusIcon } from "lucide-react";
-
 
 function Table() {
     return (
@@ -11,9 +10,16 @@ function Table() {
             url='api/resguardos'
             queryKey={['resguardos']}
             columns={resguardoTableColumns}
+            filterBar={(
+                <>
+                    <SearchInput
+                        placeholder="Folio de solicitud"
+                    />
+                </>
+            )}
             actionBar={(
                 <RouterButton to={RouteCreate.to} size="sm" >
-                    <CirclePlusIcon/> Crear
+                    <CirclePlusIcon /> Crear
                 </RouterButton>
             )}
         />

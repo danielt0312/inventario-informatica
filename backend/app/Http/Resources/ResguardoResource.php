@@ -16,8 +16,8 @@ class ResguardoResource extends JsonResource
             'estado' => new ResguardoEstadoResource($this->whenLoaded('estado')),
             'archivo' => new ArchivoResource($this->whenLoaded('archivo')),
             'articulos_resguardados' => ResguardoArticuloResource::collection($this->whenLoaded('articulosResguardados')),
-            'empleado' => \Database\Factories\EmpleadoFactory::create(), // TODO cambiar por datos reales
-            'adscripcion' => \Database\Factories\Adscripcion::create(), // TODO cambiar por datos reales
+            'empleado' => \App\Models\Empleado::factory()->make(), // TODO cambiar por datos reales
+            'adscripcion' => \App\Models\Adscripcion::factory()->make(), // TODO cambiar por datos reales
         ];
     }
 }

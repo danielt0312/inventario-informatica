@@ -1,10 +1,10 @@
 import type { EmpleadoFieldType } from "../../externos/empleados/form-fields"
-import { requiredArray, selectedNumberOption } from "@/lib/schemas/common";
+import { filledString, requiredArray, selectedNumberOption } from "@/lib/schemas/common";
 import z from "zod";
 
 type Schema = {
     empleado_id: EmpleadoFieldType;
-    articulos: number[];
+    articulos: string[];
 }
 
 const defaultValues: Schema = {
@@ -13,11 +13,14 @@ const defaultValues: Schema = {
 }
 
 const validator = z.object({
-    articulos: requiredArray(selectedNumberOption),
+    articulos: requiredArray(filledString()),
     empleado_id: selectedNumberOption
 });
 
+type SchemaOutput = z.output<typeof validator>;
+
 export {
     defaultValues as createResguardoDefaultValues,
-    validator as createResguardoValidator
+    validator as createResguardoValidator,
+    type SchemaOutput as CreateResguardoSchemaOutput
 }
