@@ -22,7 +22,8 @@ use App\Http\Requests\Dictamen\{
 use App\Models\{
     Dictamen,
     DictamenAdquisicion,
-    Archivo
+    Archivo,
+    Oficio
 };
 
 use App\Enums\{
@@ -32,12 +33,17 @@ use App\Enums\{
 };
 
 use App\Services\{
+    ArchivoService,
     ArticuloService,
     PdfWatermarkService,
 };
 
-class DictamenController extends ArchivableController
+class DictamenController extends Controller
 {
+    public function __construct(
+        protected ArchivoService $archivoService
+    ) {}
+
     public function index(Request $request)
     {
         return QueryBuilder::for(Dictamen::class)
@@ -63,13 +69,17 @@ class DictamenController extends ArchivableController
 
                 $archivo->temporal?->delete();
 
-                $documento = $archivo->documento()->create([
-                    'tipo_id' => DocumentoTipoEnum::OFICIO->value
+                $oficio = Oficio::create([
+                    'folio' => $validated['folio'],
                 ]);
 
-                $oficio = $documento->oficio()->create([
-                    'folio' => $validated['folio']
-                ]);
+                $archivo->documento()
+                    ->make([
+                        'tipo_id' => DocumentoTipoEnum::OFICIO->value
+                    ])
+                    ->documentable()
+                    ->associate($oficio)
+                    ->save();
             }
 
             //todo obtener el jefe de departamento de DTI
@@ -134,19 +144,20 @@ class DictamenController extends ArchivableController
             $dictamen->versionActual()->associate($version)->save();
 
             $dictamen->load('versionActual.adquisiciones');
-
             $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
 
             $archivo = $this->archivoService->createAndStoreFromRaw(
                 DocumentoTipoEnum::DICTAMEN->getLabelValue(),
-                $pdf->output()
+                $pdf->output(),
+                'pdf'
             );
 
-            $documento = $archivo->documento()->create([
-                'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
-            ]);
-
-            $dictamen->versionActual->documento()->associate($documento)->save();
+            $archivo->documento()->make([
+                    'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
+                ])
+                ->documentable()
+                ->associate($version)
+                ->save();
 
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::PENDIENTE_ACUSE->value
@@ -174,19 +185,22 @@ class DictamenController extends ArchivableController
             }
 
             $dictamen->load('versionActual.adquisiciones');
-
             $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
 
             $archivo = $this->archivoService->createAndStoreFromRaw(
                 DocumentoTipoEnum::DICTAMEN->getLabelValue(),
-                $pdf->output()
+                $pdf->output(),
+                'pdf'
             );
 
-            $documento = $archivo->documento()->create([
-                'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
-            ]);
+            $archivo->documento()
+                ->make([
+                    'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
+                ])
+                ->documentable()
+                ->associate($dictamen->versionActual)
+                ->save();
 
-            $dictamen->versionActual->documento()->associate($documento)->save();
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::PENDIENTE_ACUSE->value
             ]);
@@ -202,7 +216,7 @@ class DictamenController extends ArchivableController
         $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
             if ($dictamen->oficio && $dictamen->oficio->verified_at === null) {
                 $oficioArchivoRequest = $request->getOficioArchivo();
-                $oficioArchivoOriginal = $dictamen->oficio->documento->archivo;
+                $oficioArchivoOriginal = $dictamen->oficio->archivo;
 
                 $dictamen->oficio->documento->archivo()
                     ->associate($oficioArchivoRequest)
@@ -216,7 +230,7 @@ class DictamenController extends ArchivableController
             }
 
             $dictamenArchivoRequest = $request->getDictamenArchivo();
-            $dictamenArchivoOriginal = $dictamen->versionActual->documento->archivo;
+            $dictamenArchivoOriginal = $dictamen->versionActual->archivo;
 
             $dictamen->versionActual->documento->archivo()
                 ->associate($dictamenArchivoRequest)
@@ -315,8 +329,9 @@ class DictamenController extends ArchivableController
 
         return $dictamen->load([
                 'estado',
+                'oficio',
                 'ordenCompra' => ['proveedor'],
-                'versionActual' => ['adquisiciones', 'oficio']
+                'versionActual' => ['adquisiciones']
             ])
             ->toResourceResponse();
     }

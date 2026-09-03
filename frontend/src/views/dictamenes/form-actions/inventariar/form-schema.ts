@@ -3,7 +3,7 @@ import type { ArticuloCostoUnitarioFieldType, ArticuloCuentaContableType, Articu
 import type { FacturaFieldType } from "@/components/features/facturas/form-fields";
 import type { ProductoFieldType } from "@/components/features/productos/form-fields";
 import type { OrdenCompraFieldType } from "@/components/features/orden_compras/form-fields";
-import { esCuentaContable } from "@/lib/utils";
+import { esCuentaContable, esCuentaContableInventariable } from "@/lib/utils";
 import z from "zod";
 
 type AdquisicionFields = {
@@ -77,7 +77,7 @@ export const validator = z.object({
         )
         .refine(
             ({ cuenta_contable, costo_unitario }) => !(
-                esCuentaContable(cuenta_contable) && (costo_unitario === null || isNaN(costo_unitario))
+                esCuentaContableInventariable(cuenta_contable) && (costo_unitario === null || isNaN(costo_unitario))
             ),
             {
                 error: 'Este campo es requerido',

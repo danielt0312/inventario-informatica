@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\{
     HasMany,
 };
 
-use App\Traits\Models\HasDocumentable;
+use App\Traits\Models\Relations\HasDocumentable;
 
 class DictamenVersion extends Model
 {

@@ -5,13 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany};
 
-use App\Traits\Models\{HasDocumentable, HasProveedor, HasResourceResponse};
+use App\Traits\Models\HasResourceResponse;
+use App\Traits\Models\Relations\{
+    HasDocumentable,
+    HasProveedor
+};
 
 class Factura extends Model
 {
     use HasDocumentable, HasProveedor, HasResourceResponse;
 
     protected $fillable = [
+        'proveedor_id',
         'folio',
         'fecha_emision',
     ];

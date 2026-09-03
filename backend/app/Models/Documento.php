@@ -14,7 +14,7 @@ class Documento extends Model
         'archivo_id',
     ];
 
-    public function documentable(): MorphOne
+    public function documentable(): MorphTo
     {
         return $this->morphTo();
     }

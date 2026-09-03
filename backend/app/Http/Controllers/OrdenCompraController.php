@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use App\Models\OrdenCompra;
+use App\Services\ArchivoService;
 use App\Enums\DocumentoTipoEnum;
 use App\Http\Requests\OrdenCompra\StoreOrdenCompraRequest;
 
-class OrdenCompraController extends ArchivableController
+class OrdenCompraController extends Controller
 {
+    public function __construct(
+        protected ArchivoService $archivoService
+    ) {}
+
     public function index(Request $request)
     {
         return OrdenCompra::with(['archivo', 'proveedor'])
@@ -20,19 +24,24 @@ class OrdenCompraController extends ArchivableController
 
     public function store(StoreOrdenCompraRequest $request)
     {
-        $orden_compra = DB::transaction(function () use ($request): OrdenCompra {
+        $ordenCompra = DB::transaction(function () use ($request): OrdenCompra {
             $archivo = $request->getArchivo();
-
-            $documento = $archivo->documento()->create([
-                'tipo_id' => DocumentoTipoEnum::ORDEN_COMPRA->value
-            ]);
-
             $archivo->temporal->delete();
 
-            return $documento->ordenCompra()->create($request->validated());
+            $ordenCompra = OrdenCompra::create($request->validated());
+
+            $archivo->documento()
+                ->make([
+                    'tipo_id' => DocumentoTipoEnum::ORDEN_COMPRA->value
+                ])
+                ->documentable()
+                ->associate($ordenCompra)
+                ->save();
+
+            return $ordenCompra;
         });
 
-        return $orden_compra->load(['archivo', 'proveedor'])
+        return $ordenCompra->load(['archivo', 'proveedor'])
             ->toResourceResponse(201);
     }
 }

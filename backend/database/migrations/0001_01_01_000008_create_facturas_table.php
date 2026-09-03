@@ -16,10 +16,6 @@ return new class extends Migration
                 ->constrained('proveedores', indexName: 'fk_facturas_proveedores')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('documento_id')
-                ->constrained('documentos', indexName: 'fk_facturas_documentos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
         });
 
         Schema::create('factura_orden_compra', function (Blueprint $table) {

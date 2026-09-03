@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('nombre', 64);
             $table->string('extension', 5);
             $table->unsignedBigInteger('size');
-            $table->boolean('activo');
             $table->timestamps();
         });
 

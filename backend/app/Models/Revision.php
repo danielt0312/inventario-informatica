@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Traits\Models\HasDocumentable;
+use App\Traits\Models\Relations\HasDocumentable;
 
 class Revision extends Model
 {

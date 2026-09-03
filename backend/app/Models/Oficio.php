@@ -3,17 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
     HasOne
 };
 
-use App\Traits\Models\HasDocumentable;
+use App\Traits\Models\Relations\HasDocumentable;
 
 class Oficio extends Model
 {
-    use HasFactory, HasDocumentable;
+    use HasDocumentable;
 
     protected $fillable = [
         'folio',

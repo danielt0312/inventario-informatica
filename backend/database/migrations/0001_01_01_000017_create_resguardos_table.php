@@ -23,11 +23,6 @@ return new class extends Migration
             $table->date('fecha_actualizacion');
             $table->date('fecha_cancelacion')
                 ->nullable();
-            $table->foreignId('documento_id')
-                ->nullable()
-                ->constrained('documentos', indexName: 'fk_resguardos_documentos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->boolean('es_cancelado');
             $table->timestamps();
         });

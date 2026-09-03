@@ -13,9 +13,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Models\{
     Oficio,
-    Dictamen,
+    DictamenVersion,
     Factura,
     Resguardo,
+    OrdenCompra
 };
 
 class AppServiceProvider extends ServiceProvider
@@ -32,9 +33,10 @@ class AppServiceProvider extends ServiceProvider
 
         Relation::enforceMorphMap([
             'oficio'    => Oficio::class,
-            'dictamen'  => Dictamen::class,
+            'dictamen_version'  => DictamenVersion::class,
             'factura'   => Factura::class,
             'resguardo' => Resguardo::class,
+            'orden_compra' => OrdenCompra::class
         ]);
 
         Blade::anonymousComponentPath(resource_path('pdfs/components'), 'pdf');

@@ -4,14 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
-
+use Spatie\QueryBuilder\{
+    AllowedFilter,
+    QueryBuilder
+};
 use App\Models\Factura;
+use App\Services\ArchivoService;
 use App\Enums\DocumentoTipoEnum;
 use App\Http\Requests\Factura\StoreFacturaRequest;
 
-class FacturaController extends ArchivableController
+class FacturaController extends Controller
 {
+    public function __construct(
+        protected ArchivoService $archivoService
+    ) {}
+
     public function index(Request $request)
     {
         return QueryBuilder::for(Factura::class)
@@ -26,14 +33,18 @@ class FacturaController extends ArchivableController
     public function store(StoreFacturaRequest $request)
     {
         $factura = DB::transaction(function () use ($request): Factura {
-            $archivoPayload = $request->getArchivo();
-            $archivoPayload->temporal->delete();
+            $archivo = $request->getArchivo();
+            $archivo->temporal->delete();
 
-            $documento = $archivoPayload->documento()->create([
-                'tipo_id' => DocumentoTipoEnum::FACTURA->value
-            ]);
+            $factura = Factura::create($request->validated());
 
-            $factura = $documento->factura()->create($request->validated());
+            $archivo->documento()
+                ->make([
+                    'tipo_id' => DocumentoTipoEnum::FACTURA->value
+                ])
+                ->documentable()
+                ->associate($factura)
+                ->save();
 
             return $factura;
         });

@@ -10,16 +10,13 @@ return new class extends Migration
     {
         Schema::create('orden_compras', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('documento_id')
-                ->constrained('documentos', indexName: 'fk_orden_compras_documentos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->date('fecha_solicitud');
             $table->string('numero_orden', 64);
             $table->foreignId('proveedor_id')
                 ->constrained('proveedores', indexName: 'fk_orden_compras_proveedores')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 

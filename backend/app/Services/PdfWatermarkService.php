@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class PdfWatermarkService
 {
-    public function apply(string $sourcePath, string $outputPath, string $text, ?string $paper = 'a4'): string
+    public function apply(string $sourcePath, string $outputPath, string $text, string $paper = 'a4'): string
     {
         if (! File::exists($sourcePath)) {
             throw new RuntimeException("El archivo origen no existe: {$sourcePath}");

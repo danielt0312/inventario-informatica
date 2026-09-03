@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB, Storage};
-
 use App\Models\Archivo;
+use App\Services\ArchivoService;
 use App\Http\Requests\Archivo\StoreArchivoRequest;
 
-class ArchivoController extends ArchivableController
+
+class ArchivoController extends Controller
 {
+    public function __construct(
+        protected ArchivoService $archivoService
+    ) {}
+
     public function store(StoreArchivoRequest $request)
     {
         $archivo = DB::transaction(function () use ($request): Archivo {
@@ -31,20 +36,6 @@ class ArchivoController extends ArchivableController
 
     public function stream(Archivo $archivo)
     {
-        if (!Storage::disk('local')->exists($archivo->relative_path)) {
-            return response(status: 404);
-        }
-
-        return response()->stream(function () use ($archivo) {
-            $stream = Storage::disk('local')->readStream($archivo->relative_path);
-            fpassthru($stream);
-
-            if (is_resource($stream)) {
-                fclose($stream);
-            }
-        }, 200, [
-            'Content-Type' => Storage::disk('local')->mimeType($archivo->relative_path),
-            'Content-Disposition' => 'inline; filename="'. $archivo->nombre .'"'
-        ]);
+        return $this->archivoService->stream($archivo);
     }
 }

@@ -15,10 +15,6 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
-            $table->foreignId('documento_id')
-                ->constrained('documentos', indexName: 'fk_revisiones_documentos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->string('observaciones', 255)
                 ->nullable();
             $table->timestamps();

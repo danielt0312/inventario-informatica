@@ -49,11 +49,6 @@ return new class extends Migration
             $table->date('fecha_solicitud');
             $table->string('motivo_cambio', 64)
                 ->nullable();
-            $table->foreignId('documento_id')
-                ->nullable()
-                ->constrained('documentos', indexName: 'fk_dictamen_versiones_documentos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->timestamps();
 
             $table->unique(['dictamen_id', 'numero_version'], 'uk_dictamen_versiones');

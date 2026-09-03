@@ -47,10 +47,6 @@ return new class extends Migration
                 ->constrained('users', indexName: 'fk_prestamos_receptor_users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('documento_id')
-                ->constrained('documentos', indexName: 'fk_prestamos_documentos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->string('observaciones', 255)
                 ->nullable();
             $table->timestamps();

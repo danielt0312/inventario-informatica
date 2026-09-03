@@ -16,7 +16,7 @@
         "laravel/tinker": "^2.10.1",
         "mikehaertl/php-pdftk": "^0.14.4",
         "spatie/laravel-query-builder": "^7.3",
-        "staudenmeir/belongs-to-through": "^2.17"
+        "staudenmeir/eloquent-has-many-deep": "^1.21"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
