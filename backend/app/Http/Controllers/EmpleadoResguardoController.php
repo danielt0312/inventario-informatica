@@ -33,8 +33,8 @@ class EmpleadoResguardoController extends Controller
                 'articulosResguardados.articulo.producto.tipo.categoria'
             )
             ->firstWhere([
-                'empleado_id' => $empleadoId,
-                'estado_id' => ResguardoEstadoEnum::ACTIVO->value
+                ['empleado_id', $empleadoId],
+                ['estado_id', '!=', ResguardoEstadoEnum::ACTIVO->value]
             ]);
 
         return $data === null

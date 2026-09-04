@@ -28,6 +28,7 @@ import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useNavigate } from "@tanstack/react-router";
 import { Route } from "@/routes/_auth/resguardos";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { SubmitButton } from "@/components/ui/submit-button";
 
 type ArticuloResguardado = ResguardoArticulo<Articulo> | {
     id?: undefined;
@@ -35,7 +36,9 @@ type ArticuloResguardado = ResguardoArticulo<Articulo> | {
 }
 
 function CreateView() {
-    const { mutate } = useFormMutation<any, CreateResguardoSchemaOutput>({
+    const navigate = useNavigate();
+
+    const { mutate, isPending } = useFormMutation<DetailedResguardo<Articulo>, CreateResguardoSchemaOutput>({
         method: 'PUT',
         url: (data) => `api/empleados/${data.empleado_id}/resguardo`,
         onSuccess: async (_, __, ___, { client }) => {
@@ -50,17 +53,12 @@ function CreateView() {
             onSubmit: createResguardoValidator
         },
         onSubmit: ({ value, formApi }) => {
-            console.count('handleSubmit');
-
             const data = createResguardoValidator.parse(value);
             mutate({ data, formApi });
         }
     });
 
     const empleadoId = useStore(form.store, (state) => state.values.empleado_id);
-
-
-    const navigate = useNavigate();
 
     const { data: articulosResguardadosPrevios } = useQuery({
         enabled: empleadoId !== undefined,
@@ -71,7 +69,6 @@ function CreateView() {
                     'articulosResguardados.articulo.producto.marca',
                     'articulosResguardados.articulo.producto.tipo.categoria',
                 ],
-                filter: { empleado: empleadoId }
             }
         }).then(r => r.data.data)
     });
@@ -192,17 +189,17 @@ function CreateView() {
                                 {(errors) => errors && <FieldError errors={errors} />}
                             </form.Subscribe>
 
-                            <Button
+                            <form.SubmitFormButton
+                                type="button"
                                 onClick={async () => {
                                     form.validateSync('submit');
                                     await form.validateAsync('submit');
                                     if (!form.state.isValid) return;
                                     setAlertOpen(true);
                                 }}
-                                className="self-center"
                             >
                                 <SaveIcon /> Guardar
-                            </Button>
+                            </form.SubmitFormButton>
 
                             <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
                                 <AlertDialogContent>
@@ -213,7 +210,7 @@ function CreateView() {
 
                                     <AlertDialogFooter>
                                         <AlertDialogAction asChild>
-                                            <form.SubmitFormButton onClick={() => form.handleSubmit()} />
+                                            <SubmitButton isSubmitting={isPending} onClick={() => form.handleSubmit()} />
                                         </AlertDialogAction>
 
                                         <AlertDialogCancel>
