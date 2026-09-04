@@ -21,6 +21,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('oficio_id')
+                ->nullable()
                 ->unique('uk_dictamenes_oficio')
                 ->constrained('oficios', indexName: 'fk_dictamen_versiones_oficios')
                 ->cascadeOnUpdate()
