@@ -9,7 +9,7 @@ import { Table } from "./partials/table";
 export function View() {
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader>
                 <CardTitle>
                     Dictámenes Tecnológicos
                 </CardTitle>

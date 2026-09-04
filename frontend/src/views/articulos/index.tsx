@@ -4,7 +4,7 @@ import { ArticuloTable } from "./partials/table";
 function View() {
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader>
                 <CardTitle>
                     Inventario de Bienes Informáticos
                 </CardTitle>

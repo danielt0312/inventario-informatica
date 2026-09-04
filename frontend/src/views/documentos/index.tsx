@@ -4,7 +4,7 @@ import { DocumentoTable } from "./partials/table"
 export function View() {
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader>
                 <CardTitle>Documentos almancenados</CardTitle>
             </CardHeader>
 
