@@ -9,6 +9,7 @@ import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";
 import type { ResguardoEstado } from "@/types/resguardos";
 import { MultiSelect } from "@/components/ui/multiselect";
+import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 
 interface TableFilters {
     estado: number[];
@@ -24,6 +25,8 @@ function Table() {
         queryFn: () => api.get<TResponse<ResguardoEstado[]>>('api/resguardo_estados')
             .then(r => r.data.data),
     });
+
+    const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
 
     return (
         <QueryDataTable
@@ -50,6 +53,12 @@ function Table() {
                     <CirclePlusIcon /> Crear o Modificar
                 </RouterButton>
             )}
+            tableOptions={{
+                meta: {
+                    previewFile: (uuid, title) => mutate({ uuid, title }),
+                    isPreviewing
+                }
+            }}
         />
     );
 }

@@ -18,13 +18,13 @@ export function DocumentoTable() {
         tipos: []
     });
 
-    const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
-
     const { data: TIPOS = [] } = useQuery({
         queryKey: ['documento_tipos'],
         queryFn: () => api.get<CatalogoListResponse>('api/documento_tipos')
             .then(r => r.data.data)
     });
+
+    const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
 
     return (
         <QueryDataTable

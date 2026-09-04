@@ -2,6 +2,7 @@ import type { ResguardoEstadoEnum } from "@/lib/constants";
 import type { Articulo } from "./articulos";
 import type { Adscripcion, Empleado } from "./externos";
 import type { Includable, TCatalogo } from "./generics";
+import type { Archivo } from "./documentos";
 
 type IncludableArticulo = Includable<Articulo>;
 
@@ -16,6 +17,7 @@ type ResguardoArticulo<TArticulo extends IncludableArticulo = IncludableArticulo
 
 type Resguardo<TEstado extends BaseEstado = BaseEstado> = {
     id: number;
+    archivo: Archivo;
     estado: TEstado;
     fecha_actualizacion: string;
     fecha_cancelacion: string | null;

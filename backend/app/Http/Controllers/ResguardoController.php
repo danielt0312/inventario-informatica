@@ -16,7 +16,7 @@ class ResguardoController extends Controller
     public function index(Request $request)
     {
         return QueryBuilder::for(Resguardo::class)
-            ->with('estado')
+            ->with('estado', 'archivo')
             ->defaultSort('-fecha_actualizacion')
             ->allowedSorts('fecha_actualizacion')
             ->allowedFilters(

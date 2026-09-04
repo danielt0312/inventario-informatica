@@ -4,6 +4,7 @@ import { cn, toLocaleDateFormat } from "@/lib/utils";
 import type { Resguardo, ResguardoEstado } from "@/types/resguardos";
 import type { ColumnDef } from "@tanstack/react-table";
 import { cva } from "class-variance-authority";
+import { ArchivoPreviewActionRow } from "../../archivos/table-cols";
 
 const estadoColorVariants = cva(
     "text-black",
@@ -56,6 +57,13 @@ const columns: ColumnDef<Resguardo>[] = [
     {
         header: 'Estado',
         cell: ({ row }) => <EstadoBadge estado={row.original.estado} />
+    },
+    {
+
+        id: 'actions',
+        cell: ({ row, table }) => (
+            <ArchivoPreviewActionRow meta={table.options.meta} archivo={row.original.archivo} />
+        ),
     }
 ];
 
