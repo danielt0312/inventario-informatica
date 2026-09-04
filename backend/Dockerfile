@@ -34,7 +34,9 @@ RUN composer install
 
 EXPOSE 8000
 
-CMD php -d upload_max_filesize=${PHP_UPLOAD_MAX_FILESIZE} \
+CMD php artisan config:clear && \
+    php artisan package:discover --ansi && \
+    php -d upload_max_filesize=${PHP_UPLOAD_MAX_FILESIZE} \
         -d post_max_size=${PHP_POST_MAX_SIZE} \
         -d memory_limit=${PHP_MEMORY_LIMIT} \
         -d max_file_uploads=${PHP_MAX_FILE_UPLOADS} \
