@@ -150,4 +150,4 @@ export function SearchInput({
     )
 }
 
-export { useAppTable as useAppQueryTable }
+export { useAppTable as useAppQueryDataTable }

@@ -30,10 +30,12 @@ class EmpleadoResguardoController extends Controller
             ->with('estado')
             ->allowedIncludes(
                 'articulosResguardados.articulo.producto.marca',
-                'articulosResguardados.articulo.producto.tipo.categoria'
+                'articulosResguardados.articulo.producto.tipo.categoria',
+                'articulosResguardados.articulo.estado'
             )
             ->firstWhere([
-                ['empleado_id', $empleadoId],
+                // ['empleado_id', $empleadoId],
+                ['empleado_id', 1],
                 ['estado_id', '!=', ResguardoEstadoEnum::ACTIVO->value]
             ]);
 
@@ -45,11 +47,13 @@ class EmpleadoResguardoController extends Controller
     public function update(int $empleadoId, UpdateEmpleadoResguardoRequest $request)
     {
         $resguardo = DB::transaction(function () use ($empleadoId, $request): Resguardo {
-            $resguardoActual = Resguardo::firstWhere('empleado_id', $empleadoId);
+            // $resguardoActual = Resguardo::firstWhere('empleado_id', $empleadoId);
+            $resguardoActual = Resguardo::firstWhere('empleado_id', 1);
 
             if ($resguardoActual === null) {
                 $resguardo = Resguardo::create([
-                    'empleado_id' => $empleadoId,
+                    // 'empleado_id' => $empleadoId,
+                    'empleado_id' => 1,
                     'estado_id' => ResguardoEstadoEnum::PENDIENTE_ACUSE->value,
                     'fecha_actualizacion' => now(),
                 ]);
@@ -92,6 +96,8 @@ class EmpleadoResguardoController extends Controller
 
                 return $resguardo;
             }
+
+            
         });
 
         return $resguardo->load([
