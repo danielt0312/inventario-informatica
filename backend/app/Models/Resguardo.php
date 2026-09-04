@@ -31,4 +31,12 @@ class Resguardo extends Model
     {
         return $this->hasMany(ResguardoArticulo::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'fecha_actualizacion' => 'date:Y-m-d',
+            'fecha_cancelacion' => 'date:Y-m-d',
+        ];
+    }
 }

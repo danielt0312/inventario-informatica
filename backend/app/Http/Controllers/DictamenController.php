@@ -44,8 +44,18 @@ class DictamenController extends Controller
         protected ArchivoService $archivoService
     ) {}
 
-    public function index(Request $request)
+    public function index(Request $request, \App\Services\ArchivoService $archivoService)
     {
+        $dictamen = Dictamen::with([
+            'versionActual.adquisiciones'
+        ])->find(1);
+        $pdfTitle = \App\Enums\DocumentoTipoEnum::DICTAMEN->getLabelValue();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf-view::dictamen', compact('dictamen'));
+        $archivoService->storeFileFromRaw(
+            $dictamen->versionActual->archivo,
+            $pdf->output(),
+        );
+
         return QueryBuilder::for(Dictamen::class)
             ->with(['oficio', 'estado', 'versionActual.archivo'])
             ->allowedFilters(

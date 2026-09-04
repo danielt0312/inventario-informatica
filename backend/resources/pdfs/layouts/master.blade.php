@@ -23,6 +23,7 @@
             font-size: 14px;
             margin: 0;
             padding: 0;
+            text-align: justify;
         }
         header {
             position: fixed;
@@ -30,8 +31,6 @@
             left: 0;
             right: 0;
             height: 60px;
-            border-bottom: 0.5px solid;
-            font-size: 12px;
         }
         footer {
             position: fixed;
@@ -39,9 +38,7 @@
             left: 0;
             right: 0;
             height: 40px;
-            border-top: 0.5px solid;
             padding-top: 10px;
-            font-size: 9px;
         }
 
         .align-top { vertical-align: top; }
@@ -66,7 +63,10 @@
 
         .font-bold { font-weight: bold; }
 
+        .text-9px { font-size: 9px; }
         .text-xs { font-size: 12px; }
+        .text-13px { font-size: 13px; }
+        .text-sm { font-size: 14px; }
         .text-2xl { font-size: 24px; }
         .text-3xl { font-size: 30px; }
 
@@ -75,9 +75,20 @@
         .mt-2 { margin-top: 8px; }
         .mt-3 { margin-top: 12px; }
         .mt-4 { margin-top: 16px; }
+        .mt-8 { margin-top: 32px; }
+        .mt-9 { margin-top: 36px; }
+        .mt-10 { margin-top: 40px; }
+        .mt-12 { margin-top: 48px; }
+        .mt-14 { margin-top: 56px; }
         .mt-20 { margin-top: 80px; }
         .mb-5 { margin-bottom: 20px; }
         .mb-8 { margin-bottom: 32px; }
+
+        .border-t { border-top: 0.5px solid }
+        .border-b { border-bottom: 0.5px solid }
+        .border { border: 0.5px solid }
+
+        .bg-neutral-500 { background-color: #737373; }
     </style>
 
     @stack('style')

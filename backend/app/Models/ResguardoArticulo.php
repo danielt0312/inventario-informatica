@@ -23,4 +23,12 @@ class ResguardoArticulo extends Model
     {
         return $this->belongsTo(Resguardo::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'fecha_asignacion' => 'date:Y-m-d',
+            'fecha_cancelacion' => 'date:Y-m-d'
+        ];
+    }
 }

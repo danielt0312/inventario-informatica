@@ -8,7 +8,7 @@ export function View() {
         <>
             <GoBackButton />
             <SidebarSteps>
-                <CardHeader>
+                <CardHeader className="mt-14">
                     <CardTitle>
                         {dictamenFormActionGetTitle().toUpperCase()}
                     </CardTitle>

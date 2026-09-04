@@ -68,15 +68,11 @@
             display: block;
             font-weight: bold;
         }
-
-        body {
-            text-align: justify;
-        }
     </style>
 @endpush
 
 <x-pdf-layout::master title="{{ $fileTitle }}">
-    <x-slot:header class="container">
+    <x-slot:header class="container border-b text-xs">
         <div class="header-logo">
             <x-pdf::logo />
         </div>
@@ -145,7 +141,7 @@
         </div>
     </div>
 
-    <x-slot:footer class="container">
+    <x-slot:footer class="container border-t text-9px">
         <div class="footer-left">
             <span>Porfirio Díaz Norte No. 1050. Colonia Hogares Modernos. C.P. 87059</span>
             <span>Cd. Victoria; Tamaulipas</span>
