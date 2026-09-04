@@ -22,6 +22,7 @@ use App\Http\Controllers\{
     OrdenCompraController,
     ProveedorController,
     ResguardoController,
+    ResguardoEstadoController,
     EmpleadoResguardoController
 };
 
@@ -42,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'empleados' => EmpleadoController::class,
         'adscripciones' => AdscripcionController::class,
         'resguardos' => ResguardoController::class,
+        'resguardo_estados' => ResguardoEstadoController::class,
     ], ['only' => 'index']);
 
     Route::apiResources([

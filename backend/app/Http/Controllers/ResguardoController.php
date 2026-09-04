@@ -16,6 +16,9 @@ class ResguardoController extends Controller
     public function index(Request $request)
     {
         return QueryBuilder::for(Resguardo::class)
+            ->with('estado')
+            ->defaultSort('-fecha_actualizacion')
+            ->allowedSorts('fecha_actualizacion')
             ->allowedFilters(
                 AllowedFilter::belongsTo('estado'),
                 // TODO realizar filtrados por empleado y adscripción (de empleado)
@@ -23,6 +26,6 @@ class ResguardoController extends Controller
                 // AllowedFilter::exact('adscripcion', 'empleado.adscripcion_id'),
             )
             ->paginate($request->query('per_page', 10))
-            ->toResourceCollection();   
+            ->toResourceCollection();
     }
 }

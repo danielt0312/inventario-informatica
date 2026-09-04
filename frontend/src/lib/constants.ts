@@ -152,3 +152,10 @@ export const dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario: Pro
 
 export const ArticuloCuentaContableInventariableRegex = /^\d{4}-\d{1}-\d{4}$/;
 export const ArticuloCuentaContableNoInventariable = '2000';
+
+export const ResguardoEstadoEnum = {
+    ACTIVO: 1,
+    PENDIENTE_ACUSE: 2,
+    CANCELADO: 3,
+}
+export type ResguardoEstadoEnum = (typeof ResguardoEstadoEnum)[keyof typeof ResguardoEstadoEnum];
