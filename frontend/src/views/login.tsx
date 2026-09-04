@@ -116,6 +116,7 @@ export function View() {
 
                         <form.SubmitFormButton
                             label="Ingresar"
+                            spinnerLabel="Intentando ingresar..."
                             icon={<DoorOpen />}
                             className="max-w-full w-1/2"
                         />
