@@ -15,7 +15,18 @@
 @push('style')
     <style>
         @page {
-            margin: 80px 60px;
+            margin-top: 90px;
+            margin-bottom: 80px;
+            margin-left: 60px;
+            margin-right: 60px;
+        }
+
+        header {
+            top: -70px;
+        }
+
+        footer {
+            bottom: -50px;
         }
     </style>
 @endpush
@@ -25,12 +36,13 @@
         <div class="table-cell align-middle text-left">
             <x-pdf::logo width="150" />
         </div>
-        <div class="text-center uppercase">
-            <h1>{{ $title }}</h1>
+        <div class="text-center align-middle uppercase font-bold">
+            <div class="text-3xl">Resguardo</div>
+            <div class="text-2xl">de Bienes Informáticos</div>
         </div>
     </x-slot:header>
 
-    <div class="text-right mt-10">
+    <div class="text-right">
         Fecha de Actualización: <span class="border-b uppercase">{{ $resguardo->fecha_actualizacion->translatedFormat('d \d\e F \d\e Y') }}</span>
     </div>
 
@@ -113,8 +125,13 @@
         </div>
     </div>
 
-    <x-slot:footer class="text-right">
-        <div>ASE-FOR-DTI-01-03</div>
-        <div>Versión: 0</div>
+    <x-slot:footer>
+        <div class="text-11px mb-1">
+            <b>NOTA: Una vez terminado el resguardo se procede a su cancelación, entregando, copia al interesado.</b>
+        </div>
+        <div class="text-right">
+            <div>ASE-FOR-DTI-01-03</div>
+            <div>Versión: 0</div>
+        </div>
     </x-slot:footer>
 </x-pdf-layout::master>

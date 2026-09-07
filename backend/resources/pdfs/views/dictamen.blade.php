@@ -25,63 +25,35 @@
 @push('style')
     <style>
         @page {
-            margin: 80px 60px;
+            margin-top: 88px;
+            margin-bottom: 80px;
+            margin-left: 60px;
+            margin-right: 60px;
         }
 
-        .container {
-            display: table;
-            width: 100%;
+        header {
+            top: -68px;
+            height: 60px;
         }
 
-        .header-logo {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: left;
-        }
-
-        .header-text {
-            display: table-cell;
-            vertical-align: bottom;
-            text-align: right;
-            white-space: nowrap;
-        }
-
-        .footer-left {
-            display: table-cell;
-            vertical-align: top;
-        }
-
-        .footer-right {
-            display: table-cell;
-            vertical-align: top;
-            width: 1%;
-            white-space: nowrap;
-            text-align: right;
-        }
-
-        .container span {
-            display: block;
-            line-height: 1.4;
-        }
-
-        .subtitle span {
-            display: block;
-            font-weight: bold;
+        footer {
+            bottom: -60px;
+            height: 40px;
         }
     </style>
 @endpush
 
 <x-pdf-layout::master title="{{ $fileTitle }}">
-    <x-slot:header class="container border-b text-xs">
-        <div class="header-logo">
+    <x-slot:header class="table w-full border-b text-xs">
+        <div class="table-cell align-middle">
             <x-pdf::logo />
         </div>
-        <div class="header-text">
-            <span>{{ $location }} a {{ $date }}</span>
+        <div class="table-cell align-bottom text-right white-space-nowrap">
+            <span class="block" style="line-height: 1.4">{{ $location }} a {{ $date }}</span>
         </div>
     </x-slot:header>
 
-    <div class="mt-2 text-right">
+    <div class="text-right">
         <b>DICTAMEN NO. {{ $dictamen->id.'/'. $dictamen->versionActual->numero_version }}.</b>
     </div>
 
@@ -89,10 +61,10 @@
         {{ $title }}
     </div>
 
-    <div class="subtitle mb-5">
-        <span>C.P. FERNANDO MARTÍN CASTILLO DE ANDA</span>
-        <span>DIRECTOR GENERAL DE ADMINISTRACIÓN Y FINANZAS</span>
-        <span class="tracking-widest">PRESENTE</span>
+    <div class="mb-5 font-bold">
+        <div>C.P. FERNANDO MARTÍN CASTILLO DE ANDA</div>
+        <div>DIRECTOR GENERAL DE ADMINISTRACIÓN Y FINANZAS</div>
+        <div class="tracking-widest">PRESENTE</div>
     </div>
 
     <div class="mb-5">
@@ -141,14 +113,14 @@
         </div>
     </div>
 
-    <x-slot:footer class="container border-t text-9px">
-        <div class="footer-left">
-            <span>Porfirio Díaz Norte No. 1050. Colonia Hogares Modernos. C.P. 87059</span>
-            <span>Cd. Victoria; Tamaulipas</span>
+    <x-slot:footer class="table w-full border-t text-9px pt-2p5">
+        <div class="table-cell align-top">
+            <div>Porfirio Díaz Norte No. 1050. Colonia Hogares Modernos. C.P. 87059</div>
+            <div>Cd. Victoria; Tamaulipas</div>
         </div>
-        <div class="footer-right">
-            <span>Tel. 834 153-68-00</span>
-            <span>wwww.asetamaulipas.gob.mx</span>
+        <div class="table-cell align-top white-space-nowrap text-right">
+            <div>Tel. 834 153-68-00</div>
+            <div>wwww.asetamaulipas.gob.mx</div>
         </div>
     </x-slot:footer>
 </x-pdf-layout::master>

@@ -13,20 +13,8 @@ use Spatie\QueryBuilder\{
 
 class ResguardoController extends Controller
 {
-    public function index(Request $request, \App\Services\ArchivoService $archivoService)
+    public function index(Request $request)
     {
-        $resguardo = Resguardo::with([
-            'articulosResguardados.articulo.producto' => [
-                'tipo.categoria', 'marca'
-            ]
-        ])->find(1);
-        $pdfTitle = \App\Enums\DocumentoTipoEnum::RESGUARDO->getLabelValue();
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf-view::resguardo', ['resguardo' => $resguardo, 'title' => $pdfTitle, 'fileTitle' => $pdfTitle]);
-        $archivoService->storeFileFromRaw(
-            $resguardo->archivo,
-            $pdf->output(),
-        );
-
         return QueryBuilder::for(Resguardo::class)
             ->with('estado', 'archivo')
             ->defaultSort('-fecha_actualizacion')

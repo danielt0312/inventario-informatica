@@ -25,20 +25,17 @@
             padding: 0;
             text-align: justify;
         }
+
         header {
             position: fixed;
-            top: -60px;
             left: 0;
             right: 0;
-            height: 60px;
         }
+
         footer {
             position: fixed;
-            bottom: -60px;
             left: 0;
             right: 0;
-            height: 40px;
-            padding-top: 10px;
         }
 
         .align-top { vertical-align: top; }
@@ -64,6 +61,7 @@
         .font-bold { font-weight: bold; }
 
         .text-9px { font-size: 9px; }
+        .text-11px { font-size: 11px; }
         .text-xs { font-size: 12px; }
         .text-13px { font-size: 13px; }
         .text-sm { font-size: 14px; }
@@ -81,8 +79,11 @@
         .mt-12 { margin-top: 48px; }
         .mt-14 { margin-top: 56px; }
         .mt-20 { margin-top: 80px; }
+        .mb-1 { margin-bottom: 4px; }
         .mb-5 { margin-bottom: 20px; }
         .mb-8 { margin-bottom: 32px; }
+
+        .pt-2p5 { padding-top: 10px }
 
         .border-t { border-top: 0.5px solid }
         .border-b { border-bottom: 0.5px solid }
