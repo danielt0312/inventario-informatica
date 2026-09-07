@@ -152,16 +152,20 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                 {field.state.value.map((_, index) => (
                                     <Card key={index}>
                                         <CardHeader>
-                                            <CardTitle className="text-lg">Bien Informático #{index + 1}</CardTitle>
-                                            <CardAction className="flex gap-2">
+                                            <CardTitle className="flex flex-row gap-2">
+                                                <div className="text-lg">
+                                                    Bien Informático #{index + 1}
+                                                </div>
                                                 <form.Subscribe selector={state => state.values.adquisiciones[index].cuenta_contable}>
                                                     {(cuentaContable) => !!cuentaContable && esCuentaContable(cuentaContable) && (
-                                                        <Badge className="[&>svg]:size-4.5 text-black" variant="secondary">
+                                                        <Badge className="[&>svg]:size-4.5 font-bold text-foreground bg-green-500">
                                                             <BadgeCheckIcon />
                                                             {esCuentaContableNoInventariable(cuentaContable) ? 'No Inventariable' : 'Inventariable'}
                                                         </Badge>
                                                     )}
                                                 </form.Subscribe>
+                                            </CardTitle>
+                                            <CardAction>
                                                 <Button
                                                     size="sm"
                                                     variant="destructive"
