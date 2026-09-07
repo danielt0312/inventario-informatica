@@ -42,7 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
         'dictamen_estados' => DictamenEstadoController::class,
         'empleados' => EmpleadoController::class,
         'adscripciones' => AdscripcionController::class,
-        'resguardos' => ResguardoController::class,
         'resguardo_estados' => ResguardoEstadoController::class,
     ], ['only' => 'index']);
 
@@ -60,6 +59,9 @@ Route::middleware('auth:sanctum')->group(function () {
         'proveedores' => ProveedorController::class,
     ], ['only' => ['index', 'store']]);
 
+    Route::apiResources([
+        'resguardos' => ResguardoController::class,
+    ], ['only' => ['index', 'destroy']]);
 
     // TODO definir si el parametro sera un id, uuid, u otro como identificable del empleado
     // TODO definir si un empleado puede ver los resguardos de otros (permisos de usuario)

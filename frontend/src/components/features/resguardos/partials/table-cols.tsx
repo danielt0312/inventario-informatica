@@ -1,10 +1,18 @@
+import type { Resguardo, ResguardoEstado } from "@/types/resguardos";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { ResguardoEstadoEnum } from "@/lib/constants";
 import { cn, toLocaleDateFormat } from "@/lib/utils";
-import type { Resguardo, ResguardoEstado } from "@/types/resguardos";
-import type { ColumnDef } from "@tanstack/react-table";
 import { cva } from "class-variance-authority";
 import { ArchivoPreviewActionRow } from "../../archivos/table-cols";
+import { useMutation } from "@tanstack/react-query";
+import { esResguardoEstadoCancelado } from "../utils";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { CircleArrowRightIcon, CircleXIcon, Trash2Icon } from "lucide-react";
+import { ActionRow } from "@/components/ui/action-row";
+import React from "react";
+import api from "@/lib/axios";
+import { Spinner } from "@/components/ui/spinner";
 
 const estadoColorVariants = cva(
     "text-black",
@@ -41,6 +49,62 @@ const EstadoBadge = ({
     </Badge>
 );
 
+const DestroyAction = ({
+    resguardo
+}: {
+    resguardo: Resguardo
+}) => {
+    const { mutate, isPending } = useMutation({
+        mutationFn: () => api.delete(`api/resguardos/${resguardo.uuid}`),
+        onSuccess: (_, __, ___, { client }) => {
+            client.invalidateQueries({
+                queryKey: ['resguardos']
+            });
+        }
+    });
+    const [alertOpen, setAlertOpen] = React.useState(false);
+
+    return (
+        <>
+            <ActionRow
+                onClick={() => setAlertOpen(true)}
+                variant="destructive"
+                tooltip={{
+                    message: "Cancelar",
+                }}
+            >
+                <Trash2Icon />
+            </ActionRow>
+
+            <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            ¿Deseas continuar?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Al continuar, estarás cancelando este resguardo y los artículos no tendrán ningún resguardante.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                        <AlertDialogAction variant="destructive" onClick={() => mutate()} disabled={isPending}>
+                            {isPending ? (
+                                <><Spinner /> Cancelando...</>
+                            ) : (
+                                <><CircleArrowRightIcon /> Continuar</>
+                            )}
+                        </AlertDialogAction>
+                        <AlertDialogCancel>
+                            <CircleXIcon /> Cancelar
+                        </AlertDialogCancel>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
+    );
+}
+
 const columns: ColumnDef<Resguardo>[] = [
     {
         header: 'Área de Adscripción',
@@ -61,9 +125,16 @@ const columns: ColumnDef<Resguardo>[] = [
     {
 
         id: 'actions',
-        cell: ({ row, table }) => (
-            <ArchivoPreviewActionRow meta={table.options.meta} archivo={row.original.archivo} />
-        ),
+        cell: ({ row, table }) => {
+            const resguardo = row.original;
+
+            return (
+                <div className="flex gap-1">
+                    <ArchivoPreviewActionRow meta={table.options.meta} archivo={resguardo.archivo} />
+                    {!esResguardoEstadoCancelado(resguardo.estado.id) && <DestroyAction resguardo={resguardo} />}
+                </div>
+            );
+        },
     }
 ];
 

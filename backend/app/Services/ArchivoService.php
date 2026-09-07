@@ -5,7 +5,10 @@ namespace App\Services;
 use InvalidArgumentException;
 use App\Models\Archivo;
 use App\Enums\AvailableFileExtensions;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\{
+    Storage,
+    File as FacadeFile
+};
 use Illuminate\Http\{
     File,
     UploadedFile,
@@ -13,6 +16,25 @@ use Illuminate\Http\{
 
 class ArchivoService
 {
+    public function __construct(
+        protected PdfWatermarkService $pdfWatermarkService
+    ) {}
+
+    public function cancelar(Archivo $archivo): void
+    {
+        $filepath = $this->getFullPath($archivo);
+        $outputPath = $this->pdfWatermarkService->apply(
+            $filepath,
+            $filepath,
+            'CANCELADO',
+        );
+
+        // todo revisar si colocar softdeletes
+        $archivo->update([
+            'size' => FacadeFile::size($filepath)
+        ]);
+    }
+
     public function getFullPath(Archivo $archivo): string
     {
         if (!$archivo->exists)

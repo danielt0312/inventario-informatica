@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Relations\{
 
 use App\Traits\Models\HasResourceResponse;
 use App\Traits\Models\Relations\HasDocumentable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Resguardo extends Model
 {
-    use HasDocumentable, HasResourceResponse;
+    use HasDocumentable, HasResourceResponse, HasUuids;
 
     protected $fillable = [
         'estado_id',
@@ -38,5 +39,15 @@ class Resguardo extends Model
             'fecha_actualizacion' => 'date:Y-m-d',
             'fecha_cancelacion' => 'date:Y-m-d',
         ];
+    }
+
+    public function uniqueIds(): array
+    {
+        return ['uuid'];
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
     }
 }

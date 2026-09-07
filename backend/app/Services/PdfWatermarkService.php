@@ -24,7 +24,7 @@ class PdfWatermarkService
             $pdf = new PdftkPdf($sourcePath);
 
             if (! $pdf->stamp($watermarkPath)->saveAs($outputPath)) {
-                throw new RuntimeException('pdftk falló al aplicar la marca de agua: '.$pdf->getError());
+                throw new RuntimeException('`pdftk` falló al aplicar la marca de agua: '.$pdf->getError());
             }
         } finally {
             File::delete($watermarkPath);

@@ -15,6 +15,7 @@ return new class extends Migration
 
         Schema::create('resguardos', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->foreignId('estado_id')
                 ->constrained('resguardo_estados', indexName: 'fk_resguardos_resguardo_estados')

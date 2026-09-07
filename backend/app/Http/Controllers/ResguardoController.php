@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Resguardo;
 use App\Services\ResguardoService;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\{
     QueryBuilder,
     AllowedFilter
@@ -27,5 +27,12 @@ class ResguardoController extends Controller
             )
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();
+    }
+
+    public function destroy(Resguardo $resguardo, ResguardoService $service)
+    {
+        DB::transaction(fn () => $service->cancelar($resguardo));
+
+        return response(status: 204);
     }
 }

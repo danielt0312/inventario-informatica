@@ -10,7 +10,7 @@ class ResguardoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'uuid' => $this->uuid,
             'fecha_actualizacion' => $this->fecha_actualizacion,
             'fecha_cancelacion' => $this->fecha_cancelacion,
             'estado' => new ResguardoEstadoResource($this->whenLoaded('estado')),
