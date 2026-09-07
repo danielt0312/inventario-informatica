@@ -10,6 +10,10 @@ use Illuminate\Support\Str;
 
 class PdfWatermarkService
 {
+    public function __construct (
+        protected PdfViewService $viewerService
+    ) {}
+
     public function apply(string $sourcePath, string $outputPath, string $text, string $paper = 'a4'): string
     {
         if (! File::exists($sourcePath)) {
@@ -39,7 +43,7 @@ class PdfWatermarkService
 
         File::ensureDirectoryExists(dirname($tmpPath));
 
-        DomPdf::loadView('pdf-view::watermark-stamp', [
+        $this->viewerService->loadView('pdf-view::watermark-stamp', [
                 'text' => $text,
             ])
             ->setPaper($paper)

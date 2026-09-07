@@ -20,18 +20,10 @@ class ArchivoService
         protected PdfWatermarkService $pdfWatermarkService
     ) {}
 
-    public function cancelar(Archivo $archivo): void
+    public function reloadMetadata(Archivo $archivo): void
     {
-        $filepath = $this->getFullPath($archivo);
-        $outputPath = $this->pdfWatermarkService->apply(
-            $filepath,
-            $filepath,
-            'CANCELADO',
-        );
-
-        // todo revisar si colocar softdeletes
         $archivo->update([
-            'size' => FacadeFile::size($filepath)
+            'size' => FacadeFile::size($this->getFullPath($archivo))
         ]);
     }
 
@@ -40,20 +32,18 @@ class ArchivoService
         if (!$archivo->exists)
             throw new \LogicException('No se puede obtener el file path para una instancia que no exista');
 
+        // todo definir si se utilizaran discos por posibilidad de conflicto
         return storage_path("app/private/{$archivo->relativePath}");
-    }
-
-    public function create(array $fillable): Archivo
-    {
-        return Archivo::create($fillable);
     }
 
     public function storeFile(Archivo $archivo, UploadedFile|File $file, string $disk = 'local'): string | false
     {
+        $relativePath = $archivo->relative_path;
+
         return Storage::disk($disk)->putFileAs(
-            dirname($archivo->relative_path),
+            dirname($relativePath),
             $file,
-            basename($archivo->relative_path)
+            basename($relativePath)
         );
     }
 
@@ -65,7 +55,7 @@ class ArchivoService
         );
     }
 
-    public function createAndStore(UploadedFile|File $file, string $disk = 'local', string|null $fileName = null): Archivo
+    public function createAndStoreFile(UploadedFile|File $file, string|null $fileName = null, string $disk = 'local'): Archivo
     {
         $fileName ??= pathinfo(
             $file instanceof UploadedFile
@@ -74,7 +64,7 @@ class ArchivoService
             PATHINFO_FILENAME
         );
 
-        $archivo = $this->create([
+        $archivo = Archivo::create([
             'nombre' => $fileName,
             'size' => $file->getSize(),
             'extension' => $file->extension()
@@ -85,9 +75,9 @@ class ArchivoService
         return $archivo;
     }
 
-    public function createAndStoreFromRaw(string $fileName, string $content, string $extension, string $disk = 'local'): Archivo
+    public function createAndStoreFileFromRaw(string $content, string $fileName, string $extension, string $disk = 'local'): Archivo
     {
-        $archivo = $this->create([
+        $archivo = Archivo::create([
             'nombre' => $fileName,
             'size' => strlen($content),
             'extension' => $extension
@@ -98,10 +88,7 @@ class ArchivoService
         return $archivo;
     }
 
-    public function stream(
-        Archivo $archivo,
-        string $disk = 'local'
-    ) {
+    public function stream(Archivo $archivo, string $disk = 'local') {
         if (!Storage::disk($disk)->exists($archivo->relative_path)) {
             return response(status: 404);
         }

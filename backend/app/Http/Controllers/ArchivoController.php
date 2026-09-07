@@ -18,7 +18,7 @@ class ArchivoController extends Controller
     public function store(StoreArchivoRequest $request)
     {
         $archivo = DB::transaction(function () use ($request): Archivo {
-            $archivo = $this->archivoService->createAndStore($request->file('archivo'));
+            $archivo = $this->archivoService->createAndStoreFile($request->file('archivo'));
 
             $archivo->temporal()->create([
                 'user_id' => $request->user()->id,

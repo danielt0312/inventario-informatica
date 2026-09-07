@@ -147,7 +147,7 @@ class DictamenController extends Controller
             $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
             $archivoNombre = DocumentoTipoEnum::DICTAMEN->getLabelValue();
 
-            $archivo = $this->archivoService->createAndStoreFromRaw(
+            $archivo = $this->archivoService->createAndStoreFileFromRaw(
                 "{$archivoNombre} - No. {$dictamen->id}/{$dictamen->versionActual->numero_version}",
                 $pdf->output(),
                 'pdf'
@@ -189,7 +189,7 @@ class DictamenController extends Controller
             $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
             $archivoNombre = DocumentoTipoEnum::DICTAMEN->getLabelValue();
 
-            $archivo = $this->archivoService->createAndStoreFromRaw(
+            $archivo = $this->archivoService->createAndStoreFileFromRaw(
                 "{$archivoNombre} - No. {$dictamen->id}/{$dictamen->versionActual->numero_version}",
                 $pdf->output(),
                 'pdf'

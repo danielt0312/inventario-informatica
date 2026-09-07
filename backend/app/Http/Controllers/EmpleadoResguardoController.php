@@ -23,6 +23,10 @@ use Spatie\QueryBuilder\QueryBuilder;
 // TODO devolver '404' en caso de que el empleado no exista
 class EmpleadoResguardoController extends Controller
 {
+    public function __construct(
+        protected ResguardoService $service
+    ) {}
+
     public function show(int $empleadoId)
     {
         $data = QueryBuilder::for(Resguardo::class)
@@ -43,26 +47,13 @@ class EmpleadoResguardoController extends Controller
             : $data->toResource();
     }
 
-    public function update(int $empleadoId, UpdateEmpleadoResguardoRequest $request, ArchivoService $archivoService, PdfWatermarkService $pdfWatermarkService)
+    public function update(int $empleadoId, UpdateEmpleadoResguardoRequest $request)
     {
-        $resguardo = DB::transaction(function () use ($empleadoId, $request, $archivoService, $pdfWatermarkService): Resguardo {
+        $resguardo = DB::transaction(function () use ($empleadoId, $request): Resguardo {
             $resguardoActual = Resguardo::firstWhere('empleado_id', 1);
 
             if ($resguardoActual !== null) {
-                $archivoPath = $archivoService->getFullPath($resguardoActual->archivo);
-                $pdfWatermarkService->apply(
-                    $archivoPath,
-                    $archivoPath,
-                    'CANCELADO'
-                );
-                $fechaCancelacion = now();
-                $resguardoActual->update([
-                    'fecha_cancelacion' => $fechaCancelacion,
-                    'estado_id' => ResguardoEstadoEnum::CANCELADO->value,
-                ]);
-                $resguardoActual->articulosResguardados()->update([
-                    'fecha_cancelacion' => $fechaCancelacion
-                ]);
+                $this->cancelar($resguardoActual);
             }
 
             $resguardo = Resguardo::create([
@@ -93,7 +84,7 @@ class EmpleadoResguardoController extends Controller
 
             $pdfTitle = DocumentoTipoEnum::RESGUARDO->getLabelValue();
             $pdf = DomPdf::loadView('pdf-view::resguardo', ['resguardo' => $resguardo, 'title' => $pdfTitle, 'fileTitle' => $pdfTitle]);
-            $archivo = $archivoService->createAndStoreFromRaw(
+            $archivo = $archivoService->createAndStoreFileFromRaw(
                 $pdfTitle,
                 $pdf->output(),
                 'pdf'

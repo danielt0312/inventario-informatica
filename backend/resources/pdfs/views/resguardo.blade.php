@@ -3,13 +3,11 @@
  * @var \App\Models\Resguardo $resguardo
  * @var string $title
  * @var string $subtitle
- * @var string $fileTitle
  */
 --}}
 @props([
     'resguardo',
     'title',
-    'fileTitle'
 ])
 
 @push('style')
@@ -31,7 +29,7 @@
     </style>
 @endpush
 
-<x-pdf-layout::master title="{{ $fileTitle }}">
+<x-pdf-layout::master :$title>
     <x-slot:header class="table w-full">
         <div class="table-cell align-middle text-left">
             <x-pdf::logo width="150" />
