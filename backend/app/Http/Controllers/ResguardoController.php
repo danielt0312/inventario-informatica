@@ -32,12 +32,14 @@ class ResguardoController extends Controller
     public function show(string $uuid)
     {
         return QueryBuilder::for(Resguardo::class)
-            ->with('estado')
-            ->allowedIncludes(
-                'articulosResguardados.articulo.producto.marca',
-                'articulosResguardados.articulo.producto.tipo.categoria',
-                'articulosResguardados.articulo.estado'
-            )
+            ->with([
+                'archivo',
+                'estado',
+                'articulosResguardados.articulo' => [
+                    'producto' => ['marca', 'tipo.categoria'],
+                    'estado'
+                ]
+            ])
             ->where('uuid', $uuid)
             ->firstOrFail()
             ->toResource();

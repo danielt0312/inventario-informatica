@@ -4,13 +4,14 @@ import { evidenciarAcuseResguardoDefaultFormValues, evidenciarAcuseResguardoVali
 import type { Resguardo } from "@/types/resguardos";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { ResguardoAcuseRecibidoField } from "./form-fields";
+import { SubmitButton } from "@/components/ui/submit-button";
 
 function EvidenciarAcuseForm({
     resguardo
 }: {
     resguardo: Resguardo
 }) {
-    const { mutate } = useFormMutation({
+    const { mutate, isPending } = useFormMutation({
         url: `api/resguardos/${resguardo.uuid}/evidenciar`,
     })
 
@@ -26,14 +27,14 @@ function EvidenciarAcuseForm({
     });
 
     return (
-        <Form form={form}>
+        <Form form={form} className="flex flex-col gap-7">
             <form.AppForm>
                 <form.AppField
                     name="acuse_archivo_uuid"
-                    children={() => <ResguardoAcuseRecibidoField />}
+                    children={() => <ResguardoAcuseRecibidoField className="w-1/2" />}
                 />
 
-                <form.SubmitFormButton />
+                <SubmitButton isSubmitting={isPending} disabled={isPending} className="self-start" />
             </form.AppForm>
         </Form>
     );

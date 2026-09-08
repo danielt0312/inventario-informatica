@@ -84,6 +84,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
             Route::prefix('{resguardo}')
                 ->group(function () {
+                    Route::post('/evidenciar-acuse', [ResguardoController::class, 'evidenciarAcuse'])
+                        ->name('evidenciar-acuse');
+
                     Route::post('cancelar', [ResguardoController::class, 'cancelar'])
                         ->name('cancelar');
                 });
