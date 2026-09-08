@@ -40,7 +40,7 @@ class EmpleadoResguardoController extends Controller
             ->firstWhere([
                 // ['empleado_id', $empleadoId],
                 ['empleado_id', 1],
-                ['estado_id', '!=', ResguardoEstadoEnum::ACTIVO->value]
+                ['estado_id', '!=', ResguardoEstadoEnum::CANCELADO->value]
             ]);
 
         return $data === null

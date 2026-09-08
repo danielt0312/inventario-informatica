@@ -43,7 +43,7 @@ class PdfWatermarkService
 
         File::ensureDirectoryExists(dirname($tmpPath));
 
-        $this->viewerService->loadView('pdf-view::watermark-stamp', [
+        $this->viewerService->loadView('watermark-stamp', [
                 'text' => $text,
             ])
             ->setPaper($paper)

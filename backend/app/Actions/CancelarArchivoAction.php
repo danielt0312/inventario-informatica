@@ -2,6 +2,12 @@
 
 namespace App\Actions;
 
+use App\Models\Archivo;
+use App\Services\{
+    ArchivoService,
+    PdfWatermarkService
+};
+
 final class CancelarArchivoAction
 {
     public function __construct(
