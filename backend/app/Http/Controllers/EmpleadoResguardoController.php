@@ -52,9 +52,10 @@ class EmpleadoResguardoController extends Controller
     {
         $articulosPorResguardar = Articulo::whereIn('uuid', $request->validated('articulos'))
             ->get()
-            ->pluck('id');
+            ->pluck('id')
+            ->toArray();
 
-        $resguardo = DB::transaction(fn () => $this->service->actualizar($empleadoId, $articulosPorResguardar->toArray()));
+        $resguardo = DB::transaction(fn () => $this->service->actualizar($empleadoId, $articulosPorResguardar));
 
         return $resguardo->load([
                 'estado',
@@ -65,7 +66,14 @@ class EmpleadoResguardoController extends Controller
 
     public function destroy(int $empleadoId)
     {
-        DB::transaction(fn () => $this->service->cancelarSiExiste($empleadoId));
+        DB::transaction(fn () => $this->service->cancelarPorEmpleado($empleadoId));
+
+        return response(status: 204);
+    }
+
+    public function evidenciarAcuse(Resguardo $resguardo, Archivo $acuseArchivo)
+    {
+        DB::transaction(fn () => $this->service->evidenciarAcuse($resguardo, $acuseArchivo));
 
         return response(status: 204);
     }

@@ -35,4 +35,18 @@ class ResguardoController extends Controller
 
         return response(status: 204);
     }
+
+    public function show(string $uuid)
+    {
+        return QueryBuilder::for(Resguardo::class)
+            ->with('estado')
+            ->allowedIncludes(
+                'articulosResguardados.articulo.producto.marca',
+                'articulosResguardados.articulo.producto.tipo.categoria',
+                'articulosResguardados.articulo.estado'
+            )
+            ->where('uuid', $uuid)
+            ->firstOrFail()
+            ->toResource();
+    }
 }

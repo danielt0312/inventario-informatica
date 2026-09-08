@@ -2,8 +2,12 @@
 
 namespace App\Services;
 
+use App\Exceptions\EntityNotEditableException;
 use App\Support\FileNameGenerator;
-use App\Actions\CancelarArchivoAction;
+use App\Actions\{
+    CancelarArchivoAction,
+    ReemplazarArchivoAction
+};
 use App\Models\Resguardo;
 use App\Enums\{
     ResguardoEstadoEnum,
@@ -17,10 +21,23 @@ class ResguardoService
         protected PdfViewService $pdfService
     ) {}
 
+    protected function cancelacionFallida(): void
+    {
+        throw new EntityNotEditableException(
+            reason: 'resguardo_ya_cancelado',
+            message: 'El resguardo no puede ser cancelado debido a que ya se encuentra en este estado.'
+        );
+    }
+
+    protected function esCancelable(Resguardo $resguardo): bool
+    {
+        return $resguardo->estado_id !== ResguardoEstadoEnum::CANCELADO->value;
+    }
+
     public function cancelar(Resguardo $resguardo): void
     {
-        if ($resguardo->estado_id === ResguardoEstadoEnum::CANCELADO->value) {
-            return;
+        if (! $this->esCancelable($resguardo)) {
+            $this->cancelacionFallida();
         }
 
         app()->call(CancelarArchivoAction::class, ['archivo' => $resguardo->archivo]);
@@ -37,16 +54,15 @@ class ResguardoService
         ]);
     }
 
-    public function cancelarSiExiste(int $empleadoId): void
+    public function cancelarPorEmpleado(int $empleadoId): void
     {
-        $resguardo = Resguardo::firstWhere([
-            ['empleado_id', $empleadoId],
-            ['estado_id', '!=', ResguardoEstadoEnum::CANCELADO->value]
-        ]);
+        Resguardo::where([
+                ['empleado_id', $empleadoId],
+                ['estado_id', '!=', ResguardoEstadoEnum::CANCELADO->value]
+            ])
+            ->firstOrFail();
 
-        if ($resguardo !== null) {
-            $this->cancelar($resguardo);
-        }
+        $this->cancelar($resguardo);
     }
 
     protected function crear(int $empleadoId, array $articulosIds): Resguardo
@@ -94,8 +110,30 @@ class ResguardoService
 
     public function actualizar(int $empleadoId, array $articulosIds): Resguardo
     {
-        $this->cancelarSiExiste($empleadoId);
+        $this->cancelarPorEmpleado($empleadoId);
 
         return $this->crear($empleadoId, $articulosIds);
+    }
+
+    protected function evidenciaFallida(): void
+    {
+        throw new EntityNotEditableException(
+            reason: 'resguardo_ya_evidenciado',
+            message: 'El resguardo ya se encuentra con una evidencia de acuse de recibido.'
+        );
+    }
+
+    protected function esEvidenciable(Resguardo $resguardo): bool
+    {
+        return $resguardo->estado_id === ResguardoEstadoEnum::PENDIENTE_ACUSE->value;
+    }
+
+    public function evidenciar(Resguardo $resguardo, Archivo $acuseArchivo): void
+    {
+        if (! $this->esEvidenciable($resguardo)) {
+            $this->evidenciaFallida();
+        }
+
+        app()->call(ReemplazarArchivoAction::class, ['target' => $resguardo->archivo, 'replacer' => $acuseArchivo]);
     }
 }
