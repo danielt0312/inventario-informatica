@@ -4,7 +4,6 @@ namespace App\Services;
 
 use InvalidArgumentException;
 use App\Models\Archivo;
-use App\Enums\AvailableFileExtensions;
 use Illuminate\Support\Facades\{
     Storage,
     File as FacadeFile
@@ -16,7 +15,17 @@ use Illuminate\Http\{
 
 class ArchivoService
 {
-    public function reloadMetadata(Archivo $archivo): void
+    public function fileExists(Archivo $archivo): bool
+    {
+        return Storage::exists($archivo->relative_path);
+    }
+
+    public function getFile(Archivo $archivo): string | null
+    {
+        return Storage::get($archivo->relative_path);
+    }
+
+    public function refreshMetadata(Archivo $archivo): void
     {
         $archivo->update([
             'size' => FacadeFile::size($this->getFullPath($archivo))
@@ -25,33 +34,34 @@ class ArchivoService
 
     public function getFullPath(Archivo $archivo): string
     {
-        if (!$archivo->exists)
-            throw new \LogicException('No se puede obtener el file path para una instancia que no exista');
+        if (!$archivo->exists) {
+            throw new \LogicException('No se puede obtener el file path para una instancia que no existe.');
+        }
 
         // todo definir si se utilizaran discos por posibilidad de conflicto
-        return storage_path("app/private/{$archivo->relativePath}");
+        return Storage::path($archivo->relativePath);
     }
 
-    public function storeFile(Archivo $archivo, UploadedFile|File $file, string $disk = 'local'): string | false
+    public function storeFile(Archivo $archivo, UploadedFile|File $file): string | false
     {
         $relativePath = $archivo->relative_path;
 
-        return Storage::disk($disk)->putFileAs(
+        return Storage::putFileAs(
             dirname($relativePath),
             $file,
             basename($relativePath)
         );
     }
 
-    public function storeFileFromRaw(Archivo $archivo, string $content, string $disk = 'local'): bool
+    public function storeFileFromRaw(Archivo $archivo, string $contents): bool
     {
-        return Storage::disk($disk)->put(
+        return Storage::put(
             $archivo->relativePath,
-            $content
+            $contents
         );
     }
 
-    public function createAndStoreFile(UploadedFile|File $file, string|null $fileName = null, string $disk = 'local'): Archivo
+    public function createAndStoreFile(UploadedFile|File $file, ?string $fileName = null): Archivo
     {
         $fileName ??= pathinfo(
             $file instanceof UploadedFile
@@ -66,39 +76,41 @@ class ArchivoService
             'extension' => $file->extension()
         ]);
 
-        $this->storeFile($archivo, $file, $disk);
+        $this->storeFile($archivo, $file);
 
         return $archivo;
     }
 
-    public function createAndStoreFileFromRaw(string $content, string $fileName, string $extension, string $disk = 'local'): Archivo
+    public function createAndStoreFileFromRaw(string $contents, string $fileName, string $extension): Archivo
     {
         $archivo = Archivo::create([
             'nombre' => $fileName,
-            'size' => strlen($content),
+            'size' => strlen($contents),
             'extension' => $extension
         ]);
 
-        $this->storeFileFromRaw($archivo, $content, $disk);
+        $this->storeFileFromRaw($archivo, $contents);
 
         return $archivo;
     }
 
-    public function stream(Archivo $archivo, string $disk = 'local') {
-        if (!Storage::disk($disk)->exists($archivo->relative_path)) {
+    public function stream(Archivo $archivo)
+    {
+        if (! $this->fileExists($archivo)) {
             return response(status: 404);
         }
 
-        return response()->stream(function () use ($archivo, $disk) {
-            $stream = Storage::disk($disk)->readStream($archivo->relative_path);
+        return response()->stream(function () use ($archivo) {
+            $stream = Storage::readStream($archivo->relative_path);
             fpassthru($stream);
 
             if (is_resource($stream)) {
                 fclose($stream);
             }
         }, 200, [
-            'Content-Type' => Storage::disk($disk)->mimeType($archivo->relative_path),
+            'Content-Type' => Storage::mimeType($archivo->relative_path),
             'Content-Disposition' => 'inline; filename="'. $archivo->nombre .'"'
         ]);
     }
+
 }
