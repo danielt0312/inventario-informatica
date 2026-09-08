@@ -2,12 +2,12 @@
 
 namespace App\Support;
 
-class FileNameGenerator
+final class FileNameGenerator
 {
-    public static function forUuid(string $legibleTitle, string $uuid7): string
+    public static function forUuid(string $legibleTitle, string $uuid): string
     {
-        $prepend = mb_strtoupper(str_replace(' ', '_', $this->legible()), 'UTF-8');
-        [,,,,$append] = explode('-', $uuid7);
+        $prepend = mb_strtoupper(str_replace(' ', '_', $legibleTitle), 'UTF-8');
+        [,,,,$append] = explode('-', $uuid);
         return "$prepend-$append";
     }
 }

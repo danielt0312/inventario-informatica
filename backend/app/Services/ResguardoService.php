@@ -2,20 +2,19 @@
 
 namespace App\Services;
 
+use App\Support\FileNameGenerator;
 use App\Actions\CancelarArchivoAction;
 use App\Models\Resguardo;
 use App\Enums\{
     ResguardoEstadoEnum,
     DocumentoTipoEnum
 };
-use App\Traits\Services\HasArchivoCancelable;
 
 class ResguardoService
 {
-    use HasArchivoCancelable;
-
     public function __construct(
         protected ArchivoService $archivoService,
+        protected PdfViewService $pdfService
     ) {}
 
     public function cancelar(Resguardo $resguardo): void
@@ -38,7 +37,19 @@ class ResguardoService
         ]);
     }
 
-    public function crear(int $empleadoId, array $articulosIds): Resguardo
+    public function cancelarSiExiste(int $empleadoId): void
+    {
+        $resguardo = Resguardo::firstWhere([
+            ['empleado_id', $empleadoId],
+            ['estado_id', '!=', ResguardoEstadoEnum::CANCELADO->value]
+        ]);
+
+        if ($resguardo !== null) {
+            $this->cancelar($resguardo);
+        }
+    }
+
+    protected function crear(int $empleadoId, array $articulosIds): Resguardo
     {
         $fechaActual = now();
 
@@ -56,17 +67,19 @@ class ResguardoService
             $articulosIds
         );
 
+        // todo validar que los articulos realmente no se encuentren bajo resguardo
         $resguardo->articulosResguardados()->createMany($articulosPorResguardar);
+
         $resguardo->load([
             'articulosResguardados.articulo.producto' => [
                 'marca', 'tipo.categoria'
             ]
         ]);
 
-        $filename = FileName
-        $pdf = app()->call(PdfViewService::class, ['view' => 'resguardo', 'resguardo' => $resguardo, 'title' =>])
+        $title = FileNameGenerator::forUuid(DocumentoTipoEnum::RESGUARDO->getLabelValue(), $resguardo->uuid);
+        $pdf = $this->pdfService->loadView('resguardo', compact('resguardo', 'title'));
 
-        $archivo = $this->archivoService->createAndStoreFileFromRaw($pdf, $filename, 'pdf');
+        $archivo = $this->archivoService->createAndStoreFileFromRaw($pdf->output(), $title, 'pdf');
 
         $archivo->documento()
             ->make([
@@ -75,5 +88,14 @@ class ResguardoService
             ->documentable()
             ->associate($resguardo)
             ->save();
+
+        return $resguardo;
+    }
+
+    public function actualizar(int $empleadoId, array $articulosIds): Resguardo
+    {
+        $this->cancelarSiExiste($empleadoId);
+
+        return $this->crear($empleadoId, $articulosIds);
     }
 }

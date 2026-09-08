@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-class FilePathGenerator
+final class FilePathGenerator
 {
     public static function forUuid(string $uuid, string $extension): string
     {

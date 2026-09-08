@@ -16,10 +16,6 @@ use Illuminate\Http\{
 
 class ArchivoService
 {
-    public function __construct(
-        protected PdfWatermarkService $pdfWatermarkService
-    ) {}
-
     public function reloadMetadata(Archivo $archivo): void
     {
         $archivo->update([

@@ -12,7 +12,8 @@ use App\Enums\{
 };
 use App\Services\{
     ArchivoService,
-    PdfWatermarkService
+    PdfWatermarkService,
+    ResguardoService
 };
 use App\Http\Requests\Resguardo\UpdateEmpleadoResguardoRequest;
 use Barryvdh\DomPDF\Facade\Pdf as DomPdf;
@@ -49,58 +50,11 @@ class EmpleadoResguardoController extends Controller
 
     public function update(int $empleadoId, UpdateEmpleadoResguardoRequest $request)
     {
-        $resguardo = DB::transaction(function () use ($empleadoId, $request): Resguardo {
-            $resguardoActual = Resguardo::firstWhere('empleado_id', 1);
+        $articulosPorResguardar = Articulo::whereIn('uuid', $request->validated('articulos'))
+            ->get()
+            ->pluck('id');
 
-            if ($resguardoActual !== null) {
-                $this->cancelar($resguardoActual);
-            }
-
-            $resguardo = Resguardo::create([
-                'empleado_id' => 1,
-                'estado_id' => ResguardoEstadoEnum::PENDIENTE_ACUSE->value,
-                'fecha_actualizacion' => now()
-            ]);
-
-            $articulosUuids = $request->validated('articulos');
-            $articulosPorResguardar = Articulo::whereIn('uuid', $articulosUuids)
-                ->get()
-                ->keyBy('uuid');
-
-            $articulosResguardados = array_map(
-                fn ($uuid) => [
-                    'articulo_id' => $articulosPorResguardar->get($uuid)->id,
-                    'fecha_asignacion' => now(),
-                ],
-                $articulosUuids
-            );
-
-            $resguardo->articulosResguardados()->createMany($articulosResguardados);
-            $resguardo->load([
-                'articulosResguardados.articulo.producto' => [
-                    'marca', 'tipo.categoria'
-                ]
-            ]);
-
-            $pdfTitle = DocumentoTipoEnum::RESGUARDO->getLabelValue();
-            $pdf = DomPdf::loadView('pdf-view::resguardo', ['resguardo' => $resguardo, 'title' => $pdfTitle, 'fileTitle' => $pdfTitle]);
-            $archivo = $archivoService->createAndStoreFileFromRaw(
-                $pdfTitle,
-                $pdf->output(),
-                'pdf'
-            );
-
-            $archivo->documento()
-                ->make([
-                    'tipo_id' => DocumentoTipoEnum::RESGUARDO->value,
-                ])
-                ->documentable()
-                ->associate($resguardo)
-                ->save();
-
-            return $resguardo;
-
-        });
+        $resguardo = DB::transaction(fn () => $this->service->actualizar($empleadoId, $articulosPorResguardar->toArray()));
 
         return $resguardo->load([
                 'estado',
@@ -111,6 +65,8 @@ class EmpleadoResguardoController extends Controller
 
     public function destroy(int $empleadoId)
     {
-        //
+        DB::transaction(fn () => $this->service->cancelarSiExiste($empleadoId));
+
+        return response(status: 204);
     }
 }
