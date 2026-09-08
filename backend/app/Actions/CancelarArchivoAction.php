@@ -19,6 +19,6 @@ final class CancelarArchivoAction
     {
         $path = $this->archivoService->getFullPath($archivo);
         $this->pdfWatermarkService->apply($path, $path, $texto);
-        $this->archivoService->reloadMetadata($archivo);
+        $this->archivoService->refreshMetadata($archivo);
     }
 }
