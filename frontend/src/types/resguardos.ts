@@ -16,7 +16,7 @@ type ResguardoArticulo<TArticulo extends IncludableArticulo = IncludableArticulo
 }
 
 type Resguardo<TEstado extends BaseEstado = BaseEstado> = {
-    uuid: number;
+    uuid: string;
     archivo: Archivo;
     estado: TEstado;
     fecha_actualizacion: string;

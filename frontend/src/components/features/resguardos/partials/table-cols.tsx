@@ -8,11 +8,13 @@ import { ArchivoPreviewActionRow } from "../../archivos/table-cols";
 import { useMutation } from "@tanstack/react-query";
 import { esResguardoEstadoCancelado } from "../utils";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { CircleArrowRightIcon, CircleXIcon, Trash2Icon } from "lucide-react";
+import { CircleArrowRightIcon, CircleXIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { ActionRow } from "@/components/ui/action-row";
 import React from "react";
 import api from "@/lib/axios";
 import { Spinner } from "@/components/ui/spinner";
+import { RouterButton } from "@/components/ui/router-button";
+import { Route as InspeccionarRoute } from "@/routes/_auth/resguardos/$uuid/inspeccionar";
 
 const estadoColorVariants = cva(
     "text-black",
@@ -131,6 +133,17 @@ const columns: ColumnDef<Resguardo>[] = [
             return (
                 <div className="flex gap-1">
                     <ArchivoPreviewActionRow meta={table.options.meta} archivo={resguardo.archivo} />
+                    <RouterButton
+                        to={InspeccionarRoute.to}
+                        params={{ uuid: resguardo.uuid }}
+                        size="icon"
+                        variant="outline"
+                        tooltip={{
+                            message: "Inspeccionar"
+                        }}
+                    >
+                        <SearchIcon />
+                    </RouterButton>
                     {!esResguardoEstadoCancelado(resguardo.estado.id) && <DestroyAction resguardo={resguardo} />}
                 </div>
             );

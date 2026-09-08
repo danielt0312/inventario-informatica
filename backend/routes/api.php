@@ -59,9 +59,20 @@ Route::middleware('auth:sanctum')->group(function () {
         'proveedores' => ProveedorController::class,
     ], ['only' => ['index', 'store']]);
 
-    Route::apiResources([
-        'resguardos' => ResguardoController::class,
-    ], ['only' => ['index', 'destroy']]);
+    Route::name('resguardos.')
+        ->prefix('resguardos')
+        ->group(function () {
+            Route::apiResource('', ResguardoController::class)
+                ->only(['index', 'destroy'])
+                ->parameters(['' => 'resguardo']);
+
+            Route::apiResource('', ResguardoController::class)
+                ->only(['show'])
+                ->parameters(['' => 'uuid']);
+
+            Route::post('{resguardo}/evidenciar-acuse', [ResguardoController::class, 'evidenciarAcuse'])
+                ->name('evidenciar-acuse');
+        });
 
     // TODO definir si el parametro sera un id, uuid, u otro como identificable del empleado
     // TODO definir si un empleado puede ver los resguardos de otros (permisos de usuario)
@@ -73,8 +84,8 @@ Route::middleware('auth:sanctum')->group(function () {
         ->prefix('dictamenes')
         ->group(function () {
             Route::apiResource('', DictamenController::class)
-                ->parameters(['' => 'dictamen'])
-                ->only(['index', 'store', 'update']);
+                ->only(['index', 'store', 'update'])
+                ->parameters(['' => 'dictamen']);
 
             Route::get('{uuid}', [DictamenController::class, 'show'])
                 ->whereUuid('uuid')
