@@ -4,7 +4,7 @@ namespace App\Http\Requests\Resguardo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEmpleadoResguardoRequest extends FormRequest
+class ActualizarResguardoRequest extends FormRequest
 {
     // TODO validar en caso de que el empleado no exista
     public function authorize(): bool

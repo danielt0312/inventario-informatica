@@ -23,7 +23,8 @@ use App\Http\Controllers\{
     ProveedorController,
     ResguardoController,
     ResguardoEstadoController,
-    EmpleadoResguardoController
+    EmpleadoResguardoController,
+    EmpleadoResguardoActualController,
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -59,26 +60,34 @@ Route::middleware('auth:sanctum')->group(function () {
         'proveedores' => ProveedorController::class,
     ], ['only' => ['index', 'store']]);
 
+    // TODO definir si el parametro sera un id, uuid, u otro como identificable del empleado
+    // TODO definir si un empleado puede ver los resguardos de otros (permisos de usuario)
+    Route::apiResource('empleados.resguardos', EmpleadoResguardoController::class)
+        ->only(['index'])
+        ->parameters(['empleados' => 'empleadoId']);
+
+    Route::name('empleados.resguardo-actual.')
+        ->prefix('empleados/{empleadoId}/resguardo-actual')
+        ->group(function () {
+            Route::apiResource('', EmpleadoResguardoActualController::class)
+                ->only(['index']);
+            Route::post('', [EmpleadoResguardoActualController::class, 'actualizar'])
+                ->name('actualizar');
+        });
+
     Route::name('resguardos.')
         ->prefix('resguardos')
         ->group(function () {
             Route::apiResource('', ResguardoController::class)
-                ->only(['index', 'destroy'])
-                ->parameters(['' => 'resguardo']);
-
-            Route::apiResource('', ResguardoController::class)
-                ->only(['show'])
+                ->only(['index', 'show'])
                 ->parameters(['' => 'uuid']);
 
-            Route::post('{resguardo}/evidenciar-acuse', [ResguardoController::class, 'evidenciarAcuse'])
-                ->name('evidenciar-acuse');
+            Route::prefix('{resguardo}')
+                ->group(function () {
+                    Route::post('cancelar', [ResguardoController::class, 'cancelar'])
+                        ->name('cancelar');
+                });
         });
-
-    // TODO definir si el parametro sera un id, uuid, u otro como identificable del empleado
-    // TODO definir si un empleado puede ver los resguardos de otros (permisos de usuario)
-    Route::apiSingleton('empleados.resguardo', EmpleadoResguardoController::class)
-        ->destroyable()
-        ->parameters(['empleados' => 'empleadoId']);
 
     Route::name('dictamenes.')
         ->prefix('dictamenes')

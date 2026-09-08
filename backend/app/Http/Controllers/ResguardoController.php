@@ -29,13 +29,6 @@ class ResguardoController extends Controller
             ->toResourceCollection();
     }
 
-    public function destroy(Resguardo $resguardo, ResguardoService $service)
-    {
-        DB::transaction(fn () => $service->cancelar($resguardo));
-
-        return response(status: 204);
-    }
-
     public function show(string $uuid)
     {
         return QueryBuilder::for(Resguardo::class)
@@ -48,5 +41,12 @@ class ResguardoController extends Controller
             ->where('uuid', $uuid)
             ->firstOrFail()
             ->toResource();
+    }
+
+    public function cancelar(Resguardo $resguardo, ResguardoService $service)
+    {
+        DB::transaction(fn () => $service->cancelar($resguardo));
+
+        return response(status: 204);
     }
 }

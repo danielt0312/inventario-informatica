@@ -57,7 +57,7 @@ const DestroyAction = ({
     resguardo: Resguardo
 }) => {
     const { mutate, isPending } = useMutation({
-        mutationFn: () => api.delete(`api/resguardos/${resguardo.uuid}`),
+        mutationFn: () => api.post(`api/resguardos/${resguardo.uuid}/cancelar`),
         onSuccess: (_, __, ___, { client }) => {
             client.invalidateQueries({
                 queryKey: ['resguardos']

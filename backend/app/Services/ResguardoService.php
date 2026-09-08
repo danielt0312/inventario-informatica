@@ -54,15 +54,16 @@ class ResguardoService
         ]);
     }
 
-    public function cancelarPorEmpleado(int $empleadoId): void
+    protected function cancelarPorEmpleado(int $empleadoId): void
     {
-        Resguardo::where([
-                ['empleado_id', $empleadoId],
-                ['estado_id', '!=', ResguardoEstadoEnum::CANCELADO->value]
-            ])
-            ->firstOrFail();
+        $resguardo = Resguardo::firstWhere([
+            ['empleado_id', $empleadoId],
+            ['estado_id', '!=', ResguardoEstadoEnum::CANCELADO->value]
+        ]);
 
-        $this->cancelar($resguardo);
+        if ($resguardo !== null) {
+            $this->cancelar($resguardo);
+        }
     }
 
     protected function crear(int $empleadoId, array $articulosIds): Resguardo

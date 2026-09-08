@@ -46,8 +46,7 @@ function CreateForm() {
     const navigate = useNavigate();
 
     const { mutate, isPending } = useFormMutation<DetailedResguardo<Articulo>, CreateResguardoSchemaOutput>({
-        method: 'PUT',
-        url: (data) => `api/empleados/${data.empleado_id}/resguardo`,
+        url: (data) => `api/empleados/${data.empleado_id}/resguardo-actual`,
         onSuccess: async (_, __, ___, { client }) => {
             await client.invalidateQueries({ queryKey: ["resguardos"] });
             await navigate({ to: ResguardoIndexRoute.to });
@@ -136,7 +135,7 @@ function CreateForm() {
 function ResguardoDetalle({ empleadoId }: { empleadoId: EmpleadoFieldType }) {
     const { data: resguardoActual, isLoading } = useQuery({
         queryKey: ['resguardos', empleadoId],
-        queryFn: () => api.get<TResponse<DetailedResguardo<Articulo> | null>>(`api/empleados/${empleadoId}/resguardo`, {
+        queryFn: () => api.get<TResponse<DetailedResguardo<Articulo> | null>>(`api/empleados/${empleadoId}/resguardo-actual`, {
             params: {
                 include: [
                     'articulosResguardados.articulo.producto.marca',
