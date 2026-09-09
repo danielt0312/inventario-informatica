@@ -26,10 +26,17 @@ class ArticuloSeeder extends Seeder
         ]);
 
         Articulo::create([
-            'producto_id' => 1,
+            'producto_id' => 3,
             'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
             'es_inventariable' => true,
             'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION, 2),
+        ]);
+
+        Articulo::create([
+            'producto_id' => 7,
+            'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
+            'es_inventariable' => true,
+            'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION, 3),
         ]);
     }
 }

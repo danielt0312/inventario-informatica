@@ -33,7 +33,8 @@ class ProductoSeeder extends Seeder
             ['tipo_id' => ProductoTipoEnum::COMPUTADORA_PORTATIL->value, 'marca_id' => 1, 'nombre' => 'Inspiron 3800'],
             ['tipo_id' => ProductoTipoEnum::COMPUTADORA_PORTATIL->value, 'marca_id' => 1, 'nombre' => 'Inspiron 5070'],
             ['tipo_id' => ProductoTipoEnum::COMPUTADORA_PORTATIL->value, 'marca_id' => 2, 'nombre' => 'Vivobook 14'],
-            ['tipo_id' => ProductoTipoEnum::COMPUTADORA_PORTATIL->value, 'marca_id' => 2, 'nombre' => 'Vivobook 15']
+            ['tipo_id' => ProductoTipoEnum::COMPUTADORA_PORTATIL->value, 'marca_id' => 2, 'nombre' => 'Vivobook 15'],
+            ['tipo_id' => ProductoTipoEnum::TECLADO->value, 'marca_id' => 1, 'nombre' => 'KB216-BK-LTN'],
         ]);
     }
 }
