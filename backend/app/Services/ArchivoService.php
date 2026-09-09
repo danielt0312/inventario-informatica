@@ -131,7 +131,7 @@ class ArchivoService
         }
 
         DB::transaction(function () use ($target, $replacer) {
-            $this->reloadMetadata($target);
+            $this->refreshMetadata($target);
             $replacer->delete();
         });
 

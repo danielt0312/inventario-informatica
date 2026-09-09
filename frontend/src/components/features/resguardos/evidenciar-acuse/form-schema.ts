@@ -19,5 +19,5 @@ type Output = z.output<typeof validator>;
 export {
     defaultValues as evidenciarAcuseResguardoDefaultFormValues,
     validator as evidenciarAcuseResguardoValidator,
-    type Output as SchemaOutput
+    type Output as EvidenciarAcuseResguardoSchemaOutput
 }

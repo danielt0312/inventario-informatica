@@ -13,7 +13,7 @@ class EvidenciarAcuseResguardoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'archivo_uuid' => $this->archivoRules(),
+            'acuse_archivo_uuid' => $this->archivoRules(),
         ];
     }
 }

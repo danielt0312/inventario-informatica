@@ -56,4 +56,11 @@ class ResguardoController extends Controller
 
         return response(status: 204);
     }
+
+    public function evidenciarAcuse(EvidenciarAcuseResguardoRequest $request, Resguardo $resguardo)
+    {
+        $this->service->evidenciarAcuse($resguardo, $request->getArchivo());
+
+        return response(status: 204);
+    }
 }

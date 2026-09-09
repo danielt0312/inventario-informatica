@@ -29,7 +29,6 @@ export function useForm(dictamen: DetailedPendienteAcuseDictamen) {
 export function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen }) {
     const form = useForm(dictamen);
 
-
     return (
         <PrimitiveForm form={form}>
             <form.AppForm>

@@ -13,6 +13,11 @@ final class ReemplazarArchivoAction
 
     public function __invoke(Archivo $target, Archivo $replacer): void
     {
+        $this->handle($target, $replacer);
+    }
+
+    public function handle(Archivo $target, Archivo $replacer): void
+    {
         if ($this->service->mimeType($target) !== $this->service->mimeType($replacer)) {
             throw new \InvalidArgumentException('Los archivos deben ser del mismo tipo para poder reemplazarse.');
         }

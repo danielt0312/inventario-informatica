@@ -8,7 +8,10 @@ use App\Actions\{
     CancelarArchivoAction,
     ReemplazarArchivoAction
 };
-use App\Models\Resguardo;
+use App\Models\{
+    Resguardo,
+    Archivo
+};
 use App\Enums\{
     ResguardoEstadoEnum,
     DocumentoTipoEnum
@@ -21,6 +24,7 @@ class ResguardoService
         protected ArchivoService $archivoService,
         protected PdfViewService $pdfService,
         protected CancelarArchivoAction $cancelarArchivoAction,
+        protected ReemplazarArchivoAction $reemplazarArchivoAction,
     ) {}
 
     protected function cancelacionFallida(): void
@@ -142,6 +146,12 @@ class ResguardoService
             $this->evidenciaFallida();
         }
 
-        app()->call(ReemplazarArchivoAction::class, ['target' => $resguardo->archivo, 'replacer' => $acuseArchivo]);
+        DB::transaction(function () use ($resguardo, $acuseArchivo) {
+            $this->reemplazarArchivoAction->handle($resguardo->archivo, $acuseArchivo);
+
+            $resguardo->update([
+                'estado_id' => ResguardoEstadoEnum::ACTIVO->value
+            ]);
+        });
     }
 }

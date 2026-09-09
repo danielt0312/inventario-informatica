@@ -14,28 +14,26 @@ import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { articuloDefaultColumnsBuilder } from '@/views/articulos/partials/table-cols';
 import { DataTable } from '@/components/ui/datatable';
 import { Label } from '@/components/ui/label';
-import { RouterButton } from '@/components/ui/router-button';
-import { SquarePenIcon } from 'lucide-react';
-import { Route as CreateRoute } from '../crear'
 import GoBackButton from '@/components/Goback';
 import api from '@/lib/axios';
 import { EmptyValue } from '@/components/ui/empty-value';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
+
+const resguardoQueryOptions = (uuid: string) => queryOptions({
+    queryKey: ['resguardos', uuid],
+    queryFn: () => api.get<TResponse<DetailedResguardo<Articulo>>>(`api/resguardos/${uuid}`)
+        .then(r => r.data.data),
+});
 
 export const Route = createFileRoute('/_auth/resguardos/$uuid/inspeccionar')({
     component: RouteComponent,
-    beforeLoad: async ({ context, params }) => {
-        const resguardo = await context.queryClient.fetchQuery({
-            queryKey: ['resguardo', params.uuid],
-            queryFn: () => api.get<TResponse<DetailedResguardo<Articulo>>>(`api/resguardos/${params.uuid}`)
-                .then(r => r.data.data)
-        })
-
-        return { resguardo };
-    }
+    loader: ({ context, params }) =>
+        context.queryClient.ensureQueryData(resguardoQueryOptions(params.uuid))
 });
 
 function RouteComponent() {
-    const { resguardo } = Route.useRouteContext();
+    const { uuid } = Route.useParams();
+    const { data: resguardo }  = useSuspenseQuery(resguardoQueryOptions(uuid));
 
     const formTable = useReactTable({
         data: resguardo.articulos_resguardados,

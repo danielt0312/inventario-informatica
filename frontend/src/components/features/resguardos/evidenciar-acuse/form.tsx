@@ -1,10 +1,10 @@
 import { Form } from "@/components/ui/form";
 import { useAppForm } from "@/components/ui/form-context";
 import { evidenciarAcuseResguardoDefaultFormValues, evidenciarAcuseResguardoValidator } from "./form-schema";
-import type { Resguardo } from "@/types/resguardos";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { ResguardoAcuseRecibidoField } from "./form-fields";
 import { SubmitButton } from "@/components/ui/submit-button";
+import type { Resguardo } from "@/types/resguardos";
 
 function EvidenciarAcuseForm({
     resguardo
@@ -12,8 +12,11 @@ function EvidenciarAcuseForm({
     resguardo: Resguardo
 }) {
     const { mutate, isPending } = useFormMutation({
-        url: `api/resguardos/${resguardo.uuid}/evidenciar`,
-    })
+        url: `api/resguardos/${resguardo.uuid}/evidenciar-acuse`,
+        onSuccess: (_, __, ___, { client }) => {
+            client.invalidateQueries({ queryKey: ['resguardos'] });
+        }
+    });
 
     const form = useAppForm({
         defaultValues: evidenciarAcuseResguardoDefaultFormValues,
