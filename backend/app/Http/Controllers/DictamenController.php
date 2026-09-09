@@ -148,12 +148,13 @@ class DictamenController extends Controller
             $archivoNombre = DocumentoTipoEnum::DICTAMEN->getLabelValue();
 
             $archivo = $this->archivoService->createAndStoreFileFromRaw(
-                "{$archivoNombre} - No. {$dictamen->id}/{$dictamen->versionActual->numero_version}",
                 $pdf->output(),
+                "{$archivoNombre} - No. {$dictamen->id}/{$dictamen->versionActual->numero_version}",
                 'pdf'
             );
 
-            $archivo->documento()->make([
+            $archivo->documento()
+                ->make([
                     'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
                 ])
                 ->documentable()
@@ -190,8 +191,8 @@ class DictamenController extends Controller
             $archivoNombre = DocumentoTipoEnum::DICTAMEN->getLabelValue();
 
             $archivo = $this->archivoService->createAndStoreFileFromRaw(
-                "{$archivoNombre} - No. {$dictamen->id}/{$dictamen->versionActual->numero_version}",
                 $pdf->output(),
+                "{$archivoNombre} - No. {$dictamen->id}/{$dictamen->versionActual->numero_version}",
                 'pdf'
             );
 
