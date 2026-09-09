@@ -1,3 +1,5 @@
+import type { TCatalogo } from "@/types/generics";
+
 export const ArticuloEstadoEnum = {
     ACTIVO: 1,
     BAJA: 2,
@@ -93,6 +95,9 @@ export const ProductoTipoEnum = {
     ESCANER: 42
 } as const;
 export type ProductoTipoEnum = (typeof ProductoTipoEnum)[keyof typeof ProductoTipoEnum];
+
+export type ProductoTipoComputadoraEscritorio = TCatalogo<typeof ProductoTipoEnum.COMPUTADORA_ESCRITORIO>;
+export type ProductoTipoComputadoraPortatil = TCatalogo<typeof ProductoTipoEnum.COMPUTADORA_PORTATIL>;
 
 export const ProductoTipoProductoCategoriaMap: Record<ProductoTipoEnum, ProductoCategoriaEnum> = {
     [ProductoTipoEnum.COMPUTADORA_ESCRITORIO]: ProductoCategoriaEnum.COMPUTADORA,

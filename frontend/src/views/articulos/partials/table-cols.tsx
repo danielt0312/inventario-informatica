@@ -3,8 +3,11 @@ import type { Articulo, ArticuloEstado } from "@/types/articulos";
 import type { RowDataAccessorFn } from "@/types/generics";
 import { Badge } from "@/components/ui/badge";
 import { ArticuloEstadoEnum } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { cn, productoTipoEsComputadoraEscritorio, productoTipoEsComputadoraPortatil } from "@/lib/utils";
 import { cva } from "class-variance-authority";
+import { RouterButton } from "@/components/ui/router-button";
+import { Route } from "@/routes/_auth/articulos/$uuid/actualizar";
+import { CircleFadingArrowUpIcon } from "lucide-react";
 
 const estadoColorVariants = cva(
     "text-black",
@@ -113,8 +116,35 @@ const defaultColumnsBuilder = <TRowData,>(getRowData: AccessorFn<TRowData>): Col
     EstadoRow(getRowData)
 ]);
 
-const columns: ColumnDef<Articulo>[] = [
-    ...defaultColumnsBuilder<Articulo>(row => row)
+const defaultColumns: ColumnDef<Articulo>[] = [
+    ...defaultColumnsBuilder<Articulo>(row => row),
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            const articulo = row.original;
+            const productoTipo = articulo.producto.tipo;
+
+            return (
+                <div className="flex gap-1">
+                    {(productoTipoEsComputadoraEscritorio(productoTipo) || productoTipoEsComputadoraPortatil(productoTipo)) && (
+                        <RouterButton
+                            to={Route.to}
+                            params={{
+                                uuid: articulo.uuid
+                            }}
+                            size="icon"
+                            variant="outline"
+                            tooltip={{
+                                message: "Actualizar"
+                            }}
+                        >
+                            <CircleFadingArrowUpIcon />
+                        </RouterButton>
+                    )}
+                </div>
+            );
+        }
+    }
 ];
 
-export { columns as articuloTableColumns, estadoColorVariants as articuloEstadoColorVariants, EstadoBadge as ArticuloEstadoBadge, defaultColumnsBuilder as articuloDefaultColumnsBuilder, type AccessorFn as ArticuloRowDataAccessorFn }
+export { defaultColumns as articuloTableColumns, estadoColorVariants as articuloEstadoColorVariants, EstadoBadge as ArticuloEstadoBadge, defaultColumnsBuilder as articuloDefaultColumnsBuilder, type AccessorFn as ArticuloRowDataAccessorFn }

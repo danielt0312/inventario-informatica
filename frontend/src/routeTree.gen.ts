@@ -22,7 +22,7 @@ import { Route as AuthDictamenesCreateRouteImport } from './routes/_auth/dictame
 import { Route as AuthResguardosUuidInspeccionarRouteImport } from './routes/_auth/resguardos/$uuid/inspeccionar'
 import { Route as AuthDictamenesUuidEditarRouteImport } from './routes/_auth/dictamenes/$uuid/editar'
 import { Route as AuthDictamenesUuidActionRouteImport } from './routes/_auth/dictamenes/$uuid/$action'
-import { Route as AuthArticulosUuidVerificarYConfigurarRouteImport } from './routes/_auth/articulos/$uuid/verificar-y-configurar'
+import { Route as AuthArticulosUuidActualizarRouteImport } from './routes/_auth/articulos/$uuid/actualizar'
 
 const GuestRoute = GuestRouteImport.update({
   id: '/_guest',
@@ -90,10 +90,10 @@ const AuthDictamenesUuidActionRoute =
     path: '/dictamenes/$uuid/$action',
     getParentRoute: () => AuthRoute,
   } as any)
-const AuthArticulosUuidVerificarYConfigurarRoute =
-  AuthArticulosUuidVerificarYConfigurarRouteImport.update({
-    id: '/articulos/$uuid/verificar-y-configurar',
-    path: '/articulos/$uuid/verificar-y-configurar',
+const AuthArticulosUuidActualizarRoute =
+  AuthArticulosUuidActualizarRouteImport.update({
+    id: '/articulos/$uuid/actualizar',
+    path: '/articulos/$uuid/actualizar',
     getParentRoute: () => AuthRoute,
   } as any)
 
@@ -106,7 +106,7 @@ export interface FileRoutesByFullPath {
   '/dictamenes/': typeof AuthDictamenesIndexRoute
   '/documentos/': typeof AuthDocumentosIndexRoute
   '/resguardos/': typeof AuthResguardosIndexRoute
-  '/articulos/$uuid/verificar-y-configurar': typeof AuthArticulosUuidVerificarYConfigurarRoute
+  '/articulos/$uuid/actualizar': typeof AuthArticulosUuidActualizarRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
   '/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
   '/resguardos/$uuid/inspeccionar': typeof AuthResguardosUuidInspeccionarRoute
@@ -120,7 +120,7 @@ export interface FileRoutesByTo {
   '/dictamenes': typeof AuthDictamenesIndexRoute
   '/documentos': typeof AuthDocumentosIndexRoute
   '/resguardos': typeof AuthResguardosIndexRoute
-  '/articulos/$uuid/verificar-y-configurar': typeof AuthArticulosUuidVerificarYConfigurarRoute
+  '/articulos/$uuid/actualizar': typeof AuthArticulosUuidActualizarRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
   '/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
   '/resguardos/$uuid/inspeccionar': typeof AuthResguardosUuidInspeccionarRoute
@@ -137,7 +137,7 @@ export interface FileRoutesById {
   '/_auth/dictamenes/': typeof AuthDictamenesIndexRoute
   '/_auth/documentos/': typeof AuthDocumentosIndexRoute
   '/_auth/resguardos/': typeof AuthResguardosIndexRoute
-  '/_auth/articulos/$uuid/verificar-y-configurar': typeof AuthArticulosUuidVerificarYConfigurarRoute
+  '/_auth/articulos/$uuid/actualizar': typeof AuthArticulosUuidActualizarRoute
   '/_auth/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
   '/_auth/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
   '/_auth/resguardos/$uuid/inspeccionar': typeof AuthResguardosUuidInspeccionarRoute
@@ -153,7 +153,7 @@ export interface FileRouteTypes {
     | '/dictamenes/'
     | '/documentos/'
     | '/resguardos/'
-    | '/articulos/$uuid/verificar-y-configurar'
+    | '/articulos/$uuid/actualizar'
     | '/dictamenes/$uuid/$action'
     | '/dictamenes/$uuid/editar'
     | '/resguardos/$uuid/inspeccionar'
@@ -167,7 +167,7 @@ export interface FileRouteTypes {
     | '/dictamenes'
     | '/documentos'
     | '/resguardos'
-    | '/articulos/$uuid/verificar-y-configurar'
+    | '/articulos/$uuid/actualizar'
     | '/dictamenes/$uuid/$action'
     | '/dictamenes/$uuid/editar'
     | '/resguardos/$uuid/inspeccionar'
@@ -183,7 +183,7 @@ export interface FileRouteTypes {
     | '/_auth/dictamenes/'
     | '/_auth/documentos/'
     | '/_auth/resguardos/'
-    | '/_auth/articulos/$uuid/verificar-y-configurar'
+    | '/_auth/articulos/$uuid/actualizar'
     | '/_auth/dictamenes/$uuid/$action'
     | '/_auth/dictamenes/$uuid/editar'
     | '/_auth/resguardos/$uuid/inspeccionar'
@@ -288,11 +288,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDictamenesUuidActionRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/articulos/$uuid/verificar-y-configurar': {
-      id: '/_auth/articulos/$uuid/verificar-y-configurar'
-      path: '/articulos/$uuid/verificar-y-configurar'
-      fullPath: '/articulos/$uuid/verificar-y-configurar'
-      preLoaderRoute: typeof AuthArticulosUuidVerificarYConfigurarRouteImport
+    '/_auth/articulos/$uuid/actualizar': {
+      id: '/_auth/articulos/$uuid/actualizar'
+      path: '/articulos/$uuid/actualizar'
+      fullPath: '/articulos/$uuid/actualizar'
+      preLoaderRoute: typeof AuthArticulosUuidActualizarRouteImport
       parentRoute: typeof AuthRoute
     }
   }
@@ -305,7 +305,7 @@ interface AuthRouteChildren {
   AuthDictamenesIndexRoute: typeof AuthDictamenesIndexRoute
   AuthDocumentosIndexRoute: typeof AuthDocumentosIndexRoute
   AuthResguardosIndexRoute: typeof AuthResguardosIndexRoute
-  AuthArticulosUuidVerificarYConfigurarRoute: typeof AuthArticulosUuidVerificarYConfigurarRoute
+  AuthArticulosUuidActualizarRoute: typeof AuthArticulosUuidActualizarRoute
   AuthDictamenesUuidActionRoute: typeof AuthDictamenesUuidActionRoute
   AuthDictamenesUuidEditarRoute: typeof AuthDictamenesUuidEditarRoute
   AuthResguardosUuidInspeccionarRoute: typeof AuthResguardosUuidInspeccionarRoute
@@ -318,8 +318,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthDictamenesIndexRoute: AuthDictamenesIndexRoute,
   AuthDocumentosIndexRoute: AuthDocumentosIndexRoute,
   AuthResguardosIndexRoute: AuthResguardosIndexRoute,
-  AuthArticulosUuidVerificarYConfigurarRoute:
-    AuthArticulosUuidVerificarYConfigurarRoute,
+  AuthArticulosUuidActualizarRoute: AuthArticulosUuidActualizarRoute,
   AuthDictamenesUuidActionRoute: AuthDictamenesUuidActionRoute,
   AuthDictamenesUuidEditarRoute: AuthDictamenesUuidEditarRoute,
   AuthResguardosUuidInspeccionarRoute: AuthResguardosUuidInspeccionarRoute,
