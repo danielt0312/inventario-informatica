@@ -11,7 +11,7 @@ class ProductoResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nombre' => $this->nombre,
+            'modelo' => $this->modelo,
             'tipo' => new ProductoTipoResource($this->whenLoaded('tipo')),
             'marca' => new ProductoMarcaResource($this->whenLoaded('marca'))
         ];

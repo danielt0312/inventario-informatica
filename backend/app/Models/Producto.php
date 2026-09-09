@@ -10,12 +10,10 @@ class Producto extends Model
 {
     use HasFactory;
 
-    protected $table = 'productos';
-
     protected $fillable = [
         'tipo_id',
         'marca_id',
-        'nombre'
+        'modelo'
     ];
 
     public $timestamps = false;

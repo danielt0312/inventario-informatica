@@ -11,7 +11,7 @@ class StoreProductoRequest extends FormRequest
         return [
             'tipo_id' => ['required', 'integer', 'exists:producto_tipos,id'],
             'marca_id' => ['required', 'integer', 'exists:producto_marcas,id'],
-            'nombre' => ['required', 'string', 'max:64', 'unique:productos,nombre'],
+            'modelo' => ['required', 'string', 'max:128', 'unique:productos,modelo'],
         ];
     }
 }

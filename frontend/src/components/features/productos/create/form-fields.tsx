@@ -1,7 +1,7 @@
 import { InputField, type InputFieldType } from "@/components/ui/input-field";
 
-export type ProductoNombreFieldType = InputFieldType;
-export function ProductoNombreField({
+export type ProductoModeloFieldType = InputFieldType;
+export function ProductoModeloField({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof InputField>) {

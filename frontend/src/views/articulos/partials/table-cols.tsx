@@ -81,7 +81,7 @@ const MarcaRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowDa
 const ModeloRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
     id: 'articulo.modelo',
     header: 'Modelo',
-    accessorFn: (row) => getRowData(row).producto.nombre
+    accessorFn: (row) => getRowData(row).producto.modelo
 });
 
 const EstadoRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({

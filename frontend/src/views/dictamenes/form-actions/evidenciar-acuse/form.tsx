@@ -59,7 +59,7 @@ export function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen })
                                     </div>
                                     <div data-slot="label-container" className="w-6/12">
                                         <Label className="font-bold">Producto</Label>
-                                        <Label>{`${producto.tipo.nombre} ${producto.marca.nombre} ${producto.nombre} ${adquisicion.especificaciones_tecnicas}`}</Label>
+                                        <Label>{`${producto.tipo.nombre} ${producto.marca.nombre} ${producto.modelo} ${adquisicion.especificaciones_tecnicas}`}</Label>
                                     </div>
                                     <div data-slot="label-container" className="w-3/12">
                                         <Label className="font-bold">Resguardante</Label>

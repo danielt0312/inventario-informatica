@@ -13,10 +13,9 @@ import React from "react";
 import api from "@/lib/axios";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { CreatableComboboxFieldGrouped } from "@/components/ui/creatable-combobox-field-grouped";
-import { toComboboxGroups } from "@/components/ui/combobox-layout.shared";
-import { toComboboxCatalogItems } from "@/lib/utils";
+import { toComboboxGroups, toComboboxItems } from "@/components/ui/combobox-layout.shared";
 import { ProductoMarcaField } from "./marcas/form-fields";
-import { ProductoNombreField } from "./create/form-fields";
+import { ProductoModeloField } from "./create/form-fields";
 import { Form } from "@/components/ui/form";
 
 export type ProductoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
@@ -55,7 +54,10 @@ export function ProductoField({
             const productos = data.filter((productoWithMarca) => marcaDisponible.id === productoWithMarca.marca.id);
             return {
                 label: marcaDisponible.nombre,
-                items: toComboboxCatalogItems(productos)
+                items: toComboboxItems(productos, (producto) => ({
+                    value: producto.id,
+                    label: producto.modelo
+                }))
             };
         });
     }, [data]);
@@ -82,7 +84,7 @@ export function ProductoField({
                     ...layout
                 }}
                 onCreate={(searchValue) => {
-                    form.setFieldValue('nombre', searchValue);
+                    form.setFieldValue('modelo', searchValue);
                     setDialogIsOpen(true);
                     field.handleChange(undefined);
                 }}
@@ -101,7 +103,7 @@ export function ProductoField({
 
                     <Form form={form} className="contents">
                         <form.AppField name="marca_id" children={() => <ProductoMarcaField />} />
-                        <form.AppField name="nombre" children={() => <ProductoNombreField />} />
+                        <form.AppField name="modelo" children={() => <ProductoModeloField />} />
 
                         <DialogFooter>
                             <form.SubmitFormButton />

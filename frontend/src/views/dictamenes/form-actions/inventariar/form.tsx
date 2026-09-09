@@ -29,7 +29,7 @@ function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]
             .filter((adquisicion) => adquisicion.cantidad_restante > 0)
             .map((adquisicion) => ({
                 id: adquisicion.id,
-                label: `${adquisicion.producto.tipo.nombre} ${adquisicion.producto.marca.nombre} ${adquisicion.producto.nombre} ${adquisicion.especificaciones_tecnicas} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
+                label: `${adquisicion.producto.tipo.nombre} ${adquisicion.producto.marca.nombre} ${adquisicion.producto.modelo} ${adquisicion.especificaciones_tecnicas} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
                 cantidad_restante: adquisicion.cantidad_restante,
             })),
         [initialValues]);

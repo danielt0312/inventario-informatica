@@ -67,7 +67,11 @@ export function ArticuloTable() {
                 }
             }
         }).then(r => r.data.data),
-        enabled: debouncedFilters.tipo.length > 0
+        enabled: debouncedFilters.tipo.length > 0,
+        select: (data) => data.map(producto => ({
+            ...producto,
+            nombre: producto.modelo
+        }))
     });
 
     const { data: PRODUCTO_ESTADOS = [] } = useQuery({

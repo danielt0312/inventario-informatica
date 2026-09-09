@@ -99,7 +99,7 @@ class DictamenAdquisicion extends Model
                 implode(' ', array_filter([
                     $this->tipo->nombre,
                     $this->marca?->nombre,
-                    $this->producto?->nombre,
+                    $this->producto?->modelo,
                     $attributes['especificaciones_tecnicas']
                 ]))
         );
