@@ -5,7 +5,7 @@ namespace App\Actions;
 use App\Models\Archivo;
 use App\Services\ArchivoService;
 
-final class CancelarArchivoAction
+final class ReemplazarArchivoAction
 {
     public function __construct(
         protected ArchivoService $service,
@@ -13,18 +13,10 @@ final class CancelarArchivoAction
 
     public function __invoke(Archivo $target, Archivo $replacer): void
     {
-        if ($target->extension !== $replacer->extension) {
-            throw new \InvalidArgumentException('Las extensiones de los archivos deben ser las mismas para poder reemplazarse.');
+        if ($this->service->mimeType($target) !== $this->service->mimeType($replacer)) {
+            throw new \InvalidArgumentException('Los archivos deben ser del mismo tipo para poder reemplazarse.');
         }
 
-        $replacerFileContents = $this->service->getFile($replacer);
-
-        $this->service->storeFileFromRaw(
-            $target,
-            $replacerFileContents
-        );
-
-        $this->service->refreshMetadata($target);
-        $replacer->destroy();
+        $this->service->replaceFile($target, $replacer);
     }
 }
