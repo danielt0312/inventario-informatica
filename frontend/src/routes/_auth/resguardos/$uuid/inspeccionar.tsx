@@ -19,6 +19,7 @@ import { SquarePenIcon } from 'lucide-react';
 import { Route as CreateRoute } from '../crear'
 import GoBackButton from '@/components/Goback';
 import api from '@/lib/axios';
+import { EmptyValue } from '@/components/ui/empty-value';
 
 export const Route = createFileRoute('/_auth/resguardos/$uuid/inspeccionar')({
     component: RouteComponent,
@@ -77,7 +78,7 @@ function RouteComponent() {
                             value={
                                 resguardo.fecha_cancelacion
                                     ? toLocaleDateFormat(resguardo.fecha_cancelacion)
-                                    : <span className="italic text-muted-foreground">N/A</span>
+                                    : <EmptyValue />
                             }
                         />
                     </FieldGroup>
@@ -90,9 +91,10 @@ function RouteComponent() {
 
                     <div className="flex flex-row justify-between">
                         <Label className="font-black text-lg">Artículos Resguardados</Label>
-                        <RouterButton to={CreateRoute.to} variant="outline" size="sm">
+                        {/* todo agregar la funcionalidad de redirección hacia `CreateRoute` y cancelar */}
+                        {/* <RouterButton to={CreateRoute.to} variant="outline" size="sm">
                             <SquarePenIcon /> Actualizar
-                        </RouterButton>
+                        </RouterButton> */}
                     </div>
                     <DataTable table={formTable} />
                 </CardContent>
