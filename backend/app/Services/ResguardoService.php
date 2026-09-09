@@ -19,7 +19,8 @@ class ResguardoService
 {
     public function __construct(
         protected ArchivoService $archivoService,
-        protected PdfViewService $pdfService
+        protected PdfViewService $pdfService,
+        protected CancelarArchivoAction $cancelarArchivoAction,
     ) {}
 
     protected function cancelacionFallida(): void
@@ -41,7 +42,7 @@ class ResguardoService
             $this->cancelacionFallida();
         }
 
-        app()->call(CancelarArchivoAction::class, ['archivo' => $resguardo->archivo]);
+        $this->cancelarArchivoAction->handle($resguardo->archivo);
 
         $fechaCancelacion = now();
 
