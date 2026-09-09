@@ -10,9 +10,14 @@ use Spatie\QueryBuilder\{
     QueryBuilder,
     AllowedFilter
 };
+use App\Http\Requests\Resguardo\EvidenciarAcuseResguardoRequest;
 
 class ResguardoController extends Controller
 {
+    public function __construct(
+        protected ResguardoService $service
+    ) {}
+
     public function index(Request $request)
     {
         return QueryBuilder::for(Resguardo::class)
@@ -45,9 +50,9 @@ class ResguardoController extends Controller
             ->toResource();
     }
 
-    public function cancelar(Resguardo $resguardo, ResguardoService $service)
+    public function cancelar(Resguardo $resguardo)
     {
-        DB::transaction(fn () => $service->cancelar($resguardo));
+        $this->service->cancelar($resguardo);
 
         return response(status: 204);
     }

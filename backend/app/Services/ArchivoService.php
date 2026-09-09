@@ -6,7 +6,8 @@ use InvalidArgumentException;
 use App\Models\Archivo;
 use Illuminate\Support\Facades\{
     Storage,
-    File as FacadeFile
+    File as FacadeFile,
+    DB
 };
 use Illuminate\Http\{
     File,
@@ -15,6 +16,16 @@ use Illuminate\Http\{
 
 class ArchivoService
 {
+    public function deleteFile(Archivo $archivo): bool
+    {
+        return Storage::delete($archivo->relative_path);
+    }
+
+    public function copyFile(Archivo $from, Archivo $to): bool
+    {
+        return Storage::copy($from->relative_path, $to->relative_path);
+    }
+
     public function fileExists(Archivo $archivo): bool
     {
         return Storage::exists($archivo->relative_path);
@@ -108,9 +119,27 @@ class ArchivoService
                 fclose($stream);
             }
         }, 200, [
-            'Content-Type' => Storage::mimeType($archivo->relative_path),
+            'Content-Type' => $this->mimeType($archivo),
             'Content-Disposition' => 'inline; filename="'. $archivo->nombre .'"'
         ]);
     }
 
+    public function replaceFile(Archivo $target, Archivo $replacer): void
+    {
+        if (! $this->copyFile($replacer, $target)) {
+            throw new \RuntimeException('No fue posible copiar el archivo de reemplazo.');
+        }
+
+        DB::transaction(function () use ($target, $replacer) {
+            $this->reloadMetadata($target);
+            $replacer->delete();
+        });
+
+        $this->deleteFile($replacer);
+    }
+
+    public function mimeType(Archivo $archivo): string|false
+    {
+        return Storage::mimeType($archivo->relativePath);
+    }
 }

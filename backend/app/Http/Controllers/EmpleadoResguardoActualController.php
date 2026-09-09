@@ -38,8 +38,7 @@ class EmpleadoResguardoActualController extends Controller
                 'articulosResguardados.articulo.estado'
             )
             ->firstWhere([
-                // ['empleado_id', $empleadoId],
-                ['empleado_id', 1],
+                ['empleado_id', $empleadoId],
                 ['estado_id', '!=', ResguardoEstadoEnum::CANCELADO->value]
             ]);
 
