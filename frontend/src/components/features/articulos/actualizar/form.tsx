@@ -13,6 +13,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { ProductoField } from "../../productos/form-fields";
 import { ProductoTipoEnum } from "@/lib/constants";
 import { DiscoTipoField } from "../discos/tipo-field";
+import { DiscoCapacidadField } from "../discos/capacidad-field";
 
 function ActualizarForm({
     articulo
@@ -76,6 +77,10 @@ function ActualizarForm({
                                             <form.AppField
                                                 name={`discos[${index}].tipo_id`}
                                                 children={() => <DiscoTipoField required />}
+                                            />
+                                            <form.AppField
+                                                name={`discos[${index}].capacidad_id`}
+                                                children={() => <DiscoCapacidadField required />}
                                             />
                                             {/* <form.AppField
                                                 name={`discos[${index}].tipo_id`}

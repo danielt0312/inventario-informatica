@@ -1,9 +1,9 @@
 import type { TResponse } from "@/types/generics";
-import type { DiscoTipo } from "@/types/articulos/discos";
+import type { DiscoCapacidad } from "@/types/articulos/discos";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { discoTipoQueryOptions } from "./queries";
+import { discoCapacidadQueryOptions } from "./queries";
 import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useAppForm, useFieldContext } from "@/components/ui/form-context";
@@ -35,35 +35,35 @@ function NombreField({
     return (
         <InputField
             fieldLayout={{
-                label: "Tipo",
+                label: "Capacidad",
                 ...fieldLayout
             }}
-            placeholder="Ingresa el tipo de disco"
+            placeholder="Ingresa la capacidad del disco"
             {...props}
         />
     );
 }
 
-type TipoFieldType = ComboboxFieldType<false, undefined>;
-function TipoField({
+type CapacidadFieldType = ComboboxFieldType<false, undefined>;
+function CapacidadField({
     layout,
     ...props
 }: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
-    const { queryKey } = discoTipoQueryOptions;
+    const { queryKey } = discoCapacidadQueryOptions;
     const { data: items = [] } = useQuery({
-        ...discoTipoQueryOptions,
+        ...discoCapacidadQueryOptions,
         select: toComboboxCatalogItems
     });
 
-    const field = useFieldContext<TipoFieldType>();
+    const field = useFieldContext<CapacidadFieldType>();
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
-    const { mutate } = useFormMutation<TResponse<DiscoTipo>, OutputSchema>({
-        url: 'api/disco_tipos',
+    const { mutate } = useFormMutation<TResponse<DiscoCapacidad>, OutputSchema>({
+        url: 'api/disco_capacidades',
         onSuccess: (data, _, __, { client }) => {
-            const tipo = data.data.data;
-            client.setQueryData(queryKey, (old: DiscoTipo[] = []) => [...old, tipo]);
-            field.handleChange(tipo.id);
+            const capacidad = data.data.data;
+            client.setQueryData(queryKey, (old: DiscoCapacidad[] = []) => [...old, capacidad]);
+            field.handleChange(capacidad.id);
             client.invalidateQueries({ queryKey });
             setDialogOpen(false);
         }
@@ -89,7 +89,7 @@ function TipoField({
                     setDialogOpen(true);
                 }}
                 layout={{
-                    label: "Tipo",
+                    label: "Capacidad",
                     ...layout
                 }}
                 {...props}
@@ -98,9 +98,9 @@ function TipoField({
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen} onOpenChangeComplete={(open) => !open && form.setFieldValue('nombre', undefined)}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Registrar Tipo de Disco</DialogTitle>
+                        <DialogTitle>Registrar Capacidad de Disco</DialogTitle>
                         <DialogDescription className="sr-only">
-                            Registro de nuevo tipo de disco
+                            Registro de nueva capacidad de disco
                         </DialogDescription>
                     </DialogHeader>
 
@@ -122,6 +122,6 @@ function TipoField({
 }
 
 export {
-    TipoField as DiscoTipoField,
-    type TipoFieldType as DiscoTipoFieldType,
+    CapacidadField as DiscoCapacidadField,
+    type CapacidadFieldType as DiscoCapacidadFieldType
 }

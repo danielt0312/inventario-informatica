@@ -2,11 +2,12 @@ import z from "zod";
 import type { DiscoTipoFieldType } from "../discos/tipo-field";
 import { requiredArray, selectedNumberOption } from "@/lib/schemas/common";
 import type { ProductoFieldType } from "../../productos/form-fields";
+import type { DiscoCapacidadFieldType } from "../discos/capacidad-field";
 
 type DiscoFields = {
     producto_id: ProductoFieldType;
     tipo_id: DiscoTipoFieldType;
-    // capacidad_id: DiscoCapacidadFieldType;
+    capacidad_id: DiscoCapacidadFieldType;
     // interfaz_id: DiscoInterfazFieldType;
 }
 
@@ -17,7 +18,7 @@ type Schema = {
 const discoFieldsDefaultValues: DiscoFields = {
     producto_id: undefined,
     tipo_id: undefined,
-    // capacidad_id: undefined,
+    capacidad_id: undefined,
     // interfaz_id: null,
 }
 
@@ -30,7 +31,7 @@ const validator = z.object({
         z.object({
             producto_id: selectedNumberOption,
             tipo_id: selectedNumberOption,
-            // capacidad_id: selectedNumberOption,
+            capacidad_id: selectedNumberOption,
             // interfaz_id: selectedNumberOption.nullable(),
         })
     )
