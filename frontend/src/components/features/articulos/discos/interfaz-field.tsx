@@ -89,7 +89,7 @@ function InterfazField({
                     setDialogOpen(true);
                 }}
                 layout={{
-                    label: "Tipo",
+                    label: "Interfaz",
                     ...layout
                 }}
                 {...props}

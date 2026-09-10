@@ -47,7 +47,7 @@ function ActualizarForm({
                     {(field) => (
                         <>
                             <div className="flex flex-row justify-between">
-                                <Label className="text-xl font-bold">Discos</Label>
+                                <Label className="text-xl font-bold">Discos de Almacenamiento</Label>
                                 <Button
                                     size="sm"
                                     variant="outline"
@@ -60,7 +60,7 @@ function ActualizarForm({
                             </div>
 
                             {field.state.value.map((_, index) => (
-                                <Card key={index}>
+                                <Card key={index} className="shadow-none">
                                     <CardHeader>
                                         <CardTitle className="flex justify-between">
                                             <span className="normal-case">Disco #{index+1}</span>
