@@ -98,11 +98,11 @@ class InventariarDictamenRequest extends FormRequest
                 'integer',
                 'exists:productos,id'
             ],
+            // todo agregar 'distinct' y 'unique' en caso de ser inventariable
             'adquisiciones.*.cuenta_contable' => [
                 'required',
                 new CuentaContableFormat,
                 'distinct',
-                'unique:articulos,cuenta_contable'
             ],
             'adquisiciones.*.numero_serie' => [
                 'nullable',
