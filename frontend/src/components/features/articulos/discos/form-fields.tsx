@@ -5,7 +5,6 @@ import { ComboboxFieldSimple } from "@/components/ui/combobox-field-simple";
 import { discoTipoQueryOptions } from "./queries";
 
 type TipoFieldType = ComboboxFieldType<false, undefined>;
-
 function TipoField({
     layout,
     ...props
