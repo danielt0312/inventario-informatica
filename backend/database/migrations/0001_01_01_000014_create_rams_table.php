@@ -18,6 +18,11 @@ return new class extends Migration
             $table->string('nombre', 64);
         });
 
+        Schema::create('ram_frecuencias', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', 64);
+        });
+
         Schema::create('rams', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tipo_id')
@@ -30,7 +35,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->foreignId('frecuencia_id')
                 ->nullable()
-                ->constrained('frecuencias', indexName: 'fk_rams_frecuencias')
+                ->constrained('ram_frecuencias', indexName: 'fk_rams_ram_frecuencias')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
@@ -50,8 +55,8 @@ return new class extends Migration
         });
 
         Schema::create('articulo_rams', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('articulo_id')
-                ->primary()
                 ->constrained('articulos', indexName: 'fk_articulo_rams_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
@@ -68,10 +73,18 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('ram_articulo_id')
-                ->constrained('articulo_rams', 'articulo_id', 'fk_articulo_computadora_rams_articulos_ram')
+                ->constrained('articulo_rams', indexName: 'fk_articulo_computadora_rams_articulo_rams')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('principal');
+            $table->date('fecha_instalacion');
+            $table->date('fecha_desinstalacion')
+                ->nullable();
+            $table->unsignedBigInteger('ram_vigente_marker')
+                ->virtualAs('CASE WHEN fecha_desinstalacion IS NULL THEN ram_articulo_id ELSE NULL END')
+                ->nullable();
+            $table->timestamps();
+
+            $table->unique('ram_vigente_marker', 'uk_articulo_computadora_rams_ram_vigente');
         });
     }
 
@@ -81,6 +94,7 @@ return new class extends Migration
         Schema::dropIfExists('articulo_rams');
         Schema::dropIfExists('producto_rams');
         Schema::dropIfExists('rams');
+        Schema::dropIfExists('ram_frecuencias');
         Schema::dropIfExists('ram_capacidades');
         Schema::dropIfExists('ram_tipos');
     }

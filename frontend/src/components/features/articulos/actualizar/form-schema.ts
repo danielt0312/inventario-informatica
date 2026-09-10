@@ -12,6 +12,10 @@ type DiscoFields = {
     interfaz_id: DiscoInterfazFieldType;
 }
 
+type RamFields = {
+    producto_id: ProductoFieldType;
+}
+
 type Schema = {
     discos: DiscoFields[];
 }
