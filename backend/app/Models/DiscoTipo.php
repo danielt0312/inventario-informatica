@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Models\HasResourceResponse;
 
 class DiscoTipo extends Model
 {
-    protected $table = 'disco_tipos';
+    use HasResourceResponse;
 
     protected $fillable = [
         'nombre'

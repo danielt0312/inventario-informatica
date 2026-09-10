@@ -25,6 +25,9 @@ use App\Http\Controllers\{
     ResguardoEstadoController,
     EmpleadoResguardoController,
     EmpleadoResguardoActualController,
+    DiscoTipoController,
+    DiscoCapacidadController,
+    DiscoInterfazController,
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -58,6 +61,9 @@ Route::middleware('auth:sanctum')->group(function () {
         'orden_compras' => OrdenCompraController::class,
         'facturas' => FacturaController::class,
         'proveedores' => ProveedorController::class,
+        'disco_tipos' => DiscoTipoController::class,
+        'disco_capacidades' => DiscoCapacidadController::class,
+        'disco_interfaces' => DiscoInterfazController::class,
     ], ['only' => ['index', 'store']]);
 
     // TODO definir si el parametro sera un id, uuid, u otro como identificable del empleado
