@@ -1,11 +1,10 @@
+import type { Articulo } from "@/types/articulos";
 import { Form } from "@/components/ui/form";
 import { useAppForm } from "@/components/ui/form-context";
 import { useFormMutation } from "@/hooks/use-form-mutation";
-import type { Articulo } from "@/types/articulos";
 import { actualizarArticuloDefaultFormValues, actualizarArticuloDiscoFieldsDefaultValues, actualizarArticuloFormValidator } from "./form-schema";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, CircleFadingArrowUpIcon, CirclePlusIcon, CircleXIcon, Trash2Icon } from "lucide-react";
-import React from "react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +13,8 @@ import { ProductoField } from "../../productos/form-fields";
 import { ProductoTipoEnum } from "@/lib/constants";
 import { DiscoTipoField } from "../discos/tipo-field";
 import { DiscoCapacidadField } from "../discos/capacidad-field";
+import { DiscoInterfazField } from "../discos/interfaz-field";
+import React from "react";
 
 function ActualizarForm({
     articulo
@@ -82,18 +83,10 @@ function ActualizarForm({
                                                 name={`discos[${index}].capacidad_id`}
                                                 children={() => <DiscoCapacidadField required />}
                                             />
-                                            {/* <form.AppField
-                                                name={`discos[${index}].tipo_id`}
-                                                children={() => <DiscoTipoField required />}
-                                            />
-                                            <form.AppField
-                                                name={`discos[${index}].capacidad_id`}
-                                                children={() => <DiscoCapacidadField required />}
-                                            />
                                             <form.AppField
                                                 name={`discos[${index}].interfaz_id`}
                                                 children={() => <DiscoInterfazField />}
-                                            /> */}
+                                            />
                                         </FieldGroup>
                                     </CardContent>
                                 </Card>

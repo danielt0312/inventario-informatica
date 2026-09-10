@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Models\HasResourceResponse;
 
 class DiscoInterfaz extends Model
 {
-    protected $table = 'disco_interfaces';
+    use HasResourceResponse;
 
     protected $fillable = [
         'nombre'
