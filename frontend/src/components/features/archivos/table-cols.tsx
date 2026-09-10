@@ -1,10 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { toLocaleDateFormat } from "@/lib/utils";
 import type { Archivo } from "@/types/documentos";
 import type { RowDataAccessorFn } from "@/types/generics";
 import type { ColumnDef, InitialTableState, TableMeta } from "@tanstack/react-table";
-import { EyeIcon } from "lucide-react";
+import { TooltipButton } from "@/components/ui/tooltip-button";
+import { toLocaleDateFormat } from "@/lib/utils";
+import { FileTextIcon } from "lucide-react";
 
 type AccessorFn<TRowData> = RowDataAccessorFn<TRowData, Archivo>;
 
@@ -30,19 +29,15 @@ function PreviewActionRow<TRowData>({
     const { uuid, nombre } = archivo;
 
     return (
-        <Tooltip>
-            <TooltipContent>Ver Documento</TooltipContent>
-            <TooltipTrigger asChild>
-                <Button
-                    disabled={meta?.isPreviewing}
-                    onClick={() => meta?.previewFile?.(uuid, nombre)}
-                    variant="outline"
-                    size="icon"
-                >
-                    <EyeIcon />
-                </Button>
-            </TooltipTrigger>
-        </Tooltip>
+        <TooltipButton
+            tooltip={{ message: "Ver documento" }}
+            disabled={meta?.isPreviewing}
+            onClick={() => meta?.previewFile?.(uuid, nombre)}
+            variant="outline"
+            size="icon"
+        >
+            <FileTextIcon />
+        </TooltipButton>
     );
 }
 

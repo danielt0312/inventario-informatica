@@ -8,7 +8,7 @@ import { ArchivoPreviewActionRow } from "../../archivos/table-cols";
 import { useMutation } from "@tanstack/react-query";
 import { esResguardoEstadoCancelado } from "../utils";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { CircleArrowRightIcon, CircleXIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import { BanIcon, CircleArrowRightIcon, CircleXIcon, EyeIcon, SearchIcon } from "lucide-react";
 import { ActionRow } from "@/components/ui/action-row";
 import React from "react";
 import api from "@/lib/axios";
@@ -75,7 +75,7 @@ const DestroyAction = ({
                     message: "Cancelar",
                 }}
             >
-                <Trash2Icon />
+                <BanIcon />
             </ActionRow>
 
             <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
@@ -139,10 +139,10 @@ const columns: ColumnDef<Resguardo>[] = [
                         size="icon"
                         variant="outline"
                         tooltip={{
-                            message: "Inspeccionar"
+                            message: "Ver más información"
                         }}
                     >
-                        <SearchIcon />
+                        <EyeIcon />
                     </RouterButton>
                     {!esResguardoEstadoCancelado(resguardo.estado.id) && <DestroyAction resguardo={resguardo} />}
                 </div>

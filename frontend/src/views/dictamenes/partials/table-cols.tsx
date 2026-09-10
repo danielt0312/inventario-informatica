@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedPorSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
-import { CircleXIcon, FileInputIcon, PackageOpenIcon, PackagePlusIcon, PaperclipIcon, SquarePenIcon } from "lucide-react";
+import { BadgeCheckIcon, CircleDashedCheckIcon, CircleXIcon, PackageOpenIcon, PackagePlusIcon, SquarePenIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
@@ -19,8 +19,8 @@ import { ActionRow } from "@/components/ui/action-row";
 import { RouterButton } from "@/components/ui/router-button";
 
 const FormActionIcon = {
-    [ActionDictamenEstadoEnum.DICTAMINAR]: <FileInputIcon />,
-    [ActionDictamenEstadoEnum.PENDIENTE_ACUSE]: <PaperclipIcon />,
+    [ActionDictamenEstadoEnum.DICTAMINAR]: <CircleDashedCheckIcon />,
+    [ActionDictamenEstadoEnum.PENDIENTE_ACUSE]: <BadgeCheckIcon />,
     [ActionDictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
