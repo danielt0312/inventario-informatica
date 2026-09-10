@@ -80,7 +80,12 @@ return new class extends Migration
             $table->date('fecha_instalacion');
             $table->date('fecha_desinstalacion')
                 ->nullable();
+            $table->unsignedBigInteger('disco_vigente_marker')
+                ->virtualAs('CASE WHEN fecha_desinstalacion IS NULL THEN disco_articulo_id ELSE NULL END')
+                ->nullable();
             $table->timestamps();
+
+            $table->unique('disco_vigente_marker', 'uk_articulo_computadora_discos_disco_vigente');
         });
     }
 
