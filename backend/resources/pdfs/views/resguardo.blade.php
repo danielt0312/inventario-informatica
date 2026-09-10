@@ -96,7 +96,7 @@
                     <x-pdf::table.td class="align-middle">{{ $articulo->numero_serie ?? 'N/A' }}</x-pdf::table.td>
                     <x-pdf::table.td class="align-middle">{{ $producto->tipo->nombre }}</x-pdf::table.td>
                     <x-pdf::table.td class="align-middle">{{ $producto->marca->nombre }}</x-pdf::table.td>
-                    <x-pdf::table.td class="align-middle">{{ $producto->nombre }}</x-pdf::table.td>
+                    <x-pdf::table.td class="align-middle">{{ $producto->modelo }}</x-pdf::table.td>
                 </x-pdf::table.tr>
             @endforeach
         </x-pdf::table.tbody>
