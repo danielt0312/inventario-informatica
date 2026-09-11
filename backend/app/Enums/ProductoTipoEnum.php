@@ -51,6 +51,8 @@ enum ProductoTipoEnum: int
     case MODULO_BATERIA = 40;
     case UPS = 41;
     case ESCANER = 42;
+    // No se debe de utilizar mas que para las funcionalidades exclusivas de CPU
+    case CPU = 43;
 
     public function categoria(): ProductoCategoriaEnum
     {
@@ -96,7 +98,8 @@ enum ProductoTipoEnum: int
             self::MOUSE => ProductoCategoriaEnum::PERIFERICO,
             self::MODULO_BATERIA,
             self::UPS => ProductoCategoriaEnum::ELECTRICO,
-            self::ESCANER => ProductoCategoriaEnum::ESCANER
+            self::ESCANER => ProductoCategoriaEnum::ESCANER,
+            self::CPU => ProductoCategoriaEnum::PROCESADOR,
         };
     }
 

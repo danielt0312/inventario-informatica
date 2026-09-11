@@ -22,6 +22,8 @@ enum ProductoCategoriaEnum: int
     case PERIFERICO = 11;
     case ELECTRICO = 12;
     case ESCANER = 13;
+    // No se debe de utilizar mas que para las funcionalidades exclusivas de CPU
+    case PROCESADOR = 14;
 
     public function formattedLabel(): string
     {
