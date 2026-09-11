@@ -52,11 +52,14 @@ return new class extends Migration
                 ->constrained('discos', indexName: 'fk_producto_discos_discos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
+            $table->unique(['producto_id', 'disco_id'], 'uk_producto_discos');
         });
 
         Schema::create('articulo_discos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')
+                ->unique('uk_articulo_discos')
                 ->constrained('articulos', indexName: 'fk_articulo_discos_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
@@ -68,12 +71,12 @@ return new class extends Migration
 
         Schema::create('disco_instalaciones', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('computadora_articulo_id')
-                ->constrained('articulos', indexName: 'fk_disco_instalaciones_articulos_computadora')
+            $table->foreignId('articulo_computadora_id')
+                ->constrained('articulo_computadoras', indexName: 'fk_disco_instalaciones_articulo_computadoras')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('disco_articulo_id')
-                ->constrained('articulo_discos', indexName: 'fk_disco_instalaciones_articulos_disco')
+            $table->foreignId('articulo_disco_id')
+                ->constrained('articulo_discos', indexName: 'fk_disco_instalaciones_disco_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('es_principal');
@@ -81,7 +84,7 @@ return new class extends Migration
             $table->date('fecha_desinstalacion')
                 ->nullable();
             $table->unsignedBigInteger('disco_vigente_marker')
-                ->virtualAs('CASE WHEN fecha_desinstalacion IS NULL THEN disco_articulo_id ELSE NULL END')
+                ->virtualAs('CASE WHEN fecha_desinstalacion IS NULL THEN articulo_disco_id ELSE NULL END')
                 ->nullable();
             $table->timestamps();
 
