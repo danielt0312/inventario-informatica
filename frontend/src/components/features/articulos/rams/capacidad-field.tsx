@@ -1,5 +1,5 @@
 import type { TResponse } from "@/types/generics";
-import type { DiscoCapacidad } from "@/types/articulos/discos";
+import type { RamCapacidad } from "@/types/articulos/rams";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -38,7 +38,7 @@ function NombreField({
                 label: "Capacidad",
                 ...fieldLayout
             }}
-            placeholder="Ingresa la capacidad del disco"
+            placeholder="4 GB, 8 GB, 12 GB..."
             {...props}
         />
     );
@@ -58,11 +58,11 @@ function CapacidadField({
     const field = useFieldContext<CapacidadFieldType>();
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
-    const { mutate } = useFormMutation<TResponse<DiscoCapacidad>, OutputSchema>({
-        url: 'api/disco_capacidades',
+    const { mutate } = useFormMutation<TResponse<RamCapacidad>, OutputSchema>({
+        url: 'api/ram_capacidades',
         onSuccess: (data, _, __, { client }) => {
             const capacidad = data.data.data;
-            client.setQueryData(queryKey, (old: DiscoCapacidad[] = []) => [...old, capacidad]);
+            client.setQueryData(queryKey, (prev: RamCapacidad[] = []) => [...prev, capacidad]);
             field.handleChange(capacidad.id);
             client.invalidateQueries({ queryKey });
             setDialogOpen(false);
@@ -122,6 +122,6 @@ function CapacidadField({
 }
 
 export {
-    CapacidadField as DiscoCapacidadField,
-    type CapacidadFieldType as DiscoCapacidadFieldType
+    CapacidadField as RamCapacidadField,
+    type CapacidadFieldType as RamCapacidadFieldType
 }

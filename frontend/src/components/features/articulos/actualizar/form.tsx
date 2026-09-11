@@ -14,9 +14,10 @@ import { ProductoTipoEnum } from "@/lib/constants";
 import { DiscoTipoField } from "../discos/tipo-field";
 import { DiscoCapacidadField } from "../discos/capacidad-field";
 import { DiscoInterfazField } from "../discos/interfaz-field";
-import React from "react";
 import { Separator } from "@/components/ui/separator";
 import { RamTipoField } from "../rams/tipo-field";
+import { RamCapacidadField } from "../rams/capacidad-field";
+import React from "react";
 
 function ActualizarForm({
     articulo
@@ -137,6 +138,10 @@ function ActualizarForm({
                                                 <form.AppField
                                                     name={`rams[${index}].tipo_id`}
                                                     children={() => <RamTipoField required />}
+                                                />
+                                                <form.AppField
+                                                    name={`rams[${index}].capacidad_id`}
+                                                    children={() => <RamCapacidadField required />}
                                                 />
                                             </FieldGroup>
                                         </CardContent>
