@@ -66,14 +66,14 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
-        Schema::create('articulo_computadora_discos', function (Blueprint $table) {
+        Schema::create('disco_instalaciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('computadora_articulo_id')
-                ->constrained('articulos', indexName: 'fk_articulo_computadora_discos_articulos_computadora')
+                ->constrained('articulos', indexName: 'fk_disco_instalaciones_articulos_computadora')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('disco_articulo_id')
-                ->constrained('articulo_discos', indexName: 'fk_articulo_computadora_discos_articulos_disco')
+                ->constrained('articulo_discos', indexName: 'fk_disco_instalaciones_articulos_disco')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->boolean('es_principal');
@@ -85,13 +85,13 @@ return new class extends Migration
                 ->nullable();
             $table->timestamps();
 
-            $table->unique('disco_vigente_marker', 'uk_articulo_computadora_discos_disco_vigente');
+            $table->unique('disco_vigente_marker', 'uk_disco_instalaciones_disco_vigente');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('articulo_computadora_discos');
+        Schema::dropIfExists('disco_instalaciones');
         Schema::dropIfExists('articulo_discos');
         Schema::dropIfExists('producto_discos');
         Schema::dropIfExists('discos');
