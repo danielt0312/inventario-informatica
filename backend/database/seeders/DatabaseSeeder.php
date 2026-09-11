@@ -18,6 +18,12 @@ class DatabaseSeeder extends Seeder
             DocumentoTipoSeeder::class,
             DictamenEstadoSeeder::class,
             ResguardoEstadoSeeder::class,
+            RamTipoSeeder::class,
+            RamCapacidadSeeder::class,
+            RamVelocidadSeeder::class,
+            DiscoTipoSeeder::class,
+            DiscoCapacidadSeeder::class,
+            DiscoInterfazSeeder::class,
         ]);
 
         // todo eliminar esta invocación, solo es para debug
