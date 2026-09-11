@@ -8,11 +8,11 @@ type Interfaz = TCatalogo
 type IncludableInterfaz = Includable<Interfaz>;
 type Articulo = Omit<PrimitiveArticulo, 'producto'>;
 
-type Base<TProducto extends ProductoWithMarca = ProductoWithMarca, TInterfaz extends IncludableInterfaz = IncludableInterfaz> = {
+type Base<TInterfaz extends IncludableInterfaz = IncludableInterfaz> = {
     tipo: Tipo;
     capacidad: Capacidad;
     interfaz: TInterfaz;
-    producto: TProducto;
+    producto: ProductoWithMarca;
 }
 
 type BaseArticulo<TArticulo extends Articulo = Articulo, TDisco extends Base = Base> = TDisco & {

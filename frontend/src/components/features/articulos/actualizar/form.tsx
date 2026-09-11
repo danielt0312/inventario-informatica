@@ -2,7 +2,7 @@ import type { Articulo } from "@/types/articulos";
 import { Form } from "@/components/ui/form";
 import { useAppForm } from "@/components/ui/form-context";
 import { useFormMutation } from "@/hooks/use-form-mutation";
-import { actualizarArticuloDefaultFormValues, actualizarArticuloDiscoFieldsDefaultValues, actualizarArticuloFormValidator } from "./form-schema";
+import { actualizarArticuloDefaultFormValues, actualizarArticuloDiscoFieldsDefaultValues, actualizarArticuloFormValidator, actualizarArticuloRamFieldsDefaultValues } from "./form-schema";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, CircleFadingArrowUpIcon, CirclePlusIcon, CircleXIcon, Trash2Icon } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -15,6 +15,8 @@ import { DiscoTipoField } from "../discos/tipo-field";
 import { DiscoCapacidadField } from "../discos/capacidad-field";
 import { DiscoInterfazField } from "../discos/interfaz-field";
 import React from "react";
+import { Separator } from "@/components/ui/separator";
+import { RamTipoField } from "../rams/tipo-field";
 
 function ActualizarForm({
     articulo
@@ -43,60 +45,110 @@ function ActualizarForm({
     return (
         <Form form={form} className="flex flex-col gap-7">
             <form.AppForm>
-                <form.AppField name="discos" mode="array">
-                    {(field) => (
-                        <>
-                            <div className="flex flex-row justify-between">
-                                <Label className="text-xl font-bold">Discos de Almacenamiento</Label>
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => {
-                                        field.pushValue(actualizarArticuloDiscoFieldsDefaultValues)
-                                    }}
-                                >
-                                    <CirclePlusIcon /> Agregar
-                                </Button>
-                            </div>
+                <Separator />
 
-                            {field.state.value.map((_, index) => (
-                                <Card key={index} className="shadow-none">
-                                    <CardHeader>
-                                        <CardTitle className="flex justify-between">
-                                            <span className="normal-case">Disco #{index+1}</span>
-                                            <Button size="sm" variant="destructive" onClick={() => field.removeValue(index)}>
-                                                <Trash2Icon/> Eliminar
-                                            </Button>
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <FieldGroup className="flex-row">
-                                            <form.AppField
-                                                name={`discos[${index}].producto_id`}
-                                                children={() => <ProductoField tipo={ProductoTipoEnum.DISCO} layout={{ label: "Modelo" }} required />}
-                                            />
-                                            <form.AppField
-                                                name={`discos[${index}].tipo_id`}
-                                                children={() => <DiscoTipoField required />}
-                                            />
-                                            <form.AppField
-                                                name={`discos[${index}].capacidad_id`}
-                                                children={() => <DiscoCapacidadField required />}
-                                            />
-                                            <form.AppField
-                                                name={`discos[${index}].interfaz_id`}
-                                                children={() => <DiscoInterfazField />}
-                                            />
-                                        </FieldGroup>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </>
-                    )}
-                </form.AppField>
+                <CardContent className="flex flex-col gap-7">
+                    <form.AppField name="discos" mode="array">
+                        {(field) => (
+                            <>
+                                <div className="flex flex-row justify-between">
+                                    <Label className="text-xl font-bold">Discos de Almacenamiento</Label>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => {
+                                            field.pushValue(actualizarArticuloDiscoFieldsDefaultValues)
+                                        }}
+                                    >
+                                        <CirclePlusIcon /> Agregar
+                                    </Button>
+                                </div>
+
+                                {field.state.value.map((_, index) => (
+                                    <Card key={index} className="shadow-none">
+                                        <CardHeader>
+                                            <CardTitle className="flex justify-between">
+                                                <span className="normal-case">Disco #{index + 1}</span>
+                                                <Button size="sm" variant="destructive" onClick={() => field.removeValue(index)} disabled={field.state.value.length === 1}>
+                                                    <Trash2Icon /> Eliminar
+                                                </Button>
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <FieldGroup className="flex-row">
+                                                <form.AppField
+                                                    name={`discos[${index}].producto_id`}
+                                                    children={() => <ProductoField tipo={ProductoTipoEnum.DISCO} layout={{ label: "Modelo" }} required />}
+                                                />
+                                                <form.AppField
+                                                    name={`discos[${index}].tipo_id`}
+                                                    children={() => <DiscoTipoField required />}
+                                                />
+                                                <form.AppField
+                                                    name={`discos[${index}].capacidad_id`}
+                                                    children={() => <DiscoCapacidadField required />}
+                                                />
+                                                <form.AppField
+                                                    name={`discos[${index}].interfaz_id`}
+                                                    children={() => <DiscoInterfazField />}
+                                                />
+                                            </FieldGroup>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </>
+                        )}
+                    </form.AppField>
+                </CardContent>
+
+                <CardContent className="flex flex-col gap-7">
+                    <form.AppField name="rams" mode="array">
+                        {(field) => (
+                            <>
+                                <div className="flex flex-row justify-between">
+                                    <Label className="text-xl font-bold">RAMs</Label>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => {
+                                            field.pushValue(actualizarArticuloRamFieldsDefaultValues)
+                                        }}
+                                    >
+                                        <CirclePlusIcon /> Agregar
+                                    </Button>
+                                </div>
+
+                                {field.state.value.map((_, index) => (
+                                    <Card key={index} className="shadow-none">
+                                        <CardHeader>
+                                            <CardTitle className="flex justify-between">
+                                                <span className="normal-case">RAM #{index + 1}</span>
+                                                <Button size="sm" variant="destructive" onClick={() => field.removeValue(index)} disabled={field.state.value.length === 1}>
+                                                    <Trash2Icon /> Eliminar
+                                                </Button>
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <FieldGroup className="flex-row">
+                                                <form.AppField
+                                                    name={`rams[${index}].producto_id`}
+                                                    children={() => <ProductoField tipo={ProductoTipoEnum.RAM} layout={{ label: "Modelo" }} required />}
+                                                />
+                                                <form.AppField
+                                                    name={`rams[${index}].tipo_id`}
+                                                    children={() => <RamTipoField required />}
+                                                />
+                                            </FieldGroup>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </>
+                        )}
+                    </form.AppField>
+                </CardContent>
 
                 <Button
-                    onClick={async() => {
+                    onClick={async () => {
                         form.validateSync('submit');
                         await form.validateAsync('submit');
                         if (!form.state.isValid) return;

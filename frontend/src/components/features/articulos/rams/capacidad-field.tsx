@@ -3,7 +3,7 @@ import type { DiscoCapacidad } from "@/types/articulos/discos";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { discoCapacidadQueryOptions } from "./queries";
+import { ramCapacidadQueryOptions } from "./queries";
 import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useAppForm, useFieldContext } from "@/components/ui/form-context";
@@ -49,9 +49,9 @@ function CapacidadField({
     layout,
     ...props
 }: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
-    const { queryKey } = discoCapacidadQueryOptions;
+    const { queryKey } = ramCapacidadQueryOptions;
     const { data: items = [] } = useQuery({
-        ...discoCapacidadQueryOptions,
+        ...ramCapacidadQueryOptions,
         select: toComboboxCatalogItems
     });
 

@@ -1,15 +1,18 @@
 import type { Articulo as PrimitiveArticulo } from "../articulos";
-import type { TCatalogo } from "../generics";
+import type { Includable, TCatalogo } from "../generics";
 import type { ProductoWithMarca } from "../productos";
 
 type Tipo = TCatalogo;
 type Capacidad = TCatalogo;
+type Frecuencia = TCatalogo;
+type IncludableFrecuencia = Includable<Frecuencia>;
 type Articulo = Omit<PrimitiveArticulo, 'producto'>;
 
-type Base<TProducto extends ProductoWithMarca = ProductoWithMarca> = {
+type Base<TFrecuencia extends IncludableFrecuencia = IncludableFrecuencia> = {
     tipo: Tipo;
     capacidad: Capacidad;
-    producto: TProducto;
+    frecuencia: TFrecuencia;
+    producto: ProductoWithMarca;
 }
 
 type BaseArticulo<TArticulo extends Articulo = Articulo, TDisco extends Base = Base> = TDisco & {
@@ -20,8 +23,9 @@ type Ram = Base;
 type ArticuloRam = BaseArticulo;
 
 export type {
-    Ram as Disco,
+    Ram,
     ArticuloRam,
-    Tipo as DiscoRam,
-    Capacidad as DiscoCapacidad,
+    Tipo as RamTipo,
+    Capacidad as RamCapacidad,
+    Frecuencia as RamFrecuencia,
 }

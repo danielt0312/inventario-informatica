@@ -1,9 +1,9 @@
 import type { TResponse } from "@/types/generics";
-import type { DiscoTipo } from "@/types/articulos/discos";
+import type { RamTipo } from "@/types/articulos/rams";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { discoTipoQueryOptions } from "./queries";
+import { ramTipoQueryOptions } from "./queries";
 import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useAppForm, useFieldContext } from "@/components/ui/form-context";
@@ -38,7 +38,7 @@ function NombreField({
                 label: "Tipo",
                 ...fieldLayout
             }}
-            placeholder="Ingresa el tipo de disco"
+            placeholder="DDR, DDR2, DDR3..."
             {...props}
         />
     );
@@ -49,20 +49,20 @@ function TipoField({
     layout,
     ...props
 }: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
-    const { queryKey } = discoTipoQueryOptions;
+    const { queryKey } = ramTipoQueryOptions;
     const { data: items = [] } = useQuery({
-        ...discoTipoQueryOptions,
+        ...ramTipoQueryOptions,
         select: toComboboxCatalogItems
     });
 
     const field = useFieldContext<TipoFieldType>();
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
-    const { mutate } = useFormMutation<TResponse<DiscoTipo>, OutputSchema>({
-        url: 'api/disco_tipos',
+    const { mutate } = useFormMutation<TResponse<RamTipo>, OutputSchema>({
+        url: 'api/ram_tipos',
         onSuccess: (data, _, __, { client }) => {
             const tipo = data.data.data;
-            client.setQueryData(queryKey, (old: DiscoTipo[] = []) => [...old, tipo]);
+            client.setQueryData(queryKey, (prev: RamTipo[] = []) => [...prev, tipo]);
             field.handleChange(tipo.id);
             client.invalidateQueries({ queryKey });
             setDialogOpen(false);
@@ -98,9 +98,9 @@ function TipoField({
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen} onOpenChangeComplete={(open) => !open && form.setFieldValue('nombre', undefined)}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Registrar Tipo de Disco</DialogTitle>
+                        <DialogTitle>Registrar tipo de RAM</DialogTitle>
                         <DialogDescription className="sr-only">
-                            Registro de nuevo tipo de disco
+                            Registro de nuevo tipo de RAM
                         </DialogDescription>
                     </DialogHeader>
 
@@ -122,6 +122,6 @@ function TipoField({
 }
 
 export {
-    TipoField as DiscoTipoField,
-    type TipoFieldType as DiscoTipoFieldType,
+    TipoField as RamTipoField,
+    type TipoFieldType as RamTipoFieldType,
 }

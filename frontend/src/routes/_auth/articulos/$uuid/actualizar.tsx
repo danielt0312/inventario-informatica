@@ -1,11 +1,11 @@
-import { ActualizarArticuloForm } from '@/components/features/articulos/actualizar/form'
-import GoBackButton from '@/components/Goback'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import api from '@/lib/axios'
 import type { Articulo } from '@/types/articulos'
 import type { TResponse } from '@/types/generics'
+import { ActualizarArticuloForm } from '@/components/features/articulos/actualizar/form'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import GoBackButton from '@/components/Goback'
+import api from '@/lib/axios'
 
 const articuloQueryOptions = (uuid: string) => queryOptions({
     queryKey: ['articulos', uuid],
@@ -28,15 +28,13 @@ function RouteComponent() {
             <GoBackButton />
 
             <Card>
-                <CardHeader>
+                <CardContent>
                     <CardTitle>
                         Actualización de componentes internos de {articulo.producto.tipo.nombre}
                     </CardTitle>
-                </CardHeader>
-
-                <CardContent>
-                    <ActualizarArticuloForm articulo={articulo} />
                 </CardContent>
+
+                <ActualizarArticuloForm articulo={articulo} />
             </Card>
         </>
     )
