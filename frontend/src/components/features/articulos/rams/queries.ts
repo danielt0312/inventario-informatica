@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { RamCapacidad, RamFrecuencia, RamTipo } from "@/types/articulos/rams";
+import type { RamCapacidad, RamVelocidad, RamTipo } from "@/types/articulos/rams";
 import type { TResponse } from "@/types/generics";
 import { queryOptions } from "@tanstack/react-query";
 
@@ -15,14 +15,14 @@ const capacidadOptions = queryOptions({
         .then(r => r.data.data)
 });
 
-const frecuenciaOptions = queryOptions({
-    queryKey: ['ram_frecuencia'],
-    queryFn: () => api.get<TResponse<RamFrecuencia[]>>('api/ram_frecuencia')
+const velocidadOptions = queryOptions({
+    queryKey: ['ram_velocidades'],
+    queryFn: () => api.get<TResponse<RamVelocidad[]>>('api/ram_velocidades')
         .then(r => r.data.data)
 });
 
 export {
     tipoOptions as ramTipoQueryOptions,
     capacidadOptions as ramCapacidadQueryOptions,
-    frecuenciaOptions as ramFrecueciaQueryOptions,
+    velocidadOptions as ramVelocidadQueryOptions,
 }

@@ -18,6 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import { RamTipoField } from "../rams/tipo-field";
 import { RamCapacidadField } from "../rams/capacidad-field";
 import React from "react";
+import { RamVelocidadField } from "../rams/velocidad-field";
 
 function ActualizarForm({
     articulo
@@ -47,7 +48,6 @@ function ActualizarForm({
         <Form form={form} className="flex flex-col gap-7">
             <form.AppForm>
                 <Separator />
-
                 <CardContent className="flex flex-col gap-7">
                     <form.AppField name="discos" mode="array">
                         {(field) => (
@@ -102,6 +102,7 @@ function ActualizarForm({
                     </form.AppField>
                 </CardContent>
 
+                <Separator />
                 <CardContent className="flex flex-col gap-7">
                     <form.AppField name="rams" mode="array">
                         {(field) => (
@@ -142,6 +143,10 @@ function ActualizarForm({
                                                 <form.AppField
                                                     name={`rams[${index}].capacidad_id`}
                                                     children={() => <RamCapacidadField required />}
+                                                />
+                                                <form.AppField
+                                                    name={`rams[${index}].velocidad_id`}
+                                                    children={() => <RamVelocidadField />}
                                                 />
                                             </FieldGroup>
                                         </CardContent>

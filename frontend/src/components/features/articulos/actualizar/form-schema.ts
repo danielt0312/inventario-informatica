@@ -1,11 +1,12 @@
+import { requiredArray, selectedNumberOption } from "@/lib/schemas/common";
 import type { DiscoTipoFieldType } from "../discos/tipo-field";
 import type { ProductoFieldType } from "../../productos/form-fields";
 import type { DiscoCapacidadFieldType } from "../discos/capacidad-field";
-import { requiredArray, selectedNumberOption } from "@/lib/schemas/common";
-import z from "zod";
 import type { DiscoInterfazFieldType } from "../discos/interfaz-field";
 import type { RamTipoFieldType } from "../rams/tipo-field";
 import type { RamCapacidadFieldType } from "../rams/capacidad-field";
+import type { RamVelocidadFieldType } from "../rams/velocidad-field";
+import z from "zod";
 
 type DiscoFields = {
     producto_id: ProductoFieldType;
@@ -18,6 +19,7 @@ type RamFields = {
     producto_id: ProductoFieldType;
     tipo_id: RamTipoFieldType;
     capacidad_id: RamCapacidadFieldType;
+    velocidad_id: RamVelocidadFieldType;
 }
 
 type Schema = {
@@ -36,6 +38,7 @@ const ramFieldsDefaultValues: RamFields = {
     producto_id: undefined,
     tipo_id: undefined,
     capacidad_id: undefined,
+    velocidad_id: null,
 }
 
 const defaultValues: Schema = {
@@ -54,6 +57,7 @@ const ramValidator = z.object({
     producto_id: selectedNumberOption,
     tipo_id: selectedNumberOption,
     capacidad_id: selectedNumberOption,
+    velocidad_id: selectedNumberOption.nullable(),
 });
 
 const validator = z.object({

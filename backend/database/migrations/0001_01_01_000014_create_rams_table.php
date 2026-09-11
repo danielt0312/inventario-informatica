@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nombre', 64);
         });
 
-        Schema::create('ram_frecuencias', function (Blueprint $table) {
+        Schema::create('ram_velocidades', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 64);
         });
@@ -35,7 +35,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->foreignId('frecuencia_id')
                 ->nullable()
-                ->constrained('ram_frecuencias', indexName: 'fk_rams_ram_frecuencias')
+                ->constrained('ram_velocidades', indexName: 'fk_rams_ram_velocidades')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
@@ -94,7 +94,7 @@ return new class extends Migration
         Schema::dropIfExists('articulo_rams');
         Schema::dropIfExists('producto_rams');
         Schema::dropIfExists('rams');
-        Schema::dropIfExists('ram_frecuencias');
+        Schema::dropIfExists('ram_velocidades');
         Schema::dropIfExists('ram_capacidades');
         Schema::dropIfExists('ram_tipos');
     }

@@ -1,9 +1,9 @@
 import type { TResponse } from "@/types/generics";
-import type { RamCapacidad } from "@/types/articulos/rams";
+import type { RamVelocidad } from "@/types/articulos/rams";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { ramCapacidadQueryOptions } from "./queries";
+import { ramVelocidadQueryOptions } from "./queries";
 import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useAppForm, useFieldContext } from "@/components/ui/form-context";
@@ -35,34 +35,34 @@ function NombreField({
     return (
         <InputField
             fieldLayout={{
-                label: "Capacidad",
+                label: "Velocidad",
                 ...fieldLayout
             }}
-            placeholder="4 GB, 8 GB, 12 GB..."
+            placeholder="133 MHz, 1600 MHz, 3200 MT/s..."
             {...props}
         />
     );
 }
 
-type CapacidadFieldType = ComboboxFieldType<false, undefined>;
-function CapacidadField({
+type VelocidadFieldType = ComboboxFieldType<false, null>;
+function VelocidadField({
     layout,
     ...props
 }: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
-    const { queryKey } = ramCapacidadQueryOptions;
+    const { queryKey } = ramVelocidadQueryOptions;
     const { data: items = [] } = useQuery({
-        ...ramCapacidadQueryOptions,
+        ...ramVelocidadQueryOptions,
         select: toComboboxCatalogItems
     });
 
-    const field = useFieldContext<CapacidadFieldType>();
+    const field = useFieldContext<VelocidadFieldType>();
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
-    const { mutate } = useFormMutation<TResponse<RamCapacidad>, OutputSchema>({
-        url: 'api/ram_capacidades',
+    const { mutate } = useFormMutation<TResponse<RamVelocidad>, OutputSchema>({
+        url: 'api/ram_velocidades',
         onSuccess: (data, _, __, { client }) => {
             const capacidad = data.data.data;
-            client.setQueryData(queryKey, (prev: RamCapacidad[] = []) => [...prev, capacidad]);
+            client.setQueryData(queryKey, (prev: RamVelocidad[] = []) => [...prev, capacidad]);
             field.handleChange(capacidad.id);
             client.invalidateQueries({ queryKey });
             setDialogOpen(false);
@@ -89,7 +89,7 @@ function CapacidadField({
                     setDialogOpen(true);
                 }}
                 layout={{
-                    label: "Capacidad",
+                    label: "Velocidad",
                     ...layout
                 }}
                 {...props}
@@ -98,9 +98,9 @@ function CapacidadField({
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen} onOpenChangeComplete={(open) => !open && form.setFieldValue('nombre', undefined)}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Registrar capacidad de RAM</DialogTitle>
+                        <DialogTitle>Registrar velocidad de RAM</DialogTitle>
                         <DialogDescription className="sr-only">
-                            Registro de nueva capacidad de RAM
+                            Registro de nueva velocidad de RAM
                         </DialogDescription>
                     </DialogHeader>
 
@@ -122,6 +122,6 @@ function CapacidadField({
 }
 
 export {
-    CapacidadField as RamCapacidadField,
-    type CapacidadFieldType as RamCapacidadFieldType
+    VelocidadField as RamVelocidadField,
+    type VelocidadFieldType as RamVelocidadFieldType
 }

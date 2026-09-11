@@ -30,6 +30,7 @@ use App\Http\Controllers\{
     DiscoInterfazController,
     RamTipoController,
     RamCapacidadController,
+    RamVelocidadController,
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -68,6 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'disco_interfaces' => DiscoInterfazController::class,
         'ram_tipos' => RamTipoController::class,
         'ram_capacidades' => RamCapacidadController::class,
+        'ram_velocidades' => RamVelocidadController::class,
     ], ['only' => ['index', 'store']]);
 
     // TODO definir si el parametro sera un id, uuid, u otro como identificable del empleado

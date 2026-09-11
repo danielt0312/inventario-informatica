@@ -4,11 +4,11 @@ import type { ProductoWithMarca } from "../productos";
 
 type Tipo = TCatalogo;
 type Capacidad = TCatalogo;
-type Frecuencia = TCatalogo;
-type IncludableFrecuencia = Includable<Frecuencia>;
+type Velocidad = TCatalogo;
+type IncludableVelocidad = Includable<Velocidad>;
 type Articulo = Omit<PrimitiveArticulo, 'producto'>;
 
-type Base<TFrecuencia extends IncludableFrecuencia = IncludableFrecuencia> = {
+type Base<TFrecuencia extends IncludableVelocidad = IncludableVelocidad> = {
     tipo: Tipo;
     capacidad: Capacidad;
     frecuencia: TFrecuencia;
@@ -27,5 +27,5 @@ export type {
     ArticuloRam,
     Tipo as RamTipo,
     Capacidad as RamCapacidad,
-    Frecuencia as RamFrecuencia,
+    Velocidad as RamVelocidad,
 }
