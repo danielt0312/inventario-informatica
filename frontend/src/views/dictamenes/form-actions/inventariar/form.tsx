@@ -1,7 +1,7 @@
 import type { OrdenCompra } from "@/types/orden_compras";
 import type { DetailedInventariarDictamen, InventariarDictamenAdquisicion } from "@/types/dictamenes";
 import { useAppForm } from "@/components/ui/form-context";
-import { adquisicionFieldsDefaultValues, defaultValues, validator } from "./form-schema";
+import { adquisicionFieldsDefaultValues, inventariarDictamenFormDefaultValues, inventariarDictamenFormValidator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Form } from "@/components/ui/form";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -76,16 +76,16 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
     const { mutate, status } = useActionFormMutation(dictamen);
 
     const cleanedDefaultValues = inventariarDictamenHasOrdenCompra(dictamen)
-        ? { ...defaultValues, orden_compra_id: dictamen.orden_compra.id }
-        : defaultValues;
+        ? { ...inventariarDictamenFormDefaultValues, orden_compra_id: dictamen.orden_compra.id }
+        : inventariarDictamenFormDefaultValues;
 
     const form = useAppForm({
         defaultValues: cleanedDefaultValues,
         validators: {
-            onSubmit: validator
+            onSubmit: inventariarDictamenFormValidator
         },
         onSubmit: ({ value, formApi }) => {
-            const data = validator.parse(value);
+            const data = inventariarDictamenFormValidator.parse(value);
             mutate({ data, formApi });
         }
     });
@@ -296,7 +296,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                             <FieldGroup className="grid grid-cols-2">
                                                 <form.AppField
                                                     name={`adquisiciones[${index}].numero_serie`}
-                                                    children={() => <ArticuloNumeroSerieField required />}
+                                                    children={() => <ArticuloNumeroSerieField />}
                                                 />
 
                                                 <form.AppField

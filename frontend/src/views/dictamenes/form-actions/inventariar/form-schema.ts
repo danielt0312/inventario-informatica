@@ -1,9 +1,9 @@
-import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption } from "@/lib/schemas/common";
+import { nullableNumber, nullableString, requiredArray, requiredString, selectedBooleanOption, selectedNumberOption, trimmedString } from "@/lib/schemas/common";
+import { esCuentaContable, esCuentaContableInventariable } from "@/lib/utils";
 import type { ArticuloCostoUnitarioFieldType, ArticuloCuentaContableType, ArticuloNumeroSerieFieldType, EsResultadoEsperadoFieldType, ObservacionesFieldType } from "@/components/features/articulos/form-fields";
 import type { FacturaFieldType } from "@/components/features/facturas/form-fields";
 import type { ProductoFieldType } from "@/components/features/productos/form-fields";
 import type { OrdenCompraFieldType } from "@/components/features/orden_compras/form-fields";
-import { esCuentaContable, esCuentaContableInventariable } from "@/lib/utils";
 import z from "zod";
 
 type AdquisicionFields = {
@@ -27,13 +27,13 @@ export const adquisicionFieldsDefaultValues: AdquisicionFields = {
     observaciones: null,
     factura_id: undefined,
     cuenta_contable: undefined,
-    numero_serie: undefined,
+    numero_serie: null,
     costo_unitario: null,
     id: undefined,
     producto_id: undefined,
 }
 
-export const defaultValues: Schema = {
+const defaultValues: Schema = {
     orden_compra_id: undefined,
     adquisiciones: [adquisicionFieldsDefaultValues]
 };
@@ -53,13 +53,13 @@ const adquisicionValidator = z
                         .success
                 }
             ),
-        numero_serie: requiredString,
+        numero_serie: trimmedString().nullable(),
         costo_unitario: nullableNumber,
         es_resultado_esperado: selectedBooleanOption,
         observaciones: nullableString,
     });
 
-export const validator = z.object({
+const validator = z.object({
     orden_compra_id: selectedNumberOption,
     adquisiciones: requiredArray(adquisicionValidator
         .refine(
@@ -93,5 +93,7 @@ export const validator = z.object({
 
 
 export {
-    type Schema as InventariarDictamenSchema
+    type Schema as InventariarDictamenSchema,
+    validator as inventariarDictamenFormValidator,
+    defaultValues as inventariarDictamenFormDefaultValues,
 }

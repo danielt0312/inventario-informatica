@@ -88,17 +88,17 @@ export const ArticuloNullableNumeroInventarioField = ({
     />
 );
 
-export type ArticuloNumeroSerieFieldType = InputFieldType;
+export type ArticuloNumeroSerieFieldType = NullableInputFieldType;
 export const ArticuloNumeroSerieField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof NullableInputField>) => (
     <NullableInputField
         fieldLayout={{
-            label: "Número de serie",
+            label: "Número de serie / Código identificador",
             ...fieldLayout
         }}
-        placeholder="Ingresa el número de serie"
+        placeholder="Ingresa el número de serie o código identificador"
         {...props}
     >
         <InputGroupAddon>
