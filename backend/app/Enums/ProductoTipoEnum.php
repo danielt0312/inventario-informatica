@@ -142,6 +142,7 @@ enum ProductoTipoEnum: int
             self::CAMARA_VIDEO => ClasificadorEnum::CAMARA_FOTOGRAFICA_VIDEO,
             self::TELEFONO => ClasificadorEnum::COMUNICACION_TELECOMUNICACION,
             self::UPS => ClasificadorEnum::ELECTRICO_GENERACION_ELECTRICA,
+            self::LICENCIA => ClasificadorEnum::LICENCIA_INFORMATICA_INTELECTUAL,
             default => ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION,
         };
     }
