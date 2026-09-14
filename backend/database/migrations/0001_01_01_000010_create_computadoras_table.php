@@ -15,7 +15,10 @@ return new class extends Migration
                 ->constrained('articulos', indexName: 'fk_articulo_computadoras_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->unsignedBigInteger('producto_cpu_id');
+            $table->foreignId('cpu_producto_id')
+                ->constrained('productos', indexName: 'fk_articulo_computadoras_productos_cpu')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
     }
 

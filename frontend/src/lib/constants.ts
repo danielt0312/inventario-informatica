@@ -46,7 +46,8 @@ export const ProductoCategoriaEnum = {
     IMPRESORA: 10,
     PERIFERICO: 11,
     ELECTRICO: 12,
-    ESCANER: 13
+    ESCANER: 13,
+    PROCESADOR: 14,
 } as const;
 export type ProductoCategoriaEnum = (typeof ProductoCategoriaEnum)[keyof typeof ProductoCategoriaEnum];
 
@@ -92,7 +93,8 @@ export const ProductoTipoEnum = {
     MOUSE: 39,
     MODULO_BATERIA: 40,
     UPS: 41,
-    ESCANER: 42
+    ESCANER: 42,
+    CPU: 43,
 } as const;
 export type ProductoTipoEnum = (typeof ProductoTipoEnum)[keyof typeof ProductoTipoEnum];
 
@@ -141,7 +143,8 @@ export const ProductoTipoProductoCategoriaMap: Record<ProductoTipoEnum, Producto
     [ProductoTipoEnum.MOUSE]: ProductoCategoriaEnum.PERIFERICO,
     [ProductoTipoEnum.MODULO_BATERIA]: ProductoCategoriaEnum.ELECTRICO,
     [ProductoTipoEnum.UPS]: ProductoCategoriaEnum.ELECTRICO,
-    [ProductoTipoEnum.ESCANER]: ProductoCategoriaEnum.ESCANER
+    [ProductoTipoEnum.ESCANER]: ProductoCategoriaEnum.ESCANER,
+    [ProductoTipoEnum.CPU]: ProductoCategoriaEnum.PROCESADOR,
 }
 
 export const dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario: ProductoTipoEnum[] = [

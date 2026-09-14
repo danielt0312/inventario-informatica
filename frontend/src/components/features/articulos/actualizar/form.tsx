@@ -8,7 +8,7 @@ import { CircleArrowRightIcon, CircleFadingArrowUpIcon, CirclePlusIcon, CircleXI
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FieldGroup } from "@/components/ui/field";
+import { Field, FieldGroup } from "@/components/ui/field";
 import { ProductoField } from "../../productos/form-fields";
 import { ProductoTipoEnum } from "@/lib/constants";
 import { DiscoTipoField } from "../discos/tipo-field";
@@ -47,6 +47,17 @@ function ActualizarForm({
     return (
         <Form form={form} className="flex flex-col gap-7">
             <form.AppForm>
+                <Separator />
+                <CardContent className="flex flex-col gap-7">
+                    <Field orientation="horizontal">
+                        <Label className="text-xl font-bold w-1/4">Procesador (CPU)</Label>
+                        <form.AppField
+                            name="cpu_producto_id"
+                            children={() => <ProductoField tipo={ProductoTipoEnum.CPU} layout={{ label: undefined }} className="w-3/4" />}
+                        />
+                    </Field>
+                </CardContent>
+
                 <Separator />
                 <CardContent className="flex flex-col gap-7">
                     <form.AppField name="discos" mode="array">

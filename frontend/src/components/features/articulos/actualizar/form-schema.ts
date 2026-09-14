@@ -25,6 +25,7 @@ type RamFields = {
 type Schema = {
     discos: DiscoFields[];
     rams: RamFields[];
+    cpu_producto_id: ProductoFieldType;
 }
 
 const discoFieldsDefaultValues: DiscoFields = {
@@ -44,6 +45,7 @@ const ramFieldsDefaultValues: RamFields = {
 const defaultValues: Schema = {
     discos: [discoFieldsDefaultValues],
     rams: [ramFieldsDefaultValues],
+    cpu_producto_id: undefined,
 }
 
 const discoValidator = z.object({
@@ -63,6 +65,7 @@ const ramValidator = z.object({
 const validator = z.object({
     discos: requiredArray(discoValidator),
     rams: requiredArray(ramValidator),
+    cpu_producto_id: selectedNumberOption
 });
 
 type SchemaOutput = z.output<typeof validator>;
