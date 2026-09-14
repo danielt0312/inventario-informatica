@@ -57,16 +57,9 @@ class DictamenAdquisicion extends Model
         return $this->belongsTo(Articulo::class);
     }
 
-    public function articulosSurtidos(): HasMany
+    public function surtimientos(): HasMany
     {
-        return $this->hasMany(DictamenAdquisicionArticulo::class);
-    }
-
-    public function articulos(): BelongsToMany
-    {
-        return $this->belongsToMany(Articulo::class, 'dictamen_adquisicion_articulos')
-            ->using(DictamenAdquisicionArticulo::class)
-            ->withTimestamps();
+        return $this->hasMany(DictamenSurtimiento::class);
     }
 
     public function tipo(): Attribute

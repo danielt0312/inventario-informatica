@@ -20,6 +20,7 @@ use App\Http\Requests\Dictamen\Traits\{
 
 use App\Rules\CuentaContableFormat;
 
+// todo corregir ingreso de articulos para las licencias
 class InventariarDictamenRequest extends FormRequest
 {
     use InteractsWithDictamen {
@@ -57,7 +58,6 @@ class InventariarDictamenRequest extends FormRequest
 
         if ($this->dictamen->orden_compra_id !== null) $this->setOrdenCompra($this->dictamen->ordenCompra);
     }
-
 
     public function rules(): array
     {
@@ -133,7 +133,7 @@ class InventariarDictamenRequest extends FormRequest
                 $adquisicionesPayload = collect($this->input('adquisiciones', []));
 
                 $adquisiciones = DictamenAdquisicion::with('producto:id,tipo_id')
-                    ->withCount('articulosSurtidos')
+                    ->withCount('surtimientos')
                     ->whereIn('id', $adquisicionesPayload->pluck('id')->unique())
                     ->get()
                     ->keyBy('id');
@@ -161,7 +161,7 @@ class InventariarDictamenRequest extends FormRequest
                         $this->setProductos($adquisicionPayload['cuenta_contable'], $adquisicion->producto);
                     }
 
-                    $pendiente = $adquisicion->cantidad - $adquisicion->articulos_surtidos_count;
+                    $pendiente = $adquisicion->cantidad - $adquisicion->surtimientos_count;
                     $enviado = $conteoPorAdquisicion->get($adquisicionPayload['id']);
 
                     if ($enviado > $pendiente) {

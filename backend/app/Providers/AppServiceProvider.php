@@ -16,7 +16,9 @@ use App\Models\{
     DictamenVersion,
     Factura,
     Resguardo,
-    OrdenCompra
+    OrdenCompra,
+    Articulo,
+    Licencia,
 };
 
 class AppServiceProvider extends ServiceProvider
@@ -32,11 +34,13 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('es');
 
         Relation::enforceMorphMap([
-            'oficio'    => Oficio::class,
+            'oficio'            => Oficio::class,
             'dictamen_version'  => DictamenVersion::class,
-            'factura'   => Factura::class,
-            'resguardo' => Resguardo::class,
-            'orden_compra' => OrdenCompra::class
+            'factura'           => Factura::class,
+            'resguardo'         => Resguardo::class,
+            'orden_compra'      => OrdenCompra::class,
+            'articulo'          => Articulo::class,
+            'licencia'          => Licencia::class,
         ]);
 
         Blade::anonymousComponentPath(resource_path('pdfs/components'), 'pdf');

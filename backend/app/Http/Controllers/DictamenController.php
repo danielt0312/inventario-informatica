@@ -22,14 +22,15 @@ use App\Http\Requests\Dictamen\{
 use App\Models\{
     Dictamen,
     DictamenAdquisicion,
+    DictamenSurtimiento,
     Archivo,
-    Oficio
+    Oficio,
 };
 
 use App\Enums\{
     DocumentoTipoEnum,
     DictamenEstadoEnum,
-    ArticuloEstadoEnum
+    ArticuloEstadoEnum,
 };
 
 use App\Services\{
@@ -269,6 +270,7 @@ class DictamenController extends Controller
                 ['cuenta_contable' => $cuentaContable] = $payloadAdquisicion;
                 $producto = $request->getProductos($cuentaContable);
 
+                // todo corregir ingreso de articulos para las licencias
                 $articulo = $request->getFacturaAdquisiciones($cuentaContable)
                     ->articulos()
                     ->create([
@@ -279,10 +281,12 @@ class DictamenController extends Controller
                         'producto_id' => $producto->id
                     ]);
 
-                $articulo->cumplimientoAdquisicion()
-                    ->create([
+                DictamenSurtimiento::make([
                         'dictamen_adquisicion_id' => $payloadAdquisicion['id']
-                    ]);
+                    ])
+                    ->adquirible()
+                    ->associate($articulo)
+                    ->save();
             }
 
             $ordenCompra = $request->getOrdenCompra();
@@ -296,10 +300,10 @@ class DictamenController extends Controller
             }
 
             $adquisiciones = $dictamen->versionActual->adquisiciones()
-                ->withCount('articulosSurtidos')
+                ->withCount('surtimientos')
                 ->get();
 
-            $faltaPorSurtirAdquisiciones = $adquisiciones->contains(fn ($a) => $a->articulos_surtidos_count < $a->cantidad);
+            $faltaPorSurtirAdquisiciones = $adquisiciones->contains(fn ($a) => $a->surtimientos_count < $a->cantidad);
             $dictamenEstadoId = $faltaPorSurtirAdquisiciones
                 ? DictamenEstadoEnum::SURTIDO_PARCIAL->value
                 : DictamenEstadoEnum::SURTIDO->value;

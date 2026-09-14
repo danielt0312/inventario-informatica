@@ -34,11 +34,11 @@ class DictamenAdquisicionResource extends JsonResource
             $this->when(
                 $dictamen->esEstadoInventariar(),
                 function () {
-                    $this->loadCount('articulosSurtidos');
+                    $this->loadCount('surtimientos');
 
                     return $this->merge([
-                        'cantidad_surtida' => $this->articulos_surtidos_count,
-                        'cantidad_restante' => $this->cantidad - $this->articulos_surtidos_count,
+                        'cantidad_surtida' => $this->surtimientos_count,
+                        'cantidad_restante' => $this->cantidad - $this->surtimientos_count,
                     ]);
                 }
             )

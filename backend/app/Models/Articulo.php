@@ -3,23 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{
-    BelongsTo,
-    HasOne
-};
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-
 use App\Enums\{
     ArticuloEstadoEnum,
     ProductoTipoEnum
 };
+use App\Traits\Models\Relations\HasDictamen;
 use App\Services\NumeroInventarioService;
 
 class Articulo extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, HasDictamen;
 
     protected $fillable = [
         'producto_id',
@@ -57,16 +54,6 @@ class Articulo extends Model
                 $articulo->saveQuietly();
             }
         });
-    }
-
-    public function dictamen(): BelongsTo
-    {
-        return $this->belongsTo(Dictamen::class);
-    }
-
-    public function cumplimientoAdquisicion(): HasOne
-    {
-        return $this->hasOne(DictamenAdquisicionArticulo::class);
     }
 
     public function producto(): BelongsTo
