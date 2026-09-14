@@ -51,8 +51,8 @@ enum ProductoTipoEnum: int
     case MODULO_BATERIA = 40;
     case UPS = 41;
     case ESCANER = 42;
-    // No se debe de utilizar mas que para las funcionalidades exclusivas de CPU
-    case CPU = 43;
+    case PROCESADOR = 43;
+    case LICENCIA = 44;
 
     public function categoria(): ProductoCategoriaEnum
     {
@@ -60,6 +60,8 @@ enum ProductoTipoEnum: int
             self::COMPUTADORA_ESCRITORIO,
             self::COMPUTADORA_PORTATIL,
             self::SERVIDOR,
+            self::LICENCIA,
+            self::PROCESADOR,
             self::TABLET => ProductoCategoriaEnum::COMPUTADORA,
             self::DISCO => ProductoCategoriaEnum::DISPOSITIVO_ALMACENAMIENTO,
             self::RAM => ProductoCategoriaEnum::MEMORIA_ACCESO_ALEATORIO,
@@ -99,7 +101,6 @@ enum ProductoTipoEnum: int
             self::MODULO_BATERIA,
             self::UPS => ProductoCategoriaEnum::ELECTRICO,
             self::ESCANER => ProductoCategoriaEnum::ESCANER,
-            self::CPU => ProductoCategoriaEnum::PROCESADOR,
         };
     }
 

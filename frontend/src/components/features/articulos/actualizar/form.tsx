@@ -53,7 +53,7 @@ function ActualizarForm({
                         <Label className="text-xl font-bold w-1/4">Procesador (CPU)</Label>
                         <form.AppField
                             name="cpu_producto_id"
-                            children={() => <ProductoField tipo={ProductoTipoEnum.CPU} layout={{ label: undefined }} className="w-3/4" />}
+                            children={() => <ProductoField tipo={ProductoTipoEnum.PROCESADOR} layout={{ label: undefined }} className="w-3/4" />}
                         />
                     </Field>
                 </CardContent>

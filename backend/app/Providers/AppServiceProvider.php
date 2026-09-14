@@ -18,7 +18,6 @@ use App\Models\{
     Resguardo,
     OrdenCompra,
     Articulo,
-    Licencia,
 };
 
 class AppServiceProvider extends ServiceProvider
@@ -39,8 +38,6 @@ class AppServiceProvider extends ServiceProvider
             'factura'           => Factura::class,
             'resguardo'         => Resguardo::class,
             'orden_compra'      => OrdenCompra::class,
-            'articulo'          => Articulo::class,
-            'licencia'          => Licencia::class,
         ]);
 
         Blade::anonymousComponentPath(resource_path('pdfs/components'), 'pdf');

@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    HasOne
+};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -54,6 +57,11 @@ class Articulo extends Model
                 $articulo->saveQuietly();
             }
         });
+    }
+
+    public function surtimiento(): HasOne
+    {
+        return $this->hasOne(DictamenSurtimiento::class);
     }
 
     public function producto(): BelongsTo

@@ -94,10 +94,14 @@ return new class extends Migration
         Schema::create('dictamen_surtimientos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('dictamen_adquisicion_id')
-                ->constrained('dictamen_adquisiciones', indexName: 'fk_dictamen_adquisicion_articulos_dictamen_adquisiciones')
+                ->constrained('dictamen_adquisiciones', indexName: 'fk_dictamen_surtimientos_dictamen_adquisiciones')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->morphs('adquirible');
+            $table->foreignId('articulo_id')
+                ->unique('uk_dictamen_surtimientos')
+                ->constrained('articulos', indexName: 'fk_dictamen_surtimientos_articulos')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
 
@@ -112,7 +116,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('dictamen_adquisicion_articulos');
+        Schema::dropIfExists('dictamen_surtimientos');
         Schema::dropIfExists('dictamen_adquisiciones');
         Schema::dropIfExists('dictamen_versiones');
         Schema::dropIfExists('dictamenes');

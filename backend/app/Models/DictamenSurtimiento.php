@@ -3,15 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{
-    BelongsTo,
-    MorphTo,
-};
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DictamenSurtimiento extends Model
 {
     protected $fillable = [
         'dictamen_adquisicion_id',
+        'articulo_id',
     ];
 
     public function dictamenAdquisicion(): BelongsTo
@@ -19,8 +17,8 @@ class DictamenSurtimiento extends Model
         return $this->belongsTo(DictamenAdquisicion::class);
     }
 
-    public function adquirible(): MorphTo
+    public function articulo(): BelongsTo
     {
-        return $this->morphTo();
+        return $this->belongsTo(Articulo::class);
     }
 }

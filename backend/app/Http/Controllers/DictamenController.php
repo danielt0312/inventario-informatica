@@ -281,12 +281,10 @@ class DictamenController extends Controller
                         'producto_id' => $producto->id
                     ]);
 
-                DictamenSurtimiento::make([
-                        'dictamen_adquisicion_id' => $payloadAdquisicion['id']
-                    ])
-                    ->adquirible()
-                    ->associate($articulo)
-                    ->save();
+                $surtimiento = $articulo->surtimiento()
+                    ->create([
+                        'dictamen_adquisicion_id' => $payloadAdquisicion['id'],
+                    ]);
             }
 
             $ordenCompra = $request->getOrdenCompra();
