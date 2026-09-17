@@ -3,18 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Models\Relations\{
-    HasDictamen,
-    HasProducto
-};
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Licencia extends Model
 {
-    use HasDictamen, HasProducto;
-
     protected $fillable = [
-        'dictamen_id',
-        'producto_id',
-        'fecha_expiracion',
+        'estado_id',
     ];
+
+    public $timestamps = false;
+
+    public function estado(): BelongsTo
+    {
+        return $this->belongsTo(LicenciaEstado::class);
+    }
 }
