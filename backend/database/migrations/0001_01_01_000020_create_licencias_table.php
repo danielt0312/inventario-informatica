@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('licencias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tipo_id')
+                ->unique('uk_licencias')
                 ->constrained('licencia_tipos', indexName: 'fk_licencias_licencia_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
@@ -31,11 +32,14 @@ return new class extends Migration
                 ->constrained('licencias', indexName: 'fk_producto_licencias_licencias')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+
+            $table->unique(['producto_id', 'licencia_id'], 'uk_producto_licencias');
         });
 
         Schema::create('articulo_licencias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')
+                ->unique('uk_articulo_licencias')
                 ->constrained('articulos', indexName: 'fk_articulo_licencias_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
@@ -58,7 +62,6 @@ return new class extends Migration
                 ->constrained('articulo_licencias', indexName: 'fk_licencia_instalaciones_licencia_articulos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('es_principal');
             $table->date('fecha_instalacion');
             $table->date('fecha_desinstalacion')
                 ->nullable();
@@ -73,7 +76,10 @@ return new class extends Migration
 
     public function down(): void
     {
+        Schema::dropIfExists('licencia_instalaciones');
+        Schema::dropIfExists('articulo_licencias');
+        Schema::dropIfExists('producto_licencias');
         Schema::dropIfExists('licencias');
-        Schema::dropIfExists('licencia_estados');
+        Schema::dropIfExists('licencia_tipos');
     }
 };
