@@ -35,7 +35,7 @@ use App\Enums\{
 
 use App\Services\{
     ArchivoService,
-    ArticuloService,
+    CuentaContableService,
     PdfWatermarkService,
 };
 
@@ -275,7 +275,7 @@ class DictamenController extends Controller
                     ->articulos()
                     ->create([
                         ...$payloadAdquisicion,
-                        'es_inventariable' => !ArticuloService::esCuentaContableNoInventariable($payloadAdquisicion['cuenta_contable']),
+                        'es_inventariable' => !CuentaContableService::esNoInventariable($payloadAdquisicion['cuenta_contable']),
                         'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
                         'dictamen_id' => $dictamen->id,
                         'producto_id' => $producto->id

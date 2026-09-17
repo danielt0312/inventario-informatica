@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
-use App\Services\ArticuloService;
+use App\Services\CuentaContableService;
 
 class CuentaContableFormat implements ValidationRule
 {
@@ -20,7 +20,7 @@ class CuentaContableFormat implements ValidationRule
             return;
         }
 
-        if (!ArticuloService::esCuentaContable($value)) {
+        if (!CuentaContableService::esValido($value)) {
             $fail("La $attribute debe ser una cuenta contable válida");
         }
     }
