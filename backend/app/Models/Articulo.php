@@ -15,7 +15,8 @@ use App\Enums\{
     ProductoTipoEnum
 };
 use App\Traits\Models\Relations\{
-    HasDictamen
+    HasDictamen,
+    HasProducto
 };
 use App\Services\NumeroInventarioService;
 

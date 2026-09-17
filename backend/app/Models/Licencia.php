@@ -3,9 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Models\Relations\HasDictamen;
+use App\Traits\Models\Relations\{
+    HasDictamen,
+    HasProducto
+};
 
 class Licencia extends Model
 {
-    use HasDictamen;
+    use HasDictamen, HasProducto;
+
+    protected $fillable = [
+        'dictamen_id',
+        'producto_id',
+        'fecha_expiracion',
+    ];
 }
