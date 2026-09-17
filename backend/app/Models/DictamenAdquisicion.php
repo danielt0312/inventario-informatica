@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Relations\{
     HasMany
 };
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Traits\Models\Relations\HasProducto;
 
 class DictamenAdquisicion extends Model
 {
-    use HasFactory;
+    use HasFactory, HasProducto;
 
     protected $fillable = [
         'dictamen_version_id',
@@ -40,11 +41,6 @@ class DictamenAdquisicion extends Model
     public function empleado(): BelongsTo
     {
         return $this->belongsTo(Empleado::class);
-    }
-
-    public function producto(): BelongsTo
-    {
-        return $this->belongsTo(Producto::class);
     }
 
     public function productoTipo(): BelongsTo

@@ -14,12 +14,14 @@ use App\Enums\{
     ArticuloEstadoEnum,
     ProductoTipoEnum
 };
-use App\Traits\Models\Relations\HasDictamen;
+use App\Traits\Models\Relations\{
+    HasDictamen
+};
 use App\Services\NumeroInventarioService;
 
 class Articulo extends Model
 {
-    use HasFactory, HasUuids, HasDictamen;
+    use HasFactory, HasUuids, HasDictamen, HasProducto;
 
     protected $fillable = [
         'producto_id',
@@ -62,11 +64,6 @@ class Articulo extends Model
     public function surtimiento(): HasOne
     {
         return $this->hasOne(DictamenSurtimiento::class);
-    }
-
-    public function producto(): BelongsTo
-    {
-        return $this->belongsTo(Producto::class);
     }
 
     public function estado(): BelongsTo
