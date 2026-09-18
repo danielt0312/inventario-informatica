@@ -3,11 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\{
-    BelongsTo,
-    HasOne
-};
-
 use App\Traits\Models\Relations\HasDocumentable;
 
 class Oficio extends Model
@@ -18,9 +13,4 @@ class Oficio extends Model
         'folio',
         'verified_at'
     ];
-
-    public function dictamen(): HasOne
-    {
-        return $this->hasOne(Dictamen::class);
-    }
 }

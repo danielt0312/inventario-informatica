@@ -37,12 +37,16 @@ use App\Services\{
     ArchivoService,
     CuentaContableService,
     PdfWatermarkService,
+    DocumentoService,
+    OficioService,
 };
 
 class DictamenController extends Controller
 {
     public function __construct(
-        protected ArchivoService $archivoService
+        protected ArchivoService $archivoService,
+        protected DocumentoService $documentoService,
+        protected OficioService $oficioService,
     ) {}
 
     public function index(Request $request)
@@ -70,17 +74,7 @@ class DictamenController extends Controller
 
                 $archivo->temporal?->delete();
 
-                $oficio = Oficio::create([
-                    'folio' => $validated['folio'],
-                ]);
-
-                $archivo->documento()
-                    ->make([
-                        'tipo_id' => DocumentoTipoEnum::OFICIO->value
-                    ])
-                    ->documentable()
-                    ->associate($oficio)
-                    ->save();
+                $oficio = $this->oficioService->create($validated['folio'], $archivo);
             }
 
             //todo obtener el jefe de departamento de DTI
@@ -92,13 +86,13 @@ class DictamenController extends Controller
                 'oficio_id' => $oficio?->id
             ]);
 
-            $version = $dictamen->versiones()->create([
+            $nuevaVersion = $dictamen->versiones()->create([
                 'fecha_solicitud' => $validated['fecha_solicitud'],
             ]);
 
-            $version->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
+            $nuevaVersion->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
 
-            $dictamen->versionActual()->associate($version)->save();
+            $dictamen->versionActual()->associate($nuevaVersion)->save();
 
             return $dictamen;
         });
@@ -135,14 +129,14 @@ class DictamenController extends Controller
 
             $dictamen->versionActual()->update(['motivo_cambio' => $validated['motivo_cambio']]);
 
-            $version = $dictamen->versiones()->create([
+            $nuevaVersion = $dictamen->versiones()->create([
                 'numero_version' => $dictamen->versionActual->numero_version + 1,
                 'fecha_solicitud' => now(),
             ]);
 
-            $version->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
+            $nuevaVersion->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
 
-            $dictamen->versionActual()->associate($version)->save();
+            $dictamen->versionActual()->associate($nuevaVersion)->save();
 
             $dictamen->load('versionActual.adquisiciones');
             $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
@@ -154,13 +148,7 @@ class DictamenController extends Controller
                 'pdf'
             );
 
-            $archivo->documento()
-                ->make([
-                    'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
-                ])
-                ->documentable()
-                ->associate($version)
-                ->save();
+            $this->documentoService->createForModel($nuevaVersion, $archivo);
 
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::PENDIENTE_ACUSE->value
@@ -197,13 +185,7 @@ class DictamenController extends Controller
                 'pdf'
             );
 
-            $archivo->documento()
-                ->make([
-                    'tipo_id' => DocumentoTipoEnum::DICTAMEN->value
-                ])
-                ->documentable()
-                ->associate($dictamen->versionActual)
-                ->save();
+            $this->documentoService->createForModel($dictamen->versionActual, $archivo);
 
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::PENDIENTE_ACUSE->value
