@@ -54,4 +54,26 @@ enum DocumentoTipoEnum: int
             self::RESGUARDO     => 'resguardo',
         };
     }
+
+    public static function tryFromModel(Model|string $model): ?self
+    {
+        $class = is_object($model) ? $model::class : $model;
+
+        return match($class) {
+            Oficio::class           => self::OFICIO,
+            DictamenVersion::class  => self::DICTAMEN,
+            Factura::class          => self::FACTURA,
+            OrdenCompra::class      => self::ORDEN_COMPRA,
+            Resguardo::class        => self::RESGUARDO,
+            default                 => null,
+        };
+    }
+
+    public static function fromModel(Model|string $model): self
+    {
+        $class = is_object($model) ? $model::class : $model;
+
+        return self::tryFromModel($class)
+            ?? throw new InvalidArgumentException("El modelo `{$class}` no se encuentra registrado como un tipo de documento válido.");
+    }
 }
