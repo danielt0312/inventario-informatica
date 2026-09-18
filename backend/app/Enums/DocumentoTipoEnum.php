@@ -4,6 +4,7 @@ namespace App\Enums;
 
 use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasFormattedLabel;
 use App\Traits\Enums\IsCatalog;
 use App\Models\{
     Oficio,
@@ -15,7 +16,7 @@ use App\Models\{
 
 enum DocumentoTipoEnum: int
 {
-    use IsCatalog;
+    use IsCatalog, HasFormattedLabel;
 
     case OFICIO = 1;
     case DICTAMEN = 2;

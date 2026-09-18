@@ -53,6 +53,7 @@ class StoreDictamenRequest extends FormRequest
                 'exists:producto_tipos,id'
             ],
             'adquisiciones.*.numero_inventario' => [
+                'sometimes',
                 'nullable',
                 'string'
             ]

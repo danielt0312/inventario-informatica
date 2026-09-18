@@ -6,7 +6,7 @@ use App\Enums\ProductoTipoEnum;
 
 class DictamenService
 {
-    public function productoTipoPuedeRequerirNumeroInventario(ProductoTipoEnum $tipo)
+    public function productoTipoPuedeRequerirNumeroInventario(ProductoTipoEnum $tipo): bool
     {
         return match($tipo) {
             ProductoTipoEnum::DISCO,
