@@ -6,6 +6,7 @@ use App\Models\{
     Archivo,
     Oficio
 };
+use App\Data\Oficio\StoreOficioData;
 use Illuminate\Support\Facades\DB;
 
 class OficioService
@@ -14,10 +15,10 @@ class OficioService
         protected DocumentoService $documentoService
     ) {}
 
-    public function create(string $folio, Archivo $archivo): Oficio
+    public function create(StoreOficioData $data, Archivo $archivo): Oficio
     {
         return DB::transaction(function () use ($folio, $archivo) {
-            $oficio = Oficio::create(compact('folio'));
+            $oficio = Oficio::create(['folio' => $data->folio]);
 
             $this->documentoService->createForModel($oficio, $archivo);
 
