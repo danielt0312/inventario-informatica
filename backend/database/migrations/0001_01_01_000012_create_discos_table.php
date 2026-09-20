@@ -42,29 +42,11 @@ return new class extends Migration
             $table->unique(['tipo_id', 'capacidad_id', 'interfaz_id'], 'uk_discos');
         });
 
-        Schema::create('producto_discos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('producto_id')
-                ->constrained('productos', indexName: 'fk_producto_discos_productos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('disco_id')
-                ->constrained('discos', indexName: 'fk_producto_discos_discos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-
-            $table->unique(['producto_id', 'disco_id'], 'uk_producto_discos');
-        });
-
         Schema::create('articulo_discos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')
                 ->unique('uk_articulo_discos')
                 ->constrained('articulos', indexName: 'fk_articulo_discos_articulos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('producto_disco_id')
-                ->constrained('producto_discos', indexName: 'fk_articulo_discos_producto_discos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -96,7 +78,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('disco_instalaciones');
         Schema::dropIfExists('articulo_discos');
-        Schema::dropIfExists('producto_discos');
         Schema::dropIfExists('discos');
         Schema::dropIfExists('disco_interfaces');
         Schema::dropIfExists('disco_capacidades');

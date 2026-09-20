@@ -42,29 +42,11 @@ return new class extends Migration
             $table->unique(['tipo_id', 'capacidad_id', 'velocidad_id'], 'uk_rams');
         });
 
-        Schema::create('producto_rams', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('producto_id')
-                ->constrained('productos', indexName: 'fk_producto_rams_productos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('ram_id')
-                ->constrained('rams', indexName: 'fk_producto_rams_rams')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-
-            $table->unique(['producto_id', 'ram_id'], 'uk_producto_rams');
-        });
-
         Schema::create('articulo_rams', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')
                 ->unique('uk_articulo_rams')
                 ->constrained('articulos', indexName: 'fk_articulo_rams_articulos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('producto_ram_id')
-                ->constrained('producto_rams', indexName: 'fk_articulo_rams_producto_rams')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -95,7 +77,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('ram_instalaciones');
         Schema::dropIfExists('articulo_rams');
-        Schema::dropIfExists('producto_rams');
         Schema::dropIfExists('rams');
         Schema::dropIfExists('ram_velocidades');
         Schema::dropIfExists('ram_capacidades');

@@ -22,29 +22,11 @@ return new class extends Migration
                 ->cascadeOnDelete();
         });
 
-        Schema::create('producto_licencias', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('producto_id')
-                ->constrained('productos', indexName: 'fk_producto_licencias_productos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('licencia_id')
-                ->constrained('licencias', indexName: 'fk_producto_licencias_licencias')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-
-            $table->unique(['producto_id', 'licencia_id'], 'uk_producto_licencias');
-        });
-
         Schema::create('articulo_licencias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')
                 ->unique('uk_articulo_licencias')
                 ->constrained('articulos', indexName: 'fk_articulo_licencias_articulos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('producto_licencia_id')
-                ->constrained('producto_licencias', indexName: 'fk_articulo_licencias_producto_licencias')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->date('fecha_expiracion')
@@ -78,7 +60,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('licencia_instalaciones');
         Schema::dropIfExists('articulo_licencias');
-        Schema::dropIfExists('producto_licencias');
         Schema::dropIfExists('licencias');
         Schema::dropIfExists('licencia_tipos');
     }

@@ -2,7 +2,10 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\{
+    Schema,
+    DB
+};
 
 return new class extends Migration
 {
@@ -44,10 +47,37 @@ return new class extends Migration
 
             $table->unique(['tipo_id', 'marca_id', 'modelo'], 'uk_productos');
         });
+
+        Schema::create('producto_variantes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('producto_id')
+                ->constrained('productos', indexName: 'fk_producto_variantes_productos')
+                ->restrictOnDelete();
+            $table->nullableMorphs('variante', 'idx_producto_variantes_morph');
+            $table->unsignedBigInteger('variante_generica_marker')
+                ->nullable()
+                ->virtualAs('CASE WHEN variante_type IS NULL THEN producto_id ELSE NULL END');
+            $table->timestamps();
+
+            $table->unique('variante_generica_marker', 'uk_producto_variantes_generica');
+            $table->unique(
+                ['producto_id', 'variante_type', 'variante_id'],
+                'uk_producto_variantes_spec'
+            );
+        });
+
+        DB::statement(<<<'SQL'
+            ALTER TABLE producto_variantes
+            ADD CONSTRAINT chk_producto_variantes_morph CHECK (
+                (variante_type IS NULL AND variante_id IS NULL)
+                OR (variante_type IS NOT NULL AND variante_id IS NOT NULL)
+            )
+            SQL);
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('producto_variantes');
         Schema::dropIfExists('productos');
         Schema::dropIfExists('producto_marcas');
         Schema::dropIfExists('producto_tipos');
