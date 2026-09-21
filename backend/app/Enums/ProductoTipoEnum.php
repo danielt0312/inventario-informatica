@@ -9,63 +9,57 @@ enum ProductoTipoEnum: int
 {
     use HasFormattedLabel, IsCatalog;
 
-    case COMPUTADORA_ESCRITORIO = 1;
-    case COMPUTADORA_PORTATIL = 2;
-    case SERVIDOR = 3;
-    case TABLET = 4;
-    case DISCO = 5;
-    case RAM = 6;
-    case TELEFONO = 7;
-    case ACCESS_POINT = 8;
-    case ANTENA = 9;
-    case FIREWALL = 10;
-    case MODEM = 11;
-    case PANEL_PARCHEO = 12;
-    case RACK = 13;
-    case ROUTER = 14;
-    case SWITCH = 15;
-    case ADAPTADOR = 16;
-    case MODULO_RECEPTOR = 17;
-    case APUNTADOR_OPTICO = 18;
-    case CAJA_CONECTIVIDAD = 19;
-    case LECTOR_CODIGOS = 20;
-    case RELOJ_CHECADOR = 21;
-    case BOCINA = 22;
-    case BOCINA_AMBIENTAL = 23;
-    case CONSOLA = 24;
-    case MICROFONO = 25;
-    case CAMARA_VIDEO = 26;
-    case CAMARA_FOTOGRAFICA = 27;
-    case CAMARA_WEB = 28;
-    case CONCENTRADOR = 29;
-    case PANTALLA_RETRACTIL = 30;
-    case PROYECTOR = 31;
-    case UNIDAD_VIDEO = 32;
-    case IMPRESORA = 33;
-    case IMPRESORA_MULTIFUNCIONAL = 34;
-    case PLOTTER = 35;
-    case MONITOR = 36;
-    case UNIDAD_DISCO_OPTICO = 37;
-    case TECLADO = 38;
-    case MOUSE = 39;
-    case MODULO_BATERIA = 40;
-    case UPS = 41;
-    case ESCANER = 42;
-    case PROCESADOR = 43;
-    case LICENCIA = 44;
+    case COMPUTADORA = 1;
+    case SERVIDOR = 2;
+    case TABLET = 3;
+    case DISCO = 4;
+    case RAM = 5;
+    case TELEFONO = 6;
+    case ACCESS_POINT = 7;
+    case ANTENA = 8;
+    case FIREWALL = 9;
+    case MODEM = 10;
+    case PANEL_PARCHEO = 11;
+    case RACK = 12;
+    case ROUTER = 13;
+    case SWITCH = 14;
+    case ADAPTADOR = 15;
+    case MODULO_RECEPTOR = 16;
+    case APUNTADOR_OPTICO = 17;
+    case CAJA_CONECTIVIDAD = 18;
+    case LECTOR_CODIGOS = 19;
+    case RELOJ_CHECADOR = 20;
+    case BOCINA = 21;
+    case CONSOLA = 22;
+    case MICROFONO = 23;
+    case CAMARA = 24;
+    case CONCENTRADOR = 25;
+    case PANTALLA_RETRACTIL = 26;
+    case PROYECTOR = 27;
+    case BARRA_VIDEO = 28;
+    case IMPRESORA = 29;
+    case PLOTTER = 30;
+    case MONITOR = 31;
+    case DISCO_OPTICO = 32;
+    case TECLADO = 33;
+    case MOUSE = 34;
+    case MODULO_BATERIA = 35;
+    case UPS = 36;
+    case ESCANER = 37;
+    case PROCESADOR = 38;
+    case LICENCIA = 39;
 
     public function categoria(): ProductoCategoriaEnum
     {
         return match ($this) {
-            self::COMPUTADORA_ESCRITORIO,
-            self::COMPUTADORA_PORTATIL,
+            self::COMPUTADORA,
             self::SERVIDOR,
             self::LICENCIA,
             self::PROCESADOR,
-            self::TABLET => ProductoCategoriaEnum::COMPUTADORA,
-            self::DISCO => ProductoCategoriaEnum::DISPOSITIVO_ALMACENAMIENTO,
-            self::RAM => ProductoCategoriaEnum::MEMORIA_ACCESO_ALEATORIO,
-            self::TELEFONO => ProductoCategoriaEnum::TELEFONIA,
+            self::RAM,
+            self::TABLET                => ProductoCategoriaEnum::COMPUTADORA,
+            self::DISCO                 => ProductoCategoriaEnum::DISPOSITIVO_ALMACENAMIENTO,
+            self::TELEFONO              => ProductoCategoriaEnum::TELEFONIA,
             self::ACCESS_POINT,
             self::ANTENA,
             self::FIREWALL,
@@ -75,58 +69,50 @@ enum ProductoTipoEnum: int
             self::ROUTER,
             self::SWITCH,
             self::ADAPTADOR,
-            self::MODULO_RECEPTOR => ProductoCategoriaEnum::REDES,
+            self::MODULO_RECEPTOR       => ProductoCategoriaEnum::REDES,
             self::APUNTADOR_OPTICO,
             self::CAJA_CONECTIVIDAD,
             self::LECTOR_CODIGOS,
-            self::RELOJ_CHECADOR => ProductoCategoriaEnum::HERRAMIENTA,
+            self::RELOJ_CHECADOR        => ProductoCategoriaEnum::HERRAMIENTA,
             self::BOCINA,
-            self::BOCINA_AMBIENTAL,
             self::CONSOLA,
-            self::MICROFONO => ProductoCategoriaEnum::AUDIO,
-            self::CAMARA_VIDEO,
-            self::CAMARA_FOTOGRAFICA,
-            self::CAMARA_WEB => ProductoCategoriaEnum::CAMARA_VIDEO,
+            self::MICROFONO,
+            self::CAMARA,
             self::CONCENTRADOR,
             self::PANTALLA_RETRACTIL,
             self::PROYECTOR,
-            self::UNIDAD_VIDEO => ProductoCategoriaEnum::PROYECCION,
+            self::BARRA_VIDEO           => ProductoCategoriaEnum::CAMARA_VIDEO_SONIDO,
             self::IMPRESORA,
-            self::IMPRESORA_MULTIFUNCIONAL,
-            self::PLOTTER => ProductoCategoriaEnum::IMPRESORA,
+            self::PLOTTER               => ProductoCategoriaEnum::IMPRESORA,
             self::MONITOR,
-            self::UNIDAD_DISCO_OPTICO,
+            self::DISCO_OPTICO,
             self::TECLADO,
-            self::MOUSE => ProductoCategoriaEnum::PERIFERICO,
+            self::MOUSE                 => ProductoCategoriaEnum::PERIFERICO,
             self::MODULO_BATERIA,
-            self::UPS => ProductoCategoriaEnum::ELECTRICO,
-            self::ESCANER => ProductoCategoriaEnum::ESCANER,
+            self::UPS                   => ProductoCategoriaEnum::ELECTRICO,
+            self::ESCANER               => ProductoCategoriaEnum::ESCANER,
         };
     }
 
     public function formattedLabel(): string
     {
         return match($this) {
-            self::COMPUTADORA_ESCRITORIO => 'Computadora de Escritorio',
-            self::COMPUTADORA_PORTATIL => 'Computadora Portátil',
-            self::RAM => 'RAM',
-            self::TELEFONO => 'Teléfono',
-            self::MODEM => 'Módem',
-            self::PANEL_PARCHEO => 'Panel de Parcheo',
-            self::MODULO_RECEPTOR => 'Módulo Receptor',
-            self::APUNTADOR_OPTICO => 'Apuntador Óptico',
-            self::CAJA_CONECTIVIDAD => 'Caja de Conectividad',
-            self::LECTOR_CODIGOS => 'Lector de Códigos',
-            self::MICROFONO => 'Micrófono',
-            self::CAMARA_VIDEO => 'Cámara de Video',
-            self::CAMARA_FOTOGRAFICA => 'Cámara Fotográfica',
-            self::CAMARA_WEB => 'Cámara Web',
-            self::PANTALLA_RETRACTIL => 'Pantalla Retráctil',
-            self::UNIDAD_VIDEO => 'Unidad de Video',
-            self::UNIDAD_DISCO_OPTICO => 'Unidad de Disco Óptico',
-            self::MODULO_BATERIA => 'Módulo de Baterias',
-            self::UPS => 'UPS',
-            self::ESCANER => 'Escáner'
+            self::RAM                   => 'RAM',
+            self::TELEFONO              => 'Teléfono',
+            self::MODEM                 => 'Módem',
+            self::PANEL_PARCHEO         => 'Panel de Parcheo',
+            self::MODULO_RECEPTOR       => 'Módulo Receptor',
+            self::APUNTADOR_OPTICO      => 'Apuntador Óptico',
+            self::CAJA_CONECTIVIDAD     => 'Caja de Conectividad',
+            self::LECTOR_CODIGOS        => 'Lector de Códigos',
+            self::MICROFONO             => 'Micrófono',
+            self::CAMARA                => 'Cámara',
+            self::PANTALLA_RETRACTIL    => 'Pantalla Retráctil',
+            self::BARRA_VIDEO           => 'Barra de Video',
+            self::DISCO_OPTICO          => 'Disco Óptico',
+            self::MODULO_BATERIA        => 'Módulo de Baterias',
+            self::UPS                   => 'UPS',
+            self::ESCANER               => 'Escáner'
         };
     }
 
@@ -137,13 +123,13 @@ enum ProductoTipoEnum: int
             self::MICROFONO,
             self::PANTALLA_RETRACTIL,
             self::PROYECTOR,
-            self::BOCINA => ClasificadorEnum::AUDIOVISUAL,
+            self::BOCINA                => ClasificadorEnum::AUDIOVISUAL,
             self::CAMARA_FOTOGRAFICA,
-            self::CAMARA_VIDEO => ClasificadorEnum::CAMARA_FOTOGRAFICA_VIDEO,
-            self::TELEFONO => ClasificadorEnum::COMUNICACION_TELECOMUNICACION,
-            self::UPS => ClasificadorEnum::ELECTRICO_GENERACION_ELECTRICA,
-            self::LICENCIA => ClasificadorEnum::LICENCIA_INFORMATICA_INTELECTUAL,
-            default => ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION,
+            self::CAMARA_VIDEO          => ClasificadorEnum::CAMARA_FOTOGRAFICA_VIDEO,
+            self::TELEFONO              => ClasificadorEnum::COMUNICACION_TELECOMUNICACION,
+            self::UPS                   => ClasificadorEnum::ELECTRICO_GENERACION_ELECTRICA,
+            self::LICENCIA              => ClasificadorEnum::LICENCIA_INFORMATICA_INTELECTUAL,
+            default                     => ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION,
         };
     }
 }

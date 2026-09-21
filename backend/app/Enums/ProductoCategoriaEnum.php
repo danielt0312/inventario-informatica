@@ -11,26 +11,22 @@ enum ProductoCategoriaEnum: int
 
     case COMPUTADORA = 1;
     case DISPOSITIVO_ALMACENAMIENTO = 2;
-    case MEMORIA_ACCESO_ALEATORIO = 3;
-    case TELEFONIA = 4;
-    case REDES = 5;
-    case HERRAMIENTA = 6;
-    case AUDIO = 7;
-    case CAMARA_VIDEO = 8;
-    case PROYECCION = 9;
-    case IMPRESORA = 10;
-    case PERIFERICO = 11;
-    case ELECTRICO = 12;
-    case ESCANER = 13;
+    case TELEFONIA = 3;
+    case REDES = 4;
+    case HERRAMIENTA = 5;
+    case AUDIO = 6;
+    case CAMARA_VIDEO_SONIDO = 7;
+    case IMPRESORA = 8;
+    case PERIFERICO = 9;
+    case ELECTRICO = 10;
+    case ESCANER = 11;
 
     public function formattedLabel(): string
     {
         return match($this) {
             self::DISPOSITIVO_ALMACENAMIENTO => 'Dispositivo de Almacenamiento',
-            self::MEMORIA_ACCESO_ALEATORIO => 'Memoria de Acceso Aleatorio',
             self::TELEFONIA => 'Telefonía',
-            self::CAMARA_VIDEO => 'Cámara y Video',
-            self::PROYECCION => 'Proyección',
+            self::CAMARA_VIDEO_SONIDO => 'Cámara, Video y Sonido',
             self::PERIFERICO => 'Periférico',
             self::ELECTRICO => 'Eléctrico',
             self::ESCANER => 'Escáner'
