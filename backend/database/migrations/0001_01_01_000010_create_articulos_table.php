@@ -16,14 +16,14 @@ return new class extends Migration
         Schema::create('articulos', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->foreignId('producto_id')
-                ->constrained('productos', indexName: 'fk_articulos_productos')
+            $table->foreignId('producto_variante_id')
+                ->constrained('producto_variantes', indexName: 'fk_articulos_producto_variantes')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('estado_id')
                 ->constrained('articulo_estados', indexName: 'fk_articulos_articulo_estados')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->string('numero_serie', 64)
                 ->nullable()
                 ->unique('uk_articulos_numero_serie');

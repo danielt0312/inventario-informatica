@@ -75,9 +75,9 @@ return new class extends Migration
                 ->constrained('producto_tipos', indexName: 'fk_dictamen_adquisiciones_producto_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('producto_id')
+            $table->foreignId('producto_variante_id')
                 ->nullable()
-                ->constrained('productos', indexName: 'fk_dictamen_adquisiciones_productos')
+                ->constrained('producto_variantes', indexName: 'fk_dictamen_adquisiciones_producto_variantes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('articulo_id')

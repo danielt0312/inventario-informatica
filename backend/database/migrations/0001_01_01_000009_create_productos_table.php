@@ -24,7 +24,8 @@ return new class extends Migration
             $table->foreignId('categoria_id')
                 ->constrained('producto_categorias', indexName: 'fk_producto_tipos_producto_categorias')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
+            $table->boolean('es_tangible');
         });
 
         Schema::create('producto_marcas', function (Blueprint $table) {
