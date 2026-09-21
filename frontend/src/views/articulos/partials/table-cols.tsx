@@ -2,8 +2,8 @@ import type { ColumnDef, RowData } from "@tanstack/react-table"
 import type { Articulo, ArticuloEstado } from "@/types/articulos";
 import type { RowDataAccessorFn } from "@/types/generics";
 import { Badge } from "@/components/ui/badge";
-import { ArticuloEstadoEnum } from "@/lib/constants";
-import { cn, productoTipoEsComputadoraEscritorio, productoTipoEsComputadoraPortatil } from "@/lib/utils";
+import { ArticuloEstadoEnum, ProductoTipoEnum } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 import { RouterButton } from "@/components/ui/router-button";
 import { Route } from "@/routes/_auth/articulos/$uuid/actualizar";
@@ -15,9 +15,9 @@ const estadoColorVariants = cva(
         variants: {
             variant: {
                 default: undefined,
-                [ArticuloEstadoEnum.ACTIVO]: "bg-lime-400",
-                [ArticuloEstadoEnum.BAJA]: "bg-red-400",
-                [ArticuloEstadoEnum.BAJA_PREVENTIVA]: "bg-red-400/80",
+                [ArticuloEstadoEnum.Activo]: "bg-lime-400",
+                [ArticuloEstadoEnum.Baja]: "bg-red-400",
+                [ArticuloEstadoEnum.BajaPreventiva]: "bg-red-400/80",
             }
         },
         defaultVariants: {
@@ -125,7 +125,7 @@ const defaultColumns: ColumnDef<Articulo>[] = [
 
             return (
                 <div className="flex gap-1">
-                    {(productoTipoEsComputadoraEscritorio(productoTipo) || productoTipoEsComputadoraPortatil(productoTipo)) && (
+                    {productoTipo.id === ProductoTipoEnum.Computadora && (
                         <RouterButton
                             to={Route.to}
                             params={{

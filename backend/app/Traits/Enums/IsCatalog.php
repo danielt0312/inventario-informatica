@@ -35,6 +35,6 @@ trait IsCatalog
 
     public function nameToFormattedLabel(): string
     {
-        return ucwords(str_replace('_', ' ', strtolower($this->name)));
+        return preg_replace('/(?<!^)[A-Z]/', ' $0', $this->name);
     }
 }

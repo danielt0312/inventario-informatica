@@ -18,25 +18,25 @@ class ArticuloSeeder extends Seeder
 
     public function run(): void
     {
-        Articulo::create([
-            'producto_id' => 1,
-            'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-            'es_inventariable' => true,
-            'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION, 1),
-        ]);
+        // Articulo::create([
+        //     'producto_variante_id' => 1,
+        //     'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
+        //     'es_inventariable' => true,
+        //     'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::ComputoTecnologiaInformacion, 1),
+        // ]);
 
-        Articulo::create([
-            'producto_id' => 3,
-            'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-            'es_inventariable' => true,
-            'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION, 2),
-        ]);
+        // Articulo::create([
+        //     'producto_variante_id' => 3,
+        //     'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
+        //     'es_inventariable' => true,
+        //     'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::ComputoTecnologiaInformacion, 2),
+        // ]);
 
-        Articulo::create([
-            'producto_id' => 7,
-            'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-            'es_inventariable' => true,
-            'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION, 3),
-        ]);
+        // Articulo::create([
+        //     'producto_variante_id' => 7,
+        //     'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
+        //     'es_inventariable' => true,
+        //     'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::ComputoTecnologiaInformacion, 3),
+        // ]);
     }
 }

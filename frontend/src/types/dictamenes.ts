@@ -52,7 +52,7 @@ type DetailedBase<TDictamen extends Base = Base, TVersionActualWithAdquisiciones
 // contrario a lo anterior, entonces todas las versiones serian "dictaminado", i.e., `FullyDetailedDictaminadoDictamen`
 // export type FullyDetailedBase<TDictamen extends Base = Base, TVersionesWithAdquisiciones extends VersionesWithAdquisiciones = VersionesWithAdquisiciones, TVersionActualWithAdquisiciones extends VersionActualWithAdquisiciones = VersionActualWithAdquisiciones> = DetailedBase<TDictamen & TVersionesWithAdquisiciones, TVersionActualWithAdquisiciones>
 
-type DictaminarEstado = BaseEstado<typeof DictamenEstadoEnum.DICTAMINAR>;
+type DictaminarEstado = BaseEstado<typeof DictamenEstadoEnum.Dictaminar>;
 type Dictaminar = Base<DictaminarEstado>;
 type DictaminarAdquisicion = BaseAdquisicion & {
     producto_tipo: DetailedProductoTipo;
@@ -68,19 +68,19 @@ type BaseDictaminadoVersion = BaseVersion & {
     archivo: Archivo;
 }
 
-type PendienteAcuseEstado = BaseEstado<typeof DictamenEstadoEnum.PENDIENTE_ACUSE>;
+type PendienteAcuseEstado = BaseEstado<typeof DictamenEstadoEnum.PendienteAcuse>;
 type PendienteAcuse = Base<PendienteAcuseEstado>;
 type PendienteAcuseAdquisicion = BaseDictaminadoAdquisicion
 type PendienteAcuseVersion = BaseDictaminadoVersion;
 type PendienteAcuseEvidenciar = DetailedBase<PendienteAcuse, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PendienteAcuseVersion, Adquisiciones<PendienteAcuseAdquisicion>>>>;
 
-type PorSurtirEstado = BaseEstado<typeof DictamenEstadoEnum.POR_SURTIR>;
-type PorSurtir = Base<PorSurtirEstado>;
-type PorSurtirAdquisicion = BaseDictaminadoAdquisicion;
-type PorSurtirVersion = BaseDictaminadoVersion;
-type DetailedPorSurtir = DetailedBase<PorSurtir, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PorSurtirVersion,Adquisiciones<PorSurtirAdquisicion>>>>;
+type SurtirEstado = BaseEstado<typeof DictamenEstadoEnum.Surtir>;
+type Surtir = Base<SurtirEstado>;
+type SurtirAdquisicion = BaseDictaminadoAdquisicion;
+type SurtirVersion = BaseDictaminadoVersion;
+type DetailedSurtir = DetailedBase<Surtir, VersionActualWithAdquisiciones<VersionWithAdquisiciones<SurtirVersion,Adquisiciones<SurtirAdquisicion>>>>;
 
-type InventariarEstado = BaseEstado<typeof DictamenEstadoEnum.INVENTARIAR>;
+type InventariarEstado = BaseEstado<typeof DictamenEstadoEnum.Inventariar>;
 type Inventariar = Base<InventariarEstado> & BaseOrdenCompra;
 type InventariarAdquisicion = BaseDictaminadoAdquisicion & {
     cantidad_restante: number;
@@ -93,13 +93,13 @@ type BaseTieneObservacionesAttribute<TValue extends boolean | null> = {
     tiene_observaciones: TValue;
 }
 
-type SurtidoEstado = BaseEstado<typeof DictamenEstadoEnum.SURTIDO>;
+type SurtidoEstado = BaseEstado<typeof DictamenEstadoEnum.Surtido>;
 type Surtido = Base<SurtidoEstado> & BaseOrdenCompra<OrdenCompra> & BaseTieneObservacionesAttribute<boolean>;
 type SurtidoAdquisicion = BaseDictaminadoAdquisicion;
 type SurtidoVersion = BaseDictaminadoVersion;
 type DetailedSurtido = DetailedBase<Surtido, VersionActualWithAdquisiciones<VersionWithAdquisiciones<SurtidoVersion, Adquisiciones<SurtidoAdquisicion>>>>;
 
-type SurtidoParcialEstado = BaseEstado<typeof DictamenEstadoEnum.SURTIDO_PARCIAL>;
+type SurtidoParcialEstado = BaseEstado<typeof DictamenEstadoEnum.SurtidoParcial>;
 type SurtidoParcial = Base<SurtidoParcialEstado> & BaseOrdenCompra<OrdenCompra> & BaseTieneObservacionesAttribute<boolean | null>;
 type SurtidoParcialAdquisicion = BaseDictaminadoAdquisicion;
 type SurtidoParcialVersion = BaseDictaminadoVersion;
@@ -108,7 +108,7 @@ type DetailedSurtidoParcial = DetailedBase<SurtidoParcial, VersionActualWithAdqu
 type Dictamen =
     | Dictaminar
     | PendienteAcuse
-    | PorSurtir
+    | Surtir
     | Inventariar
     | Surtido
     | SurtidoParcial;
@@ -116,7 +116,7 @@ type Dictamen =
 type DetailedDictamen =
     | DetailedDictaminar
     | PendienteAcuseEvidenciar
-    | DetailedPorSurtir
+    | DetailedSurtir
     | DetailedInventariar
     | DetailedSurtido
     | DetailedSurtidoParcial;
@@ -124,7 +124,7 @@ type DetailedDictamen =
 type DictamenAdquisicion =
     | DictaminarAdquisicion
     | PendienteAcuseAdquisicion
-    | PorSurtirAdquisicion
+    | SurtirAdquisicion
     | InventariarAdquisicion
     | SurtidoAdquisicion
     | SurtidoParcialAdquisicion;
@@ -132,7 +132,7 @@ type DictamenAdquisicion =
 type DictamenVersion =
     | DictaminarVersion
     | PendienteAcuseVersion
-    | PorSurtirVersion
+    | SurtirVersion
     | InventariarVersion
     | SurtidoVersion
     | SurtidoParcialVersion;
@@ -147,12 +147,12 @@ export type {
     DictamenVersion,
     Dictaminar as DictaminarDictamen,
     PendienteAcuse as PendienteAcuseDictamen,
-    PorSurtir as PorSurtirDictamen,
+    Surtir as SurtirDictamen,
     Inventariar as InventariarDictamen,
     Surtido as SurtidoDictamen,
     SurtidoParcial as SurtidoParcialDictamen,
     DetailedDictaminar as DetailedDictaminarDictamen,
-    DetailedPorSurtir as DetailedPorSurtirDictamen,
+    DetailedSurtir as DetailedSurtirDictamen,
     PendienteAcuseEvidenciar as DetailedPendienteAcuseDictamen,
     DetailedInventariar as DetailedInventariarDictamen,
     DetailedSurtido as DetailedSurtidoDictamen,

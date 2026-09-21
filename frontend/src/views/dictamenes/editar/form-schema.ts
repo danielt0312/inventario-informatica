@@ -4,7 +4,7 @@ import type { NumberInputFieldType } from "@/components/ui/input-field";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
 import type { DictamenEspecificacionesTecnicasFieldType, DictamenMotivoCambioFieldType } from "../partials/form-fields";
 import type { ProductoFieldType } from "@/components/features/productos/form-fields";
-import type { DetailedPorSurtirDictamen } from "@/types/dictamenes";
+import type { DetailedSurtirDictamen } from "@/types/dictamenes";
 import { nullableString, positiveInteger, requiredArray, requiredString, selectedNumberOption } from "@/lib/schemas/common";
 import z from "zod";
 
@@ -31,7 +31,7 @@ type Schema = {
     adquisiciones: AdquisicionFields[];
 }
 
-export const defaultValues = (dictamen: DetailedPorSurtirDictamen): Schema => ({
+export const defaultValues = (dictamen: DetailedSurtirDictamen): Schema => ({
     motivo_cambio: undefined,
     adquisiciones: dictamen.version_actual.adquisiciones.map((adquiscion): AdquisicionFields => ({
         cantidad: adquiscion.cantidad,

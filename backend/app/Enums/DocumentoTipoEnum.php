@@ -18,41 +18,41 @@ enum DocumentoTipoEnum: int
 {
     use IsCatalog, HasFormattedLabel;
 
-    case OFICIO = 1;
-    case DICTAMEN = 2;
-    case FACTURA = 3;
-    case ORDEN_COMPRA = 4;
-    case RESGUARDO = 5;
+    case Oficio = 1;
+    case DictamenVersion = 2;
+    case Factura = 3;
+    case OrdenCompra = 4;
+    case Resguardo = 5;
 
     public function formattedLabel(): string
     {
         return match ($this) {
-            self::OFICIO        => 'Oficio solicitante',
-            self::DICTAMEN      => 'Dictamen de Tecnologías',
-            self::ORDEN_COMPRA  => 'Orden de Compra',
-            self::RESGUARDO     => 'Resguardo de Bienes Informáticos',
+            self::Oficio            => 'Oficio solicitante',
+            self::DictamenVersion   => 'Dictamen de Tecnologías',
+            self::OrdenCompra       => 'Orden de Compra',
+            self::Resguardo         => 'Resguardo de Bienes Informáticos',
         };
     }
 
     public function modelClass(): string
     {
         return match($this) {
-            self::OFICIO        => Oficio::class,
-            self::DICTAMEN      => DictamenVersion::class,
-            self::FACTURA       => Factura::class,
-            self::ORDEN_COMPRA  => OrdenCompra::class,
-            self::RESGUARDO     => Resguardo::class,
+            self::Oficio            => Oficio::class,
+            self::DictamenVersion   => DictamenVersion::class,
+            self::Factura           => Factura::class,
+            self::OrdenCompra       => OrdenCompra::class,
+            self::Resguardo         => Resguardo::class,
         };
     }
 
     public function morphAlias(): string
     {
         return match($this) {
-            self::OFICIO        => 'oficio',
-            self::DICTAMEN      => 'dictamen',
-            self::FACTURA       => 'factura',
-            self::ORDEN_COMPRA  => 'orden_compra',
-            self::RESGUARDO     => 'resguardo',
+            self::Oficio            => 'oficio',
+            self::DictamenVersion   => 'dictamen_version',
+            self::Factura           => 'factura',
+            self::OrdenCompra       => 'orden_compra',
+            self::Resguardo         => 'resguardo',
         };
     }
 
@@ -61,11 +61,11 @@ enum DocumentoTipoEnum: int
         $class = is_object($model) ? $model::class : $model;
 
         return match($class) {
-            Oficio::class           => self::OFICIO,
-            DictamenVersion::class  => self::DICTAMEN,
-            Factura::class          => self::FACTURA,
-            OrdenCompra::class      => self::ORDEN_COMPRA,
-            Resguardo::class        => self::RESGUARDO,
+            Oficio::class           => self::Oficio,
+            DictamenVersion::class  => self::DictamenVersion,
+            Factura::class          => self::Factura,
+            OrdenCompra::class      => self::OrdenCompra,
+            Resguardo::class        => self::Resguardo,
             default                 => null,
         };
     }

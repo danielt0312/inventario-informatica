@@ -9,127 +9,126 @@ enum ProductoTipoEnum: int
 {
     use HasFormattedLabel, IsCatalog;
 
-    case COMPUTADORA = 1;
-    case SERVIDOR = 2;
-    case TABLET = 3;
-    case DISCO = 4;
-    case RAM = 5;
-    case TELEFONO = 6;
-    case ACCESS_POINT = 7;
-    case ANTENA = 8;
-    case FIREWALL = 9;
-    case MODEM = 10;
-    case PANEL_PARCHEO = 11;
-    case RACK = 12;
-    case ROUTER = 13;
-    case SWITCH = 14;
-    case ADAPTADOR = 15;
-    case MODULO_RECEPTOR = 16;
-    case APUNTADOR_OPTICO = 17;
-    case CAJA_CONECTIVIDAD = 18;
-    case LECTOR_CODIGOS = 19;
-    case RELOJ_CHECADOR = 20;
-    case BOCINA = 21;
-    case CONSOLA = 22;
-    case MICROFONO = 23;
-    case CAMARA = 24;
-    case CONCENTRADOR = 25;
-    case PANTALLA_RETRACTIL = 26;
-    case PROYECTOR = 27;
-    case BARRA_VIDEO = 28;
-    case IMPRESORA = 29;
-    case PLOTTER = 30;
-    case MONITOR = 31;
-    case DISCO_OPTICO = 32;
-    case TECLADO = 33;
-    case MOUSE = 34;
-    case MODULO_BATERIA = 35;
-    case UPS = 36;
-    case ESCANER = 37;
-    case PROCESADOR = 38;
-    case LICENCIA = 39;
+    case Computadora = 1;
+    case Servidor = 2;
+    case Tablet = 3;
+    case Disco = 4;
+    case Ram = 5;
+    case Telefono = 6;
+    case AccessPoint = 7;
+    case Antena = 8;
+    case Firewall = 9;
+    case Modem = 10;
+    case PanelParcheo = 11;
+    case Rack = 12;
+    case Router = 13;
+    case Switch = 14;
+    case Adaptador = 15;
+    case ModuloReceptor = 16;
+    case ApuntadorOptico = 17;
+    case CajaConectividad = 18;
+    case LectorCodigos = 19;
+    case RelojChecador = 20;
+    case Bocina = 21;
+    case Consola = 22;
+    case Microfono = 23;
+    case Camara = 24;
+    case Concentrador = 25;
+    case PantallaRetractil = 26;
+    case Proyector = 27;
+    case BarraVideo = 28;
+    case Impresora = 29;
+    case Plotter = 30;
+    case Monitor = 31;
+    case DiscoOptico = 32;
+    case Teclado = 33;
+    case Mouse = 34;
+    case ModuloBateria = 35;
+    case Ups = 36;
+    case Escaner = 37;
+    case Procesador = 38;
+    case Licencia = 39;
 
     public function categoria(): ProductoCategoriaEnum
     {
         return match ($this) {
-            self::COMPUTADORA,
-            self::SERVIDOR,
-            self::LICENCIA,
-            self::PROCESADOR,
-            self::RAM,
-            self::TABLET                => ProductoCategoriaEnum::COMPUTADORA,
-            self::DISCO                 => ProductoCategoriaEnum::DISPOSITIVO_ALMACENAMIENTO,
-            self::TELEFONO              => ProductoCategoriaEnum::TELEFONIA,
-            self::ACCESS_POINT,
-            self::ANTENA,
-            self::FIREWALL,
-            self::MODEM,
-            self::PANEL_PARCHEO,
-            self::RACK,
-            self::ROUTER,
-            self::SWITCH,
-            self::ADAPTADOR,
-            self::MODULO_RECEPTOR       => ProductoCategoriaEnum::REDES,
-            self::APUNTADOR_OPTICO,
-            self::CAJA_CONECTIVIDAD,
-            self::LECTOR_CODIGOS,
-            self::RELOJ_CHECADOR        => ProductoCategoriaEnum::HERRAMIENTA,
-            self::BOCINA,
-            self::CONSOLA,
-            self::MICROFONO,
-            self::CAMARA,
-            self::CONCENTRADOR,
-            self::PANTALLA_RETRACTIL,
-            self::PROYECTOR,
-            self::BARRA_VIDEO           => ProductoCategoriaEnum::CAMARA_VIDEO_SONIDO,
-            self::IMPRESORA,
-            self::PLOTTER               => ProductoCategoriaEnum::IMPRESORA,
-            self::MONITOR,
-            self::DISCO_OPTICO,
-            self::TECLADO,
-            self::MOUSE                 => ProductoCategoriaEnum::PERIFERICO,
-            self::MODULO_BATERIA,
-            self::UPS                   => ProductoCategoriaEnum::ELECTRICO,
-            self::ESCANER               => ProductoCategoriaEnum::ESCANER,
+            self::Computadora,
+            self::Servidor,
+            self::Licencia,
+            self::Procesador,
+            self::Ram,
+            self::Tablet                => ProductoCategoriaEnum::Computadora,
+            self::Disco                 => ProductoCategoriaEnum::DispositivoAlmacenamiento,
+            self::Telefono              => ProductoCategoriaEnum::Telefonia,
+            self::AccessPoint,
+            self::Antena,
+            self::Firewall,
+            self::Modem,
+            self::PanelParcheo,
+            self::Rack,
+            self::Router,
+            self::Switch,
+            self::Adaptador,
+            self::ModuloReceptor        => ProductoCategoriaEnum::Redes,
+            self::ApuntadorOptico,
+            self::CajaConectividad,
+            self::LectorCodigos,
+            self::RelojChecador         => ProductoCategoriaEnum::Herramienta,
+            self::Bocina,
+            self::Consola,
+            self::Microfono,
+            self::Camara,
+            self::Concentrador,
+            self::PantallaRetractil,
+            self::Proyector,
+            self::BarraVideo            => ProductoCategoriaEnum::CamaraVideoSonido,
+            self::Impresora,
+            self::Plotter               => ProductoCategoriaEnum::Impresora,
+            self::Monitor,
+            self::DiscoOptico,
+            self::Teclado,
+            self::Mouse                 => ProductoCategoriaEnum::Periferico,
+            self::ModuloBateria,
+            self::Ups                   => ProductoCategoriaEnum::Electrico,
+            self::Escaner               => ProductoCategoriaEnum::Escaner,
         };
     }
 
     public function formattedLabel(): string
     {
         return match($this) {
-            self::RAM                   => 'RAM',
-            self::TELEFONO              => 'Teléfono',
-            self::MODEM                 => 'Módem',
-            self::PANEL_PARCHEO         => 'Panel de Parcheo',
-            self::MODULO_RECEPTOR       => 'Módulo Receptor',
-            self::APUNTADOR_OPTICO      => 'Apuntador Óptico',
-            self::CAJA_CONECTIVIDAD     => 'Caja de Conectividad',
-            self::LECTOR_CODIGOS        => 'Lector de Códigos',
-            self::MICROFONO             => 'Micrófono',
-            self::CAMARA                => 'Cámara',
-            self::PANTALLA_RETRACTIL    => 'Pantalla Retráctil',
-            self::BARRA_VIDEO           => 'Barra de Video',
-            self::DISCO_OPTICO          => 'Disco Óptico',
-            self::MODULO_BATERIA        => 'Módulo de Baterias',
-            self::UPS                   => 'UPS',
-            self::ESCANER               => 'Escáner'
+            self::Ram                   => 'Ram',
+            self::Telefono              => 'Teléfono',
+            self::Modem                 => 'Módem',
+            self::PanelParcheo          => 'Panel de Parcheo',
+            self::ModuloReceptor        => 'Módulo Receptor',
+            self::ApuntadorOptico       => 'Apuntador Óptico',
+            self::CajaConectividad      => 'Caja de Conectividad',
+            self::LectorCodigos         => 'Lector de Códigos',
+            self::Microfono             => 'Micrófono',
+            self::Camara                => 'Cámara',
+            self::PantallaRetractil     => 'Pantalla Retráctil',
+            self::BarraVideo            => 'Barra de Video',
+            self::DiscoOptico           => 'Disco Óptico',
+            self::ModuloBateria         => 'Módulo de Baterias',
+            self::Ups                   => 'Ups',
+            self::Escaner               => 'Escáner'
         };
     }
 
     public function clasificador(): ClasificadorEnum
     {
         return match($this) {
-            self::CONSOLA,
-            self::MICROFONO,
-            self::PANTALLA_RETRACTIL,
-            self::PROYECTOR,
-            self::BOCINA                => ClasificadorEnum::AUDIOVISUAL,
-            self::CAMARA_FOTOGRAFICA,
-            self::CAMARA_VIDEO          => ClasificadorEnum::CAMARA_FOTOGRAFICA_VIDEO,
-            self::TELEFONO              => ClasificadorEnum::COMUNICACION_TELECOMUNICACION,
-            self::UPS                   => ClasificadorEnum::ELECTRICO_GENERACION_ELECTRICA,
-            self::LICENCIA              => ClasificadorEnum::LICENCIA_INFORMATICA_INTELECTUAL,
-            default                     => ClasificadorEnum::COMPUTO_TECNOLOGIA_INFORMACION,
+            self::Consola,
+            self::Microfono,
+            self::PantallaRetractil,
+            self::Proyector,
+            self::Bocina                => ClasificadorEnum::Audiovisual,
+            self::Camara                => ClasificadorEnum::CamaraFotograficaVideo,
+            self::Telefono              => ClasificadorEnum::ComunicacionTelecomunicacion,
+            self::Ups                   => ClasificadorEnum::ElectricoGeneracionElectrica,
+            self::Licencia              => ClasificadorEnum::LicenciaInformaticaIntelectual,
+            default                     => ClasificadorEnum::ComputoTecnologiaInformacion,
         };
     }
 }

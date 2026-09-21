@@ -18,14 +18,14 @@ import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { FieldValue } from "@/components/ui/field-value";
 import { ShowBienesInformaticosTitle } from "../partials/show-info";
-import type { PorSurtirDictamen } from "@/types/dictamenes";
+import type { SurtirDictamen } from "@/types/dictamenes";
 import React from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { ShowOficioInfo } from "../form-actions/partials/show-info";
 import { BaseFieldLayout } from "@/components/ui/field-layout";
 import { DatePicker } from "@/components/ui/date-picker";
 
-function useEditFormMutation(dictamen: PorSurtirDictamen) {
+function useEditFormMutation(dictamen: SurtirDictamen) {
     const navigate = useNavigate();
 
     return useFormMutation({

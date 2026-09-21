@@ -4,9 +4,9 @@ namespace App\Enums;
 
 enum NumeroInventarioEnum: string
 {
-    case MUEBLES = '01';
-    case INFORMATICA = '02';
-    case VEHICULOS = '03';
+    case Mueble         = '01';
+    case Informatica    = '02';
+    case Vehiculo       = '03';
 
     public function regex(): string
     {

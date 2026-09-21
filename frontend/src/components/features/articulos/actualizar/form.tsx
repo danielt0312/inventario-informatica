@@ -53,7 +53,7 @@ function ActualizarForm({
                         <Label className="text-xl font-bold w-1/4">Procesador (CPU)</Label>
                         <form.AppField
                             name="cpu_producto_id"
-                            children={() => <ProductoField tipo={ProductoTipoEnum.PROCESADOR} layout={{ label: undefined }} className="w-3/4" />}
+                            children={() => <ProductoField tipo={ProductoTipoEnum.Procesador} layout={{ label: undefined }} className="w-3/4" />}
                         />
                     </Field>
                 </CardContent>
@@ -90,7 +90,7 @@ function ActualizarForm({
                                             <FieldGroup className="flex-row">
                                                 <form.AppField
                                                     name={`discos[${index}].producto_id`}
-                                                    children={() => <ProductoField tipo={ProductoTipoEnum.DISCO} layout={{ label: "Modelo" }} required />}
+                                                    children={() => <ProductoField tipo={ProductoTipoEnum.Disco} layout={{ label: "Modelo" }} required />}
                                                 />
                                                 <form.AppField
                                                     name={`discos[${index}].tipo_id`}
@@ -145,7 +145,7 @@ function ActualizarForm({
                                             <FieldGroup className="flex-row">
                                                 <form.AppField
                                                     name={`rams[${index}].producto_id`}
-                                                    children={() => <ProductoField tipo={ProductoTipoEnum.RAM} layout={{ label: "Modelo" }} required />}
+                                                    children={() => <ProductoField tipo={ProductoTipoEnum.Ram} layout={{ label: "Modelo" }} required />}
                                                 />
                                                 <form.AppField
                                                     name={`rams[${index}].tipo_id`}

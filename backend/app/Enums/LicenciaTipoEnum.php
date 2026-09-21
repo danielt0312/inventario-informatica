@@ -9,14 +9,14 @@ enum LicenciaTipoEnum: int
 {
     use HasFormattedLabel, IsCatalog;
 
-    case APLICACION = 1;
-    case SISTEMA_OPERATIVO = 2;
+    case Aplicacion = 1;
+    case SistemaOperativo = 2;
 
     public function formattedLabel(): string
     {
         return match ($this) {
-            self::APLICACION => 'de Aplicación',
-            self::SISTEMA_OPERATIVO => 'de Sistema Operativo',
+            self::Aplicacion => 'Aplicación',
+            self::SistemaOperativo => 'Sistema Operativo',
         };
     }
 }

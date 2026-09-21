@@ -1,4 +1,4 @@
-import type { DetailedDictaminarDictamen, DetailedPendienteAcuseDictamen, DetailedInventariarDictamen, DetailedPorSurtirDictamen, DictaminarDictamen, PendienteAcuseDictamen, InventariarDictamen, PorSurtirDictamen } from "@/types/dictamenes";
+import type { DetailedDictaminarDictamen, DetailedPendienteAcuseDictamen, DetailedInventariarDictamen, DetailedSurtirDictamen, DictaminarDictamen, PendienteAcuseDictamen, InventariarDictamen, SurtirDictamen } from "@/types/dictamenes";
 
 type FormAction =
     | DictaminarDictamen
@@ -11,10 +11,10 @@ type DetailedFormAction =
     | DetailedInventariarDictamen;
 
 type EditableFormAction =
-    | PorSurtirDictamen;
+    | SurtirDictamen;
 
 type DetailedEditableFormAction =
-    | DetailedPorSurtirDictamen;
+    | DetailedSurtirDictamen;
 
 export type {
     FormAction as FormActionDictamen,

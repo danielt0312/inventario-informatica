@@ -3,7 +3,7 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 export const ActionDictamenLabels = ['dictaminar', 'evidenciar-acuse', 'inventariar'] as const;
 export type ActionDictamenLabels = (typeof ActionDictamenLabels)[number];
 
-const { DICTAMINAR, PENDIENTE_ACUSE, INVENTARIAR } = DictamenEstadoEnum;
+const { Dictaminar: DICTAMINAR, PendienteAcuse: PENDIENTE_ACUSE, Inventariar: INVENTARIAR } = DictamenEstadoEnum;
 export const ActionDictamenEstadoEnum = {
     DICTAMINAR,
     PENDIENTE_ACUSE,

@@ -8,7 +8,7 @@ enum ArticuloEstadoEnum: int
 {
     use IsCatalog;
 
-    case ACTIVO = 1;
-    case BAJA_DEFINITIVA = 2;
-    case BAJA_PREVENTIVA = 3;
+    case Activo         = 1;
+    case BajaDefinitiva = 2;
+    case BajaPreventiva = 3;
 }

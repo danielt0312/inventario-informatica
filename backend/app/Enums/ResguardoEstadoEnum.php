@@ -9,14 +9,14 @@ enum ResguardoEstadoEnum: int
 {
     use HasFormattedLabel, IsCatalog;
 
-    case ACTIVO = 1;
-    case PENDIENTE_ACUSE = 2;
-    case CANCELADO = 3;
+    case Activo         = 1;
+    case PendienteAcuse = 2;
+    case Cancelado      = 3;
 
     public function formattedLabel(): string
     {
         return match ($this) {
-            self::PENDIENTE_ACUSE => 'Pendiente de Acuse',
+            self::PendienteAcuse => 'Pendiente de Acuse',
         };
     }
 }

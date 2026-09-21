@@ -8,9 +8,9 @@ import { DictamenFormActionLabel } from "../../partials/table-cols";
 
 const OrderActionDictamenEstado = [
     undefined,
-    DictamenEstadoEnum.DICTAMINAR,
-    DictamenEstadoEnum.PENDIENTE_ACUSE,
-    DictamenEstadoEnum.INVENTARIAR,
+    DictamenEstadoEnum.Dictaminar,
+    DictamenEstadoEnum.PendienteAcuse,
+    DictamenEstadoEnum.Inventariar,
 ] as const;
 type OrderActionDictamenEstado = (typeof OrderActionDictamenEstado)[number];
 

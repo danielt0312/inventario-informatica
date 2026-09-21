@@ -18,9 +18,8 @@ import {
 } from "date-fns"
 import { isAxiosError } from "axios";
 import { root } from "./axios";
-import { ArticuloCuentaContableInventariableRegex, ArticuloCuentaContableNoInventariable, dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap, type ProductoTipoComputadoraEscritorio, type ProductoTipoComputadoraPortatil } from "./constants";
+import { ArticuloCuentaContableInventariableRegex, ArticuloCuentaContableNoInventariable, dictamenAdquisicionProductoTiposPuedenRequerirNumeroInventario, ProductoCategoriaEnum, ProductoTipoEnum, ProductoTipoProductoCategoriaMap } from "./constants";
 import type { DatePickerFieldType } from "@/components/ui/date-picker-field";
-import type { ProductoTipo } from "@/types/productos";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -182,7 +181,7 @@ export const Producto = {
         return this.getCategoriaByTipo(tipo) === categoria;
     },
     tipoEsCategoriaComputadora(tipo: unknown): boolean {
-        return this.tipoEsDeCategoria(tipo, this.categoria.COMPUTADORA);
+        return this.tipoEsDeCategoria(tipo, this.categoria.Computadora);
     }
 }
 
@@ -227,9 +226,3 @@ export const esCuentaContableNoInventariable = (value: string) =>
 
 export const esCuentaContable = (value:string) =>
     esCuentaContableNoInventariable(value) || esCuentaContableInventariable(value);
-
-export const productoTipoEsComputadoraEscritorio = (tipo: ProductoTipo): tipo is ProductoTipoComputadoraEscritorio =>
-    tipo.id === ProductoTipoEnum.COMPUTADORA_ESCRITORIO
-
-export const productoTipoEsComputadoraPortatil = (tipo: ProductoTipo): tipo is ProductoTipoComputadoraPortatil =>
-    tipo.id === ProductoTipoEnum.COMPUTADORA_PORTATIL

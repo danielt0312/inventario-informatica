@@ -28,13 +28,13 @@ class ProductoSeeder extends Seeder
 
         // todo eliminar o definir más profundamente
         Producto::insert([
-            ['tipo_id' => ProductoTipoEnum::COMPUTADORA->value, 'marca_id' => 1, 'modelo' => 'Optiplex 3070'],
-            ['tipo_id' => ProductoTipoEnum::COMPUTADORA->value, 'marca_id' => 1, 'modelo' => 'Optiplex 9020'],
-            ['tipo_id' => ProductoTipoEnum::COMPUTADORA->value, 'marca_id' => 1, 'modelo' => 'Inspiron 3800'],
-            ['tipo_id' => ProductoTipoEnum::COMPUTADORA->value, 'marca_id' => 1, 'modelo' => 'Inspiron 5070'],
-            ['tipo_id' => ProductoTipoEnum::COMPUTADORA->value, 'marca_id' => 2, 'modelo' => 'Vivobook 14'],
-            ['tipo_id' => ProductoTipoEnum::COMPUTADORA->value, 'marca_id' => 2, 'modelo' => 'Vivobook 15'],
-            ['tipo_id' => ProductoTipoEnum::TECLADO->value, 'marca_id' => 1, 'modelo' => 'KB216-BK-LTN'],
+            ['tipo_id' => ProductoTipoEnum::Computadora->value, 'marca_id' => 1, 'modelo' => 'Optiplex 3070'],
+            ['tipo_id' => ProductoTipoEnum::Computadora->value, 'marca_id' => 1, 'modelo' => 'Optiplex 9020'],
+            ['tipo_id' => ProductoTipoEnum::Computadora->value, 'marca_id' => 1, 'modelo' => 'Inspiron 3800'],
+            ['tipo_id' => ProductoTipoEnum::Computadora->value, 'marca_id' => 1, 'modelo' => 'Inspiron 5070'],
+            ['tipo_id' => ProductoTipoEnum::Computadora->value, 'marca_id' => 2, 'modelo' => 'Vivobook 14'],
+            ['tipo_id' => ProductoTipoEnum::Computadora->value, 'marca_id' => 2, 'modelo' => 'Vivobook 15'],
+            ['tipo_id' => ProductoTipoEnum::Teclado->value, 'marca_id' => 1, 'modelo' => 'KB216-BK-LTN'],
         ]);
     }
 }

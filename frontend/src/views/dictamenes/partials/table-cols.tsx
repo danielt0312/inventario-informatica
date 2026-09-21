@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedPorSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
 import { BadgeCheckIcon, CircleDashedCheckIcon, CircleXIcon, PackageOpenIcon, PackagePlusIcon, SquarePenIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
@@ -14,7 +14,7 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
 import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
-import type { DetailedDictamen, DetailedPorSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
+import type { DetailedDictamen, DetailedSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
 import { ActionRow } from "@/components/ui/action-row";
 import { RouterButton } from "@/components/ui/router-button";
 
@@ -63,7 +63,7 @@ const EdicionActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormActi
     </RouterButton>
 );
 
-const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | DetailedSurtidoParcialDictamen>) => {
+const SurtirActionRow = ({ dictamen }: ActionProps<DetailedSurtirDictamen | DetailedSurtidoParcialDictamen>) => {
     const [open, setOpen] = useState(false);
     const { mutateAsync, status } = useSurtirMutation(dictamen);
     const navigate = useNavigate();
@@ -126,12 +126,12 @@ const estadoColorVariants = cva(
         variants: {
             variant: {
                 default: undefined,
-                [DictamenEstadoEnum.DICTAMINAR]: "bg-red-400/90",
-                [DictamenEstadoEnum.PENDIENTE_ACUSE]: "bg-orange-300",
-                [DictamenEstadoEnum.POR_SURTIR]: "bg-yellow-300/50",
-                [DictamenEstadoEnum.INVENTARIAR]: "bg-yellow-400/70",
-                [DictamenEstadoEnum.SURTIDO]: "bg-lime-400",
-                [DictamenEstadoEnum.SURTIDO_PARCIAL]: "bg-lime-400/60",
+                [DictamenEstadoEnum.Dictaminar]: "bg-red-400/90",
+                [DictamenEstadoEnum.PendienteAcuse]: "bg-orange-300",
+                [DictamenEstadoEnum.Surtir]: "bg-yellow-300/50",
+                [DictamenEstadoEnum.Inventariar]: "bg-yellow-400/70",
+                [DictamenEstadoEnum.Surtido]: "bg-lime-400",
+                [DictamenEstadoEnum.SurtidoParcial]: "bg-lime-400/60",
             }
         },
         defaultVariants: {
@@ -202,7 +202,7 @@ export const columns: ColumnDef<DetailedDictamen>[] = [
                     {isDetailedActionFormDictamen(dictamen) && (
                         <FormActionItemRow dictamen={dictamen} />
                     )}
-                    {(isDetailedPorSurtirDictamen(dictamen) || isDetailedSurtidoParcialDictamen(dictamen)) && <SurtirActionRow dictamen={dictamen} />}
+                    {(isDetailedSurtirDictamen(dictamen) || isDetailedSurtidoParcialDictamen(dictamen)) && <SurtirActionRow dictamen={dictamen} />}
                     {dictamenVersionHasArchivo(dictamen.version_actual) && (
                         <ArchivoPreviewActionRow
                             archivo={dictamen.version_actual.archivo}

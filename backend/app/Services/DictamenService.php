@@ -47,13 +47,13 @@ class DictamenService
     public function productoTipoPuedeRequerirNumeroInventario(ProductoTipoEnum $tipo): bool
     {
         return match($tipo) {
-            ProductoTipoEnum::DISCO,
-            ProductoTipoEnum::RAM,
-            ProductoTipoEnum::BOCINA,
-            ProductoTipoEnum::MONITOR,
-            ProductoTipoEnum::DISCO_OPTICO,
-            ProductoTipoEnum::TECLADO,
-            ProductoTipoEnum::MOUSE => true,
+            ProductoTipoEnum::Disco,
+            ProductoTipoEnum::Ram,
+            ProductoTipoEnum::Bocina,
+            ProductoTipoEnum::Monitor,
+            ProductoTipoEnum::DiscoOptico,
+            ProductoTipoEnum::Teclado,
+            ProductoTipoEnum::Mouse => true,
             default => false
         };
     }

@@ -9,6 +9,8 @@ use App\Enums\ProductoTipoEnum;
 
 class ProductoTipoSeeder extends Seeder
 {
+    private const INTANGIBLES = [ProductoTipoEnum::Licencia];
+
     public function run(): void
     {
         $this->call([
@@ -18,7 +20,8 @@ class ProductoTipoSeeder extends Seeder
         foreach (ProductoTipoEnum::cases() as $case) {
             ProductoTipo::insert([
                 ...$case->toFormattedCatalog(),
-                'categoria_id' => $case->categoria()->value
+                'categoria_id' => $case->categoria()->value,
+                'es_tangible' => ! in_array($case, self::INTANGIBLES, true),
             ]);
         }
     }
