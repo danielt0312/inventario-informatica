@@ -9,8 +9,20 @@ class StoreProductoTipoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'categoria_id' => ['required', 'integer', 'exists:producto_categorias,id'],
-            'nombre' => ['required', 'string', 'max:64']
+            'categoria_id' => [
+                'required',
+                'integer',
+                'exists:producto_categorias,id'
+            ],
+            'nombre' => [
+                'required',
+                'string',
+                'max:64'
+            ],
+            'es_tangible' => [
+                'required',
+                'boolean',
+            ]
         ];
     }
 }

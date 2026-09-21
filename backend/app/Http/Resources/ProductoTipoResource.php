@@ -12,7 +12,8 @@ class ProductoTipoResource extends JsonResource
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
-            'categoria' => new ProductoCategoriaResource($this->whenLoaded('categoria'))
+            'es_tangible' => $this->es_tangible,
+            'categoria' => new ProductoCategoriaResource($this->whenLoaded('categoria')),
         ];
     }
 }

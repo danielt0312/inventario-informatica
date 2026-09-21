@@ -4,22 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductoTipo extends Model
 {
-    use HasFactory;
-
-    protected $table = 'producto_tipos';
-
     protected $fillable = [
         'categoria_id',
-        'nombre'
+        'nombre',
+        'es_tangible',
     ];
 
     public $timestamps = false;
 
-    public function categoria(): BelongsTo {
-        return $this->belongsTo(ProductoCategoria::class, 'categoria_id');
+    public function categoria(): BelongsTo
+    {
+        return $this->belongsTo(ProductoCategoria::class);
+    }
+
+    public function casts(): array
+    {
+        return [
+            'es_tangible' => 'boolean',
+        ];
     }
 }
