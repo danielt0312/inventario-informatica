@@ -11,10 +11,12 @@ class Disco extends Model
         'tipo_id',
         'capacidad_id',
         'interfaz_id',
+        'factor_forma_id',
     ];
 
     protected $attributes = [
         'interfaz_id' => null,
+        'factor_forma_id' => null,
     ];
 
     public $timestamps = false;
@@ -32,5 +34,10 @@ class Disco extends Model
     public function interfaz(): BelongsTo
     {
         return $this->belongsTo(DiscoInterfaz::class);
+    }
+
+    public function factorForma(): BelongsTo
+    {
+        return $this->belongsTo(DiscoFactorForma::class);
     }
 }
