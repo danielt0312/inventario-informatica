@@ -23,6 +23,11 @@ return new class extends Migration
             $table->string('nombre', 64);
         });
 
+        Schema::create('disco_factor_formas', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', 64);
+        });
+
         Schema::create('discos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tipo_id')
@@ -38,8 +43,13 @@ return new class extends Migration
                 ->constrained('disco_interfaces', indexName: 'fk_discos_disco_interfaces')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignId('factor_forma_id')
+                ->nullable()
+                ->constrained('disco_factor_formas', indexName: 'fk_discos_disco_factor_formas')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
 
-            $table->unique(['tipo_id', 'capacidad_id', 'interfaz_id'], 'uk_discos');
+            $table->unique(['tipo_id', 'capacidad_id', 'interfaz_id', 'factor_forma_id'], 'uk_discos');
         });
 
         Schema::create('articulo_discos', function (Blueprint $table) {

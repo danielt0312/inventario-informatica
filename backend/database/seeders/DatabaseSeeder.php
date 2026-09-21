@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             DiscoTipoSeeder::class,
             DiscoCapacidadSeeder::class,
             DiscoInterfazSeeder::class,
+            DiscoFactorFormaSeeder::class,
             LicenciaTipoSeeder::class,
         ]);
 

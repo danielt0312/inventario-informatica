@@ -13,7 +13,7 @@ class DiscoInterfazSeeder extends Seeder
         DiscoInterfaz::create(['nombre' => 'SATA I']);
         DiscoInterfaz::create(['nombre' => 'SATA II']);
         DiscoInterfaz::create(['nombre' => 'SATA III']);
-        DiscoInterfaz::create(['nombre' => 'SATA M.2']);
-        DiscoInterfaz::create(['nombre' => 'NVMe M.2']);
+        DiscoInterfaz::create(['nombre' => 'SATA']);
+        DiscoInterfaz::create(['nombre' => 'NVMe']);
     }
 }
