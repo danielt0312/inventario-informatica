@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\{
 use Illuminate\Support\Pluralizer;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use App\Enums\DocumentoTipoEnum;
+use App\Enums\{
+    DocumentoTipoEnum,
+    ProductoTipoEnum,
+};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,13 +28,14 @@ class AppServiceProvider extends ServiceProvider
         Pluralizer::useLanguage('spanish');
         Carbon::setLocale('es');
 
-        Relation::enforceMorphMap(
-            collect(DocumentoTipoEnum::cases())
-                ->mapWithKeys(fn ($case) => [
-                    $case->morphAlias() => $case->modelClass()
-                ])
-                ->toArray()
-        );
+        $documentos = collect(DocumentoTipoEnum::cases())
+            ->mapWithKeys(fn ($case) => [$case->morphAlias() => $case->modelClass()]);
+
+        $variantes = collect(ProductoTipoEnum::cases())
+            ->filter(fn ($case) => $case->varianteModelClass() !== null)
+            ->mapWithKeys(fn ($case) => [$case->varianteMorphAlias() => $case->varianteModelClass()]);
+
+        Relation::enforceMorphMap($documentos->merge($variantes)->all());
 
         Blade::anonymousComponentPath(resource_path('pdfs/components'), 'pdf');
         Blade::anonymousComponentPath(resource_path('pdfs/layouts'), 'pdf-layout');

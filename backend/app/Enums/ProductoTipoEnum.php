@@ -4,6 +4,12 @@ namespace App\Enums;
 
 use App\Traits\HasFormattedLabel;
 use App\Traits\Enums\IsCatalog;
+use App\Models\{
+    Disco,
+    Licencia,
+    Computadora,
+    Camara,
+};
 
 enum ProductoTipoEnum: int
 {
@@ -129,6 +135,41 @@ enum ProductoTipoEnum: int
             self::Ups                   => ClasificadorEnum::ElectricoGeneracionElectrica,
             self::Licencia              => ClasificadorEnum::LicenciaInformaticaIntelectual,
             default                     => ClasificadorEnum::ComputoTecnologiaInformacion,
+        };
+    }
+
+    public function varianteModelClass(): ?string
+    {
+        return match($this) {
+            self::Disco         => Disco::class,
+            self::Licencia      => Licencia::class,
+            self::Computadora   => Computadora::class,
+            self::Camara        => Camara::class,
+            default             => null,
+        };
+    }
+
+    public function varianteMorphAlias(): ?string
+    {
+        return match($this) {
+            self::Disco         => 'disco',
+            self::Licencia      => 'licencia',
+            self::Computadora   => 'computadora',
+            self::Camara        => 'camara',
+            default             => null,
+        };
+    }
+
+    public static function tryFromVarianteModel(Model|string $model): ?self
+    {
+        $class = is_object($model) ? $model::class : $model;
+
+        return match($class) {
+            Disco::class       => self::Disco,
+            Licencia::class    => self::Licencia,
+            Computadora::class => self::Computadora,
+            Camara::class      => self::Camara,
+            default            => null,
         };
     }
 }
