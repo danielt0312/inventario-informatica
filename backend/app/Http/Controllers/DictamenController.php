@@ -152,36 +152,14 @@ class DictamenController extends Controller
 
     public function evidenciarAcuse(EvidenciarAcuseDictamenRequest $request, Dictamen $dictamen)
     {
-        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
-            if ($dictamen->oficio && $dictamen->oficio->verified_at === null) {
-                $oficioArchivoRequest = $request->getOficioArchivo();
-                $oficioArchivoOriginal = $dictamen->oficio->archivo;
+        DB::transaction(function () use ($request, $dictamen) {
+            $dictamenArchivo = $request->getDictamenArchivo();
+            $oficioArchivo = $request->getOficioArchivo();
 
-                $dictamen->oficio->documento->archivo()
-                    ->associate($oficioArchivoRequest)
-                    ->save();
+            $dictamenArchivo->temporal?->delete();
+            $oficioArchivo?->temporal?->delete();
 
-                $oficioArchivoOriginal->delete();
-                $oficioArchivoRequest->temporal->delete();
-                $dictamen->oficio->update([
-                    'verified_at' => now()
-                ]);
-            }
-
-            $dictamenArchivoRequest = $request->getDictamenArchivo();
-            $dictamenArchivoOriginal = $dictamen->versionActual->archivo;
-
-            $dictamen->versionActual->documento->archivo()
-                ->associate($dictamenArchivoRequest)
-                ->save();
-
-            $dictamenArchivoOriginal->delete();
-            $dictamenArchivoRequest->temporal->delete();
-            $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::SURTIR->value
-            ]);
-
-            return $dictamen;
+            $this->dictamenService->evidenciarAcuse($dictamen, $dictamenArchivo, $oficioArchivo);
         });
 
         return $dictamen->toResourceResponse();

@@ -11,6 +11,7 @@ use App\Models\{
     Archivo,
     Dictamen
 };
+use App\Actions\ReemplazarArchivoAction;
 use App\Data\Dictamen\{
     StoreDictamenData,
     DictaminarDictamenData
@@ -25,7 +26,8 @@ class DictamenService
         protected PdfViewService $pdfViewService,
         protected PdfWatermarkService $pdfWatermarkService,
         protected ArchivoService $archivoService,
-        protected DocumentoService $documentoService
+        protected DocumentoService $documentoService,
+        protected ReemplazarArchivoAction $reemplazarArchivoAction
     ) {}
 
     public function crear(StoreDictamenData $data, ?Archivo $oficioArchivo): Dictamen
@@ -79,6 +81,26 @@ class DictamenService
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::PendienteAcuse->value
             ]);
+        });
+    }
+
+    public function evidenciarAcuse(Dictamen $dictamen, Archivo $dictamenArchivo, ?Archivo $oficioArchivo): void
+    {
+        $oficioTieneAcuse = $dictamen->oficio->verified_at !== null;
+        if (! $oficioTieneAcuse && $oficioArchivo === null) {
+            $this->oficioArchivoMissingFailure();
+        }
+
+        DB::transaction(function () use ($dictamen, $dictamenArchivo, $oficioTieneAcuse, $oficioArchivo) {
+            if (! $oficioTieneAcuse) {
+                ($this->reemplazarArchivoAction)($dictamen->oficio->archivo, $oficioArchivo);
+
+                $dictamen->oficio->update(['verified_at' => now()]);
+            }
+
+            ($this->reemplazarArchivoAction)($dictamen->versionActual->archivo, $dictamenArchivo);
+
+            $dictamen->update(['estado_id' => DictamenEstadoEnum::Surtir->value]);
         });
     }
 

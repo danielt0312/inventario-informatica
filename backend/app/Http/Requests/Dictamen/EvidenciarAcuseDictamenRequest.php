@@ -47,7 +47,7 @@ class EvidenciarAcuseDictamenRequest extends FormRequest
         ];
     }
 
-    public function getDictamenArchivo(): ?Archivo
+    public function getDictamenArchivo(): Archivo
     {
         return $this->dictamenArchivo;
     }
