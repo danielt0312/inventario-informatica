@@ -3,24 +3,19 @@
 {{--
 /**
  * @var \App\Models\Dictamen $dictamen
- * @var string|null $title
- * @var string|null $location
- * @var string|null $date
- * @var string|null $fileTitle
+ * @var string $title
+ * @var string $location
+ * @var string $date
+ * @var string $fileTitle
  */
 --}}
 @props([
     'dictamen',
-    'title' => DocumentoTipoEnum::DICTAMEN->getLabelValue(),
-    'location' => 'Ciudad Victoria, Tamaulipas',
-    'date' => now()
-        ->isoFormat('D [de] MMMM [de] YYYY'),
-    'fileTitle' => null
+    'title',
+    'location',
+    'date',
+    'fileTitle'
 ])
-
-@php
-    $fileTitle ??= $title;
-@endphp
 
 @push('style')
     <style>
@@ -54,7 +49,7 @@
     </x-slot:header>
 
     <div class="text-right">
-        <b>DICTAMEN NO. {{ $dictamen->id.'/'. $dictamen->versionActual->numero_version }}.</b>
+        <b>DICTAMEN NO. {{ $dictamen->folio }}.</b>
     </div>
 
     <div class="text-center font-bold text-2xl uppercase my-10">

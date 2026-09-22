@@ -42,7 +42,10 @@ use App\Services\{
     DictamenService,
 };
 
-use App\Data\Dictamen\StoreDictamenData;
+use App\Data\Dictamen\{
+    StoreDictamenData,
+    DictaminarDictamenData
+};
 
 class DictamenController extends Controller
 {
@@ -69,12 +72,12 @@ class DictamenController extends Controller
     {
         $dictamen = DB::transaction(function () use ($request) {
             $oficioArchivo = null;
-            if ($this->dictamenService->esAdscripcionInterna($request->validated('adscripcion_id'))) {
+            if (! $this->dictamenService->esAdscripcionInterna($request->validated('adscripcion_id'))) {
                 $oficioArchivo = $request->getArchivo();
                 $oficioArchivo->temporal?->delete();
             }
 
-            return $this->dictamenService->create(StoreDictamenData::fromRequest($request), $oficioArchivo);
+            return $this->dictamenService->crear(StoreDictamenData::fromRequest($request), $oficioArchivo);
         });
 
         return $dictamen->toResourceResponse(201);
@@ -142,37 +145,7 @@ class DictamenController extends Controller
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
     {
-        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
-            $validated = $request->validated();
-
-            foreach ($validated['adquisiciones'] as $adquisicion) {
-                $dictamen->versionActual->adquisiciones()
-                    ->where('id', $adquisicion['id'])
-                    ->update([
-                        'producto_tipo_id' => null,
-                        'producto_id' => $adquisicion['producto_id'],
-                        'especificaciones_tecnicas' => $adquisicion['especificaciones_tecnicas']
-                    ]);
-            }
-
-            $dictamen->load('versionActual.adquisiciones');
-            $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
-            $archivoNombre = DocumentoTipoEnum::DICTAMEN->getLabelValue();
-
-            $archivo = $this->archivoService->createAndStoreFileFromRaw(
-                $pdf->output(),
-                "{$archivoNombre} - No. {$dictamen->id}/{$dictamen->versionActual->numero_version}",
-                'pdf'
-            );
-
-            $this->documentoService->createForModel($dictamen->versionActual, $archivo);
-
-            $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::PENDIENTE_ACUSE->value
-            ]);
-
-            return $dictamen;
-        });
+        $this->dictamenService->dictaminar($dictamen, DictaminarDictamenData::from($request));
 
         return $dictamen->toResource();
     }

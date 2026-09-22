@@ -6,8 +6,11 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
-
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    HasMany
+};
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Enums\DictamenEstadoEnum;
 use App\Traits\Models\HasResourceResponse;
 
@@ -69,6 +72,13 @@ class Dictamen extends Model
     public function estado(): BelongsTo
     {
         return $this->belongsTo(DictamenEstado::class);
+    }
+
+    public function folio(): Attribute
+    {
+        return Attribute::make(
+            fn (mixed $value, array $attributes) => "{$this->id}/{$this->versionActual->numero_version}"
+        );
     }
 
     public function uniqueIds(): array

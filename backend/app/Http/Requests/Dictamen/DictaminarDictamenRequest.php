@@ -23,27 +23,18 @@ class DictaminarDictamenRequest extends FormRequest
                 'array',
                 'min:1'
             ],
+            // todo validar que pertenezca al mismo dictamen
             'adquisiciones.*.id' => [
                 'required',
                 'integer',
-                Rule::exists('dictamen_adquisiciones', 'id')->where(function ($query) {
-                    $query->where('dictamen_version_id', $this->dictamen->versionActual->id);
-                }),
+                'exists:dictamen_adquisiciones,id',
             ],
-            'adquisiciones.*.producto_id' => Rule::foreach(function ($_, string $attribute) {
-                $index = explode('.', $attribute)[1];
-                $adquisicionId = $this->input("adquisiciones.{$index}.id");
-                $adquisicion = $this->dictamen->versionActual->adquisiciones->firstWhere('id', $adquisicionId);
-                $tipoId = $adquisicion?->productoTipo?->id;
-
-                return [
-                    'required',
-                    'integer',
-                    Rule::exists('productos', 'id')->where(
-                        fn ($q) => $q->where('tipo_id', $tipoId)
-                    )
-                ];
-            }),
+            // todo validar que `producto_tipo_id` sea igual al que se encuentre en `dictamen_adquisiciones.productos.tipo_id`
+            'adquisiciones.*.producto_variante_id' => [
+                'required',
+                'integer',
+                'exists:producto_variantes,id'
+            ],
             'adquisiciones.*.especificaciones_tecnicas' => [
                 'required',
                 'string',

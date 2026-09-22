@@ -4,23 +4,31 @@ namespace App\Services;
 
 use App\Enums\{
     ProductoTipoEnum,
-    DictamenEstadoEnum
+    DictamenEstadoEnum,
+    DocumentoTipoEnum
 };
 use App\Models\{
     Archivo,
     Dictamen
 };
-use App\Data\Dictamen\StoreDictamenData;
+use App\Data\Dictamen\{
+    StoreDictamenData,
+    DictaminarDictamenData
+};
 use Illuminate\Support\Facades\DB;
 use LogicException;
 
 class DictamenService
 {
     public function __construct(
-        protected OficioService $oficioService
+        protected OficioService $oficioService,
+        protected PdfViewService $pdfViewService,
+        protected PdfWatermarkService $pdfWatermarkService,
+        protected ArchivoService $archivoService,
+        protected DocumentoService $documentoService
     ) {}
 
-    public function create(StoreDictamenData $data, ?Archivo $oficioArchivo): Dictamen
+    public function crear(StoreDictamenData $data, ?Archivo $oficioArchivo): Dictamen
     {
         $esAdscripcionInterna = $this->esAdscripcionInterna($data->adscripcionId);
 
@@ -29,7 +37,7 @@ class DictamenService
         }
 
         return DB::transaction(function () use ($data, $oficioArchivo, $esAdscripcionInterna) {
-            $oficio = $esAdscripcionInterna
+            $oficio = !$esAdscripcionInterna
                 ? $this->oficioService->create($data->oficio, $oficioArchivo)
                 : null;
 
@@ -51,6 +59,63 @@ class DictamenService
 
             return $dictamen;
         });
+    }
+
+    public function dictaminar(Dictamen $dictamen, DictaminarDictamenData $data): void
+    {
+        DB::transaction(function () use ($dictamen, $data) {
+            foreach ($data->adquisiciones as $adquisicion) {
+                $dictamen->versionActual->adquisiciones()
+                    ->where('id', $adquisicion->id)
+                    ->update([
+                        'producto_tipo_id' => null,
+                        'producto_variante_id' => $adquisicion->productoVarianteId,
+                        'especificaciones_tecnicas' => $adquisicion->especificacionesTecnicas
+                    ]);
+            }
+
+            $this->generateAndAssociatePdf($dictamen);
+
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::PendienteAcuse->value
+            ]);
+        });
+    }
+
+    protected function generateAndAssociatePdf(Dictamen $dictamen): void
+    {
+        $archivo = $this->generatePdf($dictamen);
+
+        $this->documentoService->createForModel($dictamen->versionActual, $archivo);
+    }
+
+    protected function generatePdf(Dictamen $dictamen): Archivo
+    {
+        $dictamen->load('versionActual.adquisiciones', 'oficio');
+
+        return $this->archivoService->createAndStoreFileFromRaw(
+            $this->loadPdfView($dictamen)->output(),
+            $this->generatePdfArchivoNombre($dictamen),
+            'pdf'
+        );
+    }
+
+    protected function loadPdfView(Dictamen $dictamen, ?string $title = null, ?string $location = null, ?string $date = null, ?string $fileTitle = null)
+    {
+        $title ??= DocumentoTipoEnum::DictamenVersion->getLabelValue();
+        $location ??= 'Ciudad Victoria, Tamaulipas';
+        $date ??= now()->isoFormat('D [de] MMMM [de] YYYY');
+        $fileTitle ??= $title;
+
+        return $this->pdfViewService->loadView('dictamen', compact('dictamen', 'title', 'location', 'date', 'fileTitle'));
+    }
+
+    protected function generatePdfArchivoNombre(Dictamen $dictamen): string
+    {
+        return sprintf('%s - No. %s',
+            DocumentoTipoEnum::DictamenVersion->getLabelValue(),
+            $dictamen->folio
+        );
     }
 
     public function esAdscripcionInterna(int $adscripcionId): bool
