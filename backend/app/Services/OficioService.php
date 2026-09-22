@@ -17,7 +17,7 @@ class OficioService
 
     public function create(StoreOficioData $data, Archivo $archivo): Oficio
     {
-        return DB::transaction(function () use ($folio, $archivo) {
+        return DB::transaction(function () use ($data, $archivo) {
             $oficio = Oficio::create(['folio' => $data->folio]);
 
             $this->documentoService->createForModel($oficio, $archivo);

@@ -13,6 +13,6 @@ class StoreDictamenAdquisicionData extends Data
         public int $cantidad,
         public int $empleadoId,
         public int $productoTipoId,
-        public ?string $numeroInventario
+        public ?string $numeroInventario = null,
     ) {}
 }

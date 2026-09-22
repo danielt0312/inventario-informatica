@@ -39,7 +39,10 @@ use App\Services\{
     PdfWatermarkService,
     DocumentoService,
     OficioService,
+    DictamenService,
 };
+
+use App\Data\Dictamen\StoreDictamenData;
 
 class DictamenController extends Controller
 {
@@ -47,6 +50,7 @@ class DictamenController extends Controller
         protected ArchivoService $archivoService,
         protected DocumentoService $documentoService,
         protected OficioService $oficioService,
+        protected DictamenService $dictamenService,
     ) {}
 
     public function index(Request $request)
@@ -63,38 +67,14 @@ class DictamenController extends Controller
 
     public function store(StoreDictamenRequest $request)
     {
-        $dictamen = DB::transaction(function () use ($request): Dictamen {
-            $validated = $request->validated();
-
-            $adscripcionId = $validated['adscripcion_id'];
-            $oficio = null;
-            // todo identificar si el area de adscripcion es la interna
-            if ($adscripcionId != 2) {
-                $archivo = $request->getArchivo();
-
-                $archivo->temporal?->delete();
-
-                $oficio = $this->oficioService->create($validated['folio'], $archivo);
+        $dictamen = DB::transaction(function () use ($request) {
+            $oficioArchivo = null;
+            if ($this->dictamenService->esAdscripcionInterna($request->validated('adscripcion_id'))) {
+                $oficioArchivo = $request->getArchivo();
+                $oficioArchivo->temporal?->delete();
             }
 
-            //todo obtener el jefe de departamento de DTI
-            $empleadoId = 1;
-
-            $dictamen = Dictamen::create([
-                'empleado_id' => $empleadoId,
-                'adscripcion_id' => $adscripcionId,
-                'oficio_id' => $oficio?->id
-            ]);
-
-            $nuevaVersion = $dictamen->versiones()->create([
-                'fecha_solicitud' => $validated['fecha_solicitud'],
-            ]);
-
-            $nuevaVersion->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
-
-            $dictamen->versionActual()->associate($nuevaVersion)->save();
-
-            return $dictamen;
+            return $this->dictamenService->create(StoreDictamenData::fromRequest($request), $oficioArchivo);
         });
 
         return $dictamen->toResourceResponse(201);

@@ -18,8 +18,8 @@ class Dictamen extends Model
     public function __call($method, $parameters)
     {
         if (Str::startsWith($method, 'esEstado')) {
-            $statusName = Str::after($method, 'esEstado');
-            $enumCaseName = strtoupper(Str::snake($statusName));
+            $estadoNombre = Str::after($method, 'esEstado');
+            $enumCaseName = Str::studly($estadoNombre);
             $enumClass = DictamenEstadoEnum::class;
 
             if (defined("$enumClass::$enumCaseName")) {
@@ -39,14 +39,6 @@ class Dictamen extends Model
         'orden_compra_id',
         'empleado_id',
         'tiene_observaciones',
-    ];
-
-    protected $attributes = [
-        'oficio_id' => null,
-        'estado_id' => DictamenEstadoEnum::DICTAMINAR->value,
-        'version_actual_id' => null,
-        'orden_compra_id' => null,
-        'tiene_observaciones' => null
     ];
 
     public function oficio(): BelongsTo

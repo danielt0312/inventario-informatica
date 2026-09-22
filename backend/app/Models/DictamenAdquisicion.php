@@ -19,18 +19,11 @@ class DictamenAdquisicion extends Model
     protected $fillable = [
         'dictamen_version_id',
         'empleado_id',
-        'producto_id',
         'producto_tipo_id',
+        'producto_variante_id',
         'articulo_id',
         'cantidad',
         'especificaciones_tecnicas'
-    ];
-
-    protected $attributes = [
-        'producto_tipo_id' => null,
-        'producto_id' => null,
-        'articulo_id' => null,
-        'especificaciones_tecnicas' => null
     ];
 
     public function version(): BelongsTo
@@ -48,6 +41,13 @@ class DictamenAdquisicion extends Model
         return $this->belongsTo(ProductoTipo::class);
     }
 
+    public function producto(): Attribute
+    {
+        return Attribute::make(
+            fn (): Producto => $this->productoVariante?->producto
+        );
+    }
+
     public function articulo(): BelongsTo
     {
         return $this->belongsTo(Articulo::class);
@@ -61,7 +61,7 @@ class DictamenAdquisicion extends Model
     public function tipo(): Attribute
     {
         return Attribute::make(
-            fn (mixed $value, array $attributes): ProductoTipo => $attributes['producto_id']
+            fn (mixed $value, array $attributes): ProductoTipo => $attributes['producto_variante_id']
                 ? $this->producto->tipo
                 : $this->productoTipo
         );

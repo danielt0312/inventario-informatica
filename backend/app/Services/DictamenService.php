@@ -2,46 +2,67 @@
 
 namespace App\Services;
 
-use App\Enums\ProductoTipoEnum;
+use App\Enums\{
+    ProductoTipoEnum,
+    DictamenEstadoEnum
+};
 use App\Models\{
     Archivo,
-    Dicamen
+    Dictamen
 };
 use App\Data\Dictamen\StoreDictamenData;
 use Illuminate\Support\Facades\DB;
+use LogicException;
 
 class DictamenService
 {
     public function __construct(
         protected OficioService $oficioService
-    )
+    ) {}
 
-    public function store(StoreDictamenData $data, ?Archivo $oficioArchivo): Dictamen
+    public function create(StoreDictamenData $data, ?Archivo $oficioArchivo): Dictamen
     {
-        return DB::transaction(function () use ($data, $oficioArchivo) {
-            // todo identificar si el area de adscripcion es la interna
-            // todo centralizar esta verificacion
-            $oficioId = $data->adscripcionId != 2
-                // todo validar que `oficioArchivo` y `oficio` hayan sido pasados
-                ? $this->oficioService->create($data->oficio, $oficioArchivo)->id
+        $esAdscripcionInterna = $this->esAdscripcionInterna($data->adscripcionId);
+
+        if ($esAdscripcionInterna && $oficioArchivo === null) {
+            $this->oficioArchivoMissingFailure();
+        }
+
+        return DB::transaction(function () use ($data, $oficioArchivo, $esAdscripcionInterna) {
+            $oficio = $esAdscripcionInterna
+                ? $this->oficioService->create($data->oficio, $oficioArchivo)
                 : null;
 
             $dictamen = Dictamen::create([
-                'empleado_id' => $data->empleadoId,
+                'estado_id' => DictamenEstadoEnum::Dictaminar->value,
+                'empleado_id' => 1, // todo obtener jefe de adscripcion interna
                 'adscripcion_id' => $data->adscripcionId,
-                'oficio_id' => $oficioId
+                'oficio_id' => $oficio?->id
             ]);
 
             $nuevaVersion = $dictamen->versiones()->create([
                 'fecha_solicitud' => $data->version->fechaSolicitud,
             ]);
 
-            $nuevaVersion->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
+            $nuevaVersion->adquisiciones()->createMany($data->adquisiciones);
 
-            $dictamen->versionActual()->associate($nuevaVersion)->save();
+            $dictamen->versionActual()->associate($nuevaVersion);
+            $dictamen->save();
 
             return $dictamen;
         });
+    }
+
+    public function esAdscripcionInterna(int $adscripcionId): bool
+    {
+        // todo identificar si el area de adscripcion es la interna
+        // todo revisar si mover a otra seccion
+        return $adscripcionId === 2;
+    }
+
+    protected function oficioArchivoMissingFailure(): void
+    {
+        throw new LogicException('El archivo del oficio de solicitud es requerido.');
     }
 
     public function productoTipoPuedeRequerirNumeroInventario(ProductoTipoEnum $tipo): bool
