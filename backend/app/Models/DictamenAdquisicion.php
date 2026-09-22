@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Relations\{
     HasMany
 };
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Traits\Models\Relations\HasProducto;
+use App\Traits\Models\Relations\HasProductoVariante;
 
 class DictamenAdquisicion extends Model
 {
-    use HasFactory, HasProducto;
+    use HasFactory, HasProductoVariante;
 
     protected $fillable = [
         'dictamen_version_id',

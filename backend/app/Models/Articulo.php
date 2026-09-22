@@ -16,16 +16,16 @@ use App\Enums\{
 };
 use App\Traits\Models\Relations\{
     HasDictamen,
-    HasProducto
+    HasProductoVariante
 };
 use App\Services\NumeroInventarioService;
 
 class Articulo extends Model
 {
-    use HasFactory, HasUuids, HasDictamen, HasProducto;
+    use HasFactory, HasUuids, HasDictamen, HasProductoVariante;
 
     protected $fillable = [
-        'producto_id',
+        'producto_variante_id',
         'estado_id',
         'numero_serie',
         'costo_unitario',
@@ -47,20 +47,6 @@ class Articulo extends Model
         'es_resultado_esperado' => null,
         'observaciones' => null
     ];
-
-    protected static function booted(): void
-    {
-        static::created(function (Articulo $articulo) {
-            if (is_null($articulo->numero_inventario)) {
-                $productoTipoEnum = ProductoTipoEnum::tryFrom($articulo->producto?->tipo_id ?? '');
-                if ($productoTipoEnum === null) {
-                    throw new \Exception("No se pudo generar el número de inventario");
-                }
-                $articulo->numero_inventario = NumeroInventarioService::generate($productoTipoEnum->clasificador(), $articulo->id);
-                $articulo->saveQuietly();
-            }
-        });
-    }
 
     public function surtimiento(): HasOne
     {
