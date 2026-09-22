@@ -104,6 +104,13 @@ class DictamenService
         });
     }
 
+    public function surtir(Dictamen $dictamen): void
+    {
+        $dictamen->update([
+            'estado_id' => DictamenEstadoEnum::Inventariar->value
+        ]);
+    }
+
     protected function generateAndAssociatePdf(Dictamen $dictamen): void
     {
         $archivo = $this->generatePdf($dictamen);

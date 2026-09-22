@@ -167,9 +167,7 @@ class DictamenController extends Controller
 
     public function surtir(SurtirDictamenRequest $request, Dictamen $dictamen)
     {
-        $dictamen->update([
-            'estado_id' => DictamenEstadoEnum::INVENTARIAR->value
-        ]);
+        $this->dictamenService->surtir($dictamen);
 
         return $dictamen->toResourceResponse();
     }
