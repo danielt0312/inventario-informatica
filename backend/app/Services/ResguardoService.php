@@ -46,7 +46,7 @@ class ResguardoService
             $this->cancelacionFallida();
         }
 
-        $this->cancelarArchivoAction->handle($resguardo->archivo);
+        ($this->cancelarArchivoAction)($resguardo->archivo);
 
         $fechaCancelacion = now();
 
@@ -147,7 +147,7 @@ class ResguardoService
         }
 
         DB::transaction(function () use ($resguardo, $acuseArchivo) {
-            $this->reemplazarArchivoAction->handle($resguardo->archivo, $acuseArchivo);
+            ($this->reemplazarArchivoAction)($resguardo->archivo, $acuseArchivo);
 
             $resguardo->update([
                 'estado_id' => ResguardoEstadoEnum::ACTIVO->value

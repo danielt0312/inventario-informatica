@@ -12,15 +12,10 @@ final class CancelarArchivoAction
 {
     public function __construct(
         protected ArchivoService $archivoService,
-        protected PdfWatermarkService $pdfWatermarkService,
+        protected PdfWatermarkService $pdfWatermarkService
     ) {}
 
     public function __invoke(Archivo $archivo, string $texto = 'CANCELADO'): void
-    {
-        $this->handle();
-    }
-
-    public function handle(Archivo $archivo, string $texto = 'CANCELADO'): void
     {
         $path = $this->archivoService->getFullPath($archivo);
         $this->pdfWatermarkService->apply($path, $path, $texto);
