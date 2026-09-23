@@ -72,51 +72,50 @@ class InventariarDictamenRequest extends FormRequest
                     $this->setOrdenCompra($ordenCompra);
                 }
             ],
-            'adquisiciones' => [
+            'articulos' => [
                 'required',
                 'array',
-                'min:1',
+                'min:1'
             ],
-            'adquisiciones.*.id' => [
+            'articulos.*.dictamen_adquisicion_id' => [
                 'required',
                 'integer',
                 'exists:dictamen_adquisiciones,id'
             ],
-            'adquisiciones.*.es_resultado_esperado' => [
+            'articulos.*.es_resultado_esperado' => [
                 'required',
                 'boolean'
             ],
-            'adquisiciones.*.observaciones' => [
-                'exclude_unless:adquisiciones.*.es_resultado_esperado,false',
+            'articulos.*.observaciones' => [
+                // 'exclude_unless:articulos.*.es_resultado_esperado,false',
                 'required',
                 'string',
                 'max:255'
             ],
-            'adquisiciones.*.producto_id' => [
-                'exclude_unless:adquisiciones.*.es_resultado_esperado,false',
+            'articulos.*.producto_variante_id' => [
+                // 'exclude_unless:articulos.*.es_resultado_esperado,false',
                 'required',
                 'integer',
-                'exists:productos,id'
+                'exists:producto_variantes,id'
             ],
             // todo agregar 'distinct' y 'unique' en caso de ser inventariable
-            'adquisiciones.*.cuenta_contable' => [
+            'articulos.*.cuenta_contable' => [
                 'required',
-                new CuentaContableFormat,
-                'distinct',
+                new CuentaContableFormat
             ],
-            'adquisiciones.*.numero_serie' => [
+            'articulos.*.numero_serie' => [
                 'nullable',
                 'string',
                 'max:64',
                 'distinct',
                 'unique:articulos,numero_serie'
             ],
-            'adquisiciones.*.costo_unitario' => [
+            'articulos.*.costo_unitario' => [
                 'nullable',
-                'required_if:adquisiciones.*.es_contable,true',
+                'required_if:articulos.*.es_contable,true',
                 'numeric',
             ],
-            'adquisiciones.*.factura_id' => [
+            'articulos.*.factura_id' => [
                 'required',
                 'integer',
                 'exists:facturas,id'
@@ -127,95 +126,95 @@ class InventariarDictamenRequest extends FormRequest
     public function after(): array
     {
         return [
-            function (Validator $validator) {
-                if ($validator->errors()->isNotEmpty()) return;
+            // function (Validator $validator) {
+            //     if ($validator->errors()->isNotEmpty()) return;
 
-                $adquisicionesPayload = collect($this->input('adquisiciones', []));
+            //     $adquisicionesPayload = collect($this->input('adquisiciones', []));
 
-                $adquisiciones = DictamenAdquisicion::with('producto:id,tipo_id')
-                    ->withCount('surtimientos')
-                    ->whereIn('id', $adquisicionesPayload->pluck('id')->unique())
-                    ->get()
-                    ->keyBy('id');
+            //     $adquisiciones = DictamenAdquisicion::with('producto:id,tipo_id')
+            //         ->withCount('surtimientos')
+            //         ->whereIn('id', $adquisicionesPayload->pluck('id')->unique())
+            //         ->get()
+            //         ->keyBy('id');
 
-                $productos = Producto::select('id', 'tipo_id')
-                    ->whereIn('id', $adquisicionesPayload->pluck('producto_id')->filter())
-                    ->get()
-                    ->keyBy('id');
+            //     $productos = Producto::select('id', 'tipo_id')
+            //         ->whereIn('id', $adquisicionesPayload->pluck('producto_id')->filter())
+            //         ->get()
+            //         ->keyBy('id');
 
-                $conteoPorAdquisicion = $adquisicionesPayload->countBy('id');
+            //     $conteoPorAdquisicion = $adquisicionesPayload->countBy('id');
 
-                $validarProducto = function ($adquisicionPayload, $index) use ($adquisiciones, $productos, $conteoPorAdquisicion, $validator) {
-                    $adquisicion = $adquisiciones->get($adquisicionPayload['id']);
-                    if (!$adquisicion) return;
+            //     $validarProducto = function ($adquisicionPayload, $index) use ($adquisiciones, $productos, $conteoPorAdquisicion, $validator) {
+            //         $adquisicion = $adquisiciones->get($adquisicionPayload['id']);
+            //         if (!$adquisicion) return;
 
-                    if (! $adquisicionPayload['es_resultado_esperado']) {
-                        $producto = $productos->get($adquisicionPayload['producto_id'] ?? null);
+            //         if (! $adquisicionPayload['es_resultado_esperado']) {
+            //             $producto = $productos->get($adquisicionPayload['producto_id'] ?? null);
 
-                        if ($producto->tipo_id !== $adquisicion->producto->tipo_id) {
-                            $validator->addFailure("adquisiciones.$index.producto_id", "El adquisiciones.$index.producto_id debe ser del mismo tipo que el solicitado en el dictamen");
-                        } else {
-                            $this->setProductos($adquisicionPayload['cuenta_contable'], $producto);
-                        }
-                    } else {
-                        $this->setProductos($adquisicionPayload['cuenta_contable'], $adquisicion->producto);
-                    }
+            //             if ($producto->tipo_id !== $adquisicion->producto->tipo_id) {
+            //                 $validator->addFailure("adquisiciones.$index.producto_id", "El adquisiciones.$index.producto_id debe ser del mismo tipo que el solicitado en el dictamen");
+            //             } else {
+            //                 $this->setProductos($adquisicionPayload['cuenta_contable'], $producto);
+            //             }
+            //         } else {
+            //             $this->setProductos($adquisicionPayload['cuenta_contable'], $adquisicion->producto);
+            //         }
 
-                    $pendiente = $adquisicion->cantidad - $adquisicion->surtimientos_count;
-                    $enviado = $conteoPorAdquisicion->get($adquisicionPayload['id']);
+            //         $pendiente = $adquisicion->cantidad - $adquisicion->surtimientos_count;
+            //         $enviado = $conteoPorAdquisicion->get($adquisicionPayload['id']);
 
-                    if ($enviado > $pendiente) {
-                        $validator->addFailure("adquisiciones.$index.id", "El adquisiciones.$index.id excede lo pendiente a surtir ({$pendiente})");
-                    }
-                };
+            //         if ($enviado > $pendiente) {
+            //             $validator->addFailure("adquisiciones.$index.id", "El adquisiciones.$index.id excede lo pendiente a surtir ({$pendiente})");
+            //         }
+            //     };
 
-                $validarFactura = function ($adquisicionPayload, $index) use ($validator) {
-                    foreach ($this->getFacturas() as $factura) {
-                        if ($factura->id === $adquisicionPayload['factura_id']) {
-                            $this->setFacturaAdquisiciones($adquisicionPayload['cuenta_contable'], $factura);
-                            return;
-                        }
-                    }
+            //     $validarFactura = function ($adquisicionPayload, $index) use ($validator) {
+            //         foreach ($this->getFacturas() as $factura) {
+            //             if ($factura->id === $adquisicionPayload['factura_id']) {
+            //                 $this->setFacturaAdquisiciones($adquisicionPayload['cuenta_contable'], $factura);
+            //                 return;
+            //             }
+            //         }
 
-                    $setValidatorError = fn () =>
-                        $validator->addFailure("adquisiciones.$index.factura_id", "La adquisiciones.$index.factura_id no pertenece al mismo proveedor que la orden_compra indicada");
+            //         $setValidatorError = fn () =>
+            //             $validator->addFailure("adquisiciones.$index.factura_id", "La adquisiciones.$index.factura_id no pertenece al mismo proveedor que la orden_compra indicada");
 
-                    foreach ($this->getFacturasInvalidas() as $facturaIdInvalida) {
-                        if ($facturaIdInvalida === $adquisicionPayload['factura_id']) {
-                            $setValidatorError();
-                            return;
-                        }
-                    }
+            //         foreach ($this->getFacturasInvalidas() as $facturaIdInvalida) {
+            //             if ($facturaIdInvalida === $adquisicionPayload['factura_id']) {
+            //                 $setValidatorError();
+            //                 return;
+            //             }
+            //         }
 
-                    $factura = Factura::query()
-                        ->join('proveedores', 'proveedores.id', '=', 'facturas.proveedor_id')
-                        ->join('orden_compras', 'orden_compras.proveedor_id', '=', 'proveedores.id')
-                        ->where('facturas.id', $adquisicionPayload['factura_id'])
-                        ->where('orden_compras.id', $this->orden_compra_id)
-                        ->select('facturas.*')
-                        ->first();
+            //         $factura = Factura::query()
+            //             ->join('proveedores', 'proveedores.id', '=', 'facturas.proveedor_id')
+            //             ->join('orden_compras', 'orden_compras.proveedor_id', '=', 'proveedores.id')
+            //             ->where('facturas.id', $adquisicionPayload['factura_id'])
+            //             ->where('orden_compras.id', $this->orden_compra_id)
+            //             ->select('facturas.*')
+            //             ->first();
 
-                    if (! $factura) {
-                        logger()->warning('Factura no pertenece a Proveedor de Orden de Compra', [
-                            'payload' => $validator->getData(),
-                            'user_id' => auth()->id(),
-                            'ip' => $this->ip(),
-                        ]);
+            //         if (! $factura) {
+            //             logger()->warning('Factura no pertenece a Proveedor de Orden de Compra', [
+            //                 'payload' => $validator->getData(),
+            //                 'user_id' => auth()->id(),
+            //                 'ip' => $this->ip(),
+            //             ]);
 
-                        $setValidatorError();
-                        $this->setFacturasIdInvalidas($adquisicionPayload['factura_id']);
-                        return;
-                    }
+            //             $setValidatorError();
+            //             $this->setFacturasIdInvalidas($adquisicionPayload['factura_id']);
+            //             return;
+            //         }
 
-                    $this->setFacturas($factura);
-                    $this->setFacturaAdquisiciones($adquisicionPayload['cuenta_contable'], $factura);
-                };
+            //         $this->setFacturas($factura);
+            //         $this->setFacturaAdquisiciones($adquisicionPayload['cuenta_contable'], $factura);
+            //     };
 
-                foreach ($adquisicionesPayload as $index => $adquisicionPayload) {
-                    $validarProducto($adquisicionPayload, $index);
-                    $validarFactura($adquisicionPayload, $index);
-                }
-            }
+            //     foreach ($adquisicionesPayload as $index => $adquisicionPayload) {
+            //         $validarProducto($adquisicionPayload, $index);
+            //         $validarFactura($adquisicionPayload, $index);
+            //     }
+            // }
         ];
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
+use App\Data\Articulo\StoreArticuloData;
 use App\Models\{
     Articulo,
     ProductoVariante
@@ -11,11 +13,10 @@ use App\Enums\{
     ClasificadorEnum,
     ArticuloEstadoEnum,
 };
-use Illuminate\Support\Facades\DB;
 
 class ArticuloService
 {
-    public function create(StoreArticuloData $data): Articulo
+    public function crear(StoreArticuloData $data): Articulo
     {
         $productoVariante = ProductoVariante::find($data->productoVarianteId);
         $clasificador = ProductoTipoEnum::tryFrom($productoVariante->producto->tipo->id)?->clasificador();

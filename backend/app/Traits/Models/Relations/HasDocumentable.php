@@ -4,10 +4,12 @@ namespace App\Traits\Models\Relations;
 
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Builder;
+
 use Staudenmeir\EloquentHasManyDeep\{
     HasRelationships,
     HasOneDeep
 };
+
 use App\Models\{
     Documento,
     Archivo

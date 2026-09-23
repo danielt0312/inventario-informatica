@@ -1,7 +1,7 @@
 import type { OrdenCompra } from "@/types/orden_compras";
 import type { DetailedInventariarDictamen, InventariarDictamenAdquisicion } from "@/types/dictamenes";
 import { useAppForm } from "@/components/ui/form-context";
-import { adquisicionFieldsDefaultValues, inventariarDictamenFormDefaultValues, inventariarDictamenFormValidator } from "./form-schema";
+import { inventariarDictamenArticuloFieldsDefaultValues, inventariarDictamenFormDefaultValues, inventariarDictamenFormValidator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Form } from "@/components/ui/form";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -98,8 +98,8 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
     const {
         options: adquisicionesOptions,
         availableOptions: adquisicionesAvailableOptions,
-        removeOption: adquisicionRemoveOptions,
-        restoreOption: adquisicionRestoreOptions
+        removeOption: adquisicionesRemoveOptions,
+        restoreOption: adquisicionesRestoreOptions
     } = useAdquisicionesOptions(adquisiciones);
 
     let cantidadTotal = 0;
@@ -123,16 +123,16 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                 children={() => <OrdenCompraField onValueChange={setOrdenCompra} />}
                                 listeners={{
                                     onChange: () =>
-                                        form.getFieldValue('adquisiciones')
+                                        form.getFieldValue('articulos')
                                             .forEach((_, index) => {
-                                                form.setFieldValue(`adquisiciones[${index}].factura_id`, undefined);
+                                                form.setFieldValue(`articulos[${index}].factura_id`, undefined);
                                             })
                                 }}
                             />
                         )}
                     </div>
 
-                    <form.AppField name="adquisiciones" mode="array">
+                    <form.AppField name="articulos" mode="array">
                         {(field) => (
                             <>
                                 <div className="flex flex-row justify-between">
@@ -140,7 +140,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                     <Button
                                         disabled={field.state.value.length >= cantidadTotal}
                                         onClick={() => {
-                                            field.pushValue(adquisicionFieldsDefaultValues);
+                                            field.pushValue(inventariarDictamenArticuloFieldsDefaultValues);
                                         }}
                                         variant="outline"
                                         size="sm"
@@ -156,7 +156,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                 <div className="text-lg">
                                                     Bien Informático #{index + 1}
                                                 </div>
-                                                <form.Subscribe selector={state => state.values.adquisiciones[index].cuenta_contable}>
+                                                <form.Subscribe selector={state => state.values.articulos[index].cuenta_contable}>
                                                     {(cuentaContable) => !!cuentaContable && esCuentaContable(cuentaContable) && (
                                                         <Badge className={`[&>svg]:size-4.5 font-bold text-foreground ${esCuentaContableInventariable(cuentaContable) ? 'bg-lime-400/90' : 'bg-yellow-400/50'}`}>
                                                             <BadgeCheckIcon />
@@ -170,9 +170,9 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                     size="sm"
                                                     variant="destructive"
                                                     onClick={() => {
-                                                        const id = field.state.value[index].id;
+                                                        const id = field.state.value[index].dictamen_adquisicion_id;
                                                         if (id) {
-                                                            adquisicionRestoreOptions(id);
+                                                            adquisicionesRestoreOptions(id);
                                                         }
                                                         field.removeValue(index);
                                                     }}
@@ -185,7 +185,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                         <CardContent className="flex flex-col gap-7">
                                             <FieldGroup className="grid grid-cols-2">
                                                 <form.AppField
-                                                    name={`adquisiciones[${index}].id`}
+                                                    name={`articulos[${index}].dictamen_adquisicion_id`}
                                                     children={(field) => (
                                                         <AdquisicionIdField
                                                             items={adquisicionesOptions}
@@ -200,11 +200,11 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                                 const previousValue = field.state.value;
 
                                                                 if (previousValue !== undefined && previousValue !== value) {
-                                                                    adquisicionRestoreOptions(previousValue);
+                                                                    adquisicionesRestoreOptions(previousValue);
                                                                 }
 
                                                                 if (value !== undefined && previousValue !== value) {
-                                                                    adquisicionRemoveOptions(value);
+                                                                    adquisicionesRemoveOptions(value);
                                                                 }
 
                                                                 return value;
@@ -213,20 +213,20 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                     )}
                                                 />
 
-                                                <form.Subscribe selector={(state) => state.values.adquisiciones[index].id}>
+                                                <form.Subscribe selector={(state) => state.values.articulos[index].dictamen_adquisicion_id}>
                                                     {(adquisicionId) => (
                                                         <form.AppField
-                                                            name={`adquisiciones[${index}].es_resultado_esperado`}
+                                                            name={`articulos[${index}].es_resultado_esperado`}
                                                             children={() => <EsResultadoEsperadoField required />}
                                                             listeners={{
                                                                 onChange: ({ value }) => {
-                                                                    form.setFieldValue(`adquisiciones[${index}].observaciones`, null);
+                                                                    form.setFieldValue(`articulos[${index}].observaciones`, null);
 
                                                                     if (value) {
                                                                         const adquisicion = adquisiciones.find(a => a.id === adquisicionId);
-                                                                        form.setFieldValue(`adquisiciones[${index}].producto_id`, adquisicion?.producto.id);
+                                                                        form.setFieldValue(`articulos[${index}].producto_id`, adquisicion?.producto.id);
                                                                     } else {
-                                                                        form.setFieldValue(`adquisiciones[${index}].producto_id`, undefined);
+                                                                        form.setFieldValue(`articulos[${index}].producto_id`, undefined);
                                                                     }
                                                                 }
                                                             }}
@@ -237,17 +237,17 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
 
                                             <form.Subscribe
                                                 selector={(state) => {
-                                                    const adquisicionField = state.values.adquisiciones[index];
+                                                    const adquisicionField = state.values.articulos[index];
                                                     return {
                                                         esResultadoEsperado: adquisicionField.es_resultado_esperado,
-                                                        adquisicionId: adquisicionField.id
+                                                        adquisicionId: adquisicionField.dictamen_adquisicion_id
                                                     };
                                                 }}
                                             >
                                                 {({ esResultadoEsperado, adquisicionId }) => esResultadoEsperado === false && (
                                                     <FieldGroup className="flex-row">
                                                         <form.AppField
-                                                            name={`adquisiciones[${index}].producto_id`}
+                                                            name={`articulos[${index}].producto_id`}
                                                             children={() => {
                                                                 const adquisicion = adquisiciones.find(a => a.id === adquisicionId);
                                                                 return (
@@ -256,7 +256,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                             }}
                                                         />
                                                         <form.AppField
-                                                            name={`adquisiciones[${index}].observaciones`}
+                                                            name={`articulos[${index}].observaciones`}
                                                             children={() => <ObservacionesField className="col-span-2" required />}
                                                         />
                                                     </FieldGroup>
@@ -265,21 +265,21 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
 
                                             <FieldGroup className="flex-row">
                                                 <form.AppField
-                                                    name={`adquisiciones[${index}].cuenta_contable`}
+                                                    name={`articulos[${index}].cuenta_contable`}
                                                     children={() => <ArticuloCuentaContable required />}
                                                     listeners={{
                                                         onChange: ({ value }) => {
                                                             if (value !== undefined && esCuentaContableNoInventariable(value)) {
-                                                                form.validateField(`adquisiciones[${index}].costo_unitario`, 'change')
+                                                                form.validateField(`articulos[${index}].costo_unitario`, 'change')
                                                             }
                                                         }
                                                     }}
                                                 />
 
-                                                <form.Subscribe selector={(state) => state.values.adquisiciones[index].cuenta_contable}>
+                                                <form.Subscribe selector={(state) => state.values.articulos[index].cuenta_contable}>
                                                     {(cuentaContable) => (
                                                         <form.AppField
-                                                            name={`adquisiciones[${index}].costo_unitario`}
+                                                            name={`articulos[${index}].costo_unitario`}
                                                             children={() => (
                                                                 <ArticuloCostoUnitarioField
                                                                     required={
@@ -295,12 +295,12 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
 
                                             <FieldGroup className="grid grid-cols-2">
                                                 <form.AppField
-                                                    name={`adquisiciones[${index}].numero_serie`}
+                                                    name={`articulos[${index}].numero_serie`}
                                                     children={() => <ArticuloNumeroSerieField />}
                                                 />
 
                                                 <form.AppField
-                                                    name={`adquisiciones[${index}].factura_id`}
+                                                    name={`articulos[${index}].factura_id`}
                                                     children={() => (
                                                         <FacturaField
                                                             proveedorId={ordenCompra?.proveedor.id}

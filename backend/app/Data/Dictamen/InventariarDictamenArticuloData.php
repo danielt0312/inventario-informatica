@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Articulo;
+namespace App\Data\Dictamen;
 
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
@@ -12,12 +12,12 @@ use Spatie\LaravelData\Attributes\{
 
 #[MapInputName(SnakeCaseMapper::class)]
 #[MapOutputName(SnakeCaseMapper::class)]
-class StoreArticuloData extends Data
+class InventariarDictamenArticuloData extends Data
 {
     public function __construct(
+        public int $dictamenAdquisicionId,
         public int $productoVarianteId,
         public int $facturaId,
-        public int $dictamenId,
         public string $cuentaContable,
         public string $esResultadoEsperado,
         public ?string $observaciones = null,

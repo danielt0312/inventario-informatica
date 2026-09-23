@@ -2,9 +2,8 @@
 
 namespace App\Traits\Models\Relations;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
 use App\Models\Proveedor;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait HasProveedor
 {

@@ -43,7 +43,8 @@ return new class extends Migration
                 ->nullable();
             $table->string('cuenta_contable', 11)
                 ->nullable();
-            $table->boolean('es_inventariable');
+            $table->boolean('es_inventariable')
+                ->nullable();
             $table->unsignedBigInteger('dictamen_id')
                 ->nullable();
             $table->boolean('es_resultado_esperado')

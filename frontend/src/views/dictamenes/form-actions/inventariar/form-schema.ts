@@ -6,10 +6,10 @@ import type { ProductoFieldType } from "@/components/features/productos/form-fie
 import type { OrdenCompraFieldType } from "@/components/features/orden_compras/form-fields";
 import z from "zod";
 
-type AdquisicionFields = {
+type ArticuloFields = {
     es_resultado_esperado: EsResultadoEsperadoFieldType;
     observaciones: ObservacionesFieldType;
-    id: number | undefined;
+    dictamen_adquisicion_id: number | undefined;
     cuenta_contable: ArticuloCuentaContableType;
     factura_id: FacturaFieldType;
     producto_id: ProductoFieldType;
@@ -19,28 +19,28 @@ type AdquisicionFields = {
 
 type Schema = {
     orden_compra_id: OrdenCompraFieldType;
-    adquisiciones: AdquisicionFields[];
+    articulos: ArticuloFields[];
 }
 
-export const adquisicionFieldsDefaultValues: AdquisicionFields = {
+const articuloFieldsDefaultValues: ArticuloFields = {
     es_resultado_esperado: undefined,
     observaciones: null,
     factura_id: undefined,
     cuenta_contable: undefined,
     numero_serie: null,
     costo_unitario: null,
-    id: undefined,
+    dictamen_adquisicion_id: undefined,
     producto_id: undefined,
 }
 
 const defaultValues: Schema = {
     orden_compra_id: undefined,
-    adquisiciones: [adquisicionFieldsDefaultValues]
+    articulos: [articuloFieldsDefaultValues]
 };
 
-const adquisicionValidator = z
+const articuloValidator = z
     .object({
-        id: selectedNumberOption,
+        dictamen_adquisicion_id: selectedNumberOption,
         producto_id: selectedNumberOption,
         factura_id: selectedNumberOption,
         cuenta_contable: requiredString
@@ -61,7 +61,7 @@ const adquisicionValidator = z
 
 const validator = z.object({
     orden_compra_id: selectedNumberOption,
-    adquisiciones: requiredArray(adquisicionValidator
+    articulos: requiredArray(articuloValidator
         .refine(
             ({ es_resultado_esperado, observaciones }) => !(
                 es_resultado_esperado === false && (observaciones === null || observaciones.length === 0)
@@ -70,7 +70,7 @@ const validator = z.object({
                 error: 'Este campo es requerido',
                 path: ['observaciones'],
                 when: ({ value }) =>
-                    adquisicionValidator.pick({ es_resultado_esperado: true, observaciones: true })
+                    articuloValidator.pick({ es_resultado_esperado: true, observaciones: true })
                         .safeParse(value)
                         .success
             }
@@ -83,7 +83,7 @@ const validator = z.object({
                 error: 'Este campo es requerido',
                 path: ['costo_unitario'],
                 when: ({ value }) =>
-                    adquisicionValidator.pick({ cuenta_contable: true, costo_unitario: true })
+                    articuloValidator.pick({ cuenta_contable: true, costo_unitario: true })
                         .safeParse(value)
                         .success
             }
@@ -96,4 +96,5 @@ export {
     type Schema as InventariarDictamenSchema,
     validator as inventariarDictamenFormValidator,
     defaultValues as inventariarDictamenFormDefaultValues,
+    articuloFieldsDefaultValues as inventariarDictamenArticuloFieldsDefaultValues
 }

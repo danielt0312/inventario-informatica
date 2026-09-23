@@ -7,14 +7,11 @@ use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
     HasMany,
 };
-use App\Traits\Models\Relations\{
-    HasDocumentable,
-    HasDictamen
-};
+use App\Traits\Models\Relations\HasDocumentable;
 
 class DictamenVersion extends Model
 {
-    use HasDocumentable, HasDictamen;
+    use HasDocumentable;
 
     protected $fillable = [
         'numero_version',
@@ -27,6 +24,11 @@ class DictamenVersion extends Model
         'numero_version' => 1,
         'motivo_cambio' => null
     ];
+
+    public function dictamen(): BelongsTo
+    {
+        return $this->belongsTo(Dictamen::class);
+    }
 
     public function adquisiciones(): HasMany
     {

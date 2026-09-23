@@ -45,7 +45,8 @@ use App\Services\{
 use App\Data\Dictamen\{
     StoreDictamenData,
     DictaminarDictamenData,
-    CorregirDictamenData
+    CorregirDictamenData,
+    InventariarDictamenData
 };
 
 class DictamenController extends Controller
@@ -137,74 +138,7 @@ class DictamenController extends Controller
 
     public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen)
     {
-        $dictamen = DB::transaction(function () use ($request, $dictamen): Dictamen {
-            $validated = $request->validated();
-
-            foreach ($validated['adquisiciones'] as $payloadAdquisicion) {
-                ['cuenta_contable' => $cuentaContable] = $payloadAdquisicion;
-                $producto = $request->getProductos($cuentaContable);
-
-                // todo corregir ingreso de articulos para las licencias
-                $articulo = $request->getFacturaAdquisiciones($cuentaContable)
-                    ->articulos()
-                    ->create([
-                        ...$payloadAdquisicion,
-                        'es_inventariable' => !CuentaContableService::esNoInventariable($payloadAdquisicion['cuenta_contable']),
-                        'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-                        'dictamen_id' => $dictamen->id,
-                        'producto_id' => $producto->id
-                    ]);
-
-                $surtimiento = $articulo->surtimiento()
-                    ->create([
-                        'dictamen_adquisicion_id' => $payloadAdquisicion['id'],
-                    ]);
-            }
-
-            $ordenCompra = $request->getOrdenCompra();
-
-            if ($dictamen->orden_compra_id === null) {
-                $dictamen->ordenCompra()->associate($ordenCompra)->save();
-            }
-
-            foreach ($request->getFacturas() as $factura) {
-                $factura->ordenCompras()->syncWithoutDetaching($ordenCompra);
-            }
-
-            $adquisiciones = $dictamen->versionActual->adquisiciones()
-                ->withCount('surtimientos')
-                ->get();
-
-            $faltaPorSurtirAdquisiciones = $adquisiciones->contains(fn ($a) => $a->surtimientos_count < $a->cantidad);
-            $dictamenEstadoId = $faltaPorSurtirAdquisiciones
-                ? DictamenEstadoEnum::SURTIDO_PARCIAL->value
-                : DictamenEstadoEnum::SURTIDO->value;
-
-            if ($dictamen->tiene_observaciones) {
-                $dictamen->update(['estado_id' => $dictamenEstadoId]);
-                return $dictamen;
-            }
-
-            $algunArticuloTieneObservaciones = $dictamen->whereHas('articulos', fn ($q) => $q->where('es_resultado_esperado', false))
-                ->exists();
-
-            if ($algunArticuloTieneObservaciones) {
-                $dictamen->update([
-                    'estado_id' => $dictamenEstadoId,
-                    'tiene_observaciones' => true
-                ]);
-                return $dictamen;
-            }
-
-            $dictamen->update([
-                'estado_id' => $dictamenEstadoId,
-                'tiene_observaciones' => $faltaPorSurtirAdquisiciones
-                    ? null
-                    : false
-            ]);
-
-            return $dictamen;
-        });
+        $this->dictamenService->inventariar($dictamen, InventariarDictamenData::from($request->validated()), $request->getOrdenCompra());
 
         return $dictamen->load([
                 'estado',

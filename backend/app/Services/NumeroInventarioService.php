@@ -9,7 +9,7 @@ use App\Enums\{
 
 class NumeroInventarioService
 {
-    private const NumeroInventarioEnum DEFAULT = NumeroInventarioEnum::INFORMATICA;
+    private const NumeroInventarioEnum DEFAULT = NumeroInventarioEnum::Informatica;
 
     public static function regex(NumeroInventarioEnum $case = self::DEFAULT): string
     {
@@ -25,5 +25,4 @@ class NumeroInventarioService
     {
         return $case->generate($clasificador->value, $consecutivo);
     }
-
 }

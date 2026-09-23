@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use LogicException;
+use App\Exception\EntityNotEditableException;
 use Illuminate\Support\Facades\DB;
 
 use App\Enums\{
@@ -13,8 +13,8 @@ use App\Enums\{
 
 use App\Models\{
     Archivo,
-    Dictamen
-
+    Dictamen,
+    OrdenCompra
 };
 
 use App\Actions\{
@@ -22,10 +22,13 @@ use App\Actions\{
     CancelarArchivoAction
 };
 
+
+use App\Data\Articulo\StoreArticuloData;
 use App\Data\Dictamen\{
     StoreDictamenData,
     DictaminarDictamenData,
-    CorregirDictamenData
+    CorregirDictamenData,
+    InventariarDictamenData
 };
 
 class DictamenService
@@ -37,7 +40,8 @@ class DictamenService
         protected ArchivoService $archivoService,
         protected DocumentoService $documentoService,
         protected ReemplazarArchivoAction $reemplazarArchivoAction,
-        protected CancelarArchivoAction $cancelarArchivoAction
+        protected CancelarArchivoAction $cancelarArchivoAction,
+        protected ArticuloService $articuloService
     ) {}
 
     public function crear(StoreDictamenData $data, ?Archivo $oficioArchivo): Dictamen
@@ -111,7 +115,7 @@ class DictamenService
             ($this->reemplazarArchivoAction)($dictamen->versionActual->archivo, $dictamenArchivo);
 
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::Surtir->value
+                'estado_id' => DictamenEstadoEnum::PendienteAcuse->value
             ]);
         });
     }
@@ -145,6 +149,72 @@ class DictamenService
                 'estado_id' => DictamenEstadoEnum::PendienteAcuse->value
             ]);
         });
+    }
+
+    public function inventariar(Dictamen $dictamen, InventariarDictamenData $data, ?OrdenCompra $ordenCompra): void
+    {
+        $tieneOrdenCompra = $dictamen->orden_compra_id !== null;
+        if (! $tieneOrdenCompra && $ordenCompra === null) {
+            $this->ordenCompraMissingFailure();
+        }
+
+        DB::transaction(function () use ($dictamen, $data, $ordenCompra, $tieneOrdenCompra) {
+            foreach ($data->articulos as $articuloData) {
+                $articulo = $this->articuloService->crear(StoreArticuloData::from([
+                    ...$articuloData->toArray(),
+                    'dictamen_id' => $dictamen->id
+                ]));
+
+                $articulo->surtimiento()->create([
+                    'dictamen_adquisicion_id' => $articuloData->dictamenAdquisicionId
+                ]);
+            }
+
+            if (! $tieneOrdenCompra) {
+                $dictamen->ordenCompra()->associate($ordenCompra)->save();
+            }
+
+            $dictamen->ordenCompra->facturas()->syncWithoutDetaching(
+                collect($data->articulos)->pluck('facturaId')->unique()->all()
+            );
+
+            $this->resolverSalidaDeInventario($dictamen);
+        });
+    }
+
+    private function resolverSalidaDeInventario(Dictamen $dictamen): void
+    {
+        $adquisiciones = $dictamen->versionActual->adquisiciones()
+            ->withCount('surtimientos')
+            ->get();
+
+        $faltaPorSurtir = $adquisiciones->contains(fn ($a) => $a->surtimientos_count < $a->cantidad);
+        $estadoId = $faltaPorSurtir
+            ? DictamenEstadoEnum::SurtidoParcial->value
+            : DictamenEstadoEnum::Surtido->value;
+
+        if ($dictamen->tiene_observaciones) {
+            $dictamen->update(['estado_id' => $estadoId]);
+            return;
+        }
+
+        $algunArticuloTieneObservaciones = $dictamen->whereHas(
+            'articulos',
+            fn ($q) => $q->where('es_resultado_esperado', false)
+        )->exists();
+
+        if ($algunArticuloTieneObservaciones) {
+            $dictamen->update([
+                'estado_id' => $estadoId,
+                'tiene_observaciones' => true,
+            ]);
+            return;
+        }
+
+        $dictamen->update([
+            'estado_id' => $estadoId,
+            'tiene_observaciones' => $faltaPorSurtir ? null : false,
+        ]);
     }
 
     protected function generateAndAssociatePdf(Dictamen $dictamen): void
@@ -193,6 +263,11 @@ class DictamenService
     protected function oficioArchivoMissingFailure(): void
     {
         throw new LogicException('El archivo del oficio de solicitud es requerido.');
+    }
+
+    protected function ordenCompraMissingFailure(): void
+    {
+        throw new LogicException('La orden de compra es requerida.');
     }
 
     public function productoTipoPuedeRequerirNumeroInventario(ProductoTipoEnum $tipo): bool
