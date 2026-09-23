@@ -22,7 +22,6 @@ use App\Actions\{
     CancelarArchivoAction
 };
 
-
 use App\Data\Articulo\StoreArticuloData;
 use App\Data\Dictamen\{
     StoreDictamenData,

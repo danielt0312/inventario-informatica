@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf as DomPdf;
+use App\Models\Dictamen;
+use App\Services\DictamenService;
+
 use Spatie\QueryBuilder\{
     AllowedFilter,
     QueryBuilder
@@ -19,27 +21,10 @@ use App\Http\Requests\Dictamen\{
     InventariarDictamenRequest
 };
 
-use App\Models\{
-    Dictamen,
-    DictamenAdquisicion,
-    DictamenSurtimiento,
-    Archivo,
-    Oficio
-};
-
 use App\Enums\{
     DocumentoTipoEnum,
     DictamenEstadoEnum,
     ArticuloEstadoEnum
-};
-
-use App\Services\{
-    ArchivoService,
-    CuentaContableService,
-    PdfWatermarkService,
-    DocumentoService,
-    OficioService,
-    DictamenService,
 };
 
 use App\Data\Dictamen\{
@@ -52,10 +37,7 @@ use App\Data\Dictamen\{
 class DictamenController extends Controller
 {
     public function __construct(
-        protected ArchivoService $archivoService,
-        protected DocumentoService $documentoService,
-        protected OficioService $oficioService,
-        protected DictamenService $dictamenService,
+        protected DictamenService $dictamenService
     ) {}
 
     public function index(Request $request)
@@ -126,14 +108,14 @@ class DictamenController extends Controller
             $this->dictamenService->evidenciarAcuse($dictamen, $dictamenArchivo, $oficioArchivo);
         });
 
-        return $dictamen->toResourceResponse();
+        return $dictamen->toResourceResponse(201);
     }
 
     public function surtir(SurtirDictamenRequest $request, Dictamen $dictamen)
     {
         $this->dictamenService->surtir($dictamen);
 
-        return $dictamen->toResourceResponse();
+        return $dictamen->toResourceResponse(201);
     }
 
     public function inventariar(InventariarDictamenRequest $request, Dictamen $dictamen)
@@ -146,6 +128,6 @@ class DictamenController extends Controller
                 'ordenCompra' => ['proveedor'],
                 'versionActual' => ['adquisiciones']
             ])
-            ->toResourceResponse();
+            ->toResourceResponse(201);
     }
 }
