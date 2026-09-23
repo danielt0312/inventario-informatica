@@ -2,22 +2,31 @@
 
 namespace App\Services;
 
+use LogicException;
+use Illuminate\Support\Facades\DB;
+
 use App\Enums\{
     ProductoTipoEnum,
     DictamenEstadoEnum,
     DocumentoTipoEnum
 };
+
 use App\Models\{
     Archivo,
     Dictamen
+
 };
-use App\Actions\ReemplazarArchivoAction;
+
+use App\Actions\{
+    ReemplazarArchivoAction,
+    CancelarArchivoAction
+};
+
 use App\Data\Dictamen\{
     StoreDictamenData,
-    DictaminarDictamenData
+    DictaminarDictamenData,
+    CorregirDictamenData
 };
-use Illuminate\Support\Facades\DB;
-use LogicException;
 
 class DictamenService
 {
@@ -27,7 +36,8 @@ class DictamenService
         protected PdfWatermarkService $pdfWatermarkService,
         protected ArchivoService $archivoService,
         protected DocumentoService $documentoService,
-        protected ReemplazarArchivoAction $reemplazarArchivoAction
+        protected ReemplazarArchivoAction $reemplazarArchivoAction,
+        protected CancelarArchivoAction $cancelarArchivoAction
     ) {}
 
     public function crear(StoreDictamenData $data, ?Archivo $oficioArchivo): Dictamen
@@ -100,7 +110,9 @@ class DictamenService
 
             ($this->reemplazarArchivoAction)($dictamen->versionActual->archivo, $dictamenArchivo);
 
-            $dictamen->update(['estado_id' => DictamenEstadoEnum::Surtir->value]);
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::Surtir->value
+            ]);
         });
     }
 
@@ -109,6 +121,30 @@ class DictamenService
         $dictamen->update([
             'estado_id' => DictamenEstadoEnum::Inventariar->value
         ]);
+    }
+
+    public function corregir(Dictamen $dictamen, CorregirDictamenData $data): void
+    {
+        DB::transaction(function () use ($dictamen, $data) {
+            ($this->cancelarArchivoAction)($dictamen->versionActual->archivo);
+
+            $dictamen->versionActual->update(['motivo_cambio' => $data->motivoCambio]);
+
+            $nuevaVersion = $dictamen->versiones()->create([
+                'numero_version' => $dictamen->versionActual->numero_version + 1,
+                'fecha_solicitud' => now(),
+            ]);
+
+            $nuevaVersion->adquisiciones()->createMany($data->adquisiciones);
+
+            $dictamen->versionActual()->associate($nuevaVersion)->save();
+
+            $this->generateAndAssociatePdf($dictamen);
+
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::PendienteAcuse->value
+            ]);
+        });
     }
 
     protected function generateAndAssociatePdf(Dictamen $dictamen): void

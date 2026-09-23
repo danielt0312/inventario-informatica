@@ -1,10 +1,10 @@
 import GoBackButton from "@/components/Goback";
-import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
+import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DictamenEditarForm } from "./form";
-import { ShowVersionInfo } from "../partials/show-info";
+import { DictamenCorregirForm } from "./form";
+import { ShowVersionInfo } from "../../partials/show-info";
 
-export const DictamenEditarView = () => {
+export const DictamenCorregirView = () => {
     const { dictamen } = EditarRoute.useRouteContext();
 
     return (
@@ -14,7 +14,7 @@ export const DictamenEditarView = () => {
             <Card>
                 <CardHeader>
                     <CardTitle>
-                        Edición de Dictamen
+                        Corrección de Dictamen
                     </CardTitle>
                     <CardAction>
                         <ShowVersionInfo dictamen={dictamen} />
@@ -22,7 +22,7 @@ export const DictamenEditarView = () => {
                 </CardHeader>
 
                 <CardContent>
-                    <DictamenEditarForm />
+                    <DictamenCorregirForm />
                 </CardContent>
             </Card>
         </>

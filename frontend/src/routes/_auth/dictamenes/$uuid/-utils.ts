@@ -1,7 +1,7 @@
 import { DictamenEstadoEnum } from '@/lib/constants';
 import { ActionDictamenStates } from './-constants';
 import type { DetailedDictaminarDictamen, DetailedInventariarDictamen, DetailedSurtirDictamen, DetailedSurtidoDictamen, DetailedSurtidoParcialDictamen, Dictamen, DictamenVersion, DictamenVersionWithArchivo, DictaminarDictamen, InventariarDictamen, InventariarDictamenWithOrdenCompra, SurtirDictamen, SurtidoDictamen, SurtidoParcialDictamen } from '@/types/dictamenes';
-import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen, EditableFormActionDictamen, FormActionDictamen } from './-types';
+import type { DetailedEditableFormActionDictamen, DetailedCorregibleActionDictamen, CorregibleFormActionDictamen, FormActionDictamen } from './-types';
 
 export const isDictaminarDictamen = (dictamen: Dictamen): dictamen is DictaminarDictamen =>
     dictamen.estado.id === DictamenEstadoEnum.Dictaminar;
@@ -36,14 +36,14 @@ export const isDetailedSurtidoParcialDictamen = (dictamen: Dictamen): dictamen i
 export const isActionFormDictamen = (dictamen: Dictamen): dictamen is FormActionDictamen =>
     dictamen.estado.id in ActionDictamenStates;
 
-export const isDetailedActionFormDictamen = (dictamen: Dictamen): dictamen is DetailedFormActionDictamen =>
+export const isDetailedActionFormDictamen = (dictamen: Dictamen): dictamen is DetailedCorregibleActionDictamen =>
     isActionFormDictamen(dictamen);
 
-export const isEditableFormActionDictamen = (dictamen: Dictamen): dictamen is EditableFormActionDictamen =>
-    isSurtirDictamen(dictamen);
+export const isCorregibleFormActionDictamen = (dictamen: Dictamen): dictamen is CorregibleFormActionDictamen =>
+    dictamen.estado.id === DictamenEstadoEnum.Surtir;
 
-export const isDetailedEditableFormActionDictamen = (dictamen: Dictamen): dictamen is DetailedEditableFormActionDictamen =>
-    isDetailedSurtirDictamen(dictamen);
+export const isDetailedCorregibleFormActionDictamen = (dictamen: Dictamen): dictamen is DetailedEditableFormActionDictamen =>
+    isCorregibleFormActionDictamen(dictamen);
 
 export const inventariarDictamenHasOrdenCompra = (dictamen: InventariarDictamen): dictamen is InventariarDictamenWithOrdenCompra =>
     !!dictamen.orden_compra;

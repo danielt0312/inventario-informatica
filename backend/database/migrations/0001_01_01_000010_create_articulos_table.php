@@ -39,7 +39,7 @@ return new class extends Migration
                 ->constrained('archivos', indexName: 'fk_articulos_archivos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('numero_inventario', 11)
+            $table->string('numero_inventario', 13)
                 ->nullable();
             $table->string('cuenta_contable', 11)
                 ->nullable();

@@ -16,7 +16,7 @@ use App\Models\{
     Producto
 };
 
-class UpdateDictamenRequest extends FormRequest
+class CorregirDictamenRequest extends FormRequest
 {
     use InteractsWithDictamen, InteractsWithArticulos;
 
@@ -47,17 +47,20 @@ class UpdateDictamenRequest extends FormRequest
                 'required',
                 'integer'
             ],
-            'adquisiciones.*.producto_id' => [
+            'adquisiciones.*.producto_variante_id' => [
                 'required',
                 'integer',
-                'exists:productos,id'
+                'exists:producto_variantes,id'
             ],
             'adquisiciones.*.numero_inventario' => [
+                'sometimes',
                 'nullable',
-                'string'
+                'string',
+                'max:13'
             ],
             'adquisiciones.*.especificaciones_tecnicas' => [
-                'required',
+                'sometimes',
+                'nullable',
                 'string',
                 'max:255'
             ],

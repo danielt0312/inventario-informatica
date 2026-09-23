@@ -6,9 +6,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { InventariarForm } from "../inventariar/form";
 import { isDetailedDictaminarDictamen, isDetailedInventariarDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
-import type { DetailedFormActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedCorregibleActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 
-export function ActionForm({ dictamen }: { dictamen: DetailedFormActionDictamen }) {
+export function ActionForm({ dictamen }: { dictamen: DetailedCorregibleActionDictamen }) {
     if (isDetailedDictaminarDictamen(dictamen)) {
         return <DictaminarForm dictamen={dictamen} />;
     }
@@ -20,7 +20,7 @@ export function ActionForm({ dictamen }: { dictamen: DetailedFormActionDictamen 
     return <EvidenciarForm dictamen={dictamen} />;
 }
 
-export function useActionFormMutation(dictamen: DetailedFormActionDictamen) {
+export function useActionFormMutation(dictamen: DetailedCorregibleActionDictamen) {
     const action = ActionDictamenStates[dictamen.estado.id];
     const navigate = useNavigate();
 

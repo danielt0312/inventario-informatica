@@ -38,16 +38,6 @@ class Articulo extends Model
         'observaciones',
     ];
 
-    protected $attributes = [
-        'numero_serie' => null,
-        'factura_id' => null,
-        'numero_inventario' => null,
-        'cuenta_contable' => null,
-        'dictamen_id' => null,
-        'es_resultado_esperado' => null,
-        'observaciones' => null
-    ];
-
     public function surtimiento(): HasOne
     {
         return $this->hasOne(DictamenSurtimiento::class);

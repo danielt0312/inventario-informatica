@@ -1,10 +1,11 @@
+import type { SurtirDictamen } from "@/types/dictamenes";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useAppForm } from "@/components/ui/form-context";
-import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
+import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { Form } from "@/components/ui/form";
 import { FieldError, FieldGroup } from "@/components/ui/field";
-import { CantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField } from "../partials/form-fields";
+import { CantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField } from "../../partials/form-fields";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, CircleXIcon, PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,20 +18,18 @@ import { ProductoField } from "@/components/features/productos/form-fields";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { FieldValue } from "@/components/ui/field-value";
-import { ShowBienesInformaticosTitle } from "../partials/show-info";
-import type { SurtirDictamen } from "@/types/dictamenes";
-import React from "react";
+import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 import { Spinner } from "@/components/ui/spinner";
-import { ShowOficioInfo } from "../form-actions/partials/show-info";
+import { ShowOficioInfo } from "../partials/show-info";
 import { BaseFieldLayout } from "@/components/ui/field-layout";
 import { DatePicker } from "@/components/ui/date-picker";
+import React from "react";
 
-function useEditFormMutation(dictamen: SurtirDictamen) {
+function useCorregirFormMutation(dictamen: SurtirDictamen) {
     const navigate = useNavigate();
 
     return useFormMutation({
-        url: `api/dictamenes/${dictamen.uuid}`,
-        method: 'PUT',
+        url: `api/dictamenes/${dictamen.uuid}/corregir`,
         onSuccess: async (_, __, ___, context) => {
             await context.client.invalidateQueries({ queryKey: ['dictamenes'] });
             await navigate({ to: IndexRoute.to });
@@ -38,10 +37,10 @@ function useEditFormMutation(dictamen: SurtirDictamen) {
     });
 }
 
-export const DictamenEditarForm = () => {
+export const DictamenCorregirForm = () => {
     const { dictamen } = EditarRoute.useRouteContext();
 
-    const { mutate, status } = useEditFormMutation(dictamen);
+    const { mutate, status } = useCorregirFormMutation(dictamen);
 
     const form = useAppForm({
         defaultValues: defaultValues(dictamen),

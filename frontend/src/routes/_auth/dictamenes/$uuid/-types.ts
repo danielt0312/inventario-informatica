@@ -10,15 +10,15 @@ type DetailedFormAction =
     | DetailedPendienteAcuseDictamen
     | DetailedInventariarDictamen;
 
-type EditableFormAction =
+type CorregibleFormAction =
     | SurtirDictamen;
 
-type DetailedEditableFormAction =
+type DetailedCorregibleFormAction =
     | DetailedSurtirDictamen;
 
 export type {
     FormAction as FormActionDictamen,
-    DetailedFormAction as DetailedFormActionDictamen,
-    EditableFormAction as EditableFormActionDictamen,
-    DetailedEditableFormAction as DetailedEditableFormActionDictamen
+    DetailedFormAction as DetailedCorregibleActionDictamen,
+    CorregibleFormAction as CorregibleFormActionDictamen,
+    DetailedCorregibleFormAction as DetailedEditableFormActionDictamen
 }

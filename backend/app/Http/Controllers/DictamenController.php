@@ -12,7 +12,7 @@ use Spatie\QueryBuilder\{
 
 use App\Http\Requests\Dictamen\{
     StoreDictamenRequest,
-    UpdateDictamenRequest,
+    CorregirDictamenRequest,
     DictaminarDictamenRequest,
     EvidenciarAcuseDictamenRequest,
     SurtirDictamenRequest,
@@ -24,13 +24,13 @@ use App\Models\{
     DictamenAdquisicion,
     DictamenSurtimiento,
     Archivo,
-    Oficio,
+    Oficio
 };
 
 use App\Enums\{
     DocumentoTipoEnum,
     DictamenEstadoEnum,
-    ArticuloEstadoEnum,
+    ArticuloEstadoEnum
 };
 
 use App\Services\{
@@ -44,7 +44,8 @@ use App\Services\{
 
 use App\Data\Dictamen\{
     StoreDictamenData,
-    DictaminarDictamenData
+    DictaminarDictamenData,
+    CorregirDictamenData
 };
 
 class DictamenController extends Controller
@@ -98,47 +99,9 @@ class DictamenController extends Controller
             ->toResource();
     }
 
-    public function update(UpdateDictamenRequest $request, Dictamen $dictamen, PdfWatermarkService $watermarkService)
+    public function corregir(CorregirDictamenRequest $request, Dictamen $dictamen)
     {
-        $dictamen = DB::transaction(function () use ($request, $dictamen, $watermarkService): Dictamen {
-            $validated = $request->validated();
-
-            $versionCanceladaArchivoPath = $this->archivoService->getFullPath($dictamen->versionActual->archivo);
-            $watermarkService->apply(
-                $versionCanceladaArchivoPath,
-                $versionCanceladaArchivoPath,
-                'CANCELADO'
-            );
-
-            $dictamen->versionActual()->update(['motivo_cambio' => $validated['motivo_cambio']]);
-
-            $nuevaVersion = $dictamen->versiones()->create([
-                'numero_version' => $dictamen->versionActual->numero_version + 1,
-                'fecha_solicitud' => now(),
-            ]);
-
-            $nuevaVersion->adquisiciones()->createMany($request->getAdquisicionesValidatedData());
-
-            $dictamen->versionActual()->associate($nuevaVersion)->save();
-
-            $dictamen->load('versionActual.adquisiciones');
-            $pdf = DomPdf::loadView('pdf-view::dictamen', compact('dictamen'));
-            $archivoNombre = DocumentoTipoEnum::DICTAMEN->getLabelValue();
-
-            $archivo = $this->archivoService->createAndStoreFileFromRaw(
-                $pdf->output(),
-                "{$archivoNombre} - No. {$dictamen->id}/{$dictamen->versionActual->numero_version}",
-                'pdf'
-            );
-
-            $this->documentoService->createForModel($nuevaVersion, $archivo);
-
-            $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::PENDIENTE_ACUSE->value
-            ]);
-
-            return $dictamen;
-        });
+        $this->dictamenService->corregir($dictamen, CorregirDictamenData::fromRequest($request));
 
         return $dictamen->toResourceResponse(201);
     }

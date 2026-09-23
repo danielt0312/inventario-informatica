@@ -20,7 +20,7 @@ import { Route as AuthArticulosIndexRouteImport } from './routes/_auth/articulos
 import { Route as AuthResguardosCrearRouteImport } from './routes/_auth/resguardos/crear'
 import { Route as AuthDictamenesCreateRouteImport } from './routes/_auth/dictamenes/create'
 import { Route as AuthResguardosUuidInspeccionarRouteImport } from './routes/_auth/resguardos/$uuid/inspeccionar'
-import { Route as AuthDictamenesUuidEditarRouteImport } from './routes/_auth/dictamenes/$uuid/editar'
+import { Route as AuthDictamenesUuidCorregirRouteImport } from './routes/_auth/dictamenes/$uuid/corregir'
 import { Route as AuthDictamenesUuidActionRouteImport } from './routes/_auth/dictamenes/$uuid/$action'
 import { Route as AuthArticulosUuidActualizarRouteImport } from './routes/_auth/articulos/$uuid/actualizar'
 
@@ -78,10 +78,10 @@ const AuthResguardosUuidInspeccionarRoute =
     path: '/resguardos/$uuid/inspeccionar',
     getParentRoute: () => AuthRoute,
   } as any)
-const AuthDictamenesUuidEditarRoute =
-  AuthDictamenesUuidEditarRouteImport.update({
-    id: '/dictamenes/$uuid/editar',
-    path: '/dictamenes/$uuid/editar',
+const AuthDictamenesUuidCorregirRoute =
+  AuthDictamenesUuidCorregirRouteImport.update({
+    id: '/dictamenes/$uuid/corregir',
+    path: '/dictamenes/$uuid/corregir',
     getParentRoute: () => AuthRoute,
   } as any)
 const AuthDictamenesUuidActionRoute =
@@ -108,7 +108,7 @@ export interface FileRoutesByFullPath {
   '/resguardos/': typeof AuthResguardosIndexRoute
   '/articulos/$uuid/actualizar': typeof AuthArticulosUuidActualizarRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
-  '/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
+  '/dictamenes/$uuid/corregir': typeof AuthDictamenesUuidCorregirRoute
   '/resguardos/$uuid/inspeccionar': typeof AuthResguardosUuidInspeccionarRoute
 }
 export interface FileRoutesByTo {
@@ -122,7 +122,7 @@ export interface FileRoutesByTo {
   '/resguardos': typeof AuthResguardosIndexRoute
   '/articulos/$uuid/actualizar': typeof AuthArticulosUuidActualizarRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
-  '/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
+  '/dictamenes/$uuid/corregir': typeof AuthDictamenesUuidCorregirRoute
   '/resguardos/$uuid/inspeccionar': typeof AuthResguardosUuidInspeccionarRoute
 }
 export interface FileRoutesById {
@@ -139,7 +139,7 @@ export interface FileRoutesById {
   '/_auth/resguardos/': typeof AuthResguardosIndexRoute
   '/_auth/articulos/$uuid/actualizar': typeof AuthArticulosUuidActualizarRoute
   '/_auth/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
-  '/_auth/dictamenes/$uuid/editar': typeof AuthDictamenesUuidEditarRoute
+  '/_auth/dictamenes/$uuid/corregir': typeof AuthDictamenesUuidCorregirRoute
   '/_auth/resguardos/$uuid/inspeccionar': typeof AuthResguardosUuidInspeccionarRoute
 }
 export interface FileRouteTypes {
@@ -155,7 +155,7 @@ export interface FileRouteTypes {
     | '/resguardos/'
     | '/articulos/$uuid/actualizar'
     | '/dictamenes/$uuid/$action'
-    | '/dictamenes/$uuid/editar'
+    | '/dictamenes/$uuid/corregir'
     | '/resguardos/$uuid/inspeccionar'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -169,7 +169,7 @@ export interface FileRouteTypes {
     | '/resguardos'
     | '/articulos/$uuid/actualizar'
     | '/dictamenes/$uuid/$action'
-    | '/dictamenes/$uuid/editar'
+    | '/dictamenes/$uuid/corregir'
     | '/resguardos/$uuid/inspeccionar'
   id:
     | '__root__'
@@ -185,7 +185,7 @@ export interface FileRouteTypes {
     | '/_auth/resguardos/'
     | '/_auth/articulos/$uuid/actualizar'
     | '/_auth/dictamenes/$uuid/$action'
-    | '/_auth/dictamenes/$uuid/editar'
+    | '/_auth/dictamenes/$uuid/corregir'
     | '/_auth/resguardos/$uuid/inspeccionar'
   fileRoutesById: FileRoutesById
 }
@@ -274,11 +274,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthResguardosUuidInspeccionarRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/dictamenes/$uuid/editar': {
-      id: '/_auth/dictamenes/$uuid/editar'
-      path: '/dictamenes/$uuid/editar'
-      fullPath: '/dictamenes/$uuid/editar'
-      preLoaderRoute: typeof AuthDictamenesUuidEditarRouteImport
+    '/_auth/dictamenes/$uuid/corregir': {
+      id: '/_auth/dictamenes/$uuid/corregir'
+      path: '/dictamenes/$uuid/corregir'
+      fullPath: '/dictamenes/$uuid/corregir'
+      preLoaderRoute: typeof AuthDictamenesUuidCorregirRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_auth/dictamenes/$uuid/$action': {
@@ -307,7 +307,7 @@ interface AuthRouteChildren {
   AuthResguardosIndexRoute: typeof AuthResguardosIndexRoute
   AuthArticulosUuidActualizarRoute: typeof AuthArticulosUuidActualizarRoute
   AuthDictamenesUuidActionRoute: typeof AuthDictamenesUuidActionRoute
-  AuthDictamenesUuidEditarRoute: typeof AuthDictamenesUuidEditarRoute
+  AuthDictamenesUuidCorregirRoute: typeof AuthDictamenesUuidCorregirRoute
   AuthResguardosUuidInspeccionarRoute: typeof AuthResguardosUuidInspeccionarRoute
 }
 
@@ -320,7 +320,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthResguardosIndexRoute: AuthResguardosIndexRoute,
   AuthArticulosUuidActualizarRoute: AuthArticulosUuidActualizarRoute,
   AuthDictamenesUuidActionRoute: AuthDictamenesUuidActionRoute,
-  AuthDictamenesUuidEditarRoute: AuthDictamenesUuidEditarRoute,
+  AuthDictamenesUuidCorregirRoute: AuthDictamenesUuidCorregirRoute,
   AuthResguardosUuidInspeccionarRoute: AuthResguardosUuidInspeccionarRoute,
 }
 

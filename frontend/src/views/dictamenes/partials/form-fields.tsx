@@ -1,6 +1,6 @@
 import { DatePickerField, type DatePickerFieldType } from "@/components/ui/date-picker-field";
 import { InputField, NumberInputField, type InputFieldType, type NumberInputFieldType } from "@/components/ui/input-field";
-import { TextareaField, type TextareaFieldType } from "@/components/ui/textarea-field";
+import { NullableTextareaField, TextareaField, type NullableTextareaFieldType, type TextareaFieldType } from "@/components/ui/textarea-field";
 import { ArchivoUploaderField, type ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
 import React from "react";
 
@@ -68,19 +68,18 @@ export const OficioArchivoField = ({
 );
 
 
-export type DictamenEspecificacionesTecnicasFieldType = TextareaFieldType;
+export type DictamenEspecificacionesTecnicasFieldType = NullableTextareaFieldType;
 export function DictamenEspecificacionesTecnicasField({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof TextareaField>) {
     return (
-        <TextareaField
+        <NullableTextareaField
             fieldLayout={{
                 label: "Especificaciones técnicas",
                 ...fieldLayout
             }}
             placeholder="Ingresa las especificaciones técnicas"
-            required
             {...props}
         />
     );

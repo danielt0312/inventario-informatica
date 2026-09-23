@@ -55,7 +55,8 @@ class StoreDictamenRequest extends FormRequest
             'adquisiciones.*.numero_inventario' => [
                 'sometimes',
                 'nullable',
-                'string'
+                'string',
+                'max:13'
             ]
         ];
     }

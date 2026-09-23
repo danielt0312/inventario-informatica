@@ -106,13 +106,12 @@ Route::middleware('auth:sanctum')->group(function () {
                 });
         });
 
+    Route::apiResource('dictamenes', DictamenController::class)
+        ->only(['index', 'store']);
+
     Route::name('dictamenes.')
         ->prefix('dictamenes')
         ->group(function () {
-            Route::apiResource('', DictamenController::class)
-                ->only(['index', 'store', 'update'])
-                ->parameters(['' => 'dictamen']);
-
             Route::get('{uuid}', [DictamenController::class, 'show'])
                 ->whereUuid('uuid')
                 ->name('show');
@@ -120,7 +119,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::controller(DictamenController::class)
                 ->prefix('{dictamen}')
                 ->group(function () {
-                    foreach (['dictaminar', 'surtir', 'inventariar'] as $action) {
+                    foreach (['dictaminar', 'corregir', 'surtir', 'inventariar'] as $action) {
                         Route::post($action, $action)->name($action);
                     }
 

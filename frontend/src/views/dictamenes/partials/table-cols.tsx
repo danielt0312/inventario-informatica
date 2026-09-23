@@ -1,10 +1,10 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedEditableFormActionDictamen, isDetailedSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
-import { BadgeCheckIcon, CircleDashedCheckIcon, CircleXIcon, PackageOpenIcon, PackagePlusIcon, SquarePenIcon } from "lucide-react";
+import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedCorregibleFormActionDictamen, isDetailedSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { BadgeCheckIcon, CircleDashedCheckIcon, CircleXIcon, FilePenIcon, PackageOpenIcon, PackagePlusIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
-import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/editar";
+import { Route as CorregirRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { useState, type JSX } from "react";
 import { useSurtirMutation } from "../form-actions/surtir/form";
@@ -13,7 +13,7 @@ import { cn, toLocaleDateFormat } from "@/lib/utils";
 import { DictamenEstadoEnum } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
-import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import type { DetailedEditableFormActionDictamen, DetailedCorregibleActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { DetailedDictamen, DetailedSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
 import { ActionRow } from "@/components/ui/action-row";
 import { RouterButton } from "@/components/ui/router-button";
@@ -30,7 +30,7 @@ const FormActionLabel = {
     [ActionDictamenEstadoEnum.INVENTARIAR]: 'Inventariar Bienes Informáticos',
 } as const satisfies Record<ActionDictamenEstadoEnum, string>;
 
-const FormActionItemRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) => {
+const FormActionItemRow = ({ dictamen }: ActionProps<DetailedCorregibleActionDictamen>) => {
     const estadoId = dictamen.estado.id;
 
     return (
@@ -51,15 +51,15 @@ const FormActionItemRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>
     );
 }
 
-const EdicionActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormActionDictamen>) => (
+const CorregirActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormActionDictamen>) => (
     <RouterButton
-        to={EditarRoute.to}
+        to={CorregirRoute.to}
         params={{ uuid: dictamen.uuid }}
-        tooltip={{ message: "Editar" }}
+        tooltip={{ message: "Corregir" }}
         variant="outline"
         size="icon"
     >
-        <SquarePenIcon />
+        <FilePenIcon />
     </RouterButton>
 );
 
@@ -196,8 +196,8 @@ export const columns: ColumnDef<DetailedDictamen>[] = [
 
             return (
                 <div className="flex gap-1">
-                    {isDetailedEditableFormActionDictamen(dictamen) && (
-                        <EdicionActionItemRow dictamen={dictamen} />
+                    {isDetailedCorregibleFormActionDictamen(dictamen) && (
+                        <CorregirActionItemRow dictamen={dictamen} />
                     )}
                     {isDetailedActionFormDictamen(dictamen) && (
                         <FormActionItemRow dictamen={dictamen} />

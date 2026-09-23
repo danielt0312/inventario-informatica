@@ -13,7 +13,7 @@ class EvidenciarAcuseDictamenRequest extends FormRequest
     use InteractsWithDictamen;
 
     protected Archivo $dictamenArchivo;
-    protected Archivo $oficioArchivo;
+    protected ?Archivo $oficioArchivo = null;
 
     public function authorize(): bool
     {
