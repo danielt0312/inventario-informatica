@@ -5,11 +5,13 @@ namespace App\Services;
 use LogicException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Data\Producto\ProductoData;
+
 use App\Models\{
     Producto,
     ProductoVariante
 };
-use App\Data\Producto\ProductoData;
 
 class ProductoService
 {

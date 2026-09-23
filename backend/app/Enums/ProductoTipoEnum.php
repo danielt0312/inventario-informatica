@@ -4,11 +4,19 @@ namespace App\Enums;
 
 use App\Traits\HasFormattedLabel;
 use App\Traits\Enums\IsCatalog;
+
 use App\Models\{
     Disco,
     Licencia,
     Computadora,
-    Camara,
+    Camara
+};
+
+use App\Resource\{
+    DiscoResource,
+    LicenciaResource,
+    ComputadoraResource,
+    CamaraResource
 };
 
 enum ProductoTipoEnum: int
@@ -96,7 +104,7 @@ enum ProductoTipoEnum: int
             self::Mouse                 => ProductoCategoriaEnum::Periferico,
             self::ModuloBateria,
             self::Ups                   => ProductoCategoriaEnum::Electrico,
-            self::Escaner               => ProductoCategoriaEnum::Escaner,
+            self::Escaner               => ProductoCategoriaEnum::Escaner
         };
     }
 
@@ -134,7 +142,7 @@ enum ProductoTipoEnum: int
             self::Telefono              => ClasificadorEnum::ComunicacionTelecomunicacion,
             self::Ups                   => ClasificadorEnum::ElectricoGeneracionElectrica,
             self::Licencia              => ClasificadorEnum::LicenciaInformaticaIntelectual,
-            default                     => ClasificadorEnum::ComputoTecnologiaInformacion,
+            default                     => ClasificadorEnum::ComputoTecnologiaInformacion
         };
     }
 
@@ -145,7 +153,7 @@ enum ProductoTipoEnum: int
             self::Licencia      => Licencia::class,
             self::Computadora   => Computadora::class,
             self::Camara        => Camara::class,
-            default             => null,
+            default             => null
         };
     }
 
@@ -156,20 +164,18 @@ enum ProductoTipoEnum: int
             self::Licencia      => 'licencia',
             self::Computadora   => 'computadora',
             self::Camara        => 'camara',
-            default             => null,
+            default             => null
         };
     }
 
-    public static function tryFromVarianteModel(Model|string $model): ?self
+    public function varianteResourceClass(): string
     {
-        $class = is_object($model) ? $model::class : $model;
-
-        return match($class) {
-            Disco::class       => self::Disco,
-            Licencia::class    => self::Licencia,
-            Computadora::class => self::Computadora,
-            Camara::class      => self::Camara,
-            default            => null,
+        return match ($this->varianteModelClass()) {
+            Disco::class        => DiscoResource::class,
+            Licencia::class     => LicenciaResource::class,
+            Computadora::class  => ComputadoraResource::class,
+            Camara::class       => CamaraResource::class,
+            default             => ProductoVarianteResource::class
         };
     }
 }

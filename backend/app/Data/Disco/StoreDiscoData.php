@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Data\Computadora;
+namespace App\Data\Disco;
 
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Mappers\SnakeCaseMapper;
-use Spatie\LaravelData\Attributes\MapInputName;
 use App\Data\Producto\StoreProductoData;
 
-#[MapInputName(SnakeCaseMapper::class)]
 class StoreDiscoData extends Data
 {
     public function __construct(
