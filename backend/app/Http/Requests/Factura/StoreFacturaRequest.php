@@ -30,7 +30,7 @@ class StoreFacturaRequest extends FormRequest
                 'date',
                 'before_or_equal:today'
             ],
-            'archivo_uuid' => $this->archivoRules(),
+            'archivo_uuid' => $this->archivoRules()
         ];
     }
 }
