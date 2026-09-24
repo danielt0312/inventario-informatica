@@ -6,16 +6,9 @@ use Illuminate\Http\JsonResponse;
 
 trait HasResourceResponse
 {
-    public function toResourceResponse(int $status = 200): JsonResponse
+    public function toResourceResponse(int $status = 200, ?string $resourceClass = null): JsonResponse
     {
-        if (! $this->exists) {
-            throw new \LogicException(sprintf(
-                'Cannot build a resource response for an unpersisted [%s] instance.',
-                static::class
-            ));
-        }
-
-        return $this->toResource()
+        return $this->toResource($resourceClass)
             ->response()
             ->setStatusCode($status);
     }
