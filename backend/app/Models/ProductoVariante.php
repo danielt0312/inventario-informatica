@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Models\HasResourceResponse;
+
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
     MorphTo
@@ -10,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\{
 
 class ProductoVariante extends Model
 {
+    use HasResourceResponse;
+
     protected $fillable = [
         'producto_id',
     ];

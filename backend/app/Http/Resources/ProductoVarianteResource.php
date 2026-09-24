@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Enums\ProductoTipoEnum;
 
 class ProductoVarianteResource extends JsonResource
 {
@@ -12,6 +13,6 @@ class ProductoVarianteResource extends JsonResource
         return [
             'id' => $this->id,
             'producto' => new ProductoResource($this->producto),
-        ];
+        ];;
     }
 }

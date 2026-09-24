@@ -34,7 +34,12 @@ class ProductoService
 
     public function crearConVariante(ProductoIdentidadData $identidad, Model $spec): ProductoVariante
     {
-        $tipo = ProductoTipoEnum::fromVarianteModel($spec);
+        $tipo = ProductoTipoEnum::tryFromVarianteModel($spec);
+
+        if ($tipo === null) {
+            throw new LogicException('El modelo `'.$model::class.'` no corresponde a ningun tipo de producto con variante.');
+        }
+
         $data = ProductoData::from([...$identidad->all(), 'tipoId' => $tipo->value]);
 
         return DB::transaction(function () use ($data, $spec) {

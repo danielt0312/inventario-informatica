@@ -7,13 +7,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class DiscoResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return array_merge(
+            (new ProductoVarianteResource($this->resource))->resolve($request),
+            [
+                'disco' => [
+                    'tipo' => new DiscoTipoResource($this->variante->tipo),
+                    'capacidad' => new DiscoCapacidadResource($this->variante->capacidad),
+                    'interfaz' => new DiscoInterfazResource($this->variante->interfaz),
+                    'factor_forma' => new DiscoFactorFormaResource($this->variante->factor_forma)
+                ]
+            ]
+        );
     }
 }

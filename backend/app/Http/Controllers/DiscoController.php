@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\DiscoService;
 use App\Data\Disco\StoreDiscoData;
 use App\Http\Requests\Disco\StoreDiscoRequest;
+use App\Http\Resources\DiscoResource;
 
 class DiscoController extends Controller
 {
@@ -14,8 +15,8 @@ class DiscoController extends Controller
 
     public function store(StoreDiscoRequest $request)
     {
-        $productoVariante = $this->discoService->crear(StoreDiscoData::from($request->validated()));
-
-        return response(status: 201);
+        return $this->discoService->crear(StoreDiscoData::from($request->validated()))
+            ->load('producto.marca')
+            ->toResourceResponse(201, DiscoResource::class);
     }
 }

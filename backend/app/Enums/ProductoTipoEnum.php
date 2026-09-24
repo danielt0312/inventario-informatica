@@ -169,27 +169,36 @@ enum ProductoTipoEnum: int
         };
     }
 
-    public function varianteResourceClass(): string
+    public function varianteResourceClass(): ?string
     {
         return match ($this->varianteModelClass()) {
             Disco::class        => DiscoResource::class,
             Licencia::class     => LicenciaResource::class,
             Computadora::class  => ComputadoraResource::class,
             Camara::class       => CamaraResource::class,
-            default             => ProductoVarianteResource::class
+            default             => null
         };
     }
 
-    public static function fromVarianteModel(Model $model): self
+    public static function tryFromVarianteModel(Model $model): ?self
     {
         return match (true) {
             $model instanceof Disco         => self::Disco,
             $model instanceof Licencia      => self::Licencia,
             $model instanceof Computadora   => self::Computadora,
             $model instanceof Camara        => self::Camara,
-            default => throw new LogicException(
-                'El modelo ' . $model::class . ' no corresponde a ningún tipo de producto con variante.'
-            ),
+            default => null,
+        };
+    }
+
+    public static function tryFromVarianteMorphAlias(string $alias): ?self
+    {
+        return match ($alias) {
+            'disco'         => self::Disco,
+            'licencia'      => self::Licencia,
+            'computadora'   => self::Computadora,
+            'camara'        => self::Camara,
+            default         => null
         };
     }
 }
