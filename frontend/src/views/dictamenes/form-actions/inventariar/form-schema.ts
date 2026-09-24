@@ -2,7 +2,7 @@ import { nullableNumber, nullableString, requiredArray, requiredString, selected
 import { esCuentaContable, esCuentaContableInventariable } from "@/lib/utils";
 import type { ArticuloCostoUnitarioFieldType, ArticuloCuentaContableType, ArticuloNumeroSerieFieldType, EsResultadoEsperadoFieldType, ObservacionesFieldType } from "@/components/features/articulos/form-fields";
 import type { FacturaFieldType } from "@/components/features/facturas/form-fields";
-import type { ProductoFieldType } from "@/components/features/productos/form-fields";
+import type { ProductoFieldType } from "@/components/features/productos/field";
 import type { OrdenCompraFieldType } from "@/components/features/orden_compras/form-fields";
 import z from "zod";
 

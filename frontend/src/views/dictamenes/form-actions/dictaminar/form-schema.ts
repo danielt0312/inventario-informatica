@@ -1,6 +1,6 @@
 import { nullableString, requiredArray, selectedNumberOption } from "@/lib/schemas/common";
 import type { DictamenEspecificacionesTecnicasFieldType } from "../../partials/form-fields";
-import type { ProductoFieldType } from "@/components/features/productos/form-fields";
+import type { ProductoFieldType } from "@/components/features/productos/field";
 import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
 import z from "zod";
 

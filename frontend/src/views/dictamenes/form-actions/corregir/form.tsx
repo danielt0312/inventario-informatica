@@ -14,7 +14,7 @@ import { DictamenAdquisicion } from "@/lib/utils";
 import { ArticuloNullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { EmpleadoField } from "@/components/features/externos/empleados/form-fields";
 import { adquisicionFieldsDefaultValues, defaultValues, validator } from "./form-schema";
-import { ProductoField } from "@/components/features/productos/form-fields";
+import { ProductoField } from "@/components/features/productos/field";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { FieldValue } from "@/components/ui/field-value";

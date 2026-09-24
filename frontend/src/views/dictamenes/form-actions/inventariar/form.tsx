@@ -5,7 +5,7 @@ import { inventariarDictamenArticuloFieldsDefaultValues, inventariarDictamenForm
 import { useActionFormMutation } from "../partials/form";
 import { Form } from "@/components/ui/form";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProductoField } from "@/components/features/productos/form-fields";
+import { ProductoField } from "@/components/features/productos/field";
 import { FacturaField } from "@/components/features/facturas/form-fields";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { ArticuloCostoUnitarioField, ArticuloCuentaContable, ArticuloNumeroSerieField, EsResultadoEsperadoField, ObservacionesField } from "@/components/features/articulos/form-fields";

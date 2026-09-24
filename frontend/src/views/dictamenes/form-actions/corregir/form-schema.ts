@@ -3,7 +3,7 @@ import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/fea
 import type { NumberInputFieldType } from "@/components/ui/input-field";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
 import type { DictamenEspecificacionesTecnicasFieldType, DictamenMotivoCambioFieldType } from "../../partials/form-fields";
-import type { ProductoFieldType } from "@/components/features/productos/form-fields";
+import type { ProductoFieldType } from "@/components/features/productos/field";
 import type { DetailedSurtirDictamen } from "@/types/dictamenes";
 import { nullableString, positiveInteger, requiredArray, requiredString, selectedNumberOption } from "@/lib/schemas/common";
 import z from "zod";

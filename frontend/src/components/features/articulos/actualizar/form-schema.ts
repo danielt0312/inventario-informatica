@@ -1,8 +1,8 @@
 import { requiredArray, selectedNumberOption } from "@/lib/schemas/common";
-import type { DiscoTipoFieldType } from "../discos/tipo-field";
-import type { ProductoFieldType } from "../../productos/form-fields";
-import type { DiscoCapacidadFieldType } from "../discos/capacidad-field";
-import type { DiscoInterfazFieldType } from "../discos/interfaz-field";
+import type { DiscoTipoFieldType } from "../../discos/tipo-field";
+import type { ProductoFieldType } from "../../productos/field";
+import type { DiscoCapacidadFieldType } from "../../discos/capacidad-field";
+import type { DiscoInterfazFieldType } from "../../discos/interfaz-field";
 import type { RamTipoFieldType } from "../rams/tipo-field";
 import type { RamCapacidadFieldType } from "../rams/capacidad-field";
 import type { RamVelocidadFieldType } from "../rams/velocidad-field";

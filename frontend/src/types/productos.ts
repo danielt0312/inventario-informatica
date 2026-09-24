@@ -1,26 +1,53 @@
+import type { ProductoTipoEnum } from "@/lib/constants";
 import type { TCatalogo } from "./generics";
 
-export type ProductoMarca = TCatalogo;
-export type ProductoCategoria = TCatalogo;
-export type ProductoTipo = TCatalogo & {
+type BaseMarca = TCatalogo;
+type BaseCategoria = TCatalogo;
+type BaseTipo = TCatalogo<ProductoTipoEnum> & {
     es_tangible: boolean;
+};
+
+type CategoriaAttr<TCategoria extends BaseCategoria = BaseCategoria> = {
+    categoria: TCategoria;
 }
-export type Producto = {
-    id: number;
+type TipoAttr<TTipo extends BaseTipo = BaseTipo> = {
+    tipo: TTipo;
+}
+type TiposAttr<TTipo extends BaseTipo = BaseTipo> = {
+    tipos: TTipo[];
+}
+type MarcaAttr<TMarca extends BaseMarca = BaseMarca> = {
+    marca: TMarca;
+}
+type TipoWithCategoria = BaseTipo & CategoriaAttr<BaseCategoria>;
+type TipoWithCategoriaAttr = TipoAttr<TipoWithCategoria>;
+
+type CategoriaWithTipos = BaseCategoria & TiposAttr<BaseTipo>;
+
+type Base = {
     modelo: string;
 }
 
-export type ProductoCategoriaWithTipos = ProductoCategoria & {
-    tipos: ProductoTipo[];
-}
-export type ProductoWithMarca = Producto & {
-    marca: ProductoMarca;
+type Generica<TTipoAttr extends TipoAttr = TipoWithCategoriaAttr, TMarcaAttr extends MarcaAttr = MarcaAttr> = Base & TTipoAttr & TMarcaAttr;
+type Spec<TMarcaAttr extends MarcaAttr = MarcaAttr> = Base & TMarcaAttr;
 
+type Producto = Generica | Spec;
+
+type ProductoAttr<TProducto extends Producto = Producto> = {
+    producto: TProducto;
 }
-export type DetailedProductoTipo = ProductoTipo & {
-    categoria: ProductoCategoria;
+
+type BaseVariante<TProducto extends Producto = Producto> = ProductoAttr<TProducto> & {
+    id: number;
 }
-export type DetailedProducto<TTipo extends DetailedProductoTipo = DetailedProductoTipo> = Producto & {
-    tipo: TTipo;
-    marca: ProductoMarca;
+
+type Variante = BaseVariante;
+type VarianteGenerica = BaseVariante<Generica>;
+type VarianteSpec = BaseVariante<Spec>;
+
+export type {
+    CategoriaWithTipos as ProductoCategoriaWithTipos,
+    Variante as ProductoVariante,
+    VarianteGenerica as ProductoVarianteGenerica,
+    VarianteSpec as ProductoVarianteSpec,
 }

@@ -27,6 +27,12 @@ const factorFormaOptions = queryOptions({
         .then(r => r.data.data)
 });
 
+const options = queryOptions({
+    queryKey: ['discos'],
+    queryFn: () => api.get<TResponse<DiscoFactorForma[]>>('api/disco_factor_formas')
+        .then(r => r.data.data)
+});
+
 export {
     tipoOptions as discoTipoQueryOptions,
     capacidadOptions as discoCapacidadQueryOptions,

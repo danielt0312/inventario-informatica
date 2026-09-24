@@ -9,11 +9,11 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
-import { ProductoField } from "../../productos/form-fields";
+import { ProductoField } from "../../productos/field";
 import { ProductoTipoEnum } from "@/lib/constants";
-import { DiscoTipoField } from "../discos/tipo-field";
-import { DiscoCapacidadField } from "../discos/capacidad-field";
-import { DiscoInterfazField } from "../discos/interfaz-field";
+import { DiscoTipoField } from "../../discos/tipo-field";
+import { DiscoCapacidadField } from "../../discos/capacidad-field";
+import { DiscoInterfazField } from "../../discos/interfaz-field";
 import { Separator } from "@/components/ui/separator";
 import { RamTipoField } from "../rams/tipo-field";
 import { RamCapacidadField } from "../rams/capacidad-field";
