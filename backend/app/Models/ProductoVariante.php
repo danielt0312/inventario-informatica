@@ -14,6 +14,8 @@ class ProductoVariante extends Model
         'producto_id',
     ];
 
+    public $timestamps = false;
+
     public function producto(): BelongsTo
     {
         return $this->belongsTo(Producto::class);

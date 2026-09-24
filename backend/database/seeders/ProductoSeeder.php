@@ -24,6 +24,7 @@ class ProductoSeeder extends Seeder
             ['nombre' => 'Dell'],
             ['nombre' => 'Asus'],
             ['nombre' => 'Apple'],
+            ['nombre' => 'Kingston']
         ]);
 
         // todo eliminar o definir más profundamente

@@ -16,6 +16,8 @@ class Producto extends Model
         'modelo'
     ];
 
+    public $timestamps = false;
+
     public function tipo(): BelongsTo
     {
         return $this->belongsTo(ProductoTipo::class, 'tipo_id');

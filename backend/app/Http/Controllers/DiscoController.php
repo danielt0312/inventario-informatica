@@ -16,9 +16,6 @@ class DiscoController extends Controller
     {
         $productoVariante = $this->discoService->crear(StoreDiscoData::from($request->validated()));
 
-        logger(compact('productoVariante'));
-
-        return $productoVariante
-            ->toResourceResponse(201);
+        return response(status: 201);
     }
 }

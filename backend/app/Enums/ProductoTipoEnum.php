@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasFormattedLabel;
 use App\Traits\Enums\IsCatalog;
 
@@ -111,7 +112,7 @@ enum ProductoTipoEnum: int
     public function formattedLabel(): string
     {
         return match($this) {
-            self::Ram                   => 'Ram',
+            self::Ram                   => 'RAM',
             self::Telefono              => 'Teléfono',
             self::Modem                 => 'Módem',
             self::PanelParcheo          => 'Panel de Parcheo',
@@ -125,7 +126,7 @@ enum ProductoTipoEnum: int
             self::BarraVideo            => 'Barra de Video',
             self::DiscoOptico           => 'Disco Óptico',
             self::ModuloBateria         => 'Módulo de Baterias',
-            self::Ups                   => 'Ups',
+            self::Ups                   => 'UPS',
             self::Escaner               => 'Escáner'
         };
     }
@@ -176,6 +177,19 @@ enum ProductoTipoEnum: int
             Computadora::class  => ComputadoraResource::class,
             Camara::class       => CamaraResource::class,
             default             => ProductoVarianteResource::class
+        };
+    }
+
+    public static function fromVarianteModel(Model $model): self
+    {
+        return match (true) {
+            $model instanceof Disco         => self::Disco,
+            $model instanceof Licencia      => self::Licencia,
+            $model instanceof Computadora   => self::Computadora,
+            $model instanceof Camara        => self::Camara,
+            default => throw new LogicException(
+                'El modelo ' . $model::class . ' no corresponde a ningún tipo de producto con variante.'
+            ),
         };
     }
 }

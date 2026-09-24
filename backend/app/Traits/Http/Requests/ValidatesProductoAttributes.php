@@ -13,11 +13,6 @@ trait ValidatesProductoAttributes
                 'required',
                 'array',
             ],
-            'producto.tipo_id' => [
-                'required',
-                'integer',
-                'exists:producto_tipos,id'
-            ],
             'producto.marca_id' => [
                 'required',
                 'integer',
@@ -25,7 +20,8 @@ trait ValidatesProductoAttributes
             ],
             'producto.modelo' => [
                 'required',
-                'integer',
+                'string',
+                'max:128',
                 'unique:productos,modelo'
             ],
         ];

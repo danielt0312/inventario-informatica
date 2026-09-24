@@ -5,8 +5,12 @@ namespace App\Services;
 use LogicException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\ProductoTipoEnum;
 
-use App\Data\Producto\ProductoData;
+use App\Data\Producto\{
+    ProductoData,
+    ProductoIdentidadData
+};
 
 use App\Models\{
     Producto,
@@ -15,27 +19,29 @@ use App\Models\{
 
 class ProductoService
 {
-    public function createWithVariante(ProductoData $data, ?Model $spec = null): ProductoVariante
+    public function crearGenerico(ProductoData $data): ProductoVariante
     {
-        $expected = $this->varianteModelClass($data->tipoId);
-
-        if ($expected !== null && ! $spec instanceof $expected) {
-            throw new LogicException("Se esperaba una instancia de {$expected} para el tipo {$data->tipoId}");
+        if ($this->tieneVariante($data->tipoId)) {
+            throw new LogicException("El tipo {$data->tipoId} requiere una variante; use `crearConVariante()`.");
         }
 
-        if ($expected === null && $spec !== null) {
-            throw new LogicException("El tipo {$data->tipoId} no admite variante");
-        }
+        return DB::transaction(function () use ($data) {
+            $producto = Producto::firstOrCreate($data->all(), $data->all());
+
+            return $producto->variantes()->create();
+        });
+    }
+
+    public function crearConVariante(ProductoIdentidadData $identidad, Model $spec): ProductoVariante
+    {
+        $tipo = ProductoTipoEnum::fromVarianteModel($spec);
+        $data = ProductoData::from([...$identidad->all(), 'tipoId' => $tipo->value]);
 
         return DB::transaction(function () use ($data, $spec) {
             $producto = Producto::firstOrCreate($data->all(), $data->all());
 
             $variante = $producto->variantes()->make();
-
-            if ($spec !== null) {
-                $variante->variante()->associate($spec);
-            }
-
+            $variante->variante()->associate($spec);
             $variante->save();
 
             return $variante;

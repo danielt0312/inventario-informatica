@@ -58,7 +58,6 @@ return new class extends Migration
             $table->unsignedBigInteger('variante_generica_marker')
                 ->nullable()
                 ->virtualAs('CASE WHEN variante_type IS NULL THEN producto_id ELSE NULL END');
-            $table->timestamps();
 
             $table->unique('variante_generica_marker', 'uk_producto_variantes_generica');
             $table->unique(
