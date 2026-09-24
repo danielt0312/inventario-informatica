@@ -8,7 +8,7 @@ use App\Services\ProductoService;
 
 class StoreProductoRequest extends FormRequest
 {
-    protected function __construct(
+    public function __construct(
         protected ProductoService $productoService
     ) {
         parent::__construct();

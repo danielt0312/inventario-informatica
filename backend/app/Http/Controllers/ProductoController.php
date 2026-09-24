@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Producto;
+use App\Models\ProductoVariante;
+use App\Data\Producto\ProductoData;
 use App\Http\Requests\Producto\StoreProductoRequest;
+use App\Services\ProductoService;
+
 use Spatie\QueryBuilder\{
     AllowedFilter,
     QueryBuilder
@@ -11,17 +14,28 @@ use Spatie\QueryBuilder\{
 
 class ProductoController extends Controller
 {
+    public function __construct(
+        protected ProductoService $productoService
+    ) {}
+
     public function index()
     {
-        return QueryBuilder::for(Producto::class)
-            ->allowedIncludes('tipo.categoria', 'marca')
+        return ProductoVariante::query()
+            // ->where('variante_id', null)
+            ->with([
+                'producto' => [
+                    'tipo.categoria',
+                    'marca'
+                ]
+            ])
             ->get()
             ->toResourceCollection();
     }
 
     public function store(StoreProductoRequest $request)
     {
-        return (Producto::create($request->validated()))
+        return $this->productoService->crearGenerico(ProductoData::from($request->validated()))
+            ->load('producto.marca')
             ->toResourceResponse(201);
     }
 }
