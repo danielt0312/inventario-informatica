@@ -13,6 +13,10 @@ use App\Models\{
     Camara
 };
 
+use App\Services\{
+    DiscoService,
+};
+
 use App\Resource\{
     DiscoResource,
     LicenciaResource,
