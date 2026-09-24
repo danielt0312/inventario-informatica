@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Models\HasResourceResponse;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
@@ -28,5 +30,11 @@ class ProductoVariante extends Model
     public function variante(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    #[Scope]
+    protected function genericas(Builder $query): Builder
+    {
+        return $query->whereNull('variante_type');
     }
 }

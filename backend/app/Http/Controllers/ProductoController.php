@@ -20,8 +20,7 @@ class ProductoController extends Controller
 
     public function index()
     {
-        return ProductoVariante::query()
-            // ->where('variante_id', null)
+        return ProductoVariante::genericas()
             ->with([
                 'producto' => [
                     'tipo.categoria',

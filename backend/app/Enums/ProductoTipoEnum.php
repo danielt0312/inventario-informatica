@@ -194,15 +194,4 @@ enum ProductoTipoEnum: int
             default => null,
         };
     }
-
-    public static function tryFromVarianteMorphAlias(string $alias): ?self
-    {
-        return match ($alias) {
-            'disco'         => self::Disco,
-            'licencia'      => self::Licencia,
-            'computadora'   => self::Computadora,
-            'camara'        => self::Camara,
-            default         => null
-        };
-    }
 }
