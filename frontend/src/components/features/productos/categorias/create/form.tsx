@@ -1,8 +1,8 @@
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { type FormMutation, useFormMutation } from "@/hooks/use-form-mutation";
 import { productoCategoriaDefaultValues, productoCategoriaValidator, type ProductoCategoriaCreateOutputSchema } from "./form-schema";
 import { ProductoCategoriaNombreField } from "./form-fields";
-import { Form as PrimitiveForm } from "@/components/ui/form";
+import { FormLayout as PrimitiveForm } from "@/components/ui/form-layout";
 import type { TResponse } from "@/types/generics";
 import type { ProductoCategoria } from "@/types/productos";
 

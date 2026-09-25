@@ -1,9 +1,9 @@
 import type { SurtirDictamen } from "@/types/dictamenes";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
-import { Form } from "@/components/ui/form";
+import { FormLayout } from "@/components/ui/form-layout";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { CantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField } from "../fields";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ export const DictamenCorregirForm = () => {
     const [showAlertDialog, setShowAlertDialog] = React.useState(false);
 
     return (
-        <Form form={form} className="flex flex-col gap-6">
+        <FormLayout form={form} className="flex flex-col gap-6">
             <form.AppForm>
                 <FieldGroup className="flex-row">
                     <FieldValue
@@ -208,6 +208,6 @@ export const DictamenCorregirForm = () => {
                     </AlertDialogContent>
                 </AlertDialog>
             </form.AppForm>
-        </Form>
+        </FormLayout>
     );
 }

@@ -1,6 +1,6 @@
 import type { Articulo } from "@/types/articulos";
-import { Form } from "@/components/ui/form";
-import { useAppForm } from '@/components/ui/app-form';
+import { FormLayout } from "@/components/ui/form-layout";
+import { useAppForm } from '@/components/ui/form.shared';
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { actualizarArticuloDefaultFormValues, actualizarArticuloDiscoFieldsDefaultValues, actualizarArticuloFormValidator, actualizarArticuloRamFieldsDefaultValues } from "./form-schema";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,7 @@ function ActualizarForm({
     const [alertOpen, setAlertOpen] = React.useState(false);
 
     return (
-        <Form form={form} className="flex flex-col gap-7">
+        <FormLayout form={form} className="flex flex-col gap-7">
             <form.AppForm>
                 <Separator />
                 <CardContent className="flex flex-col gap-7">
@@ -200,7 +200,7 @@ function ActualizarForm({
                     </AlertDialogContent>
                 </AlertDialog>
             </form.AppForm>
-        </Form>
+        </FormLayout>
     );
 }
 

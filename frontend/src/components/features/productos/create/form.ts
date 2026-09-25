@@ -1,6 +1,6 @@
 import type { TResponse } from "@/types/generics";
 import type { Producto } from "@/types/productos";
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { type FormMutation, useFormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator, type OutputSchema } from "./form-schema";
 

@@ -1,7 +1,7 @@
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
 import { createProveedorDefaultValues, createProveedorValidator, type CreateProveedorOutputSchema } from "./form-schema";
-import { Form } from "@/components/ui/form";
+import { FormLayout } from "@/components/ui/form-layout";
 import { ProveedorNombreField, ProveedorRfcField } from "./form-fields";
 import type { TResponse } from "@/types/generics";
 import type { Proveedor } from "@/types/orden_compras";
@@ -32,7 +32,7 @@ export const useCreateProveedorForm = (
     });
 }
 
-interface AppFormProps extends Omit<React.ComponentProps<typeof Form>, 'form'> {
+interface AppFormProps extends Omit<React.ComponentProps<typeof FormLayout>, 'form'> {
     form: ReturnType<typeof useCreateProveedorForm>;
 }
 
@@ -41,7 +41,7 @@ export const AppCreateProveedorForm = ({
     children,
     ...props
 }: AppFormProps) => (
-    <Form form={form} {...props}>
+    <FormLayout form={form} {...props}>
         <form.AppForm>
             <form.AppField
                 name="nombre"
@@ -55,10 +55,10 @@ export const AppCreateProveedorForm = ({
 
             {children}
         </form.AppForm>
-    </Form>
+    </FormLayout>
 );
 
-interface FormProps extends Omit<React.ComponentProps<typeof Form>, 'form'> {
+interface FormProps extends Omit<React.ComponentProps<typeof FormLayout>, 'form'> {
     useFormHook?: typeof useCreateProveedorForm;
 }
 

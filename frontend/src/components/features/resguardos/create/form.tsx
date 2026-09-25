@@ -1,9 +1,9 @@
 import type { Articulo } from "@/types/articulos";
 import type { TResponse } from "@/types/generics";
 import type { DetailedResguardo, ResguardoArticulo } from "@/types/resguardos";
-import { Form } from "@/components/ui/form";
+import { FormLayout } from "@/components/ui/form-layout";
 import { useFieldContext } from "@/components/ui/form-context";
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { EmpleadoField, type EmpleadoFieldType } from "../../externos/empleados/form-fields";
 import { createResguardoDefaultValues, createResguardoValidator, type CreateResguardoSchemaOutput } from "./form-schema";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -74,7 +74,7 @@ function CreateForm() {
             </CardHeader>
 
             <CardContent>
-                <Form form={form} className="flex flex-col gap-7">
+                <FormLayout form={form} className="flex flex-col gap-7">
                     <form.AppForm>
                         <FieldGroup className="flex-row">
                             <form.AppField
@@ -127,7 +127,7 @@ function CreateForm() {
                             </AlertDialogContent>
                         </AlertDialog>
                     </form.AppForm>
-                </Form>
+                </FormLayout>
             </CardContent>
         </Card>
     );

@@ -10,7 +10,7 @@ function RouteComponent() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Documentos almancenados</CardTitle>
+                <CardTitle>Bienes Informáticos</CardTitle>
             </CardHeader>
 
             <CardContent>

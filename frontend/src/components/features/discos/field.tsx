@@ -7,7 +7,7 @@ import { toComboboxGroups, toComboboxItems, type InferComboboxGroupFromFn, type 
 import { CreatableComboboxFieldGrouped } from "@/components/ui/creatable-combobox-field-grouped";
 import { useFieldContext } from "@/components/ui/form-context";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useAppForm } from "@/components/ui/app-form";
+import { useAppForm } from "@/components/ui/form.shared";
 import z from "zod";
 import type { DiscoTipoFieldType } from "./tipo-field";
 import type { DiscoCapacidadFieldType } from "./capacidad-field";
@@ -18,7 +18,7 @@ import { useFormMutation } from "@/hooks/use-form-mutation";
 import type { TResponse } from "@/types/generics";
 import { productoVarianteSpecDefaultFormValues, ProductoVarianteSpecFieldGroup, productoVarianteSpecFormValidator, type ProductoVarianteSpecSchema } from "../productos/spec-form";
 import React from "react";
-import { Form } from "@/components/ui/form";
+import { FormLayout } from "@/components/ui/form-layout";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 
@@ -157,7 +157,7 @@ function Field<Multiple extends boolean | undefined = false>({
                         </DialogDescription>
                     </DialogHeader>
 
-                    <Form form={form} className="contents">
+                    <FormLayout form={form} className="contents">
                         <ProductoVarianteSpecFieldGroup
                             form={form}
                             fields={{
@@ -173,7 +173,7 @@ function Field<Multiple extends boolean | undefined = false>({
                                 <XCircleIcon /> Cerrar
                             </Button>
                         </DialogFooter>
-                    </Form>
+                    </FormLayout>
                 </DialogContent>
             </Dialog>
         </>

@@ -1,7 +1,7 @@
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator, type OutputSchema } from "./form-schema";
-import { Form } from "@/components/ui/form";
+import { FormLayout } from "@/components/ui/form-layout";
 import { FieldGroup } from "@/components/ui/field";
 import { OrdenCompraFechaSolicitudField, OrdenCompraNumeroOrdenField } from "./form-fields";
 import { ProveedorField } from "../../proveedores/form-fields";
@@ -35,7 +35,7 @@ export const useCreateOrdenCompraForm = (
     });
 }
 
-interface AppFormProps extends Omit<React.ComponentProps<typeof Form>, 'form'> {
+interface AppFormProps extends Omit<React.ComponentProps<typeof FormLayout>, 'form'> {
     form: ReturnType<typeof useCreateOrdenCompraForm>;
 }
 
@@ -44,7 +44,7 @@ export const AppCreateOrdenCompraForm = ({
     children,
     ...props
 }: AppFormProps) => (
-    <Form form={form} {...props}>
+    <FormLayout form={form} {...props}>
         <form.AppForm>
             <FieldGroup className="flex-row">
                 <form.AppField
@@ -74,10 +74,10 @@ export const AppCreateOrdenCompraForm = ({
 
             {children}
         </form.AppForm>
-    </Form>
+    </FormLayout>
 );
 
-interface FormProps extends Omit<React.ComponentProps<typeof Form>, 'form'> {
+interface FormProps extends Omit<React.ComponentProps<typeof FormLayout>, 'form'> {
     useFormHook?: typeof useCreateOrdenCompraForm;
 }
 

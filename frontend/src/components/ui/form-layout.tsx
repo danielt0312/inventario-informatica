@@ -4,7 +4,8 @@ import type React from "react";
 interface FormProps extends React.ComponentProps<'form'> {
     form: AnyFormApi;
 }
-export function Form({ form, ...props }: FormProps) {
+
+export function FormLayout({ form, ...props }: FormProps) {
     return (
         <form
             onSubmit={(e) => {

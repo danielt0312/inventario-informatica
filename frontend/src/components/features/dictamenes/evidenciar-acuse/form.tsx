@@ -1,7 +1,7 @@
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Form as PrimitiveForm } from "@/components/ui/form";
+import { FormLayout as PrimitiveForm } from "@/components/ui/form-layout";
 import type { DetailedPendienteAcuseDictamen } from "@/types/dictamenes";
 import { DictamenArchivoField, OficioArchivoField } from "../fields";
 import { evidenciarAcuseFormDefaultValues, evidenciarAcuseFormValidator } from "./form-schema";

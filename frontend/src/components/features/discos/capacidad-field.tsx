@@ -7,11 +7,11 @@ import { discoCapacidadQueryOptions } from "./queries";
 import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useFieldContext } from "@/components/ui/form-context";
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { requiredString } from "@/lib/schemas/common";
 import { InputField, type InputFieldType } from "@/components/ui/input-field";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Form } from "@/components/ui/form";
+import { FormLayout } from "@/components/ui/form-layout";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import React from "react";
@@ -105,7 +105,7 @@ function CapacidadField({
                         </DialogDescription>
                     </DialogHeader>
 
-                    <Form form={form} className="contents">
+                    <FormLayout form={form} className="contents">
                         <form.AppField name="nombre" children={() => <NombreField />} />
 
                         <DialogFooter>
@@ -115,7 +115,7 @@ function CapacidadField({
                                 <XCircleIcon /> Cerrar
                             </Button>
                         </DialogFooter>
-                    </Form>
+                    </FormLayout>
                 </DialogContent>
             </Dialog>
         </>

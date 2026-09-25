@@ -1,8 +1,8 @@
 import type { OrdenCompra } from "@/types/orden_compras";
 import type { DetailedInventariarDictamen, InventariarDictamenAdquisicion } from "@/types/dictamenes";
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { inventariarDictamenArticuloFieldsDefaultValues, inventariarDictamenFormDefaultValues, inventariarDictamenFormValidator } from "./form-schema";
-import { Form } from "@/components/ui/form";
+import { FormLayout } from "@/components/ui/form-layout";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FacturaField } from "@/components/features/facturas/form-fields";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -106,7 +106,7 @@ function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }
 
     return (
         <>
-            <Form form={form}>
+            <FormLayout form={form}>
                 <form.AppForm>
                     <div className="max-w-1/3">
                         {inventariarDictamenHasOrdenCompra(dictamen) ? (
@@ -328,7 +328,7 @@ function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }
                         <PackageCheckIcon /> Ingresar artículos
                     </Button>
                 </form.AppForm>
-            </Form>
+            </FormLayout>
 
             <AlertDialog open={open} onOpenChange={setOpen}>
                 <AlertDialogContent>

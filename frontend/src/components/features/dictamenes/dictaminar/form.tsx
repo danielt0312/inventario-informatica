@@ -1,8 +1,8 @@
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { defaultValues, validator } from "./form-schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Form as PrimitiveForm } from "@/components/ui/form";
+import { FormLayout as PrimitiveForm } from "@/components/ui/form-layout";
 import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
 import { useDictamenFormActionMutation } from '../form-action/view';
 

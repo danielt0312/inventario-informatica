@@ -2,7 +2,7 @@ import { ProductoMarcaField, type ProductoMarcaFieldType } from "./marcas/form-f
 import { ProductoModeloField, type ProductoModeloFieldType } from "./create/form-fields";
 import { requiredString, selectedNumberOption } from "@/lib/schemas/common";
 import z from "zod";
-import { withFieldGroup } from "@/components/ui/app-form";
+import { withFieldGroup } from "@/components/ui/form.shared";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 

@@ -1,5 +1,5 @@
-import { Form } from "@/components/ui/form";
-import { useAppForm } from '@/components/ui/app-form';
+import { FormLayout } from "@/components/ui/form-layout";
+import { useAppForm } from '@/components/ui/form.shared';
 import { evidenciarAcuseResguardoDefaultFormValues, evidenciarAcuseResguardoValidator } from "./form-schema";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { ResguardoAcuseRecibidoField } from "./form-fields";
@@ -30,7 +30,7 @@ function EvidenciarAcuseForm({
     });
 
     return (
-        <Form form={form} className="flex flex-col gap-7">
+        <FormLayout form={form} className="flex flex-col gap-7">
             <form.AppForm>
                 <form.AppField
                     name="acuse_archivo_uuid"
@@ -39,7 +39,7 @@ function EvidenciarAcuseForm({
 
                 <SubmitButton isSubmitting={isPending} disabled={isPending} className="self-start" />
             </form.AppForm>
-        </Form>
+        </FormLayout>
     );
 }
 

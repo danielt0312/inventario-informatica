@@ -1,8 +1,8 @@
 import { createFacturaDefaultValues, createFacturaValidator, type CreateFacturaSchemaOutput } from "./form-schema";
-import { Form as RootForm } from "@/components/ui/form";
+import { FormLayout as RootForm } from "@/components/ui/form-layout";
 import { FacturaFechaEmisionField, FacturaFolioField } from "./form-fields";
 import { ArchivoUploaderField } from "@/components/features/archivos/uploader-field";
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import * as m from "@/hooks/use-form-mutation";
 import * as f from "@tanstack/react-form";
 import type { Factura } from "@/types/documentos";

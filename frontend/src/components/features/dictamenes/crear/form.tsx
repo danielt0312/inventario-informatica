@@ -1,4 +1,4 @@
-import { useAppForm } from '@/components/ui/app-form';
+import { useAppForm } from '@/components/ui/form.shared';
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { PlusCircleIcon, Trash2Icon } from "lucide-react";
@@ -11,11 +11,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { OficioArchivoField, CantidadField, FechaSolicitudField, FolioField } from "../fields";
 import { AdscripcionField } from "@/components/features/adscripciones/field";
 import { EmpleadoField } from '@/components/features/empleados/field';
-import { Form as PrimitiveForm } from "@/components/ui/form";
+import { FormLayout as PrimitiveForm } from "@/components/ui/form-layout";
 import { ProductoTipoField } from '@/components/features/productos/tipo-field';
 import { ArticuloNullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { DictamenAdquisicion } from "@/lib/utils";
-import { ShowBienesInformaticosTitle } from "../../../../views/dictamenes/partials/show-info";
 import { Label } from '@/components/ui/label';
 
 function useCreateFormMutation() {
@@ -147,4 +146,4 @@ function Form() {
     );
 }
 
-export { Form as CreateDictamenForm }
+export { Form as CrearDictamenForm }
