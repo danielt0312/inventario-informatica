@@ -13,6 +13,7 @@ class ProductoVarianteResource extends JsonResource
         return [
             'id' => $this->id,
             'producto' => new ProductoResource($this->producto),
+            'descripcion' => $this->descripcion
         ];;
     }
 }

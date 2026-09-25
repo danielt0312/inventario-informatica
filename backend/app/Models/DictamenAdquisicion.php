@@ -85,12 +85,12 @@ class DictamenAdquisicion extends Model
     {
         return Attribute::make(
             fn (mixed $value, array $attributes): string =>
-                implode(' ', array_filter([
+                str_compact_join(
                     $this->tipo->nombre,
                     $this->marca?->nombre,
                     $this->producto?->modelo,
                     $attributes['especificaciones_tecnicas']
-                ]))
+                )
         );
     }
 }

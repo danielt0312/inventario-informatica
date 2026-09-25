@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Disco extends Model
@@ -39,5 +40,17 @@ class Disco extends Model
     public function factorForma(): BelongsTo
     {
         return $this->belongsTo(DiscoFactorForma::class);
+    }
+
+    public function descripcion(): Attribute
+    {
+        return Attribute::make(
+            fn () => str_compact_join(
+                $this->tipo->nombre,
+                $this->capacidad->nombre,
+                $this->interfaz?->nombre,
+                $this->factorForma?->nombre,
+            )
+        );
     }
 }
