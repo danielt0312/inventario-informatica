@@ -1,6 +1,6 @@
 import type { OrdenCompra } from "@/types/orden_compras";
 import type { DetailedInventariarDictamen, InventariarDictamenAdquisicion } from "@/types/dictamenes";
-import { useAppForm } from "@/components/ui/form-context";
+import { useAppForm } from '@/components/ui/app-form';
 import { inventariarDictamenArticuloFieldsDefaultValues, inventariarDictamenFormDefaultValues, inventariarDictamenFormValidator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Form } from "@/components/ui/form";

@@ -1,4 +1,4 @@
-import { useAppForm } from "@/components/ui/form-context";
+import { useAppForm } from '@/components/ui/app-form';
 import { type FormMutation, useFormMutation } from "@/hooks/use-form-mutation";
 import { productoCategoriaDefaultValues, productoCategoriaValidator, type ProductoCategoriaCreateOutputSchema } from "./form-schema";
 import { ProductoCategoriaNombreField } from "./form-fields";

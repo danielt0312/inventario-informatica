@@ -11,7 +11,7 @@ import {
     type ComboboxFieldType,
 } from "./combobox-field.shared"
 
-type ComboboxFieldGroupedProps<
+export type ComboboxFieldGroupedProps<
     TItem extends ComboboxLayoutItem,
     TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
     Multiple extends boolean | undefined = false,

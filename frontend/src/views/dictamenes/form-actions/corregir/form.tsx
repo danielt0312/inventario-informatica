@@ -1,6 +1,6 @@
 import type { SurtirDictamen } from "@/types/dictamenes";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { useAppForm } from "@/components/ui/form-context";
+import { useAppForm } from '@/components/ui/app-form';
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { Form } from "@/components/ui/form";

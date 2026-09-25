@@ -67,5 +67,11 @@ function createCreatableComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyTyp
     }
 }
 
-export const CreatableComboboxFieldSimple = createCreatableComboboxFieldSimple(undefined)
-export const NullableCreatableComboboxFieldSimple = createCreatableComboboxFieldSimple(null)
+const CreatableComboboxFieldSimple = createCreatableComboboxFieldSimple(undefined)
+const NullableCreatableComboboxFieldSimple = createCreatableComboboxFieldSimple(null)
+
+export {
+    CreatableComboboxFieldSimple,
+    NullableCreatableComboboxFieldSimple,
+    type CreatableComboboxFieldSimpleProps
+}

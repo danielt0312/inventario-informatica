@@ -1,6 +1,6 @@
 import type { Articulo } from "@/types/articulos";
 import { Form } from "@/components/ui/form";
-import { useAppForm } from "@/components/ui/form-context";
+import { useAppForm } from '@/components/ui/app-form';
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { actualizarArticuloDefaultFormValues, actualizarArticuloDiscoFieldsDefaultValues, actualizarArticuloFormValidator, actualizarArticuloRamFieldsDefaultValues } from "./form-schema";
 import { Button } from "@/components/ui/button";

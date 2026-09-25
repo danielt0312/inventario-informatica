@@ -45,9 +45,12 @@ type Variante = BaseVariante;
 type VarianteGenerica = BaseVariante<Generica>;
 type VarianteSpec = BaseVariante<Spec>;
 
+type Tipo = BaseTipo;
+
 export type {
     CategoriaWithTipos as ProductoCategoriaWithTipos,
     Variante as ProductoVariante,
     VarianteGenerica as ProductoVarianteGenerica,
     VarianteSpec as ProductoVarianteSpec,
+    Tipo as ProductoTipo
 }

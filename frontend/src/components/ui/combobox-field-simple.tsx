@@ -10,7 +10,7 @@ import {
     useComboboxFieldContext,
 } from "./combobox-field.shared"
 
-type ComboboxFieldSimpleProps<
+export type ComboboxFieldSimpleProps<
     TItem extends ComboboxLayoutItem,
     Multiple extends boolean | undefined = false,
     TEmpty extends ComboboxFieldEmptyType = undefined,

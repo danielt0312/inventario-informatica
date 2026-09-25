@@ -78,5 +78,11 @@ function createCreatableComboboxFieldGrouped<TEmpty extends ComboboxFieldEmptyTy
     }
 }
 
-export const CreatableComboboxFieldGrouped = createCreatableComboboxFieldGrouped(undefined)
-export const NullableCreatableComboboxFieldGrouped = createCreatableComboboxFieldGrouped(null)
+const CreatableComboboxFieldGrouped = createCreatableComboboxFieldGrouped(undefined)
+const NullableCreatableComboboxFieldGrouped = createCreatableComboboxFieldGrouped(null)
+
+export {
+    CreatableComboboxFieldGrouped,
+    NullableCreatableComboboxFieldGrouped,
+    type CreatableComboboxFieldGroupedProps
+}

@@ -20,10 +20,6 @@ export type ComboboxLayoutItem<TValue extends React.Key = React.Key> = {
  * Forma mínima obligatoria para un grupo. `label` amarrado por
  * consistencia con ComboboxLayoutItem (decisión de API propia,
  * Base UI no impone ninguna convención de label para grupos).
- *
- * Nota: sin `Record<string, unknown>` — no hace falta una firma de
- * índice para permitir campos extra; un tipo que extiende esta forma
- * vía genérico ya puede traer propiedades adicionales sin problema.
  */
 export type ComboboxLayoutGroup<TItem extends ComboboxLayoutItem> = {
   label: React.ReactNode
@@ -77,3 +73,11 @@ export function toComboboxGroups<
 ): TGroup[] {
     return source.map(toGroup)
 }
+
+export type InferComboboxGroupFromFn<
+  T extends (...args: any[]) => readonly ComboboxLayoutGroup<any>[]
+> = ReturnType<T>[number]
+
+export type InferComboboxItemFromFn<
+  T extends (...args: any[]) => readonly ComboboxLayoutGroup<any>[]
+> = InferComboboxGroupFromFn<T>["items"][number]

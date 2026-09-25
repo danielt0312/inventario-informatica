@@ -1,4 +1,4 @@
-import { useAppForm } from "@/components/ui/form-context";
+import { useAppForm } from '@/components/ui/app-form';
 import { useFormMutation, type FormMutation } from "@/hooks/use-form-mutation";
 import { defaultValues, validator, type OutputSchema } from "./form-schema";
 import { Form } from "@/components/ui/form";
