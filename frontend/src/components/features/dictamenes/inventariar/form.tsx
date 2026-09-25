@@ -2,15 +2,13 @@ import type { OrdenCompra } from "@/types/orden_compras";
 import type { DetailedInventariarDictamen, InventariarDictamenAdquisicion } from "@/types/dictamenes";
 import { useAppForm } from '@/components/ui/app-form';
 import { inventariarDictamenArticuloFieldsDefaultValues, inventariarDictamenFormDefaultValues, inventariarDictamenFormValidator } from "./form-schema";
-import { useActionFormMutation } from "../../../../views/dictamenes/form-actions/partials/form";
 import { Form } from "@/components/ui/form";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FacturaField } from "@/components/features/facturas/form-fields";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { ArticuloCostoUnitarioField, ArticuloCuentaContable, ArticuloNumeroSerieField, EsResultadoEsperadoField, ObservacionesField } from "@/components/features/articulos/form-fields";
 import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
-import { inventariarDictamenHasOrdenCompra } from "@/routes/_auth/dictamenes/$uuid/-utils";
-import { ShowBienesInformaticosTitle } from "../../../../views/dictamenes/partials/show-info";
+import { inventariarDictamenHasOrdenCompra } from "@/components/features/dictamenes/helpers";
 import { Button } from "@/components/ui/button";
 import { BadgeCheckIcon, CircleArrowRightIcon, CircleXIcon, PackageCheckIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachment-layout";
@@ -21,6 +19,8 @@ import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Spinner } from "@/components/ui/spinner";
 import React from "react";
+import { useDictamenFormActionMutation } from "../form-action/view";
+import { Label } from "@/components/ui/label";
 
 function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]) {
     const initialOptions = React.useMemo(() =>
@@ -72,7 +72,7 @@ function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]
 }
 
 function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }) {
-    const { mutate, status } = useActionFormMutation(dictamen);
+    const { mutate, status } = useDictamenFormActionMutation(dictamen);
 
     const cleanedDefaultValues = inventariarDictamenHasOrdenCompra(dictamen)
         ? { ...inventariarDictamenFormDefaultValues, orden_compra_id: dictamen.orden_compra.id }
@@ -135,7 +135,7 @@ function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }
                         {(field) => (
                             <>
                                 <div className="flex flex-row justify-between">
-                                    <ShowBienesInformaticosTitle />
+                                    <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
                                     <Button
                                         disabled={field.state.value.length >= cantidadTotal}
                                         onClick={() => {

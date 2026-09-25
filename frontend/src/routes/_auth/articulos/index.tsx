@@ -1,6 +1,21 @@
-import { ArticuloIndexView } from '@/views/articulos'
+import { ArticuloTable } from '@/components/features/articulos/table';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth/articulos/')({
-    component: ArticuloIndexView
-})
+    component: RouteComponent
+});
+
+function RouteComponent() {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Documentos almancenados</CardTitle>
+            </CardHeader>
+
+            <CardContent>
+                <ArticuloTable />
+            </CardContent>
+        </Card>
+    );
+}

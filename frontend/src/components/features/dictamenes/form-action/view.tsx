@@ -1,14 +1,14 @@
-import { ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
+import type { DetailedFormActionDictamen } from "./types";
 import { Form as EvidenciarForm } from "../evidenciar-acuse/form";
 import { DictaminarDictamenForm } from "../dictaminar/form";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
-import { InventariarDictamenForm } from "../../../../components/features/dictamenes/inventariar/form";
-import { isDetailedDictaminarDictamen, isDetailedInventariarDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
-import type { DetailedCorregibleActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
+import { InventariarDictamenForm } from "../inventariar/form";
+import { isDetailedDictaminarDictamen, isDetailedInventariarDictamen } from "@/components/features/dictamenes/helpers";
+import { ActionDictamenStates } from "./constants";
 
-export function ActionForm({ dictamen }: { dictamen: DetailedCorregibleActionDictamen }) {
+function FormAction({ dictamen }: { dictamen: DetailedFormActionDictamen }) {
     if (isDetailedDictaminarDictamen(dictamen)) {
         return <DictaminarDictamenForm dictamen={dictamen} />;
     }
@@ -20,7 +20,7 @@ export function ActionForm({ dictamen }: { dictamen: DetailedCorregibleActionDic
     return <EvidenciarForm dictamen={dictamen} />;
 }
 
-export function useActionFormMutation(dictamen: DetailedCorregibleActionDictamen) {
+function useFormActionMutation(dictamen: DetailedFormActionDictamen) {
     const action = ActionDictamenStates[dictamen.estado.id];
     const navigate = useNavigate();
 
@@ -31,4 +31,9 @@ export function useActionFormMutation(dictamen: DetailedCorregibleActionDictamen
             navigate({ to: IndexRoute.to });
         }
     })
+}
+
+export {
+    FormAction as DictamenFormAction,
+    useFormActionMutation as useDictamenFormActionMutation
 }

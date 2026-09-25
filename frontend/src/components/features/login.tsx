@@ -32,7 +32,7 @@ const validator = z.object({
     password: requiredString
 });
 
-export function View() {
+function View() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -125,4 +125,8 @@ export function View() {
             </CardContent>
         </Card>
     );
+}
+
+export {
+    View as LoginView
 }

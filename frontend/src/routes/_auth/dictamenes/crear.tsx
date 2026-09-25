@@ -1,7 +1,7 @@
 import GoBackButton from '@/components/Goback';
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CreateDictamenForm } from '@/views/dictamenes/create/form';
-import { dictamenFormActionGetTitle, SidebarSteps } from '@/views/dictamenes/form-actions/partials/form-steps';
+import { CreateDictamenForm } from '@/components/features/dictamenes/create/form';
+import { dictamenFormActionGetTitle, SidebarSteps } from '@/components/features/dictamenes/partials/form-steps';
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth/dictamenes/crear')({

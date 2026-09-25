@@ -18,7 +18,7 @@ type DetailedCorregibleFormAction =
 
 export type {
     FormAction as FormActionDictamen,
-    DetailedFormAction as DetailedCorregibleActionDictamen,
+    DetailedFormAction as DetailedFormActionDictamen,
     CorregibleFormAction as CorregibleFormActionDictamen,
     DetailedCorregibleFormAction as DetailedEditableFormActionDictamen
 }

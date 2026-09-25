@@ -10,7 +10,7 @@ import type { ProductoTipoFieldType } from "@/components/features/productos/tipo
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/empleados/field";
 import type { AdscripcionFieldType } from "@/components/features/adscripciones/field";
-import type { CantidadFieldType, FechaSolicitudFieldType, FolioFieldType, OficioArchivoFieldType } from "../partials/form-fields";
+import type { CantidadFieldType, FechaSolicitudFieldType, FolioFieldType, OficioArchivoFieldType } from "../fields";
 import z from "zod";
 
 type AdquisicionFields = {

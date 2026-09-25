@@ -1,22 +1,22 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedCorregibleFormActionDictamen, isDetailedSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/routes/_auth/dictamenes/$uuid/-utils";
+import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedCorregibleFormActionDictamen, isDetailedSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/components/features/dictamenes/helpers";
 import { BadgeCheckIcon, CircleDashedCheckIcon, CircleXIcon, FilePenIcon, PackageOpenIcon, PackagePlusIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { Route as CorregirRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
-import { ActionDictamenEstadoEnum, ActionDictamenStates } from "@/routes/_auth/dictamenes/$uuid/-constants";
 import { useState, type JSX } from "react";
-import { useSurtirMutation } from "../form-actions/surtir/form";
+import { useSurtirMutation } from "./surtir/form";
 import { ArchivoPreviewActionRow } from "@/components/features/archivos/table-cols";
 import { cn, toLocaleDateFormat } from "@/lib/utils";
 import { DictamenEstadoEnum } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
-import type { DetailedEditableFormActionDictamen, DetailedCorregibleActionDictamen } from "@/routes/_auth/dictamenes/$uuid/-types";
 import type { DetailedDictamen, DetailedSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
 import { ActionRow } from "@/components/ui/action-row";
 import { RouterButton } from "@/components/ui/router-button";
+import { ActionDictamenEstadoEnum, ActionDictamenStates } from "./form-action/constants";
+import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen } from "./form-action/types";
 
 const FormActionIcon = {
     [ActionDictamenEstadoEnum.DICTAMINAR]: <CircleDashedCheckIcon />,
@@ -30,7 +30,7 @@ const FormActionLabel = {
     [ActionDictamenEstadoEnum.INVENTARIAR]: 'Inventariar Bienes Informáticos',
 } as const satisfies Record<ActionDictamenEstadoEnum, string>;
 
-const FormActionItemRow = ({ dictamen }: ActionProps<DetailedCorregibleActionDictamen>) => {
+const FormActionItemRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) => {
     const estadoId = dictamen.estado.id;
 
     return (
@@ -159,7 +159,7 @@ const EstadoBadge = ({
     </Badge>
 )
 
-export const columns: ColumnDef<DetailedDictamen>[] = [
+const defaultColumns: ColumnDef<DetailedDictamen>[] = [
     {
         header: "Fecha de Solicitud",
         cell: ({ row }) => toLocaleDateFormat(row.original.version_actual.fecha_solicitud)
@@ -218,5 +218,6 @@ export const columns: ColumnDef<DetailedDictamen>[] = [
 export {
     estadoColorVariants as dictamenEstadoColorVariants,
     EstadoBadge as DictamenEstadoBadge,
-    FormActionLabel as DictamenFormActionLabel
+    FormActionLabel as DictamenFormActionLabel,
+    defaultColumns as dictamenDefaultTableColumns
 }

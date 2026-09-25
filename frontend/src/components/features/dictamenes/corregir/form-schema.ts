@@ -2,7 +2,7 @@ import type { ProductoTipoFieldType } from "@/components/features/productos/tipo
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { NumberInputFieldType } from "@/components/ui/input-field";
 import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
-import type { DictamenEspecificacionesTecnicasFieldType, DictamenMotivoCambioFieldType } from "../../partials/form-fields";
+import type { DictamenEspecificacionesTecnicasFieldType, DictamenMotivoCambioFieldType } from "../fields";
 import type { ProductoFieldType } from "@/components/features/productos/generica-field";
 import type { DetailedSurtirDictamen } from "@/types/dictamenes";
 import { nullableString, positiveInteger, requiredArray, requiredString, selectedNumberOption } from "@/lib/schemas/common";

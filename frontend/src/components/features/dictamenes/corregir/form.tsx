@@ -5,7 +5,7 @@ import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { Form } from "@/components/ui/form";
 import { FieldError, FieldGroup } from "@/components/ui/field";
-import { CantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField } from "../../partials/form-fields";
+import { CantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField } from "../fields";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, CircleXIcon, PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,12 +18,12 @@ import { ProductoField } from "@/components/features/productos/generica-field";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { FieldValue } from "@/components/ui/field-value";
-import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 import { Spinner } from "@/components/ui/spinner";
-import { ShowOficioInfo } from "../partials/show-info";
+import { ShowOficioInfo } from "../common";
 import { BaseFieldLayout } from "@/components/ui/field-layout";
 import { DatePicker } from "@/components/ui/date-picker";
 import React from "react";
+import { Label } from "@/components/ui/label";
 
 function useCorregirFormMutation(dictamen: SurtirDictamen) {
     const navigate = useNavigate();
@@ -76,7 +76,7 @@ export const DictamenCorregirForm = () => {
                     {(field) => (
                         <>
                             <div className="flex flex-row justify-between">
-                                <ShowBienesInformaticosTitle />
+                                <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
                                 <Button
                                     variant="outline"
                                     size="sm"

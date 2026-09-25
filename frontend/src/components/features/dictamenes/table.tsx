@@ -1,22 +1,22 @@
+import type { TResponse, TCatalogo } from "@/types/generics";
+import type { DictamenEstado } from "@/types/dictamenes";
 import { QueryDataTable, SearchInput } from "@/components/ui/query-datatable";
-import { columns, DictamenEstadoBadge } from "./table-cols";
+import { dictamenDefaultTableColumns, DictamenEstadoBadge } from "./table-cols";
 import { useDebouncedFilters } from "@/hooks/use-debounced-filters";
 import { useQuery } from "@tanstack/react-query";
 import { MultiSelect } from "@/components/ui/multiselect";
-import api from "@/lib/axios";
-import type { TResponse, TCatalogo } from "@/types/generics";
 import { PlusCircle } from "lucide-react";
 import { Route as CreateRoute } from "@/routes/_auth/dictamenes/crear";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
-import type { DictamenEstado } from "@/types/dictamenes";
 import { RouterButton } from "@/components/ui/router-button";
+import api from "@/lib/axios";
 
 interface TableFilters {
     folio: string;
     estados: string[];
 }
 
-export function Table() {
+function Table() {
     const { debouncedFilters, filters, setFilters } = useDebouncedFilters<TableFilters>({
         folio: '',
         estados: []
@@ -32,7 +32,7 @@ export function Table() {
 
     return (
         <QueryDataTable
-            columns={columns}
+            columns={dictamenDefaultTableColumns}
             filter={debouncedFilters}
             url="api/dictamenes"
             queryKey={['dictamenes']}
@@ -74,4 +74,8 @@ export function Table() {
             }}
         />
     );
+}
+
+export {
+    Table as DictamenTable
 }

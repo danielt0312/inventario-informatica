@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { detailedDictamenQueryOptions } from './-queries'
-import { isDetailedCorregibleFormActionDictamen } from './-utils';
+import { detailedDictamenQueryOptions } from '../../../../components/features/dictamenes/queries'
+import { isDetailedCorregibleFormActionDictamen } from '../../../../components/features/dictamenes/helpers';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
-import { DictamenCorregirView } from '@/views/dictamenes/form-actions/corregir/view';
+import { DictamenCorregirView } from '@/components/features/dictamenes/corregir/view';
 
 export const Route = createFileRoute('/_auth/dictamenes/$uuid/corregir')({
     component: DictamenCorregirView,

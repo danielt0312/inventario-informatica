@@ -1,16 +1,13 @@
 import { useAppForm } from '@/components/ui/app-form';
 import { defaultValues, validator } from "./form-schema";
-import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ProductoField } from "@/components/features/productos/generica-field";
 import { Form as PrimitiveForm } from "@/components/ui/form";
-import { DictamenEspecificacionesTecnicasField } from "../../partials/form-fields";
-import { ShowBienesInformaticosTitle } from "../../partials/show-info";
 import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
+import { useDictamenFormActionMutation } from '../form-action/view';
 
 const useForm = (dictamen: DetailedDictaminarDictamen) => {
-    const { mutate } = useActionFormMutation(dictamen);
+    const { mutate } = useDictamenFormActionMutation(dictamen);
 
     return useAppForm({
         defaultValues: defaultValues(dictamen),
@@ -29,7 +26,7 @@ function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
 
     return (
         <PrimitiveForm form={form}>
-            <ShowBienesInformaticosTitle />
+            <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
 
             <form.AppForm>
                 {dictamen.version_actual.adquisiciones.map((adquisicion, index) => {

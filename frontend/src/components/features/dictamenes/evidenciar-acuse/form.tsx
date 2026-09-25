@@ -3,13 +3,12 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form as PrimitiveForm } from "@/components/ui/form";
 import type { DetailedPendienteAcuseDictamen } from "@/types/dictamenes";
-import { useActionFormMutation } from "../partials/form";
-import { DictamenArchivoField, OficioArchivoField } from "../../partials/form-fields";
-import { ShowBienesInformaticosTitle } from "../../partials/show-info";
+import { DictamenArchivoField, OficioArchivoField } from "../fields";
 import { evidenciarAcuseFormDefaultValues, evidenciarAcuseFormValidator } from "./form-schema";
+import { useDictamenFormActionMutation } from '../form-action/view';
 
 export function useForm(dictamen: DetailedPendienteAcuseDictamen) {
-    const { mutate } = useActionFormMutation(dictamen);
+    const { mutate } = useDictamenFormActionMutation(dictamen);
 
     // TODO validar cuando el oficio no existe debido a la adscripcion
     const validator = evidenciarAcuseFormValidator(!(dictamen.oficio && dictamen.oficio.verified_at !== null));
@@ -44,7 +43,7 @@ export function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen })
                     />
                 )}
 
-                <ShowBienesInformaticosTitle />
+                <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
 
                 {dictamen.version_actual.adquisiciones.map((adquisicion, index) => {
                     const producto = adquisicion.producto;

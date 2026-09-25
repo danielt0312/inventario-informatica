@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { BaseFieldLayout } from "@/components/ui/field-layout";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/datatable";
-import { articuloDefaultColumnsBuilder } from "@/views/articulos/partials/table-cols";
+import { articuloDefaultColumnsBuilder } from "@/components/features/articulos/table-cols";
 import { toLocaleDateFormat } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

@@ -8,14 +8,15 @@ import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
-import { OficioArchivoField, CantidadField, FechaSolicitudField, FolioField } from "../partials/form-fields";
+import { OficioArchivoField, CantidadField, FechaSolicitudField, FolioField } from "../fields";
 import { AdscripcionField } from "@/components/features/adscripciones/field";
 import { EmpleadoField } from '@/components/features/empleados/field';
 import { Form as PrimitiveForm } from "@/components/ui/form";
 import { ProductoTipoField } from '@/components/features/productos/tipo-field';
 import { ArticuloNullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { DictamenAdquisicion } from "@/lib/utils";
-import { ShowBienesInformaticosTitle } from "../partials/show-info";
+import { ShowBienesInformaticosTitle } from "../../../../views/dictamenes/partials/show-info";
+import { Label } from '@/components/ui/label';
 
 function useCreateFormMutation() {
     const navigate = useNavigate();
@@ -75,7 +76,7 @@ function Form() {
                     {(field) => (
                         <>
                             <div className="flex flex-row justify-between">
-                                <ShowBienesInformaticosTitle />
+                                <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
                                 <Button
                                     variant="outline"
                                     size="sm"

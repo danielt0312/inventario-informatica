@@ -4,7 +4,7 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CheckIcon } from "lucide-react";
-import { DictamenFormActionLabel } from "../../partials/table-cols";
+import { DictamenFormActionLabel } from "../table-cols";
 
 const OrderActionDictamenEstado = [
     undefined,
@@ -89,7 +89,7 @@ export function Steps({
     )
 }
 
-export function SidebarSteps({
+function Wizard({
     step,
     children
 }: {
@@ -109,4 +109,8 @@ export function SidebarSteps({
             </div>
         </Card>
     );
+}
+
+export {
+    Wizard as DictamenFormActionWizard
 }

@@ -1,7 +1,7 @@
 import { DictamenEstadoEnum } from '@/lib/constants';
-import { ActionDictamenStates } from './-constants';
+import { ActionDictamenStates } from './form-action/constants';
 import type { DetailedDictaminarDictamen, DetailedInventariarDictamen, DetailedSurtirDictamen, DetailedSurtidoDictamen, DetailedSurtidoParcialDictamen, Dictamen, DictamenVersion, DictamenVersionWithArchivo, DictaminarDictamen, InventariarDictamen, InventariarDictamenWithOrdenCompra, SurtirDictamen, SurtidoDictamen, SurtidoParcialDictamen } from '@/types/dictamenes';
-import type { DetailedEditableFormActionDictamen, DetailedCorregibleActionDictamen, CorregibleFormActionDictamen, FormActionDictamen } from './-types';
+import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen, CorregibleFormActionDictamen, FormActionDictamen } from './form-action/types';
 
 export const isDictaminarDictamen = (dictamen: Dictamen): dictamen is DictaminarDictamen =>
     dictamen.estado.id === DictamenEstadoEnum.Dictaminar;
@@ -36,7 +36,7 @@ export const isDetailedSurtidoParcialDictamen = (dictamen: Dictamen): dictamen i
 export const isActionFormDictamen = (dictamen: Dictamen): dictamen is FormActionDictamen =>
     dictamen.estado.id in ActionDictamenStates;
 
-export const isDetailedActionFormDictamen = (dictamen: Dictamen): dictamen is DetailedCorregibleActionDictamen =>
+export const isDetailedActionFormDictamen = (dictamen: Dictamen): dictamen is DetailedFormActionDictamen =>
     isActionFormDictamen(dictamen);
 
 export const isCorregibleFormActionDictamen = (dictamen: Dictamen): dictamen is CorregibleFormActionDictamen =>

@@ -1,4 +1,4 @@
-import type { DictamenArchivoFieldType, OficioArchivoFieldType } from "../../partials/form-fields";
+import type { DictamenArchivoFieldType, OficioArchivoFieldType } from "../fields";
 import { requiredString } from "@/lib/schemas/common";
 import z from "zod";
 

@@ -1,9 +1,9 @@
 import { checkAuth } from "@/lib/auth";
-import { View } from "@/views/login";
+import { LoginView } from "@/components/features/login";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_guest/login")({
-    component: View,
+    component: LoginView,
     beforeLoad: async ({ context }) => {
         const user = await checkAuth(context.queryClient);
 

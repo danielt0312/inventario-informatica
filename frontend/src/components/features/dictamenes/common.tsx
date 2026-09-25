@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { toLocaleDateFormat } from "@/lib/utils";
 import type { DetailedDictamen } from "@/types/dictamenes";
 import type { Oficio } from "@/types/documentos";
+import { dictamenVersionHasArchivo } from "./helpers";
 
 export function ShowInfo({ dictamen }: { dictamen: DetailedDictamen }) {
     const { oficio } = dictamen;
@@ -22,9 +23,25 @@ export function ShowInfo({ dictamen }: { dictamen: DetailedDictamen }) {
     );
 }
 
+export const getLabeledVersionTitle = (dictamen: DetailedDictamen) =>
+    `Dictamen No. ${dictamen.id}/${dictamen.version_actual.numero_version}`;
+
 export const ShowOficioInfo = ({ oficio, ...props }: React.ComponentProps<'div'> & { oficio: Oficio }) => (
     <div data-slot="label-container" {...props}>
         <Label className="font-bold">Folio de solicitud</Label>
         {oficio && <LinkToFile uuid={oficio.archivo.uuid} title={oficio.archivo.nombre} label={oficio.folio} />}
     </div>
-);
+);export const ShowVersionInfo = ({ dictamen }: { dictamen: DetailedDictamen; }) => {
+    if (dictamenVersionHasArchivo(dictamen.version_actual)) {
+        const { uuid, nombre } = dictamen.version_actual.archivo;
+
+        return <LinkToFile label={getLabeledVersionTitle(dictamen)} uuid={uuid} title={nombre} />;
+    }
+
+    return (
+        <Label className="text-sm">
+            {getLabeledVersionTitle(dictamen)}
+        </Label>
+    );
+};
+
