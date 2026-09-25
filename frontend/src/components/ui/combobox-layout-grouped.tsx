@@ -1,4 +1,3 @@
-// combobox-layout-grouped.tsx
 "use client"
 
 import * as React from "react"
@@ -25,6 +24,7 @@ import type {
     ComboboxLayoutGroup,
     ComboboxLayoutGroupedProps,
     ComboboxLayoutItem,
+    ComboboxLayoutSharedUIProps,
 } from "./combobox-layout.shared"
 
 function GroupedListBody<
@@ -66,25 +66,13 @@ export type ComboboxLayoutGroupedComponentProps<
     TItem extends ComboboxLayoutItem,
     TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
     Multiple extends boolean | undefined = false,
-> = Omit<
-    ComboboxLayoutGroupedProps<TItem, TGroup, Multiple>,
-    "items"
-> & {
+> = Omit<ComboboxLayoutGroupedProps<TItem, TGroup, Multiple>, "items"> &
+    ComboboxLayoutSharedUIProps<TItem> & {
         items: readonly (TGroup & ComboboxLayoutGroup<TItem>)[]
-        placeholder?: string
-        emptyMessage?: React.ReactNode
-        showClear?: boolean
-        showTrigger?: boolean
-        className?: string
-        contentClassName?: string
         getGroupKey?: (group: TGroup, index: number) => React.Key
-        renderItem?: (item: TItem) => React.ReactNode
         renderGroupLabel?: (group: TGroup) => React.ReactNode
         searchByGroupLabel?: boolean
         groupToStringLabel?: (group: TGroup) => string
-        renderChipsOnMultiple?: boolean
-        placeholderSearch?: string
-        trigger?: React.ReactElement
     }
 
 export function ComboboxLayoutGrouped<
@@ -103,6 +91,7 @@ export function ComboboxLayoutGrouped<
         emptyMessage = "No se encontraron resultados.",
         getGroupKey = (_group: TGroup, index: number) => index,
         renderItem = (item: TItem) => item.label,
+        renderSelectedItem = (item: TItem) => item.label,
         renderGroupLabel = (group: TGroup) => group.label,
         searchByGroupLabel = true,
         groupToStringLabel = (group: TGroup) => String(group.label),
@@ -162,13 +151,13 @@ export function ComboboxLayoutGrouped<
                 <ComboboxLayoutChips
                     className={className}
                     placeholder={placeholderProp}
-                    renderItem={renderItem}
+                    renderItem={renderSelectedItem}
                 />
             ) : (
                 <ComboboxLayoutTriggerShell
                     trigger={trigger}
                     placeholder={placeholderProp}
-                    renderItem={renderItem}
+                    renderItem={renderSelectedItem}
                 />
             )}
             <ComboboxContent className={contentClassName}>

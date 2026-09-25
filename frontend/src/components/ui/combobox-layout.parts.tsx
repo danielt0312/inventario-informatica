@@ -1,17 +1,16 @@
-// combobox-layout.parts.tsx
 "use client"
 
 import * as React from "react"
 import { ChevronsUpDownIcon, SearchIcon } from "lucide-react"
 
 import {
-  ComboboxChips,
-  ComboboxChip,
-  ComboboxChipsInput,
-  ComboboxValue,
-  ComboboxTrigger,
-  ComboboxInput,
-  ComboboxSeparator,
+    ComboboxChips,
+    ComboboxChip,
+    ComboboxChipsInput,
+    ComboboxValue,
+    ComboboxTrigger,
+    ComboboxInput,
+    ComboboxSeparator,
 } from "@/components/ui/combobox"
 import { Button } from "./button"
 import { InputGroupAddon } from "./input-group"
@@ -22,78 +21,78 @@ import type { ComboboxLayoutItem } from "./combobox-layout.shared"
  * simple y agrupado: no depende de si los items vienen planos o agrupados,
  * solo del valor ya seleccionado. */
 export function ComboboxLayoutChips<TItem extends ComboboxLayoutItem>({
-  className,
-  placeholder,
-  renderItem,
+    className,
+    placeholder,
+    renderItem,
 }: {
-  className?: string
-  placeholder?: string
-  renderItem: (item: TItem) => React.ReactNode
+    className?: string
+    placeholder?: string
+    renderItem: (item: TItem) => React.ReactNode
 }) {
-  return (
-    <ComboboxChips className={className}>
-      <ComboboxValue>
-        {(value: TItem[]) =>
-          value.map((item) => (
-            <ComboboxChip key={item.value}>{renderItem(item)}</ComboboxChip>
-          ))
-        }
-      </ComboboxValue>
-      <ComboboxChipsInput placeholder={placeholder} />
-    </ComboboxChips>
-  )
+    return (
+        <ComboboxChips className={className}>
+            <ComboboxValue>
+                {(value: TItem[]) =>
+                    value.map((item) => (
+                        <ComboboxChip key={item.value}>{renderItem(item)}</ComboboxChip>
+                    ))
+                }
+            </ComboboxValue>
+            <ComboboxChipsInput placeholder={placeholder} />
+        </ComboboxChips>
+    )
 }
 
 /** Trigger por defecto (Button + label + chevron). Se reemplaza por
  * completo pasando `trigger` */
 export function ComboboxLayoutTriggerShell<TItem extends ComboboxLayoutItem>({
-  trigger,
-  placeholder,
-  renderItem,
+    trigger,
+    placeholder,
+    renderItem,
 }: {
-  trigger?: React.ReactElement
-  placeholder?: string
-  renderItem: (item: TItem) => React.ReactNode
+    trigger?: React.ReactElement
+    placeholder?: string
+    renderItem: (item: TItem) => React.ReactNode
 }) {
-  return (
-    <ComboboxTrigger
-      render={
-        trigger ?? (
-          <Button variant="outline" className="justify-between font-normal truncate">
-            <ComboboxValue>
-              {(selectedValue: TItem | null) =>
-                <div className="truncate">
-                   {selectedValue ? (
-                  renderItem(selectedValue)
-                ) : (
-                  <span className="text-muted-foreground truncate">{placeholder}</span>
-                )}
-                </div>
-              }
-            </ComboboxValue>
-            <ChevronsUpDownIcon className="text-muted-foreground" />
-          </Button>
-        )
-      }
-    />
-  )
+    return (
+        <ComboboxTrigger
+            render={
+                trigger ?? (
+                    <Button variant="outline" className="justify-between font-normal truncate">
+                        <ComboboxValue>
+                            {(selectedValue: TItem | null) =>
+                                <div className="truncate">
+                                    {selectedValue ? (
+                                        renderItem(selectedValue)
+                                    ) : (
+                                        <span className="text-muted-foreground truncate">{placeholder}</span>
+                                    )}
+                                </div>
+                            }
+                        </ComboboxValue>
+                        <ChevronsUpDownIcon className="text-muted-foreground" />
+                    </Button>
+                )
+            }
+        />
+    )
 }
 
 export function ComboboxLayoutSearchInput({
-  className,
-  ...props
+    className,
+    ...props
 }: Omit<React.ComponentProps<typeof ComboboxInput>, 'children'>) {
-  return (
-    <>
-      <ComboboxInput
-        className={cn("ring-0! border-0! bg-transparent!", className)}
-        {...props}
-      >
-        <InputGroupAddon>
-          <SearchIcon />
-        </InputGroupAddon>
-      </ComboboxInput>
-      <ComboboxSeparator />
-    </>
-  )
+    return (
+        <>
+            <ComboboxInput
+                className={cn("ring-0! border-0! bg-transparent!", className)}
+                {...props}
+            >
+                <InputGroupAddon>
+                    <SearchIcon />
+                </InputGroupAddon>
+            </ComboboxInput>
+            <ComboboxSeparator />
+        </>
+    )
 }

@@ -1,4 +1,3 @@
-// combobox-layout.shared.ts
 import type * as React from "react"
 import type { ComboboxRoot } from "@base-ui/react/combobox"
 
@@ -12,8 +11,8 @@ import type { ComboboxRoot } from "@base-ui/react/combobox"
  * los campos extra que necesites además de value/label.
  */
 export type ComboboxLayoutItem<TValue extends React.Key = React.Key> = {
-  value: TValue
-  label: string
+    value: TValue
+    label: string
 }
 
 /**
@@ -22,8 +21,8 @@ export type ComboboxLayoutItem<TValue extends React.Key = React.Key> = {
  * Base UI no impone ninguna convención de label para grupos).
  */
 export type ComboboxLayoutGroup<TItem extends ComboboxLayoutItem> = {
-  label: React.ReactNode
-  items: readonly TItem[]
+    label: React.ReactNode
+    items: readonly TItem[]
 }
 
 /**
@@ -35,25 +34,39 @@ export type ComboboxLayoutGroup<TItem extends ComboboxLayoutItem> = {
  * como `readonly any[] | readonly Group<any>[]` sin ligar a `Value`.
  */
 type BaseLayoutProps<
-  TItem extends ComboboxLayoutItem,
-  Multiple extends boolean | undefined,
-  TItems,
+    TItem extends ComboboxLayoutItem,
+    Multiple extends boolean | undefined,
+    TItems,
 > = Omit<ComboboxRoot.Props<TItem, Multiple>, "items" | "filteredItems"> & {
-  items?: TItems | undefined
-  filteredItems?: TItems | undefined
+    items?: TItems | undefined
+    filteredItems?: TItems | undefined
+}
+
+export type ComboboxLayoutSharedUIProps<TItem extends ComboboxLayoutItem> = {
+    placeholder?: string
+    emptyMessage?: React.ReactNode
+    showClear?: boolean
+    showTrigger?: boolean
+    className?: string
+    contentClassName?: string
+    renderItem?: (item: TItem) => React.ReactNode
+    renderSelectedItem?: (item: TItem) => React.ReactNode
+    renderChipsOnMultiple?: boolean
+    placeholderSearch?: string
+    trigger?: React.ReactElement
 }
 
 /** Props del root para el layout plano (lista simple de items). */
 export type ComboboxLayoutSimpleProps<
-  TItem extends ComboboxLayoutItem,
-  Multiple extends boolean | undefined = false,
+    TItem extends ComboboxLayoutItem,
+    Multiple extends boolean | undefined = false,
 > = BaseLayoutProps<TItem, Multiple, readonly TItem[]>
 
 /** Props del root para el layout agrupado (lista de grupos con items). */
 export type ComboboxLayoutGroupedProps<
-  TItem extends ComboboxLayoutItem,
-  TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
-  Multiple extends boolean | undefined = false,
+    TItem extends ComboboxLayoutItem,
+    TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
+    Multiple extends boolean | undefined = false,
 > = BaseLayoutProps<TItem, Multiple, readonly TGroup[]>
 
 export function toComboboxItems<TSource, TItem extends ComboboxLayoutItem>(
@@ -75,9 +88,9 @@ export function toComboboxGroups<
 }
 
 export type InferComboboxGroupFromFn<
-  T extends (...args: any[]) => readonly ComboboxLayoutGroup<any>[]
+    T extends (...args: any[]) => readonly ComboboxLayoutGroup<any>[]
 > = ReturnType<T>[number]
 
 export type InferComboboxItemFromFn<
-  T extends (...args: any[]) => readonly ComboboxLayoutGroup<any>[]
+    T extends (...args: any[]) => readonly ComboboxLayoutGroup<any>[]
 > = InferComboboxGroupFromFn<T>["items"][number]
