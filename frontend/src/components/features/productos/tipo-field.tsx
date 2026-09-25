@@ -2,9 +2,8 @@ import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import type { ProductoCategoriaWithTipos } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
 import { productoTipoQueryOptions } from "./queries";
-import { toComboboxGroups, toComboboxItems, type InferComboboxGroupFromFn, type InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
+import { toComboboxGroups, toComboboxItems, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
 import { ComboboxFieldGrouped, type ComboboxFieldGroupedProps } from "@/components/ui/combobox-field-grouped";
-import React from "react";
 
 type TipoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 
@@ -19,7 +18,7 @@ const dataToComboboxItems = (items: ProductoCategoriaWithTipos[]) =>
 
 type TipoFieldProps<Multiple extends boolean | undefined = false> = Omit<
     ComboboxFieldGroupedProps<
-        InferComboboxItemFromFn<typeof dataToComboboxItems>,
+        InferComboboxGroupItemFromFn<typeof dataToComboboxItems>,
         InferComboboxGroupFromFn<typeof dataToComboboxItems>,
         Multiple
     >,
@@ -30,9 +29,10 @@ function TipoField<Multiple extends boolean | undefined = false>({
     layout,
     ...props
 }: TipoFieldProps<Multiple>) {
-    const { data = [] } = useQuery(productoTipoQueryOptions);
-
-    const items = React.useMemo(() => dataToComboboxItems(data), [data]);
+    const { data: items = [] } = useQuery({
+        ...productoTipoQueryOptions,
+        select: dataToComboboxItems
+    });
 
     return (
         <ComboboxFieldGrouped

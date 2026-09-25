@@ -87,10 +87,15 @@ export function toComboboxGroups<
     return source.map(toGroup)
 }
 
+export type InferComboboxItemFromFn<
+    T extends (...args: any[]) => readonly ComboboxLayoutItem<any>[]
+> = ReturnType<T>[number]
+
+
 export type InferComboboxGroupFromFn<
     T extends (...args: any[]) => readonly ComboboxLayoutGroup<any>[]
 > = ReturnType<T>[number]
 
-export type InferComboboxItemFromFn<
+export type InferComboboxGroupItemFromFn<
     T extends (...args: any[]) => readonly ComboboxLayoutGroup<any>[]
 > = InferComboboxGroupFromFn<T>["items"][number]

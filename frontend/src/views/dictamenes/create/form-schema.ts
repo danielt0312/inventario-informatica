@@ -8,8 +8,8 @@ import {
 } from "@/lib/schemas/common";
 import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
-import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
-import type { AdscripcionFieldType } from "@/components/features/externos/adscripciones/form-fields";
+import type { EmpleadoFieldType } from "@/components/features/empleados/field";
+import type { AdscripcionFieldType } from "@/components/features/adscripciones/field";
 import type { CantidadFieldType, FechaSolicitudFieldType, FolioFieldType, OficioArchivoFieldType } from "../partials/form-fields";
 import z from "zod";
 
