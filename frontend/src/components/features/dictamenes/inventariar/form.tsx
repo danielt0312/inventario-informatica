@@ -2,21 +2,20 @@ import type { OrdenCompra } from "@/types/orden_compras";
 import type { DetailedInventariarDictamen, InventariarDictamenAdquisicion } from "@/types/dictamenes";
 import { useAppForm } from '@/components/ui/app-form';
 import { inventariarDictamenArticuloFieldsDefaultValues, inventariarDictamenFormDefaultValues, inventariarDictamenFormValidator } from "./form-schema";
-import { useActionFormMutation } from "../partials/form";
+import { useActionFormMutation } from "../../../../views/dictamenes/form-actions/partials/form";
 import { Form } from "@/components/ui/form";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProductoField } from "@/components/features/productos/field";
 import { FacturaField } from "@/components/features/facturas/form-fields";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { ArticuloCostoUnitarioField, ArticuloCuentaContable, ArticuloNumeroSerieField, EsResultadoEsperadoField, ObservacionesField } from "@/components/features/articulos/form-fields";
 import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
 import { inventariarDictamenHasOrdenCompra } from "@/routes/_auth/dictamenes/$uuid/-utils";
-import { ShowBienesInformaticosTitle } from "../../partials/show-info";
+import { ShowBienesInformaticosTitle } from "../../../../views/dictamenes/partials/show-info";
 import { Button } from "@/components/ui/button";
 import { BadgeCheckIcon, CircleArrowRightIcon, CircleXIcon, PackageCheckIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachment-layout";
 import { esCuentaContableNoInventariable, esCuentaContable, isStringNumber, esCuentaContableInventariable } from "@/lib/utils";
-import { AdquisicionIdField } from "./form-fields";
+import { DictamenAdquisicionField } from "./fields";
 import { toComboboxItems } from "@/components/ui/combobox-layout.shared";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -72,7 +71,7 @@ function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]
     return { options: allOptions, availableOptions, removeOption, restoreOption };
 }
 
-export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }) {
+function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }) {
     const { mutate, status } = useActionFormMutation(dictamen);
 
     const cleanedDefaultValues = inventariarDictamenHasOrdenCompra(dictamen)
@@ -187,7 +186,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                 <form.AppField
                                                     name={`articulos[${index}].dictamen_adquisicion_id`}
                                                     children={(field) => (
-                                                        <AdquisicionIdField
+                                                        <DictamenAdquisicionField
                                                             items={adquisicionesOptions}
                                                             availableItems={adquisicionesAvailableOptions}
                                                             onFieldValueChange={(item) => {
@@ -251,7 +250,7 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
                                                             children={() => {
                                                                 const adquisicion = adquisiciones.find(a => a.id === adquisicionId);
                                                                 return (
-                                                                    <ProductoField tipo={adquisicion?.producto.tipo.id} required />
+                                                                    <></>
                                                                 );
                                                             }}
                                                         />
@@ -362,4 +361,8 @@ export function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDic
             </AlertDialog>
         </>
     );
+}
+
+export {
+    InventariarForm as InventariarDictamenForm
 }

@@ -20,13 +20,17 @@ class ProductoController extends Controller
 
     public function index()
     {
-        return ProductoVariante::genericas()
+        return QueryBuilder::for(ProductoVariante::class)
+            ->genericas()
             ->with([
                 'producto' => [
                     'tipo.categoria',
                     'marca'
                 ]
             ])
+            ->allowedFilters(
+                AllowedFilter::belongsTo('producto_tipo_id', 'producto.tipo_id')
+            )
             ->get()
             ->toResourceCollection();
     }

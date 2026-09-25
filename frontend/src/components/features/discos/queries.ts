@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { DiscoCapacidad, DiscoFactorForma, DiscoInterfaz, DiscoTipo } from "@/types/articulos/discos";
+import type { Disco, DiscoCapacidad, DiscoFactorForma, DiscoInterfaz, DiscoTipo } from "@/types/articulos/discos";
 import type { TResponse } from "@/types/generics";
 import { queryOptions } from "@tanstack/react-query";
 
@@ -29,7 +29,7 @@ const factorFormaOptions = queryOptions({
 
 const options = queryOptions({
     queryKey: ['discos'],
-    queryFn: () => api.get<TResponse<DiscoFactorForma[]>>('api/disco_factor_formas')
+    queryFn: () => api.get<TResponse<Disco[]>>('api/discos')
         .then(r => r.data.data)
 });
 
@@ -38,4 +38,5 @@ export {
     capacidadOptions as discoCapacidadQueryOptions,
     interfazOptions as discoInterfazQueryOptions,
     factorFormaOptions as discoFactorFormaQueryOptions,
+    options as discoQueryOptions
 }

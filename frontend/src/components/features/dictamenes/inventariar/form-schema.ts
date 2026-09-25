@@ -2,14 +2,15 @@ import { nullableNumber, nullableString, requiredArray, requiredString, selected
 import { esCuentaContable, esCuentaContableInventariable } from "@/lib/utils";
 import type { ArticuloCostoUnitarioFieldType, ArticuloCuentaContableType, ArticuloNumeroSerieFieldType, EsResultadoEsperadoFieldType, ObservacionesFieldType } from "@/components/features/articulos/form-fields";
 import type { FacturaFieldType } from "@/components/features/facturas/form-fields";
-import type { ProductoFieldType } from "@/components/features/productos/field";
+import type { ProductoFieldType } from "@/components/features/productos/generica-field";
 import type { OrdenCompraFieldType } from "@/components/features/orden_compras/form-fields";
+import type { DictamenAdquisicionFieldType } from "./fields";
 import z from "zod";
 
 type ArticuloFields = {
     es_resultado_esperado: EsResultadoEsperadoFieldType;
     observaciones: ObservacionesFieldType;
-    dictamen_adquisicion_id: number | undefined;
+    dictamen_adquisicion_id: DictamenAdquisicionFieldType;
     cuenta_contable: ArticuloCuentaContableType;
     factura_id: FacturaFieldType;
     producto_id: ProductoFieldType;

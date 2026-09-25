@@ -45,7 +45,7 @@ function NombreField({
     );
 }
 
-type FactorFormaFieldType = ComboboxFieldType<false, undefined>;
+type FactorFormaFieldType = ComboboxFieldType<false, null>;
 function FactorFormaField({
     layout,
     ...props

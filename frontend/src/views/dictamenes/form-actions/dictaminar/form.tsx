@@ -3,7 +3,7 @@ import { defaultValues, validator } from "./form-schema";
 import { useActionFormMutation } from "../partials/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ProductoField } from "@/components/features/productos/field";
+import { ProductoField } from "@/components/features/productos/generica-field";
 import { Form as PrimitiveForm } from "@/components/ui/form";
 import { DictamenEspecificacionesTecnicasField } from "../../partials/form-fields";
 import { ShowBienesInformaticosTitle } from "../../partials/show-info";
@@ -59,7 +59,7 @@ function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
 
                                 <form.AppField
                                     name={`adquisiciones[${index}].producto_id`}
-                                    children={() => <ProductoField tipo={productoTipo.id} className="w-1/3" required />}
+                                    children={() => <ProductoField tipoId={productoTipo.id} className="w-1/3" required />}
                                 />
 
                                 <form.AppField

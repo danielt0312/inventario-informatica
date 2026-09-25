@@ -1,4 +1,5 @@
 import type { Includable, TCatalogo } from "../generics"
+import type { ProductoVarianteSpec } from "../productos";
 
 type Tipo = TCatalogo;
 type Capacidad = TCatalogo;
@@ -15,7 +16,11 @@ type Base<TInterfaz extends IncludableInterfaz = IncludableInterfaz, TFactorForm
     factor_forma: TFactorForma;
 }
 
-type Disco = Base;
+type Spec<TDisco extends Base = Base> = ProductoVarianteSpec & {
+    disco: TDisco;
+}
+
+type Disco = Spec;
 
 export type {
     Disco,

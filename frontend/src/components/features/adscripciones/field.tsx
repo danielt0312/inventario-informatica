@@ -3,10 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { ComboboxFieldSimple, type ComboboxFieldSimpleProps } from "@/components/ui/combobox-field-simple";
 import { adscripcionesQueryOptions } from "./queries";
+import type { InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 
 type FieldProps<Multiple extends boolean | undefined = false> = Omit<
     ComboboxFieldSimpleProps<
-        ReturnType<typeof toComboboxCatalogItems>[number],
+        InferComboboxItemFromFn<typeof toComboboxCatalogItems>,
         Multiple
     >,
     'items'

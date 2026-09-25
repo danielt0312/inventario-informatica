@@ -7,8 +7,8 @@ import { ComboboxFieldGrouped, type ComboboxFieldGroupedProps } from "@/componen
 
 type TipoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 
-const dataToComboboxItems = (items: ProductoCategoriaWithTipos[]) =>
-    toComboboxGroups(items, (group) => ({
+const dataToComboboxItems = (data: ProductoCategoriaWithTipos[]) =>
+    toComboboxGroups(data, (group) => ({
         items: toComboboxItems(group.tipos, (item) => ({
             label: item.nombre,
             value: item.id

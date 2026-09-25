@@ -39,18 +39,19 @@ type ProductoAttr<TProducto extends Producto = Producto> = {
 
 type BaseVariante<TProducto extends Producto = Producto> = ProductoAttr<TProducto> & {
     id: number;
+    descripcion: string;
 }
 
-type Variante = BaseVariante;
 type VarianteGenerica = BaseVariante<Generica>;
 type VarianteSpec = BaseVariante<Spec>;
 
 type Tipo = BaseTipo;
+type Marca = BaseMarca;
 
 export type {
     CategoriaWithTipos as ProductoCategoriaWithTipos,
-    Variante as ProductoVariante,
     VarianteGenerica as ProductoVarianteGenerica,
     VarianteSpec as ProductoVarianteSpec,
-    Tipo as ProductoTipo
+    Tipo as ProductoTipo,
+    Marca as ProductoMarca,
 }
