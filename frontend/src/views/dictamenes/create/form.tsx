@@ -12,7 +12,7 @@ import { OficioArchivoField, CantidadField, FechaSolicitudField, FolioField } fr
 import { AdscripcionField } from "@/components/features/externos/adscripciones/form-fields";
 import { EmpleadoField } from "@/components/features/externos/empleados/form-fields";
 import { Form as PrimitiveForm } from "@/components/ui/form";
-import { ProductoTipoField } from "@/components/features/productos/tipos/form-fields";
+import { ProductoTipoField } from '@/components/features/productos/tipo-field';
 import { ArticuloNullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { DictamenAdquisicion } from "@/lib/utils";
 import { ShowBienesInformaticosTitle } from "../partials/show-info";
@@ -94,6 +94,10 @@ function Form() {
                                         />
 
                                         <FieldGroup>
+                                            {/* <form.AppField
+                                                name={`adquisiciones[${index}].producto_tipo_id`}
+                                                children={() => <ProductoTipoField required />}
+                                            /> */}
                                             <form.AppField
                                                 name={`adquisiciones[${index}].producto_tipo_id`}
                                                 children={() => <ProductoTipoField required />}

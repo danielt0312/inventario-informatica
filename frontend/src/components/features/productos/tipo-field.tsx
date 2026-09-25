@@ -12,8 +12,7 @@ const dataToComboboxItems = (items: ProductoCategoriaWithTipos[]) =>
     toComboboxGroups(items, (group) => ({
         items: toComboboxItems(group.tipos, (item) => ({
             label: item.nombre,
-            value: item.id,
-            group: group.nombre
+            value: item.id
         })),
         label: group.nombre
     }));
