@@ -1,4 +1,4 @@
-import { ProductoMarcaField, type ProductoMarcaFieldType } from "./marcas/form-fields";
+import { ProductoMarcaField, type ProductoMarcaFieldType } from "./marcas/field";
 import { ProductoModeloField, type ProductoModeloFieldType } from "./create/form-fields";
 import { requiredString, selectedNumberOption } from "@/lib/schemas/common";
 import z from "zod";

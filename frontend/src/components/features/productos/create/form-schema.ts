@@ -1,5 +1,5 @@
 import { requiredString, selectedNumberOption } from "@/lib/schemas/common";
-import type { ProductoMarcaFieldType } from "../marcas/form-fields";
+import type { ProductoMarcaFieldType } from "../marcas/field";
 import type { ProductoTipoFieldType } from "../tipos/form-fields";
 import type { ProductoModeloFieldType } from "./form-fields";
 import z from "zod";

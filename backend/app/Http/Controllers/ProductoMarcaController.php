@@ -18,6 +18,7 @@ class ProductoMarcaController extends Controller
 
     public function store(StoreProductoMarcaRequest $request)
     {
+        sleep(1);
         return (ProductoMarca::create($request->validated()))
             ->toResourceResponse(201);
     }

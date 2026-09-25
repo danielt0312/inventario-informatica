@@ -1,18 +1,21 @@
 import { nullableString, requiredArray, selectedNumberOption } from "@/lib/schemas/common";
-import type { DictamenEspecificacionesTecnicasFieldType } from "../../partials/form-fields";
-import type { ProductoFieldType } from "@/components/features/productos/generica-field";
 import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
+import type { DictamenEspecificacionesTecnicasFieldType } from "../fields";
+import type { ProductoTipoFieldType } from "../../productos/tipo-field";
 import z from "zod";
 
-export type Schema = {
-    adquisiciones: {
-        id: number;
-        especificaciones_tecnicas: DictamenEspecificacionesTecnicasFieldType;
-        producto_id: ProductoFieldType;
-    }[];
+type AdquisicionFields = {
+    id: number;
+    especificaciones_tecnicas: DictamenEspecificacionesTecnicasFieldType;
+    producto_tipo_id: ProductoTipoFieldType;
+    producto_variante_id: ProductoVariante;
 }
 
-export const defaultValues = (dictamen: DetailedDictaminarDictamen): Schema => ({
+type Schema = {
+    adquisiciones: AdquisicionFields[];
+}
+
+const defaultValues = (dictamen: DetailedDictaminarDictamen): Schema => ({
     adquisiciones: dictamen.version_actual.adquisiciones.map((adquisicion) => ({
         id: adquisicion.id,
         especificaciones_tecnicas: null,
@@ -20,7 +23,7 @@ export const defaultValues = (dictamen: DetailedDictaminarDictamen): Schema => (
     }))
 });
 
-export const validator = z.object({
+const validator = z.object({
     adquisiciones: requiredArray(
         z.object({
             id: selectedNumberOption,

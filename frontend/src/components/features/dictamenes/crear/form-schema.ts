@@ -10,13 +10,13 @@ import type { ProductoTipoFieldType } from "@/components/features/productos/tipo
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/empleados/field";
 import type { AdscripcionFieldType } from "@/components/features/adscripciones/field";
-import type { CantidadFieldType, FechaSolicitudFieldType, FolioFieldType, OficioArchivoFieldType } from "../fields";
+import type { DictamenCantidadFieldType, DictamenFechaSolicitudFieldType, DictamenFolioFieldType, DictamenOficioArchivoFieldType } from "../fields";
 import z from "zod";
 
 type AdquisicionFields = {
     producto_tipo_id: ProductoTipoFieldType;
     numero_inventario: ArticuloNullableNumeroInventarioFieldType;
-    cantidad: CantidadFieldType;
+    cantidad: DictamenCantidadFieldType;
     empleado_id: EmpleadoFieldType;
 }
 
@@ -28,10 +28,10 @@ const adquisicionFieldsDefaultValues: AdquisicionFields = {
 } as const;
 
 export type Schema = {
-    folio: FolioFieldType;
-    fecha_solicitud: FechaSolicitudFieldType;
+    folio: DictamenFolioFieldType;
+    fecha_solicitud: DictamenFechaSolicitudFieldType;
     adscripcion_id: AdscripcionFieldType;
-    archivo_uuid: OficioArchivoFieldType;
+    archivo_uuid: DictamenOficioArchivoFieldType;
     adquisiciones: AdquisicionFields[];
 }
 

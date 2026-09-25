@@ -4,8 +4,8 @@ import { NullableTextareaField, TextareaField, type NullableTextareaFieldType, t
 import { ArchivoUploaderField, type ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
 import React from "react";
 
-export type CantidadFieldType = NumberInputFieldType;
-export const CantidadField = ({
+export type DictamenCantidadFieldType = NumberInputFieldType;
+export const DictamenCantidadField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof InputField>) => (
@@ -20,8 +20,8 @@ export const CantidadField = ({
     />
 );
 
-export type FolioFieldType = InputFieldType;
-export const FolioField = ({
+export type DictamenFolioFieldType = InputFieldType;
+export const DictamenFolioField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof InputField>) => (
@@ -36,8 +36,8 @@ export const FolioField = ({
     />
 );
 
-export type FechaSolicitudFieldType = DatePickerFieldType;
-export const FechaSolicitudField = ({
+export type DictamenFechaSolicitudFieldType = DatePickerFieldType;
+export const DictamenFechaSolicitudField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof DatePickerField>) => (
@@ -52,8 +52,8 @@ export const FechaSolicitudField = ({
     />
 );
 
-export type OficioArchivoFieldType = ArchivoUploaderFieldType;
-export const OficioArchivoField = ({
+export type DictamenOficioArchivoFieldType = ArchivoUploaderFieldType;
+export const DictamenOficioArchivoField = ({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof ArchivoUploaderField>) => (

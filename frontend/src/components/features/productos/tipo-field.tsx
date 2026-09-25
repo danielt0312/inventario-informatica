@@ -5,7 +5,7 @@ import { productoTipoQueryOptions } from "./queries";
 import { toComboboxGroups, toComboboxItems, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
 import { ComboboxFieldGrouped, type ComboboxFieldGroupedProps } from "@/components/ui/combobox-field-grouped";
 
-type TipoFieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
+type FieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 
 const dataToComboboxItems = (data: ProductoCategoriaWithTipos[]) =>
     toComboboxGroups(data, (group) => ({
@@ -16,7 +16,7 @@ const dataToComboboxItems = (data: ProductoCategoriaWithTipos[]) =>
         label: group.nombre
     }));
 
-type TipoFieldProps<Multiple extends boolean | undefined = false> = Omit<
+type FieldProps<Multiple extends boolean | undefined = false> = Omit<
     ComboboxFieldGroupedProps<
         InferComboboxGroupItemFromFn<typeof dataToComboboxItems>,
         InferComboboxGroupFromFn<typeof dataToComboboxItems>,
@@ -25,10 +25,10 @@ type TipoFieldProps<Multiple extends boolean | undefined = false> = Omit<
     'items'
 >;
 
-function TipoField<Multiple extends boolean | undefined = false>({
+function Field<Multiple extends boolean | undefined = false>({
     layout,
     ...props
-}: TipoFieldProps<Multiple>) {
+}: FieldProps<Multiple>) {
     const { data: items = [] } = useQuery({
         ...productoTipoQueryOptions,
         select: dataToComboboxItems
@@ -47,6 +47,6 @@ function TipoField<Multiple extends boolean | undefined = false>({
 }
 
 export {
-    type TipoFieldType as ProductoTipoFieldType,
-    TipoField as ProductoTipoField
+    type FieldType as ProductoTipoFieldType,
+    Field as ProductoTipoField
 }

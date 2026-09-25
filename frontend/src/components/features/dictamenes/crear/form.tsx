@@ -8,7 +8,7 @@ import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
-import { OficioArchivoField, CantidadField, FechaSolicitudField, FolioField } from "../fields";
+import { DictamenOficioArchivoField, DictamenCantidadField, DictamenFechaSolicitudField, DictamenFolioField } from "../fields";
 import { AdscripcionField } from "@/components/features/adscripciones/field";
 import { EmpleadoField } from '@/components/features/empleados/field';
 import { FormLayout as PrimitiveForm } from "@/components/ui/form-layout";
@@ -54,7 +54,7 @@ function Form() {
                 <FieldGroup className="flex-row">
                     <form.AppField
                         name="fecha_solicitud"
-                        children={() => <FechaSolicitudField />}
+                        children={() => <DictamenFechaSolicitudField />}
                     />
                     <form.AppField
                         name="adscripcion_id"
@@ -62,13 +62,13 @@ function Form() {
                     />
                     <form.AppField
                         name="folio"
-                        children={() => <FolioField />}
+                        children={() => <DictamenFolioField />}
                     />
                 </FieldGroup>
 
                 <form.AppField
                     name="archivo_uuid"
-                    children={() => <OficioArchivoField className="md:max-w-1/2" />}
+                    children={() => <DictamenOficioArchivoField className="md:max-w-1/2" />}
                 />
 
                 <form.AppField name="adquisiciones" mode="array">
@@ -90,7 +90,7 @@ function Form() {
                                     <CardContent className="flex gap-6 items-center">
                                         <form.AppField
                                             name={`adquisiciones[${index}].cantidad`}
-                                            children={() => <CantidadField className="max-w-min" />}
+                                            children={() => <DictamenCantidadField className="max-w-min" />}
                                         />
 
                                         <FieldGroup>

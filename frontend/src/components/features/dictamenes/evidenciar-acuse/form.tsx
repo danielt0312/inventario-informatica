@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormLayout as PrimitiveForm } from "@/components/ui/form-layout";
 import type { DetailedPendienteAcuseDictamen } from "@/types/dictamenes";
-import { DictamenArchivoField, OficioArchivoField } from "../fields";
+import { DictamenArchivoField, DictamenOficioArchivoField } from "../fields";
 import { evidenciarAcuseFormDefaultValues, evidenciarAcuseFormValidator } from "./form-schema";
 import { useDictamenFormActionMutation } from '../form-action/view';
 
@@ -39,7 +39,7 @@ export function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen })
                 {dictamen.oficio && dictamen.oficio.verified_at === null && (
                     <form.AppField
                         name="oficio_archivo_uuid"
-                        children={() => <OficioArchivoField fieldLayout={{ label: "Adjuntar acuse de recibido del oficio de solicitud" }} className="w-1/2" />}
+                        children={() => <DictamenOficioArchivoField fieldLayout={{ label: "Adjuntar acuse de recibido del oficio de solicitud" }} className="w-1/2" />}
                     />
                 )}
 

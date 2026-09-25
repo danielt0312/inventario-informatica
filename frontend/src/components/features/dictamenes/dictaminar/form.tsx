@@ -55,7 +55,7 @@ function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
                                 </div>
 
                                 <form.AppField
-                                    name={`adquisiciones[${index}].producto_id`}
+                                    name={`adquisiciones[${index}].producto_variante_id`}
                                     children={() => <ProductoField tipoId={productoTipo.id} className="w-1/3" required />}
                                 />
 

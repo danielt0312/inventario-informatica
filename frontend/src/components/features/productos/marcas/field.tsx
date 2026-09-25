@@ -37,7 +37,7 @@ export function ProductoMarcaField({
         }
     });
 
-    const dialogForm = useForm(useDialogFormMutation);
+    const form = useForm(useDialogFormMutation);
 
     return (
         <>
@@ -48,7 +48,7 @@ export function ProductoMarcaField({
                     ...layout
                 }}
                 onCreate={(searchValue) => {
-                    dialogForm.setFieldValue('nombre', searchValue);
+                    form.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
                     field.handleChange(undefined);
                 }}
@@ -64,9 +64,9 @@ export function ProductoMarcaField({
                         </DialogDescription>
                     </DialogHeader>
 
-                    <AppForm form={dialogForm} className="contents">
+                    <AppForm form={form} className="contents">
                         <DialogFooter>
-                            <dialogForm.SubmitFormButton />
+                            <form.SubmitFormButton />
 
                             <Button onClick={() => setDialogIsOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar

@@ -1,10 +1,10 @@
-import type { DictamenArchivoFieldType, OficioArchivoFieldType } from "../fields";
+import type { DictamenArchivoFieldType, DictamenOficioArchivoFieldType } from "../fields";
 import { requiredString } from "@/lib/schemas/common";
 import z from "zod";
 
 type Schema = {
     dictamen_archivo_uuid: DictamenArchivoFieldType;
-    oficio_archivo_uuid?: OficioArchivoFieldType;
+    oficio_archivo_uuid?: DictamenOficioArchivoFieldType;
 }
 
 const defaultValues: Schema = {
