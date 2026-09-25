@@ -7,7 +7,8 @@ export type ComboboxFieldEmptyType = undefined | null
 export type ComboboxFieldType<
     Multiple extends boolean | undefined,
     TEmpty extends ComboboxFieldEmptyType,
-> = Multiple extends true ? React.Key[] | TEmpty : React.Key | TEmpty
+    TValue extends React.Key = number,
+> = Multiple extends true ? TValue[] | TEmpty : TValue | TEmpty
 
 /** Deriva el TItem (o TItem[]) real a partir del primitivo que vive en
  * TanStack Form + los `items` disponibles — nunca depende de que el
