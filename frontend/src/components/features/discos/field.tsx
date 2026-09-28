@@ -16,7 +16,7 @@ import type { DiscoFactorFormaFieldType } from "./factor-forma-field";
 import { selectedNumberOption } from "@/lib/schemas/common";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import type { TResponse } from "@/types/generics";
-import { productoVarianteSpecDefaultFormValues, ProductoVarianteSpecFieldGroup, productoVarianteSpecFormValidator, type ProductoVarianteSpecSchema } from "../productos/spec-form";
+import { productoVarianteSpecDefaultFormValues, ProductoVarianteSpecFieldGroup, productoVarianteSpecFormValidator, type ProductoVarianteSpecSchema } from "../productos/variante-spec-field-group";
 import React from "react";
 import { FormLayout } from "@/components/ui/form-layout";
 import { Button } from "@/components/ui/button";

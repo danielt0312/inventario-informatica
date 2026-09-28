@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Producto;
 
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 use App\Services\ProductoService;
@@ -20,38 +21,34 @@ class StoreProductoRequest extends FormRequest
             'tipo_id' => [
                 'required',
                 'integer',
-                'exists:producto_tipos,id'
+                'exists:producto_tipos,id',
+                function (string $attribute, mixed $value, Closure $fail) {
+                    if ($this->productoService->tieneVariante($value)) {
+                        logger()->warning('Intento de creación de producto generico con variante', [
+                            'payload' => $validator->getData(),
+                            'user_id' => auth()->id(),
+                            'ip' => $this->ip(),
+                        ]);
+
+                        $fail('Este tipo de producto no puede ser creado genéricamente.');
+                    }
+                }
             ],
             'marca_id' => [
+                'sometimes',
+                'nullable',
                 'required',
                 'integer',
                 'exists:producto_marcas,id'
             ],
             'modelo' => [
+                'sometimes',
+                'nullable',
                 'required',
                 'string',
                 'max:128',
                 'unique:productos,modelo'
             ],
-        ];
-    }
-
-    protected function after(): array
-    {
-        return [
-            function (Validator $validator) {
-                if ($validator->errors()->isNotEmpty()) return;
-
-                if ($this->productoService->tieneVariante($this->tipo_id)) {
-                    logger()->warning('Intento de creación de producto generico con variante', [
-                        'payload' => $validator->getData(),
-                        'user_id' => auth()->id(),
-                        'ip' => $this->ip(),
-                    ]);
-
-                    $validator->addFailure('tipo_id', 'Este tipo de producto no puede ser creado genéricamente');
-                }
-            }
         ];
     }
 }

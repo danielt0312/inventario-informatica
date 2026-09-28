@@ -22,12 +22,7 @@ class ProductoController extends Controller
     {
         return QueryBuilder::for(ProductoVariante::class)
             ->genericas()
-            ->with([
-                'producto' => [
-                    'tipo.categoria',
-                    'marca'
-                ]
-            ])
+            ->with(['producto' => ['tipo.categoria', 'marca']])
             ->allowedFilters(
                 AllowedFilter::belongsTo('producto_tipo_id', 'producto.tipo_id')
             )
@@ -37,8 +32,10 @@ class ProductoController extends Controller
 
     public function store(StoreProductoRequest $request)
     {
-        return $this->productoService->crearGenerico(ProductoData::from($request->validated()))
-            ->load('producto.marca')
+        return $this->productoService->crearGenerico(
+                ProductoData::from($request->validated())
+            )
+            ->load(['producto' => ['tipo.categoria', 'marca']])
             ->toResourceResponse(201);
     }
 }

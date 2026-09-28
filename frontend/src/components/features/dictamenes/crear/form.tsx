@@ -86,43 +86,47 @@ function Form() {
                             </div>
 
                             {field.state.value.map((_, index) => (
-                                <Card key={index} className="shadow-none">
-                                    <CardContent className="flex gap-6 items-center">
-                                        <form.AppField
-                                            name={`adquisiciones[${index}].cantidad`}
-                                            children={() => <DictamenCantidadField className="max-w-min" />}
-                                        />
-
-                                        <FieldGroup>
-                                            {/* <form.AppField
-                                                name={`adquisiciones[${index}].producto_tipo_id`}
-                                                children={() => <ProductoTipoField required />}
-                                            /> */}
-                                            <form.AppField
-                                                name={`adquisiciones[${index}].producto_tipo_id`}
-                                                children={() => <ProductoTipoField required />}
-                                            />
-
-                                            <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_tipo_id}>
-                                                {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
-                                                    <form.AppField
-                                                        name={`adquisiciones[${index}].numero_inventario`}
-                                                        children={() => <ArticuloNullableNumeroInventarioField />}
-                                                    />
-                                                )}
-                                            </form.Subscribe>
-                                        </FieldGroup>
-
-                                        <form.AppField
-                                            name={`adquisiciones[${index}].empleado_id`}
-                                            children={() => (
-                                                <EmpleadoField
-                                                    adscripcionId={adscripcion}
-                                                    disabled={adscripcion === undefined}
-                                                    required
+                                <Card key={index}>
+                                    <CardContent className="flex gap-7 items-center">
+                                        <div className="flex flex-col gap-7 grow">
+                                            <FieldGroup className="grid grid-cols-2">
+                                                <form.AppField
+                                                    name={`adquisiciones[${index}].empleado_id`}
+                                                    children={() => (
+                                                        <EmpleadoField
+                                                            adscripcionId={adscripcion}
+                                                            disabled={adscripcion === undefined}
+                                                            required
+                                                        />
+                                                    )}
                                                 />
-                                            )}
-                                        />
+                                            </FieldGroup>
+
+                                            <div className="flex flex-row gap-7">
+                                                <form.AppField
+                                                    name={`adquisiciones[${index}].cantidad`}
+                                                    children={() => <DictamenCantidadField className="max-w-min" />}
+                                                />
+
+                                                <FieldGroup className="flex-row">
+                                                    <form.AppField
+                                                        name={`adquisiciones[${index}].producto_tipo_id`}
+                                                        children={() => <ProductoTipoField required />}
+                                                    />
+
+                                                    <div className="w-1/3">
+                                                        <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_tipo_id}>
+                                                            {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
+                                                                <form.AppField
+                                                                    name={`adquisiciones[${index}].numero_inventario`}
+                                                                    children={() => <ArticuloNullableNumeroInventarioField />}
+                                                                />
+                                                            )}
+                                                        </form.Subscribe>
+                                                    </div>
+                                                </FieldGroup>
+                                            </div>
+                                        </div>
 
                                         <Button
                                             disabled={field.state.value.length === 1}

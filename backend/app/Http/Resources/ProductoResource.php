@@ -10,9 +10,9 @@ class ProductoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'modelo' => $this->modelo,
             'tipo' => new ProductoTipoResource($this->whenLoaded('tipo')),
-            'marca' => new ProductoMarcaResource($this->whenLoaded('marca'))
+            'marca' => new ProductoMarcaResource($this->whenLoaded('marca')),
+            'modelo' => $this->modelo
         ];
     }
 }

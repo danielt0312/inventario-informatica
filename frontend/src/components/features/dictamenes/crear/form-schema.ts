@@ -6,11 +6,11 @@ import {
     requiredString,
     nullableString
 } from "@/lib/schemas/common";
-import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/empleados/field";
 import type { AdscripcionFieldType } from "@/components/features/adscripciones/field";
 import type { DictamenCantidadFieldType, DictamenFechaSolicitudFieldType, DictamenFolioFieldType, DictamenOficioArchivoFieldType } from "../fields";
+import type { ProductoTipoFieldType } from "../../productos/tipo-field";
 import z from "zod";
 
 type AdquisicionFields = {
@@ -58,4 +58,8 @@ const validator = z.object({
     )
 });
 
-export { adquisicionFieldsDefaultValues as createDictamenFormAdquisicionFieldsDefaultValues, defaultValues as createDictamenFormDefaultValues, validator as createDictamenFormValidator }
+export {
+    adquisicionFieldsDefaultValues as createDictamenFormAdquisicionFieldsDefaultValues,
+    defaultValues as createDictamenFormDefaultValues,
+    validator as createDictamenFormValidator
+}

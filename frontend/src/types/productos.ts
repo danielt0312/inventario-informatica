@@ -13,16 +13,12 @@ type CategoriaAttr<TCategoria extends BaseCategoria = BaseCategoria> = {
 type TipoAttr<TTipo extends BaseTipo = BaseTipo> = {
     tipo: TTipo;
 }
-type TiposAttr<TTipo extends BaseTipo = BaseTipo> = {
-    tipos: TTipo[];
-}
 type MarcaAttr<TMarca extends BaseMarca = BaseMarca> = {
     marca: TMarca;
 }
 type TipoWithCategoria = BaseTipo & CategoriaAttr<BaseCategoria>;
 type TipoWithCategoriaAttr = TipoAttr<TipoWithCategoria>;
 
-type CategoriaWithTipos = BaseCategoria & TiposAttr<BaseTipo>;
 
 type Base = {
     modelo: string;
@@ -47,11 +43,13 @@ type VarianteSpec = BaseVariante<Spec>;
 
 type Tipo = BaseTipo;
 type Marca = BaseMarca;
+type Categoria = BaseCategoria;
 
 export type {
-    CategoriaWithTipos as ProductoCategoriaWithTipos,
     VarianteGenerica as ProductoVarianteGenerica,
     VarianteSpec as ProductoVarianteSpec,
     Tipo as ProductoTipo,
     Marca as ProductoMarca,
+    TipoWithCategoria as ProductoTipoWithCategoria,
+    Categoria as ProductoCategoria
 }

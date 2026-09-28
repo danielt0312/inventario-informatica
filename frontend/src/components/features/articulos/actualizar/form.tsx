@@ -9,7 +9,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
-import { ProductoField } from "../../productos/generica-field";
+import { ProductoField } from "../../productos/variante-generica-field";
 import { ProductoTipoEnum } from "@/lib/constants";
 import { DiscoTipoField } from "../../discos/tipo-field";
 import { DiscoCapacidadField } from "../../discos/capacidad-field";

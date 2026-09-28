@@ -64,7 +64,7 @@ function Field<Multiple extends boolean | undefined = false>({
         <ComboboxFieldGrouped
             items={items}
             layout={{
-                label: "Producto",
+                label: "Descripción",
                 ...layout
             }}
             disabled={disabled}
