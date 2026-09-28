@@ -19,18 +19,18 @@ return new class extends Migration
             $table->foreignId('estado_id')
                 ->constrained('dictamen_estados', indexName: 'fk_dictamenes_dictamen_estados')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('oficio_id')
                 ->nullable()
                 ->unique('uk_dictamenes_oficio')
                 ->constrained('oficios', indexName: 'fk_dictamen_versiones_oficios')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('orden_compra_id')
                 ->nullable()
                 ->constrained('orden_compras', indexName: 'fk_dictamenes_orden_compras')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->unsignedBigInteger('adscripcion_id'); // todo cambiar por definicion real
             $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->unsignedBigInteger('version_actual_id')
@@ -45,7 +45,7 @@ return new class extends Migration
             $table->foreignId('dictamen_id')
                 ->constrained('dictamenes', indexName: 'fk_dictamen_versiones_dictamenes')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->unsignedInteger('numero_version');
             $table->date('fecha_solicitud');
             $table->string('motivo_cambio', 64)
@@ -60,7 +60,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('dictamen_versiones')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
         });
 
         Schema::create('dictamen_adquisiciones', function (Blueprint $table) {
@@ -68,17 +68,17 @@ return new class extends Migration
             $table->foreignId('dictamen_version_id')
                 ->constrained('dictamen_versiones', indexName: 'fk_dictamen_adquisiciones_dictamen_versiones')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->foreignId('producto_variante_id')
                 ->constrained('producto_variantes', indexName: 'fk_dictamen_adquisiciones_producto_variantes')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('articulo_id')
                 ->nullable()
                 ->constrained('articulos', indexName: 'fk_dictamen_adquisiciones_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->unsignedTinyInteger('cantidad');
             $table->string('especificaciones_tecnicas', 255)
                 ->nullable();
@@ -90,12 +90,12 @@ return new class extends Migration
             $table->foreignId('dictamen_adquisicion_id')
                 ->constrained('dictamen_adquisiciones', indexName: 'fk_dictamen_surtimientos_dictamen_adquisiciones')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('articulo_id')
                 ->unique('uk_dictamen_surtimientos')
                 ->constrained('articulos', indexName: 'fk_dictamen_surtimientos_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->timestamps();
         });
 
@@ -104,7 +104,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('dictamenes')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
         });
     }
 

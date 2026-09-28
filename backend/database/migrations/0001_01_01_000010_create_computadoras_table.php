@@ -14,11 +14,11 @@ return new class extends Migration
                 ->unique('uk_articulo_computadoras')
                 ->constrained('articulos', indexName: 'fk_articulo_computadoras_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('cpu_producto_id')
                 ->constrained('productos', indexName: 'fk_articulo_computadoras_productos_cpu')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
         });
     }
 

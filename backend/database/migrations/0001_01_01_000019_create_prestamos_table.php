@@ -23,30 +23,30 @@ return new class extends Migration
             $table->foreignId('articulo_id')
                 ->constrained('articulos', indexName: 'fk_prestamos_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('estado_id')
                 ->constrained('prestamo_estados', indexName: 'fk_prestamos_prestamo_estados')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('motivo_id')
                 ->constrained('prestamo_motivos', indexName: 'fk_prestamos_prestamo_motivos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('solicitante_user_id')
                 ->constrained('users', indexName: 'fk_prestamos_solicitante_users')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->date('fecha_entrega');
             $table->foreignId('proveedor_user_id')
                 ->constrained('users', indexName: 'fk_prestamos_proveedor_users')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->date('fecha_devolucion')
                 ->nullable();
             $table->foreignId('receptor_user_id')
                 ->constrained('users', indexName: 'fk_prestamos_receptor_users')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->string('observaciones', 255)
                 ->nullable();
             $table->timestamps();
@@ -57,7 +57,7 @@ return new class extends Migration
                 ->primary()
                 ->constrained('prestamos', indexName: 'fk_prestamo_motivo_otros_prestamos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->string('nombre', 64);
         });
     }

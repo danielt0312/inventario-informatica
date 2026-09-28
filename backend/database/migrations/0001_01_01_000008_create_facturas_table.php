@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('proveedor_id')
                 ->constrained('proveedores', indexName: 'fk_facturas_proveedores')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
         });
 
         Schema::create('factura_orden_compra', function (Blueprint $table) {
@@ -23,11 +23,11 @@ return new class extends Migration
             $table->foreignId('factura_id')
                 ->constrained('facturas', indexName: 'fk_factura_orden_compras_facturas')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('orden_compra_id')
                 ->constrained('orden_compras', indexName: 'fk_factura_orden_compras_orden_compras')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
 
             $table->unique(['factura_id', 'orden_compra_id'], 'uk_factura_orden_compras');
         });

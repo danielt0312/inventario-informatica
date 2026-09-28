@@ -33,12 +33,12 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('facturas', indexName: 'fk_articulos_facturas')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->nullOnDelete();
             $table->foreignId('qr_archivo_id')
                 ->nullable()
                 ->constrained('archivos', indexName: 'fk_articulos_archivos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->nullOnDelete();
             $table->string('numero_inventario', 13)
                 ->nullable();
             $table->string('cuenta_contable', 11)
@@ -59,12 +59,13 @@ return new class extends Migration
             $table->foreignId('articulo_id')
                 ->constrained('articulos', indexName: 'fk_articulo_historial_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->json('datos');
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users', indexName: 'fk_articulo_historial_users')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->timestamp('created_at');
         });
     }

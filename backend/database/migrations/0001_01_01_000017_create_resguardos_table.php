@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('estado_id')
                 ->constrained('resguardo_estados', indexName: 'fk_resguardos_resguardo_estados')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->date('fecha_actualizacion');
             $table->date('fecha_cancelacion')
                 ->nullable();
@@ -32,11 +32,11 @@ return new class extends Migration
             $table->foreignId('resguardo_id')
                 ->constrained('resguardos', indexName: 'fk_resguardo_articulos_resguardos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('articulo_id')
                 ->constrained('articulos', indexName: 'fk_resguardo_articulos_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->date('fecha_asignacion');
             $table->date('fecha_cancelacion')
                 ->nullable();

@@ -28,16 +28,16 @@ return new class extends Migration
             $table->foreignId('tipo_id')
                 ->constrained('ram_tipos', indexName: 'fk_rams_ram_tipos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('capacidad_id')
                 ->constrained('ram_capacidades', indexName: 'fk_rams_ram_capacidades')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('velocidad_id')
                 ->nullable()
                 ->constrained('ram_velocidades', indexName: 'fk_rams_ram_velocidades')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
 
             $table->unique(['tipo_id', 'capacidad_id', 'velocidad_id'], 'uk_rams');
         });
@@ -48,7 +48,7 @@ return new class extends Migration
                 ->unique('uk_articulo_rams')
                 ->constrained('articulos', indexName: 'fk_articulo_rams_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
         });
 
         Schema::create('ram_instalaciones', function (Blueprint $table) {
@@ -56,11 +56,11 @@ return new class extends Migration
             $table->foreignId('articulo_computadora_id')
                 ->constrained('articulo_computadoras', indexName: 'fk_ram_instalaciones_articulo_computadoras')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('articulo_ram_id')
                 ->constrained('articulo_rams', indexName: 'fk_ram_instalaciones_articulo_rams')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->date('fecha_instalacion');
             $table->date('fecha_desinstalacion')
                 ->nullable();

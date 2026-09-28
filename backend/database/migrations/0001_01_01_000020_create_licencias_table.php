@@ -19,7 +19,7 @@ return new class extends Migration
                 ->unique('uk_licencias')
                 ->constrained('licencia_tipos', indexName: 'fk_licencias_licencia_tipos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
         });
 
         Schema::create('articulo_licencias', function (Blueprint $table) {
@@ -28,7 +28,7 @@ return new class extends Migration
                 ->unique('uk_articulo_licencias')
                 ->constrained('articulos', indexName: 'fk_articulo_licencias_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->date('fecha_expiracion')
                 ->nullable();
             $table->timestamps();
@@ -39,11 +39,11 @@ return new class extends Migration
             $table->foreignId('articulo_computadora_id')
                 ->constrained('articulo_computadoras', indexName: 'fk_licencia_instalaciones_articulo_computadoras')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('articulo_licencia_id')
                 ->constrained('articulo_licencias', indexName: 'fk_licencia_instalaciones_licencia_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->date('fecha_instalacion');
             $table->date('fecha_desinstalacion')
                 ->nullable();

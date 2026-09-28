@@ -18,11 +18,11 @@ return new class extends Migration
             $table->foreignId('tipo_id')
                 ->constrained('documento_tipos', indexName: 'fk_documentos_documento_tipos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('archivo_id')
                 ->constrained('archivos', indexName: 'fk_documentos_archivos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->morphs('documentable');
         });
     }

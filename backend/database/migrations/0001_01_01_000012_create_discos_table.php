@@ -32,22 +32,18 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tipo_id')
                 ->constrained('disco_tipos', indexName: 'fk_discos_disco_tipos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('capacidad_id')
                 ->constrained('disco_capacidades', indexName: 'fk_discos_disco_capacidades')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('interfaz_id')
                 ->nullable()
                 ->constrained('disco_interfaces', indexName: 'fk_discos_disco_interfaces')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('factor_forma_id')
                 ->nullable()
                 ->constrained('disco_factor_formas', indexName: 'fk_discos_disco_factor_formas')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->string('spec_key', 40)
                 ->virtualAs(
                     "CONCAT_WS('-', COALESCE(tipo_id,0), COALESCE(capacidad_id,0), COALESCE(interfaz_id,0), COALESCE(factor_forma_id,0))"
@@ -64,7 +60,7 @@ return new class extends Migration
                 ->unique('uk_articulo_discos')
                 ->constrained('articulos', indexName: 'fk_articulo_discos_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
         });
 
         Schema::create('disco_instalaciones', function (Blueprint $table) {
@@ -72,11 +68,11 @@ return new class extends Migration
             $table->foreignId('articulo_computadora_id')
                 ->constrained('articulo_computadoras', indexName: 'fk_disco_instalaciones_articulo_computadoras')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('articulo_disco_id')
                 ->constrained('articulo_discos', indexName: 'fk_disco_instalaciones_disco_articulos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->boolean('es_principal');
             $table->date('fecha_instalacion');
             $table->date('fecha_desinstalacion')

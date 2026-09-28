@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('proveedor_id')
                 ->constrained('proveedores', indexName: 'fk_orden_compras_proveedores')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->timestamps();
         });
     }

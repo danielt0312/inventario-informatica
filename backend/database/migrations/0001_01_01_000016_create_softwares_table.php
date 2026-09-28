@@ -18,11 +18,11 @@ return new class extends Migration
                 ->primary()
                 ->constrained('articulos', indexName: 'fk_articulo_computadora_softwares_articulos_computadora')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('tipo_id')
                 ->constrained('software_tipos', indexName: 'fk_articulo_computadora_softwares_software_tipos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->string('version', 64)
                 ->nullable();
         });

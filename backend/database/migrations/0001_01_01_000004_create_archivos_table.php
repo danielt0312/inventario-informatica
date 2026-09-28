@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->constrained('users', indexName: 'fk_archivo_temporales_users')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->date('expires_at');
             $table->timestamp('created_at');
         });

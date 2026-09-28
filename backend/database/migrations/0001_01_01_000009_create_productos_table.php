@@ -39,12 +39,11 @@ return new class extends Migration
             $table->foreignId('tipo_id')
                 ->constrained('producto_tipos', indexName: 'fk_productos_producto_tipos')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->foreignId('marca_id')
                 ->nullable()
                 ->constrained('producto_marcas', indexName: 'fk_productos_producto_marcas')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
             $table->string('modelo', 128)
                 ->nullable();
             $table->string('producto_key', 300)
@@ -61,9 +60,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('producto_id')
                 ->constrained('productos', indexName: 'fk_producto_variantes_productos')
+                ->cascadeOnUpdate()
                 ->restrictOnDelete();
             $table->nullableMorphs('variante', 'idx_producto_variantes_morph');
-            $table->bool('es_completa');
+            $table->boolean('es_completa');
             $table->unsignedBigInteger('variante_generica_marker')
                 ->nullable()
                 ->virtualAs('CASE WHEN variante_type IS NULL THEN producto_id ELSE NULL END');
