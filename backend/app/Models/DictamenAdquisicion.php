@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
-    BelongsToMany,
     HasMany
 };
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -19,11 +18,14 @@ class DictamenAdquisicion extends Model
     protected $fillable = [
         'dictamen_version_id',
         'empleado_id',
-        'producto_tipo_id',
         'producto_variante_id',
         'articulo_id',
         'cantidad',
         'especificaciones_tecnicas'
+    ];
+
+    protected $attributes = [
+        'especificaciones_tecnicas' => null
     ];
 
     public function version(): BelongsTo
@@ -36,18 +38,6 @@ class DictamenAdquisicion extends Model
         return $this->belongsTo(Empleado::class);
     }
 
-    public function productoTipo(): BelongsTo
-    {
-        return $this->belongsTo(ProductoTipo::class);
-    }
-
-    public function producto(): Attribute
-    {
-        return Attribute::make(
-            fn (): Producto => $this->productoVariante?->producto
-        );
-    }
-
     public function articulo(): BelongsTo
     {
         return $this->belongsTo(Articulo::class);
@@ -58,26 +48,31 @@ class DictamenAdquisicion extends Model
         return $this->hasMany(DictamenSurtimiento::class);
     }
 
-    public function tipo(): Attribute
+    public function producto(): Attribute
     {
         return Attribute::make(
-            fn (mixed $value, array $attributes): ProductoTipo => $attributes['producto_variante_id']
-                ? $this->producto->tipo
-                : $this->productoTipo
+            fn (): Producto => $this->productoVariante->producto
         );
     }
 
-    public function categoria(): Attribute
+    public function productoTipo(): Attribute
     {
         return Attribute::make(
-            fn (): ProductoCategoria => $this->tipo->categoria
+            fn (): ProductoTipo => $this->producto->tipo
         );
     }
 
-    public function marca(): Attribute
+    public function productoCategoria(): Attribute
     {
         return Attribute::make(
-            fn (): ProductoMarca | null => $this->producto?->marca
+            fn (): ProductoCategoria => $this->productoTipo->categoria
+        );
+    }
+
+    public function productoMarca(): Attribute
+    {
+        return Attribute::make(
+            fn (): ProductoMarca => $this->producto->marca
         );
     }
 
@@ -87,8 +82,8 @@ class DictamenAdquisicion extends Model
             fn (mixed $value, array $attributes): string =>
                 str_compact_join(
                     $this->tipo->nombre,
-                    $this->marca?->nombre,
-                    $this->producto?->modelo,
+                    $this->marca->nombre,
+                    $this->producto->modelo,
                     $attributes['especificaciones_tecnicas']
                 )
         );

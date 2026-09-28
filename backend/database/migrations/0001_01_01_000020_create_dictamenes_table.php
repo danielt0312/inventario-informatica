@@ -70,13 +70,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
-            $table->foreignId('producto_tipo_id')
-                ->nullable()
-                ->constrained('producto_tipos', indexName: 'fk_dictamen_adquisiciones_producto_tipos')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->foreignId('producto_variante_id')
-                ->nullable()
                 ->constrained('producto_variantes', indexName: 'fk_dictamen_adquisiciones_producto_variantes')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
