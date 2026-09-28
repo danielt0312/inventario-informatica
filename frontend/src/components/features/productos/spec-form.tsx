@@ -1,14 +1,14 @@
-import { ProductoMarcaField, type ProductoMarcaFieldType } from "./marcas/field";
-import { ProductoModeloField, type ProductoModeloFieldType } from "./create/form-fields";
+import { InputField, type InputFieldType } from "@/components/ui/input-field";
+import { ProductoMarcaField, type ProductoMarcaFieldType } from "./marca-field";
 import { requiredString, selectedNumberOption } from "@/lib/schemas/common";
-import z from "zod";
 import { withFieldGroup } from "@/components/ui/form.shared";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
+import z from "zod";
 
 type Schema = {
     marca_id: ProductoMarcaFieldType;
-    modelo: ProductoModeloFieldType;
+    modelo: InputFieldType;
 }
 
 const defaultValues: Schema = {
@@ -36,12 +36,20 @@ const fieldGroup = withFieldGroup({
         >
             <group.AppField
                 name="marca_id"
-                children={() => <ProductoMarcaField />}
+                children={() => <ProductoMarcaField required />}
             />
 
             <group.AppField
                 name="modelo"
-                children={() => <ProductoModeloField />}
+                children={() => (
+                    <InputField
+                        fieldLayout={{
+                            label: "Modelo"
+                        }}
+                        placeholder="Ingresa el nombre del modelo"
+                        required
+                    />
+                )}
             />
         </FieldGroup>
     )

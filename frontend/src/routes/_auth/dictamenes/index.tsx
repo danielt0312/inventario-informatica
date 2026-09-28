@@ -1,5 +1,5 @@
 import { DictamenTable } from "@/components/features/dictamenes/table";
-import { ProductoMarcaField } from "@/components/features/productos/marcas/field";
+import { ProductoMarcaField } from "@/components/features/productos/marca-field";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppForm } from "@/components/ui/form.shared";
 import { createFileRoute } from "@tanstack/react-router";

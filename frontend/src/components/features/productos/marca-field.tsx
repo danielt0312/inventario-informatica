@@ -1,4 +1,3 @@
-import type { ComboboxFieldSimpleProps } from "@/components/ui/combobox-field-simple";
 import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import type { InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 import type { TResponse } from "@/types/generics";
@@ -10,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAppForm } from "@/components/ui/form.shared";
 import { InputField, type InputFieldType } from "@/components/ui/input-field";
 import { requiredString } from "@/lib/schemas/common";
-import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
+import { CreatableComboboxFieldSimple, type CreatableComboboxFieldSimpleProps } from "@/components/ui/creatable-combobox-field-simple";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FormLayout } from "@/components/ui/form-layout";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,7 @@ import z from "zod";
 type FieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 
 type FieldProps<Multiple extends boolean | undefined = false> = Omit<
-    ComboboxFieldSimpleProps<
+    CreatableComboboxFieldSimpleProps<
         InferComboboxItemFromFn<typeof toComboboxCatalogItems>,
         Multiple
     >,
@@ -57,7 +56,7 @@ function Field<Multiple extends boolean | undefined = false>({
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
     const { mutateAsync } =  useFormMutation<TResponse<ProductoMarca>>({
-        url: 'api/producto_categorias',
+        url: 'api/producto_marcas',
         onSuccess: (data, _, __, { client }) => {
             const newData = data.data.data;
             client.setQueryData(queryKey, (prev = []) => [...prev, newData]);

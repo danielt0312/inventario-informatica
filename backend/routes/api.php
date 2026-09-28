@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{
     ProductoController,
-    ProductoCategoriaController,
+    ProductoMarcaController,
     ProductoTipoController,
     ArticuloController,
     DocumentoController,
