@@ -52,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'empleados' => EmpleadoController::class,
         'adscripciones' => AdscripcionController::class,
         'resguardo_estados' => ResguardoEstadoController::class,
+        'producto_tipos' => ProductoTipoController::class,
     ], ['only' => 'index']);
 
     Route::apiResources([
@@ -60,7 +61,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResources([
         'producto_categorias' => ProductoCategoriaController::class,
-        'producto_tipos' => ProductoTipoController::class,
         'producto_marcas' => ProductoMarcaController::class,
         'productos' => ProductoController::class,
         'orden_compras' => OrdenCompraController::class,

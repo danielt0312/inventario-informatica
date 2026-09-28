@@ -6,11 +6,9 @@ function SubmitFormButton(props: Omit<React.ComponentProps<typeof SubmitButton>,
 
     return (
         <form.Subscribe selector={(state) => state.isSubmitting}>
-            {(isSubmitting) => {
-                console.log('isSubmitting', isSubmitting);
-
-                return <SubmitButton isSubmitting={isSubmitting} {...props} />
-            }}
+            {(isSubmitting) => (
+                <SubmitButton isSubmitting={isSubmitting} {...props} />
+            )}
         </form.Subscribe>
     );
 }

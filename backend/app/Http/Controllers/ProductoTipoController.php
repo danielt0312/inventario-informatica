@@ -17,12 +17,4 @@ class ProductoTipoController extends Controller
             ->get()
             ->toResourceCollection();
     }
-
-    public function store(StoreProductoTipoRequest $request)
-    {
-        return (ProductoTipo::create($request->validated()))
-            ->toResource()
-            ->response()
-            ->setStatusCode(201);
-    }
 }
