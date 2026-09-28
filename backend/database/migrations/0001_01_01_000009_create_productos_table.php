@@ -63,6 +63,7 @@ return new class extends Migration
                 ->constrained('productos', indexName: 'fk_producto_variantes_productos')
                 ->restrictOnDelete();
             $table->nullableMorphs('variante', 'idx_producto_variantes_morph');
+            $table->bool('es_completa');
             $table->unsignedBigInteger('variante_generica_marker')
                 ->nullable()
                 ->virtualAs('CASE WHEN variante_type IS NULL THEN producto_id ELSE NULL END');
