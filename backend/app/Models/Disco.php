@@ -16,6 +16,8 @@ class Disco extends Model
     ];
 
     protected $attributes = [
+        'tipo_id' => null,
+        'capacidad_id' => null,
         'interfaz_id' => null,
         'factor_forma_id' => null
     ];
@@ -46,8 +48,8 @@ class Disco extends Model
     {
         return Attribute::make(
             fn () => str_compact_join(
-                $this->tipo->nombre,
-                $this->capacidad->nombre,
+                $this->tipo?->nombre,
+                $this->capacidad?->nombre,
                 $this->interfaz?->nombre,
                 $this->factorForma?->nombre,
             )

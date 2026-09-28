@@ -48,9 +48,15 @@ return new class extends Migration
                 ->constrained('disco_factor_formas', indexName: 'fk_discos_disco_factor_formas')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-
-            $table->unique(['tipo_id', 'capacidad_id', 'interfaz_id', 'factor_forma_id'], 'uk_discos');
+            $table->string('spec_key', 40)
+                ->virtualAs(
+                    "CONCAT_WS('-', COALESCE(tipo_id,0), COALESCE(capacidad_id,0), COALESCE(interfaz_id,0), COALESCE(factor_forma_id,0))"
+                )->unique('uk_discos_spec');
         });
+
+        DB::statement("ALTER TABLE discos ADD CONSTRAINT chk_discos_alguno CHECK (
+            tipo_id IS NOT NULL OR capacidad_id IS NOT NULL
+            OR interfaz_id IS NOT NULL OR factor_forma_id IS NOT NULL)");
 
         Schema::create('articulo_discos', function (Blueprint $table) {
             $table->id();
