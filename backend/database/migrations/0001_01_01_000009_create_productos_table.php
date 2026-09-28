@@ -36,18 +36,26 @@ return new class extends Migration
 
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->string('modelo', 128);
             $table->foreignId('tipo_id')
                 ->constrained('producto_tipos', indexName: 'fk_productos_producto_tipos')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('marca_id')
+                ->nullable()
                 ->constrained('producto_marcas', indexName: 'fk_productos_producto_marcas')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-
-            $table->unique(['tipo_id', 'marca_id', 'modelo'], 'uk_productos');
+            $table->string('modelo', 128)
+                ->nullable();
+            $table->string('producto_key', 300)
+                ->virtualAs("CONCAT_WS('|', tipo_id, COALESCE(marca_id,0), COALESCE(modelo,''))")
+                ->unique('uk_productos_identidad');
         });
+
+        DB::statement("ALTER TABLE productos ADD CONSTRAINT chk_productos_modelo_marca
+            CHECK (modelo IS NULL OR marca_id IS NOT NULL)");
+        DB::statement("ALTER TABLE productos ADD CONSTRAINT chk_productos_modelo_vacio
+            CHECK (modelo IS NULL OR modelo <> '')");
 
         Schema::create('producto_variantes', function (Blueprint $table) {
             $table->id();

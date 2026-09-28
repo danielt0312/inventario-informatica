@@ -16,6 +16,11 @@ class Producto extends Model
         'modelo'
     ];
 
+    protected $attributes = [
+        'marca_id' => null,
+        'modelo' => null
+    ];
+
     public $timestamps = false;
 
     public function tipo(): BelongsTo
