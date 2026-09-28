@@ -7,7 +7,6 @@ use App\Http\Controllers\{
     ProductoController,
     ProductoCategoriaController,
     ProductoTipoController,
-    ProductoMarcaController,
     ArticuloController,
     DocumentoController,
     DocumentoTipoController,
@@ -60,7 +59,6 @@ Route::middleware('auth:sanctum')->group(function () {
     ], ['only' => ['index', 'show']]);
 
     Route::apiResources([
-        'producto_categorias' => ProductoCategoriaController::class,
         'producto_marcas' => ProductoMarcaController::class,
         'productos' => ProductoController::class,
         'orden_compras' => OrdenCompraController::class,
