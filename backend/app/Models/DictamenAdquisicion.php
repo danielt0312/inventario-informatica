@@ -21,11 +21,15 @@ class DictamenAdquisicion extends Model
         'producto_variante_id',
         'articulo_id',
         'cantidad',
-        'especificaciones_tecnicas'
+        'especificaciones',
+        'borrador'
     ];
 
     protected $attributes = [
-        'especificaciones_tecnicas' => null
+        'producto_variante_id' => null,
+        'articulo_id' => null,
+        'especificaciones' => null,
+        'borrador' => null
     ];
 
     public function version(): BelongsTo
@@ -48,44 +52,16 @@ class DictamenAdquisicion extends Model
         return $this->hasMany(DictamenSurtimiento::class);
     }
 
-    public function producto(): Attribute
-    {
-        return Attribute::make(
-            fn (): Producto => $this->productoVariante->producto
-        );
-    }
-
-    public function productoTipo(): Attribute
-    {
-        return Attribute::make(
-            fn (): ProductoTipo => $this->producto->tipo
-        );
-    }
-
-    public function productoCategoria(): Attribute
-    {
-        return Attribute::make(
-            fn (): ProductoCategoria => $this->productoTipo->categoria
-        );
-    }
-
-    public function productoMarca(): Attribute
-    {
-        return Attribute::make(
-            fn (): ProductoMarca => $this->producto->marca
-        );
-    }
-
     public function descripcion(): Attribute
     {
         return Attribute::make(
-            fn (mixed $value, array $attributes): string =>
-                str_compact_join(
-                    $this->tipo->nombre,
-                    $this->marca->nombre,
-                    $this->producto->modelo,
-                    $attributes['especificaciones_tecnicas']
-                )
+            fn (mixed $value, array $attributes): string | null =>
+                $attributes['producto_variante_id']
+                    ? str_compact_join(
+                        $this->productoVariante->descripcion,
+                        $attributes['especificaciones']
+                    )
+                    : null
         );
     }
 }

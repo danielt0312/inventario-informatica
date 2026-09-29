@@ -19,7 +19,6 @@ class ProductoVariante extends Model
 
     protected $fillable = [
         'producto_id',
-        'es_completa'
     ];
 
     public $timestamps = false;
@@ -44,8 +43,8 @@ class ProductoVariante extends Model
     {
         return Attribute::make(
             fn () => str_compact_join(
-                $this->producto?->marca->nombre,
-                $this->producto?->modelo,
+                $this->producto->marca->nombre,
+                $this->producto->modelo,
                 $this->variante?->descripcion ?? null
             )
         );

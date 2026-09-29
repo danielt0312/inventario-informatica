@@ -41,20 +41,10 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
             $table->foreignId('marca_id')
-                ->nullable()
                 ->constrained('producto_marcas', indexName: 'fk_productos_producto_marcas')
                 ->restrictOnDelete();
-            $table->string('modelo', 128)
-                ->nullable();
-            $table->string('producto_key', 300)
-                ->virtualAs("CONCAT_WS('|', tipo_id, COALESCE(marca_id,0), COALESCE(modelo,''))")
-                ->unique('uk_productos_identidad');
+            $table->string('modelo', 128);
         });
-
-        DB::statement("ALTER TABLE productos ADD CONSTRAINT chk_productos_modelo_marca
-            CHECK (modelo IS NULL OR marca_id IS NOT NULL)");
-        DB::statement("ALTER TABLE productos ADD CONSTRAINT chk_productos_modelo_vacio
-            CHECK (modelo IS NULL OR modelo <> '')");
 
         Schema::create('producto_variantes', function (Blueprint $table) {
             $table->id();
@@ -63,7 +53,6 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
             $table->nullableMorphs('variante', 'idx_producto_variantes_morph');
-            $table->boolean('es_completa');
             $table->unsignedBigInteger('variante_generica_marker')
                 ->nullable()
                 ->virtualAs('CASE WHEN variante_type IS NULL THEN producto_id ELSE NULL END');
@@ -75,13 +64,9 @@ return new class extends Migration
             );
         });
 
-        DB::statement(<<<'SQL'
-            ALTER TABLE producto_variantes
-            ADD CONSTRAINT chk_producto_variantes_morph CHECK (
-                (variante_type IS NULL AND variante_id IS NULL)
-                OR (variante_type IS NOT NULL AND variante_id IS NOT NULL)
-            )
-            SQL);
+        DB::statement("ALTER TABLE producto_variantes ADD CONSTRAINT chk_producto_variantes_morph CHECK (
+            (variante_type IS NULL AND variante_id IS NULL)
+            OR (variante_type IS NOT NULL AND variante_id IS NOT NULL))");
     }
 
     public function down(): void
