@@ -83,8 +83,6 @@ return new class extends Migration
             $table->unsignedTinyInteger('cantidad');
             $table->string('especificaciones', 255)
                 ->nullable();
-            $table->json('borrador')
-                ->nullable();
             $table->timestamps();
         });
 

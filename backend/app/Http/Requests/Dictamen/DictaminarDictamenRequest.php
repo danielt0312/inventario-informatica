@@ -35,8 +35,9 @@ class DictaminarDictamenRequest extends FormRequest
                 'integer',
                 'exists:producto_variantes,id'
             ],
-            'adquisiciones.*.especificaciones_tecnicas' => [
-                'required',
+            'adquisiciones.*.especificaciones' => [
+                'sometimes',
+                'nullable',
                 'string',
                 'max:255'
             ]

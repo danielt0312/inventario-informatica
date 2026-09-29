@@ -2,8 +2,7 @@ import { useAppForm } from '@/components/ui/form.shared';
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { PlusCircleIcon, Trash2Icon } from "lucide-react";
-import { createDictamenFormDefaultValues, createDictamenFormAdquisicionFieldsDefaultValues, createDictamenFormValidator } from "./form-schema";
-import { useStore } from "@tanstack/react-form";
+import { createDictamenFormDefaultValues, createDictamenFormAdquisicionFieldsDefaultValues, crearDictamenFormValidator } from "./form-schema";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
@@ -17,36 +16,27 @@ import { ArticuloNullableNumeroInventarioField } from "@/components/features/art
 import { DictamenAdquisicion } from "@/lib/utils";
 import { Label } from '@/components/ui/label';
 
-function useCreateFormMutation() {
-    const navigate = useNavigate();
-
-    return useFormMutation({
+function Form() {
+    const { mutate } = useFormMutation({
         url: 'api/dictamenes',
         onSuccess: async (_, __, ___, context) => {
             await context.client.invalidateQueries({ queryKey: ['dictamenes'] });
             await navigate({ to: IndexRoute.to });
         }
     });
-}
 
-function useForm() {
-    const { mutate } = useCreateFormMutation();
+    const navigate = useNavigate();
 
-    return useAppForm({
+    const form = useAppForm({
         defaultValues: createDictamenFormDefaultValues,
         validators: {
-            onSubmit: createDictamenFormValidator
+            onSubmit: crearDictamenFormValidator
         },
         onSubmit: ({ value, formApi }) => {
-            const data = createDictamenFormValidator.parse(value);
+            const data = crearDictamenFormValidator.parse(value);
             mutate({ data, formApi });
         }
     });
-}
-
-function Form() {
-    const form = useForm();
-    const adscripcion = useStore(form.store, (state) => state.values.adscripcion_id);
 
     return (
         <PrimitiveForm form={form} className="flex flex-col gap-6">
@@ -86,20 +76,24 @@ function Form() {
                             </div>
 
                             {field.state.value.map((_, index) => (
-                                <Card key={index}>
+                                <Card key={index} className='shadow-none'>
                                     <CardContent className="flex gap-7 items-center">
                                         <div className="flex flex-col gap-7 grow">
                                             <FieldGroup className="grid grid-cols-2">
-                                                <form.AppField
-                                                    name={`adquisiciones[${index}].empleado_id`}
-                                                    children={() => (
-                                                        <EmpleadoField
-                                                            adscripcionId={adscripcion}
-                                                            disabled={adscripcion === undefined}
-                                                            required
+                                                <form.Subscribe selector={(state) => state.values.adscripcion_id}>
+                                                    {adscripcionId => (
+                                                        <form.AppField
+                                                            name={`adquisiciones[${index}].empleado_id`}
+                                                            children={() => (
+                                                                <EmpleadoField
+                                                                    adscripcionId={adscripcionId}
+                                                                    disabled={adscripcionId === undefined}
+                                                                    required
+                                                                />
+                                                            )}
                                                         />
                                                     )}
-                                                />
+                                                </form.Subscribe>
                                             </FieldGroup>
 
                                             <div className="flex flex-row gap-7">
@@ -108,23 +102,26 @@ function Form() {
                                                     children={() => <DictamenCantidadField className="max-w-min" />}
                                                 />
 
-                                                <FieldGroup className="flex-row">
-                                                    <form.AppField
-                                                        name={`adquisiciones[${index}].producto_tipo_id`}
-                                                        children={() => <ProductoTipoField required />}
-                                                    />
+                                                <div className='flex flex-col gap-7 grow'>
+                                                    <FieldGroup className="flex-row">
+                                                        <form.AppField
+                                                            name={`adquisiciones[${index}].borrador.producto.tipo_id`}
+                                                            children={() => <ProductoTipoField required className='w-1/2' />}
+                                                        />
 
-                                                    <div className="w-1/3">
-                                                        <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_tipo_id}>
-                                                            {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
-                                                                <form.AppField
-                                                                    name={`adquisiciones[${index}].numero_inventario`}
-                                                                    children={() => <ArticuloNullableNumeroInventarioField />}
-                                                                />
-                                                            )}
-                                                        </form.Subscribe>
-                                                    </div>
-                                                </FieldGroup>
+                                                        <div className="w-1/2">
+                                                            <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador.producto.tipo_id}>
+                                                                {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
+                                                                    <form.AppField
+                                                                        name={`adquisiciones[${index}].numero_inventario`}
+                                                                        children={() => <ArticuloNullableNumeroInventarioField />}
+                                                                    />
+                                                                )}
+                                                            </form.Subscribe>
+                                                        </div>
+                                                    </FieldGroup>
+
+                                                </div>
                                             </div>
                                         </div>
 

@@ -1,4 +1,4 @@
-import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import type { InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
@@ -18,7 +18,7 @@ import { useFormMutation } from "@/hooks/use-form-mutation";
 import React from "react";
 import z from "zod";
 
-type FieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
+type FieldType<EmptyValue extends ComboboxFieldEmptyType = undefined, Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, EmptyValue>;
 
 type FieldProps<Multiple extends boolean | undefined = false> = Omit<
     CreatableComboboxFieldSimpleProps<
@@ -26,7 +26,9 @@ type FieldProps<Multiple extends boolean | undefined = false> = Omit<
         Multiple
     >,
     'items' | 'onCreate'
->;
+> & {
+    emptyValue?: ComboboxFieldEmptyType;
+}
 
 type Schema = {
     nombre: InputFieldType;
@@ -42,9 +44,10 @@ const validator = z.object({
 
 function Field<Multiple extends boolean | undefined = false>({
     layout,
+    emptyValue = undefined,
     ...props
 }: FieldProps<Multiple>) {
-    const field = useFieldContext<FieldType>();
+    const field = useFieldContext<FieldType<typeof emptyValue>>();
 
     const { queryKey } = productoMarcaQueryOptions;
 
@@ -55,7 +58,7 @@ function Field<Multiple extends boolean | undefined = false>({
 
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
 
-    const { mutateAsync } =  useFormMutation<TResponse<ProductoMarca>>({
+    const { mutateAsync } = useFormMutation<TResponse<ProductoMarca>>({
         url: 'api/producto_marcas',
         onSuccess: (data, _, __, { client }) => {
             const newData = data.data.data;
@@ -88,7 +91,7 @@ function Field<Multiple extends boolean | undefined = false>({
                 onCreate={(searchValue) => {
                     form.setFieldValue('nombre', searchValue);
                     setDialogIsOpen(true);
-                    field.handleChange(undefined);
+                    field.handleChange(emptyValue);
                 }}
                 {...props}
             />

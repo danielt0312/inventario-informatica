@@ -22,14 +22,13 @@ class DictamenAdquisicion extends Model
         'articulo_id',
         'cantidad',
         'especificaciones',
-        'borrador'
+        'solicitado'
     ];
 
     protected $attributes = [
         'producto_variante_id' => null,
         'articulo_id' => null,
-        'especificaciones' => null,
-        'borrador' => null
+        'especificaciones' => null
     ];
 
     public function version(): BelongsTo

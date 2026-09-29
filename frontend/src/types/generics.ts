@@ -49,3 +49,7 @@ export type WithTimestamps<T extends object | never = never> = ([T] extends [nev
 }
 
 export type RowDataAccessorFn<TRowData extends RowData, TData = unknown> = (row: TRowData) => TData;
+
+export type BooleanMap<T extends Record<string, unknown>> = {
+    [K in keyof T]: boolean;
+}

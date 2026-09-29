@@ -35,15 +35,11 @@ class StoreProductoRequest extends FormRequest
                 }
             ],
             'marca_id' => [
-                'sometimes',
-                'nullable',
                 'required',
                 'integer',
                 'exists:producto_marcas,id'
             ],
             'modelo' => [
-                'sometimes',
-                'nullable',
                 'required',
                 'string',
                 'max:128',

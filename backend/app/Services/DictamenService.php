@@ -60,7 +60,7 @@ class DictamenService
                 'estado_id' => DictamenEstadoEnum::Dictaminar->value,
                 'empleado_id' => 1, // todo obtener jefe de adscripcion interna
                 'adscripcion_id' => $data->adscripcionId,
-                'oficio_id' => $oficio?->id
+                'oficio_id' => $oficio?->id,
             ]);
 
             $nuevaVersion = $dictamen->versiones()->create([
@@ -83,9 +83,9 @@ class DictamenService
                 $dictamen->versionActual->adquisiciones()
                     ->where('id', $adquisicion->id)
                     ->update([
-                        'producto_tipo_id' => null,
+                        'borrador' => null,
                         'producto_variante_id' => $adquisicion->productoVarianteId,
-                        'especificaciones_tecnicas' => $adquisicion->especificacionesTecnicas
+                        'especificaciones' => $adquisicion->especificaciones
                     ]);
             }
 

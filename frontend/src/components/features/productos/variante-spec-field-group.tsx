@@ -5,6 +5,7 @@ import { withFieldGroup } from "@/components/ui/form.shared";
 import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import z from "zod";
+import type { BooleanMap } from "@/types/generics";
 
 type Schema = {
     marca_id: ProductoMarcaFieldType;
@@ -23,10 +24,16 @@ const validator = z.object({
 
 type OutputSchema = z.output<typeof validator>;
 
+type RequiredFields = BooleanMap<Schema>;
+
+type FieldGroupProps = React.ComponentProps<typeof FieldGroup> & {
+    required?: Partial<RequiredFields>;
+}
+
 const fieldGroup = withFieldGroup({
     defaultValues,
-    props: {} as React.ComponentProps<typeof FieldGroup>,
-    render: ({ group, className, ...props }) => (
+    props: {} as FieldGroupProps,
+    render: ({ group, className, required, ...props }) => (
         <FieldGroup
             className={cn(
                 "flex-row",
@@ -36,7 +43,7 @@ const fieldGroup = withFieldGroup({
         >
             <group.AppField
                 name="marca_id"
-                children={() => <ProductoMarcaField required />}
+                children={() => <ProductoMarcaField layout={{ label: 'Marca' }} required={required?.marca_id} />}
             />
 
             <group.AppField
@@ -47,7 +54,7 @@ const fieldGroup = withFieldGroup({
                             label: "Modelo"
                         }}
                         placeholder="Ingresa el nombre del modelo"
-                        required
+                        required={required?.modelo}
                     />
                 )}
             />
@@ -60,5 +67,6 @@ export {
     validator as productoVarianteSpecFormValidator,
     type Schema as ProductoVarianteSpecSchema,
     type OutputSchema as ProductoVarianteSpecOutputSchema,
+    type RequiredFields as ProductoVarianteSpecRequiredFields,
     fieldGroup as ProductoVarianteSpecFieldGroup
 }

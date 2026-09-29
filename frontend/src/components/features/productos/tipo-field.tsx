@@ -8,31 +8,25 @@ import { ComboboxFieldGrouped, type ComboboxFieldGroupedProps } from "@/componen
 type FieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
 
 const dataToComboboxItems = (data: ProductoTipoWithCategoria[]) => {
-    const productoTiposPorCategoria = new Map<number, typeof data>();
-    const categoriasDisponibles: ProductoCategoria[] = [];
+    const grupos = new Map<number, { categoria: ProductoCategoria; tipo: ProductoTipoWithCategoria[] }>();
 
-    for (const generica of data) {
-        const categoriaId = generica.categoria.id;
-        let productos = productoTiposPorCategoria.get(categoriaId);
+    for (const producto of data) {
+        const { categoria } = producto;
+        const grupo = grupos.get(categoria.id);
 
-        if (!productos) {
-            productos = [];
-            productoTiposPorCategoria.set(categoriaId, []);
-            categoriasDisponibles.push(generica.categoria);
+        if (grupo) {
+            grupo.tipo.push(producto);
+        } else {
+            grupos.set(categoria.id, { categoria, tipo: [producto] });
         }
-
-        productos.push(generica);
     }
 
-    return toComboboxGroups(categoriasDisponibles, (categoria) => ({
+    return toComboboxGroups([...grupos.values()], ({ categoria, tipo: productos }) => ({
         label: categoria.nombre,
-        items: toComboboxItems(
-            productoTiposPorCategoria.get(categoria.id) ?? [],
-            (producto) => ({
-                value: producto.id,
-                label: producto.nombre
-            })
-        )
+        items: toComboboxItems(productos, (producto) => ({
+            value: producto.id,
+            label: producto.nombre,
+        })),
     }));
 }
 

@@ -47,16 +47,40 @@ class StoreDictamenRequest extends FormRequest
                 'required',
                 'integer'
             ],
-            'adquisiciones.*.producto_tipo_id' => [
-                'required',
-                'integer',
-                'exists:producto_tipos,id'
-            ],
             'adquisiciones.*.numero_inventario' => [
                 'sometimes',
                 'nullable',
                 'string',
                 'max:13'
+            ],
+            'adquisiciones.*.borrador' => [
+                'required',
+                'array'
+            ]
+            'adquisiciones.*.borrador.producto.tipo_id' => [
+                'required',
+                'integer',
+                'exists:producto_tipos,id',
+            ],
+            'adquisiciones.*.borrador.producto.marca_id' => [
+                'sometimes',
+                'nullable',
+                'integer',
+                'exists:producto_marcas,id',
+            ],
+            'adquisiciones.*.borrador.producto.modelo' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'max:128',
+                'unique:productos,modelo',
+            ],
+
+            // todo agregar validación dinámica según `adquisiciones.*.borrador.producto.tipo_id`
+            'adquisiciones.*.borrador.spec' => [
+                'sometimes',
+                'nullable',
+                'json'
             ]
         ];
     }

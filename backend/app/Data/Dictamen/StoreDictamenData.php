@@ -34,7 +34,7 @@ class StoreDictamenData extends Data
             adquisiciones: $validated['adquisiciones'],
             oficio: !empty($validated['folio'])
                 ? StoreOficioData::from(['folio' => $validated['folio']])
-                : null
+                : null,
         );
     }
 }
