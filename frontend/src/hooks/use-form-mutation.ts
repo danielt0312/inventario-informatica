@@ -10,7 +10,7 @@ export interface FormMutationFunction<TPayload = any> {
     formApi?: AnyFormApi;
 }
 
-type FormMutationOptions<TResponse = any, TPayload = any, TError = LaravelValidationErrors> = Omit<
+export type FormMutationOptions<TResponse = any, TPayload = any, TError = LaravelValidationErrors> = Omit<
     UseMutationOptions<
         AxiosResponse<TResponse>,
         AxiosError<TError>,
@@ -25,8 +25,7 @@ type FormMutationOptions<TResponse = any, TPayload = any, TError = LaravelValida
 }
 
 export type FormMutationMethod = 'POST' | 'PUT' | 'PATCH';
-export interface FormMutation<TResponse = any, TPayload = any, TError = LaravelValidationErrors>
-    extends FormMutationOptions<TResponse, TPayload, TError> { }
+export interface FormMutation<TResponse = any, TPayload = any, TError = LaravelValidationErrors> extends FormMutationOptions<TResponse, TPayload, TError> {}
 
 export function formMutationOptions<TResponse = any, TPayload = any, TError = LaravelValidationErrors>({
     url: urlProp,
@@ -66,9 +65,11 @@ export function formMutationOptions<TResponse = any, TPayload = any, TError = La
 }
 
 export function useFormMutation<TResponse = any, TPayload = any, TError = LaravelValidationErrors>(
-    options: FormMutation<TResponse, TPayload, TError>, queryClient?: QueryClient
+    options: FormMutation<TResponse, TPayload, TError>,
+    queryClient?: QueryClient
 ) {
-    return useMutation({
-        ...formMutationOptions(options)
-    }, queryClient);
+    return useMutation(
+        formMutationOptions<TResponse, TPayload, TError>(options),
+        queryClient
+    );
 }
