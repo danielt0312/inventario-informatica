@@ -21,7 +21,7 @@ type CreatableComboboxFieldGroupedProps<
     layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">
     onFieldValueChange?: (
         value: Multiple extends true ? Item[] : Item | Empty
-    ) => ComboboxFieldType<Multiple, Empty>
+    ) => ComboboxFieldType<Empty, Multiple>
 }
 
 function createCreatableComboboxFieldGrouped<Empty extends ComboboxFieldEmptyType>(
@@ -47,7 +47,7 @@ function createCreatableComboboxFieldGrouped<Empty extends ComboboxFieldEmptyTyp
             [items]
         )
 
-        const field = useFieldContext<ComboboxFieldType<Multiple, Empty>>()
+        const field = useFieldContext<ComboboxFieldType<Empty, Multiple>>()
         const derivedValue = useComboboxFieldValue(
             flatItems,
             field.state.value,

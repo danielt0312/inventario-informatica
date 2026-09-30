@@ -5,27 +5,27 @@ import { useFieldContext } from "./form-context"
 export type ComboboxFieldEmptyType = undefined | null
 
 export type ComboboxFieldType<
+    Empty extends ComboboxFieldEmptyType,
     Multiple extends boolean | undefined,
-    TEmpty extends ComboboxFieldEmptyType,
-    TValue extends React.Key = number,
-> = Multiple extends true ? TValue[] | TEmpty : TValue | TEmpty
+    Value extends React.Key = number,
+> = Multiple extends true ? Value[] | Empty : Value | Empty
 
 /** Deriva el TItem (o TItem[]) real a partir del primitivo que vive en
  * TanStack Form + los `items` disponibles — nunca depende de que el
  * consumidor pase el objeto completo por fuera en paralelo al field. */
 export function useComboboxFieldValue<
-    TItem extends ComboboxLayoutItem,
+    Item extends ComboboxLayoutItem,
     Multiple extends boolean | undefined,
-    TEmpty extends ComboboxFieldEmptyType,
+    Empty extends ComboboxFieldEmptyType,
 >(
-    items: readonly TItem[],
-    fieldValue: ComboboxFieldType<Multiple, TEmpty>,
+    items: readonly Item[],
+    fieldValue: ComboboxFieldType<Empty, Multiple>,
     multiple: Multiple,
-    emptyValue: TEmpty
-): Multiple extends true ? TItem[] : TItem | TEmpty {
+    emptyValue: Empty
+): Multiple extends true ? Item[] : Item | Empty {
     return React.useMemo(() => {
         if (multiple) {
-            const keys = (fieldValue as React.Key[] | TEmpty) ?? []
+            const keys = (fieldValue as React.Key[] | Empty) ?? []
             return items.filter((item) =>
                 (keys as React.Key[]).includes(item.value)
             ) as never
@@ -44,4 +44,4 @@ export function defaultFieldValueFromItem<TEmpty extends ComboboxFieldEmptyType>
             : (value?.value ?? emptyValue)
 }
 
-export const useComboboxFieldContext = <Multiple extends ComboboxLayoutMultiple = false, TEmpty extends ComboboxFieldEmptyType = undefined>() => useFieldContext<ComboboxFieldType<Multiple, TEmpty>>();
+export const useComboboxFieldContext = <Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLayoutMultiple>() => useFieldContext<ComboboxFieldType<Empty, Multiple>>();

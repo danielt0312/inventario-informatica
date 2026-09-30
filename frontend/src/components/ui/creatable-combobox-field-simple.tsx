@@ -15,41 +15,67 @@ type CreatableComboboxLayoutFieldSimpleProps<
 > = Omit<CreatableComboboxSimpleProps<Multiple, Item>, 'value' | 'onValueChange'> & {
     onFieldValueChange?: (
         value: Multiple extends true ? Item[] : Item | Empty
-    ) => ComboboxFieldType<Multiple, Empty>
+    ) => ComboboxFieldType<Empty, Multiple>
 }
 
-function createCreatableComboboxFieldSimple<Empty extends ComboboxFieldEmptyType>(emptyValue: Empty) {
+type CreatableComboboxFieldSimpleBaseProps<
+    Empty extends ComboboxFieldEmptyType,
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+> = CreatableComboboxLayoutFieldSimpleProps<Empty, Multiple, Item> & {
+    emptyValue: Empty;
+}
+
+function CreatableComboboxFieldSimpleBase<
+    Empty extends ComboboxFieldEmptyType,
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+>({
+    emptyValue,
+    ...props
+}: CreatableComboboxFieldSimpleBaseProps<Empty, Multiple, Item>) {
+    const {
+        items,
+        layout,
+        onFieldValueChange = defaultFieldValueFromItem(emptyValue),
+        ...comboboxProps
+    } = props
+
+    const field = useFieldContext<ComboboxFieldType<Empty, Multiple>>()
+    const derivedValue = useComboboxFieldValue(
+        items,
+        field.state.value,
+        comboboxProps.multiple,
+        emptyValue
+    )
+
+    return (
+        <CreatableComboboxSimple<Multiple, Item>
+            {...comboboxProps}
+            layout={{
+                errors: field.state.meta.errors,
+                ...layout
+            }}
+            items={items}
+            value={derivedValue as never}
+            onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}
+        />
+    );
+}
+
+function createCreatableComboboxFieldSimple<Empty extends ComboboxFieldEmptyType>(
+    emptyValue: Empty
+) {
     return function CreatableComboboxFieldSimpleImpl<
         Item extends ComboboxLayoutItem,
         Multiple extends ComboboxLayoutMultiple,
     >(props: CreatableComboboxLayoutFieldSimpleProps<Empty, Multiple, Item>) {
-        const {
-            items,
-            layout,
-            onFieldValueChange = defaultFieldValueFromItem(emptyValue),
-            ...comboboxProps
-        } = props
-
-        const field = useFieldContext<ComboboxFieldType<Multiple, Empty>>()
-        const derivedValue = useComboboxFieldValue(
-            items,
-            field.state.value,
-            comboboxProps.multiple as never,
-            emptyValue
-        )
-
         return (
-            <CreatableComboboxSimple<Multiple, Item>
-                {...comboboxProps}
-                layout={{
-                    errors: field.state.meta.errors,
-                    ...layout
-                }}
-                items={items}
-                value={derivedValue as never}
-                onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}
+            <CreatableComboboxFieldSimpleBase<Empty, Multiple, Item>
+                {...props}
+                emptyValue={emptyValue}
             />
-        );
+        )
     }
 }
 
@@ -57,7 +83,9 @@ const CreatableComboboxFieldSimple = createCreatableComboboxFieldSimple(undefine
 const NullableCreatableComboboxFieldSimple = createCreatableComboboxFieldSimple(null)
 
 export {
+    CreatableComboboxFieldSimpleBase,
     CreatableComboboxFieldSimple,
     NullableCreatableComboboxFieldSimple,
-    type CreatableComboboxLayoutFieldSimpleProps
+    type CreatableComboboxLayoutFieldSimpleProps,
+    type CreatableComboboxFieldSimpleBaseProps
 }

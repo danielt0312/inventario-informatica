@@ -3,12 +3,12 @@ import { ComboboxLayoutGrouped } from "./combobox-layout-grouped"
 import type { ComboboxLayoutGroupedComponentProps } from "./combobox-layout-grouped"
 import type { ComboboxLayoutGroup, ComboboxLayoutItem, ComboboxLayoutMultiple } from "./combobox-layout.shared"
 import { FieldLayout, type CoreFieldLayoutProps } from "./field-layout"
-import { useFieldContext } from "./form-context"
 import {
     useComboboxFieldValue,
     defaultFieldValueFromItem,
     type ComboboxFieldEmptyType,
     type ComboboxFieldType,
+    useComboboxFieldContext,
 } from "./combobox-field.shared"
 
 export type ComboboxFieldGroupedProps<
@@ -20,7 +20,7 @@ export type ComboboxFieldGroupedProps<
     layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">
     onFieldValueChange?: (
         value: Multiple extends true ? Item[] : Item | Empty
-    ) => ComboboxFieldType<Multiple, Empty>
+    ) => ComboboxFieldType<Empty, Multiple>
 }
 
 function createComboboxFieldGrouped<Empty extends ComboboxFieldEmptyType>(emptyValue: Empty) {
@@ -44,7 +44,7 @@ function createComboboxFieldGrouped<Empty extends ComboboxFieldEmptyType>(emptyV
             [items]
         )
 
-        const field = useFieldContext<ComboboxFieldType<Multiple, Empty>>()
+        const field = useComboboxFieldContext<Empty, Multiple>()
         const derivedValue = useComboboxFieldValue(
             flatItems,
             field.state.value,
