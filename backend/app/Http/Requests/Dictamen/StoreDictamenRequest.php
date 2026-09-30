@@ -85,32 +85,32 @@ class StoreDictamenRequest extends FormRequest
         ];
     }
 
-    public function after() {
-        return [
-            function (Validator $validator) {
-                if ($validator->errors()->isNotEmpty()) return;
+    // public function after() {
+    //     return [
+    //         function (Validator $validator) {
+    //             if ($validator->errors()->isNotEmpty()) return;
 
-                $adquisicionesPayload = collect($this->input('adquisiciones'));
+    //             $adquisicionesPayload = collect($this->input('adquisiciones'));
 
-                $numerosInventarioPayload = $adquisicionesPayload->pluck('numero_inventario')
-                    ->filter()
-                    ->unique();
+    //             $numerosInventarioPayload = $adquisicionesPayload->pluck('numero_inventario')
+    //                 ->filter()
+    //                 ->unique();
 
-                if ($numerosInventarioPayload->isEmpty()) return;
+    //             if ($numerosInventarioPayload->isEmpty()) return;
 
-                $articulos = Articulo::whereIn('numero_inventario', $numerosInventarioPayload)
-                    ->get();
+    //             $articulos = Articulo::whereIn('numero_inventario', $numerosInventarioPayload)
+    //                 ->get();
 
-                foreach ($adquisicionesPayload as $index => $adquisicionPayload) {
-                    $this->validateNumeroInventario(
-                        $validator,
-                        $articulos,
-                        $adquisicionPayload['producto_tipo_id'],
-                        $adquisicionPayload['numero_inventario'],
-                        "adquisiciones.$index.numero_inventario"
-                    );
-                }
-            }
-        ];
-    }
+    //             foreach ($adquisicionesPayload as $index => $adquisicionPayload) {
+    //                 $this->validateNumeroInventario(
+    //                     $validator,
+    //                     $articulos,
+    //                     $adquisicionPayload['producto_tipo_id'],
+    //                     $adquisicionPayload['numero_inventario'],
+    //                     "adquisiciones.$index.numero_inventario"
+    //                 );
+    //             }
+    //         }
+    //     ];
+    // }
 }

@@ -5,7 +5,7 @@ import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { FormLayout } from "@/components/ui/form-layout";
 import { FieldError, FieldGroup } from "@/components/ui/field";
-import { DictamenCantidadField, DictamenEspecificacionesTecnicasField, DictamenMotivoCambioField } from "../fields";
+import { DictamenCantidadField, DictamenCaracteristicasAdicionalesField, DictamenMotivoCambioField } from "../fields";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, CircleXIcon, PlusCircleIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -129,7 +129,7 @@ export const DictamenCorregirForm = () => {
                                             <FieldGroup className="flex-row">
                                                 <form.AppField
                                                     name={`adquisiciones[${index}].especificaciones_tecnicas`}
-                                                    children={() => <DictamenEspecificacionesTecnicasField className="w-1/2" />}
+                                                    children={() => <DictamenCaracteristicasAdicionalesField className="w-1/2" />}
                                                 />
 
                                                 <div className="w-1/2">

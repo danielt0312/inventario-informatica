@@ -1,12 +1,12 @@
 import { nullableString, requiredArray, selectedNumberOption } from "@/lib/schemas/common";
 import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
-import type { DictamenEspecificacionesTecnicasFieldType } from "../fields";
+import type { DictamenCaracteristicasAdicionalesFieldType } from "../fields";
 import type { ProductoTipoFieldType } from "../../productos/tipo-field";
 import z from "zod";
 
 type AdquisicionFields = {
     id: number;
-    especificaciones_tecnicas: DictamenEspecificacionesTecnicasFieldType;
+    especificaciones_tecnicas: DictamenCaracteristicasAdicionalesFieldType;
     producto_tipo_id: ProductoTipoFieldType;
     producto_variante_id: ProductoVariante;
 }

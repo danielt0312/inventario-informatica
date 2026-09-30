@@ -22,6 +22,7 @@ type BorradorFields = {
         modelo: string | null;
     };
     spec: Record<string, unknown> | null;
+    caracteristicas_adicionales: string | null;
 }
 
 const borradorFieldsDefaultValues: BorradorFields = {
@@ -30,7 +31,8 @@ const borradorFieldsDefaultValues: BorradorFields = {
         marca_id: null,
         modelo: null,
     },
-    spec: null
+    spec: null,
+    caracteristicas_adicionales: null
 }
 
 type AdquisicionFields = {
@@ -69,7 +71,8 @@ const borradorFieldsValidator = z.object({
         marca_id: selectedNumberOption.nullable(),
         modelo: trimmedString().nullable()
     }),
-    spec: z.object().nullable()
+    spec: z.object().nullable(),
+    caracteristicas_adicionales: trimmedString().nullable()
 })
 
 const adquisicionFieldsValidator = z
@@ -89,7 +92,7 @@ const validator = z.object({
 });
 
 export {
-    adquisicionFieldsDefaultValues as createDictamenFormAdquisicionFieldsDefaultValues,
-    defaultValues as createDictamenFormDefaultValues,
+    adquisicionFieldsDefaultValues as crearDictamenAdquisicionFieldsDefaultFormValues,
+    defaultValues as crearDictamenFormDefaultValues,
     validator as crearDictamenFormValidator
 }

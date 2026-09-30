@@ -22,7 +22,8 @@ class DictamenAdquisicion extends Model
         'articulo_id',
         'cantidad',
         'especificaciones',
-        'solicitado'
+        'detalle_solicitud',
+        'borrador',
     ];
 
     protected $attributes = [

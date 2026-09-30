@@ -5,13 +5,15 @@ import { ArchivoUploaderField, type ArchivoUploaderFieldType } from "@/component
 import React from "react";
 import { useFieldContext } from "@/components/ui/form-context";
 import { InputGroupAddon, InputGroupButton } from "@/components/ui/input-group";
-import { PlusCircleIcon } from "lucide-react";
+import { CirclePlusIcon, PlusCircleIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FormLayout } from "@/components/ui/form-layout";
 import { useAppForm } from "@/components/ui/form.shared";
 import { discoDefaultFormValues, DiscoFieldsGroup, discoFormValidator } from "../discos/field";
 import { ProductoVarianteSpecFieldGroup } from "../productos/variante-spec-field-group";
 import { Button } from "@/components/ui/button";
+import type { ProductoTipoFieldType } from "../productos/tipo-field";
+import type { ProductoMarcaFieldType } from "../productos/marca-field";
 
 export type DictamenCantidadFieldType = NumberInputFieldType;
 export const DictamenCantidadField = ({
@@ -77,18 +79,18 @@ export const DictamenOficioArchivoField = ({
 );
 
 
-export type DictamenEspecificacionesTecnicasFieldType = NullableTextareaFieldType;
-export function DictamenEspecificacionesTecnicasField({
+export type DictamenCaracteristicasAdicionalesFieldType = NullableTextareaFieldType;
+export function DictamenCaracteristicasAdicionalesField({
     fieldLayout,
     ...props
 }: React.ComponentProps<typeof TextareaField>) {
     return (
         <NullableTextareaField
             fieldLayout={{
-                label: "Especificaciones técnicas",
+                label: "Características adicionales",
                 ...fieldLayout
             }}
-            placeholder="Ingresa las especificaciones técnicas"
+            placeholder="Ingresa cualquier característica adicional"
             {...props}
         />
     );

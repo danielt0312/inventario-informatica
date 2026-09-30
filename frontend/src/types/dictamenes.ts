@@ -1,7 +1,6 @@
 import type { DictamenEstadoEnum } from "@/lib/constants";
 import type { Includable, TCatalogo } from "./generics";
 import type { Archivo, Oficio } from "./documentos";
-import type { DetailedProducto, DetailedProductoTipo } from "./productos";
 import type { Articulo } from "./articulos";
 import type { OrdenCompra } from "./orden_compras";
 
@@ -55,13 +54,13 @@ type DetailedBase<TDictamen extends Base = Base, TVersionActualWithAdquisiciones
 type DictaminarEstado = BaseEstado<typeof DictamenEstadoEnum.Dictaminar>;
 type Dictaminar = Base<DictaminarEstado>;
 type DictaminarAdquisicion = BaseAdquisicion & {
-    producto_tipo: DetailedProductoTipo;
+    producto_tipo: null;
 }
 type DictaminarVersion = BaseVersion;
 type DetailedDictaminar = DetailedBase<Dictaminar, VersionActualWithAdquisiciones<VersionWithAdquisiciones<DictaminarVersion, Adquisiciones<DictaminarAdquisicion>>>>;
 
 type BaseDictaminadoAdquisicion = BaseAdquisicion & {
-    producto: DetailedProducto;
+    producto: null;
     especificaciones_tecnicas: string;
 }
 type BaseDictaminadoVersion = BaseVersion & {

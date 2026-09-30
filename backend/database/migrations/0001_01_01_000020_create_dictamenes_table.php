@@ -81,7 +81,9 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
             $table->unsignedTinyInteger('cantidad');
-            $table->string('especificaciones', 255)
+            $table->string('detalle_solicitud', 255);
+            $table->json('borrador');
+            $table->string('caracteristicas_adicionales', 255)
                 ->nullable();
             $table->timestamps();
         });

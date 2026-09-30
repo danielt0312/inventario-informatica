@@ -45,6 +45,8 @@ function NombreField({
     );
 }
 
+
+
 type CapacidadFieldType = ComboboxFieldType<false, undefined>;
 function CapacidadField({
     layout,

@@ -2,7 +2,7 @@ import { useAppForm } from '@/components/ui/form.shared';
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { PlusCircleIcon, Trash2Icon } from "lucide-react";
-import { createDictamenFormDefaultValues, createDictamenFormAdquisicionFieldsDefaultValues, crearDictamenFormValidator } from "./form-schema";
+import { crearDictamenFormDefaultValues, crearDictamenAdquisicionFieldsDefaultFormValues, crearDictamenFormValidator } from "./form-schema";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
@@ -15,6 +15,7 @@ import { ProductoTipoField } from '@/components/features/productos/tipo-field';
 import { ArticuloNullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { DictamenAdquisicion } from "@/lib/utils";
 import { Label } from '@/components/ui/label';
+import { DictamenBorradorField } from '../borrador-field';
 
 function Form() {
     const { mutate } = useFormMutation({
@@ -28,7 +29,7 @@ function Form() {
     const navigate = useNavigate();
 
     const form = useAppForm({
-        defaultValues: createDictamenFormDefaultValues,
+        defaultValues: crearDictamenFormDefaultValues,
         validators: {
             onSubmit: crearDictamenFormValidator
         },
@@ -69,7 +70,7 @@ function Form() {
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => field.pushValue(createDictamenFormAdquisicionFieldsDefaultValues)}
+                                    onClick={() => field.pushValue(crearDictamenAdquisicionFieldsDefaultFormValues)}
                                 >
                                     <PlusCircleIcon /> Agregar
                                 </Button>
@@ -121,6 +122,14 @@ function Form() {
                                                         </div>
                                                     </FieldGroup>
 
+                                                    <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador.producto.tipo_id}>
+                                                        {(productoTipoId) =>
+                                                            <form.AppField
+                                                                name={`adquisiciones[${index}].borrador`}
+                                                                children={() => <DictamenBorradorField productoTipoId={productoTipoId} />}
+                                                            />
+                                                        }
+                                                    </form.Subscribe>
                                                 </div>
                                             </div>
                                         </div>
