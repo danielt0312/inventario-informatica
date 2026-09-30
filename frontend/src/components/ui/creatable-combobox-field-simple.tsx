@@ -1,7 +1,4 @@
-import { CreatableComboboxSimple } from "./creatable-combobox-simple"
-import type { CreatableComboboxSimpleProps } from "./creatable-combobox-simple"
-import type { ComboboxLayoutItem } from "./combobox-layout.shared"
-import { FieldLayout, type CoreFieldLayoutProps } from "./field-layout"
+import type { ComboboxLayoutItem, ComboboxLayoutMultiple } from "./combobox-layout.shared"
 import { useFieldContext } from "./form-context"
 import {
     useComboboxFieldValue,
@@ -9,34 +6,31 @@ import {
     type ComboboxFieldEmptyType,
     type ComboboxFieldType,
 } from "./combobox-field.shared"
+import { CreatableComboboxSimple, type CreatableComboboxSimpleProps } from "./creatable-combobox-simple"
 
-type CreatableComboboxFieldSimpleProps<
-    TItem extends ComboboxLayoutItem,
-    Multiple extends boolean | undefined = false,
-    TEmpty extends ComboboxFieldEmptyType = undefined,
-> = Omit<CreatableComboboxSimpleProps<TItem, Multiple>, "value" | "onValueChange"> & {
-    layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">
+type CreatableComboboxLayoutFieldSimpleProps<
+    Empty extends ComboboxFieldEmptyType,
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+> = Omit<CreatableComboboxSimpleProps<Multiple, Item>, 'value' | 'onValueChange'> & {
     onFieldValueChange?: (
-        value: Multiple extends true ? TItem[] : TItem | TEmpty
-    ) => ComboboxFieldType<Multiple, TEmpty>
+        value: Multiple extends true ? Item[] : Item | Empty
+    ) => ComboboxFieldType<Multiple, Empty>
 }
 
-function createCreatableComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyType>(emptyValue: TEmpty) {
+function createCreatableComboboxFieldSimple<Empty extends ComboboxFieldEmptyType>(emptyValue: Empty) {
     return function CreatableComboboxFieldSimpleImpl<
-        TItem extends ComboboxLayoutItem,
-        Multiple extends boolean | undefined = false,
-    >(props: CreatableComboboxFieldSimpleProps<TItem, Multiple, TEmpty>) {
+        Item extends ComboboxLayoutItem,
+        Multiple extends ComboboxLayoutMultiple,
+    >(props: CreatableComboboxLayoutFieldSimpleProps<Empty, Multiple, Item>) {
         const {
             items,
             layout,
-            className,
-            required,
-            disabled,
             onFieldValueChange = defaultFieldValueFromItem(emptyValue),
             ...comboboxProps
         } = props
 
-        const field = useFieldContext<ComboboxFieldType<Multiple, TEmpty>>()
+        const field = useFieldContext<ComboboxFieldType<Multiple, Empty>>()
         const derivedValue = useComboboxFieldValue(
             items,
             field.state.value,
@@ -45,25 +39,17 @@ function createCreatableComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyTyp
         )
 
         return (
-            <FieldLayout
-                className={className}
-                fieldLayout={{
-                    required,
-                    disabled,
+            <CreatableComboboxSimple<Multiple, Item>
+                {...comboboxProps}
+                layout={{
                     errors: field.state.meta.errors,
                     ...layout
                 }}
-            >
-                <CreatableComboboxSimple<TItem, Multiple>
-                    {...comboboxProps}
-                    items={items}
-                    required={required}
-                    disabled={disabled}
-                    value={(derivedValue ?? null) as never}
-                    onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}
-                />
-            </FieldLayout>
-        )
+                items={items}
+                value={derivedValue as never}
+                onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}
+            />
+        );
     }
 }
 
@@ -73,5 +59,5 @@ const NullableCreatableComboboxFieldSimple = createCreatableComboboxFieldSimple(
 export {
     CreatableComboboxFieldSimple,
     NullableCreatableComboboxFieldSimple,
-    type CreatableComboboxFieldSimpleProps
+    type CreatableComboboxLayoutFieldSimpleProps
 }

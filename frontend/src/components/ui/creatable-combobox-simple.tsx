@@ -2,9 +2,8 @@
 
 import * as React from "react"
 
-import { ComboboxLayoutSimple } from "./combobox-layout-simple"
-import type { ComboboxLayoutSimpleComponentProps } from "./combobox-layout-simple"
-import type { ComboboxLayoutItem } from "./combobox-layout.shared"
+import { ComboboxLayoutSimple, type ComboboxLayoutSimpleComponentProps } from "./combobox-layout-simple"
+import type { ComboboxLayoutItem, ComboboxLayoutMultiple } from "./combobox-layout.shared"
 import {
     isCreatableSentinel,
     defaultRenderCreateOption,
@@ -17,21 +16,21 @@ import {
 import type { ComboboxChangeEventDetails } from "./combobox"
 
 export type CreatableComboboxSimpleProps<
-    TItem extends ComboboxLayoutItem,
-    Multiple extends boolean | undefined = false,
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
 > = Omit<
-    ComboboxLayoutSimpleComponentProps<TItem, Multiple>,
+    ComboboxLayoutSimpleComponentProps<Multiple, Item>,
     "open" | "onOpenChange"
 > & {
     onCreate: (query: string) => void
     renderCreateOption?: (query: string) => React.ReactNode
-    itemToStringLabel?: (item: TItem) => string
+    itemToStringLabel?: (item: Item) => string
 }
 
 export function CreatableComboboxSimple<
-    TItem extends ComboboxLayoutItem,
-    Multiple extends boolean | undefined = false,
->(props: CreatableComboboxSimpleProps<TItem, Multiple>) {
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+>(props: CreatableComboboxSimpleProps<Multiple, Item>) {
     const {
         items,
         multiple,
@@ -40,14 +39,14 @@ export function CreatableComboboxSimple<
         renderItem,
         onInputValueChange: onInputValueChangeProp,
         renderCreateOption = defaultRenderCreateOption,
-        itemToStringLabel = (item: TItem) => String(item.label),
+        itemToStringLabel = (item: Item) => String(item.label),
         ...rest
     } = props
 
     const [open, setOpen] = React.useState(false)
     const [query, onInputValueChange] = useCreatableQuery(onInputValueChangeProp)
     const sentinel = useCreatableSentinelItem(query, renderCreateOption)
-    const resolvedFilter = useCreatableFilter<TItem>()
+    const resolvedFilter = useCreatableFilter<Item>()
 
     const showSentinel = useShowCreatableSentinel({
         query,
@@ -89,7 +88,7 @@ export function CreatableComboboxSimple<
 
     return (
         <ComboboxLayoutSimple
-            {...(rest as ComboboxLayoutSimpleComponentProps<TItem, Multiple>)}
+            {...(rest as ComboboxLayoutSimpleComponentProps<Multiple, Item>)}
             items={itemsWithSentinel as never}
             multiple={multiple}
             value={currentValue as never}
@@ -99,7 +98,7 @@ export function CreatableComboboxSimple<
             onInputValueChange={onInputValueChange}
             onValueChange={handleValueChange}
             renderItem={
-                ((item: TItem | typeof sentinel) =>
+                ((item: Item | typeof sentinel) =>
                     isCreatableSentinel(item) || !renderItem
                         ? item.label
                         : renderItem(item))

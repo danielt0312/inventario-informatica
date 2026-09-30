@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ComboboxLayoutGrouped } from "./combobox-layout-grouped"
 import type { ComboboxLayoutGroupedComponentProps } from "./combobox-layout-grouped"
-import type { ComboboxLayoutGroup, ComboboxLayoutItem } from "./combobox-layout.shared"
+import type { ComboboxLayoutGroup, ComboboxLayoutItem, ComboboxLayoutMultiple } from "./combobox-layout.shared"
 import { FieldLayout, type CoreFieldLayoutProps } from "./field-layout"
 import { useFieldContext } from "./form-context"
 import {
@@ -12,23 +12,23 @@ import {
 } from "./combobox-field.shared"
 
 export type ComboboxFieldGroupedProps<
-    TItem extends ComboboxLayoutItem,
-    TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
-    Multiple extends boolean | undefined = false,
-    TEmpty extends ComboboxFieldEmptyType = undefined,
-> = Omit<ComboboxLayoutGroupedComponentProps<TItem, TGroup, Multiple>, "value" | "onValueChange"> & {
+    Empty extends ComboboxFieldEmptyType,
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+    Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
+> = Omit<ComboboxLayoutGroupedComponentProps<Multiple, Item, Group>, "value" | "onValueChange"> & {
     layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">
     onFieldValueChange?: (
-        value: Multiple extends true ? TItem[] : TItem | TEmpty
-    ) => ComboboxFieldType<Multiple, TEmpty>
+        value: Multiple extends true ? Item[] : Item | Empty
+    ) => ComboboxFieldType<Multiple, Empty>
 }
 
-function createComboboxFieldGrouped<TEmpty extends ComboboxFieldEmptyType>(emptyValue: TEmpty) {
+function createComboboxFieldGrouped<Empty extends ComboboxFieldEmptyType>(emptyValue: Empty) {
     return function ComboboxFieldGroupedImpl<
-        TItem extends ComboboxLayoutItem,
-        TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
-        Multiple extends boolean | undefined = false,
-    >(props: ComboboxFieldGroupedProps<TItem, TGroup, Multiple, TEmpty>) {
+        Multiple extends ComboboxLayoutMultiple,
+        Item extends ComboboxLayoutItem,
+        Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
+    >(props: ComboboxFieldGroupedProps<Empty, Multiple, Item, Group>) {
         const {
             items,
             layout,
@@ -44,7 +44,7 @@ function createComboboxFieldGrouped<TEmpty extends ComboboxFieldEmptyType>(empty
             [items]
         )
 
-        const field = useFieldContext<ComboboxFieldType<Multiple, TEmpty>>()
+        const field = useFieldContext<ComboboxFieldType<Multiple, Empty>>()
         const derivedValue = useComboboxFieldValue(
             flatItems,
             field.state.value,
@@ -62,7 +62,7 @@ function createComboboxFieldGrouped<TEmpty extends ComboboxFieldEmptyType>(empty
                     ...layout
                 }}
             >
-                <ComboboxLayoutGrouped<TItem, TGroup, Multiple>
+                <ComboboxLayoutGrouped<Multiple, Item, Group>
                     {...comboboxProps}
                     items={items}
                     // required={required}

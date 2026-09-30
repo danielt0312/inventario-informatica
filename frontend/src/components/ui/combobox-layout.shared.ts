@@ -1,5 +1,6 @@
 import type * as React from "react"
 import type { ComboboxRoot } from "@base-ui/react/combobox"
+import type { CoreFieldLayoutProps } from "./field-layout"
 
 /**
  * Forma mínima obligatoria para un item seleccionable.
@@ -25,6 +26,8 @@ export type ComboboxLayoutGroup<TItem extends ComboboxLayoutItem> = {
     items: readonly TItem[]
 }
 
+export type ComboboxLayoutMultiple = boolean | undefined;
+
 /**
  * Patch base: reutiliza todo lo que Base UI ya tipa correctamente
  * contra `Value` (multiple, value, defaultValue, onValueChange,
@@ -34,15 +37,16 @@ export type ComboboxLayoutGroup<TItem extends ComboboxLayoutItem> = {
  * como `readonly any[] | readonly Group<any>[]` sin ligar a `Value`.
  */
 type BaseLayoutProps<
-    TItem extends ComboboxLayoutItem,
-    Multiple extends boolean | undefined,
-    TItems,
-> = Omit<ComboboxRoot.Props<TItem, Multiple>, "items" | "filteredItems"> & {
-    items?: TItems | undefined
-    filteredItems?: TItems | undefined
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+    Items,
+> = Omit<ComboboxRoot.Props<Item, Multiple>, "items" | "filteredItems"> & {
+    items?: Items | undefined
+    filteredItems?: Items | undefined
 }
 
 export type ComboboxLayoutSharedUIProps<TItem extends ComboboxLayoutItem> = {
+    layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">;
     placeholder?: string
     emptyMessage?: React.ReactNode
     showClear?: boolean
@@ -58,16 +62,16 @@ export type ComboboxLayoutSharedUIProps<TItem extends ComboboxLayoutItem> = {
 
 /** Props del root para el layout plano (lista simple de items). */
 export type ComboboxLayoutSimpleProps<
-    TItem extends ComboboxLayoutItem,
-    Multiple extends boolean | undefined = false,
-> = BaseLayoutProps<TItem, Multiple, readonly TItem[]>
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+> = BaseLayoutProps<Multiple, Item, readonly Item[]>
 
 /** Props del root para el layout agrupado (lista de grupos con items). */
 export type ComboboxLayoutGroupedProps<
-    TItem extends ComboboxLayoutItem,
-    TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
-    Multiple extends boolean | undefined = false,
-> = BaseLayoutProps<TItem, Multiple, readonly TGroup[]>
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+    Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
+> = BaseLayoutProps<Multiple, Item, readonly Group[]>
 
 export function toComboboxItems<TSource, TItem extends ComboboxLayoutItem>(
     source: readonly TSource[],
@@ -77,13 +81,13 @@ export function toComboboxItems<TSource, TItem extends ComboboxLayoutItem>(
 }
 
 export function toComboboxGroups<
-    TSource,
-    TItem extends ComboboxLayoutItem,
-    TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>
+    Source,
+    Item extends ComboboxLayoutItem,
+    Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>
 >(
-    source: readonly TSource[],
-    toGroup: (source: TSource, index: number) => TGroup
-): TGroup[] {
+    source: readonly Source[],
+    toGroup: (source: Source, index: number) => Group
+): Group[] {
     return source.map(toGroup)
 }
 

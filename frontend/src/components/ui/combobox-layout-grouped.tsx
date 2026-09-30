@@ -24,22 +24,24 @@ import type {
     ComboboxLayoutGroup,
     ComboboxLayoutGroupedProps,
     ComboboxLayoutItem,
+    ComboboxLayoutMultiple,
     ComboboxLayoutSharedUIProps,
 } from "./combobox-layout.shared"
+import { FieldLayout } from "./field-layout"
 
 function GroupedListBody<
-    TItem extends ComboboxLayoutItem,
-    TGroup extends ComboboxLayoutGroup<TItem>,
+    Item extends ComboboxLayoutItem,
+    Group extends ComboboxLayoutGroup<Item>,
 >({
     getGroupKey,
     renderGroupLabel,
     renderItem,
 }: {
-    getGroupKey: (group: TGroup, index: number) => React.Key
-    renderGroupLabel: (group: TGroup) => React.ReactNode
-    renderItem: (item: TItem) => React.ReactNode
+    getGroupKey: (group: Group, index: number) => React.Key
+    renderGroupLabel: (group: Group) => React.ReactNode
+    renderItem: (item: Item) => React.ReactNode
 }) {
-    const filteredGroups = useComboboxFilteredItems<TGroup>()
+    const filteredGroups = useComboboxFilteredItems<Group>()
 
     return (
         <ComboboxList>
@@ -48,7 +50,7 @@ function GroupedListBody<
                     <ComboboxGroup items={group.items}>
                         {group.label != null && <ComboboxLabel>{renderGroupLabel(group)}</ComboboxLabel>}
                         <ComboboxCollection>
-                            {(item: TItem) => (
+                            {(item: Item) => (
                                 <ComboboxItem key={item.value} value={item}>
                                     {renderItem(item)}
                                 </ComboboxItem>
@@ -63,38 +65,42 @@ function GroupedListBody<
 }
 
 export type ComboboxLayoutGroupedComponentProps<
-    TItem extends ComboboxLayoutItem,
-    TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
-    Multiple extends boolean | undefined = false,
-> = Omit<ComboboxLayoutGroupedProps<TItem, TGroup, Multiple>, "items"> &
-    ComboboxLayoutSharedUIProps<TItem> & {
-        items: readonly (TGroup & ComboboxLayoutGroup<TItem>)[]
-        getGroupKey?: (group: TGroup, index: number) => React.Key
-        renderGroupLabel?: (group: TGroup) => React.ReactNode
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+    Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
+> = Omit<ComboboxLayoutGroupedProps<Multiple, Item, Group>, "items"> &
+    ComboboxLayoutSharedUIProps<Item> & {
+        items: readonly (Group & ComboboxLayoutGroup<Item>)[]
+        getGroupKey?: (group: Group, index: number) => React.Key
+        renderGroupLabel?: (group: Group) => React.ReactNode
         searchByGroupLabel?: boolean
-        groupToStringLabel?: (group: TGroup) => string
+        groupToStringLabel?: (group: Group) => string
     }
 
 export function ComboboxLayoutGrouped<
-    TItem extends ComboboxLayoutItem,
-    TGroup extends ComboboxLayoutGroup<TItem> = ComboboxLayoutGroup<TItem>,
-    Multiple extends boolean | undefined = false,
->(props: ComboboxLayoutGroupedComponentProps<TItem, TGroup, Multiple>) {
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+    Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
+>(props: ComboboxLayoutGroupedComponentProps<Multiple, Item, Group>) {
     const {
         items,
         placeholder,
         className,
         contentClassName,
         multiple,
+        required,
+        disabled,
+        layout,
+        value,
         showClear = false,
         showTrigger = false,
         emptyMessage = "No se encontraron resultados.",
-        getGroupKey = (_group: TGroup, index: number) => index,
-        renderItem = (item: TItem) => item.label,
-        renderSelectedItem = (item: TItem) => item.label,
-        renderGroupLabel = (group: TGroup) => group.label,
+        getGroupKey = (_group: Group, index: number) => index,
+        renderItem = (item: Item) => item.label,
+        renderSelectedItem = (item: Item) => item.label,
+        renderGroupLabel = (group: Group) => group.label,
         searchByGroupLabel = true,
-        groupToStringLabel = (group: TGroup) => String(group.label),
+        groupToStringLabel = (group: Group) => String(group.label),
         filter: filterProp,
         autoHighlight = true,
         renderChipsOnMultiple = false,
@@ -115,7 +121,7 @@ export function ComboboxLayoutGrouped<
 
     const itemGroupLabel = React.useMemo(() => {
         if (!searchByGroupLabel) return undefined
-        const map = new Map<TItem["value"], string>()
+        const map = new Map<Item["value"], string>()
         for (const group of items) {
             const groupLabelText = groupToStringLabel(group)
             for (const item of group.items) {
@@ -129,9 +135,9 @@ export function ComboboxLayoutGrouped<
         if (filterProp !== undefined) return filterProp
         if (!searchByGroupLabel) return undefined
         return (
-            item: TItem,
+            item: Item,
             query: string,
-            itemToString?: (item: TItem) => string
+            itemToString?: (item: Item) => string
         ) => {
             if (collatorFilter.contains(item, query, itemToString)) return true
             const groupLabelText = itemGroupLabel?.get(item.value)
@@ -140,43 +146,53 @@ export function ComboboxLayoutGrouped<
     }, [filterProp, searchByGroupLabel, collatorFilter, itemGroupLabel])
 
     return (
-        <Combobox<TItem, Multiple>
-            items={items}
-            multiple={multiple}
-            filter={resolvedFilter}
-            autoHighlight={autoHighlight}
-            {...rootProps}
+        <FieldLayout
+            fieldLayout={{
+                required,
+                disabled,
+                ...layout
+            }}
+            className={className}
         >
-            {showChips ? (
-                <ComboboxLayoutChips
-                    className={className}
-                    placeholder={placeholderProp}
-                    renderItem={renderSelectedItem}
-                />
-            ) : (
-                <ComboboxLayoutTriggerShell
-                    trigger={trigger}
-                    placeholder={placeholderProp}
-                    renderItem={renderSelectedItem}
-                />
-            )}
-            <ComboboxContent className={contentClassName}>
-                {!showChips && (
-                    <ComboboxLayoutSearchInput
-                        placeholder={placeholderSearch}
-                        showClear={showClear}
-                        showTrigger={showTrigger}
-                        className={className}
+            <Combobox<Item, Multiple>
+                {...rootProps}
+                items={items}
+                multiple={multiple}
+                filter={resolvedFilter}
+                autoHighlight={autoHighlight}
+                value={value ?? null}
+                // required={required}
+                disabled={disabled}
+            >
+                {showChips ? (
+                    <ComboboxLayoutChips
+                        placeholder={placeholderProp}
+                        renderItem={renderSelectedItem}
+                    />
+                ) : (
+                    <ComboboxLayoutTriggerShell
+                        trigger={trigger}
+                        placeholder={placeholderProp}
+                        renderItem={renderSelectedItem}
                     />
                 )}
-                <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
-                <GroupedListBody
-                    getGroupKey={getGroupKey}
-                    renderGroupLabel={renderGroupLabel}
-                    renderItem={renderItem}
-                />
-            </ComboboxContent>
-        </Combobox>
+                <ComboboxContent className={contentClassName}>
+                    {!showChips && (
+                        <ComboboxLayoutSearchInput
+                            placeholder={placeholderSearch}
+                            showClear={showClear}
+                            showTrigger={showTrigger}
+                            className={className}
+                        />
+                    )}
+                    <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
+                    <GroupedListBody
+                        getGroupKey={getGroupKey}
+                        renderGroupLabel={renderGroupLabel}
+                        renderItem={renderItem}
+                    />
+                </ComboboxContent>
+            </Combobox>
+        </FieldLayout>
     )
 }
-

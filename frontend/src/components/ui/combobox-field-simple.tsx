@@ -1,6 +1,6 @@
 import { ComboboxLayoutSimple } from "./combobox-layout-simple"
 import type { ComboboxLayoutSimpleComponentProps } from "./combobox-layout-simple"
-import type { ComboboxLayoutItem } from "./combobox-layout.shared"
+import type { ComboboxLayoutItem, ComboboxLayoutMultiple } from "./combobox-layout.shared"
 import { FieldLayout, type CoreFieldLayoutProps } from "./field-layout"
 import {
     useComboboxFieldValue,
@@ -11,21 +11,21 @@ import {
 } from "./combobox-field.shared"
 
 export type ComboboxFieldSimpleProps<
-    TItem extends ComboboxLayoutItem,
-    Multiple extends boolean | undefined = false,
-    TEmpty extends ComboboxFieldEmptyType = undefined,
-> = Omit<ComboboxLayoutSimpleComponentProps<TItem, Multiple>, "value" | "onValueChange"> & {
+    Empty extends ComboboxFieldEmptyType,
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+> = Omit<ComboboxLayoutSimpleComponentProps<Multiple, Item>, "value" | "onValueChange"> & {
     layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">
     onFieldValueChange?: (
-        value: Multiple extends true ? TItem[] : TItem | TEmpty
-    ) => ComboboxFieldType<Multiple, TEmpty>
+        value: Multiple extends true ? Item[] : Item | Empty
+    ) => ComboboxFieldType<Multiple, Empty>
 }
 
-function createComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyType>(emptyValue: TEmpty) {
+function createComboboxFieldSimple<Empty extends ComboboxFieldEmptyType>(emptyValue: Empty) {
     return function ComboboxFieldSimpleImpl<
-        TItem extends ComboboxLayoutItem,
-        Multiple extends boolean | undefined = false,
-    >(props: ComboboxFieldSimpleProps<TItem, Multiple, TEmpty>) {
+        Multiple extends ComboboxLayoutMultiple,
+        Item extends ComboboxLayoutItem,
+    >(props: ComboboxFieldSimpleProps<Empty, Multiple, Item>) {
         const {
             items,
             layout,
@@ -36,7 +36,7 @@ function createComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyType>(emptyV
             ...comboboxProps
         } = props
 
-        const field = useComboboxFieldContext<Multiple, TEmpty>()
+        const field = useComboboxFieldContext<Multiple, Empty>()
         const derivedValue = useComboboxFieldValue(
             items,
             field.state.value,
@@ -54,12 +54,11 @@ function createComboboxFieldSimple<TEmpty extends ComboboxFieldEmptyType>(emptyV
                     ...layout
                 }}
             >
-                <ComboboxLayoutSimple<TItem, Multiple>
+                <ComboboxLayoutSimple<Multiple, Item>
                     {...comboboxProps}
                     items={items}
-                    // required={required}
                     disabled={disabled}
-                    value={(derivedValue ?? null) as never}
+                    value={derivedValue as never}
                     onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}
                 />
             </FieldLayout>

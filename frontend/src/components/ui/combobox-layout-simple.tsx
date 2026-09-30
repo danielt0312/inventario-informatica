@@ -14,22 +14,26 @@ import {
 } from "./combobox-layout.parts"
 import type {
     ComboboxLayoutItem,
+    ComboboxLayoutMultiple,
     ComboboxLayoutSharedUIProps,
     ComboboxLayoutSimpleProps,
 } from "./combobox-layout.shared"
+import { FieldLayout } from "./field-layout"
 
 export type ComboboxLayoutSimpleComponentProps<
-    TItem extends ComboboxLayoutItem,
-    Multiple extends boolean | undefined = false,
-> = Omit<ComboboxLayoutSimpleProps<TItem, Multiple>, "items"> &
-    ComboboxLayoutSharedUIProps<TItem> & {
-        items: readonly TItem[]
-    }
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+> = Omit<
+    ComboboxLayoutSimpleProps<Multiple, Item>,
+    "items"
+> & ComboboxLayoutSharedUIProps<Item> & {
+    items: readonly Item[]
+}
 
 export function ComboboxLayoutSimple<
-    TItem extends ComboboxLayoutItem,
-    Multiple extends boolean | undefined = false,
->(props: ComboboxLayoutSimpleComponentProps<TItem, Multiple>) {
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+>(props: ComboboxLayoutSimpleComponentProps<Multiple, Item>) {
     const {
         items,
         placeholder,
@@ -40,10 +44,14 @@ export function ComboboxLayoutSimple<
         contentClassName,
         multiple,
         trigger,
-        renderItem = (item: TItem) => item.label,
-        renderSelectedItem = (item: TItem) => item.label,
+        value,
+        required,
+        disabled,
+        layout,
+        renderItem = (item: Item) => item.label,
+        renderSelectedItem = (item: Item) => item.label,
         autoHighlight = true,
-        renderChipsOnMultiple = false,
+        renderChipsOnMultiple = true,
         placeholderSearch = "Buscar...",
         ...rootProps
     } = props
@@ -57,43 +65,54 @@ export function ComboboxLayoutSimple<
                 : "Selecciona una opción"
 
     return (
-        <Combobox<TItem, Multiple>
-            items={items}
-            multiple={multiple}
-            autoHighlight={autoHighlight}
-            {...rootProps}
+        <FieldLayout
+            className={className}
+            fieldLayout={{
+                required,
+                disabled,
+                ...layout
+            }}
         >
-            {showChips ? (
-                <ComboboxLayoutChips
-                    className={className}
-                    placeholder={placeholderProp}
-                    renderItem={renderSelectedItem}
-                />
-            ) : (
-                <ComboboxLayoutTriggerShell
-                    trigger={trigger}
-                    placeholder={placeholderProp}
-                    renderItem={renderSelectedItem}
-                />
-            )}
-            <ComboboxContent className={contentClassName}>
-                {!showChips && (
-                    <ComboboxLayoutSearchInput
-                        placeholder={placeholderSearch}
-                        showClear={showClear}
-                        showTrigger={showTrigger}
-                        className={className}
+            <Combobox<Item, Multiple>
+                {...rootProps}
+                items={items}
+                multiple={multiple}
+                autoHighlight={autoHighlight}
+                value={value ?? null}
+                // required={required}
+                disabled={disabled}
+            >
+                {showChips ? (
+                    <ComboboxLayoutChips
+                        placeholder={placeholderProp}
+                        renderItem={renderSelectedItem}
+                    />
+                ) : (
+                    <ComboboxLayoutTriggerShell
+                        trigger={trigger}
+                        placeholder={placeholderProp}
+                        renderItem={renderSelectedItem}
                     />
                 )}
-                <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
-                <ComboboxList>
-                    {(item: TItem) => (
-                        <ComboboxItem key={item.value} value={item}>
-                            {renderItem(item)}
-                        </ComboboxItem>
+                <ComboboxContent className={contentClassName}>
+                    {!showChips && (
+                        <ComboboxLayoutSearchInput
+                            placeholder={placeholderSearch}
+                            showClear={showClear}
+                            showTrigger={showTrigger}
+                            className={className}
+                        />
                     )}
-                </ComboboxList>
-            </ComboboxContent>
-        </Combobox>
+                    <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
+                    <ComboboxList>
+                        {(item: Item) => (
+                            <ComboboxItem key={item.value} value={item}>
+                                {renderItem(item)}
+                            </ComboboxItem>
+                        )}
+                    </ComboboxList>
+                </ComboboxContent>
+            </Combobox>
+        </FieldLayout>
     )
 }
