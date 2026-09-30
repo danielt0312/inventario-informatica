@@ -1,59 +1,52 @@
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { InputGroupAddon, InputGroupButton } from "@/components/ui/input-group";
 import { TextareaField } from "@/components/ui/textarea-field";
+import { InputGroupAddon, InputGroupButton } from "@/components/ui/input-group";
 import { CirclePlusIcon } from "lucide-react";
-import type { ProductoTipoFieldType } from "../productos/tipo-field";
-import { productoVarianteSpecDefaultFormValues } from "../productos/variante-spec-field-group";
-import { type DictamenCaracteristicasAdicionalesFieldType } from "./fields";
+import type { DiscoFilled } from "@/types/articulos/discos";
+import type { ProductoGenerico, ProductoTipo } from "@/types/productos";
+import { ProductoTipoEnum } from "@/lib/constants";
 import { useFieldContext } from "@/components/ui/form-context";
-import { FieldGroup } from "@/components/ui/field";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import React from "react";
 
-function BorradorDisco({
+type SpecDisco = Partial<DiscoFilled>;
+type Producto = Partial<ProductoGenerico>
 
-}) {
-    return (
-        <></>
-    );
+type Spec<ProductoTipoId extends ProductoTipoEnum | unknown> =
+    ProductoTipoId extends typeof ProductoTipoEnum.Disco
+    ? SpecDisco
+    : {}
+
+type SpecProductoValueAccesor<TSpec extends Producto> = TSpec['tipo'] extends ProductoTipo ? TSpec['tipo']['id'] : unknown;
+
+type Borrador = {
+    producto: Producto;
+    spec: Spec<SpecProductoValueAccesor<Producto>>;
+    caracteristicas_solicitadas: string | undefined;
 }
 
-type DefaultSchema = {
-    producto: typeof productoVarianteSpecDefaultFormValues,
-    caracteristicas_adicionales: DictamenCaracteristicasAdicionalesFieldType;
-};
+type DialogProps = React.ComponentProps<typeof Dialog>;
 
-const defaultValues: DefaultSchema = {
-    producto: productoVarianteSpecDefaultFormValues,
-    caracteristicas_adicionales: null,
-}
-
-function Default() {
-    const field = useBorradorFieldContext();
-
+function BorradorDisco(props: DialogProps) {
     return (
-        <Dialog>
-            <DialogContent className="min-w-3xl">
-                <DialogHeader>
-                    <DialogTitle>Agregar características adicionales</DialogTitle>
-                    <DialogDescription>Agregar características adicionales</DialogDescription>
-                </DialogHeader>
+        <Dialog {...props}>
 
-                <FieldGroup className="flex">
-                </FieldGroup>
-
-                <DialogFooter>
-                </DialogFooter>
-            </DialogContent>
         </Dialog>
     );
 }
 
-const useBorradorFieldContext = () => useFieldContext<DictamenBorradorFieldType>();
-export type DictamenBorradorFieldType = Record<string, unknown>;
-export function DictamenBorradorField({
-    productoTipoId
-}: {
-    productoTipoId: ProductoTipoFieldType;
-}) {
+function BorradorProducto(props: DialogProps) {
+    return (
+        <Dialog {...props}>
+
+        </Dialog>
+    );
+}
+
+export function DictamenBorradorField() {
+    const field = useFieldContext<Borrador>();
+    const value = field.state.value;
+
+    const [open, setOpen] = React.useState(false);
 
     return (
         <>
@@ -65,12 +58,22 @@ export function DictamenBorradorField({
                 readOnly
             >
                 <InputGroupAddon align="block-end">
-                    <InputGroupButton size="sm" variant="outline">
+                    <InputGroupButton size="sm" variant="outline" onClick={() => setOpen(true)}>
                         <CirclePlusIcon /> Agregar
                     </InputGroupButton>
                 </InputGroupAddon>
             </TextareaField>
 
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent className="min-w-3xl">
+                    <DialogHeader>
+                        <DialogTitle>Ingresar Características solicitadas</DialogTitle>
+                    </DialogHeader>
+
+                    <DialogFooter>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

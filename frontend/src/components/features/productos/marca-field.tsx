@@ -1,53 +1,63 @@
-import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
-import type { InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
+import type { ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
-import { useFieldContext } from "@/components/ui/form-context";
+import { defaultFieldValueFromItem, useComboboxFieldContext, type ComboboxFieldEmptyType, type ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import { CreatableComboboxFieldSimpleBase, type CreatableComboboxFieldSimpleBaseProps } from "@/components/ui/creatable-combobox-field-simple";
 import { toComboboxCatalogItems } from "@/lib/utils";
-import { productoMarcaQueryOptions } from "./queries";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAppForm } from "@/components/ui/form.shared";
 import { InputField, type InputFieldType } from "@/components/ui/input-field";
 import { requiredString } from "@/lib/schemas/common";
-import { CreatableComboboxFieldSimple, type CreatableComboboxFieldSimpleProps } from "@/components/ui/creatable-combobox-field-simple";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FormLayout } from "@/components/ui/form-layout";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { useFormMutation } from "@/hooks/use-form-mutation";
+import { formMutationOptions, type FormMutationOptions } from "@/hooks/use-form-mutation";
+import { productoMarcaQueryOptions } from "./queries";
 import React from "react";
 import z from "zod";
 
-type FieldType<EmptyValue extends ComboboxFieldEmptyType = undefined, Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, EmptyValue>;
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Empty, Multiple>;
 
-type FieldProps<Multiple extends boolean | undefined = false> = Omit<
-    CreatableComboboxFieldSimpleProps<
-        InferComboboxItemFromFn<typeof toComboboxCatalogItems>,
-        Multiple
+type Schema = { nombre: InputFieldType; }
+const defaultValues: Schema = { nombre: undefined }
+const validator = z.object({ nombre: requiredString });
+
+
+type MutationOptions = FormMutationOptions<
+    TResponse<ProductoMarca>,
+    z.output<typeof validator>
+>
+
+const mutationOptions = (
+    options?: Omit<MutationOptions, 'url'>
+) => formMutationOptions({
+    url: "api/producto_marcas",
+    ...options
+});
+
+type FieldProps<Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLayoutMultiple> = Omit<
+    CreatableComboboxFieldSimpleBaseProps<
+        Empty,
+        Multiple,
+        InferComboboxItemFromFn<typeof toComboboxCatalogItems<ProductoMarca>>
     >,
     'items' | 'onCreate'
 > & {
-    emptyValue?: ComboboxFieldEmptyType;
+    formMutationOptions?: ReturnType<typeof mutationOptions>;
 }
 
-type Schema = {
-    nombre: InputFieldType;
-}
-
-const defaultValues: Schema = {
-    nombre: undefined
-}
-
-const validator = z.object({
-    nombre: requiredString
-});
-
-function Field<Multiple extends boolean | undefined = false>({
+function Field<Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLayoutMultiple>({
     layout,
-    emptyValue = undefined,
+    emptyValue,
+    formMutationOptions: mutationOverrides,
     ...props
-}: FieldProps<Multiple>) {
-    const field = useFieldContext<FieldType<typeof emptyValue>>();
+}: FieldProps<Empty, Multiple>) {
+    const field = useComboboxFieldContext<Empty, Multiple>();
+
+    const {
+        onFieldValueChange = defaultFieldValueFromItem(emptyValue),
+    } = props
 
     const { queryKey } = productoMarcaQueryOptions;
 
@@ -56,18 +66,20 @@ function Field<Multiple extends boolean | undefined = false>({
         select: toComboboxCatalogItems
     });
 
-    const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
-    const { mutateAsync } = useFormMutation<TResponse<ProductoMarca>>({
-        url: 'api/producto_marcas',
-        onSuccess: (data, _, __, { client }) => {
-            const newData = data.data.data;
-            client.setQueryData(queryKey, (prev = []) => [...prev, newData]);
-            field.handleChange(newData.id);
-            setDialogIsOpen(false);
-            client.invalidateQueries({ queryKey: ['producto_marcas'] });
+    const { mutateAsync } = useMutation(mutationOptions({
+        ...mutationOverrides,
+        onSuccess: async (data, variables, onMutateResult, context) => {
+            const marca = data.data.data;
+            const { client } = context;
+            field.handleChange(onFieldValueChange(marca as never) as never);
+            client.setQueryData(queryKey, (prev = []) => [...prev, marca]);
+            await client.invalidateQueries({ queryKey });
+            await mutationOverrides?.onSuccess?.(data, variables, onMutateResult, context);
+            setOpen(false);
         }
-    });
+    }));
 
     const form = useAppForm({
         defaultValues,
@@ -78,11 +90,11 @@ function Field<Multiple extends boolean | undefined = false>({
             const data = validator.parse(value);
             await mutateAsync({ formApi, data });
         }
-    })
+    });
 
     return (
         <>
-            <CreatableComboboxFieldSimple
+            <CreatableComboboxFieldSimpleBase
                 items={items}
                 layout={{
                     label: "Marca del Producto",
@@ -90,13 +102,14 @@ function Field<Multiple extends boolean | undefined = false>({
                 }}
                 onCreate={(searchValue) => {
                     form.setFieldValue('nombre', searchValue);
-                    setDialogIsOpen(true);
-                    field.handleChange(emptyValue);
+                    field.handleChange(emptyValue as never);
+                    setOpen(true);
                 }}
+                emptyValue={emptyValue}
                 {...props}
             />
 
-            <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
+            <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Registrar Marca de Producto</DialogTitle>
@@ -123,7 +136,7 @@ function Field<Multiple extends boolean | undefined = false>({
                         <DialogFooter>
                             <form.SubmitFormButton />
 
-                            <Button onClick={() => setDialogIsOpen(false)} variant="outline">
+                            <Button onClick={() => setOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar
                             </Button>
                         </DialogFooter>
@@ -136,5 +149,7 @@ function Field<Multiple extends boolean | undefined = false>({
 
 export {
     Field as ProductoMarcaField,
-    type FieldType as ProductoMarcaFieldType
+    type FieldType as ProductoMarcaFieldType,
+    mutationOptions as productoMarcaFormMutationOptions,
+    Field as BaseField
 }

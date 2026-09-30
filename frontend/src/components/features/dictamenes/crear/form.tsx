@@ -126,7 +126,7 @@ function Form() {
                                                         {(productoTipoId) =>
                                                             <form.AppField
                                                                 name={`adquisiciones[${index}].borrador`}
-                                                                children={() => <DictamenBorradorField productoTipoId={productoTipoId} />}
+                                                                children={() => <DictamenBorradorField />}
                                                             />
                                                         }
                                                     </form.Subscribe>

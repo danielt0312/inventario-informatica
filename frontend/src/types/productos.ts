@@ -46,6 +46,8 @@ type Marca = BaseMarca;
 type Categoria = BaseCategoria;
 
 export type {
+    Generica as ProductoGenerico,
+    Spec as ProductoSpec,
     VarianteGenerica as ProductoVarianteGenerica,
     VarianteSpec as ProductoVarianteSpec,
     Tipo as ProductoTipo,

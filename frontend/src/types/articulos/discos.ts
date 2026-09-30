@@ -20,12 +20,17 @@ type Spec<TDisco extends Base = Base> = ProductoVarianteSpec & {
     disco: TDisco;
 }
 
-type Disco = Spec;
+type Disco = Base;
+type DiscoFilled = Base<Interfaz, FactorForma>;
+type DiscoSpec = Spec;
 
 export type {
     Disco,
+    DiscoFilled,
+    DiscoSpec,
     Tipo as DiscoTipo,
     Capacidad as DiscoCapacidad,
     Interfaz as DiscoInterfaz,
     FactorForma as DiscoFactorForma,
+    Base as DiscoBase
 }
