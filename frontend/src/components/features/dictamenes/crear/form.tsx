@@ -7,16 +7,17 @@ import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
-import { DictamenOficioArchivoField, DictamenCantidadField, DictamenFechaSolicitudField, DictamenFolioField } from "../fields";
+import { DictamenOficioArchivoField, DictamenCantidadField, DictamenFechaSolicitudField, DictamenFolioField, DictamenCaracteristicasAdicionalesField } from "../fields";
 import { AdscripcionField } from "@/components/features/adscripciones/field";
 import { EmpleadoField } from '@/components/features/empleados/field';
-import { FormLayout as PrimitiveForm } from "@/components/ui/form-layout";
+import { FormLayout } from "@/components/ui/form-layout";
 import { ProductoTipoField } from '@/components/features/productos/tipo-field';
 import { ArticuloNullableNumeroInventarioField } from "@/components/features/articulos/form-fields";
 import { DictamenAdquisicion } from "@/lib/utils";
 import { Label } from '@/components/ui/label';
-import { DictamenBorradorField } from '../borrador-field';
 import { ProductoVarianteSpecFieldGroup } from '../../productos/variante-spec-field-group';
+import { ProductoTipoEnum } from '@/lib/constants';
+import { DiscoFieldsGroup } from '../../discos/field';
 
 function Form() {
     const { mutate } = useFormMutation({
@@ -41,7 +42,7 @@ function Form() {
     });
 
     return (
-        <PrimitiveForm form={form} className="flex flex-col gap-6">
+        <FormLayout form={form} className="flex flex-col gap-6">
             <form.AppForm>
                 <FieldGroup className="flex-row">
                     <form.AppField
@@ -112,7 +113,7 @@ function Form() {
                                                         />
 
                                                         <div className="w-1/2">
-                                                            <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador.producto.tipo_id}>
+                                                            <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador.producto?.tipo_id}>
                                                                 {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
                                                                     <form.AppField
                                                                         name={`adquisiciones[${index}].numero_inventario`}
@@ -127,13 +128,34 @@ function Form() {
                                                         form={form}
                                                         fields={{
                                                             marca_id: `adquisiciones[${index}].borrador.producto.marca_id`,
-                                                            modelo: `adquisiciones[${index}].borrador.producto.modelo`
+                                                            modelo: `adquisiciones[${index}].borrador.producto.modelo`,
                                                         }}
                                                     />
 
+                                                    <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador.producto.tipo_id}>
+                                                        {(productoTipoId) => {
+                                                            switch (productoTipoId) {
+                                                                case ProductoTipoEnum.Disco:
+                                                                    return (
+                                                                        <DiscoFieldsGroup
+                                                                            form={form}
+                                                                            fields={{
+                                                                                tipo_id: `adquisiciones[${index}].borrador.spec.tipo_id`,
+                                                                                capacidad_id: `adquisiciones[${index}].borrador.spec.capacidad_id`,
+                                                                                interfaz_id: `adquisiciones[${index}].borrador.spec.interfaz_id`,
+                                                                                factor_forma_id: `adquisiciones[${index}].borrador.spec.factor_forma_id`,
+                                                                            }}
+                                                                        />
+                                                                    )
+                                                                default:
+                                                                    break;
+                                                            }
+                                                        }}
+                                                    </form.Subscribe>
+
                                                     <form.AppField
-                                                        name={`adquisiciones[${index}].borrador`}
-                                                        children={() => (<DictamenBorradorField />)}
+                                                        name={`adquisiciones[${index}].borrador.caracteristicas_adicionales`}
+                                                        children={() => <DictamenCaracteristicasAdicionalesField />}
                                                     />
                                                 </div>
                                             </div>
@@ -157,7 +179,7 @@ function Form() {
 
                 <form.SubmitFormButton />
             </form.AppForm>
-        </PrimitiveForm >
+        </FormLayout >
     );
 }
 

@@ -31,7 +31,6 @@ type FieldGroupProps = React.ComponentProps<typeof FieldGroup> & {
 }
 
 type ModeloFieldType = InputFieldType;
-
 function ModeloField({
     fieldLayout,
     ...props

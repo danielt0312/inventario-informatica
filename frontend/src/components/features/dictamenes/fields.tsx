@@ -90,7 +90,7 @@ export function DictamenCaracteristicasAdicionalesField({
                 label: "Características adicionales",
                 ...fieldLayout
             }}
-            placeholder="Ingresa cualquier característica adicional"
+            placeholder="Color, Tamaño, Garantía..."
             {...props}
         />
     );
