@@ -5,20 +5,19 @@ import { useFieldContext } from "./form-context"
 export type ComboboxFieldEmptyType = undefined | null
 
 export type ComboboxFieldType<
-    Value extends ComboboxLayoutItemValue,
     Empty extends ComboboxFieldEmptyType,
     Multiple extends ComboboxLayoutMultiple,
+    Value extends ComboboxLayoutItemValue,
 > = Multiple extends true ? Value[] | Empty : Value | Empty
 
 export type ComboboxFieldSharedUIProps<
-    Value extends ComboboxLayoutItemValue,
     Empty extends ComboboxFieldEmptyType,
     Multiple extends ComboboxLayoutMultiple,
     Item extends ComboboxLayoutItem
 > = {
     onFieldValueChange?: (
         value: Multiple extends true ? Item[] : Item | Empty
-    ) => ComboboxFieldType<Value, Empty, Multiple>
+    ) => ComboboxFieldType<Empty, Multiple, Item['value']>
     emptyValue?: Empty
 }
 
@@ -26,13 +25,12 @@ export type ComboboxFieldSharedUIProps<
  * TanStack Form + los `items` disponibles — nunca depende de que el
  * consumidor pase el objeto completo por fuera en paralelo al field. */
 export function useComboboxFieldValue<
-    Value extends React.Key,
     Empty extends ComboboxFieldEmptyType,
     Multiple extends ComboboxLayoutMultiple,
     Item extends ComboboxLayoutItem,
 >(
     items: readonly Item[],
-    fieldValue: ComboboxFieldType<Value, Empty, Multiple>,
+    fieldValue: ComboboxFieldType<Empty, Multiple, Item['value']>,
     multiple: Multiple,
     emptyValue: Empty
 ): Multiple extends true ? Item[] : Item | Empty {
@@ -57,4 +55,4 @@ export function defaultFieldValueFromItem<TEmpty extends ComboboxFieldEmptyType>
             : (value?.value ?? emptyValue)
 }
 
-export const useComboboxFieldContext = <Value extends ComboboxLayoutItemValue, Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLayoutMultiple>() => useFieldContext<ComboboxFieldType<Value, Empty, Multiple>>();
+export const useComboboxFieldContext = <Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLayoutMultiple, Value extends ComboboxLayoutItemValue>() => useFieldContext<ComboboxFieldType<Empty, Multiple, Value>>();

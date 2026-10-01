@@ -9,7 +9,7 @@ import z from "zod";
 
 type Schema = {
     marca_id: ProductoMarcaFieldType;
-    modelo: InputFieldType;
+    modelo: ModeloFieldType;
 }
 
 const defaultValues: Schema = {
@@ -30,6 +30,24 @@ type FieldGroupProps = React.ComponentProps<typeof FieldGroup> & {
     required?: Partial<RequiredFields>;
 }
 
+type ModeloFieldType = InputFieldType;
+
+function ModeloField({
+    fieldLayout,
+    ...props
+}: React.ComponentProps<typeof InputField>) {
+    return (
+        <InputField
+            fieldLayout={{
+                label: "Modelo",
+                ...fieldLayout
+            }}
+            placeholder="Ingresa el nombre del modelo"
+            {...props}
+        />
+    );
+}
+
 const fieldGroup = withFieldGroup({
     defaultValues,
     props: {} as FieldGroupProps,
@@ -48,15 +66,7 @@ const fieldGroup = withFieldGroup({
 
             <group.AppField
                 name="modelo"
-                children={() => (
-                    <InputField
-                        fieldLayout={{
-                            label: "Modelo"
-                        }}
-                        placeholder="Ingresa el nombre del modelo"
-                        required={required?.modelo}
-                    />
-                )}
+                children={() => <ModeloField required={required?.modelo} />}
             />
         </FieldGroup>
     )
@@ -68,5 +78,7 @@ export {
     type Schema as ProductoVarianteSpecSchema,
     type OutputSchema as ProductoVarianteSpecOutputSchema,
     type RequiredFields as ProductoVarianteSpecRequiredFields,
-    fieldGroup as ProductoVarianteSpecFieldGroup
+    type ModeloFieldType as ProductoModeloFieldType,
+    fieldGroup as ProductoVarianteSpecFieldGroup,
+    ModeloField as ProductoModeloField,
 }

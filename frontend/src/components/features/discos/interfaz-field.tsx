@@ -23,11 +23,10 @@ const defaultValues: Schema = { nombre: undefined }
 const validator = z.object({ nombre: requiredString });
 type OutputSchema = z.output<typeof validator>;
 
-type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>
+type FieldType<Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>
 
-type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false> = Omit<
+type FieldProps<Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     CreatableComboboxFieldSimpleProps<
-        Value,
         Empty,
         Multiple,
         InferComboboxItemFromFn<typeof toComboboxCatalogItems>
@@ -35,10 +34,10 @@ type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends Co
     'items' | 'onCreate'
 >
 
-function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false>({
+function Field<Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: FieldProps<Value, Empty, Multiple>) {
+}: FieldProps<Empty, Multiple>) {
     const { queryKey } = discoInterfazQueryOptions;
     const { data: items = [] } = useQuery({
         ...discoInterfazQueryOptions,

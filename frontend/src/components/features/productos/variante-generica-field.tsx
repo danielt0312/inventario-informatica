@@ -35,11 +35,10 @@ const dataToComboboxItems = (data: ProductoVarianteGenerica[]) => {
     }));
 }
 
-type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>;
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>;
 
-type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
+type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     ComboboxFieldGroupedProps<
-        Value,
         Empty,
         Multiple,
         InferComboboxGroupItemFromFn<typeof dataToComboboxItems>,
@@ -50,12 +49,12 @@ type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends Co
     tipoId: ProductoTipoFieldType;
 }
 
-function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
+function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     tipoId,
     disabled,
     ...props
-}: FieldProps<Value, Empty, Multiple>) {
+}: FieldProps<Empty, Multiple>) {
     const { data: items = [] } = useQuery({
         ...productoQueryOptions(tipoId),
         enabled: !disabled,

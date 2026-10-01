@@ -10,19 +10,17 @@ import {
 } from "./combobox-field.shared"
 
 export type ComboboxFieldSimpleProps<
-    Value extends ComboboxLayoutItemValue,
     Empty extends ComboboxFieldEmptyType,
     Multiple extends ComboboxLayoutMultiple,
     Item extends ComboboxLayoutItem,
 > = Omit<ComboboxLayoutSimpleComponentProps<Multiple, Item>, "value" | "onValueChange">
-    & ComboboxFieldSharedUIProps<Value, Empty, Multiple, Item>
+    & ComboboxFieldSharedUIProps<Empty, Multiple, Item>
 
 export function ComboboxFieldSimple<
-    Value extends ComboboxLayoutItemValue,
     Empty extends ComboboxFieldEmptyType,
     Multiple extends ComboboxLayoutMultiple,
     Item extends ComboboxLayoutItem,
->(props: ComboboxFieldSimpleProps<Value, Empty, Multiple, Item>) {
+>(props: ComboboxFieldSimpleProps<Empty, Multiple, Item>) {
     const {
         items,
         layout,
@@ -30,7 +28,7 @@ export function ComboboxFieldSimple<
         ...comboboxProps
     } = props
 
-    const field = useComboboxFieldContext<Value, Empty, Multiple>()
+    const field = useComboboxFieldContext<Empty, Multiple, Item['value']>()
     const derivedValue = useComboboxFieldValue(
         items,
         field.state.value,

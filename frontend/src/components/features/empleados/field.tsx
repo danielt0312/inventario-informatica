@@ -6,11 +6,10 @@ import type { ComboboxLayoutItemValue, ComboboxLayoutMultiple, InferComboboxItem
 import type { AdscripcionFieldType } from "../adscripciones/field";
 import { empleadosQueryOptions } from "./queries";
 
-type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>;
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>;
 
-type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
+type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     ComboboxFieldSimpleProps<
-        Value,
         Empty,
         Multiple,
         InferComboboxItemFromFn<typeof toComboboxCatalogItems>
@@ -20,12 +19,12 @@ type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends Co
     adscripcionId?: AdscripcionFieldType;
 };
 
-function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
+function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     adscripcionId,
     layout,
     disabled,
     ...props
-}: FieldProps<Value, Empty, Multiple>) {
+}: FieldProps<Empty, Multiple>) {
     const { data: items = [] } = useQuery({
         ...empleadosQueryOptions(adscripcionId),
         enabled: !disabled,

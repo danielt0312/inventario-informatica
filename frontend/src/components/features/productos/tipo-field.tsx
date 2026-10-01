@@ -5,7 +5,7 @@ import { productoTipoQueryOptions } from "./queries";
 import { toComboboxGroups, toComboboxItems, type ComboboxLayoutItemValue, type ComboboxLayoutMultiple, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
 import { ComboboxFieldGrouped, type ComboboxFieldGroupedProps } from "@/components/ui/combobox-field-grouped";
 
-type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>;
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>;
 
 const dataToComboboxItems = (data: ProductoTipoWithCategoria[]) => {
     const grupos = new Map<number, { categoria: ProductoCategoria; tipo: ProductoTipoWithCategoria[] }>();
@@ -30,9 +30,8 @@ const dataToComboboxItems = (data: ProductoTipoWithCategoria[]) => {
     }));
 }
 
-type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
+type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     ComboboxFieldGroupedProps<
-        Value,
         Empty,
         Multiple,
         InferComboboxGroupItemFromFn<typeof dataToComboboxItems>,
@@ -41,10 +40,10 @@ type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends Co
     'items'
 >;
 
-function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
+function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: FieldProps<Value, Empty, Multiple>) {
+}: FieldProps<Empty, Multiple>) {
     const { data: items = [] } = useQuery({
         ...productoTipoQueryOptions,
         select: dataToComboboxItems

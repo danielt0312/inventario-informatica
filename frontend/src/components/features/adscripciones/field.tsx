@@ -5,11 +5,10 @@ import { ComboboxFieldSimple, type ComboboxFieldSimpleProps } from "@/components
 import { adscripcionesQueryOptions } from "./queries";
 import type { ComboboxLayoutItemValue, ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 
-type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>;
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>;
 
-type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
+type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     ComboboxFieldSimpleProps<
-        Value,
         Empty,
         Multiple,
         InferComboboxItemFromFn<typeof toComboboxCatalogItems>
@@ -17,10 +16,10 @@ type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends Co
     'items'
 >;
 
-function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
+function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: FieldProps<Value, Empty, Multiple>) {
+}: FieldProps<Empty, Multiple>) {
     const { data: items = [] } = useQuery({
         ...adscripcionesQueryOptions,
         select: toComboboxCatalogItems

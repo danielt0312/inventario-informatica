@@ -11,21 +11,19 @@ import {
 } from "./combobox-field.shared"
 
 export type ComboboxFieldGroupedProps<
-    Value extends ComboboxLayoutItemValue,
     Empty extends ComboboxFieldEmptyType,
     Multiple extends ComboboxLayoutMultiple,
     Item extends ComboboxLayoutItem,
     Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
 > = Omit<ComboboxLayoutGroupedComponentProps<Multiple, Item, Group>, "value" | "onValueChange">
-    & ComboboxFieldSharedUIProps<Value, Empty, Multiple, Item>
+    & ComboboxFieldSharedUIProps<Empty, Multiple, Item>
 
 export function ComboboxFieldGrouped<
-    Value extends ComboboxLayoutItemValue,
     Empty extends ComboboxFieldEmptyType,
     Multiple extends ComboboxLayoutMultiple,
     Item extends ComboboxLayoutItem,
     Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
->(props: ComboboxFieldGroupedProps<Value, Empty, Multiple, Item, Group>) {
+>(props: ComboboxFieldGroupedProps<Empty, Multiple, Item, Group>) {
     const {
         items,
         layout,
@@ -38,7 +36,7 @@ export function ComboboxFieldGrouped<
         [items]
     )
 
-    const field = useComboboxFieldContext<Value, Empty, Multiple>()
+    const field = useComboboxFieldContext<Empty, Multiple, Item['value']>()
     const derivedValue = useComboboxFieldValue(
         flatItems,
         field.state.value,

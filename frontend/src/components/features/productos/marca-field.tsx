@@ -1,4 +1,4 @@
-import type { ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
+import type { ComboboxLayoutItemValue, ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
 import { defaultFieldValueFromItem, useComboboxFieldContext, type ComboboxFieldEmptyType, type ComboboxFieldType } from "@/components/ui/combobox-field.shared";
@@ -12,51 +12,33 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { FormLayout } from "@/components/ui/form-layout";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
-import { formMutationOptions, type FormMutationOptions } from "@/hooks/use-form-mutation";
+import { formMutationOptions } from "@/hooks/use-form-mutation";
 import { productoMarcaQueryOptions } from "./queries";
 import React from "react";
 import z from "zod";
 
-type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Empty, Multiple>;
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>
 
 type Schema = { nombre: InputFieldType; }
 const defaultValues: Schema = { nombre: undefined }
 const validator = z.object({ nombre: requiredString });
 
 
-type MutationOptions = FormMutationOptions<
-    TResponse<ProductoMarca>,
-    z.output<typeof validator>
->
-
-const mutationOptions = (
-    options?: Omit<MutationOptions, 'url'>
-) => formMutationOptions({
-    url: "api/producto_marcas",
-    ...options
-});
-
-type FieldProps<Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLayoutMultiple> = Omit<
+type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     CreatableComboboxFieldSimpleProps<
         Empty,
         Multiple,
         InferComboboxItemFromFn<typeof toComboboxCatalogItems<ProductoMarca>>
     >,
     'items' | 'onCreate'
-> & {
-    formMutationOptions?: ReturnType<typeof mutationOptions>;
-}
+>
 
-function Field<Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLayoutMultiple>({
+function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
-    emptyValue,
-    formMutationOptions: mutationOverrides,
     ...props
 }: FieldProps<Empty, Multiple>) {
-    const field = useComboboxFieldContext<Empty, Multiple>();
-
     const {
-        onFieldValueChange = defaultFieldValueFromItem(emptyValue),
+        onFieldValueChange = defaultFieldValueFromItem(props.emptyValue),
     } = props
 
     const { queryKey } = productoMarcaQueryOptions;
@@ -66,17 +48,17 @@ function Field<Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLa
         select: toComboboxCatalogItems
     });
 
+    const field = useComboboxFieldContext<Empty, Multiple, number>();
+
     const [open, setOpen] = React.useState(false);
 
-    const { mutateAsync } = useMutation(mutationOptions({
-        ...mutationOverrides,
-        onSuccess: async (data, variables, onMutateResult, context) => {
+    const { mutateAsync } = useMutation(formMutationOptions<TResponse<ProductoMarca>>({
+        url: "api/producto_marcas",
+        onSuccess: async (data, _, __, { client }) => {
             const marca = data.data.data;
-            const { client } = context;
             field.handleChange(onFieldValueChange(marca as never) as never);
             client.setQueryData(queryKey, (prev = []) => [...prev, marca]);
             await client.invalidateQueries({ queryKey });
-            await mutationOverrides?.onSuccess?.(data, variables, onMutateResult, context);
             setOpen(false);
         }
     }));
@@ -102,10 +84,9 @@ function Field<Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLa
                 }}
                 onCreate={(searchValue) => {
                     form.setFieldValue('nombre', searchValue);
-                    field.handleChange(emptyValue as never);
+                    field.handleChange(props.emptyValue as Empty);
                     setOpen(true);
                 }}
-                emptyValue={emptyValue}
                 {...props}
             />
 
@@ -150,6 +131,4 @@ function Field<Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLa
 export {
     Field as ProductoMarcaField,
     type FieldType as ProductoMarcaFieldType,
-    mutationOptions as productoMarcaFormMutationOptions,
-    Field as BaseField
 }
