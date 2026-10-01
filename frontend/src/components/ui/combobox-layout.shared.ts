@@ -45,6 +45,8 @@ type BaseLayoutProps<
     filteredItems?: Items | undefined
 }
 
+export type ComboboxLayoutTriggerVariant = "button" | "input"
+
 export type ComboboxLayoutSharedUIProps<TItem extends ComboboxLayoutItem> = {
     layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">;
     placeholder?: string
@@ -58,6 +60,8 @@ export type ComboboxLayoutSharedUIProps<TItem extends ComboboxLayoutItem> = {
     renderChipsOnMultiple?: boolean
     placeholderSearch?: string
     trigger?: React.ReactElement
+    triggerVariant?: ComboboxLayoutTriggerVariant
+    renderSelectedItems?: (items: TItem[]) => React.ReactNode
 }
 
 /** Props del root para el layout plano (lista simple de items). */
@@ -89,6 +93,15 @@ export function toComboboxGroups<
     toGroup: (source: Source, index: number) => Group
 ): Group[] {
     return source.map(toGroup)
+}
+
+export function resolveTriggerVariant(
+    triggerVariant: ComboboxLayoutTriggerVariant | undefined,
+    multiple: boolean | undefined,
+    renderChipsOnMultiple: boolean
+): ComboboxLayoutTriggerVariant {
+    if (triggerVariant) return triggerVariant
+    return multiple && renderChipsOnMultiple ? "input" : "button"
 }
 
 export type InferComboboxItemFromFn<

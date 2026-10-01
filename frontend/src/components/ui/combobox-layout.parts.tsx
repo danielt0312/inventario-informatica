@@ -49,10 +49,12 @@ export function ComboboxLayoutTriggerShell<TItem extends ComboboxLayoutItem>({
     trigger,
     placeholder,
     renderItem,
+    renderItems,
 }: {
     trigger?: React.ReactElement
     placeholder?: string
     renderItem: (item: TItem) => React.ReactNode
+    renderItems: (items: TItem[]) => React.ReactNode
 }) {
     return (
         <ComboboxTrigger
@@ -60,15 +62,23 @@ export function ComboboxLayoutTriggerShell<TItem extends ComboboxLayoutItem>({
                 trigger ?? (
                     <Button variant="outline" className="justify-between font-normal truncate">
                         <ComboboxValue>
-                            {(selectedValue: TItem | null) =>
-                                <div className="truncate">
-                                    {selectedValue ? (
-                                        renderItem(selectedValue)
-                                    ) : (
-                                        <span className="text-muted-foreground truncate">{placeholder}</span>
-                                    )}
-                                </div>
-                            }
+                            {(selected: TItem | TItem[] | null) => {
+                                const isEmpty =
+                                    selected == null ||
+                                    (Array.isArray(selected) && selected.length === 0)
+
+                                return (
+                                    <div className="truncate">
+                                        {isEmpty ? (
+                                            <span className="text-muted-foreground truncate">{placeholder}</span>
+                                        ) : Array.isArray(selected) ? (
+                                            renderItems(selected)
+                                        ) : (
+                                            renderItem(selected)
+                                        )}
+                                    </div>
+                                )
+                            }}
                         </ComboboxValue>
                         <ChevronsUpDownIcon className="text-muted-foreground" />
                     </Button>

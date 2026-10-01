@@ -6,17 +6,19 @@ import {
     ComboboxList,
     ComboboxItem,
     ComboboxEmpty,
+    ComboboxInput,
 } from "@/components/ui/combobox"
 import {
     ComboboxLayoutChips,
     ComboboxLayoutTriggerShell,
     ComboboxLayoutSearchInput,
 } from "./combobox-layout.parts"
-import type {
-    ComboboxLayoutItem,
-    ComboboxLayoutMultiple,
-    ComboboxLayoutSharedUIProps,
-    ComboboxLayoutSimpleProps,
+import {
+    resolveTriggerVariant,
+    type ComboboxLayoutItem,
+    type ComboboxLayoutMultiple,
+    type ComboboxLayoutSharedUIProps,
+    type ComboboxLayoutSimpleProps,
 } from "./combobox-layout.shared"
 import { FieldLayout } from "./field-layout"
 
@@ -37,9 +39,8 @@ export function ComboboxLayoutSimple<
     const {
         items,
         placeholder,
-        emptyMessage = "No se encontraron resultados.",
-        showClear = false,
-        showTrigger = false,
+        showTrigger,
+        triggerVariant,
         className,
         contentClassName,
         multiple,
@@ -48,19 +49,26 @@ export function ComboboxLayoutSimple<
         required,
         disabled,
         layout,
+        emptyMessage = "No se encontraron resultados.",
+        showClear = false,
         renderItem = (item: Item) => item.label,
         renderSelectedItem = (item: Item) => item.label,
+        renderSelectedItems = (items: Item[]) => items.map((i) => i.label).join(", "),
         autoHighlight = true,
         renderChipsOnMultiple = true,
         placeholderSearch = "Buscar...",
         ...rootProps
     } = props
 
-    const showChips = multiple && renderChipsOnMultiple
+    const variant = resolveTriggerVariant(triggerVariant, multiple, renderChipsOnMultiple)
+    const asChips = variant === "input" && !!multiple
+    const asInput = variant === "input" && !multiple
+    const showTriggerResolved = showTrigger ?? variant === "input"
+
     const placeholderProp =
         placeholder !== undefined
             ? placeholder
-            : showChips
+            : asChips
                 ? "Ingresa un valor"
                 : "Selecciona una opción"
 
@@ -82,24 +90,31 @@ export function ComboboxLayoutSimple<
                 // required={required}
                 disabled={disabled}
             >
-                {showChips ? (
+                {asChips ? (
                     <ComboboxLayoutChips
                         placeholder={placeholderProp}
                         renderItem={renderSelectedItem}
+                    />
+                ) : asInput ? (
+                    <ComboboxInput
+                        placeholder={placeholderProp}
+                        showClear={showClear}
+                        showTrigger={showTrigger}
                     />
                 ) : (
                     <ComboboxLayoutTriggerShell
                         trigger={trigger}
                         placeholder={placeholderProp}
                         renderItem={renderSelectedItem}
+                        renderItems={renderSelectedItems}
                     />
                 )}
                 <ComboboxContent className={contentClassName}>
-                    {!showChips && (
+                    {variant === 'button' && (
                         <ComboboxLayoutSearchInput
                             placeholder={placeholderSearch}
                             showClear={showClear}
-                            showTrigger={showTrigger}
+                            showTrigger={showTriggerResolved}
                             className={className}
                         />
                     )}

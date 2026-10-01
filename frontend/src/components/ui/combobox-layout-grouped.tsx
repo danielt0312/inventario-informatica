@@ -14,18 +14,20 @@ import {
     ComboboxEmpty,
     useComboboxFilteredItems,
     useComboboxFilter,
+    ComboboxInput,
 } from "@/components/ui/combobox"
 import {
     ComboboxLayoutChips,
     ComboboxLayoutTriggerShell,
     ComboboxLayoutSearchInput,
 } from "./combobox-layout.parts"
-import type {
-    ComboboxLayoutGroup,
-    ComboboxLayoutGroupedProps,
-    ComboboxLayoutItem,
-    ComboboxLayoutMultiple,
-    ComboboxLayoutSharedUIProps,
+import {
+    resolveTriggerVariant,
+    type ComboboxLayoutGroup,
+    type ComboboxLayoutGroupedProps,
+    type ComboboxLayoutItem,
+    type ComboboxLayoutMultiple,
+    type ComboboxLayoutSharedUIProps,
 } from "./combobox-layout.shared"
 import { FieldLayout } from "./field-layout"
 
@@ -92,28 +94,34 @@ export function ComboboxLayoutGrouped<
         disabled,
         layout,
         value,
+        showTrigger,
+        trigger,
+        triggerVariant,
         showClear = false,
-        showTrigger = false,
+        filter: filterProp,
         emptyMessage = "No se encontraron resultados.",
         getGroupKey = (_group: Group, index: number) => index,
         renderItem = (item: Item) => item.label,
         renderSelectedItem = (item: Item) => item.label,
+        renderSelectedItems = (items: Item[]) => items.map((i) => i.label).join(", "),
         renderGroupLabel = (group: Group) => group.label,
         searchByGroupLabel = true,
         groupToStringLabel = (group: Group) => String(group.label),
-        filter: filterProp,
         autoHighlight = true,
         renderChipsOnMultiple = false,
         placeholderSearch = "Buscar...",
-        trigger,
         ...rootProps
     } = props
 
-    const showChips = multiple && renderChipsOnMultiple
+    const variant = resolveTriggerVariant(triggerVariant, multiple, renderChipsOnMultiple)
+    const asChips = variant === "input" && !!multiple
+    const asInput = variant === "input" && !multiple
+    const showTriggerResolved = showTrigger ?? variant === "input"
+
     const placeholderProp =
         placeholder !== undefined
             ? placeholder
-            : showChips
+            : asChips
                 ? "Ingresa un valor"
                 : "Selecciona una opción"
 
@@ -164,24 +172,31 @@ export function ComboboxLayoutGrouped<
                 // required={required}
                 disabled={disabled}
             >
-                {showChips ? (
+                {asChips ? (
                     <ComboboxLayoutChips
                         placeholder={placeholderProp}
                         renderItem={renderSelectedItem}
+                    />
+                ) : asInput ? (
+                    <ComboboxInput
+                        placeholder={placeholderProp}
+                        showClear={showClear}
+                        showTrigger={showTriggerResolved}
                     />
                 ) : (
                     <ComboboxLayoutTriggerShell
                         trigger={trigger}
                         placeholder={placeholderProp}
                         renderItem={renderSelectedItem}
+                        renderItems={renderSelectedItems}
                     />
                 )}
                 <ComboboxContent className={contentClassName}>
-                    {!showChips && (
+                    {variant === 'button' && (
                         <ComboboxLayoutSearchInput
                             placeholder={placeholderSearch}
                             showClear={showClear}
-                            showTrigger={showTrigger}
+                            showTrigger={showTriggerResolved}
                             className={className}
                         />
                     )}
