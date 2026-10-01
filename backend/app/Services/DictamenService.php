@@ -220,7 +220,7 @@ class DictamenService
     {
         $archivo = $this->generatePdf($dictamen);
 
-        $this->documentoService->createForModel($dictamen->versionActual, $archivo);
+        $this->documentoService->enlazarArchivo($dictamen->versionActual, $archivo);
     }
 
     protected function generatePdf(Dictamen $dictamen): Archivo

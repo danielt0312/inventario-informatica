@@ -21,7 +21,7 @@ class OrdenCompraService
         return DB::transaction(function () use ($data, $archivo) {
             $ordenCompra = OrdenCompra::create($data->all());
 
-            $this->documentoService->createForModel($ordenCompra, $archivo);
+            $this->documentoService->enlazarArchivo($ordenCompra, $archivo);
 
             return $ordenCompra;
         });

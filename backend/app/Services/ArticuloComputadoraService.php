@@ -20,7 +20,7 @@ class OficioService
         return DB::transaction(function () use ($folio, $archivo) {
             $oficio = Oficio::create(['folio' => $data->folio]);
 
-            $this->documentoService->createForModel($oficio, $archivo);
+            $this->documentoService->enlazarArchivo($oficio, $archivo);
 
             return $oficio;
         });

@@ -12,10 +12,12 @@ use App\Models\{
 
 class DocumentoService
 {
-    public function createForModel(Model $model, Archivo $archivo): Documento
+    public function enlazarArchivo(Model $model, Archivo $archivo): Documento
     {
-        return DB::transaction(function () use ($model, $archivo) {
-            $tipoEnum = DocumentoTipoEnum::fromModel($model);
+        $tipoEnum = DocumentoTipoEnum::fromModel($model);
+
+        return DB::transaction(function () use ($model, $archivo, $tipoEnum) {
+            $archivo->temporal()->delete();
 
             $documento = $archivo->documento()->make([
                 'tipo_id' => $tipoEnum->value,

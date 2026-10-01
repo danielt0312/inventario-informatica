@@ -21,7 +21,7 @@ class FacturaService
         return DB::transaction(function () use ($data, $archivo) {
             $factura = Factura::create($data->all());
 
-            $this->documentoService->createForModel($factura, $archivo);
+            $this->documentoService->enlazarArchivo($factura, $archivo);
 
             return $factura;
         });
