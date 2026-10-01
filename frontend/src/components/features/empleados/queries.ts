@@ -4,7 +4,7 @@ import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";
 import type { Empleado } from "@/types/externos";
 
-const options = (adscripcionId: AdscripcionFieldType<false>) => queryOptions({
+const options = (adscripcionId: AdscripcionFieldType) => queryOptions({
     queryKey: ['empleados', adscripcionId],
     queryFn: () => api.get<TResponse<Empleado[]>>('api/empleados', {
         params: {

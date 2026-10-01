@@ -1,9 +1,9 @@
 import type { ProductoTipo, ProductoVarianteGenerica } from "@/types/productos";
-import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import type { ProductoTipoFieldType } from "./tipo-field";
 import { ComboboxFieldGrouped, type ComboboxFieldGroupedProps } from "@/components/ui/combobox-field-grouped";
 import { useQuery } from "@tanstack/react-query";
-import { toComboboxGroups, toComboboxItems, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
+import { toComboboxGroups, toComboboxItems, type ComboboxLayoutItemValue, type ComboboxLayoutMultiple, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
 import { productoQueryOptions } from "./queries";
 
 const dataToComboboxItems = (data: ProductoVarianteGenerica[]) => {
@@ -35,25 +35,27 @@ const dataToComboboxItems = (data: ProductoVarianteGenerica[]) => {
     }));
 }
 
-type FieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
+type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>;
 
-type FieldProps<Multiple extends boolean | undefined = false> = Omit<
+type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     ComboboxFieldGroupedProps<
+        Value,
+        Empty,
+        Multiple,
         InferComboboxGroupItemFromFn<typeof dataToComboboxItems>,
-        InferComboboxGroupFromFn<typeof dataToComboboxItems>,
-        Multiple
+        InferComboboxGroupFromFn<typeof dataToComboboxItems>
     >,
     'items'
 > & {
     tipoId: ProductoTipoFieldType;
 }
 
-function Field<Multiple extends boolean | undefined = false>({
+function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     tipoId,
     disabled,
     ...props
-}: FieldProps<Multiple>) {
+}: FieldProps<Value, Empty, Multiple>) {
     const { data: items = [] } = useQuery({
         ...productoQueryOptions(tipoId),
         enabled: !disabled,

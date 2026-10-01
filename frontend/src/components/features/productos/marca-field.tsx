@@ -2,7 +2,7 @@ import type { ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/componen
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
 import { defaultFieldValueFromItem, useComboboxFieldContext, type ComboboxFieldEmptyType, type ComboboxFieldType } from "@/components/ui/combobox-field.shared";
-import { CreatableComboboxFieldSimpleBase, type CreatableComboboxFieldSimpleBaseProps } from "@/components/ui/creatable-combobox-field-simple";
+import { CreatableComboboxFieldSimple, type CreatableComboboxFieldSimpleProps } from "@/components/ui/creatable-combobox-field-simple";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAppForm } from "@/components/ui/form.shared";
@@ -37,7 +37,7 @@ const mutationOptions = (
 });
 
 type FieldProps<Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLayoutMultiple> = Omit<
-    CreatableComboboxFieldSimpleBaseProps<
+    CreatableComboboxFieldSimpleProps<
         Empty,
         Multiple,
         InferComboboxItemFromFn<typeof toComboboxCatalogItems<ProductoMarca>>
@@ -94,7 +94,7 @@ function Field<Empty extends ComboboxFieldEmptyType, Multiple extends ComboboxLa
 
     return (
         <>
-            <CreatableComboboxFieldSimpleBase
+            <CreatableComboboxFieldSimple
                 items={items}
                 layout={{
                     label: "Marca del Producto",

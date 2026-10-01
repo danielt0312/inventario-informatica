@@ -8,18 +8,16 @@ export const Route = createFileRoute('/_auth/dictamenes/')({
 
 function RouteComponent() {
     return (
-        <>
-            <Card>
-                <CardHeader>
-                    <CardTitle>
-                        Dictámenes Tecnológicos
-                    </CardTitle>
-                </CardHeader>
+        <Card>
+            <CardHeader>
+                <CardTitle>
+                    Dictámenes Tecnológicos
+                </CardTitle>
+            </CardHeader>
 
-                <CardContent>
-                    <DictamenTable />
-                </CardContent>
-            </Card>
-        </>
+            <CardContent>
+                <DictamenTable />
+            </CardContent>
+        </Card>
     );
 }

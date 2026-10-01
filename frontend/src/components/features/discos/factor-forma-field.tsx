@@ -1,10 +1,10 @@
 import type { TResponse } from "@/types/generics";
-import type { DiscoFactorForma } from "@/types/articulos/discos";
-import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import type { DiscoCapacidad, DiscoFactorForma } from "@/types/articulos/discos";
+import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { discoFactorFormaQueryOptions } from "./queries";
-import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
+import { CreatableComboboxFieldSimple, type CreatableComboboxFieldSimpleProps } from "@/components/ui/creatable-combobox-field-simple";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useFieldContext } from "@/components/ui/form-context";
 import { useAppForm } from '@/components/ui/form.shared';
@@ -16,47 +16,38 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import React from "react";
 import z from "zod";
+import type { ComboboxLayoutItemValue, ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 
-type Schema = {
-    nombre: NombreFieldType;
-}
+type Schema = { nombre: InputFieldType; }
 
-const defaultValues: Schema = {
-    nombre: undefined,
-}
+const defaultValues: Schema = { nombre: undefined }
 
 const validator = z.object({ nombre: requiredString });
 type OutputSchema = z.output<typeof validator>;
 
-type NombreFieldType = InputFieldType
-function NombreField({
-    fieldLayout,
-    ...props
-}: React.ComponentProps<typeof InputField>) {
-    return (
-        <InputField
-            fieldLayout={{
-                label: "Factor de Forma",
-                ...fieldLayout
-            }}
-            placeholder='M.2, 2.5", ...'
-            {...props}
-        />
-    );
-}
+type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>;
 
-type FactorFormaFieldType = ComboboxFieldType<false, null>;
-function FactorFormaField({
+type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false> = Omit<
+    CreatableComboboxFieldSimpleProps<
+        Value,
+        Empty,
+        Multiple,
+        InferComboboxItemFromFn<typeof toComboboxCatalogItems<DiscoCapacidad>>
+    >,
+    'items' | 'onCreate'
+>
+
+function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
+}: FieldProps<Value, Empty, Multiple>) {
     const { queryKey } = discoFactorFormaQueryOptions;
     const { data: items = [] } = useQuery({
         ...discoFactorFormaQueryOptions,
         select: toComboboxCatalogItems
     });
 
-    const field = useFieldContext<FactorFormaFieldType>();
+    const field = useFieldContext<FieldType>();
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
     const { mutate } = useFormMutation<TResponse<DiscoFactorForma>, OutputSchema>({
@@ -106,7 +97,17 @@ function FactorFormaField({
                     </DialogHeader>
 
                     <FormLayout form={form} className="contents">
-                        <form.AppField name="nombre" children={() => <NombreField />} />
+                        <form.AppField
+                            name="nombre"
+                            children={() => (
+                                <InputField
+                                    fieldLayout={{
+                                        label: "Factor de Forma",
+                                    }}
+                                    placeholder='M.2, 2.5", ...'
+                                />
+                            )}
+                        />
 
                         <DialogFooter>
                             <form.SubmitFormButton />
@@ -123,6 +124,6 @@ function FactorFormaField({
 }
 
 export {
-    FactorFormaField as DiscoFactorFormaField,
-    type FactorFormaFieldType as DiscoFactorFormaFieldType
+    Field as DiscoFactorFormaField,
+    type FieldType as DiscoFactorFormaFieldType
 }

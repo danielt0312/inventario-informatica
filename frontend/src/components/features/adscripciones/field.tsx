@@ -1,24 +1,26 @@
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { ComboboxFieldSimple, type ComboboxFieldSimpleProps } from "@/components/ui/combobox-field-simple";
 import { adscripcionesQueryOptions } from "./queries";
-import type { InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
+import type { ComboboxLayoutItemValue, ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 
-type FieldProps<Multiple extends boolean | undefined = false> = Omit<
+type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>;
+
+type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     ComboboxFieldSimpleProps<
-        InferComboboxItemFromFn<typeof toComboboxCatalogItems>,
-        Multiple
+        Value,
+        Empty,
+        Multiple,
+        InferComboboxItemFromFn<typeof toComboboxCatalogItems>
     >,
     'items'
 >;
 
-type FieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
-
-function Field<Multiple extends boolean | undefined = false>({
+function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: FieldProps<Multiple>) {
+}: FieldProps<Value, Empty, Multiple>) {
     const { data: items = [] } = useQuery({
         ...adscripcionesQueryOptions,
         select: toComboboxCatalogItems

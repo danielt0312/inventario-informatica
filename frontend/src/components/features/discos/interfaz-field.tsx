@@ -1,10 +1,11 @@
 import type { TResponse } from "@/types/generics";
 import type { DiscoInterfaz } from "@/types/articulos/discos";
-import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import type { ComboboxLayoutItemValue, ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { discoInterfazQueryOptions } from "./queries";
-import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
+import { CreatableComboboxFieldSimple, type CreatableComboboxFieldSimpleProps } from "@/components/ui/creatable-combobox-field-simple";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useFieldContext } from "@/components/ui/form-context";
 import { useAppForm } from '@/components/ui/form.shared';
@@ -17,46 +18,34 @@ import { XCircleIcon } from "lucide-react";
 import React from "react";
 import z from "zod";
 
-type Schema = {
-    nombre: NombreFieldType;
-}
-
-const defaultValues: Schema = {
-    nombre: undefined,
-}
-
+type Schema = { nombre: InputFieldType; }
+const defaultValues: Schema = { nombre: undefined }
 const validator = z.object({ nombre: requiredString });
 type OutputSchema = z.output<typeof validator>;
 
-type NombreFieldType = InputFieldType
-function NombreField({
-    fieldLayout,
-    ...props
-}: React.ComponentProps<typeof InputField>) {
-    return (
-        <InputField
-            fieldLayout={{
-                label: "Interfaz",
-                ...fieldLayout
-            }}
-            placeholder="Ingresa la interfaz del disco"
-            {...props}
-        />
-    );
-}
+type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>
 
-type InterfazFieldType = ComboboxFieldType<false, null>;
-function InterfazField({
+type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false> = Omit<
+    CreatableComboboxFieldSimpleProps<
+        Value,
+        Empty,
+        Multiple,
+        InferComboboxItemFromFn<typeof toComboboxCatalogItems>
+    >,
+    'items' | 'onCreate'
+>
+
+function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = null, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
+}: FieldProps<Value, Empty, Multiple>) {
     const { queryKey } = discoInterfazQueryOptions;
     const { data: items = [] } = useQuery({
         ...discoInterfazQueryOptions,
         select: toComboboxCatalogItems
     });
 
-    const field = useFieldContext<InterfazFieldType>();
+    const field = useFieldContext<FieldType>();
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
     const { mutate } = useFormMutation<TResponse<DiscoInterfaz>, OutputSchema>({
@@ -106,7 +95,14 @@ function InterfazField({
                     </DialogHeader>
 
                     <FormLayout form={form} className="contents">
-                        <form.AppField name="nombre" children={() => <NombreField />} />
+                        <form.AppField name="nombre" children={() => (
+                            <InputField
+                                fieldLayout={{
+                                    label: "Interfaz",
+                                }}
+                                placeholder="Ingresa la interfaz del disco"
+                            />
+                        )} />
 
                         <DialogFooter>
                             <form.SubmitFormButton />
@@ -123,6 +119,6 @@ function InterfazField({
 }
 
 export {
-    InterfazField as DiscoInterfazField,
-    type InterfazFieldType as DiscoInterfazFieldType,
+    Field as DiscoInterfazField,
+    type FieldType as DiscoInterfazFieldType,
 }

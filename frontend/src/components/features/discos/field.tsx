@@ -1,10 +1,10 @@
 import type { DiscoSpec, DiscoTipo } from "@/types/articulos/discos";
-import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import type { ComboboxFieldGroupedProps } from "@/components/ui/combobox-field-grouped";
 import type { BooleanMap, TResponse } from "@/types/generics";
 import { useQuery } from "@tanstack/react-query";
 import { discoQueryOptions } from "./queries";
-import { toComboboxGroups, toComboboxItems, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
+import { toComboboxGroups, toComboboxItems, type ComboboxLayoutItemValue, type ComboboxLayoutMultiple, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
 import { CreatableComboboxFieldGrouped } from "@/components/ui/creatable-combobox-field-grouped";
 import { useFieldContext } from "@/components/ui/form-context";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -89,13 +89,15 @@ const validator = z.object({
     producto: productoVarianteSpecFormValidator
 });
 
-type FieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>
+type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>
 
-type FieldProps<Multiple extends boolean | undefined = false> = Omit<
+type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     ComboboxFieldGroupedProps<
+        Value,
+        Empty,
+        Multiple,
         InferComboboxGroupItemFromFn<typeof dataToComboboxItems>,
-        InferComboboxGroupFromFn<typeof dataToComboboxItems>,
-        Multiple
+        InferComboboxGroupFromFn<typeof dataToComboboxItems>
     >,
     'items' | 'onCreate'
 >;
@@ -136,10 +138,10 @@ const FieldsGroup = withFieldGroup({
     )
 });
 
-function Field<Multiple extends boolean | undefined = false>({
+function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: FieldProps<Multiple>) {
+}: FieldProps<Value, Empty, Multiple>) {
     const field = useFieldContext<FieldType>();
     const { queryKey } = discoQueryOptions;
 

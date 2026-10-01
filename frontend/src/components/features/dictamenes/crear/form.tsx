@@ -16,6 +16,7 @@ import { ArticuloNullableNumeroInventarioField } from "@/components/features/art
 import { DictamenAdquisicion } from "@/lib/utils";
 import { Label } from '@/components/ui/label';
 import { DictamenBorradorField } from '../borrador-field';
+import { ProductoVarianteSpecFieldGroup } from '../../productos/variante-spec-field-group';
 
 function Form() {
     const { mutate } = useFormMutation({
@@ -49,7 +50,7 @@ function Form() {
                     />
                     <form.AppField
                         name="adscripcion_id"
-                        children={() => <AdscripcionField layout={{ label: "Área de Adscripción solicitante" }} required />}
+                        children={() => <AdscripcionField layout={{ label: "Área de Adscripción solicitante" }} required emptyValue={undefined} />}
                     />
                     <form.AppField
                         name="folio"
@@ -122,14 +123,18 @@ function Form() {
                                                         </div>
                                                     </FieldGroup>
 
-                                                    <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador.producto.tipo_id}>
-                                                        {(productoTipoId) =>
-                                                            <form.AppField
-                                                                name={`adquisiciones[${index}].borrador`}
-                                                                children={() => <DictamenBorradorField />}
-                                                            />
-                                                        }
-                                                    </form.Subscribe>
+                                                    <ProductoVarianteSpecFieldGroup
+                                                        form={form}
+                                                        fields={{
+                                                            marca_id: `adquisiciones[${index}].borrador.producto.marca_id`,
+                                                            modelo: `adquisiciones[${index}].borrador.producto.modelo`
+                                                        }}
+                                                    />
+
+                                                    <form.AppField
+                                                        name={`adquisiciones[${index}].borrador`}
+                                                        children={() => (<DictamenBorradorField />)}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -152,7 +157,7 @@ function Form() {
 
                 <form.SubmitFormButton />
             </form.AppForm>
-        </PrimitiveForm>
+        </PrimitiveForm >
     );
 }
 

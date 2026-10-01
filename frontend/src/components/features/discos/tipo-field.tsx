@@ -1,10 +1,10 @@
 import type { TResponse } from "@/types/generics";
 import type { DiscoTipo } from "@/types/articulos/discos";
-import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { discoTipoQueryOptions } from "./queries";
-import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
+import { CreatableComboboxFieldSimple, type CreatableComboboxFieldSimpleProps } from "@/components/ui/creatable-combobox-field-simple";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useFieldContext } from "@/components/ui/form-context";
 import { useAppForm } from '@/components/ui/form.shared';
@@ -16,47 +16,36 @@ import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import React from "react";
 import z from "zod";
+import type { ComboboxLayoutItemValue, ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 
-type Schema = {
-    nombre: NombreFieldType;
-}
-
-const defaultValues: Schema = {
-    nombre: undefined,
-}
-
+type Schema = { nombre: InputFieldType }
+const defaultValues: Schema = { nombre: undefined }
 const validator = z.object({ nombre: requiredString });
 type OutputSchema = z.output<typeof validator>;
 
-type NombreFieldType = InputFieldType
-function NombreField({
-    fieldLayout,
-    ...props
-}: React.ComponentProps<typeof InputField>) {
-    return (
-        <InputField
-            fieldLayout={{
-                label: "Tipo",
-                ...fieldLayout
-            }}
-            placeholder="Ingresa el tipo de disco"
-            {...props}
-        />
-    );
-}
+type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>
 
-type TipoFieldType = ComboboxFieldType<false, undefined>;
-function TipoField({
+type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
+    CreatableComboboxFieldSimpleProps<
+        Value,
+        Empty,
+        Multiple,
+        InferComboboxItemFromFn<typeof toComboboxCatalogItems>
+    >,
+    'items' | 'onCreate'
+>
+
+function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
+}: FieldProps<Value, Empty, Multiple>) {
     const { queryKey } = discoTipoQueryOptions;
     const { data: items = [] } = useQuery({
         ...discoTipoQueryOptions,
         select: toComboboxCatalogItems
     });
 
-    const field = useFieldContext<TipoFieldType>();
+    const field = useFieldContext<FieldType>();
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
     const { mutate } = useFormMutation<TResponse<DiscoTipo>, OutputSchema>({
@@ -106,7 +95,17 @@ function TipoField({
                     </DialogHeader>
 
                     <FormLayout form={form} className="contents">
-                        <form.AppField name="nombre" children={() => <NombreField />} />
+                        <form.AppField
+                            name="nombre"
+                            children={() => (
+                                <InputField
+                                    fieldLayout={{
+                                        label: "Tipo",
+                                    }}
+                                    placeholder="Ingresa el tipo de disco"
+                                />
+                            )}
+                        />
 
                         <DialogFooter>
                             <form.SubmitFormButton />
@@ -123,6 +122,6 @@ function TipoField({
 }
 
 export {
-    TipoField as DiscoTipoField,
-    type TipoFieldType as DiscoTipoFieldType,
+    Field as DiscoTipoField,
+    type FieldType as DiscoTipoFieldType,
 }

@@ -1,11 +1,11 @@
-import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import type { ProductoCategoria, ProductoTipoWithCategoria } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
 import { productoTipoQueryOptions } from "./queries";
-import { toComboboxGroups, toComboboxItems, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
+import { toComboboxGroups, toComboboxItems, type ComboboxLayoutItemValue, type ComboboxLayoutMultiple, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
 import { ComboboxFieldGrouped, type ComboboxFieldGroupedProps } from "@/components/ui/combobox-field-grouped";
 
-type FieldType<Multiple extends boolean | undefined = false> = ComboboxFieldType<Multiple, undefined>;
+type FieldType<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Value, Empty, Multiple>;
 
 const dataToComboboxItems = (data: ProductoTipoWithCategoria[]) => {
     const grupos = new Map<number, { categoria: ProductoCategoria; tipo: ProductoTipoWithCategoria[] }>();
@@ -30,19 +30,21 @@ const dataToComboboxItems = (data: ProductoTipoWithCategoria[]) => {
     }));
 }
 
-type FieldProps<Multiple extends boolean | undefined = false> = Omit<
+type FieldProps<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     ComboboxFieldGroupedProps<
+        Value,
+        Empty,
+        Multiple,
         InferComboboxGroupItemFromFn<typeof dataToComboboxItems>,
-        InferComboboxGroupFromFn<typeof dataToComboboxItems>,
-        Multiple
+        InferComboboxGroupFromFn<typeof dataToComboboxItems>
     >,
     'items'
 >;
 
-function Field<Multiple extends boolean | undefined = false>({
+function Field<Value extends ComboboxLayoutItemValue = number, Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: FieldProps<Multiple>) {
+}: FieldProps<Value, Empty, Multiple>) {
     const { data: items = [] } = useQuery({
         ...productoTipoQueryOptions,
         select: dataToComboboxItems
