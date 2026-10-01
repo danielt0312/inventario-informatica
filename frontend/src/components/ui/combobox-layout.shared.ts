@@ -2,6 +2,8 @@ import type * as React from "react"
 import type { ComboboxRoot } from "@base-ui/react/combobox"
 import type { CoreFieldLayoutProps } from "./field-layout"
 
+export type ComboboxLayoutItemValue = React.Key
+
 /**
  * Forma mínima obligatoria para un item seleccionable.
  * `value` amarrado a React.Key (primitivo usable como identificador/key),
@@ -11,7 +13,7 @@ import type { CoreFieldLayoutProps } from "./field-layout"
  * Cualquier metadata adicional de dominio es libre: TItem puede traer
  * los campos extra que necesites además de value/label.
  */
-export type ComboboxLayoutItem<TValue extends React.Key = React.Key> = {
+export type ComboboxLayoutItem<TValue extends ComboboxLayoutItemValue = ComboboxLayoutItemValue> = {
     value: TValue
     label: string
 }

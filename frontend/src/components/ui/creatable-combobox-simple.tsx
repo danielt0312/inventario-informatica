@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 
 import { ComboboxLayoutSimple, type ComboboxLayoutSimpleComponentProps } from "./combobox-layout-simple"

@@ -1,5 +1,3 @@
-// creatable-combobox-grouped.tsx
-"use client"
 import * as React from "react"
 
 import { ComboboxLayoutGrouped } from "./combobox-layout-grouped"
@@ -30,7 +28,6 @@ export type CreatableComboboxGroupedProps<
     ) => void
     onCreate: (query: string) => void
     renderCreateOption?: (query: string) => React.ReactNode
-    //   itemToStringLabel?: (item: TItem) => string
 }
 
 export function CreatableComboboxGrouped<
@@ -151,21 +148,21 @@ export function CreatableComboboxGrouped<
             {...(rest as ComboboxLayoutGroupedComponentProps<Multiple, Item, Group>)}
             items={groupsWithSentinel as never}
             multiple={multiple}
-            value={currentValue as never}
+            value={currentValue}
             filter={resolvedFilter as never}
             open={open}
             onOpenChange={setOpen}
             onInputValueChange={onInputValueChange}
-            onValueChange={handleValueChange as never}
+            onValueChange={handleValueChange}
             renderGroupLabel={
                 ((group: Group) =>
-                    isCreatableGroup(group) ? null : (renderGroupLabel?.(group) ?? group.label)) as never
+                    isCreatableGroup(group) ? null : renderGroupLabel?.(group) ?? group.label)
             }
             renderItem={
                 ((item: Item | typeof sentinel) =>
                     isCreatableSentinel(item)
                         ? item.label
-                        : (renderItem?.(item as Item) ?? (item as Item).label)) as never
+                        : renderItem?.(item) ?? item.label)
             }
         />
     )

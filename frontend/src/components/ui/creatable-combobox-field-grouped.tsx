@@ -1,88 +1,62 @@
-// combobox-field-creatable-grouped.tsx
 import * as React from "react"
 import { CreatableComboboxGrouped } from "./creatable-combobox-grouped"
 import type { CreatableComboboxGroupedProps } from "./creatable-combobox-grouped"
-import type { ComboboxLayoutGroup, ComboboxLayoutItem, ComboboxLayoutMultiple } from "./combobox-layout.shared"
-import { FieldLayout, type CoreFieldLayoutProps } from "./field-layout"
+import type { ComboboxLayoutGroup, ComboboxLayoutItem, ComboboxLayoutItemValue, ComboboxLayoutMultiple } from "./combobox-layout.shared"
 import { useFieldContext } from "./form-context"
 import {
     useComboboxFieldValue,
     defaultFieldValueFromItem,
     type ComboboxFieldEmptyType,
     type ComboboxFieldType,
+    type ComboboxFieldSharedUIProps,
 } from "./combobox-field.shared"
 
-type CreatableComboboxFieldGroupedProps<
+export type CreatableComboboxFieldGroupedProps<
+    Value extends ComboboxLayoutItemValue,
     Empty extends ComboboxFieldEmptyType,
     Multiple extends ComboboxLayoutMultiple,
     Item extends ComboboxLayoutItem,
     Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
-> = Omit<CreatableComboboxGroupedProps<Multiple, Item, Group>, "value" | "onValueChange"> & {
-    layout?: Omit<CoreFieldLayoutProps, "required" | "disabled" | "className">
-    onFieldValueChange?: (
-        value: Multiple extends true ? Item[] : Item | Empty
-    ) => ComboboxFieldType<Empty, Multiple>
-}
+> = Omit<CreatableComboboxGroupedProps<Multiple, Item, Group>, "value" | "onValueChange">
+    & ComboboxFieldSharedUIProps<Value, Empty, Multiple, Item>
 
-function createCreatableComboboxFieldGrouped<Empty extends ComboboxFieldEmptyType>(
-    emptyValue: Empty
-) {
-    return function CreatableComboboxFieldGroupedImpl<
-        Multiple extends ComboboxLayoutMultiple,
-        Item extends ComboboxLayoutItem,
-        Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
-    >(props: CreatableComboboxFieldGroupedProps<Empty, Multiple, Item, Group>) {
-        const {
-            items,
-            layout,
-            className,
-            required,
-            disabled,
-            onFieldValueChange = defaultFieldValueFromItem(emptyValue),
-            ...comboboxProps
-        } = props
+export function CreatableComboboxFieldGrouped<
+    Value extends ComboboxLayoutItemValue,
+    Empty extends ComboboxFieldEmptyType,
+    Multiple extends ComboboxLayoutMultiple,
+    Item extends ComboboxLayoutItem,
+    Group extends ComboboxLayoutGroup<Item> = ComboboxLayoutGroup<Item>,
+>(props: CreatableComboboxFieldGroupedProps<Value, Empty, Multiple, Item, Group>) {
+    const {
+        items,
+        layout,
+        onFieldValueChange = defaultFieldValueFromItem(props.emptyValue),
+        ...comboboxProps
+    } = props
 
-        const flatItems = React.useMemo(
-            () => items.flatMap((group) => group.items),
-            [items]
-        )
+    const flatItems = React.useMemo(
+        () => items.flatMap((group) => group.items),
+        [items]
+    )
 
-        const field = useFieldContext<ComboboxFieldType<Empty, Multiple>>()
-        const derivedValue = useComboboxFieldValue(
-            flatItems,
-            field.state.value,
-            comboboxProps.multiple as never,
-            emptyValue
-        )
+    const field = useFieldContext<ComboboxFieldType<Value, Empty, Multiple>>()
+    const derivedValue = useComboboxFieldValue(
+        flatItems,
+        field.state.value,
+        comboboxProps.multiple as never,
+        props.emptyValue
+    )
 
-        return (
-            <FieldLayout
-                className={className}
-                fieldLayout={{
-                    required,
-                    disabled,
-                    errors: field.state.meta.errors,
-                    ...layout
-                }}
-            >
-                <CreatableComboboxGrouped<Multiple, Item, Group>
-                    {...comboboxProps}
-                    items={items}
-                    // required={required}
-                    disabled={disabled}
-                    value={(derivedValue ?? null) as never}
-                    onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}
-                />
-            </FieldLayout>
-        )
-    }
-}
-
-const CreatableComboboxFieldGrouped = createCreatableComboboxFieldGrouped(undefined)
-const NullableCreatableComboboxFieldGrouped = createCreatableComboboxFieldGrouped(null)
-
-export {
-    CreatableComboboxFieldGrouped,
-    NullableCreatableComboboxFieldGrouped,
-    type CreatableComboboxFieldGroupedProps
+    return (
+        <CreatableComboboxGrouped<Multiple, Item, Group>
+            {...comboboxProps}
+            items={items}
+            value={derivedValue as never}
+            onValueChange={(value) => field.handleChange(onFieldValueChange(value as never) as never)}
+            layout={{
+                errors: field.state.meta.errors,
+                ...layout
+            }}
+        />
+    )
 }
