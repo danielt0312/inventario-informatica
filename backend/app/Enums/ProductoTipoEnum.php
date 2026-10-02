@@ -19,50 +19,48 @@ enum ProductoTipoEnum: int
     use HasFormattedLabel, IsCatalog;
 
     case Computadora = 1;
-    case Servidor = 2;
-    case Tablet = 3;
-    case Disco = 4;
-    case Ram = 5;
-    case Telefono = 6;
-    case AccessPoint = 7;
-    case Antena = 8;
-    case Firewall = 9;
-    case Modem = 10;
-    case PanelParcheo = 11;
-    case Rack = 12;
-    case Router = 13;
-    case Switch = 14;
-    case Adaptador = 15;
-    case ModuloReceptor = 16;
-    case ApuntadorOptico = 17;
-    case CajaConectividad = 18;
-    case LectorCodigos = 19;
-    case RelojChecador = 20;
-    case Bocina = 21;
-    case Consola = 22;
-    case Microfono = 23;
-    case Camara = 24;
-    case Concentrador = 25;
-    case PantallaRetractil = 26;
-    case Proyector = 27;
-    case BarraVideo = 28;
-    case Impresora = 29;
-    case Plotter = 30;
-    case Monitor = 31;
-    case DiscoOptico = 32;
-    case Teclado = 33;
-    case Mouse = 34;
-    case ModuloBateria = 35;
-    case Ups = 36;
-    case Escaner = 37;
-    case Procesador = 38;
-    case Licencia = 39;
+    case Tablet = 2;
+    case Disco = 3;
+    case Ram = 4;
+    case Telefono = 5;
+    case AccessPoint = 6;
+    case Antena = 7;
+    case Firewall = 8;
+    case Modem = 9;
+    case PanelParcheo = 10;
+    case Rack = 11;
+    case Router = 12;
+    case Switch = 13;
+    case Adaptador = 14;
+    case ModuloReceptor = 15;
+    case ApuntadorOptico = 16;
+    case CajaConectividad = 17;
+    case LectorCodigos = 18;
+    case RelojChecador = 19;
+    case Bocina = 20;
+    case Consola = 21;
+    case Microfono = 22;
+    case Camara = 23;
+    case Concentrador = 24;
+    case PantallaRetractil = 25;
+    case Proyector = 26;
+    case BarraVideo = 27;
+    case Impresora = 28;
+    case Plotter = 29;
+    case Monitor = 30;
+    case DiscoOptico = 31;
+    case Teclado = 32;
+    case Mouse = 33;
+    case ModuloBateria = 34;
+    case Ups = 35;
+    case Escaner = 36;
+    case Procesador = 37;
+    case Licencia = 38;
 
     public function categoria(): ProductoCategoriaEnum
     {
         return match ($this) {
             self::Computadora,
-            self::Servidor,
             self::Licencia,
             self::Procesador,
             self::Ram,
