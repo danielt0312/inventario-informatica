@@ -28,7 +28,7 @@ function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]
             .filter((adquisicion) => adquisicion.cantidad_restante > 0)
             .map((adquisicion) => ({
                 id: adquisicion.id,
-                label: `${adquisicion.producto.tipo.nombre} ${adquisicion.producto.marca.nombre} ${adquisicion.producto.modelo} ${adquisicion.especificaciones_tecnicas} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
+                label: `${adquisicion.producto_variante.tipo.nombre} ${adquisicion.producto_variante.marca.nombre} ${adquisicion.producto_variante.modelo} ${adquisicion.especificaciones_tecnicas} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
                 cantidad_restante: adquisicion.cantidad_restante,
             })),
         [initialValues]);
@@ -223,7 +223,7 @@ function InventariarForm({ dictamen }: { dictamen: DetailedInventariarDictamen }
 
                                                                     if (value) {
                                                                         const adquisicion = adquisiciones.find(a => a.id === adquisicionId);
-                                                                        form.setFieldValue(`articulos[${index}].producto_id`, adquisicion?.producto.id);
+                                                                        form.setFieldValue(`articulos[${index}].producto_id`, adquisicion?.producto_variante.id);
                                                                     } else {
                                                                         form.setFieldValue(`articulos[${index}].producto_id`, undefined);
                                                                     }

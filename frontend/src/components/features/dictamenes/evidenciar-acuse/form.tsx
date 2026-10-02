@@ -46,7 +46,7 @@ export function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen })
                 <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
 
                 {dictamen.version_actual.adquisiciones.map((adquisicion, index) => {
-                    const producto = adquisicion.producto;
+                    const producto = adquisicion.producto_variante;
 
                     return (
                         <Card key={index} className="shadow-none">

@@ -1,4 +1,4 @@
-import type { DiscoSpec, DiscoTipo } from "@/types/articulos/discos";
+import type { DiscoAsSpec, DiscoTipo } from "@/types/articulos/discos";
 import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import type { ComboboxFieldGroupedProps } from "@/components/ui/combobox-field-grouped";
 import type { BooleanMap, TResponse } from "@/types/generics";
@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import z from "zod";
 
-const dataToComboboxItems = (data: DiscoSpec[]) => {
+const dataToComboboxItems = (data: DiscoAsSpec[]) => {
     const variantesPorDiscoTipo = new Map<number, typeof data>();
     const discoTipo: DiscoTipo[] = [];
 
@@ -144,7 +144,7 @@ function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extend
     const field = useFieldContext<FieldType>();
     const { queryKey } = discoQueryOptions;
 
-    const { mutate } = useFormMutation<TResponse<DiscoSpec>, z.output<typeof validator>>({
+    const { mutate } = useFormMutation<TResponse<DiscoAsSpec>, z.output<typeof validator>>({
         url: 'api/discos',
         onSuccess: (data, _, __, { client }) => {
             const disco = data.data.data;

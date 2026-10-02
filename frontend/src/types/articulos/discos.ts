@@ -16,18 +16,18 @@ type Base<TInterfaz extends IncludableInterfaz = IncludableInterfaz, TFactorForm
     factor_forma: TFactorForma;
 }
 
-type Spec<TDisco extends Base = Base> = ProductoVarianteSpec & {
+type AsSpec<TDisco extends Base = Base> = ProductoVarianteSpec & {
     disco: TDisco;
 }
 
 type Disco = Base;
 type DiscoFilled = Base<Interfaz, FactorForma>;
-type DiscoSpec = Spec;
+type DiscoAsSpec = AsSpec;
 
 export type {
     Disco,
     DiscoFilled,
-    DiscoSpec,
+    DiscoAsSpec,
     Tipo as DiscoTipo,
     Capacidad as DiscoCapacidad,
     Interfaz as DiscoInterfaz,

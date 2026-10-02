@@ -1,16 +1,17 @@
 import { useAppForm } from '@/components/ui/form.shared';
-import { defaultValues, validator } from "./form-schema";
+import { dictaminarDictamenDefaultFormValues, validator } from "./form-schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { FormLayout as PrimitiveForm } from "@/components/ui/form-layout";
 import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
 import { useDictamenFormActionMutation } from '../form-action/view';
 
-const useForm = (dictamen: DetailedDictaminarDictamen) => {
+
+function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
     const { mutate } = useDictamenFormActionMutation(dictamen);
 
-    return useAppForm({
-        defaultValues: defaultValues(dictamen),
+    const form = useAppForm({
+        defaultValues: dictaminarDictamenDefaultFormValues(dictamen),
         validators: {
             onSubmit: validator
         },
@@ -19,10 +20,6 @@ const useForm = (dictamen: DetailedDictaminarDictamen) => {
             mutate({ data, formApi });
         }
     });
-}
-
-function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
-    const form = useForm(dictamen);
 
     return (
         <PrimitiveForm form={form}>

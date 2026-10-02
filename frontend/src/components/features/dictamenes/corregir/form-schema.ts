@@ -35,8 +35,8 @@ export const defaultValues = (dictamen: DetailedSurtirDictamen): Schema => ({
     motivo_cambio: undefined,
     adquisiciones: dictamen.version_actual.adquisiciones.map((adquiscion): AdquisicionFields => ({
         cantidad: adquiscion.cantidad,
-        producto_tipo_id: adquiscion.producto.tipo.id,
-        producto_id: adquiscion.producto.id,
+        producto_tipo_id: adquiscion.producto_variante.tipo.id,
+        producto_id: adquiscion.producto_variante.id,
         empleado_id: adquiscion.empleado?.id ?? 1,
         numero_inventario: adquiscion.articulo?.numero_inventario ?? null,
         especificaciones_tecnicas: adquiscion.especificaciones_tecnicas ?? undefined
