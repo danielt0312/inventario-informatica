@@ -1,6 +1,6 @@
 import { ComboboxLayoutSimple } from "./combobox-layout-simple"
 import type { ComboboxLayoutSimpleComponentProps } from "./combobox-layout-simple"
-import type { ComboboxLayoutItem, ComboboxLayoutItemValue, ComboboxLayoutMultiple } from "./combobox-layout.shared"
+import type { ComboboxLayoutItem, ComboboxLayoutMultiple } from "./combobox-layout.shared"
 import {
     useComboboxFieldValue,
     defaultFieldValueFromItem,

@@ -24,7 +24,7 @@ class ProductoController extends Controller
             ->genericas()
             ->with(['producto' => ['tipo.categoria', 'marca']])
             ->allowedFilters(
-                AllowedFilter::belongsTo('producto_tipo_id', 'producto.tipo_id')
+                AllowedFilter::exact('tipo_id', 'producto.tipo_id')
             )
             ->get()
             ->toResourceCollection();

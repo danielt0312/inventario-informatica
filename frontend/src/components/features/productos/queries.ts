@@ -19,12 +19,12 @@ const marcaOptions = queryOptions({
         .then(r => r.data.data),
 });
 
-const options = (tipoId: ProductoTipoFieldType) => queryOptions({
+const options = (tipoId: ProductoTipoFieldType = undefined) => queryOptions({
     queryKey: ['productos', tipoId],
     queryFn: () => api.get<TResponse<ProductoVarianteGenerica[]>>('api/productos', {
         params: {
             filter: {
-                producto_tipo_id: tipoId,
+                tipo_id: tipoId,
             }
         }
     }).then(r => r.data.data),

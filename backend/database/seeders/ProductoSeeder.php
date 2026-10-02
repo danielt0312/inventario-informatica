@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
-use App\Models\{Producto, ProductoMarca};
+use App\Models\{Producto, ProductoMarca, ProductoVariante};
 use App\Enums\ProductoTipoEnum;
 
 class ProductoSeeder extends Seeder
@@ -36,6 +36,10 @@ class ProductoSeeder extends Seeder
             ['tipo_id' => ProductoTipoEnum::Computadora->value, 'marca_id' => 2, 'modelo' => 'Vivobook 14'],
             ['tipo_id' => ProductoTipoEnum::Computadora->value, 'marca_id' => 2, 'modelo' => 'Vivobook 15'],
             ['tipo_id' => ProductoTipoEnum::Teclado->value, 'marca_id' => 1, 'modelo' => 'KB216-BK-LTN'],
+        ]);
+
+        ProductoVariante::insert([
+            ['producto_id' => 7]
         ]);
     }
 }
