@@ -27,7 +27,16 @@ type Field = SchemaBase & (
     | { tipo_id: typeof Ram; spec?: z.input<typeof specRamValidator> }
     | { tipo_id: typeof Camara; spec?: z.input<typeof specCamaraValidator> }
     | { tipo_id: typeof Licencia; spec?: z.input<typeof specLicenciaValidator> }
-    | { tipo_id: Exclude<ProductoTipoEnum, typeof Disco> | undefined }
+    | {
+        tipo_id: Exclude<
+            ProductoTipoEnum,
+            | typeof Computadora
+            | typeof Disco
+            | typeof Ram
+            | typeof Camara
+            | typeof Licencia
+        > | undefined
+    }
 )
 
 const defaultValues: Field = {
@@ -74,7 +83,7 @@ const validator = z.discriminatedUnion("tipo_id", [
 ], { error: "Debes de seleccionar un tipo de producto válido" });
 
 export {
-    type Field as DictamenBorradorField,
+    type Field as DictamenBorradorProductoVariante,
     defaultValues as dictamenBorradorDefaultFieldValues,
     validator as dictamenBorradorFieldValidator
 }

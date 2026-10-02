@@ -53,6 +53,12 @@ class StoreDictamenRequest extends FormRequest
                 'string',
                 'max:13'
             ],
+            'adquisiciones.*.caracteristicas_adicionales' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'max:255'
+            ],
             'adquisiciones.*.borrador_producto_variante' => [
                 'required',
                 'array'

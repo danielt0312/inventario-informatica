@@ -11,7 +11,7 @@ import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/fea
 import type { EmpleadoFieldType } from "@/components/features/empleados/field";
 import type { AdscripcionFieldType } from "@/components/features/adscripciones/field";
 import type { DictamenCantidadFieldType, DictamenCaracteristicasAdicionalesFieldType, DictamenFechaSolicitudFieldType, DictamenFolioFieldType, DictamenOficioArchivoFieldType } from "../fields";
-import { dictamenBorradorDefaultFieldValues, dictamenBorradorFieldValidator, type DictamenBorradorField } from "../borrador-producto-variante-field";
+import { dictamenBorradorDefaultFieldValues, dictamenBorradorFieldValidator, type DictamenBorradorProductoVariante } from "../borrador-producto-variante-field";
 import z from "zod";
 
 type AdquisicionFields = {
@@ -19,7 +19,7 @@ type AdquisicionFields = {
     cantidad: DictamenCantidadFieldType;
     empleado_id: EmpleadoFieldType;
     caracteristicas_adicionales: DictamenCaracteristicasAdicionalesFieldType;
-    borrador_producto_variante: DictamenBorradorField;
+    borrador_producto_variante: DictamenBorradorProductoVariante;
 }
 
 const adquisicionFieldsDefaultValues: AdquisicionFields = {
