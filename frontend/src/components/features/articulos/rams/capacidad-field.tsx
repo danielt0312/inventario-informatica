@@ -1,70 +1,62 @@
 import type { TResponse } from "@/types/generics";
 import type { RamCapacidad } from "@/types/articulos/rams";
-import type { ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import { useComboboxFieldContext, type ComboboxFieldEmptyType, type ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { ramCapacidadQueryOptions } from "./queries";
-import { CreatableComboboxFieldSimple } from "@/components/ui/creatable-combobox-field-simple";
+import { CreatableComboboxFieldSimple, type CreatableComboboxFieldSimpleProps } from "@/components/ui/creatable-combobox-field-simple";
 import { useFormMutation } from "@/hooks/use-form-mutation";
-import { useFieldContext } from "@/components/ui/form-context";
 import { useAppForm } from '@/components/ui/form.shared';
 import { requiredString } from "@/lib/schemas/common";
 import { InputField, type InputFieldType } from "@/components/ui/input-field";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { FormLayout } from "@/components/ui/form-layout";
 import { Button } from "@/components/ui/button";
 import { XCircleIcon } from "lucide-react";
 import React from "react";
 import z from "zod";
+import { SubmitButton } from "@/components/ui/submit-button";
+import type { ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 
-type Schema = {
-    nombre: NombreFieldType;
-}
-
-const defaultValues: Schema = {
-    nombre: undefined,
-}
-
+type Schema = { nombre: InputFieldType; }
+const defaultValues: Schema = { nombre: undefined }
 const validator = z.object({ nombre: requiredString });
 type OutputSchema = z.output<typeof validator>;
 
-type NombreFieldType = InputFieldType
-function NombreField({
-    fieldLayout,
-    ...props
-}: React.ComponentProps<typeof InputField>) {
-    return (
-        <InputField
-            fieldLayout={{
-                label: "Capacidad",
-                ...fieldLayout
-            }}
-            placeholder="4 GB, 8 GB, 12 GB..."
-            {...props}
-        />
-    );
-}
+type ComboboxItem = InferComboboxItemFromFn<typeof toComboboxCatalogItems>;
+type FieldValue = ComboboxItem['value'];
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Empty, Multiple, FieldValue>
 
-type CapacidadFieldType = ComboboxFieldType<false, undefined>;
-function CapacidadField({
+type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
+    CreatableComboboxFieldSimpleProps<
+        Empty,
+        Multiple,
+        ComboboxItem
+    >,
+    'items' | 'onCreate'
+>
+
+function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
     ...props
-}: Omit<React.ComponentProps<typeof CreatableComboboxFieldSimple>, 'items' | 'onCreate'>) {
+}: FieldProps<Empty, Multiple>) {
     const { queryKey } = ramCapacidadQueryOptions;
     const { data: items = [] } = useQuery({
         ...ramCapacidadQueryOptions,
         select: toComboboxCatalogItems
     });
 
-    const field = useFieldContext<CapacidadFieldType>();
+    const field = useComboboxFieldContext<Empty, Multiple, FieldValue>();
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
-    const { mutate } = useFormMutation<TResponse<RamCapacidad>, OutputSchema>({
+    const { mutate, isPending } = useFormMutation<TResponse<RamCapacidad>, OutputSchema>({
         url: 'api/ram_capacidades',
         onSuccess: (data, _, __, { client }) => {
             const capacidad = data.data.data;
             client.setQueryData(queryKey, (prev: RamCapacidad[] = []) => [...prev, capacidad]);
-            field.handleChange(capacidad.id);
+            field.handleChange((props.multiple
+                ? (prev = []) => [...prev, capacidad.id]
+                : capacidad.id
+            ) as FieldType<Empty, Multiple>);
             client.invalidateQueries({ queryKey });
             setDialogOpen(false);
         }
@@ -89,10 +81,7 @@ function CapacidadField({
                     form.setFieldValue('nombre', query);
                     setDialogOpen(true);
                 }}
-                layout={{
-                    label: "Capacidad",
-                    ...layout
-                }}
+                layout={{ label: "Capacidad", ...layout }}
                 {...props}
             />
 
@@ -105,17 +94,25 @@ function CapacidadField({
                         </DialogDescription>
                     </DialogHeader>
 
-                    <FormLayout form={form} className="contents">
-                        <form.AppField name="nombre" children={() => <NombreField />} />
+                    <form.AppForm>
+                        <form.AppField
+                            name="nombre"
+                            children={() => (
+                                <InputField
+                                    fieldLayout={{ label: "Capacidad" }}
+                                    placeholder="4 GB, 8 GB, 12 GB..."
+                                />
+                            )}
+                        />
 
                         <DialogFooter>
-                            <form.SubmitFormButton />
+                            <SubmitButton isSubmitting={isPending} />
 
                             <Button onClick={() => setDialogOpen(false)} variant="outline">
                                 <XCircleIcon /> Cerrar
                             </Button>
                         </DialogFooter>
-                    </FormLayout>
+                    </form.AppForm>
                 </DialogContent>
             </Dialog>
         </>
@@ -123,6 +120,6 @@ function CapacidadField({
 }
 
 export {
-    CapacidadField as RamCapacidadField,
-    type CapacidadFieldType as RamCapacidadFieldType
+    Field as RamCapacidadField,
+    type FieldType as RamCapacidadFieldType
 }

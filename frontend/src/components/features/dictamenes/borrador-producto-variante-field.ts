@@ -9,6 +9,7 @@ import z from "zod";
 
 const {
     Disco,
+    Ram,
     ...otrosProductoTipo
 } = ProductoTipoEnum;
 
@@ -19,6 +20,7 @@ type SchemaBase = {
 
 type Field = SchemaBase & (
     | { tipo_id: typeof Disco; spec?: z.input<typeof specDiscoValidator> }
+    | { tipo_id: typeof Ram; spec?: z.input<typeof specRamValidator> }
     | { tipo_id: Exclude<ProductoTipoEnum, typeof Disco> | undefined }
 )
 
@@ -33,6 +35,12 @@ const specDiscoValidator = z.object({
     interfaz_id: selectedNumberOption,
 }).partial();
 
+const specRamValidator = z.object({
+    tipo_id: selectedNumberOption,
+    capacidad_id: selectedNumberOption,
+    velocidad_id: selectedNumberOption,
+}).partial();
+
 const validatorBase = {
     marca_id: selectedNumberOption.optional(),
     modelo: trimmedString().optional()
@@ -40,6 +48,7 @@ const validatorBase = {
 
 const validator = z.discriminatedUnion("tipo_id", [
     z.object({ ...validatorBase, tipo_id: z.literal(Disco), spec: specDiscoValidator.optional() }),
+    z.object({ ...validatorBase, tipo_id: z.literal(Ram), spec: specRamValidator.optional() }),
     z.object({ ...validatorBase, tipo_id: z.literal(Object.values(otrosProductoTipo)) }),
 ], { error: "Debes de seleccionar un tipo de producto válido" });
 

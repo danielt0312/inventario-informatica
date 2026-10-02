@@ -22,6 +22,9 @@ import { DiscoCapacidadField } from '../../discos/capacidad-field';
 import { DiscoFactorFormaField } from '../../discos/factor-forma-field';
 import { DiscoInterfazField } from '../../discos/interfaz-field';
 import { useStore } from '@tanstack/react-form';
+import { RamTipoField } from '../../articulos/rams/tipo-field';
+import { RamCapacidadField } from '../../articulos/rams/capacidad-field';
+import { RamVelocidadField } from '../../articulos/rams/velocidad-field';
 
 function Form() {
     const { mutate } = useFormMutation({
@@ -143,7 +146,7 @@ function Form() {
                                                             switch (productoTipoId) {
                                                                 case ProductoTipoEnum.Disco:
                                                                     return (
-                                                                        <>
+                                                                        <FieldGroup className='flex-row'>
                                                                             <form.AppField
                                                                                 name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
                                                                                 children={() => <DiscoTipoField emptyValue={undefined} />}
@@ -163,8 +166,25 @@ function Form() {
                                                                                 name={`adquisiciones[${index}].borrador_producto_variante.spec.interfaz_id`}
                                                                                 children={() => <DiscoInterfazField emptyValue={undefined} />}
                                                                             />
-                                                                        </>
-                                                                    )
+                                                                        </FieldGroup>
+                                                                    );
+                                                                case ProductoTipoEnum.Ram:
+                                                                    return (
+                                                                        <FieldGroup className='flex-row'>
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
+                                                                                children={() => <RamTipoField emptyValue={undefined} />}
+                                                                            />
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.capacidad_id`}
+                                                                                children={() => <RamCapacidadField emptyValue={undefined} />}
+                                                                            />
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.velocidad_id`}
+                                                                                children={() => <RamVelocidadField emptyValue={undefined} />}
+                                                                            />
+                                                                        </FieldGroup>
+                                                                    );
                                                                 default:
                                                                     break;
                                                             }
@@ -183,6 +203,7 @@ function Form() {
                                             disabled={field.state.value.length === 1}
                                             onClick={() => field.removeValue(index)}
                                             variant="destructive"
+                                            size="icon"
                                         >
                                             <Trash2Icon />
                                         </Button>

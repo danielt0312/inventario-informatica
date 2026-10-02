@@ -51,7 +51,7 @@ function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extend
         url: 'api/disco_capacidades',
         onSuccess: (data, _, __, { client }) => {
             const capacidad = data.data.data;
-            client.setQueryData(queryKey, (old: DiscoCapacidad[] = []) => [...old, capacidad]);
+            client.setQueryData(queryKey, (prev: DiscoCapacidad[] = []) => [...prev, capacidad]);
             field.handleChange(capacidad.id);
             client.invalidateQueries({ queryKey });
             setDialogOpen(false);
