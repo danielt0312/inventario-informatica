@@ -8,6 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('computadora_tipos', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', 64);
+        });
+
+        Schema::create('computadoras', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('tipo_id')
+                ->unique('uk_computadoras')
+                ->constrained('computadora_tipos', indexName: 'fk_computadoras_computadora_tipos')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+        });
+
         Schema::create('articulo_computadoras', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')

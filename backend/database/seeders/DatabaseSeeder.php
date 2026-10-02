@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             DiscoInterfazSeeder::class,
             DiscoFactorFormaSeeder::class,
             LicenciaTipoSeeder::class,
+            ComputadoraTipoSeeder::class,
         ]);
 
         // todo eliminar esta invocación, solo es para debug

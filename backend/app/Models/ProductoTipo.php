@@ -7,12 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductoTipo extends Model
 {
-    protected $fillable = [
-        'categoria_id',
-        'nombre',
-        'es_tangible',
-    ];
-
     public $timestamps = false;
 
     public function categoria(): BelongsTo

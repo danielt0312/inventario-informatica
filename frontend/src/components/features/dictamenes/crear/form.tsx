@@ -25,6 +25,7 @@ import { useStore } from '@tanstack/react-form';
 import { RamTipoField } from '../../articulos/rams/tipo-field';
 import { RamCapacidadField } from '../../articulos/rams/capacidad-field';
 import { RamVelocidadField } from '../../articulos/rams/velocidad-field';
+import { ComputadoraTipoField } from '../../computadoras/tipo-field';
 
 function Form() {
     const { mutate } = useFormMutation({
@@ -131,6 +132,18 @@ function Form() {
                                                             name={`adquisiciones[${index}].borrador_producto_variante.tipo_id`}
                                                             children={() => <ProductoTipoField required />}
                                                         />
+                                                        <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador_producto_variante.tipo_id}>
+                                                            {(productoTipoId) => {
+                                                                if (productoTipoId === ProductoTipoEnum.Computadora) {
+                                                                    return (
+                                                                        <form.AppField
+                                                                            name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
+                                                                            children={() => <ComputadoraTipoField emptyValue={undefined} layout={{ label: "Tipo de Computadora" }} />}
+                                                                        />
+                                                                    )
+                                                                }
+                                                            }}
+                                                        </form.Subscribe>
                                                     </FieldGroup>
 
                                                     <ProductoVarianteSpecFieldGroup
