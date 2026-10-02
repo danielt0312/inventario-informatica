@@ -1,6 +1,10 @@
+import type { ProductoMarcaFieldType } from "../productos/marca-field";
+import type { ProductoModeloFieldType } from "../productos/variante-spec-field-group";
 import { ProductoTipoEnum } from "@/lib/constants";
-import { discoFormValidator, type DiscoFormSchemaFields } from "../discos/field";
-import { productoVarianteSpecFormValidator, type ProductoVarianteSpecSchema } from "../productos/variante-spec-field-group";
+import {
+    selectedNumberOption,
+    trimmedString
+} from "@/lib/schemas/common";
 import z from "zod";
 
 const {
@@ -8,34 +12,36 @@ const {
     ...otrosProductoTipo
 } = ProductoTipoEnum;
 
-type Field = Partial<ProductoVarianteSpecSchema> & (
-    | { tipo_id: typeof Disco; spec: DiscoFormSchemaFields }
-    | { tipo_id: Exclude<ProductoTipoEnum, typeof Disco> | undefined}
+type SchemaBase = {
+    marca_id?: ProductoMarcaFieldType<undefined, false, number>;
+    modelo?: ProductoModeloFieldType;
+}
+
+type Field = SchemaBase & (
+    | { tipo_id: typeof Disco; spec?: z.input<typeof specDiscoValidator> }
+    | { tipo_id: Exclude<ProductoTipoEnum, typeof Disco> | undefined }
 )
 
 const defaultValues: Field = {
-    tipo_id: undefined,
-    marca_id: undefined,
-    modelo: undefined,
+    tipo_id: undefined
 }
 
-const { marca_id: productoMarcaValidator, modelo: productoModeloValidator } = productoVarianteSpecFormValidator.shape;
-const productoValidatorBase = {
-    marca_id: productoMarcaValidator.or(z.undefined()),
-    modelo: productoModeloValidator.or(z.undefined())
-}
+const specDiscoValidator = z.object({
+    tipo_id: selectedNumberOption,
+    capacidad_id: selectedNumberOption,
+    factor_forma_id: selectedNumberOption,
+    interfaz_id: selectedNumberOption,
+}).partial();
 
-const { capacidad_id: discoCapacidadValidator, tipo_id: discoTipoValidator  } = discoFormValidator.shape.disco.shape;
-const specDiscoValidator = discoFormValidator.shape.disco
-    .extend({
-        capacidad_id: discoCapacidadValidator.or(z.undefined()),
-        tipo_id: discoTipoValidator.or(z.undefined())
-    });
+const validatorBase = {
+    marca_id: selectedNumberOption.optional(),
+    modelo: trimmedString().optional()
+}
 
 const validator = z.discriminatedUnion("tipo_id", [
-    z.object({ ...productoValidatorBase, tipo_id: z.literal(Disco), spec: specDiscoValidator }),
-    z.object({ ...productoValidatorBase, tipo_id: z.literal(Object.values(otrosProductoTipo)) }),
-], { error: "Debes de seleccionar una tipo de producto válido" });
+    z.object({ ...validatorBase, tipo_id: z.literal(Disco), spec: specDiscoValidator.optional() }),
+    z.object({ ...validatorBase, tipo_id: z.literal(Object.values(otrosProductoTipo)) }),
+], { error: "Debes de seleccionar un tipo de producto válido" });
 
 export {
     type Field as DictamenBorradorField,

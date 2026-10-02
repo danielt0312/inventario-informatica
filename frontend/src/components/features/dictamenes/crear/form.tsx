@@ -17,7 +17,11 @@ import { DictamenAdquisicion } from "@/lib/utils";
 import { Label } from '@/components/ui/label';
 import { ProductoVarianteSpecFieldGroup } from '../../productos/variante-spec-field-group';
 import { ProductoTipoEnum } from '@/lib/constants';
-import { DiscoFieldsGroup } from '../../discos/field';
+import { DiscoTipoField } from '../../discos/tipo-field';
+import { DiscoCapacidadField } from '../../discos/capacidad-field';
+import { DiscoFactorFormaField } from '../../discos/factor-forma-field';
+import { DiscoInterfazField } from '../../discos/interfaz-field';
+import { useStore } from '@tanstack/react-form';
 
 function Form() {
     const { mutate } = useFormMutation({
@@ -40,6 +44,10 @@ function Form() {
             mutate({ data, formApi });
         }
     });
+
+    const errors = useStore(form.store, (state) => state.errors)
+    console.log(errors);
+
 
     return (
         <FormLayout form={form} className="flex flex-col gap-6">
@@ -135,15 +143,27 @@ function Form() {
                                                             switch (productoTipoId) {
                                                                 case ProductoTipoEnum.Disco:
                                                                     return (
-                                                                        <DiscoFieldsGroup
-                                                                            form={form}
-                                                                            fields={{
-                                                                                tipo_id: `adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`,
-                                                                                capacidad_id: `adquisiciones[${index}].borrador_producto_variante.spec.capacidad_id`,
-                                                                                interfaz_id: `adquisiciones[${index}].borrador_producto_variante.spec.interfaz_id`,
-                                                                                factor_forma_id: `adquisiciones[${index}].borrador_producto_variante.spec.factor_forma_id`,
-                                                                            }}
-                                                                        />
+                                                                        <>
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
+                                                                                children={() => <DiscoTipoField emptyValue={undefined} />}
+                                                                            />
+
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.capacidad_id`}
+                                                                                children={() => <DiscoCapacidadField emptyValue={undefined} />}
+                                                                            />
+
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.factor_forma_id`}
+                                                                                children={() => <DiscoFactorFormaField emptyValue={undefined} />}
+                                                                            />
+
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.interfaz_id`}
+                                                                                children={() => <DiscoInterfazField emptyValue={undefined} />}
+                                                                            />
+                                                                        </>
                                                                     )
                                                                 default:
                                                                     break;
