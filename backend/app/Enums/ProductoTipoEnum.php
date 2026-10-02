@@ -8,20 +8,10 @@ use App\Traits\Enums\IsCatalog;
 
 use App\Models\{
     Disco,
+    Ram,
     Licencia,
     Computadora,
     Camara
-};
-
-use App\Services\{
-    DiscoService,
-};
-
-use App\Resource\{
-    DiscoResource,
-    LicenciaResource,
-    ComputadoraResource,
-    CamaraResource
 };
 
 enum ProductoTipoEnum: int
@@ -158,6 +148,7 @@ enum ProductoTipoEnum: int
             self::Licencia      => Licencia::class,
             self::Computadora   => Computadora::class,
             self::Camara        => Camara::class,
+            self::Ram           => Ram::class,
             default             => null
         };
     }
@@ -169,17 +160,7 @@ enum ProductoTipoEnum: int
             self::Licencia      => 'licencia',
             self::Computadora   => 'computadora',
             self::Camara        => 'camara',
-            default             => null
-        };
-    }
-
-    public function varianteResourceClass(): ?string
-    {
-        return match ($this->varianteModelClass()) {
-            Disco::class        => DiscoResource::class,
-            Licencia::class     => LicenciaResource::class,
-            Computadora::class  => ComputadoraResource::class,
-            Camara::class       => CamaraResource::class,
+            self::Ram           => 'ram',
             default             => null
         };
     }
@@ -191,6 +172,7 @@ enum ProductoTipoEnum: int
             $model instanceof Licencia      => self::Licencia,
             $model instanceof Computadora   => self::Computadora,
             $model instanceof Camara        => self::Camara,
+            $model instanceof Ram           => self::Ram,
             default => null,
         };
     }
