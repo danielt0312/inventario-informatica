@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Licencia extends Model
 {
     protected $fillable = [
-        'estado_id',
+        'tipo_id',
     ];
 
     public $timestamps = false;
 
-    public function estado(): BelongsTo
+    public function tipo(): BelongsTo
     {
-        return $this->belongsTo(LicenciaEstado::class);
+        return $this->belongsTo(LicenciaTipo::class);
     }
 }

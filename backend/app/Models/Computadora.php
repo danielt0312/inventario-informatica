@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Computadora extends Model
 {
     protected $fillable = [
-        'nombre',
+        'tipo_id',
     ];
 
     public $timestamps = false;

@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Camara extends Model
 {
+    protected $fillable = [
+        'tipo_id',
+    ];
+
+    public $timestamps = false;
+
     public function tipo(): BelongsTo
     {
         return $this->belongsTo(CamaraTipo::class);

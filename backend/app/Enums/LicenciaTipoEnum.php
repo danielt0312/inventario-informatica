@@ -16,7 +16,6 @@ enum LicenciaTipoEnum: int
     {
         return match ($this) {
             self::Aplicacion => 'Aplicación',
-            self::SistemaOperativo => 'Sistema Operativo',
         };
     }
 }

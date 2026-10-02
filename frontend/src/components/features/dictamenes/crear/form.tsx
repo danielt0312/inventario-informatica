@@ -27,6 +27,7 @@ import { RamCapacidadField } from '../../articulos/rams/capacidad-field';
 import { RamVelocidadField } from '../../articulos/rams/velocidad-field';
 import { ComputadoraTipoField } from '../../computadoras/tipo-field';
 import { CamaraTipoField } from '../../camaras/tipo-field';
+import { LicenciaTipoField } from '../../licencias/tipo-field';
 
 function Form() {
     const { mutate } = useFormMutation({
@@ -148,6 +149,13 @@ function Form() {
                                                                             <form.AppField
                                                                                 name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
                                                                                 children={() => <CamaraTipoField emptyValue={undefined} layout={{ label: "Tipo de Cámara" }} />}
+                                                                            />
+                                                                        );
+                                                                    case ProductoTipoEnum.Licencia:
+                                                                        return (
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
+                                                                                children={() => <LicenciaTipoField emptyValue={undefined} layout={{ label: "Tipo de Licencia" }} />}
                                                                             />
                                                                         );
                                                                     default:
