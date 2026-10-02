@@ -98,7 +98,7 @@ function RouteComponent() {
 
     return (
         <Card>
-            <form.AppForm>
+            {/* <form.AppForm>
                 <form.AppField
                     name="modelo"
                     children={() => <Modelo />}
@@ -106,7 +106,7 @@ function RouteComponent() {
                         onChange: ({ value }) => console.log('fieldValue changed to', value)
                     }}
                 />
-            </form.AppForm>
+            </form.AppForm> */}
 
             <CardHeader>
                 <CardTitle>

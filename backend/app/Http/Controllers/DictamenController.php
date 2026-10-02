@@ -54,15 +54,12 @@ class DictamenController extends Controller
 
     public function store(StoreDictamenRequest $request)
     {
-        $dictamen = DB::transaction(function () use ($request) {
-            $oficioArchivo = null;
-            if (! $this->dictamenService->esAdscripcionInterna($request->validated('adscripcion_id'))) {
-                $oficioArchivo = $request->getArchivo();
-                $oficioArchivo->temporal?->delete();
-            }
+        $oficioArchivo = null;
+        if (! $this->dictamenService->esAdscripcionInterna($request->validated('adscripcion_id'))) {
+            $oficioArchivo = $request->getArchivo();
+        }
 
-            return $this->dictamenService->crear(StoreDictamenData::fromRequest($request), $oficioArchivo);
-        });
+        $dictamen = $this->dictamenService->crear(StoreDictamenData::fromRequest($request), $oficioArchivo);
 
         return $dictamen->toResourceResponse(201);
     }

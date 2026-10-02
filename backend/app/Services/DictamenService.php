@@ -67,7 +67,14 @@ class DictamenService
                 'fecha_solicitud' => $data->version->fechaSolicitud,
             ]);
 
-            $nuevaVersion->adquisiciones()->createMany($data->adquisiciones);
+            $adquisiciones = collect($data->adquisiciones)
+                ->map(fn ($adquisicion) => [
+                    ...$adquisicion,
+                    'borrador_producto_variante' => json_encode($adquisicion['borrador_producto_variante'])
+                ])
+                ->toArray();
+
+            $nuevaVersion->adquisiciones()->createMany($adquisiciones);
 
             $dictamen->versionActual()->associate($nuevaVersion);
             $dictamen->save();

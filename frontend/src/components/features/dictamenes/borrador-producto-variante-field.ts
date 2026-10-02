@@ -1,29 +1,41 @@
 import { ProductoTipoEnum } from "@/lib/constants";
 import { discoFormValidator, type DiscoFormSchemaFields } from "../discos/field";
 import { productoVarianteSpecFormValidator, type ProductoVarianteSpecSchema } from "../productos/variante-spec-field-group";
-import type { ProductoTipoFieldType } from "../productos/tipo-field";
 import z from "zod";
 
+const {
+    Disco,
+    ...otrosProductoTipo
+} = ProductoTipoEnum;
+
 type Field = Partial<ProductoVarianteSpecSchema> & (
-    | { tipo_id: typeof ProductoTipoEnum.Disco; spec: DiscoFormSchemaFields }
-    | { tipo_id: ProductoTipoFieldType, spec?: undefined }
+    | { tipo_id: typeof Disco; spec: DiscoFormSchemaFields }
+    | { tipo_id: Exclude<ProductoTipoEnum, typeof Disco> | undefined}
 )
 
 const defaultValues: Field = {
-    tipo_id: undefined
+    tipo_id: undefined,
+    marca_id: undefined,
+    modelo: undefined,
 }
 
-const { marca_id, modelo } = productoVarianteSpecFormValidator.shape;
+const { marca_id: productoMarcaValidator, modelo: productoModeloValidator } = productoVarianteSpecFormValidator.shape;
 const productoValidatorBase = {
-    marca_id: marca_id.optional(),
-    modelo: modelo.optional()
+    marca_id: productoMarcaValidator.or(z.undefined()),
+    modelo: productoModeloValidator.or(z.undefined())
 }
 
-const { Disco, ...otrosProductoTipo } = ProductoTipoEnum;
+const { capacidad_id: discoCapacidadValidator, tipo_id: discoTipoValidator  } = discoFormValidator.shape.disco.shape;
+const specDiscoValidator = discoFormValidator.shape.disco
+    .extend({
+        capacidad_id: discoCapacidadValidator.or(z.undefined()),
+        tipo_id: discoTipoValidator.or(z.undefined())
+    });
+
 const validator = z.discriminatedUnion("tipo_id", [
-    z.object({ ...productoValidatorBase, tipo_id: z.literal(Disco), spec: discoFormValidator.shape.disco.optional() }),
+    z.object({ ...productoValidatorBase, tipo_id: z.literal(Disco), spec: specDiscoValidator }),
     z.object({ ...productoValidatorBase, tipo_id: z.literal(Object.values(otrosProductoTipo)) }),
-], { error: "Tipo de producto no soportado" });
+], { error: "Debes de seleccionar una tipo de producto válido" });
 
 export {
     type Field as DictamenBorradorField,

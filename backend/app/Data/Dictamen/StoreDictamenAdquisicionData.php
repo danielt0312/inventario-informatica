@@ -16,7 +16,7 @@ class StoreDictamenAdquisicionData extends Data
     public function __construct(
         public int $cantidad,
         public int $empleadoId,
-        public string $borrador,
-        public ?string $numeroInventario = null
+        public object $borradorProductoVariante,
+        public ?string $numeroInventario = null,
     ) {}
 }

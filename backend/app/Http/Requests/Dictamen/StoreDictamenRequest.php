@@ -53,22 +53,22 @@ class StoreDictamenRequest extends FormRequest
                 'string',
                 'max:13'
             ],
-            'adquisiciones.*.borrador' => [
+            'adquisiciones.*.borrador_producto_variante' => [
                 'required',
                 'array'
-            ]
-            'adquisiciones.*.borrador.producto.tipo_id' => [
+            ],
+            'adquisiciones.*.borrador_producto_variante.tipo_id' => [
                 'required',
                 'integer',
                 'exists:producto_tipos,id',
             ],
-            'adquisiciones.*.borrador.producto.marca_id' => [
+            'adquisiciones.*.borrador_producto_variante.marca_id' => [
                 'sometimes',
                 'nullable',
                 'integer',
                 'exists:producto_marcas,id',
             ],
-            'adquisiciones.*.borrador.producto.modelo' => [
+            'adquisiciones.*.borrador_producto_variante.modelo' => [
                 'sometimes',
                 'nullable',
                 'string',
@@ -77,10 +77,10 @@ class StoreDictamenRequest extends FormRequest
             ],
 
             // todo agregar validación dinámica según `adquisiciones.*.borrador.producto.tipo_id`
-            'adquisiciones.*.borrador.spec' => [
+            'adquisiciones.*.borrador_producto_variante.spec' => [
                 'sometimes',
                 'nullable',
-                'json'
+                'array'
             ]
         ];
     }
