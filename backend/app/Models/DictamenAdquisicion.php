@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
@@ -13,7 +12,7 @@ use App\Traits\Models\Relations\HasProductoVariante;
 
 class DictamenAdquisicion extends Model
 {
-    use HasFactory, HasProductoVariante;
+    use HasProductoVariante;
 
     protected $fillable = [
         'dictamen_version_id',
@@ -21,15 +20,15 @@ class DictamenAdquisicion extends Model
         'producto_variante_id',
         'articulo_id',
         'cantidad',
-        'especificaciones',
+        'caracteristicas_adicionales',
         'detalle_solicitud',
-        'borrador',
+        'borrador_producto_variante',
     ];
 
     protected $attributes = [
         'producto_variante_id' => null,
         'articulo_id' => null,
-        'especificaciones' => null
+        'caracteristicas_adicionales' => null
     ];
 
     public function version(): BelongsTo
@@ -59,7 +58,7 @@ class DictamenAdquisicion extends Model
                 $attributes['producto_variante_id']
                     ? str_compact_join(
                         $this->productoVariante->descripcion,
-                        $attributes['especificaciones']
+                        $attributes['caracteristicas_adicionales']
                     )
                     : null
         );

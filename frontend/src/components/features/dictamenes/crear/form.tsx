@@ -97,6 +97,15 @@ function Form() {
                                                         />
                                                     )}
                                                 </form.Subscribe>
+
+                                                <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador_producto_variante.tipo_id}>
+                                                    {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
+                                                        <form.AppField
+                                                            name={`adquisiciones[${index}].numero_inventario`}
+                                                            children={() => <ArticuloNullableNumeroInventarioField />}
+                                                        />
+                                                    )}
+                                                </form.Subscribe>
                                             </FieldGroup>
 
                                             <div className="flex flex-row gap-7">
@@ -106,33 +115,22 @@ function Form() {
                                                 />
 
                                                 <div className='flex flex-col gap-7 grow'>
-                                                    <FieldGroup className="flex-row">
+                                                    <FieldGroup className="grid grid-cols-2">
                                                         <form.AppField
-                                                            name={`adquisiciones[${index}].borrador.producto.tipo_id`}
-                                                            children={() => <ProductoTipoField required className='w-1/2' />}
+                                                            name={`adquisiciones[${index}].borrador_producto_variante.tipo_id`}
+                                                            children={() => <ProductoTipoField required />}
                                                         />
-
-                                                        <div className="w-1/2">
-                                                            <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador.producto?.tipo_id}>
-                                                                {(productoTipoId) => DictamenAdquisicion.productoTipoPuedeRequerirNumeroInventario(productoTipoId) && (
-                                                                    <form.AppField
-                                                                        name={`adquisiciones[${index}].numero_inventario`}
-                                                                        children={() => <ArticuloNullableNumeroInventarioField />}
-                                                                    />
-                                                                )}
-                                                            </form.Subscribe>
-                                                        </div>
                                                     </FieldGroup>
 
                                                     <ProductoVarianteSpecFieldGroup
                                                         form={form}
                                                         fields={{
-                                                            marca_id: `adquisiciones[${index}].borrador.producto.marca_id`,
-                                                            modelo: `adquisiciones[${index}].borrador.producto.modelo`,
+                                                            marca_id: `adquisiciones[${index}].borrador_producto_variante.marca_id`,
+                                                            modelo: `adquisiciones[${index}].borrador_producto_variante.modelo`,
                                                         }}
                                                     />
 
-                                                    <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador.producto.tipo_id}>
+                                                    <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador_producto_variante.tipo_id}>
                                                         {(productoTipoId) => {
                                                             switch (productoTipoId) {
                                                                 case ProductoTipoEnum.Disco:
@@ -140,10 +138,10 @@ function Form() {
                                                                         <DiscoFieldsGroup
                                                                             form={form}
                                                                             fields={{
-                                                                                tipo_id: `adquisiciones[${index}].borrador.spec.tipo_id`,
-                                                                                capacidad_id: `adquisiciones[${index}].borrador.spec.capacidad_id`,
-                                                                                interfaz_id: `adquisiciones[${index}].borrador.spec.interfaz_id`,
-                                                                                factor_forma_id: `adquisiciones[${index}].borrador.spec.factor_forma_id`,
+                                                                                tipo_id: `adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`,
+                                                                                capacidad_id: `adquisiciones[${index}].borrador_producto_variante.spec.capacidad_id`,
+                                                                                interfaz_id: `adquisiciones[${index}].borrador_producto_variante.spec.interfaz_id`,
+                                                                                factor_forma_id: `adquisiciones[${index}].borrador_producto_variante.spec.factor_forma_id`,
                                                                             }}
                                                                         />
                                                                     )
@@ -154,7 +152,7 @@ function Form() {
                                                     </form.Subscribe>
 
                                                     <form.AppField
-                                                        name={`adquisiciones[${index}].borrador.caracteristicas_adicionales`}
+                                                        name={`adquisiciones[${index}].caracteristicas_adicionales`}
                                                         children={() => <DictamenCaracteristicasAdicionalesField />}
                                                     />
                                                 </div>

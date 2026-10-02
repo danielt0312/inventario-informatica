@@ -70,6 +70,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
             $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
+            $table->json('borrador_producto_variante');
             $table->foreignId('producto_variante_id')
                 ->nullable()
                 ->constrained('producto_variantes', indexName: 'fk_dictamen_adquisiciones_producto_variantes')
@@ -82,7 +83,6 @@ return new class extends Migration
                 ->restrictOnDelete();
             $table->unsignedTinyInteger('cantidad');
             $table->string('detalle_solicitud', 255);
-            $table->json('borrador');
             $table->string('caracteristicas_adicionales', 255)
                 ->nullable();
             $table->timestamps();

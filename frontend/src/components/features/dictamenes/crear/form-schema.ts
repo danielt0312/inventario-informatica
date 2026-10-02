@@ -5,26 +5,29 @@ import {
     positiveInteger,
     requiredString,
     nullableString,
+    trimmedString,
 } from "@/lib/schemas/common";
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/empleados/field";
 import type { AdscripcionFieldType } from "@/components/features/adscripciones/field";
-import type { DictamenCantidadFieldType, DictamenFechaSolicitudFieldType, DictamenFolioFieldType, DictamenOficioArchivoFieldType } from "../fields";
-import { dictamenBorradorDefaultFieldsValues, dictamenBorradorFieldsValidator, type DictamenBorradorFields } from "../borrador-field";
+import type { DictamenCantidadFieldType, DictamenCaracteristicasAdicionalesFieldType, DictamenFechaSolicitudFieldType, DictamenFolioFieldType, DictamenOficioArchivoFieldType } from "../fields";
+import { dictamenBorradorDefaultFieldValues, dictamenBorradorFieldValidator, type DictamenBorradorField } from "../borrador-producto-variante-field";
 import z from "zod";
 
 type AdquisicionFields = {
     numero_inventario: ArticuloNullableNumeroInventarioFieldType;
     cantidad: DictamenCantidadFieldType;
     empleado_id: EmpleadoFieldType;
-    borrador: DictamenBorradorFields;
+    caracteristicas_adicionales: DictamenCaracteristicasAdicionalesFieldType;
+    borrador_producto_variante: DictamenBorradorField;
 }
 
 const adquisicionFieldsDefaultValues: AdquisicionFields = {
     numero_inventario: null,
     cantidad: 1,
     empleado_id: undefined,
-    borrador: dictamenBorradorDefaultFieldsValues
+    caracteristicas_adicionales: null,
+    borrador_producto_variante: dictamenBorradorDefaultFieldValues,
 } as const;
 
 type Schema = {
@@ -48,7 +51,8 @@ const adquisicionFieldsValidator = z
         cantidad: positiveInteger,
         empleado_id: selectedNumberOption,
         numero_inventario: nullableString,
-        borrador: dictamenBorradorFieldsValidator
+        caracteristicas_adicionales: trimmedString().nullable(),
+        borrador_producto_variante: dictamenBorradorFieldValidator,
     });
 
 const validator = z.object({

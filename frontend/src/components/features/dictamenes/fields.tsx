@@ -2,18 +2,6 @@ import { DatePickerField, type DatePickerFieldType } from "@/components/ui/date-
 import { InputField, NumberInputField, type InputFieldType, type NumberInputFieldType } from "@/components/ui/input-field";
 import { NullableTextareaField, TextareaField, type NullableTextareaFieldType, type TextareaFieldType } from "@/components/ui/textarea-field";
 import { ArchivoUploaderField, type ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
-import React from "react";
-import { useFieldContext } from "@/components/ui/form-context";
-import { InputGroupAddon, InputGroupButton } from "@/components/ui/input-group";
-import { CirclePlusIcon, PlusCircleIcon } from "lucide-react";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { FormLayout } from "@/components/ui/form-layout";
-import { useAppForm } from "@/components/ui/form.shared";
-import { discoDefaultFormValues, DiscoFieldsGroup, discoFormValidator } from "../discos/field";
-import { ProductoVarianteSpecFieldGroup } from "../productos/variante-spec-field-group";
-import { Button } from "@/components/ui/button";
-import type { ProductoTipoFieldType } from "../productos/tipo-field";
-import type { ProductoMarcaFieldType } from "../productos/marca-field";
 
 export type DictamenCantidadFieldType = NumberInputFieldType;
 export const DictamenCantidadField = ({
