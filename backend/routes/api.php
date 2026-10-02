@@ -33,6 +33,7 @@ use App\Http\Controllers\{
     RamCapacidadController,
     RamVelocidadController,
     ComputadoraTipoController,
+    CamaraTipoController,
 };
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -53,7 +54,8 @@ Route::middleware('auth:sanctum')->group(function () {
         'adscripciones' => AdscripcionController::class,
         'resguardo_estados' => ResguardoEstadoController::class,
         'producto_tipos' => ProductoTipoController::class,
-        'computadora_tipos' => ComputadoraTipoController::class
+        'computadora_tipos' => ComputadoraTipoController::class,
+        'camara_tipos' => CamaraTipoController::class
     ], ['only' => 'index']);
 
     Route::apiResources([

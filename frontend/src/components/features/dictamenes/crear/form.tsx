@@ -26,6 +26,7 @@ import { RamTipoField } from '../../articulos/rams/tipo-field';
 import { RamCapacidadField } from '../../articulos/rams/capacidad-field';
 import { RamVelocidadField } from '../../articulos/rams/velocidad-field';
 import { ComputadoraTipoField } from '../../computadoras/tipo-field';
+import { CamaraTipoField } from '../../camaras/tipo-field';
 
 function Form() {
     const { mutate } = useFormMutation({
@@ -134,13 +135,23 @@ function Form() {
                                                         />
                                                         <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador_producto_variante.tipo_id}>
                                                             {(productoTipoId) => {
-                                                                if (productoTipoId === ProductoTipoEnum.Computadora) {
-                                                                    return (
-                                                                        <form.AppField
-                                                                            name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
-                                                                            children={() => <ComputadoraTipoField emptyValue={undefined} layout={{ label: "Tipo de Computadora" }} />}
-                                                                        />
-                                                                    )
+                                                                switch (productoTipoId) {
+                                                                    case ProductoTipoEnum.Computadora:
+                                                                        return (
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
+                                                                                children={() => <ComputadoraTipoField emptyValue={undefined} layout={{ label: "Tipo de Computadora" }} />}
+                                                                            />
+                                                                        );
+                                                                    case ProductoTipoEnum.Camara:
+                                                                        return (
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
+                                                                                children={() => <CamaraTipoField emptyValue={undefined} layout={{ label: "Tipo de Cámara" }} />}
+                                                                            />
+                                                                        );
+                                                                    default:
+                                                                        break;
                                                                 }
                                                             }}
                                                         </form.Subscribe>

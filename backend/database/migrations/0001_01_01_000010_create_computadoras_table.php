@@ -39,5 +39,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('articulo_computadoras');
+        Schema::dropIfExists('computadoras');
+        Schema::dropIfExists('computadora_tipos');
     }
 };

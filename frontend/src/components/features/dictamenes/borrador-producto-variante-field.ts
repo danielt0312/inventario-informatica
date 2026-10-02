@@ -11,6 +11,7 @@ const {
     Computadora,
     Disco,
     Ram,
+    Camara,
     ...otrosProductoTipo
 } = ProductoTipoEnum;
 
@@ -23,6 +24,7 @@ type Field = SchemaBase & (
     | { tipo_id: typeof Computadora; spec?: z.input<typeof specComputadoraValidator> }
     | { tipo_id: typeof Disco; spec?: z.input<typeof specDiscoValidator> }
     | { tipo_id: typeof Ram; spec?: z.input<typeof specRamValidator> }
+    | { tipo_id: typeof Camara; spec?: z.input<typeof specCamaraValidator> }
     | { tipo_id: Exclude<ProductoTipoEnum, typeof Disco> | undefined }
 )
 
@@ -31,6 +33,10 @@ const defaultValues: Field = {
 }
 
 const specComputadoraValidator = z.object({
+    tipo_id: selectedNumberOption,
+}).partial();
+
+const specCamaraValidator = z.object({
     tipo_id: selectedNumberOption,
 }).partial();
 
@@ -56,6 +62,7 @@ const validator = z.discriminatedUnion("tipo_id", [
     z.object({ ...validatorBase, tipo_id: z.literal(Computadora), spec: specComputadoraValidator.optional() }),
     z.object({ ...validatorBase, tipo_id: z.literal(Disco), spec: specDiscoValidator.optional() }),
     z.object({ ...validatorBase, tipo_id: z.literal(Ram), spec: specRamValidator.optional() }),
+    z.object({ ...validatorBase, tipo_id: z.literal(Camara), spec: specCamaraValidator.optional() }),
     z.object({ ...validatorBase, tipo_id: z.literal(Object.values(otrosProductoTipo)) }),
 ], { error: "Debes de seleccionar un tipo de producto válido" });
 
