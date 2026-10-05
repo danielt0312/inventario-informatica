@@ -9,7 +9,7 @@ use App\Enums\ProductoTipoEnum;
 
 use App\Data\Producto\{
     ProductoData,
-    ProductoIdentidadData
+    ProductoIdentidadData,
 };
 
 use App\Models\{
@@ -26,9 +26,12 @@ class ProductoService
         }
 
         return DB::transaction(function () use ($data) {
-            $producto = Producto::firstOrCreate($data->all(), $data->all());
+            $producto = Producto::firstOrCreate($data->all());
 
-            return $producto->variantes()->create();
+            return $producto->variantes()->firstOrCreate([
+                'variante_type' => null,
+                'variante_id'   => null,
+            ]);
         });
     }
 
@@ -40,14 +43,15 @@ class ProductoService
             throw new LogicException('El modelo `'.$model::class.'` no corresponde a ningun tipo de producto con variante.');
         }
 
-        $data = ProductoData::from([...$identidad->all(), 'tipoId' => $tipo->value]);
+        $data = ProductoData::from([...$identidad->all(), 'tipo_id' => $tipo->value]);
 
-        return DB::transaction(function () use ($data, $spec) {
-            $producto = Producto::firstOrCreate($data->all(), $data->all());
+        return DB::transaction(function () use ($data, $spec, $tipo) {
+            $producto = Producto::firstOrCreate($data->all());
 
-            $variante = $producto->variantes()->make();
-            $variante->variante()->associate($spec);
-            $variante->save();
+            $variante = $producto->variantes()->firstOrCreate([
+                'variante_type' => $tipo->varianteMorphAlias(),
+                'variante_id'   => $spec->getKey(),
+            ]);
 
             return $variante;
         });

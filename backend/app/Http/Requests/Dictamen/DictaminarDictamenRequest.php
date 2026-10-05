@@ -18,6 +18,7 @@ class DictaminarDictamenRequest extends FormRequest
     public function rules(): array
     {
         return [
+            // todo validar que el tamaño sea el mismo
             'adquisiciones' => [
                 'required',
                 'array',
@@ -29,17 +30,38 @@ class DictaminarDictamenRequest extends FormRequest
                 'integer',
                 'exists:dictamen_adquisiciones,id',
             ],
-            // todo validar que `producto_tipo_id` sea igual al que se encuentre en `dictamen_adquisiciones.productos.tipo_id`
-            'adquisiciones.*.producto_variante_id' => [
-                'required',
-                'integer',
-                'exists:producto_variantes,id'
-            ],
-            'adquisiciones.*.especificaciones' => [
+            'adquisiciones.*.caracteristicas_adicionales' => [
                 'sometimes',
                 'nullable',
                 'string',
                 'max:255'
+            ],
+            'adquisiciones.*.borrador_producto_variante' => [
+                'required',
+                'array'
+            ],
+            'adquisiciones.*.borrador_producto_variante.tipo_id' => [
+                'required',
+                'integer',
+                'exists:producto_tipos,id',
+            ],
+            'adquisiciones.*.borrador_producto_variante.marca_id' => [
+                'required',
+                'integer',
+                'exists:producto_marcas,id',
+            ],
+            'adquisiciones.*.borrador_producto_variante.modelo' => [
+                'required',
+                'string',
+                'max:128',
+                'unique:productos,modelo',
+            ],
+
+            // todo agregar validación dinámica según `adquisiciones.*.borrador.producto.tipo_id`
+            'adquisiciones.*.borrador_producto_variante.spec' => [
+                'sometimes',
+                'nullable',
+                'array'
             ]
         ];
     }

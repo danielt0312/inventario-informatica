@@ -18,10 +18,12 @@ use App\Models\{
 };
 
 use App\Actions\{
+    CrearProductoVarianteAction,
     ReemplazarArchivoAction,
     CancelarArchivoAction
 };
 
+use App\Data\Producto\ProductoVarianteData;
 use App\Data\Articulo\StoreArticuloData;
 use App\Data\Dictamen\{
     StoreDictamenData,
@@ -33,6 +35,7 @@ use App\Data\Dictamen\{
 class DictamenService
 {
     public function __construct(
+        protected CrearProductoVarianteAction $crearProductoVarianteAction,
         protected OficioService $oficioService,
         protected PdfViewService $pdfViewService,
         protected PdfWatermarkService $pdfWatermarkService,
@@ -87,12 +90,13 @@ class DictamenService
     {
         DB::transaction(function () use ($dictamen, $data) {
             foreach ($data->adquisiciones as $adquisicion) {
+                $productoVariante = ($this->crearProductoVarianteAction)($adquisicion->borradorProductoVariante);
+
                 $dictamen->versionActual->adquisiciones()
                     ->where('id', $adquisicion->id)
                     ->update([
-                        'borrador' => null,
-                        'producto_variante_id' => $adquisicion->productoVarianteId,
-                        'especificaciones' => $adquisicion->especificaciones
+                        'producto_variante_id' => $productoVariante->id,
+                        'caracteristicas_adicionales' => $adquisicion->caracteristicasAdicionales
                     ]);
             }
 
@@ -232,7 +236,7 @@ class DictamenService
 
     protected function generatePdf(Dictamen $dictamen): Archivo
     {
-        $dictamen->load('versionActual.adquisiciones', 'oficio');
+        $dictamen->loadMissing('versionActual.adquisiciones', 'oficio');
 
         return $this->archivoService->createAndStoreFileFromRaw(
             $this->loadPdfView($dictamen)->output(),

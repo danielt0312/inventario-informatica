@@ -47,6 +47,7 @@ class StoreDictamenRequest extends FormRequest
                 'required',
                 'integer'
             ],
+            // todo definir si el numero de inventario pasado es valido dentro la logica de negocio
             'adquisiciones.*.numero_inventario' => [
                 'sometimes',
                 'nullable',

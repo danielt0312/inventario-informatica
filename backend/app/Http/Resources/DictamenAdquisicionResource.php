@@ -27,7 +27,7 @@ class DictamenAdquisicionResource extends JsonResource
             $this->when(
                 ! $dictamen->esEstadoDictaminar(),
                 function () {
-                    $this->producto->loadMissing('tipo.categoria', 'marca');
+                    $this->productoVariante->loadMissing('producto.tipo.categoria', 'producto.marca');
 
                     return $this->merge([
                         'especificaciones_tecnicas' => $this->especificaciones_tecnicas,

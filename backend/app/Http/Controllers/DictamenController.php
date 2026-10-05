@@ -88,7 +88,7 @@ class DictamenController extends Controller
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
     {
-        $this->dictamenService->dictaminar($dictamen, DictaminarDictamenData::from($request));
+        $this->dictamenService->dictaminar($dictamen, DictaminarDictamenData::from($request->validated()));
 
         return $dictamen->toResource();
     }

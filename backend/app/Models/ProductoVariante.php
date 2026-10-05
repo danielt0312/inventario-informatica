@@ -19,6 +19,8 @@ class ProductoVariante extends Model
 
     protected $fillable = [
         'producto_id',
+        'variante_type',
+        'variante_id'
     ];
 
     public $timestamps = false;
