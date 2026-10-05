@@ -13,6 +13,10 @@ class StoreDiscoData extends ProductoVarianteData
         public DiscoData $spec,
         ?int $tipoId = null,
     ) {
-        parent::__construct($tipoId, $marcaId, $modelo);
+        parent::__construct(
+            tipoId: $tipoId,
+            marcaId: $marcaId,
+            modelo: $modelo
+        );
     }
 }
