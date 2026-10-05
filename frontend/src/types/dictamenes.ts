@@ -3,7 +3,7 @@ import type { Includable, TCatalogo } from "./generics";
 import type { Archivo, Oficio } from "./documentos";
 import type { Articulo } from "./articulos";
 import type { OrdenCompra } from "./orden_compras";
-import type { DictamenBorradorProductoVariante } from "@/components/features/dictamenes/borrador-producto-variante-field";
+import type { DictamenBorradorProductoVarianteFields } from "@/components/features/dictamenes/crear/form-schema";
 
 type IncludableArticulo = Includable<Articulo>;
 type IncludableOrdenCompra = Includable<OrdenCompra>;
@@ -28,7 +28,6 @@ type BaseAdquisicion<TArticulo extends IncludableArticulo = IncludableArticulo> 
     articulo: TArticulo;
     detalle_solicitud: string | null;
     caracteristicas_adicionales: string | null;
-    borrador_producto_variante: DictamenBorradorProductoVariante;
 }
 type BaseOrdenCompra<TOrdenCompra extends IncludableOrdenCompra = IncludableOrdenCompra> = {
     orden_compra: TOrdenCompra;
@@ -57,7 +56,9 @@ type DetailedBase<TDictamen extends Base = Base, TVersionActualWithAdquisiciones
 
 type DictaminarEstado = BaseEstado<typeof DictamenEstadoEnum.Dictaminar>;
 type Dictaminar = Base<DictaminarEstado>;
-type DictaminarAdquisicion = BaseAdquisicion;
+type DictaminarAdquisicion = BaseAdquisicion & {
+    borrador_producto_variante: DictamenBorradorProductoVarianteFields;
+};
 type DictaminarVersion = BaseVersion;
 type DetailedDictaminar = DetailedBase<Dictaminar, VersionActualWithAdquisiciones<VersionWithAdquisiciones<DictaminarVersion, Adquisiciones<DictaminarAdquisicion>>>>;
 

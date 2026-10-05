@@ -15,15 +15,19 @@ class DictamenAdquisicionResource extends JsonResource
             'id' => $this->id,
             'empleado_id' => $this->empleado_id,
             'cantidad' => $this->cantidad,
+            'caracteristicas_adicionales' => $this->caracteristicas_adicionales,
             'articulo' => new ArticuloResource($this->whenLoaded('articulo')),
-            'producto_tipo' => $this->when(
+            $this->when(
                 $dictamen->esEstadoDictaminar(),
-                fn() => new ProductoTipoResource($this->tipo)
+                fn () => $this->merge([
+                    'borrador_producto_variante' => json_decode($this->borrador_producto_variante),
+                    'producto_tipo' => new ProductoTipoResource($this->tipo)
+                ])
             ),
             $this->when(
                 ! $dictamen->esEstadoDictaminar(),
                 function () {
-                    $this->producto->load('tipo.categoria', 'marca');
+                    $this->producto->loadMissing('tipo.categoria', 'marca');
 
                     return $this->merge([
                         'especificaciones_tecnicas' => $this->especificaciones_tecnicas,

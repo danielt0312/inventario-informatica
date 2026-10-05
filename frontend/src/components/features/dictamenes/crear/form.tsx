@@ -21,7 +21,6 @@ import { DiscoTipoField } from '../../discos/tipo-field';
 import { DiscoCapacidadField } from '../../discos/capacidad-field';
 import { DiscoFactorFormaField } from '../../discos/factor-forma-field';
 import { DiscoInterfazField } from '../../discos/interfaz-field';
-import { useStore } from '@tanstack/react-form';
 import { RamTipoField } from '../../articulos/rams/tipo-field';
 import { RamCapacidadField } from '../../articulos/rams/capacidad-field';
 import { RamVelocidadField } from '../../articulos/rams/velocidad-field';
@@ -50,10 +49,6 @@ function Form() {
             mutate({ data, formApi });
         }
     });
-
-    const errors = useStore(form.store, (state) => state.errors)
-    console.log(errors);
-
 
     return (
         <FormLayout form={form} className="flex flex-col gap-6">
@@ -250,7 +245,7 @@ function Form() {
 
                 <form.SubmitFormButton />
             </form.AppForm>
-        </FormLayout >
+        </FormLayout>
     );
 }
 

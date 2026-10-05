@@ -6,8 +6,8 @@ import { computadoraTipoQueryOptions } from "./queries";
 import { useQuery } from "@tanstack/react-query";
 
 type ComboboxItem = InferComboboxItemFromFn<typeof toComboboxCatalogItems>;
-type FieldValue = ComboboxItem['value'];
-type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Empty, Multiple, FieldValue>
+type ComboboxItemValue = ComboboxItem['value'];
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Empty, Multiple, ComboboxItemValue>
 
 type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     ComboboxFieldSimpleProps<

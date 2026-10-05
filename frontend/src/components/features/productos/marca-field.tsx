@@ -1,4 +1,4 @@
-import type { ComboboxLayoutItemValue, ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
+import type { ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
 import { defaultFieldValueFromItem, useComboboxFieldContext, type ComboboxFieldEmptyType, type ComboboxFieldType } from "@/components/ui/combobox-field.shared";
@@ -17,7 +17,9 @@ import { productoMarcaQueryOptions } from "./queries";
 import React from "react";
 import z from "zod";
 
-type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>
+type ComboboxItem = InferComboboxItemFromFn<typeof toComboboxCatalogItems>;
+type ComboboxItemValue = ComboboxItem['value'];
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Empty, Multiple, ComboboxItemValue>
 
 type Schema = { nombre: InputFieldType; }
 const defaultValues: Schema = { nombre: undefined }
