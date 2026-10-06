@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Disco;
+namespace App\Data\Ram;
 
 use App\Data\Producto\ProductoVarianteData;
 use App\Data\Producto\ProductoIdentidadData;
@@ -12,12 +12,12 @@ use Spatie\LaravelData\Attributes\{
 
 #[MapInputName(SnakeCaseMapper::class)]
 #[MapOutputName(SnakeCaseMapper::class)]
-class StoreDiscoData extends ProductoVarianteData
+class StoreRamData extends ProductoVarianteData
 {
     public function __construct(
         int $marcaId,
         string $modelo,
-        public DiscoData $spec,
+        public RamData $spec,
         ?int $tipoId = null,
     ) {
         parent::__construct(

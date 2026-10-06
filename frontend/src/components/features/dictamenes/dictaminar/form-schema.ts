@@ -100,7 +100,7 @@ const defaultValues = (dictamen: DetailedDictaminarDictamen): Schema => ({
             tipo_id: borrador.tipo_id,
             marca_id: borrador.marca_id,
             modelo: borrador.modelo,
-            spec: borrador.spec
+            spec: borrador.spec ?? {}
         } as BorradorFields
     }))
 });

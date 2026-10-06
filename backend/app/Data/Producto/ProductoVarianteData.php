@@ -7,6 +7,10 @@ use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 use Spatie\LaravelData\Contracts\PropertyMorphableData;
 use App\Enums\ProductoTipoEnum;
 use App\Data\Disco\StoreDiscoData;
+use App\Data\Ram\StoreRamData;
+use App\Data\Computadora\StoreComputadoraData;
+use App\Data\Licencia\StoreLicenciaData;
+use App\Data\Camara\StoreCamaraData;
 
 use Spatie\LaravelData\Attributes\{
     MapInputName,
@@ -47,8 +51,12 @@ abstract class ProductoVarianteData extends Data implements PropertyMorphableDat
     public static function morph(array $properties): ?string
     {
         return match (ProductoTipoEnum::tryFrom((int) ($properties['tipoId']))) {
-            ProductoTipoEnum::Disco => StoreDiscoData::class,
-            default                 => ProductoGenericoData::class,
+            ProductoTipoEnum::Disco         => StoreDiscoData::class,
+            ProductoTipoEnum::Ram           => StoreRamData::class,
+            ProductoTipoEnum::Computadora   => StoreComputadoraData::class,
+            ProductoTipoEnum::Licencia      => StoreLicenciaData::class,
+            ProductoTipoEnum::Camara        => StoreCamaraData::class,
+            default                         => ProductoGenericoData::class,
         };
     }
 }

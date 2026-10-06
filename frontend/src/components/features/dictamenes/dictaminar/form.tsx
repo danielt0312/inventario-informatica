@@ -23,7 +23,6 @@ import { RamVelocidadField } from '../../articulos/rams/velocidad-field';
 import { DictamenCaracteristicasAdicionalesField } from '../fields';
 import { EmptyValue } from "@/components/ui/empty-value";
 
-
 function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
     const { mutate } = useDictamenFormActionMutation(dictamen);
 

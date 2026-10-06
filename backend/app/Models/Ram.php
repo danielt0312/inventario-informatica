@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ram extends Model
 {
+    protected $table = 'rams';
+
     protected $fillable = [
         'tipo_id',
         'capacidad_id',

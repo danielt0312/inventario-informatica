@@ -22,7 +22,7 @@ class ProductoService
     public function crearGenerico(ProductoData $data): ProductoVariante
     {
         if ($this->tieneVariante($data->tipoId)) {
-            throw new LogicException("El tipo {$data->tipoId} requiere una variante; use `crearConVariante()`.");
+            throw new LogicException('El tipo `'.ProductoTipoEnum::tryFrom($data->tipoId)->getLabelValue().'` requiere una variante; use `crearConVariante()`.');
         }
 
         return DB::transaction(function () use ($data) {
