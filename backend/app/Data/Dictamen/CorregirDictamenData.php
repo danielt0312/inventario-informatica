@@ -17,12 +17,4 @@ class CorregirDictamenData extends Data
         #[DataCollectionOf(CorregirDictamenAdquisicionData::class)]
         public array $adquisiciones
     ) {}
-
-    public static function fromRequest(CorregirDictamenRequest $request): self
-    {
-        return new self(
-            motivoCambio: $request->validated('motivo_cambio'),
-            adquisiciones: $request->getAdquisicionesValidatedData()
-        );
-    }
 }

@@ -36,29 +36,28 @@ class DictaminarDictamenRequest extends FormRequest
                 'string',
                 'max:255'
             ],
-            'adquisiciones.*.borrador_producto_variante' => [
+            'adquisiciones.*.producto_variante' => [
                 'required',
                 'array'
             ],
-            'adquisiciones.*.borrador_producto_variante.tipo_id' => [
+            'adquisiciones.*.producto_variante.tipo_id' => [
                 'required',
                 'integer',
                 'exists:producto_tipos,id',
             ],
-            'adquisiciones.*.borrador_producto_variante.marca_id' => [
+            'adquisiciones.*.producto_variante.marca_id' => [
                 'required',
                 'integer',
                 'exists:producto_marcas,id',
             ],
-            'adquisiciones.*.borrador_producto_variante.modelo' => [
+            'adquisiciones.*.producto_variante.modelo' => [
                 'required',
                 'string',
                 'max:128',
-                'unique:productos,modelo',
             ],
 
             // todo agregar validación dinámica según `adquisiciones.*.borrador.producto.tipo_id`
-            'adquisiciones.*.borrador_producto_variante.spec' => [
+            'adquisiciones.*.producto_variante.spec' => [
                 'sometimes',
                 'nullable',
                 'array'

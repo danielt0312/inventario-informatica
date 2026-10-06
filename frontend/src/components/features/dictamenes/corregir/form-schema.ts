@@ -1,57 +1,114 @@
-import type { ProductoTipoFieldType } from "@/components/features/productos/tipos/form-fields";
-import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
-import type { NumberInputFieldType } from "@/components/ui/input-field";
-import type { EmpleadoFieldType } from "@/components/features/externos/empleados/form-fields";
-import type { DictamenCaracteristicasAdicionalesFieldType, DictamenMotivoCambioFieldType } from "../fields";
-import type { ProductoFieldType } from "@/components/features/productos/variante-generica-field";
 import type { DetailedSurtirDictamen } from "@/types/dictamenes";
+import type { DictamenBorradorProductoVarianteFields } from "../crear/form-schema";
+import type { DictamenCantidadFieldType, DictamenCaracteristicasAdicionalesFieldType, DictamenMotivoCambioFieldType } from "../fields";
+import type { EmpleadoFieldType } from "../../empleados/field";
+import type { ArticuloNullableNumeroInventarioFieldType } from "../../articulos/form-fields";
+import type { Disco } from "@/types/articulos/discos";
 import { nullableString, positiveInteger, requiredArray, requiredString, selectedNumberOption } from "@/lib/schemas/common";
+import { dictaminarDictamenProductoVarianteFieldsValidator, dictaminarDictamenSpecCamaraValidator, dictaminarDictamenSpecComputadoraValidator, dictaminarDictamenSpecDiscoValidator, dictaminarDictamenSpecLicenciaValidator, dictaminarDictamenSpecRamValidator } from "../dictaminar/form-schema";
 import z from "zod";
+import type { ProductoVariante } from "@/types/productos";
+import { esProductoTipo } from "../../productos/utils";
+import { ProductoTipoEnum } from "@/lib/constants";
+import type { Ram } from "@/types/articulos/rams";
+import type { Computadora } from "@/types/computadoras";
+import type { Camara } from "@/types/camaras";
+import type { Licencia } from "@/types/licencias";
 
-type AdquisicionFields = {
-    producto_tipo_id: ProductoTipoFieldType;
+type Adquisicion = {
+    cantidad: DictamenCantidadFieldType;
+    empleado_id: EmpleadoFieldType<undefined, false>;
     numero_inventario: ArticuloNullableNumeroInventarioFieldType;
-    cantidad: NumberInputFieldType;
-    empleado_id: EmpleadoFieldType;
-    especificaciones_tecnicas: DictamenCaracteristicasAdicionalesFieldType;
-    producto_id: ProductoFieldType;
+    caracteristicas_adicionales: DictamenCaracteristicasAdicionalesFieldType;
+    producto_variante: DictamenBorradorProductoVarianteFields;
 }
-
-export const adquisicionFieldsDefaultValues: AdquisicionFields = {
-    numero_inventario: null,
-    producto_tipo_id: undefined,
-    producto_id: undefined,
-    cantidad: 1,
-    empleado_id: undefined,
-    especificaciones_tecnicas: null,
-} as const;
 
 type Schema = {
+    adquisiciones: Adquisicion[];
     motivo_cambio: DictamenMotivoCambioFieldType;
-    adquisiciones: AdquisicionFields[];
 }
 
-export const defaultValues = (dictamen: DetailedSurtirDictamen): Schema => ({
-    motivo_cambio: undefined,
-    adquisiciones: dictamen.version_actual.adquisiciones.map((adquiscion): AdquisicionFields => ({
-        cantidad: adquiscion.cantidad,
-        producto_tipo_id: adquiscion.producto_variante.tipo.id,
-        producto_id: adquiscion.producto_variante.id,
-        empleado_id: adquiscion.empleado?.id ?? 1,
-        numero_inventario: adquiscion.articulo?.numero_inventario ?? null,
-        especificaciones_tecnicas: adquiscion.especificaciones_tecnicas ?? undefined
-    }))
+const specDiscoDefaultValues = (spec: Disco): z.input<typeof dictaminarDictamenSpecDiscoValidator> => ({
+    capacidad_id: spec.capacidad.id,
+    tipo_id: spec.tipo.id,
+    factor_forma_id: spec.factor_forma?.id,
+    interfaz_id: spec.interfaz?.id
 });
 
-export const validator = z.object({
-    motivo_cambio: requiredString,
-    adquisiciones: requiredArray(z
-        .object({
-            numero_inventario: nullableString,
-            producto_tipo_id: selectedNumberOption, // TODO no enviar en payload, solo validar
-            producto_id: selectedNumberOption,
-            cantidad: positiveInteger,
-            empleado_id: selectedNumberOption,
-            especificaciones_tecnicas: nullableString
-        }))
+const specRamDefaultValues = (spec: Ram): z.input<typeof dictaminarDictamenSpecRamValidator> => ({
+    capacidad_id: spec.capacidad.id,
+    tipo_id: spec.tipo.id,
+    velocidad_id: spec.velocidad?.id
 });
+
+const specComputadoraDefaultValues = (spec: Computadora): z.input<typeof dictaminarDictamenSpecComputadoraValidator> => ({
+    tipo_id: spec.tipo.id,
+});
+
+const specCamaraDefaultValues = (spec: Camara): z.input<typeof dictaminarDictamenSpecCamaraValidator> => ({
+    tipo_id: spec.tipo.id,
+});
+
+const specLicenciaDefaultValues = (spec: Licencia): z.input<typeof dictaminarDictamenSpecLicenciaValidator> => ({
+    tipo_id: spec.tipo.id,
+});
+
+const specDefaultValues = (productoVariante: ProductoVariante) => {
+    if (esProductoTipo(productoVariante, ProductoTipoEnum.Disco)) return specDiscoDefaultValues(productoVariante.spec);
+    if (esProductoTipo(productoVariante, ProductoTipoEnum.Ram)) return specRamDefaultValues(productoVariante.spec);
+    if (esProductoTipo(productoVariante, ProductoTipoEnum.Computadora)) return specComputadoraDefaultValues(productoVariante.spec);
+    if (esProductoTipo(productoVariante, ProductoTipoEnum.Camara)) return specCamaraDefaultValues(productoVariante.spec);
+    if (esProductoTipo(productoVariante, ProductoTipoEnum.Licencia)) return specLicenciaDefaultValues(productoVariante.spec);
+    return undefined;
+}
+
+const defaultValues = (dictamen: DetailedSurtirDictamen): Schema => ({
+    adquisiciones: dictamen.version_actual.adquisiciones.map(({
+        caracteristicas_adicionales,
+        cantidad,
+        articulo,
+        empleado,
+        producto_variante
+    }) => ({
+        cantidad,
+        empleado_id: empleado.id,
+        numero_inventario: articulo?.numero_inventario ?? null,
+        caracteristicas_adicionales,
+        producto_variante: {
+            tipo_id: producto_variante.tipo.id,
+            marca_id: producto_variante.marca.id,
+            modelo: producto_variante.modelo,
+            spec: specDefaultValues(producto_variante) ?? {}
+        } as DictamenBorradorProductoVarianteFields
+    })),
+    motivo_cambio: undefined,
+});
+
+const adquisicionValidator = z.object({
+    cantidad: positiveInteger,
+    empleado_id: selectedNumberOption,
+    numero_inventario: nullableString,
+    caracteristicas_adicionales: nullableString,
+    producto_variante: dictaminarDictamenProductoVarianteFieldsValidator
+});
+
+const validator = z.object({
+    adquisiciones: requiredArray(adquisicionValidator),
+    motivo_cambio: requiredString,
+});
+
+const adquisicionFieldsDefaultValues: Adquisicion = {
+    cantidad: 1,
+    caracteristicas_adicionales: null,
+    numero_inventario: null,
+    empleado_id: undefined,
+    producto_variante: {
+        tipo_id: undefined,
+    }
+}
+
+export {
+    defaultValues as corregirDictamenDefaultFormValues,
+    validator as corregirDictamenFormValidator,
+    adquisicionFieldsDefaultValues as corregirDictamenAdquisicionFieldsDefaultValues
+}

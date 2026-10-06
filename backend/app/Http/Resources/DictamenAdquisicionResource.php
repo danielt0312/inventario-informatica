@@ -13,10 +13,14 @@ class DictamenAdquisicionResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'empleado_id' => $this->empleado_id,
             'cantidad' => $this->cantidad,
             'caracteristicas_adicionales' => $this->caracteristicas_adicionales,
             'articulo' => new ArticuloResource($this->whenLoaded('articulo')),
+            // todo cambiar por resource/data correcto
+            'empleado' => [
+                'id' => 3,
+                'nombre' => 'Juan Perez',
+            ],
             $this->mergeWhen($dictamen->esEstadoDictaminar(), [
                 'borrador_producto_variante' => json_decode($this->borrador_producto_variante),
             ]),

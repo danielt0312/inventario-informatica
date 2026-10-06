@@ -3,7 +3,7 @@ import type { DictamenCaracteristicasAdicionalesFieldType } from "../fields";
 import type { ProductoMarcaFieldType } from "../../productos/marca-field";
 import type { ProductoModeloFieldType } from "../../productos/variante-spec-field-group";
 import { nullableString, requiredArray, requiredString, selectedNumberOption } from "@/lib/schemas/common";
-import { ProductoTipoEnum } from "@/lib/constants";
+import { ProductoTipoEnum, ProductoTipoGenericos, ProductoTipoSpec } from "@/lib/constants";
 import z from "zod";
 
 const {
@@ -12,15 +12,14 @@ const {
     Ram,
     Camara,
     Licencia,
-    ...otrosProductoTipo
-} = ProductoTipoEnum;
+} = ProductoTipoSpec;
 
-type SchemaBase = {
+type BaseProductoVarianteFields = {
     marca_id: ProductoMarcaFieldType<undefined, false>;
     modelo: ProductoModeloFieldType;
 }
 
-type BorradorFields = SchemaBase & (
+type ProductoVarianteFields = BaseProductoVarianteFields & (
     | { tipo_id: typeof Computadora; spec: z.input<typeof specComputadoraValidator> }
     | { tipo_id: typeof Disco; spec: z.input<typeof specDiscoValidator> }
     | { tipo_id: typeof Ram; spec: z.input<typeof specRamValidator> }
@@ -68,20 +67,19 @@ const validatorBase = {
     modelo: requiredString
 }
 
-const borradorFieldsValidator = z.discriminatedUnion("tipo_id", [
+const productoVarianteFieldsValidator = z.discriminatedUnion("tipo_id", [
     z.object({ ...validatorBase, tipo_id: z.literal(Computadora), spec: specComputadoraValidator }),
     z.object({ ...validatorBase, tipo_id: z.literal(Disco), spec: specDiscoValidator }),
     z.object({ ...validatorBase, tipo_id: z.literal(Ram), spec: specRamValidator }),
     z.object({ ...validatorBase, tipo_id: z.literal(Camara), spec: specCamaraValidator }),
     z.object({ ...validatorBase, tipo_id: z.literal(Licencia), spec: specLicenciaValidator }),
-    z.object({ ...validatorBase, tipo_id: z.literal(Object.values(otrosProductoTipo)) }),
+    z.object({ ...validatorBase, tipo_id: z.literal(Object.values(ProductoTipoGenericos)) }),
 ], { error: "Debes de seleccionar un tipo de producto válido" });
-
 
 type AdquisicionFields = {
     id: number;
     caracteristicas_adicionales: DictamenCaracteristicasAdicionalesFieldType;
-    borrador_producto_variante: BorradorFields;
+    producto_variante: ProductoVarianteFields;
 }
 
 type Schema = {
@@ -96,19 +94,19 @@ const defaultValues = (dictamen: DetailedDictaminarDictamen): Schema => ({
     }) => ({
         id,
         caracteristicas_adicionales,
-        borrador_producto_variante: {
+        producto_variante: {
             tipo_id: borrador.tipo_id,
             marca_id: borrador.marca_id,
             modelo: borrador.modelo,
             spec: borrador.spec ?? {}
-        } as BorradorFields
+        } as ProductoVarianteFields
     }))
 });
 
 const adquisicionValidator = z.object({
     id: selectedNumberOption,
     caracteristicas_adicionales: nullableString,
-    borrador_producto_variante: borradorFieldsValidator
+    producto_variante: productoVarianteFieldsValidator
 });
 
 const validator = z.object({
@@ -119,5 +117,12 @@ const validator = z.object({
 
 export {
     defaultValues as dictaminarDictamenDefaultFormValues,
-    validator as dictaminarDictamenFormValidator
+    validator as dictaminarDictamenFormValidator,
+    type ProductoVarianteFields as DictaminarDictamenBorradorFields,
+    productoVarianteFieldsValidator as dictaminarDictamenProductoVarianteFieldsValidator,
+    specComputadoraValidator as dictaminarDictamenSpecComputadoraValidator,
+    specDiscoValidator as dictaminarDictamenSpecDiscoValidator,
+    specRamValidator as dictaminarDictamenSpecRamValidator,
+    specCamaraValidator as dictaminarDictamenSpecCamaraValidator,
+    specLicenciaValidator as dictaminarDictamenSpecLicenciaValidator,
 }

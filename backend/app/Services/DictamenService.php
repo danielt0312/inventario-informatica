@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
-use App\Exception\EntityNotEditableException;
+use LogicException;
 use Illuminate\Support\Facades\DB;
+use App\Exception\EntityNotEditableException;
+use App\Data\Producto\ProductoVarianteData;
+use App\Data\Articulo\StoreArticuloData;
 
 use App\Enums\{
     ProductoTipoEnum,
@@ -23,8 +26,6 @@ use App\Actions\{
     CancelarArchivoAction
 };
 
-use App\Data\Producto\ProductoVarianteData;
-use App\Data\Articulo\StoreArticuloData;
 use App\Data\Dictamen\{
     StoreDictamenData,
     DictaminarDictamenData,
@@ -90,7 +91,7 @@ class DictamenService
     {
         DB::transaction(function () use ($dictamen, $data) {
             foreach ($data->adquisiciones as $adquisicion) {
-                $productoVariante = ($this->crearProductoVarianteAction)($adquisicion->borradorProductoVariante);
+                $productoVariante = ($this->crearProductoVarianteAction)($adquisicion->productoVariante);
 
                 $dictamen->versionActual->adquisiciones()
                     ->where('id', $adquisicion->id)
@@ -130,13 +131,6 @@ class DictamenService
         });
     }
 
-    public function surtir(Dictamen $dictamen): void
-    {
-        $dictamen->update([
-            'estado_id' => DictamenEstadoEnum::Inventariar->value
-        ]);
-    }
-
     public function corregir(Dictamen $dictamen, CorregirDictamenData $data): void
     {
         DB::transaction(function () use ($dictamen, $data) {
@@ -149,7 +143,19 @@ class DictamenService
                 'fecha_solicitud' => now(),
             ]);
 
-            $nuevaVersion->adquisiciones()->createMany($data->adquisiciones);
+            $adquisiciones = collect($data->adquisiciones)
+                ->map(function ($adquisicion) {
+                    $productoVariante = ($this->crearProductoVarianteAction)($adquisicion->productoVariante);
+
+                    return [
+                        ...$adquisicion->toArray(),
+                        'borrador_producto_variante' => json_encode($adquisicion->productoVariante),
+                        'producto_variante_id' => $productoVariante->id,
+                    ];
+                })
+                ->toArray();
+
+            $nuevaVersion->adquisiciones()->createMany($adquisiciones);
 
             $dictamen->versionActual()->associate($nuevaVersion)->save();
 
@@ -159,6 +165,13 @@ class DictamenService
                 'estado_id' => DictamenEstadoEnum::PendienteAcuse->value
             ]);
         });
+    }
+
+    public function surtir(Dictamen $dictamen): void
+    {
+        $dictamen->update([
+            'estado_id' => DictamenEstadoEnum::Inventariar->value
+        ]);
     }
 
     public function inventariar(Dictamen $dictamen, InventariarDictamenData $data, ?OrdenCompra $ordenCompra): void

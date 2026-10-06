@@ -11,10 +11,10 @@ import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/fea
 import type { EmpleadoFieldType } from "@/components/features/empleados/field";
 import type { AdscripcionFieldType } from "@/components/features/adscripciones/field";
 import type { DictamenCantidadFieldType, DictamenCaracteristicasAdicionalesFieldType, DictamenFechaSolicitudFieldType, DictamenFolioFieldType, DictamenOficioArchivoFieldType } from "../fields";
-import z from "zod";
-import { ProductoTipoEnum } from "@/lib/constants";
 import type { ProductoMarcaFieldType } from "../../productos/marca-field";
 import type { ProductoModeloFieldType } from "../../productos/variante-spec-field-group";
+import { ProductoTipoEnum } from "@/lib/constants";
+import z from "zod";
 
 const {
     Computadora,
@@ -129,7 +129,7 @@ const adquisicionFieldsValidator = z
         cantidad: positiveInteger,
         empleado_id: selectedNumberOption,
         numero_inventario: nullableString,
-        caracteristicas_adicionales: trimmedString().nullable(),
+        caracteristicas_adicionales: nullableString,
         borrador_producto_variante: borradorFieldsValidator,
     });
 

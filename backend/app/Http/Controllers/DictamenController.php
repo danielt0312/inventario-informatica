@@ -77,20 +77,13 @@ class DictamenController extends Controller
                 'ordenCompra.archivo',
                 'versionActual.archivo'
             ])
-            ->allowedIncludes('versiones.adquisiciones.articulo', 'versionActual.adquisiciones.articulo')
+            ->allowedIncludes(
+                'versiones.adquisiciones.articulo',
+                'versionActual.adquisiciones.articulo'
+            )
             ->where('uuid', $uuid)
             ->firstOrFail()
             ->toResource();
-    }
-
-    public function corregir(CorregirDictamenRequest $request, Dictamen $dictamen)
-    {
-        $this->dictamenService->corregir(
-            $dictamen,
-            CorregirDictamenData::fromRequest($request)
-        );
-
-        return $dictamen->toResourceResponse(201);
     }
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
@@ -109,6 +102,16 @@ class DictamenController extends Controller
             $dictamen,
             $request->getDictamenArchivo(),
             $request->getOficioArchivo()
+        );
+
+        return $dictamen->toResourceResponse(201);
+    }
+
+    public function corregir(CorregirDictamenRequest $request, Dictamen $dictamen)
+    {
+        $this->dictamenService->corregir(
+            $dictamen,
+            CorregirDictamenData::from($request->validated())
         );
 
         return $dictamen->toResourceResponse(201);

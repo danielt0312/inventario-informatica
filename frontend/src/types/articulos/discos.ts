@@ -1,5 +1,5 @@
+import { ProductoTipoEnum } from "@/lib/constants";
 import type { Includable, TCatalogo } from "../generics"
-import type { ProductoVarianteSpec } from "../productos";
 
 type Tipo = TCatalogo;
 type Capacidad = TCatalogo;
@@ -16,21 +16,16 @@ type Base<TInterfaz extends IncludableInterfaz = IncludableInterfaz, TFactorForm
     factor_forma: TFactorForma;
 }
 
-type AsSpec<TDisco extends Base = Base> = ProductoVarianteSpec & {
-    disco: TDisco;
-}
-
 type Disco = Base;
-type DiscoFilled = Base<Interfaz, FactorForma>;
-type DiscoAsSpec = AsSpec;
+
+type ProductoDisco = TCatalogo<typeof ProductoTipoEnum.Disco>
 
 export type {
     Disco,
-    DiscoFilled,
-    DiscoAsSpec,
     Tipo as DiscoTipo,
     Capacidad as DiscoCapacidad,
     Interfaz as DiscoInterfaz,
     FactorForma as DiscoFactorForma,
-    Base as DiscoBase
+    Base as DiscoBase,
+    ProductoDisco
 }

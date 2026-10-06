@@ -24,7 +24,7 @@ export const DictamenEstadoEnum = {
 } as const;
 export type DictamenEstadoEnum = (typeof DictamenEstadoEnum)[keyof typeof DictamenEstadoEnum];
 
-const { Dictaminar: DICTAMINAR, ...DictaminadoDictamenEstadoEnum } = DictamenEstadoEnum;
+const { Dictaminar, ...DictaminadoDictamenEstadoEnum } = DictamenEstadoEnum;
 
 export { DictaminadoDictamenEstadoEnum };
 export type DictaminadoDictamenEstadoEnum = (typeof DictaminadoDictamenEstadoEnum)[keyof typeof DictaminadoDictamenEstadoEnum];
@@ -85,6 +85,27 @@ export const ProductoTipoEnum = {
     Licencia: 38,
 } as const;
 export type ProductoTipoEnum = (typeof ProductoTipoEnum)[keyof typeof ProductoTipoEnum];
+
+const {
+    Computadora,
+    Disco,
+    Ram,
+    Camara,
+    Licencia,
+    ...ProductoTipoGenericos
+} = ProductoTipoEnum;
+
+export const ProductoTipoSpec = {
+    Computadora,
+    Disco,
+    Ram,
+    Camara,
+    Licencia
+}
+export type ProductoTipoSpec = (typeof ProductoTipoSpec)[keyof typeof ProductoTipoSpec];
+
+export { ProductoTipoGenericos }
+export type ProductoTipoGenericos = (typeof ProductoTipoGenericos)[keyof typeof ProductoTipoGenericos];
 
 export const ProductoTipoProductoCategoriaMap: Record<ProductoTipoEnum, ProductoCategoriaEnum> = {
     [ProductoTipoEnum.Computadora]: ProductoCategoriaEnum.Computadora,

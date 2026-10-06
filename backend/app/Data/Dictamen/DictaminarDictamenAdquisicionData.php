@@ -12,7 +12,7 @@ class DictaminarDictamenAdquisicionData extends Data
 {
     public function __construct(
         public int $id,
-        public ProductoVarianteData $borradorProductoVariante,
+        public ProductoVarianteData $productoVariante,
         public ?string $caracteristicasAdicionales = null,
         public ?string $numeroInventario = null,
     ) {}
