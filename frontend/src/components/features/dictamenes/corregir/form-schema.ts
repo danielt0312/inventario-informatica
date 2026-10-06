@@ -1,11 +1,10 @@
 import type { DetailedSurtirDictamen } from "@/types/dictamenes";
-import type { DictamenBorradorProductoVarianteFields } from "../crear/form-schema";
 import type { DictamenCantidadFieldType, DictamenCaracteristicasAdicionalesFieldType, DictamenMotivoCambioFieldType } from "../fields";
 import type { EmpleadoFieldType } from "../../empleados/field";
 import type { ArticuloNullableNumeroInventarioFieldType } from "../../articulos/form-fields";
 import type { Disco } from "@/types/articulos/discos";
 import { nullableString, positiveInteger, requiredArray, requiredString, selectedNumberOption } from "@/lib/schemas/common";
-import { dictaminarDictamenProductoVarianteFieldsValidator, dictaminarDictamenSpecCamaraValidator, dictaminarDictamenSpecComputadoraValidator, dictaminarDictamenSpecDiscoValidator, dictaminarDictamenSpecLicenciaValidator, dictaminarDictamenSpecRamValidator } from "../dictaminar/form-schema";
+import { dictaminarDictamenProductoVarianteFieldsValidator, dictaminarDictamenSpecCamaraValidator, dictaminarDictamenSpecComputadoraValidator, dictaminarDictamenSpecDiscoValidator, dictaminarDictamenSpecLicenciaValidator, dictaminarDictamenSpecRamValidator, type DictaminarDictamenProductoVarianteFields } from "../dictaminar/form-schema";
 import z from "zod";
 import type { ProductoVariante } from "@/types/productos";
 import { esProductoTipo } from "../../productos/utils";
@@ -20,7 +19,7 @@ type Adquisicion = {
     empleado_id: EmpleadoFieldType<undefined, false>;
     numero_inventario: ArticuloNullableNumeroInventarioFieldType;
     caracteristicas_adicionales: DictamenCaracteristicasAdicionalesFieldType;
-    producto_variante: DictamenBorradorProductoVarianteFields;
+    producto_variante: DictaminarDictamenProductoVarianteFields;
 }
 
 type Schema = {
@@ -62,6 +61,15 @@ const specDefaultValues = (productoVariante: ProductoVariante) => {
     return undefined;
 }
 
+const productoVarianteToFieldsValue = (productoVariante: ProductoVariante): DictaminarDictamenProductoVarianteFields => {
+    return ({
+        tipo_id: productoVariante.tipo.id,
+        marca_id: productoVariante.marca.id,
+        modelo: productoVariante.modelo,
+        spec: specDefaultValues(productoVariante) ?? {},
+    }) as DictaminarDictamenProductoVarianteFields
+}
+
 const defaultValues = (dictamen: DetailedSurtirDictamen): Schema => ({
     adquisiciones: dictamen.version_actual.adquisiciones.map(({
         caracteristicas_adicionales,
@@ -74,12 +82,7 @@ const defaultValues = (dictamen: DetailedSurtirDictamen): Schema => ({
         empleado_id: empleado.id,
         numero_inventario: articulo?.numero_inventario ?? null,
         caracteristicas_adicionales,
-        producto_variante: {
-            tipo_id: producto_variante.tipo.id,
-            marca_id: producto_variante.marca.id,
-            modelo: producto_variante.modelo,
-            spec: specDefaultValues(producto_variante) ?? {}
-        } as DictamenBorradorProductoVarianteFields
+        producto_variante: productoVarianteToFieldsValue(producto_variante)
     })),
     motivo_cambio: undefined,
 });
@@ -104,11 +107,14 @@ const adquisicionFieldsDefaultValues: Adquisicion = {
     empleado_id: undefined,
     producto_variante: {
         tipo_id: undefined,
+        marca_id: undefined,
+        modelo: undefined
     }
 }
 
 export {
     defaultValues as corregirDictamenDefaultFormValues,
     validator as corregirDictamenFormValidator,
-    adquisicionFieldsDefaultValues as corregirDictamenAdquisicionFieldsDefaultValues
+    adquisicionFieldsDefaultValues as corregirDictamenAdquisicionFieldsDefaultValues,
+    productoVarianteToFieldsValue as corregirDictamenProductoVarianteToFieldsValue
 }

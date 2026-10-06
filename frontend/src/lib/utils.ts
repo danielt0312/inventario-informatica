@@ -226,3 +226,8 @@ export const esCuentaContableNoInventariable = (value: string) =>
 
 export const esCuentaContable = (value:string) =>
     esCuentaContableNoInventariable(value) || esCuentaContableInventariable(value);
+
+export function strCompactJoin(...args: unknown[]): string {
+    const items = Array.isArray(args[0]) ? args[0] : args;
+    return items.filter(Boolean).join(' ');
+}

@@ -4,7 +4,7 @@ namespace App\Data\Dictamen;
 
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
-
+use App\Data\Producto\ProductoVarianteData;
 use Spatie\LaravelData\Attributes\{
     MapInputName,
     MapOutputName
@@ -16,7 +16,7 @@ class InventariarDictamenArticuloData extends Data
 {
     public function __construct(
         public int $dictamenAdquisicionId,
-        public int $productoVarianteId,
+        public ProductoVarianteData $productoVariante,
         public int $facturaId,
         public string $cuentaContable,
         public string $esResultadoEsperado,

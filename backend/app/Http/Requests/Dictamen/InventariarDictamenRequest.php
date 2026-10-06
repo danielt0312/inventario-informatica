@@ -87,16 +87,10 @@ class InventariarDictamenRequest extends FormRequest
                 'boolean'
             ],
             'articulos.*.observaciones' => [
-                // 'exclude_unless:articulos.*.es_resultado_esperado,false',
+                'exclude_unless:articulos.*.es_resultado_esperado,false',
                 'required',
                 'string',
                 'max:255'
-            ],
-            'articulos.*.producto_variante_id' => [
-                // 'exclude_unless:articulos.*.es_resultado_esperado,false',
-                'required',
-                'integer',
-                'exists:producto_variantes,id'
             ],
             // todo agregar 'distinct' y 'unique' en caso de ser inventariable
             'articulos.*.cuenta_contable' => [
@@ -119,6 +113,39 @@ class InventariarDictamenRequest extends FormRequest
                 'required',
                 'integer',
                 'exists:facturas,id'
+            ],
+
+            'articulos.*.caracteristicas_adicionales' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'max:255'
+            ],
+            'articulos.*.producto_variante' => [
+                'required',
+                'array'
+            ],
+            'articulos.*.producto_variante.tipo_id' => [
+                'required',
+                'integer',
+                'exists:producto_tipos,id',
+            ],
+            'articulos.*.producto_variante.marca_id' => [
+                'required',
+                'integer',
+                'exists:producto_marcas,id',
+            ],
+            'articulos.*.producto_variante.modelo' => [
+                'required',
+                'string',
+                'max:128',
+            ],
+
+            // todo agregar validación dinámica según `articulos.*.borrador.producto.tipo_id`
+            'articulos.*.producto_variante.spec' => [
+                'sometimes',
+                'nullable',
+                'array'
             ]
         ];
     }

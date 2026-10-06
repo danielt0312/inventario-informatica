@@ -183,8 +183,11 @@ class DictamenService
 
         DB::transaction(function () use ($dictamen, $data, $ordenCompra, $tieneOrdenCompra) {
             foreach ($data->articulos as $articuloData) {
+                $productoVariante = ($this->crearProductoVarianteAction)($articuloData->productoVariante);
+
                 $articulo = $this->articuloService->crear(StoreArticuloData::from([
                     ...$articuloData->toArray(),
+                    'producto_variante_id' => $productoVariante->id,
                     'dictamen_id' => $dictamen->id
                 ]));
 

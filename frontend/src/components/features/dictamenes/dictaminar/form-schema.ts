@@ -118,7 +118,7 @@ const validator = z.object({
 export {
     defaultValues as dictaminarDictamenDefaultFormValues,
     validator as dictaminarDictamenFormValidator,
-    type ProductoVarianteFields as DictaminarDictamenBorradorFields,
+    type ProductoVarianteFields as DictaminarDictamenProductoVarianteFields,
     productoVarianteFieldsValidator as dictaminarDictamenProductoVarianteFieldsValidator,
     specComputadoraValidator as dictaminarDictamenSpecComputadoraValidator,
     specDiscoValidator as dictaminarDictamenSpecDiscoValidator,
