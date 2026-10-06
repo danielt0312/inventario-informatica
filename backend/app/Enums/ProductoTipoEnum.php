@@ -14,6 +14,14 @@ use App\Models\{
     Camara
 };
 
+use App\Http\Resources\{
+    DiscoResource,
+    RamResource,
+    LicenciaResource,
+    ComputadoraResource,
+    CamaraResource
+};
+
 enum ProductoTipoEnum: int
 {
     use HasFormattedLabel, IsCatalog;
@@ -147,6 +155,18 @@ enum ProductoTipoEnum: int
             self::Computadora   => Computadora::class,
             self::Camara        => Camara::class,
             self::Ram           => Ram::class,
+            default             => null
+        };
+    }
+
+    public function varianteResourceClass(): ?string
+    {
+        return match($this) {
+            self::Disco         => DiscoResource::class,
+            self::Licencia      => LicenciaResource::class,
+            self::Computadora   => ComputadoraResource::class,
+            self::Camara        => CamaraResource::class,
+            self::Ram           => RamResource::class,
             default             => null
         };
     }

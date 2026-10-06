@@ -20,15 +20,14 @@ class DictamenAdquisicionResource extends JsonResource
             $this->mergeWhen($dictamen->esEstadoDictaminar(), [
                 'borrador_producto_variante' => json_decode($this->borrador_producto_variante),
             ]),
-            $this->when(
+            $this->mergeWhen(
                 ! $dictamen->esEstadoDictaminar(),
                 function () {
-                    $this->productoVariante->loadMissing('producto.tipo.categoria', 'producto.marca');
+                    $this->loadMissing('productoVariante');
 
-                    return $this->merge([
-                        'especificaciones_tecnicas' => $this->especificaciones_tecnicas,
-                        'producto' => new ProductoResource($this->producto),
-                    ]);
+                    return [
+                        'producto_variante' => new ProductoVarianteResource($this->productoVariante),
+                    ];
                 }
             ),
             $this->when(

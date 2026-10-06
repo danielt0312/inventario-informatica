@@ -12,8 +12,21 @@ class ProductoVarianteResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'producto' => new ProductoResource($this->producto),
-            'descripcion' => $this->descripcion
-        ];;
+            'descripcion' => $this->descripcion,
+            $this->merge(
+                function () use ($request) {
+                    $this->loadMissing('producto.tipo.categoria', 'producto.marca');
+
+                    return ProductoResource::make($this->producto)
+                        ->toArray($request);
+                }
+            ),
+            'spec' => $this->when(
+                $this->variante_type !== null,
+                fn () => ProductoTipoEnum::tryFromVarianteModel($this->variante)
+                    ->varianteResourceClass()::make($this->variante)
+                    ->toArray($request)
+            )
+        ];
     }
 }
