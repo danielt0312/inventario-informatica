@@ -1,13 +1,14 @@
+import type { DetailedPendienteAcuseDictamen } from "@/types/dictamenes";
 import { useAppForm } from '@/components/ui/form.shared';
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { FormLayout as PrimitiveForm } from "@/components/ui/form-layout";
-import type { DetailedPendienteAcuseDictamen } from "@/types/dictamenes";
+import { FormLayout } from "@/components/ui/form-layout";
 import { DictamenArchivoField, DictamenOficioArchivoField } from "../fields";
 import { evidenciarAcuseFormDefaultValues, evidenciarAcuseFormValidator } from "./form-schema";
 import { useDictamenFormActionMutation } from '../form-action/view';
+import { EmptyValue } from "@/components/ui/empty-value";
 
-export function useForm(dictamen: DetailedPendienteAcuseDictamen) {
+function useForm(dictamen: DetailedPendienteAcuseDictamen) {
     const { mutate } = useDictamenFormActionMutation(dictamen);
 
     // TODO validar cuando el oficio no existe debido a la adscripcion
@@ -25,11 +26,11 @@ export function useForm(dictamen: DetailedPendienteAcuseDictamen) {
     });
 }
 
-export function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen }) {
+function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen }) {
     const form = useForm(dictamen);
 
     return (
-        <PrimitiveForm form={form}>
+        <FormLayout form={form}>
             <form.AppForm>
                 <form.AppField
                     name="dictamen_archivo_uuid"
@@ -45,37 +46,37 @@ export function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen })
 
                 <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
 
-                {dictamen.version_actual.adquisiciones.map((adquisicion, index) => {
-                    const producto = adquisicion.producto_variante;
-
-                    return (
-                        <Card key={index} className="shadow-none">
-                            <CardContent className="flex flex-col gap-6">
-                                <div className="flex gap-7">
-                                    <div data-slot="label-container" className="w-1/12">
-                                        <Label className="font-bold">Cantidad</Label>
-                                        <Label>{adquisicion.cantidad}</Label>
-                                    </div>
-                                    <div data-slot="label-container" className="w-6/12">
-                                        <Label className="font-bold">Producto</Label>
-                                        <Label>{`${producto.tipo.nombre} ${producto.marca.nombre} ${producto.modelo} ${adquisicion.especificaciones_tecnicas}`}</Label>
-                                    </div>
-                                    <div data-slot="label-container" className="w-3/12">
-                                        <Label className="font-bold">Resguardante</Label>
-                                        <Label>{adquisicion.empleado?.nombre ?? 'Juan Perez'}</Label>
-                                    </div>
-                                    <div data-slot="label-container" className="min-w-2/12">
-                                        <Label className="font-bold">Numero Inventario</Label>
-                                        <Label>{adquisicion.articulo?.numero_inventario ?? 'N/A'}</Label>
-                                    </div>
+                {dictamen.version_actual.adquisiciones.map((adquisicion, index) => (
+                    <Card key={index} className="shadow-none">
+                        <CardContent className="flex flex-col gap-6">
+                            <div className="flex gap-7">
+                                <div data-slot="label-container" className="w-1/12">
+                                    <Label className="font-bold">Cantidad</Label>
+                                    <Label>{adquisicion.cantidad}</Label>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    );
-                })}
+                                <div data-slot="label-container" className="w-6/12">
+                                    <Label className="font-bold">Producto</Label>
+                                    <Label>{`${adquisicion.producto_variante.tipo?.nombre} ${adquisicion.producto_variante.descripcion} ${adquisicion.caracteristicas_adicionales ?? ''}`}</Label>
+                                </div>
+                                <div data-slot="label-container" className="w-3/12">
+                                    <Label className="font-bold">Resguardante</Label>
+                                    <Label>{adquisicion.empleado?.nombre ?? 'Juan Perez'}</Label>
+                                </div>
+                                <div data-slot="label-container" className="min-w-2/12">
+                                    <Label className="font-bold">Numero Inventario</Label>
+                                    <Label>{adquisicion.articulo?.numero_inventario ?? <EmptyValue />}</Label>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                ))}
 
                 <form.SubmitFormButton />
             </form.AppForm>
-        </PrimitiveForm>
+        </FormLayout>
     );
+}
+
+export {
+    Form as EvidenciarAcuseDictamenForm
 }

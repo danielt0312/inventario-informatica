@@ -125,7 +125,7 @@ class DictamenService
             ($this->reemplazarArchivoAction)($dictamen->versionActual->archivo, $dictamenArchivo);
 
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::PendienteAcuse->value
+                'estado_id' => DictamenEstadoEnum::Surtir->value
             ]);
         });
     }

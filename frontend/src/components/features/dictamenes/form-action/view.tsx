@@ -1,5 +1,5 @@
 import type { DetailedFormActionDictamen } from "./types";
-import { Form as EvidenciarForm } from "../evidenciar-acuse/form";
+import { EvidenciarAcuseDictamenForm as EvidenciarForm } from "../evidenciar-acuse/form";
 import { DictaminarDictamenForm } from "../dictaminar/form";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useNavigate } from "@tanstack/react-router";

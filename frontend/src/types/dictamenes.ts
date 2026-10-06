@@ -4,6 +4,7 @@ import type { Archivo, Oficio } from "./documentos";
 import type { Articulo } from "./articulos";
 import type { OrdenCompra } from "./orden_compras";
 import type { DictamenBorradorProductoVarianteFields } from "@/components/features/dictamenes/crear/form-schema";
+import type { ProductoVariante } from "./productos";
 
 type IncludableArticulo = Includable<Articulo>;
 type IncludableOrdenCompra = Includable<OrdenCompra>;
@@ -63,7 +64,7 @@ type DictaminarVersion = BaseVersion;
 type DetailedDictaminar = DetailedBase<Dictaminar, VersionActualWithAdquisiciones<VersionWithAdquisiciones<DictaminarVersion, Adquisiciones<DictaminarAdquisicion>>>>;
 
 type BaseDictaminadoAdquisicion = BaseAdquisicion & {
-    producto_variante: null;
+    producto_variante: ProductoVariante;
 }
 type BaseDictaminadoVersion = BaseVersion & {
     archivo: Archivo;

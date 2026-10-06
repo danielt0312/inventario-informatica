@@ -7,49 +7,30 @@ type BaseTipo = TCatalogo<ProductoTipoEnum> & {
     es_tangible: boolean;
 };
 
-type CategoriaAttr<TCategoria extends BaseCategoria = BaseCategoria> = {
+type AttrCategoria<TCategoria extends BaseCategoria = BaseCategoria> = {
     categoria: TCategoria;
 }
-type TipoAttr<TTipo extends BaseTipo = BaseTipo> = {
-    tipo: TTipo;
-}
-type MarcaAttr<TMarca extends BaseMarca = BaseMarca> = {
-    marca: TMarca;
-}
-type TipoWithCategoria = BaseTipo & CategoriaAttr<BaseCategoria>;
-type TipoWithCategoriaAttr = TipoAttr<TipoWithCategoria>;
+type TipoWithCategoria = BaseTipo & AttrCategoria<BaseCategoria>;
 
-
-type Base = {
+type Base<TTipo extends BaseTipo = TipoWithCategoria> = {
+    tipo?: TTipo;
+    marca: BaseMarca;
     modelo: string;
 }
 
-type Generica<TTipoAttr extends TipoAttr = TipoWithCategoriaAttr, TMarcaAttr extends MarcaAttr = MarcaAttr> = Base & TTipoAttr & TMarcaAttr;
-type Spec<TMarcaAttr extends MarcaAttr = MarcaAttr> = Base & TMarcaAttr;
-
-type Producto = Generica | Spec;
-
-type ProductoAttr<TProducto extends Producto = Producto> = {
-    producto: TProducto;
-}
-
-type BaseVariante<TProducto extends Producto = Producto> = ProductoAttr<TProducto> & {
+type BaseVariante<TProducto extends Base = Base> = TProducto & {
     id: number;
     descripcion: string;
 }
 
-type VarianteGenerica = BaseVariante<Generica>;
-type VarianteSpec = BaseVariante<Spec>;
+type Variante = BaseVariante;
 
 type Tipo = BaseTipo;
 type Marca = BaseMarca;
 type Categoria = BaseCategoria;
 
 export type {
-    Generica as ProductoGenerico,
-    Spec as ProductoSpec,
-    VarianteGenerica as ProductoVarianteGenerica,
-    VarianteSpec as ProductoVarianteSpec,
+    Variante as ProductoVariante,
     Tipo as ProductoTipo,
     Marca as ProductoMarca,
     TipoWithCategoria as ProductoTipoWithCategoria,

@@ -43,7 +43,11 @@ class DictamenController extends Controller
     public function index(Request $request)
     {
         return QueryBuilder::for(Dictamen::class)
-            ->with(['oficio', 'estado', 'versionActual.archivo'])
+            ->with([
+                'oficio',
+                'estado',
+                'versionActual.archivo'
+            ])
             ->allowedFilters(
                 AllowedFilter::partial('folio', 'oficio.folio'),
                 AllowedFilter::belongsTo('estado')
@@ -81,29 +85,31 @@ class DictamenController extends Controller
 
     public function corregir(CorregirDictamenRequest $request, Dictamen $dictamen)
     {
-        $this->dictamenService->corregir($dictamen, CorregirDictamenData::fromRequest($request));
+        $this->dictamenService->corregir(
+            $dictamen,
+            CorregirDictamenData::fromRequest($request)
+        );
 
         return $dictamen->toResourceResponse(201);
     }
 
     public function dictaminar(DictaminarDictamenRequest $request, Dictamen $dictamen)
     {
-        $this->dictamenService->dictaminar($dictamen, DictaminarDictamenData::from($request->validated()));
+        $this->dictamenService->dictaminar(
+            $dictamen,
+            DictaminarDictamenData::from($request->validated())
+        );
 
-        return $dictamen->toResource();
+        return $dictamen->toResourceResponse(201);
     }
 
     public function evidenciarAcuse(EvidenciarAcuseDictamenRequest $request, Dictamen $dictamen)
     {
-        DB::transaction(function () use ($request, $dictamen) {
-            $dictamenArchivo = $request->getDictamenArchivo();
-            $oficioArchivo = $request->getOficioArchivo();
-
-            $dictamenArchivo->temporal?->delete();
-            $oficioArchivo?->temporal?->delete();
-
-            $this->dictamenService->evidenciarAcuse($dictamen, $dictamenArchivo, $oficioArchivo);
-        });
+        $this->dictamenService->evidenciarAcuse(
+            $dictamen,
+            $request->getDictamenArchivo(),
+            $request->getOficioArchivo()
+        );
 
         return $dictamen->toResourceResponse(201);
     }
