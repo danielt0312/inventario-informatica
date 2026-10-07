@@ -5,10 +5,16 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-use App\Models\Articulo;
+use App\Models\{
+    Articulo,
+    ProductoVariante,
+    Computadora
+};
 use App\Enums\{
     ArticuloEstadoEnum,
-    ClasificadorEnum
+    ClasificadorEnum,
+    ComputadoraTipoEnum,
+    ProductoTipoEnum
 };
 use App\Services\NumeroInventarioService;
 
@@ -18,25 +24,24 @@ class ArticuloSeeder extends Seeder
 
     public function run(): void
     {
-        // Articulo::create([
-        //     'producto_variante_id' => 1,
-        //     'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-        //     'es_inventariable' => true,
-        //     'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::ComputoTecnologiaInformacion, 1),
-        // ]);
+        Computadora::upsert([
+            'tipo_id' => ComputadoraTipoEnum::Escritorio->value
+        ], ['id' => 1]);
 
-        // Articulo::create([
-        //     'producto_variante_id' => 3,
-        //     'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-        //     'es_inventariable' => true,
-        //     'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::ComputoTecnologiaInformacion, 2),
-        // ]);
+        ProductoVariante::upsert([
+            'producto_id' => 1,
+            'variante_type' => ProductoTipoEnum::Computadora->varianteMorphAlias(),
+            'variante_id' => 1,
+        ], [
+            'variante_type' => ProductoTipoEnum::Computadora->varianteMorphAlias(),
+            'variante_id' => 1,
+        ]);
 
-        // Articulo::create([
-        //     'producto_variante_id' => 7,
-        //     'estado_id' => ArticuloEstadoEnum::ACTIVO->value,
-        //     'es_inventariable' => true,
-        //     'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::ComputoTecnologiaInformacion, 3),
-        // ]);
+        Articulo::create([
+            'producto_variante_id' => 1,
+            'estado_id' => ArticuloEstadoEnum::Activo->value,
+            'es_inventariable' => true,
+            'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::ComputoTecnologiaInformacion, 1),
+        ]);
     }
 }
