@@ -155,7 +155,7 @@ export const ArticuloCuentaContable = ({
 
                     <ScannerButton
                         onScannedCode={(code) => {
-                            const value = code.trim();
+                            const value = code.trim().replaceAll("'",'-');
                             field.handleChange(value.trim() === ''
                                 ? undefined
                                 : value)
