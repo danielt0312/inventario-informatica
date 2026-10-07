@@ -106,7 +106,7 @@ class InventariarDictamenRequest extends FormRequest
             ],
             'articulos.*.costo_unitario' => [
                 'nullable',
-                'required_if:articulos.*.es_contable,true',
+                // 'required_if:articulos.*.es_resultado_esperado,true',
                 'numeric',
             ],
             'articulos.*.factura_id' => [

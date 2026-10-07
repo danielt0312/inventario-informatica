@@ -19,7 +19,7 @@ class InventariarDictamenArticuloData extends Data
         public ProductoVarianteData $productoVariante,
         public int $facturaId,
         public string $cuentaContable,
-        public string $esResultadoEsperado,
+        public bool $esResultadoEsperado,
         public ?string $observaciones = null,
         public ?string $numeroSerie = null,
         public ?float $costoUnitario = null,
