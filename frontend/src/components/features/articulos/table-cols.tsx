@@ -4,25 +4,21 @@ import type { RowDataAccessorFn } from "@/types/generics";
 import { Badge } from "@/components/ui/badge";
 import { ArticuloEstadoEnum, ProductoTipoEnum } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { RouterButton } from "@/components/ui/router-button";
 import { Route } from "@/routes/_auth/articulos/$uuid/actualizar";
 import { CircleFadingArrowUpIcon } from "lucide-react";
 
 const estadoColorVariants = cva(
-    "text-black",
+    undefined,
     {
         variants: {
             variant: {
-                default: undefined,
-                [ArticuloEstadoEnum.Activo]: "bg-lime-400",
-                [ArticuloEstadoEnum.Baja]: "bg-red-400",
-                [ArticuloEstadoEnum.BajaPreventiva]: "bg-red-400/80",
+                [ArticuloEstadoEnum.Activo]: "text-black bg-lime-400",
+                [ArticuloEstadoEnum.Baja]: "text-black bg-red-400",
+                [ArticuloEstadoEnum.BajaPreventiva]: "text-black bg-red-400/80",
             }
         },
-        defaultVariants: {
-            variant: "default"
-        }
     }
 );
 
@@ -68,20 +64,45 @@ const NumeroSerieRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<
 const DescripcionRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
     id: 'articulo.descripcion',
     header: 'Descripción',
-    accessorFn: (row) => getRowData(row).producto.tipo.nombre
+    accessorFn: (row) => getRowData(row).producto_variante.tipo.nombre
 });
 
 const MarcaRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
     id: 'articulo.marca',
     header: 'Marca',
-    accessorFn: (row) => getRowData(row).producto.marca.nombre
+    accessorFn: (row) => getRowData(row).producto_variante.marca.nombre
 });
 
 const ModeloRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
     id: 'articulo.modelo',
     header: 'Modelo',
-    accessorFn: (row) => getRowData(row).producto.modelo
+    accessorFn: (row) => getRowData(row).producto_variante.modelo
 });
+
+const inventariabilidadBadgeVariants = cva(
+    undefined,
+    {
+        variants: {
+            variant: {
+                inventariable: "text-foreground bg-lime-300/70",
+                "no-inventariable": "text-foreground bg-yellow-400/50"
+            }
+        },
+    }
+);
+
+const InventariabilidadBadge = ({
+    variant,
+    className,
+    ...props
+}: VariantProps<typeof inventariabilidadBadgeVariants> & Omit<React.ComponentProps<typeof Badge>, 'variant'>) => (
+    <Badge
+        className={cn(inventariabilidadBadgeVariants({ variant }), className)}
+        {...props}
+    >
+        {variant === 'inventariable' ? 'Inventariable' : 'No Inventariable'}
+    </Badge>
+);
 
 const EstadoRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
     id: 'articulo.estado',
@@ -91,14 +112,10 @@ const EstadoRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowD
         return (
             <div className="flex flex-col gap-1">
                 <EstadoBadge estado={articulo.estado} />
-                {articulo.es_inventariable !== null && (
-                    <Badge variant="outline">
-                        {articulo.es_inventariable ? 'Es inventariable' : 'No es inventariable'}
-                    </Badge>
-                )}
+                {articulo.es_inventariable !== null && <InventariabilidadBadge variant={articulo.es_inventariable ? 'inventariable' : 'no-inventariable'} />}
                 {articulo.observaciones && (
                     <Badge className="bg-red-400/80 text-black">
-                        Tiene observaciones
+                        Tiene Observaciones
                     </Badge>
                 )}
             </div>
@@ -121,7 +138,7 @@ const defaultColumns: ColumnDef<Articulo>[] = [
         id: "actions",
         cell: ({ row }) => {
             const articulo = row.original;
-            const productoTipo = articulo.producto.tipo;
+            const productoTipo = articulo.producto_variante.tipo;
 
             return (
                 <div className="flex gap-1">
@@ -146,4 +163,11 @@ const defaultColumns: ColumnDef<Articulo>[] = [
     }
 ];
 
-export { defaultColumns as articuloTableColumns, estadoColorVariants as articuloEstadoColorVariants, EstadoBadge as ArticuloEstadoBadge, defaultColumnsBuilder as articuloDefaultColumnsBuilder, type AccessorFn as ArticuloRowDataAccessorFn }
+export {
+    defaultColumns as articuloTableColumns,
+    estadoColorVariants as articuloEstadoColorVariants,
+    EstadoBadge as ArticuloEstadoBadge,
+    defaultColumnsBuilder as articuloDefaultColumnsBuilder,
+    InventariabilidadBadge as ArticuloInventariabilidadBadge,
+    type AccessorFn as ArticuloRowDataAccessorFn
+}

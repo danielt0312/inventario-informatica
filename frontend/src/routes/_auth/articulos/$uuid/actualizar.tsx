@@ -30,7 +30,7 @@ function RouteComponent() {
             <Card>
                 <CardContent>
                     <CardTitle>
-                        Actualización de componentes internos de {articulo.producto.tipo.nombre}
+                        Actualización de componentes internos de {articulo.producto_variante.tipo.nombre}
                     </CardTitle>
                 </CardContent>
 

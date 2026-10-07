@@ -24,6 +24,7 @@ class ArticuloResource extends JsonResource
             'observaciones' => $this->observaciones,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'producto_variante' => new ProductoVarianteResource($this->whenLoaded('productoVariante'))
         ];
     }
 }

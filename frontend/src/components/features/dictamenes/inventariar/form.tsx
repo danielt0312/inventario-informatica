@@ -10,12 +10,11 @@ import { ArticuloCostoUnitarioField, ArticuloCuentaContable, ArticuloNumeroSerie
 import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
 import { inventariarDictamenHasOrdenCompra } from "@/components/features/dictamenes/helpers";
 import { Button } from "@/components/ui/button";
-import { BadgeCheckIcon, CircleArrowRightIcon, CircleXIcon, PackageCheckIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
+import { CircleArrowRightIcon, CircleXIcon, PackageCheckIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachment-layout";
 import { esCuentaContableNoInventariable, esCuentaContable, esCuentaContableInventariable, strCompactJoin } from "@/lib/utils";
 import { DictamenAdquisicionField } from "./fields";
 import { toComboboxItems } from "@/components/ui/combobox-layout.shared";
-import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Spinner } from "@/components/ui/spinner";
 import { useDictamenFormActionMutation } from "../form-action/view";
@@ -37,7 +36,7 @@ import { RamCapacidadField } from "../../articulos/rams/capacidad-field";
 import { RamVelocidadField } from "../../articulos/rams/velocidad-field";
 import { DictamenCaracteristicasAdicionalesField } from "../fields";
 import { corregirDictamenProductoVarianteToFieldsValue } from "../corregir/form-schema";
-import { useStore } from "@tanstack/react-form";
+import { ArticuloInventariabilidadBadge } from "../../articulos/table-cols";
 
 function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]) {
     const initialOptions = React.useMemo(() =>
@@ -172,17 +171,10 @@ function Form({ dictamen }: { dictamen: DetailedInventariarDictamen }) {
                                                 </div>
                                                 <form.Subscribe selector={state => state.values.articulos[index].cuenta_contable}>
                                                     {(cuentaContable) => !!cuentaContable && esCuentaContable(cuentaContable) && (
-                                                        <Badge
-                                                            className={`[&>svg]:size-4.5 font-bold text-foreground ${esCuentaContableInventariable(cuentaContable)
-                                                                ? 'bg-lime-400/90'
-                                                                : 'bg-yellow-400/50'}`
-                                                            }
-                                                        >
-                                                            <BadgeCheckIcon />
-                                                            {esCuentaContableNoInventariable(cuentaContable)
-                                                                ? 'No Inventariable'
-                                                                : 'Inventariable'}
-                                                        </Badge>
+                                                        <ArticuloInventariabilidadBadge
+                                                            className="[&>svg]:size-4.5 font-bold"
+                                                            variant={esCuentaContableInventariable(cuentaContable) ? 'inventariable' : 'no-inventariable'}
+                                                        />
                                                     )}
                                                 </form.Subscribe>
                                             </CardTitle>

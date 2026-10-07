@@ -1,16 +1,16 @@
 import type { ArticuloEstadoEnum } from "@/lib/constants"
 import type { Includable, TCatalogo, WithTimestamps } from "./generics"
 import type { SurtidoDictamen, SurtidoParcialDictamen } from "./dictamenes";
-import type { DetailedProducto } from "./productos";
+import type { ProductoVariante } from "./productos";
 
 type IncludableDictamen = Includable<SurtidoDictamen | SurtidoParcialDictamen> | undefined;
 
 type BaseEstado<TEstado extends ArticuloEstadoEnum = ArticuloEstadoEnum> = TCatalogo<TEstado>;
-type CoreAttributes<TEstado extends BaseEstado = BaseEstado, TProducto extends DetailedProducto = DetailedProducto> = WithTimestamps<{
+type CoreAttributes<TEstado extends BaseEstado = BaseEstado, TProductoVariante extends ProductoVariante = ProductoVariante> = WithTimestamps<{
     uuid: string;
     estado: TEstado;
     numero_inventario: string;
-    producto: TProducto;
+    producto_variante: TProductoVariante;
 }>;
 
 type StrictAttributes = {
@@ -39,12 +39,12 @@ type AttributesDefiner<TDictamen extends IncludableDictamen> =
 
 type Base<
   TDictamen extends IncludableDictamen,
-  TProducto extends DetailedProducto = DetailedProducto,
+  TProductoVariante extends ProductoVariante = ProductoVariante,
   TEstado extends BaseEstado = BaseEstado
-> = CoreAttributes<TEstado, TProducto> & AttributesDefiner<TDictamen>;
+> = CoreAttributes<TEstado, TProductoVariante> & AttributesDefiner<TDictamen>;
 
 type ArticuloEstado = BaseEstado;
-type Articulo = Base<IncludableDictamen, DetailedProducto, ArticuloEstado>;
+type Articulo = Base<IncludableDictamen, ProductoVariante, ArticuloEstado>;
 
 export type {
     Articulo,

@@ -15,16 +15,16 @@ class ArticuloController extends Controller
         return QueryBuilder::for(Articulo::class)
             ->with([
                 'estado',
-                'producto' => [
+                'productoVariante.producto' => [
                     'tipo.categoria',
                     'marca'
                 ]
             ])
             ->allowedFilters(
-                AllowedFilter::belongsTo('categoria', 'producto.tipo.categoria'),
-                AllowedFilter::belongsTo('tipo', 'producto.tipo'),
-                AllowedFilter::belongsTo('marca', 'producto.marca'),
-                AllowedFilter::belongsTo('producto'),
+                AllowedFilter::belongsTo('categoria', 'productoVariante.producto.tipo.categoria'),
+                AllowedFilter::belongsTo('tipo', 'productoVariante.producto.tipo'),
+                AllowedFilter::belongsTo('marca', 'productoVariante.producto.marca'),
+                AllowedFilter::belongsTo('producto', 'productoVariante.producto'),
                 AllowedFilter::belongsTo('estado'),
             )
             ->paginate($request->query('per_page', 10))
@@ -36,7 +36,7 @@ class ArticuloController extends Controller
         return QueryBuilder::for(Articulo::class)
             ->with([
                 'estado',
-                'producto' => [
+                'productoVariante.producto' => [
                     'tipo.categoria',
                     'marca'
                 ]
