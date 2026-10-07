@@ -31,9 +31,9 @@ import { DiscoTipoField } from "../../discos/tipo-field";
 import { DiscoCapacidadField } from "../../discos/capacidad-field";
 import { DiscoFactorFormaField } from "../../discos/factor-forma-field";
 import { DiscoInterfazField } from "../../discos/interfaz-field";
-import { RamTipoField } from "../../articulos/rams/tipo-field";
-import { RamCapacidadField } from "../../articulos/rams/capacidad-field";
-import { RamVelocidadField } from "../../articulos/rams/velocidad-field";
+import { RamTipoField } from "../../rams/tipo-field";
+import { RamCapacidadField } from "../../rams/capacidad-field";
+import { RamVelocidadField } from "../../rams/velocidad-field";
 import React from "react";
 
 function useCorregirFormMutation(dictamen: SurtirDictamen) {

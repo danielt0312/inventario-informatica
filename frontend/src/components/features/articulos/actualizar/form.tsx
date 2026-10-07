@@ -15,10 +15,10 @@ import { DiscoTipoField } from "../../discos/tipo-field";
 import { DiscoCapacidadField } from "../../discos/capacidad-field";
 import { DiscoInterfazField } from "../../discos/interfaz-field";
 import { Separator } from "@/components/ui/separator";
-import { RamTipoField } from "../rams/tipo-field";
-import { RamCapacidadField } from "../rams/capacidad-field";
+import { RamTipoField } from "../../rams/tipo-field";
+import { RamCapacidadField } from "../../rams/capacidad-field";
 import React from "react";
-import { RamVelocidadField } from "../rams/velocidad-field";
+import { RamVelocidadField } from "../../rams/velocidad-field";
 
 function ActualizarForm({
     articulo
