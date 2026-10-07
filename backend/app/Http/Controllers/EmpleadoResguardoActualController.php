@@ -2,30 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\QueryBuilder\QueryBuilder;
+use App\Enums\ResguardoEstadoEnum;
+use App\Services\ResguardoService;
+use App\Http\Requests\Resguardo\ActualizarResguardoRequest;
+
 use App\Models\{
     Resguardo,
     Articulo
 };
-use App\Enums\{
-    ResguardoEstadoEnum,
-    DocumentoTipoEnum
-};
-use App\Services\{
-    ArchivoService,
-    PdfWatermarkService,
-    ResguardoService
-};
-use App\Http\Requests\Resguardo\ActualizarResguardoRequest;
-use Barryvdh\DomPDF\Facade\Pdf as DomPdf;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\QueryBuilder;
 
 // TODO devolver '404' en caso de que el empleado no exista
 class EmpleadoResguardoActualController extends Controller
 {
     public function __construct(
-        protected ResguardoService $service
+        protected ResguardoService $resguardoService
     ) {}
 
     public function index(int $empleadoId)
@@ -33,13 +24,13 @@ class EmpleadoResguardoActualController extends Controller
         $data = QueryBuilder::for(Resguardo::class)
             ->with('estado')
             ->allowedIncludes(
-                'articulosResguardados.articulo.producto.marca',
-                'articulosResguardados.articulo.producto.tipo.categoria',
+                'articulosResguardados.articulo.productoVariante.producto.marca',
+                'articulosResguardados.articulo.productoVariante.producto.tipo.categoria',
                 'articulosResguardados.articulo.estado'
             )
             ->firstWhere([
                 ['empleado_id', $empleadoId],
-                ['estado_id', '!=', ResguardoEstadoEnum::CANCELADO->value]
+                ['estado_id', '!=', ResguardoEstadoEnum::Cancelado->value]
             ]);
 
         return $data === null
@@ -55,7 +46,7 @@ class EmpleadoResguardoActualController extends Controller
             ->pluck('id')
             ->toArray();
 
-        $resguardo = DB::transaction(fn () => $this->service->actualizar($empleadoId, $articulosPorResguardar));
+        $resguardo = $this->resguardoService->actualizar($empleadoId, $articulosPorResguardar);
 
         return $resguardo->load([
                 'estado',

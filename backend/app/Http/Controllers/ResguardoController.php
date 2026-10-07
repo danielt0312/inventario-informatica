@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Resguardo;
 use App\Services\ResguardoService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\{
     QueryBuilder,
     AllowedFilter
@@ -15,7 +14,7 @@ use App\Http\Requests\Resguardo\EvidenciarAcuseResguardoRequest;
 class ResguardoController extends Controller
 {
     public function __construct(
-        protected ResguardoService $service
+        protected ResguardoService $resguardoService
     ) {}
 
     public function index(Request $request)
@@ -41,7 +40,7 @@ class ResguardoController extends Controller
                 'archivo',
                 'estado',
                 'articulosResguardados.articulo' => [
-                    'producto' => ['marca', 'tipo.categoria'],
+                    'productoVariante.producto' => ['marca', 'tipo.categoria'],
                     'estado'
                 ]
             ])
@@ -52,15 +51,15 @@ class ResguardoController extends Controller
 
     public function cancelar(Resguardo $resguardo)
     {
-        $this->service->cancelar($resguardo);
+        $this->resguardoService->cancelar($resguardo);
 
-        return response(status: 204);
+        return response(status: 201);
     }
 
     public function evidenciarAcuse(EvidenciarAcuseResguardoRequest $request, Resguardo $resguardo)
     {
-        $this->service->evidenciarAcuse($resguardo, $request->getArchivo());
+        $this->resguardoService->evidenciarAcuse($resguardo, $request->getArchivo());
 
-        return response(status: 204);
+        return response(status: 201);
     }
 }

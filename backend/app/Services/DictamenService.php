@@ -245,9 +245,10 @@ class DictamenService
 
     protected function generateAndAssociatePdf(Dictamen $dictamen): void
     {
-        $archivo = $this->generatePdf($dictamen);
-
-        $this->documentoService->enlazarArchivo($dictamen->versionActual, $archivo);
+        $this->documentoService->enlazarArchivo(
+            $dictamen->versionActual,
+            $this->generatePdf($dictamen)
+        );
     }
 
     protected function generatePdf(Dictamen $dictamen): Archivo

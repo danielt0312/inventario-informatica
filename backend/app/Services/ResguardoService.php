@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 class ResguardoService
 {
     public function __construct(
+        protected DocumentoService $documentoService,
         protected ArchivoService $archivoService,
         protected PdfViewService $pdfService,
         protected CancelarArchivoAction $cancelarArchivoAction,
@@ -37,7 +38,7 @@ class ResguardoService
 
     protected function esCancelable(Resguardo $resguardo): bool
     {
-        return $resguardo->estado_id !== ResguardoEstadoEnum::CANCELADO->value;
+        return $resguardo->estado_id !== ResguardoEstadoEnum::Cancelado->value;
     }
 
     public function cancelar(Resguardo $resguardo): void
@@ -52,7 +53,7 @@ class ResguardoService
 
         DB::transaction(function () use ($resguardo, $fechaCancelacion) {
             $resguardo->update([
-                'estado_id' => ResguardoEstadoEnum::CANCELADO->value,
+                'estado_id' => ResguardoEstadoEnum::Cancelado->value,
                 'fecha_cancelacion' => $fechaCancelacion,
             ]);
 
@@ -77,31 +78,14 @@ class ResguardoService
         $resguardo = DB::transaction(function () use ($empleadoId, $fechaActual, $articulosPorResguardar): Resguardo {
             $resguardo = Resguardo::create([
                 'empleado_id' => $empleadoId,
-                'estado_id' => ResguardoEstadoEnum::PENDIENTE_ACUSE->value,
+                'estado_id' => ResguardoEstadoEnum::PendienteAcuse->value,
                 'fecha_actualizacion' => $fechaActual
             ]);
 
             // todo validar que los articulos realmente no se encuentren bajo resguardo
             $resguardo->articulosResguardados()->createMany($articulosPorResguardar);
 
-            $resguardo->load([
-                'articulosResguardados.articulo.producto' => [
-                    'marca', 'tipo.categoria'
-                ]
-            ]);
-
-            $title = FileNameGenerator::forUuid(DocumentoTipoEnum::RESGUARDO->getLabelValue(), $resguardo->uuid);
-            $pdf = $this->pdfService->loadView('resguardo', compact('resguardo', 'title'));
-
-            $archivo = $this->archivoService->createAndStoreFileFromRaw($pdf->output(), $title, 'pdf');
-
-            $archivo->documento()
-                ->make([
-                    'tipo_id' => DocumentoTipoEnum::RESGUARDO->value,
-                ])
-                ->documentable()
-                ->associate($resguardo)
-                ->save();
+            $this->generateAndAssociatePdf($resguardo);
 
             return $resguardo;
         });
@@ -111,10 +95,10 @@ class ResguardoService
 
     public function actualizar(int $empleadoId, array $articulosIds): Resguardo
     {
-        $resguardo = DB::transaction(function () use ($empleadoId, $articulosIds): Resguardo {
+        return DB::transaction(function () use ($empleadoId, $articulosIds): Resguardo {
             $resguardoActual = Resguardo::firstWhere([
                 ['empleado_id', $empleadoId],
-                ['estado_id', '!=', ResguardoEstadoEnum::CANCELADO->value]
+                ['estado_id', '!=', ResguardoEstadoEnum::Cancelado->value]
             ]);
 
             if ($resguardoActual !== null) {
@@ -123,8 +107,43 @@ class ResguardoService
 
             return $this->crear($empleadoId, $articulosIds);
         });
+    }
 
-        return $resguardo;
+    protected function generateAndAssociatePdf(Resguardo $resguardo): void
+    {
+        $this->documentoService->enlazarArchivo(
+            $resguardo,
+            $this->generatePdf($resguardo)
+        );
+    }
+
+    protected function generatePdf(Resguardo $resguardo): Archivo
+    {
+        $resguardo->loadMissing([
+            'articulosResguardados.articulo.productoVariante.producto' => [
+                'marca', 'tipo.categoria'
+            ]
+        ]);
+
+        return $this->archivoService->createAndStoreFileFromRaw(
+            $this->loadPdfView($resguardo)->output(),
+            $this->generatePdfArchivoNombre($resguardo),
+            'pdf'
+        );
+    }
+
+    protected function generatePdfArchivoNombre(Resguardo $resguardo): string
+    {
+        return FileNameGenerator::forUuid(
+            DocumentoTipoEnum::Resguardo->getLabelValue(),
+            $resguardo->uuid
+        );
+    }
+
+    protected function loadPdfView(Resguardo $resguardo, ?string $fileTitle = null)
+    {
+        $fileTitle ??= $this->generatePdfArchivoNombre($resguardo);
+        return $this->pdfService->loadView('resguardo', compact('resguardo', 'fileTitle'));
     }
 
     protected function evidenciaFallida(): void
@@ -137,7 +156,7 @@ class ResguardoService
 
     protected function esEvidenciable(Resguardo $resguardo): bool
     {
-        return $resguardo->estado_id === ResguardoEstadoEnum::PENDIENTE_ACUSE->value;
+        return $resguardo->estado_id === ResguardoEstadoEnum::PendienteAcuse->value;
     }
 
     public function evidenciarAcuse(Resguardo $resguardo, Archivo $acuseArchivo): void
@@ -150,7 +169,7 @@ class ResguardoService
             ($this->reemplazarArchivoAction)($resguardo->archivo, $acuseArchivo);
 
             $resguardo->update([
-                'estado_id' => ResguardoEstadoEnum::ACTIVO->value
+                'estado_id' => ResguardoEstadoEnum::Activo->value
             ]);
         });
     }

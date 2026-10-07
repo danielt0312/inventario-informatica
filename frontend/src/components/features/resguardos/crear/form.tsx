@@ -4,8 +4,7 @@ import type { DetailedResguardo, ResguardoArticulo } from "@/types/resguardos";
 import { FormLayout } from "@/components/ui/form-layout";
 import { useFieldContext } from "@/components/ui/form-context";
 import { useAppForm } from '@/components/ui/form.shared';
-import { EmpleadoField, type EmpleadoFieldType } from "../../externos/empleados/form-fields";
-import { createResguardoDefaultValues, createResguardoValidator, type CreateResguardoSchemaOutput } from "./form-schema";
+import { createResguardoDefaultValues, createResguardoValidator } from "./form-schema";
 import { DatePicker } from "@/components/ui/date-picker";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
@@ -30,6 +29,8 @@ import { SubmitButton } from "@/components/ui/submit-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/axios";
 import React from "react";
+import { EmpleadoField, type EmpleadoFieldType } from "../../empleados/field";
+import { EmptyValue } from "@/components/ui/empty-value";
 
 type ArticuloResguardado = ResguardoArticulo<Articulo> | {
     id?: undefined;
@@ -43,10 +44,10 @@ const TableSkeleton = () => (
     </>
 );
 
-function CreateForm() {
+function Form() {
     const navigate = useNavigate();
 
-    const { mutate, isPending } = useFormMutation<DetailedResguardo<Articulo>, CreateResguardoSchemaOutput>({
+    const { mutate, isPending } = useFormMutation({
         url: (data) => `api/empleados/${data.empleado_id}/resguardo-actual`,
         onSuccess: async (_, __, ___, { client }) => {
             await client.invalidateQueries({ queryKey: ["resguardos"] });
@@ -139,8 +140,8 @@ function ResguardoDetalle({ empleadoId }: { empleadoId: EmpleadoFieldType }) {
         queryFn: () => api.get<TResponse<DetailedResguardo<Articulo> | null>>(`api/empleados/${empleadoId}/resguardo-actual`, {
             params: {
                 include: [
-                    'articulosResguardados.articulo.producto.marca',
-                    'articulosResguardados.articulo.producto.tipo.categoria',
+                    'articulosResguardados.articulo.productoVariante.producto.marca',
+                    'articulosResguardados.articulo.productoVariante.producto.tipo.categoria',
                     'articulosResguardados.articulo.estado',
                 ]
             }
@@ -176,7 +177,7 @@ function ResguardoTablas({ articulosResguardadosPrevios }: { articulosResguardad
                 cell: ({ row: { original } }) => (
                     original.id !== undefined
                         ? toLocaleDateFormat(original.fecha_asignacion)
-                        : <span className="italic text-muted-foreground">N/A</span>
+                        : <EmptyValue />
                 )
             },
             ...articuloDefaultColumnsBuilder<ArticuloResguardado>(row => row.articulo),
@@ -268,5 +269,5 @@ function ArticulosTable({
 }
 
 export {
-    CreateForm as CreateResguardoForm
+    Form as CreateResguardoForm
 }
