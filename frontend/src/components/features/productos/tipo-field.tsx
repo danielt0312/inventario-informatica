@@ -2,10 +2,13 @@ import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/
 import type { ProductoCategoria, ProductoTipoWithCategoria } from "@/types/productos";
 import { useQuery } from "@tanstack/react-query";
 import { productoTipoQueryOptions } from "./queries";
-import { toComboboxGroups, toComboboxItems, type ComboboxLayoutItemValue, type ComboboxLayoutMultiple, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
+import { toComboboxGroups, toComboboxItems, type ComboboxLayoutMultiple, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
 import { ComboboxFieldGrouped, type ComboboxFieldGroupedProps } from "@/components/ui/combobox-field-grouped";
 
-type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>;
+type ComboboxGroup = InferComboboxGroupFromFn<typeof dataToComboboxItems>;
+type ComboboxItem = InferComboboxGroupItemFromFn<typeof dataToComboboxItems>;
+type FieldValue = ComboboxItem['value'];
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Empty, Multiple, FieldValue>;
 
 const dataToComboboxItems = (data: ProductoTipoWithCategoria[]) => {
     const grupos = new Map<number, { categoria: ProductoCategoria; tipo: ProductoTipoWithCategoria[] }>();
@@ -34,8 +37,8 @@ type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple exten
     ComboboxFieldGroupedProps<
         Empty,
         Multiple,
-        InferComboboxGroupItemFromFn<typeof dataToComboboxItems>,
-        InferComboboxGroupFromFn<typeof dataToComboboxItems>
+        ComboboxItem,
+        ComboboxGroup
     >,
     'items'
 >;

@@ -30,15 +30,24 @@ type BaseVarianteSpec =
     | { tipo: BaseTipo<typeof ProductoTipoSpec.Camara>; spec: Camara }
     | { tipo: BaseTipo<ProductoTipoGenericos>; spec?: never }
 
-type BaseVariante = BaseIdentidad & BaseVarianteSpec & {
+type BaseVarianteGenerica = {
+    tipo: BaseTipo<ProductoTipoGenericos>;
+}
+
+type Base = {
     id: number;
     descripcion: string;
 }
 
+type BaseGenerica = BaseIdentidad & BaseVarianteGenerica & Base;
+
+type BaseVariante = BaseIdentidad & BaseVarianteSpec & Base
+
 type VarianteDe<T extends ProductoTipoEnum> =
-  Extract<BaseVariante, { tipo: { id: T } }>;
+    Extract<BaseVariante, { tipo: { id: T } }>;
 
 type Variante = BaseVariante;
+type VarianteGenerica = BaseGenerica;
 
 type Tipo = BaseTipo;
 type Marca = BaseMarca;
@@ -50,5 +59,6 @@ export type {
     Tipo as ProductoTipo,
     Marca as ProductoMarca,
     TipoWithCategoria as ProductoTipoWithCategoria,
-    Categoria as ProductoCategoria
+    Categoria as ProductoCategoria,
+    VarianteGenerica as ProductoVarianteGenerica
 }

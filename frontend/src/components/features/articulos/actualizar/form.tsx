@@ -1,209 +1,197 @@
 import type { Articulo } from "@/types/articulos";
 import { FormLayout } from "@/components/ui/form-layout";
-import { useAppForm } from '@/components/ui/form.shared';
-import { useFormMutation } from "@/hooks/use-form-mutation";
-import { actualizarArticuloDefaultFormValues, actualizarArticuloDiscoFieldsDefaultValues, actualizarArticuloFormValidator, actualizarArticuloRamFieldsDefaultValues } from "./form-schema";
-import { Button } from "@/components/ui/button";
-import { CircleArrowRightIcon, CircleFadingArrowUpIcon, CirclePlusIcon, CircleXIcon, Trash2Icon } from "lucide-react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { useAppForm } from "@/components/ui/form.shared";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldGroup } from "@/components/ui/field";
-import { ProductoField } from "../../productos/variante-generica-field";
-import { ProductoTipoEnum } from "@/lib/constants";
-import { DiscoTipoField } from "../../discos/tipo-field";
-import { DiscoCapacidadField } from "../../discos/capacidad-field";
-import { DiscoInterfazField } from "../../discos/interfaz-field";
+import { CardContent } from "@/components/ui/card";
+import { ProductoVarianteGenericaField } from "../../productos/variante-generica-field";
+import { ProductoTipoEnum, ProductoTipoGenericos } from "@/lib/constants";
 import { Separator } from "@/components/ui/separator";
+import { FieldGroup } from "@/components/ui/field";
 import { RamTipoField } from "../../rams/tipo-field";
 import { RamCapacidadField } from "../../rams/capacidad-field";
-import React from "react";
 import { RamVelocidadField } from "../../rams/velocidad-field";
+import { Button } from "@/components/ui/button";
+import { CirclePlusIcon, SaveIcon } from "lucide-react";
+import { DiscoTipoField } from "../../discos/tipo-field";
+import { DiscoCapacidadField } from "../../discos/capacidad-field";
+import { DiscoFactorFormaField } from "../../discos/factor-forma-field";
+import { DiscoInterfazField } from "../../discos/interfaz-field";
 
-function ActualizarForm({
+function Form({
     articulo
 }: {
     articulo: Articulo
 }) {
-    const { mutate, isPending } = useFormMutation({
-        url: `api/articulos/${articulo.uuid}/configurar`,
-        onSuccess: (_, __, ___, { client }) =>
-            client.invalidateQueries({ queryKey: ['articulos'] })
-    });
-
     const form = useAppForm({
-        defaultValues: actualizarArticuloDefaultFormValues,
-        validators: {
-            onSubmit: actualizarArticuloFormValidator
-        },
-        onSubmit: ({ value, formApi }) => {
-            const data = actualizarArticuloFormValidator.parse(value);
-            mutate({ data, formApi })
+        defaultValues: {
+            cpu: undefined,
+            procesador: undefined,
+            ram: [],
+            discos: [],
+            aplicaciones: []
+        } as {
+            cpu: undefined | number;
+            procesador: undefined | number;
+            ram: {
+                tipo: undefined | number;
+                capacidad: undefined | number;
+                velocidad: undefined | number;
+            }[]
+            discos: {
+                tipo: undefined | number;
+                capacidad: undefined | number;
+                factor_forma: undefined | number;
+                interfaz: undefined | number;
+            }[]
+            aplicaciones: {
+                id: undefined | number;
+            }[]
         }
-    });
-
-    const [alertOpen, setAlertOpen] = React.useState(false);
+    })
 
     return (
         <FormLayout form={form} className="flex flex-col gap-7">
             <form.AppForm>
-                <Separator />
-                <CardContent className="flex flex-col gap-7">
-                    <Field orientation="horizontal">
-                        <Label className="text-xl font-bold w-1/4">Procesador (CPU)</Label>
+                <CardContent className="flex">
+                    <Label className="min-w-1/7 text-lg font-bold">Sistema Operativo</Label>
+
+                    <FieldGroup>
                         <form.AppField
-                            name="cpu_producto_id"
-                            children={() => <ProductoField tipoId={ProductoTipoEnum.Procesador} layout={{ label: undefined }} className="w-3/4" />}
+                            name="cpu"
+                            children={() => (
+                                <ProductoVarianteGenericaField
+                                    tipoId={10}
+                                    layout={{ label: undefined }}
+                                />
+                            )}
                         />
-                    </Field>
+                    </FieldGroup>
                 </CardContent>
 
                 <Separator />
-                <CardContent className="flex flex-col gap-7">
-                    <form.AppField name="discos" mode="array">
-                        {(field) => (
-                            <>
-                                <div className="flex flex-row justify-between">
-                                    <Label className="text-xl font-bold">Discos de Almacenamiento</Label>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => {
-                                            field.pushValue(actualizarArticuloDiscoFieldsDefaultValues)
-                                        }}
-                                    >
-                                        <CirclePlusIcon /> Agregar
-                                    </Button>
-                                </div>
 
-                                {field.state.value.map((_, index) => (
-                                    <Card key={index} className="shadow-none">
-                                        <CardHeader>
-                                            <CardTitle className="flex justify-between">
-                                                <span className="normal-case">Disco #{index + 1}</span>
-                                                <Button size="sm" variant="destructive" onClick={() => field.removeValue(index)} disabled={field.state.value.length === 1}>
-                                                    <Trash2Icon /> Eliminar
-                                                </Button>
-                                            </CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <FieldGroup className="flex-row">
-                                                <form.AppField
-                                                    name={`discos[${index}].producto_id`}
-                                                    children={() => <ProductoField tipoId={ProductoTipoEnum.Disco} layout={{ label: "Modelo" }} required />}
-                                                />
-                                                <form.AppField
-                                                    name={`discos[${index}].tipo_id`}
-                                                    children={() => <DiscoTipoField required />}
-                                                />
-                                                <form.AppField
-                                                    name={`discos[${index}].capacidad_id`}
-                                                    children={() => <DiscoCapacidadField required />}
-                                                />
-                                                <form.AppField
-                                                    name={`discos[${index}].interfaz_id`}
-                                                    children={() => <DiscoInterfazField />}
-                                                />
-                                            </FieldGroup>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </>
+                <CardContent className="flex">
+                    <Label className="min-w-1/7 text-lg font-bold">Procesador</Label>
+
+                    <form.AppField
+                        name="procesador"
+                        children={() => (
+                            <ProductoVarianteGenericaField
+                                tipoId={ProductoTipoGenericos.Procesador}
+                                layout={{ label: undefined }}
+                            />
                         )}
-                    </form.AppField>
+                    />
                 </CardContent>
 
                 <Separator />
-                <CardContent className="flex flex-col gap-7">
-                    <form.AppField name="rams" mode="array">
-                        {(field) => (
-                            <>
-                                <div className="flex flex-row justify-between">
-                                    <Label className="text-xl font-bold">RAMs</Label>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => {
-                                            field.pushValue(actualizarArticuloRamFieldsDefaultValues)
-                                        }}
-                                    >
-                                        <CirclePlusIcon /> Agregar
-                                    </Button>
-                                </div>
 
-                                {field.state.value.map((_, index) => (
-                                    <Card key={index} className="shadow-none">
-                                        <CardHeader>
-                                            <CardTitle className="flex justify-between">
-                                                <span className="normal-case">RAM #{index + 1}</span>
-                                                <Button size="sm" variant="destructive" onClick={() => field.removeValue(index)} disabled={field.state.value.length === 1}>
-                                                    <Trash2Icon /> Eliminar
-                                                </Button>
-                                            </CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <FieldGroup className="flex-row">
-                                                <form.AppField
-                                                    name={`rams[${index}].producto_id`}
-                                                    children={() => <ProductoField tipoId={ProductoTipoEnum.Ram} layout={{ label: "Modelo" }} required />}
-                                                />
-                                                <form.AppField
-                                                    name={`rams[${index}].tipo_id`}
-                                                    children={() => <RamTipoField required />}
-                                                />
-                                                <form.AppField
-                                                    name={`rams[${index}].capacidad_id`}
-                                                    children={() => <RamCapacidadField required />}
-                                                />
-                                                <form.AppField
-                                                    name={`rams[${index}].velocidad_id`}
-                                                    children={() => <RamVelocidadField />}
-                                                />
-                                            </FieldGroup>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </>
-                        )}
-                    </form.AppField>
+                <CardContent className="flex">
+                    <Label className="min-w-1/7 text-lg font-bold">Aplicaciones de Escritorio</Label>
+
+                    <FieldGroup>
+                        <Button size="sm" className="max-w-min self-end">
+                            <CirclePlusIcon /> Agregar
+                        </Button>
+
+                        <FieldGroup className="grid grid-cols-3">
+                            {[0, 1].map((_, index) => (
+                                <form.AppField
+                                    key={index}
+                                    name={`aplicaciones[${index}].id`}
+                                    children={() => (
+                                        <ProductoVarianteGenericaField
+                                            tipoId={2}
+                                            layout={{ label: `Aplicación #${index+1}` }}
+                                        />
+                                    )}
+                                />
+                            ))}
+                        </FieldGroup>
+                    </FieldGroup>
+                </CardContent>
+                <Separator />
+
+                <CardContent className="flex">
+                    <Label className="min-w-1/7 text-lg font-bold">RAMs</Label>
+
+                    <FieldGroup>
+                        <Button size="sm" className="max-w-min self-end">
+                            <CirclePlusIcon /> Agregar
+                        </Button>
+
+                        {[0, 1].map((_, index) => (
+                            <div key={index} className="flex gap-2">
+                                <Label className="w-8">Slot #{index + 1}</Label>
+
+                                <FieldGroup className="flex-row">
+                                    <form.AppField
+                                        name={`discos[${index}].tipo`}
+                                        children={() => <DiscoTipoField required />}
+                                    />
+                                    <form.AppField
+                                        name={`discos[${index}].capacidad`}
+                                        children={() => <DiscoCapacidadField required />}
+                                    />
+                                    <form.AppField
+                                        name={`discos[${index}].factor_forma`}
+                                        children={() => <DiscoFactorFormaField />}
+                                    />
+                                    <form.AppField
+                                        name={`discos[${index}].interfaz`}
+                                        children={() => <DiscoInterfazField />}
+                                    />
+                                </FieldGroup>
+                            </div>
+                        ))}
+                    </FieldGroup>
                 </CardContent>
 
-                <Button
-                    onClick={async () => {
-                        form.validateSync('submit');
-                        await form.validateAsync('submit');
-                        if (!form.state.isValid) return;
-                        setAlertOpen(true);
-                    }}
-                    className="self-center"
-                >
-                    <CircleFadingArrowUpIcon /> Actualizar
-                </Button>
+                <Separator />
 
-                <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>¿Deseas continuar?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Estarás actualizando las especificaciones de este equipo.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
+                <CardContent className="flex">
+                    <Label className="min-w-1/7 text-lg font-bold">Discos</Label>
 
-                        <AlertDialogFooter>
-                            <AlertDialogAction onClick={() => { form.handleSubmit(); }} disabled={isPending}>
-                                <CircleArrowRightIcon /> Continuar
-                            </AlertDialogAction>
-                            <AlertDialogCancel>
-                                <CircleXIcon /> Cancelar
-                            </AlertDialogCancel>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                    <FieldGroup>
+                        <Button size="sm" className="max-w-min self-end">
+                            <CirclePlusIcon /> Agregar
+                        </Button>
+
+                        {[0].map((_, index) => (
+                            <div key={index} className="flex gap-2">
+                                <Label className="w-8"> #{index + 1}</Label>
+
+                                <FieldGroup className="flex-row">
+                                    <form.AppField
+                                        name={`ram[${index}].tipo`}
+                                        children={() => <RamTipoField required />}
+                                    />
+                                    <form.AppField
+                                        name={`ram[${index}].capacidad`}
+                                        children={() => <RamCapacidadField required />}
+                                    />
+                                    <form.AppField
+                                        name={`ram[${index}].velocidad`}
+                                        children={() => <RamVelocidadField />}
+                                    />
+                                </FieldGroup>
+                            </div>
+                        ))}
+                    </FieldGroup>
+                </CardContent>
+
+                <Separator />
+
+                <CardContent className="flex flex-col">
+                    <Button className="self-center">
+                        <SaveIcon /> Guardar
+                    </Button>
+                </CardContent>
             </form.AppForm>
         </FormLayout>
     );
 }
 
 export {
-    ActualizarForm as ActualizarArticuloForm
+    Form as ActualizarArticuloForm
 }

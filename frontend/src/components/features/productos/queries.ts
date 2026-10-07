@@ -1,8 +1,8 @@
 import api from "@/lib/axios";
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca, ProductoTipoWithCategoria, ProductoVarianteGenerica } from "@/types/productos";
+import { ProductoTipoGenericos } from '@/lib/constants';
 import { queryOptions } from "@tanstack/react-query";
-import type { ProductoTipoFieldType } from "./tipo-field";
 
 const tipoOptions = queryOptions({
     queryKey: ['producto_tipos', ['categorias']],
@@ -19,7 +19,7 @@ const marcaOptions = queryOptions({
         .then(r => r.data.data),
 });
 
-const options = (tipoId: ProductoTipoFieldType = undefined) => queryOptions({
+const options = (tipoId: (ProductoTipoGenericos | undefined) = undefined) => queryOptions({
     queryKey: ['productos', tipoId],
     queryFn: () => api.get<TResponse<ProductoVarianteGenerica[]>>('api/productos', {
         params: {

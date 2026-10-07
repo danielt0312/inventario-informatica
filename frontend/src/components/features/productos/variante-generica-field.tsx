@@ -1,68 +1,42 @@
-import type { ProductoTipo, ProductoVarianteGenerica } from "@/types/productos";
 import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
-import type { ProductoTipoFieldType } from "./tipo-field";
-import { ComboboxFieldGrouped, type ComboboxFieldGroupedProps } from "@/components/ui/combobox-field-grouped";
 import { useQuery } from "@tanstack/react-query";
-import { toComboboxGroups, toComboboxItems, type ComboboxLayoutItemValue, type ComboboxLayoutMultiple, type InferComboboxGroupFromFn, type InferComboboxGroupItemFromFn } from "@/components/ui/combobox-layout.shared";
+import { toComboboxItems, type ComboboxLayoutMultiple, type InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 import { productoQueryOptions } from "./queries";
+import type { ProductoTipoGenericos } from "@/lib/constants";
+import { ComboboxFieldSimple, type ComboboxFieldSimpleProps } from "@/components/ui/combobox-field-simple";
 
-const dataToComboboxItems = (data: ProductoVarianteGenerica[]) => {
-    const productosPorTipo = new Map<number, typeof data>();
-    const tiposDisponibles: ProductoTipo[] = [];
-
-    for (const generica of data) {
-        const tipoId = generica.producto.tipo.id;
-        let productos = productosPorTipo.get(tipoId);
-
-        if (!productos) {
-            productos = [];
-            productosPorTipo.set(tipoId, []);
-            tiposDisponibles.push(generica.producto.tipo);
-        }
-
-        productos.push(generica);
-    }
-
-    return toComboboxGroups(tiposDisponibles, (tipo) => ({
-        label: tipo.nombre,
-        items: toComboboxItems(
-            productosPorTipo.get(tipo.id) ?? [],
-            (producto) => ({
-                value: producto.id,
-                label: producto.descripcion
-            })
-        )
-    }));
-}
-
-type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>;
+type ComboboxItem = InferComboboxItemFromFn<typeof toComboboxItems>;
+type FieldValue = ComboboxItem['value'];
+type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = ComboboxFieldType<Empty, Multiple, FieldValue>;
 
 type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
-    ComboboxFieldGroupedProps<
+    ComboboxFieldSimpleProps<
         Empty,
         Multiple,
-        InferComboboxGroupItemFromFn<typeof dataToComboboxItems>,
-        InferComboboxGroupFromFn<typeof dataToComboboxItems>
+        ComboboxItem
     >,
     'items'
 > & {
-    tipoId: ProductoTipoFieldType;
+    tipoId?: ProductoTipoGenericos | undefined;
 }
 
 function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
     layout,
-    tipoId,
     disabled,
+    tipoId,
     ...props
 }: FieldProps<Empty, Multiple>) {
     const { data: items = [] } = useQuery({
         ...productoQueryOptions(tipoId),
         enabled: !disabled,
-        select: dataToComboboxItems
+        select: (data) => toComboboxItems(data, (item) => ({
+            label: item.descripcion,
+            value: item.id
+        }))
     });
 
     return (
-        <ComboboxFieldGrouped
+        <ComboboxFieldSimple
             items={items}
             layout={{
                 label: "Descripción",

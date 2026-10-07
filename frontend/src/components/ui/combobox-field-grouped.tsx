@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ComboboxLayoutGrouped } from "./combobox-layout-grouped"
 import type { ComboboxLayoutGroupedComponentProps } from "./combobox-layout-grouped"
-import type { ComboboxLayoutGroup, ComboboxLayoutItem, ComboboxLayoutItemValue, ComboboxLayoutMultiple } from "./combobox-layout.shared"
+import type { ComboboxLayoutGroup, ComboboxLayoutItem, ComboboxLayoutMultiple } from "./combobox-layout.shared"
 import {
     useComboboxFieldValue,
     defaultFieldValueFromItem,
