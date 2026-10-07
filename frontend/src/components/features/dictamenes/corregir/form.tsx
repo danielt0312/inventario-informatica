@@ -84,6 +84,11 @@ export const DictamenCorregirForm = () => {
                     )}
                 </FieldGroup>
 
+                <form.AppField
+                    name="motivo_cambio"
+                    children={() => <DictamenMotivoCambioField required />}
+                />
+
                 <form.AppField name="adquisiciones" mode="array">
                     {(field) => (
                         <>
@@ -255,11 +260,6 @@ export const DictamenCorregirForm = () => {
                         </>
                     )}
                 </form.AppField>
-
-                <form.AppField
-                    name="motivo_cambio"
-                    children={() => <DictamenMotivoCambioField required />}
-                />
 
                 <Button
                     onClick={async () => {
