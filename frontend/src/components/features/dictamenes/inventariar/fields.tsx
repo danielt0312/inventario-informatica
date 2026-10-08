@@ -5,34 +5,38 @@ import { useComboboxFieldContext, useComboboxFieldValue, type ComboboxFieldType 
 import type { PorInventariarDictamenAdquisicion } from "@/types/dictamenes";
 import React from "react";
 
-function useAdquisicionesOptions(initialValues: PorInventariarDictamenAdquisicion[]) {
-    const initialOptions = React.useMemo(() =>
+function useAdquisicionComboboxItems(initialValues: PorInventariarDictamenAdquisicion[]) {
+    const initialItems = React.useMemo(() =>
         initialValues
             .filter((adquisicion) => adquisicion.cantidad_restante > 0)
             .map((adquisicion) => ({
-                id: adquisicion.id,
-                label: `${strCompactJoin(adquisicion.producto_variante.tipo.nombre, adquisicion.producto_variante.descripcion, adquisicion.caracteristicas_adicionales)} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
-                cantidad_restante: adquisicion.cantidad_restante,
+                ...adquisicion,
+                descripcion: `${strCompactJoin(adquisicion.producto_variante.tipo.nombre, adquisicion.producto_variante.descripcion, adquisicion.caracteristicas_adicionales)} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
             })),
         [initialValues]);
 
-    const [options, setOptions] = React.useState(initialOptions);
+    const [items, setItems] = React.useState(initialItems);
 
-    const availableOptions = React.useMemo(() => {
-        const filtered = options.filter((o) => o.cantidad_restante > 0);
+    const availableItems = React.useMemo(() => {
+        const filtered = items.filter((o) => o.cantidad_restante > 0);
         return toComboboxItems(filtered, (item) => ({
-            label: item.label,
-            value: item.id
+            value: item.id,
+            label: item.descripcion,
+            cantidad_restante: item.cantidad_restante
         }))
-    }, [options]);
+    }, [items]);
 
-    const allOptions = React.useMemo(
-        () => toComboboxItems(options, (item) => ({ label: item.label, value: item.id })),
-        [options]
+    const allItems = React.useMemo(
+        () => toComboboxItems(items, (item) => ({
+            label: item.descripcion,
+            value: item.id,
+            cantidad_restante: item.cantidad_restante
+        })),
+        [items]
     );
 
-    const removeOption = (id: number) => {
-        setOptions((prev) =>
+    const removeItem = (id: number) => {
+        setItems((prev) =>
             prev.map((o) =>
                 o.id === id
                     ? { ...o, cantidad_restante: Math.max(0, o.cantidad_restante - 1) }
@@ -41,8 +45,8 @@ function useAdquisicionesOptions(initialValues: PorInventariarDictamenAdquisicio
         );
     };
 
-    const restoreOption = (id: number) => {
-        setOptions((prev) =>
+    const restoreItem = (id: number) => {
+        setItems((prev) =>
             prev.map((o) =>
                 o.id === id
                     ? { ...o, cantidad_restante: o.cantidad_restante + 1 }
@@ -51,10 +55,10 @@ function useAdquisicionesOptions(initialValues: PorInventariarDictamenAdquisicio
         );
     };
 
-    return { options: allOptions, availableOptions, removeOption, restoreOption };
+    return { allItems, availableItems, removeItem, restoreItem };
 }
 
-type AdquisicionComboboxItem = ReturnType<typeof useAdquisicionesOptions>['options'][number];
+type AdquisicionComboboxItem = ReturnType<typeof useAdquisicionComboboxItems>['allItems'][number];
 type AdquisicionFieldValue = AdquisicionComboboxItem['value'];
 type AdquisicionFieldEmptyValue = undefined;
 type AdquisicionComboboxMultiple = false;
@@ -102,5 +106,6 @@ function AdquisicionField({
 
 export {
     AdquisicionField as DictamenAdquisicionField,
-    type AdquisicionFieldType as DictamenAdquisicionFieldType
+    type AdquisicionFieldType as DictamenAdquisicionFieldType,
+    useAdquisicionComboboxItems as useDictamenAdquisicionComboboxItems
 }

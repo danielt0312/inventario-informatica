@@ -1,5 +1,5 @@
 import type { OrdenCompra } from "@/types/orden_compras";
-import type { DetailedPorInventariarDictamen, PorInventariarDictamenAdquisicion } from "@/types/dictamenes";
+import type { DetailedPorInventariarDictamen } from "@/types/dictamenes";
 import { useAppForm } from '@/components/ui/form.shared';
 import { inventariarDictamenArticuloFieldsDefaultValues, inventariarDictamenFormDefaultValues, inventariarDictamenFormValidator } from "./form-schema";
 import { FormLayout } from "@/components/ui/form-layout";
@@ -12,9 +12,8 @@ import { inventariarDictamenHasOrdenCompra } from "@/components/features/dictame
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, CircleXIcon, PackageCheckIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachment-layout";
-import { esCuentaContableNoInventariable, esCuentaContable, esCuentaContableInventariable, strCompactJoin } from "@/lib/utils";
-import { DictamenAdquisicionField } from "./fields";
-import { toComboboxItems } from "@/components/ui/combobox-layout.shared";
+import { esCuentaContableNoInventariable, esCuentaContable, esCuentaContableInventariable } from "@/lib/utils";
+import { DictamenAdquisicionField, useDictamenAdquisicionComboboxItems } from "./fields";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Spinner } from "@/components/ui/spinner";
 import { useDictamenFormActionMutation } from "../form-action/view";
@@ -37,55 +36,8 @@ import { RamVelocidadField } from "../../rams/velocidad-field";
 import { DictamenCaracteristicasAdicionalesField } from "../fields";
 import { corregirDictamenProductoVarianteToFieldsValue } from "../corregir/form-schema";
 import { ArticuloInventariabilidadBadge } from "../../articulos/table-cols";
-
-function useAdquisicionesOptions(initialValues: PorInventariarDictamenAdquisicion[]) {
-    const initialOptions = React.useMemo(() =>
-        initialValues
-            .filter((adquisicion) => adquisicion.cantidad_restante > 0)
-            .map((adquisicion) => ({
-                id: adquisicion.id,
-                label: `${strCompactJoin(adquisicion.producto_variante.tipo.nombre, adquisicion.producto_variante.descripcion, adquisicion.caracteristicas_adicionales)} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
-                cantidad_restante: adquisicion.cantidad_restante,
-            })),
-        [initialValues]);
-
-    const [options, setOptions] = React.useState(initialOptions);
-
-    const availableOptions = React.useMemo(() => {
-        const filtered = options.filter((o) => o.cantidad_restante > 0);
-        return toComboboxItems(filtered, (item) => ({
-            label: item.label,
-            value: item.id
-        }))
-    }, [options]);
-
-    const allOptions = React.useMemo(
-        () => toComboboxItems(options, (item) => ({ label: item.label, value: item.id })),
-        [options]
-    );
-
-    const removeOption = (id: number) => {
-        setOptions((prev) =>
-            prev.map((o) =>
-                o.id === id
-                    ? { ...o, cantidad_restante: Math.max(0, o.cantidad_restante - 1) }
-                    : o
-            )
-        );
-    };
-
-    const restoreOption = (id: number) => {
-        setOptions((prev) =>
-            prev.map((o) =>
-                o.id === id
-                    ? { ...o, cantidad_restante: o.cantidad_restante + 1 }
-                    : o
-            )
-        );
-    };
-
-    return { options: allOptions, availableOptions, removeOption, restoreOption };
-}
+import { Badge } from "@/components/ui/badge";
+import { useStore } from "@tanstack/react-form";
 
 function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
     const { mutate, isPending } = useDictamenFormActionMutation(dictamen);
@@ -111,14 +63,16 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
     const adquisiciones = dictamen.version_actual.adquisiciones;
 
     const {
-        options: adquisicionesOptions,
-        availableOptions: adquisicionesAvailableOptions,
-        removeOption: adquisicionesRemoveOptions,
-        restoreOption: adquisicionesRestoreOptions
-    } = useAdquisicionesOptions(adquisiciones);
+        allItems: adquisicionesAllItems,
+        availableItems: adquisicionesAvailableItems,
+        removeItem: adquisicionesRemoveItem,
+        restoreItem: adquisicionesRestoreItem
+    } = useDictamenAdquisicionComboboxItems(adquisiciones);
 
     let cantidadTotal = 0;
     adquisiciones.forEach(a => cantidadTotal += a.cantidad_restante);
+
+    const cantidadRegistrados = useStore(form.store, (state) => state.values.articulos.filter((articuloField) => articuloField.dictamen_adquisicion_id !== undefined).length)
 
     return (
         <>
@@ -135,7 +89,7 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                         ) : (
                             <form.AppField
                                 name="orden_compra_id"
-                                children={() => <OrdenCompraField onValueChange={setOrdenCompra} />}
+                                children={() => <OrdenCompraField onValueChange={setOrdenCompra} fieldLayout={{ required: true }} />}
                                 listeners={{
                                     onChange: () =>
                                         form.getFieldValue('articulos')
@@ -150,16 +104,22 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                     <form.AppField name="articulos" mode="array">
                         {(field) => (
                             <>
-                                <div className="flex flex-row justify-between">
+                                <div className="sticky top-0 z-50 flex flex-row justify-between bg-white pt-6 pb-2 -mt-6 -mb-2">
                                     <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
-                                    <Button
-                                        disabled={field.state.value.length >= cantidadTotal}
-                                        onClick={() => field.pushValue(inventariarDictamenArticuloFieldsDefaultValues)}
-                                        variant="outline"
-                                        size="sm"
-                                    >
-                                        <PlusCircleIcon /> Registrar
-                                    </Button>
+                                    <div className="flex flex-row items-center gap-2">
+                                        <Badge variant="secondary">
+                                            {`Total de Registros: ${cantidadRegistrados}/${cantidadTotal}`}
+                                        </Badge>
+
+                                        <Button
+                                            disabled={field.state.value.length >= cantidadTotal}
+                                            onClick={() => field.pushValue(inventariarDictamenArticuloFieldsDefaultValues)}
+                                            variant="outline"
+                                            size="sm"
+                                        >
+                                            <PlusCircleIcon /> Añadir
+                                        </Button>
+                                    </div>
                                 </div>
 
                                 {field.state.value.map((_, index) => (
@@ -185,7 +145,7 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                     onClick={() => {
                                                         const dictamenAdquisicionId = field.state.value[index].dictamen_adquisicion_id;
                                                         if (dictamenAdquisicionId) {
-                                                            adquisicionesRestoreOptions(dictamenAdquisicionId);
+                                                            adquisicionesRestoreItem(dictamenAdquisicionId);
                                                         }
                                                         field.removeValue(index);
                                                     }}
@@ -201,18 +161,26 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                     name={`articulos[${index}].dictamen_adquisicion_id`}
                                                     children={(field) => (
                                                         <DictamenAdquisicionField
-                                                            items={adquisicionesOptions}
-                                                            availableItems={adquisicionesAvailableOptions}
+                                                            items={adquisicionesAllItems}
+                                                            renderItem={({ cantidad_restante, label }) => (
+                                                                <span>
+                                                                    {cantidad_restante > 1 && (
+                                                                        <Badge className="rounded-full mr-1" variant="secondary">{`Restantes: ${cantidad_restante}`}</Badge>
+                                                                    )}
+                                                                    {label}
+                                                                </span>
+                                                            )}
+                                                            availableItems={adquisicionesAvailableItems}
                                                             onFieldValueChange={(item) => {
                                                                 const value = item?.value;
                                                                 const previousValue = field.state.value;
 
                                                                 if (previousValue !== undefined && previousValue !== value) {
-                                                                    adquisicionesRestoreOptions(previousValue);
+                                                                    adquisicionesRestoreItem(previousValue);
                                                                 }
 
                                                                 if (value !== undefined && previousValue !== value) {
-                                                                    adquisicionesRemoveOptions(value);
+                                                                    adquisicionesRemoveItem(value);
                                                                 }
 
                                                                 const adquisicion = dictamen.version_actual.adquisiciones.find(
