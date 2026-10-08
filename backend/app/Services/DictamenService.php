@@ -137,7 +137,13 @@ class DictamenService
             $this->cancelacionFallida();
         }
 
-        ($this->cancelarArchivoAction)($dictamen->versionActual->archivo);
+        DB::transaction(function () use ($dictamen) {
+            ($this->cancelarArchivoAction)($dictamen->versionActual->archivo);
+
+            $dictamen->update([
+                'estado_id' => DictamenEstadoEnum::Cancelado->value
+            ]);
+        });
     }
 
     public function corregir(Dictamen $dictamen, CorregirDictamenData $data): void

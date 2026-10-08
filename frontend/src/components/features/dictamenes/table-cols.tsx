@@ -1,23 +1,25 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { dictamenVersionHasArchivo, esDetailedCorregibleFormActionDictamen, esSurtidoDictamen, esSurtidoParcialDictamen, esSurtibleDictamen, esFormActionDictamen } from "@/components/features/dictamenes/guards";
-import { BadgeCheckIcon, CircleDashedCheckIcon, CircleXIcon, FilePenIcon, PackageOpenIcon, PackagePlusIcon } from "lucide-react";
+import { dictamenVersionHasArchivo, esDetailedCorregibleFormActionDictamen, esSurtidoDictamen, esSurtidoParcialDictamen, esSurtibleDictamen, esFormActionDictamen, esCancelableDictamen } from "@/components/features/dictamenes/guards";
+import { BadgeCheckIcon, BanIcon, CircleArrowRight, CircleDashedCheckIcon, CircleXIcon, FilePenIcon, PackageOpenIcon, PackagePlusIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
 import { Route as CorregirRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
-import { useState, type JSX } from "react";
+import React, { useState, type JSX } from "react";
 import { useSurtirMutation } from "./surtir/form";
 import { ArchivoPreviewActionRow } from "@/components/features/archivos/table-cols";
 import { cn, toLocaleDateFormat } from "@/lib/utils";
 import { DictamenEstadoEnum } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
-import type { DetailedDictamen, DetailedPorSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
+import type { DetailedDictamen, DetailedPorSurtirDictamen, DetailedSurtidoParcialDictamen, Dictamen, DictamenEstado } from "@/types/dictamenes";
 import { ActionRow } from "@/components/ui/action-row";
 import { RouterButton } from "@/components/ui/router-button";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "./form-action/constants";
 import type { DetailedCorregibleFormActionDictamen, DetailedFormActionDictamen } from "./form-action/types";
 import { EmptyValue } from "@/components/ui/empty-value";
+import { useMutation } from "@tanstack/react-query";
+import { cancelarDictamenMutationOptions } from "./cancelar/mutation";
 
 const FormActionIcon = {
     [ActionDictamenEstadoEnum.PorDictaminar]: <CircleDashedCheckIcon />,
@@ -26,7 +28,7 @@ const FormActionIcon = {
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
 const FormActionLabel = {
-    [ActionDictamenEstadoEnum.PorDictaminar]: 'Dictaminar Bienes Informáticos',
+    [ActionDictamenEstadoEnum.PorDictaminar]: 'Dictaminar Adquisiciones',
     [ActionDictamenEstadoEnum.PendienteAcuse]: 'Evidenciar Acuse de Recibido',
     [ActionDictamenEstadoEnum.PorInventariar]: 'Inventariar Bienes Informáticos',
 } as const satisfies Record<ActionDictamenEstadoEnum, string>;
@@ -56,13 +58,61 @@ const CorregirActionItemRow = ({ dictamen }: ActionProps<DetailedCorregibleFormA
     <RouterButton
         to={CorregirRoute.to}
         params={{ uuid: dictamen.uuid }}
-        tooltip={{ message: "Corregir" }}
+        tooltip={{ message: "Corregir Adquisiciones" }}
         variant="outline"
         size="icon"
     >
         <FilePenIcon />
     </RouterButton>
 );
+
+const CancelarActionItemRow = ({ dictamen }: { dictamen: Dictamen }) => {
+    const { mutate, isPending } = useMutation({
+        ...cancelarDictamenMutationOptions(dictamen),
+        onSuccess: async (_, __, ___, { client }) => {
+            await client.invalidateQueries({ queryKey: ['dictamenes'] })
+            setOpenDialog(false);
+        }
+    });
+
+    const [openDialog, setOpenDialog] = React.useState(false);
+
+    return (
+        <>
+            <ActionRow
+                variant="destructive"
+                tooltip={{
+                    message: "Cancelar Dictamen"
+                }}
+                onClick={() => setOpenDialog(true)}
+            >
+                <BanIcon />
+            </ActionRow>
+
+            <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            ¿Deseas continuar?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Al continuar, estarás cancelando el dictamen de tecnologías. Esta acción no se puede revertir.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => mutate()} disabled={isPending} variant="destructive">
+                            Continuar <CircleArrowRight />
+                        </AlertDialogAction>
+                        <AlertDialogCancel onClick={() => setOpenDialog(false)}>
+                            <CircleXIcon /> Cancelar
+                        </AlertDialogCancel>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
+    );
+}
 
 const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | DetailedSurtidoParcialDictamen>) => {
     const [open, setOpen] = useState(false);
@@ -74,7 +124,7 @@ const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | D
         <>
             <ActionRow
                 onClick={() => setOpen(true)}
-                tooltip={{ message: "Surtir" }}
+                tooltip={{ message: "Surtir Bienes Informáticos" }}
             >
                 <PackagePlusIcon />
             </ActionRow>
@@ -217,6 +267,9 @@ const defaultColumns: ColumnDef<DetailedDictamen>[] = [
                             meta={table.options.meta}
                         />
                     )}
+                    {/* {esCancelableDictamen(dictamen) && (
+                        <CancelarActionItemRow dictamen={dictamen} />
+                    )} */}
                 </div>
             );
         }
