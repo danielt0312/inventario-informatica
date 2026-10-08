@@ -80,9 +80,6 @@ class DictamenService
 
             $nuevaVersion->adquisiciones()->createMany($adquisiciones);
 
-            $dictamen->versionActual()->associate($nuevaVersion);
-            $dictamen->save();
-
             return $dictamen;
         });
     }
@@ -93,8 +90,8 @@ class DictamenService
             foreach ($data->adquisiciones as $adquisicion) {
                 $productoVariante = ($this->crearProductoVarianteAction)($adquisicion->productoVariante);
 
-                $dictamen->versionActual->adquisiciones()
-                    ->where('id', $adquisicion->id)
+                $dictamen->adquisiciones()
+                    ->where('dictamen_adquisiciones.id', $adquisicion->id)
                     ->update([
                         'producto_variante_id' => $productoVariante->id,
                         'caracteristicas_adicionales' => $adquisicion->caracteristicasAdicionales
@@ -123,7 +120,7 @@ class DictamenService
                 $dictamen->oficio->update(['verified_at' => now()]);
             }
 
-            ($this->reemplazarArchivoAction)($dictamen->versionActual->archivo, $dictamenArchivo);
+            ($this->reemplazarArchivoAction)($dictamen->archivo, $dictamenArchivo);
 
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::PorSurtir->value
@@ -138,7 +135,7 @@ class DictamenService
         }
 
         DB::transaction(function () use ($dictamen) {
-            ($this->cancelarArchivoAction)($dictamen->versionActual->archivo);
+            ($this->cancelarArchivoAction)($dictamen->archivo);
 
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::Cancelado->value
@@ -149,7 +146,7 @@ class DictamenService
     public function corregir(Dictamen $dictamen, CorregirDictamenData $data): void
     {
         DB::transaction(function () use ($dictamen, $data) {
-            ($this->cancelarArchivoAction)($dictamen->versionActual->archivo);
+            ($this->cancelarArchivoAction)($dictamen->archivo);
 
             $dictamen->versionActual->update(['motivo_cambio' => $data->motivoCambio]);
 
@@ -171,8 +168,6 @@ class DictamenService
                 ->toArray();
 
             $nuevaVersion->adquisiciones()->createMany($adquisiciones);
-
-            $dictamen->versionActual()->associate($nuevaVersion)->save();
 
             $this->generateAndAssociatePdf($dictamen);
 

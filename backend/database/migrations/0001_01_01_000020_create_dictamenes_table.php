@@ -33,8 +33,6 @@ return new class extends Migration
                 ->restrictOnDelete();
             $table->unsignedBigInteger('adscripcion_id'); // todo cambiar por definicion real
             $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
-            $table->unsignedBigInteger('version_actual_id')
-                ->nullable();
             $table->boolean('tiene_observaciones')
                 ->nullable();
             $table->timestamps();
@@ -53,14 +51,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['dictamen_id', 'numero_version'], 'uk_dictamen_versiones');
-        });
-
-        Schema::table('dictamenes', function (Blueprint $table) {
-            $table->foreign('version_actual_id', 'fk_dictamenes_dictamen_versiones')
-                ->references('id')
-                ->on('dictamen_versiones')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
         });
 
         Schema::create('dictamen_adquisiciones', function (Blueprint $table) {
