@@ -20,7 +20,7 @@ use App\Http\Requests\Dictamen\Traits\{
 
 use App\Rules\CuentaContableFormat;
 
-// todo corregir ingreso de articulos para las licencias
+// todo corregir ingreso de adquisiciones para las licencias
 class InventariarDictamenRequest extends FormRequest
 {
     use InteractsWithDictamen {
@@ -72,77 +72,81 @@ class InventariarDictamenRequest extends FormRequest
                     $this->setOrdenCompra($ordenCompra);
                 }
             ],
-            'articulos' => [
+            'adquisiciones' => [
                 'required',
                 'array',
                 'min:1'
             ],
-            'articulos.*.dictamen_adquisicion_id' => [
+            'adquisiciones.*.id' => [
                 'required',
                 'integer',
                 'exists:dictamen_adquisiciones,id'
             ],
-            'articulos.*.es_resultado_esperado' => [
+            'adquisiciones.*.es_resultado_esperado' => [
                 'required',
                 'boolean'
             ],
-            'articulos.*.observaciones' => [
-                'exclude_unless:articulos.*.es_resultado_esperado,false',
+            'adquisiciones.*.observaciones' => [
+                'exclude_unless:adquisiciones.*.es_resultado_esperado,false',
                 'required',
                 'string',
                 'max:255'
             ],
+            'adquisiciones.*.articulo' => [
+                'required',
+                'array'
+            ],
             // todo agregar 'distinct' y 'unique' en caso de ser inventariable
-            'articulos.*.cuenta_contable' => [
+            'adquisiciones.*.articulo.cuenta_contable' => [
                 'required',
                 new CuentaContableFormat
             ],
-            'articulos.*.numero_serie' => [
+            'adquisiciones.*.articulo.numero_serie' => [
                 'nullable',
                 'string',
                 'max:64',
                 'distinct',
-                'unique:articulos,numero_serie'
+                'unique:adquisiciones,numero_serie'
             ],
-            'articulos.*.costo_unitario' => [
+            'adquisiciones.*.articulo.costo_unitario' => [
                 'nullable',
-                // 'required_if:articulos.*.es_resultado_esperado,true',
+                // 'required_if:adquisiciones.*.es_resultado_esperado,true',
                 'numeric',
             ],
-            'articulos.*.factura_id' => [
+            'adquisiciones.*.articulo.factura_id' => [
                 'required',
                 'integer',
                 'exists:facturas,id'
             ],
 
-            'articulos.*.caracteristicas_adicionales' => [
+            'adquisiciones.*.articulo.caracteristicas_adicionales' => [
                 'sometimes',
                 'nullable',
                 'string',
                 'max:255'
             ],
-            'articulos.*.producto_variante' => [
+            'adquisiciones.*.articulo.producto_variante' => [
                 'required',
                 'array'
             ],
-            'articulos.*.producto_variante.tipo_id' => [
+            'adquisiciones.*.articulo.producto_variante.tipo_id' => [
                 'required',
                 'integer',
                 'exists:producto_tipos,id',
             ],
-            'articulos.*.producto_variante.marca_id' => [
+            'adquisiciones.*.articulo.producto_variante.marca_id' => [
                 'required',
                 'integer',
                 'exists:producto_marcas,id',
             ],
-            'articulos.*.producto_variante.modelo' => [
+            'adquisiciones.*.articulo.producto_variante.modelo' => [
                 'required',
                 'string',
                 'max:128',
             ],
 
-            // todo agregar validación dinámica según `articulos.*.borrador.producto.tipo_id`
-            'articulos.*.producto_variante.spec' => [
+            // todo agregar validación dinámica según `adquisiciones.*.articulo.producto_variante.tipo_id`
+            'adquisiciones.*.articulo.producto_variante.spec' => [
                 'sometimes',
                 'nullable',
                 'array'

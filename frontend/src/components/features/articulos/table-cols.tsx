@@ -1,5 +1,5 @@
 import type { ColumnDef, RowData } from "@tanstack/react-table"
-import type { Articulo, ArticuloEstado } from "@/types/articulos";
+import type { ArticuloEstado, DetailedArticulo } from "@/types/articulos";
 import type { RowDataAccessorFn } from "@/types/generics";
 import { Badge } from "@/components/ui/badge";
 import { ArticuloEstadoEnum, ProductoTipoEnum } from "@/lib/constants";
@@ -8,6 +8,9 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { RouterButton } from "@/components/ui/router-button";
 import { Route } from "@/routes/_auth/articulos/$uuid/actualizar";
 import { CircleFadingArrowUpIcon } from "lucide-react";
+import { EmptyValue } from "@/components/ui/empty-value";
+
+type AccessorFn<TRowData extends RowData> = RowDataAccessorFn<TRowData, DetailedArticulo>;
 
 const estadoColorVariants = cva(
     undefined,
@@ -40,8 +43,6 @@ const EstadoBadge = ({
     </Badge>
 );
 
-type AccessorFn<TRowData extends RowData> = RowDataAccessorFn<TRowData, Articulo>;
-
 const NumeroInventarioRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
     id: 'articulo.numero_inventario',
     header: 'No. Inventario',
@@ -55,7 +56,7 @@ const NumeroSerieRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<
         const numeroSerie = getRowData(original).numero_serie;
         return (
             numeroSerie === null
-                ? <span className="text-muted-foreground italic">N/A</span>
+                ? <EmptyValue />
                 : numeroSerie
         );
     }
@@ -113,7 +114,7 @@ const EstadoRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowD
             <div className="flex flex-col gap-1">
                 <EstadoBadge estado={articulo.estado} />
                 {articulo.es_inventariable !== null && <InventariabilidadBadge variant={articulo.es_inventariable ? 'inventariable' : 'no-inventariable'} />}
-                {articulo.observaciones && (
+                {articulo.surtimiento?.observaciones && (
                     <Badge className="bg-red-400/80 text-black">
                         Tiene Observaciones
                     </Badge>
@@ -132,8 +133,8 @@ const defaultColumnsBuilder = <TRowData,>(getRowData: AccessorFn<TRowData>): Col
     EstadoRow(getRowData)
 ]);
 
-const defaultColumns: ColumnDef<Articulo>[] = [
-    ...defaultColumnsBuilder<Articulo>(row => row),
+const defaultColumns: ColumnDef<DetailedArticulo>[] = [
+    ...defaultColumnsBuilder<DetailedArticulo>(row => row),
     {
         id: "actions",
         cell: ({ row }) => {

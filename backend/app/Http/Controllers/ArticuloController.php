@@ -14,6 +14,7 @@ class ArticuloController extends Controller
     {
         return QueryBuilder::for(Articulo::class)
             ->with([
+                'surtimiento',
                 'estado',
                 'productoVariante.producto' => [
                     'tipo.categoria',

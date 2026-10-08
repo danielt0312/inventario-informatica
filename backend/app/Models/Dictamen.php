@@ -3,20 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\{
-    BelongsTo,
-    HasMany
-};
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Enums\DictamenEstadoEnum;
 use App\Traits\Models\HasResourceResponse;
 
+use Staudenmeir\EloquentHasManyDeep\{
+    HasRelationships,
+    HasManyDeep
+};
+
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    HasMany
+};
+
 class Dictamen extends Model
 {
-    use HasFactory, HasUuids, HasResourceResponse;
+    use HasUuids, HasResourceResponse, HasRelationships;
 
     public function __call($method, $parameters)
     {
@@ -62,6 +67,23 @@ class Dictamen extends Model
     public function ordenCompra(): BelongsTo
     {
         return $this->belongsTo(OrdenCompra::class);
+    }
+
+    public function adquisiciones(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->versionActual(),
+            (new DictamenVersion)->adquisiciones(),
+        );
+    }
+
+    public function surtimientos(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->versionActual(),
+            (new DictamenVersion)->adquisiciones(),
+            (new DictamenAdquisicion)->surtimientos(),
+        );
     }
 
     public function articulos(): HasMany

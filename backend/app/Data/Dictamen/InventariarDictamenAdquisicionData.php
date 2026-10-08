@@ -12,13 +12,12 @@ use Spatie\LaravelData\Attributes\{
 
 #[MapInputName(SnakeCaseMapper::class)]
 #[MapOutputName(SnakeCaseMapper::class)]
-class InventariarDictamenArticuloData extends Data
+class InventariarDictamenAdquisicionData extends Data
 {
     public function __construct(
-        public ProductoVarianteData $productoVariante,
-        public int $facturaId,
-        public string $cuentaContable,
-        public ?string $numeroSerie = null,
-        public ?float $costoUnitario = null,
+        public int $id,
+        public InventariarDictamenArticuloData $articulo,
+        public bool $esResultadoEsperado,
+        public ?string $observaciones = null,
     ) {}
 }

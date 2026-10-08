@@ -197,7 +197,9 @@ class DictamenService
         }
 
         DB::transaction(function () use ($dictamen, $data, $ordenCompra, $tieneOrdenCompra) {
-            foreach ($data->articulos as $articuloData) {
+            foreach ($data->adquisiciones as $adquisicion) {
+                $articuloData = $adquisicion->articulo;
+
                 $productoVariante = ($this->crearProductoVarianteAction)($articuloData->productoVariante);
 
                 $articulo = $this->articuloService->crear(StoreArticuloData::from([
@@ -207,7 +209,9 @@ class DictamenService
                 ]));
 
                 $articulo->surtimiento()->create([
-                    'dictamen_adquisicion_id' => $articuloData->dictamenAdquisicionId
+                    'dictamen_adquisicion_id' => $adquisicion->id,
+                    'es_resultado_esperado' => $adquisicion->esResultadoEsperado,
+                    'observaciones' => $adquisicion->observaciones,
                 ]);
             }
 
@@ -216,7 +220,7 @@ class DictamenService
             }
 
             $dictamen->ordenCompra->facturas()->syncWithoutDetaching(
-                collect($data->articulos)->pluck('facturaId')->unique()->all()
+                collect($data->adquisiciones)->pluck('articulo.facturaId')->unique()->all()
             );
 
             $this->resolverSalidaDeInventario($dictamen);
@@ -225,7 +229,7 @@ class DictamenService
 
     private function resolverSalidaDeInventario(Dictamen $dictamen): void
     {
-        $adquisiciones = $dictamen->versionActual->adquisiciones()
+        $adquisiciones = $dictamen->adquisiciones()
             ->withCount('surtimientos')
             ->get();
 
@@ -239,10 +243,9 @@ class DictamenService
             return;
         }
 
-        $algunArticuloTieneObservaciones = $dictamen->whereHas(
-            'articulos',
-            fn ($q) => $q->where('es_resultado_esperado', false)
-        )->exists();
+        $algunArticuloTieneObservaciones = $dictamen->surtimientos()
+            ->where('dictamen_surtimientos.es_resultado_esperado', false)
+            ->exists();
 
         if ($algunArticuloTieneObservaciones) {
             $dictamen->update([

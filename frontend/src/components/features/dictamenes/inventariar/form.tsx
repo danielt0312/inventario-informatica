@@ -72,7 +72,7 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
     let cantidadTotal = 0;
     adquisiciones.forEach(a => cantidadTotal += a.cantidad_restante);
 
-    const cantidadRegistrados = useStore(form.store, (state) => state.values.articulos.filter((articuloField) => articuloField.dictamen_adquisicion_id !== undefined).length)
+    const cantidadRegistrados = useStore(form.store, (state) => state.values.adquisiciones.filter((articuloField) => articuloField.id !== undefined).length)
 
     return (
         <>
@@ -92,16 +92,16 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                 children={() => <OrdenCompraField onValueChange={setOrdenCompra} fieldLayout={{ required: true }} />}
                                 listeners={{
                                     onChange: () =>
-                                        form.getFieldValue('articulos')
+                                        form.getFieldValue('adquisiciones')
                                             .forEach((_, index) => {
-                                                form.setFieldValue(`articulos[${index}].factura_id`, undefined);
+                                                form.setFieldValue(`adquisiciones[${index}].articulo.factura_id`, undefined);
                                             })
                                 }}
                             />
                         )}
                     </div>
 
-                    <form.AppField name="articulos" mode="array">
+                    <form.AppField name="adquisiciones" mode="array">
                         {(field) => (
                             <>
                                 <div className="sticky top-0 z-50 flex flex-row justify-between bg-white pt-6 pb-2 -mt-6 -mb-2">
@@ -129,7 +129,7 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                 <div className="text-lg">
                                                     Bien Informático #{index + 1}
                                                 </div>
-                                                <form.Subscribe selector={state => state.values.articulos[index].cuenta_contable}>
+                                                <form.Subscribe selector={state => state.values.adquisiciones[index].articulo.cuenta_contable}>
                                                     {(cuentaContable) => !!cuentaContable && esCuentaContable(cuentaContable) && (
                                                         <ArticuloInventariabilidadBadge
                                                             className="[&>svg]:size-4.5 font-bold"
@@ -143,7 +143,7 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                     size="sm"
                                                     variant="destructive"
                                                     onClick={() => {
-                                                        const dictamenAdquisicionId = field.state.value[index].dictamen_adquisicion_id;
+                                                        const dictamenAdquisicionId = field.state.value[index].id;
                                                         if (dictamenAdquisicionId) {
                                                             adquisicionesRestoreItem(dictamenAdquisicionId);
                                                         }
@@ -158,13 +158,13 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                         <CardContent className="flex flex-col gap-7">
                                             <FieldGroup className="grid grid-cols-2">
                                                 <form.AppField
-                                                    name={`articulos[${index}].dictamen_adquisicion_id`}
+                                                    name={`adquisiciones[${index}].id`}
                                                     children={(field) => (
                                                         <DictamenAdquisicionField
                                                             items={adquisicionesAllItems}
                                                             renderItem={({ cantidad_restante, label }) => (
                                                                 <span>
-                                                                    {cantidad_restante > 1 && (
+                                                                    {cantidad_restante >= 1 && (
                                                                         <Badge className="rounded-full mr-1" variant="secondary">{`Restantes: ${cantidad_restante}`}</Badge>
                                                                     )}
                                                                     {label}
@@ -188,7 +188,10 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                                 );
 
                                                                 if (adquisicion) {
-                                                                    form.setFieldValue(`articulos[${index}].producto_variante`, corregirDictamenProductoVarianteToFieldsValue(adquisicion.producto_variante));
+                                                                    form.setFieldValue(
+                                                                        `adquisiciones[${index}].articulo.producto_variante`,
+                                                                        corregirDictamenProductoVarianteToFieldsValue(adquisicion.producto_variante)
+                                                                    );
                                                                 }
 
                                                                 return value;
@@ -198,54 +201,54 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                 />
 
                                                 <form.AppField
-                                                    name={`articulos[${index}].es_resultado_esperado`}
+                                                    name={`adquisiciones[${index}].es_resultado_esperado`}
                                                     children={() => <EsResultadoEsperadoField required />}
                                                     listeners={{
                                                         onChange: () => {
-                                                            form.setFieldValue(`articulos[${index}].observaciones`, null);
+                                                            form.setFieldValue(`adquisiciones[${index}].observaciones`, null);
                                                         }
                                                     }}
                                                 />
                                             </FieldGroup>
 
                                             <form.Subscribe
-                                                selector={(state) => (state.values.articulos[index].es_resultado_esperado)}
+                                                selector={(state) => (state.values.adquisiciones[index].es_resultado_esperado)}
                                             >
                                                 {(esResultadoEsperado) => esResultadoEsperado === false && (
                                                     <>
                                                         <form.AppField
-                                                            name={`articulos[${index}].observaciones`}
+                                                            name={`adquisiciones[${index}].observaciones`}
                                                             children={() => <ObservacionesField className="col-span-2" required />}
                                                         />
 
                                                         <div className='flex flex-col gap-7 grow'>
                                                             <FieldGroup className="grid grid-cols-2">
                                                                 <form.AppField
-                                                                    name={`articulos[${index}].producto_variante.tipo_id`}
+                                                                    name={`adquisiciones[${index}].articulo.producto_variante.tipo_id`}
                                                                     children={() => <ProductoTipoField required />}
                                                                 />
 
-                                                                <form.Subscribe selector={(state) => state.values.articulos[index].producto_variante?.tipo_id}>
+                                                                <form.Subscribe selector={(state) => state.values.adquisiciones[index].articulo.producto_variante?.tipo_id}>
                                                                     {(productoTipoId) => {
                                                                         switch (productoTipoId) {
                                                                             case ProductoTipoEnum.Computadora:
                                                                                 return (
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.tipo_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.tipo_id`}
                                                                                         children={() => <ComputadoraTipoField layout={{ label: "Tipo de Computadora" }} required />}
                                                                                     />
                                                                                 );
                                                                             case ProductoTipoEnum.Camara:
                                                                                 return (
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.tipo_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.tipo_id`}
                                                                                         children={() => <CamaraTipoField layout={{ label: "Tipo de Cámara" }} required />}
                                                                                     />
                                                                                 );
                                                                             case ProductoTipoEnum.Licencia:
                                                                                 return (
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.tipo_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.tipo_id`}
                                                                                         children={() => <LicenciaTipoField layout={{ label: "Tipo de Licencia" }} required />}
                                                                                     />
                                                                                 );
@@ -259,8 +262,8 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                             <ProductoVarianteSpecFieldGroup
                                                                 form={form}
                                                                 fields={{
-                                                                    marca_id: `articulos[${index}].producto_variante.marca_id`,
-                                                                    modelo: `articulos[${index}].producto_variante.modelo`,
+                                                                    marca_id: `adquisiciones[${index}].articulo.producto_variante.marca_id`,
+                                                                    modelo: `adquisiciones[${index}].articulo.producto_variante.modelo`,
                                                                 }}
                                                                 required={{
                                                                     marca_id: true,
@@ -268,29 +271,29 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                                 }}
                                                             />
 
-                                                            <form.Subscribe selector={(state) => state.values.articulos[index].producto_variante?.tipo_id}>
+                                                            <form.Subscribe selector={(state) => state.values.adquisiciones[index].articulo.producto_variante?.tipo_id}>
                                                                 {(productoTipoId) => {
                                                                     switch (productoTipoId) {
                                                                         case ProductoTipoEnum.Disco:
                                                                             return (
                                                                                 <FieldGroup className='flex-row'>
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.tipo_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.tipo_id`}
                                                                                         children={() => <DiscoTipoField required />}
                                                                                     />
 
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.capacidad_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.capacidad_id`}
                                                                                         children={() => <DiscoCapacidadField required />}
                                                                                     />
 
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.factor_forma_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.factor_forma_id`}
                                                                                         children={() => <DiscoFactorFormaField emptyValue={null} />}
                                                                                     />
 
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.interfaz_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.interfaz_id`}
                                                                                         children={() => <DiscoInterfazField emptyValue={null} />}
                                                                                     />
                                                                                 </FieldGroup>
@@ -299,15 +302,15 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                                             return (
                                                                                 <FieldGroup className='flex-row'>
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.tipo_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.tipo_id`}
                                                                                         children={() => <RamTipoField required />}
                                                                                     />
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.capacidad_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.capacidad_id`}
                                                                                         children={() => <RamCapacidadField required />}
                                                                                     />
                                                                                     <form.AppField
-                                                                                        name={`articulos[${index}].producto_variante.spec.velocidad_id`}
+                                                                                        name={`adquisiciones[${index}].articulo.producto_variante.spec.velocidad_id`}
                                                                                         children={() => <RamVelocidadField emptyValue={null} />}
                                                                                     />
                                                                                 </FieldGroup>
@@ -319,7 +322,7 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                             </form.Subscribe>
 
                                                             <form.AppField
-                                                                name={`articulos[${index}].caracteristicas_adicionales`}
+                                                                name={`adquisiciones[${index}].articulo.caracteristicas_adicionales`}
                                                                 children={() => <DictamenCaracteristicasAdicionalesField />}
                                                             />
                                                         </div>
@@ -333,21 +336,21 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                         <CardContent className="flex flex-col gap-7">
                                             <FieldGroup className="flex-row">
                                                 <form.AppField
-                                                    name={`articulos[${index}].cuenta_contable`}
+                                                    name={`adquisiciones[${index}].articulo.cuenta_contable`}
                                                     children={() => <ArticuloCuentaContable required />}
                                                     listeners={{
                                                         onChange: ({ value }) => {
                                                             if (value !== undefined && esCuentaContableNoInventariable(value)) {
-                                                                form.validateField(`articulos[${index}].costo_unitario`, 'change')
+                                                                form.validateField(`adquisiciones[${index}].articulo.costo_unitario`, 'change')
                                                             }
                                                         }
                                                     }}
                                                 />
 
-                                                <form.Subscribe selector={(state) => state.values.articulos[index].cuenta_contable}>
+                                                <form.Subscribe selector={(state) => state.values.adquisiciones[index].articulo.cuenta_contable}>
                                                     {(cuentaContable) => (
                                                         <form.AppField
-                                                            name={`articulos[${index}].costo_unitario`}
+                                                            name={`adquisiciones[${index}].articulo.costo_unitario`}
                                                             children={() => (
                                                                 <ArticuloCostoUnitarioField
                                                                     required={
@@ -363,12 +366,12 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
 
                                             <FieldGroup className="grid grid-cols-2">
                                                 <form.AppField
-                                                    name={`articulos[${index}].numero_serie`}
+                                                    name={`adquisiciones[${index}].articulo.numero_serie`}
                                                     children={() => <ArticuloNumeroSerieField />}
                                                 />
 
                                                 <form.AppField
-                                                    name={`articulos[${index}].factura_id`}
+                                                    name={`adquisiciones[${index}].articulo.factura_id`}
                                                     children={() => (
                                                         <FacturaField
                                                             proveedorId={ordenCompra?.proveedor.id}

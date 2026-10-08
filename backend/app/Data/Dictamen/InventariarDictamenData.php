@@ -8,7 +8,7 @@ use Spatie\LaravelData\Attributes\DataCollectionOf;
 class InventariarDictamenData extends Data
 {
     public function __construct(
-        #[DataCollectionOf(InventariarDictamenArticuloData::class)]
-        public array $articulos
+        #[DataCollectionOf(InventariarDictamenAdquisicionData::class)]
+        public array $adquisiciones
     ) {}
 }

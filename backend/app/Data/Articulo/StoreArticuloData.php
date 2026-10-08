@@ -19,8 +19,6 @@ class StoreArticuloData extends Data
         public int $facturaId,
         public int $dictamenId,
         public string $cuentaContable,
-        public bool $esResultadoEsperado,
-        public ?string $observaciones = null,
         public ?string $numeroSerie = null,
         public ?float $costoUnitario = null,
     ) {}

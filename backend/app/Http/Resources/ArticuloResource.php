@@ -20,11 +20,13 @@ class ArticuloResource extends JsonResource
             'numero_inventario' => $this->numero_inventario,
             'cuenta_contable' => $this->cuenta_contable,
             'es_inventariable' => $this->es_inventariable,
-            'es_resultado_esperado' => $this->es_resultado_esperado,
-            'observaciones' => $this->observaciones,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'producto_variante' => new ProductoVarianteResource($this->whenLoaded('productoVariante'))
+            'producto_variante' => new ProductoVarianteResource($this->whenLoaded('productoVariante')),
+            'surtimiento' => $this->whenLoaded(
+                'surtimiento',
+                fn ($surtimiento) => new DictamenSurtimientoResource($this->surtimiento)
+            )
         ];
     }
 }

@@ -9,41 +9,48 @@ import { esCuentaContable, esCuentaContableInventariable } from "@/lib/utils";
 import z from "zod";
 
 type ArticuloFields = {
-    dictamen_adquisicion_id: DictamenAdquisicionFieldType;
     cuenta_contable: ArticuloCuentaContableType;
     factura_id: FacturaFieldType;
     costo_unitario: ArticuloCostoUnitarioFieldType;
     numero_serie: ArticuloNumeroSerieFieldType;
-    es_resultado_esperado: EsResultadoEsperadoFieldType;
-    observaciones: ObservacionesFieldType;
     producto_variante: DictaminarDictamenProductoVarianteFields | undefined;
     caracteristicas_adicionales: DictamenCaracteristicasAdicionalesFieldType;
 }
 
+type AdquisicionFields = {
+    id: DictamenAdquisicionFieldType;
+    es_resultado_esperado: EsResultadoEsperadoFieldType;
+    observaciones: ObservacionesFieldType;
+    articulo: ArticuloFields;
+}
+
 type Schema = {
     orden_compra_id: OrdenCompraFieldType;
-    articulos: ArticuloFields[];
+    adquisiciones: AdquisicionFields[];
 }
 
 const articuloFieldsDefaultValues: ArticuloFields = {
-    es_resultado_esperado: undefined,
     factura_id: undefined,
     cuenta_contable: undefined,
     numero_serie: null,
     costo_unitario: null,
-    dictamen_adquisicion_id: undefined,
-    observaciones: null,
     producto_variante: undefined,
     caracteristicas_adicionales: null,
 }
 
+const adquisicionFieldsDefaultValues: AdquisicionFields = {
+    id: undefined,
+    es_resultado_esperado: undefined,
+    observaciones: null,
+    articulo: articuloFieldsDefaultValues
+}
+
 const defaultValues: Schema = {
     orden_compra_id: undefined,
-    articulos: [articuloFieldsDefaultValues]
+    adquisiciones: [adquisicionFieldsDefaultValues]
 };
 
 const articuloValidator = z.object({
-    dictamen_adquisicion_id: selectedNumberOption,
     factura_id: selectedNumberOption,
     cuenta_contable: requiredString
         .refine(
@@ -57,38 +64,33 @@ const articuloValidator = z.object({
         ),
     numero_serie: nullableString,
     costo_unitario: nullableNumber,
-    observaciones: nullableString,
     producto_variante: dictaminarDictamenProductoVarianteFieldsValidator,
+    caracteristicas_adicionales: nullableString,
+})
+
+const adquisicionValidator = z.object({
+    id: selectedNumberOption,
+    observaciones: nullableString,
     es_resultado_esperado: selectedBooleanOption,
-    caracteristicas_adicionales: nullableString
+    articulo: articuloValidator
 });
 
 const validator = z.object({
     orden_compra_id: selectedNumberOption,
-    articulos: requiredArray(articuloValidator
-        .refine(
-            ({ es_resultado_esperado, producto_variante }) => !(
-                es_resultado_esperado && producto_variante === undefined
-            ),
-            {
-                when: (values) => articuloValidator.pick({ es_resultado_esperado: true, producto_variante: true })
-                    .safeParse(values)
-                    .success
-            }
-        )
-        .refine(
-            ({ cuenta_contable, costo_unitario }) => !(
-                esCuentaContableInventariable(cuenta_contable) && (costo_unitario === null || isNaN(costo_unitario))
-            ),
-            {
-                error: 'Este campo es requerido',
-                path: ['costo_unitario'],
-                when: ({ value }) =>
-                    articuloValidator.pick({ cuenta_contable: true, costo_unitario: true })
-                        .safeParse(value)
-                        .success
-            }
-        )
+    adquisiciones: requiredArray(adquisicionValidator
+        // .refine(
+        //     ({ cuenta_contable, costo_unitario }) => !(
+        //         esCuentaContableInventariable(cuenta_contable) && (costo_unitario === null || isNaN(costo_unitario))
+        //     ),
+        //     {
+        //         error: 'Este campo es requerido',
+        //         path: ['costo_unitario'],
+        //         when: ({ value }) =>
+        //             adquisicionValidator.pick({ cuenta_contable: true, costo_unitario: true })
+        //                 .safeParse(value)
+        //                 .success
+        //     }
+        // )
     )
 });
 
@@ -96,5 +98,5 @@ export {
     type Schema as InventariarDictamenSchema,
     validator as inventariarDictamenFormValidator,
     defaultValues as inventariarDictamenFormDefaultValues,
-    articuloFieldsDefaultValues as inventariarDictamenArticuloFieldsDefaultValues
+    adquisicionFieldsDefaultValues as inventariarDictamenArticuloFieldsDefaultValues
 }

@@ -10,6 +10,12 @@ class DictamenSurtimiento extends Model
     protected $fillable = [
         'dictamen_adquisicion_id',
         'articulo_id',
+        'es_resultado_esperado',
+        'observaciones',
+    ];
+
+    protected $attributes = [
+        'observaciones' => null
     ];
 
     public function dictamenAdquisicion(): BelongsTo

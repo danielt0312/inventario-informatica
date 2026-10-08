@@ -100,8 +100,20 @@ return new class extends Migration
                 ->constrained('articulos', indexName: 'fk_dictamen_surtimientos_articulos')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
+            $table->boolean('es_resultado_esperado');
+            $table->string('observaciones', 255)
+                ->nullable();
             $table->timestamps();
         });
+
+        DB::statement("
+            ALTER TABLE dictamen_surtimientos
+            ADD CONSTRAINT chk_dictamen_surtimientos_observaciones
+            CHECK (
+                es_resultado_esperado = 1
+                OR (observaciones IS NOT NULL AND TRIM(observaciones) <> '')
+            )
+        ");
 
         Schema::table('articulos', function (Blueprint $table) {
             $table->foreign('dictamen_id', 'fk_articulos_dictamenes')

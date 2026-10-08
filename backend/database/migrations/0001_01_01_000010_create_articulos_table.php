@@ -47,10 +47,6 @@ return new class extends Migration
                 ->nullable();
             $table->unsignedBigInteger('dictamen_id')
                 ->nullable();
-            $table->boolean('es_resultado_esperado')
-                ->nullable();
-            $table->string('observaciones', 255)
-                ->nullable();
             $table->timestamps();
         });
 

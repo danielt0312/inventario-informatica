@@ -30,6 +30,9 @@ type BaseAdquisicion<TArticulo extends IncludableArticulo = IncludableArticulo> 
     detalle_solicitud: string | null;
     caracteristicas_adicionales: string | null;
 }
+type BaseSurtimiento =
+    | { es_resultado_esperado: true; observaciones: string }
+    | { es_resultado_esperado: false; observaciones: string | undefined }
 type BaseOrdenCompra<TOrdenCompra extends IncludableOrdenCompra = IncludableOrdenCompra> = {
     orden_compra: TOrdenCompra;
 }
@@ -80,7 +83,7 @@ type PorSurtirEstado = BaseEstado<typeof DictamenEstadoEnum.PorSurtir>;
 type PorSurtir = Base<PorSurtirEstado>;
 type PorSurtirAdquisicion = BaseDictaminadoAdquisicion;
 type PorSurtirVersion = BaseDictaminadoVersion;
-type DetailedPorSurtir = DetailedBase<PorSurtir, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PorSurtirVersion,Adquisiciones<PorSurtirAdquisicion>>>>;
+type DetailedPorSurtir = DetailedBase<PorSurtir, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PorSurtirVersion, Adquisiciones<PorSurtirAdquisicion>>>>;
 
 type PorInventariarEstado = BaseEstado<typeof DictamenEstadoEnum.PorInventariar>;
 type PorInventariar = Base<PorInventariarEstado> & BaseOrdenCompra;
@@ -141,6 +144,7 @@ type DictamenVersion =
 
 type InventariarWithOrdenCompra = Base<PorInventariarEstado> & BaseOrdenCompra<OrdenCompra>;
 type VersionWithArchivo = DictamenVersion & BaseDictaminadoVersion;
+type Surtimiento = BaseSurtimiento;
 
 export type {
     Dictamen,
@@ -164,5 +168,6 @@ export type {
     InventariarWithOrdenCompra as PorInventariarDictamenWithOrdenCompra,
     PorInventariarAdquisicion as PorInventariarDictamenAdquisicion,
     VersionWithArchivo as DictamenVersionWithArchivo,
-    SurtidoAdquisicion as SurtidoDictamenAdquisicion
+    SurtidoAdquisicion as SurtidoDictamenAdquisicion,
+    Surtimiento as DictamenSurtimiento,
 }

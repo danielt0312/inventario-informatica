@@ -31,8 +31,16 @@ class Articulo extends Model
         'cuenta_contable',
         'dictamen_id',
         'es_inventariable',
-        'es_resultado_esperado',
-        'observaciones',
+    ];
+
+    protected $attributes = [
+        'numero_serie' => null,
+        'costo_unitario' => null,
+        'factura_id' => null,
+        'qr_archivo_id' => null,
+        'cuenta_contable' => null,
+        'dictamen_id' => null,
+        'es_inventariable' => null,
     ];
 
     public function dictamen(): BelongsTo
