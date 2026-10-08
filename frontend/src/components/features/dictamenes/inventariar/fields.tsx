@@ -2,10 +2,10 @@ import { toComboboxItems } from "@/components/ui/combobox-layout.shared";
 import { strCompactJoin } from "@/lib/utils";
 import { ComboboxFieldSimple, type ComboboxFieldSimpleProps } from "@/components/ui/combobox-field-simple";
 import { useComboboxFieldContext, useComboboxFieldValue, type ComboboxFieldType } from "@/components/ui/combobox-field.shared";
-import type { InventariarDictamenAdquisicion } from "@/types/dictamenes";
+import type { PorInventariarDictamenAdquisicion } from "@/types/dictamenes";
 import React from "react";
 
-function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]) {
+function useAdquisicionesOptions(initialValues: PorInventariarDictamenAdquisicion[]) {
     const initialOptions = React.useMemo(() =>
         initialValues
             .filter((adquisicion) => adquisicion.cantidad_restante > 0)

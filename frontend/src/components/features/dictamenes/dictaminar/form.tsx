@@ -1,4 +1,4 @@
-import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
+import type { DetailedPorDictaminarDictamen } from "@/types/dictamenes";
 import { useAppForm } from '@/components/ui/form.shared';
 import { dictaminarDictamenDefaultFormValues, dictaminarDictamenFormValidator } from "./form-schema";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,7 +23,7 @@ import { RamVelocidadField } from '../../rams/velocidad-field';
 import { DictamenCaracteristicasAdicionalesField } from '../fields';
 import { EmptyValue } from "@/components/ui/empty-value";
 
-function Form({ dictamen }: { dictamen: DetailedDictaminarDictamen }) {
+function Form({ dictamen }: { dictamen: DetailedPorDictaminarDictamen }) {
     const { mutate } = useDictamenFormActionMutation(dictamen);
 
     const form = useAppForm({

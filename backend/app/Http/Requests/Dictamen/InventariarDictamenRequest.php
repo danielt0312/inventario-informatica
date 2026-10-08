@@ -49,7 +49,7 @@ class InventariarDictamenRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->dictamen->esEstadoInventariar();
+        return $this->dictamen->esEstadoPorInventariar();
     }
 
     protected function prepareForValidation(): void

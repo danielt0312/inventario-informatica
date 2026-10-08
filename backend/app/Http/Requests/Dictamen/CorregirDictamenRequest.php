@@ -22,7 +22,7 @@ class CorregirDictamenRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->dictamen->esEstadoSurtir();
+        return $this->dictamen->esEstadoPorSurtir();
     }
 
     public function rules(): array

@@ -1,5 +1,5 @@
 import type { OrdenCompra } from "@/types/orden_compras";
-import type { DetailedInventariarDictamen, InventariarDictamenAdquisicion } from "@/types/dictamenes";
+import type { DetailedPorInventariarDictamen, PorInventariarDictamenAdquisicion } from "@/types/dictamenes";
 import { useAppForm } from '@/components/ui/form.shared';
 import { inventariarDictamenArticuloFieldsDefaultValues, inventariarDictamenFormDefaultValues, inventariarDictamenFormValidator } from "./form-schema";
 import { FormLayout } from "@/components/ui/form-layout";
@@ -8,7 +8,7 @@ import { FacturaField } from "@/components/features/facturas/form-fields";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { ArticuloCostoUnitarioField, ArticuloCuentaContable, ArticuloNumeroSerieField, EsResultadoEsperadoField, ObservacionesField } from "@/components/features/articulos/form-fields";
 import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
-import { inventariarDictamenHasOrdenCompra } from "@/components/features/dictamenes/helpers";
+import { inventariarDictamenHasOrdenCompra } from "@/components/features/dictamenes/guards";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, CircleXIcon, PackageCheckIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { ArchivoAttachmentLayout } from "@/components/features/archivos/attachment-layout";
@@ -38,7 +38,7 @@ import { DictamenCaracteristicasAdicionalesField } from "../fields";
 import { corregirDictamenProductoVarianteToFieldsValue } from "../corregir/form-schema";
 import { ArticuloInventariabilidadBadge } from "../../articulos/table-cols";
 
-function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]) {
+function useAdquisicionesOptions(initialValues: PorInventariarDictamenAdquisicion[]) {
     const initialOptions = React.useMemo(() =>
         initialValues
             .filter((adquisicion) => adquisicion.cantidad_restante > 0)
@@ -87,7 +87,7 @@ function useAdquisicionesOptions(initialValues: InventariarDictamenAdquisicion[]
     return { options: allOptions, availableOptions, removeOption, restoreOption };
 }
 
-function Form({ dictamen }: { dictamen: DetailedInventariarDictamen }) {
+function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
     const { mutate, isPending } = useDictamenFormActionMutation(dictamen);
 
     const derivedDefaultValues = inventariarDictamenHasOrdenCompra(dictamen)

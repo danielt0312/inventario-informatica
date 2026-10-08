@@ -1,4 +1,4 @@
-import type { DetailedDictaminarDictamen } from "@/types/dictamenes";
+import type { DetailedPorDictaminarDictamen } from "@/types/dictamenes";
 import type { DictamenCaracteristicasAdicionalesFieldType } from "../fields";
 import type { ProductoMarcaFieldType } from "../../productos/marca-field";
 import type { ProductoModeloFieldType } from "../../productos/variante-spec-field-group";
@@ -86,7 +86,7 @@ type Schema = {
     adquisiciones: AdquisicionFields[];
 }
 
-const defaultValues = (dictamen: DetailedDictaminarDictamen): Schema => ({
+const defaultValues = (dictamen: DetailedPorDictaminarDictamen): Schema => ({
     adquisiciones: dictamen.version_actual.adquisiciones.map(({
         id,
         caracteristicas_adicionales,

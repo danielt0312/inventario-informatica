@@ -16,7 +16,7 @@ class DictamenVersionResource extends JsonResource
             'created_at' => $this->created_at,
             'adquisiciones' => DictamenAdquisicionResource::collection($this->whenLoaded('adquisiciones')),
             $this->when(
-                !$this->dictamen->esEstadoDictaminar(),
+                !$this->dictamen->esEstadoPorDictaminar(),
                 fn () => $this->merge(
                     ['archivo' => new ArchivoResource($this->whenLoaded('archivo'))]
                 )

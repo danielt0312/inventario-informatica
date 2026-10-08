@@ -1,4 +1,4 @@
-import type { SurtirDictamen } from "@/types/dictamenes";
+import type { PorSurtirDictamen } from "@/types/dictamenes";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useAppForm } from '@/components/ui/form.shared';
 import { Route as EditarRoute } from "@/routes/_auth/dictamenes/$uuid/corregir";
@@ -36,7 +36,7 @@ import { RamCapacidadField } from "../../rams/capacidad-field";
 import { RamVelocidadField } from "../../rams/velocidad-field";
 import React from "react";
 
-function useCorregirFormMutation(dictamen: SurtirDictamen) {
+function useCorregirFormMutation(dictamen: PorSurtirDictamen) {
     const navigate = useNavigate();
 
     return useFormMutation({

@@ -15,16 +15,16 @@ export const DocumentoTipoEnum = {
 export type DocumentoTipoEnum = (typeof DocumentoTipoEnum)[keyof typeof DocumentoTipoEnum];
 
 export const DictamenEstadoEnum = {
-    Dictaminar: 1,
+    PorDictaminar: 1,
     PendienteAcuse: 2,
-    Surtir: 3,
-    Inventariar: 4,
+    PorSurtir: 3,
+    PorInventariar: 4,
     Surtido: 5,
-    SurtidoParcial: 6
+    SurtidoParcial: 6,
 } as const;
 export type DictamenEstadoEnum = (typeof DictamenEstadoEnum)[keyof typeof DictamenEstadoEnum];
 
-const { Dictaminar, ...DictaminadoDictamenEstadoEnum } = DictamenEstadoEnum;
+const { PorDictaminar, ...DictaminadoDictamenEstadoEnum } = DictamenEstadoEnum;
 
 export { DictaminadoDictamenEstadoEnum };
 export type DictaminadoDictamenEstadoEnum = (typeof DictaminadoDictamenEstadoEnum)[keyof typeof DictaminadoDictamenEstadoEnum];

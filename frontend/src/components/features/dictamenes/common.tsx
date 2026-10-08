@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { toLocaleDateFormat } from "@/lib/utils";
 import type { DetailedDictamen } from "@/types/dictamenes";
 import type { Oficio } from "@/types/documentos";
-import { dictamenVersionHasArchivo } from "./helpers";
+import { dictamenVersionHasArchivo } from "./guards";
 
 export function ShowInfo({ dictamen }: { dictamen: DetailedDictamen }) {
     const { oficio } = dictamen;
@@ -31,7 +31,9 @@ export const ShowOficioInfo = ({ oficio, ...props }: React.ComponentProps<'div'>
         <Label className="font-bold">Folio de solicitud</Label>
         {oficio && <LinkToFile uuid={oficio.archivo.uuid} title={oficio.archivo.nombre} label={oficio.folio} />}
     </div>
-);export const ShowVersionInfo = ({ dictamen }: { dictamen: DetailedDictamen; }) => {
+);
+
+export const ShowVersionInfo = ({ dictamen }: { dictamen: DetailedDictamen; }) => {
     if (dictamenVersionHasArchivo(dictamen.version_actual)) {
         const { uuid, nombre } = dictamen.version_actual.archivo;
 

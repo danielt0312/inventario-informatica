@@ -21,11 +21,11 @@ class DictamenAdquisicionResource extends JsonResource
                 'id' => 3,
                 'nombre' => 'Juan Perez',
             ],
-            $this->mergeWhen($dictamen->esEstadoDictaminar(), [
+            $this->mergeWhen($dictamen->esEstadoPorDictaminar(), [
                 'borrador_producto_variante' => json_decode($this->borrador_producto_variante),
             ]),
             $this->mergeWhen(
-                ! $dictamen->esEstadoDictaminar(),
+                ! $dictamen->esEstadoPorDictaminar(),
                 function () {
                     $this->loadMissing('productoVariante');
 
@@ -35,7 +35,7 @@ class DictamenAdquisicionResource extends JsonResource
                 }
             ),
             $this->when(
-                $dictamen->esEstadoInventariar(),
+                $dictamen->esEstadoPorInventariar(),
                 function () {
                     $this->loadCount('surtimientos');
 

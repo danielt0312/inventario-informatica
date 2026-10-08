@@ -24,7 +24,7 @@ class DictamenResource extends JsonResource
             'version_actual' => new DictamenVersionResource($this->whenLoaded('versionActual')),
             'versiones' => DictamenVersionResource::collection($this->whenLoaded('versiones')),
             $this->when(
-                $this->esEstadoInventariar() && ! empty($this->orden_compra_id),
+                $this->esEstadoPorInventariar() && ! empty($this->orden_compra_id),
                 function () {
                     $this->load(['ordenCompra' => ['proveedor', 'archivo']]);
 

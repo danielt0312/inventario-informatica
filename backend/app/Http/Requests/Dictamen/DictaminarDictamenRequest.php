@@ -12,7 +12,7 @@ class DictaminarDictamenRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->dictamen->esEstadoDictaminar();
+        return $this->dictamen->esEstadoPorDictaminar();
     }
 
     public function rules(): array

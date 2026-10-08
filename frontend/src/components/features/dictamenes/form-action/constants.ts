@@ -3,17 +3,17 @@ import { DictamenEstadoEnum } from "@/lib/constants";
 export const ActionDictamenLabels = ['dictaminar', 'evidenciar-acuse', 'inventariar'] as const;
 export type ActionDictamenLabels = (typeof ActionDictamenLabels)[number];
 
-const { Dictaminar: DICTAMINAR, PendienteAcuse: PENDIENTE_ACUSE, Inventariar: INVENTARIAR } = DictamenEstadoEnum;
+const { PorDictaminar, PendienteAcuse, PorInventariar } = DictamenEstadoEnum;
 export const ActionDictamenEstadoEnum = {
-    DICTAMINAR,
-    PENDIENTE_ACUSE,
-    INVENTARIAR,
+    PorDictaminar,
+    PendienteAcuse,
+    PorInventariar,
 }
 export type ActionDictamenEstadoEnum = (typeof ActionDictamenEstadoEnum)[keyof typeof ActionDictamenEstadoEnum];
 
 export const ActionDictamenStates = {
-    [ActionDictamenEstadoEnum.DICTAMINAR]: 'dictaminar',
-    [ActionDictamenEstadoEnum.PENDIENTE_ACUSE]: 'evidenciar-acuse',
-    [ActionDictamenEstadoEnum.INVENTARIAR]: 'inventariar',
+    [ActionDictamenEstadoEnum.PorDictaminar]: 'dictaminar',
+    [ActionDictamenEstadoEnum.PendienteAcuse]: 'evidenciar-acuse',
+    [ActionDictamenEstadoEnum.PorInventariar]: 'inventariar',
 } as const satisfies Record<ActionDictamenEstadoEnum, ActionDictamenLabels>;
 

@@ -61,7 +61,7 @@ class DictamenService
                 : null;
 
             $dictamen = Dictamen::create([
-                'estado_id' => DictamenEstadoEnum::Dictaminar->value,
+                'estado_id' => DictamenEstadoEnum::PorDictaminar->value,
                 'empleado_id' => 1, // todo obtener jefe de adscripcion interna
                 'adscripcion_id' => $data->adscripcionId,
                 'oficio_id' => $oficio?->id,
@@ -126,7 +126,7 @@ class DictamenService
             ($this->reemplazarArchivoAction)($dictamen->versionActual->archivo, $dictamenArchivo);
 
             $dictamen->update([
-                'estado_id' => DictamenEstadoEnum::Surtir->value
+                'estado_id' => DictamenEstadoEnum::PorSurtir->value
             ]);
         });
     }
@@ -170,7 +170,7 @@ class DictamenService
     public function surtir(Dictamen $dictamen): void
     {
         $dictamen->update([
-            'estado_id' => DictamenEstadoEnum::Inventariar->value
+            'estado_id' => DictamenEstadoEnum::PorInventariar->value
         ]);
     }
 

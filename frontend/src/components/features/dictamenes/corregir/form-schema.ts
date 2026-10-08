@@ -1,4 +1,4 @@
-import type { DetailedSurtirDictamen } from "@/types/dictamenes";
+import type { DetailedPorSurtirDictamen } from "@/types/dictamenes";
 import type { DictamenCantidadFieldType, DictamenCaracteristicasAdicionalesFieldType, DictamenMotivoCambioFieldType } from "../fields";
 import type { EmpleadoFieldType } from "../../empleados/field";
 import type { ArticuloNullableNumeroInventarioFieldType } from "../../articulos/form-fields";
@@ -70,7 +70,7 @@ const productoVarianteToFieldsValue = (productoVariante: ProductoVariante): Dict
     }) as DictaminarDictamenProductoVarianteFields
 }
 
-const defaultValues = (dictamen: DetailedSurtirDictamen): Schema => ({
+const defaultValues = (dictamen: DetailedPorSurtirDictamen): Schema => ({
     adquisiciones: dictamen.version_actual.adquisiciones.map(({
         caracteristicas_adicionales,
         cantidad,

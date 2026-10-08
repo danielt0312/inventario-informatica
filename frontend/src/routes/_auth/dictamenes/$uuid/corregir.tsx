@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { detailedDictamenQueryOptions } from '../../../../components/features/dictamenes/queries'
-import { isDetailedCorregibleFormActionDictamen } from '../../../../components/features/dictamenes/helpers';
+import { esDetailedCorregibleFormActionDictamen } from '../../../../components/features/dictamenes/guards';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
 import { DictamenCorregirView } from '@/components/features/dictamenes/corregir/view';
 
@@ -10,7 +10,7 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/corregir')({
         const dictamen = await context.queryClient.fetchQuery(detailedDictamenQueryOptions(params.uuid));
 
         // todo mostrar mensaje notificando que no puede realizar esto
-        if (!isDetailedCorregibleFormActionDictamen(dictamen)) {
+        if (!esDetailedCorregibleFormActionDictamen(dictamen)) {
             throw redirect({ to: IndexRoute.to });
         }
 

@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { dictamenVersionHasArchivo, isDetailedActionFormDictamen, isDetailedCorregibleFormActionDictamen, isDetailedSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/components/features/dictamenes/helpers";
+import { dictamenVersionHasArchivo, esDetailedFormActionDictamen, esDetailedCorregibleFormActionDictamen, esDetailedPorSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/components/features/dictamenes/guards";
 import { BadgeCheckIcon, CircleDashedCheckIcon, CircleXIcon, FilePenIcon, PackageOpenIcon, PackagePlusIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
@@ -12,22 +12,22 @@ import { cn, toLocaleDateFormat } from "@/lib/utils";
 import { DictamenEstadoEnum } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import { cva } from "class-variance-authority";
-import type { DetailedDictamen, DetailedSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
+import type { DetailedDictamen, DetailedPorSurtirDictamen, DetailedSurtidoParcialDictamen, DictamenEstado } from "@/types/dictamenes";
 import { ActionRow } from "@/components/ui/action-row";
 import { RouterButton } from "@/components/ui/router-button";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "./form-action/constants";
-import type { DetailedEditableFormActionDictamen, DetailedFormActionDictamen } from "./form-action/types";
+import type { DetailedCorregibleFormActionDictamen, DetailedFormActionDictamen } from "./form-action/types";
 
 const FormActionIcon = {
-    [ActionDictamenEstadoEnum.DICTAMINAR]: <CircleDashedCheckIcon />,
-    [ActionDictamenEstadoEnum.PENDIENTE_ACUSE]: <BadgeCheckIcon />,
-    [ActionDictamenEstadoEnum.INVENTARIAR]: <PackageOpenIcon />,
+    [ActionDictamenEstadoEnum.PorDictaminar]: <CircleDashedCheckIcon />,
+    [ActionDictamenEstadoEnum.PendienteAcuse]: <BadgeCheckIcon />,
+    [ActionDictamenEstadoEnum.PorInventariar]: <PackageOpenIcon />,
 } as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
 
 const FormActionLabel = {
-    [ActionDictamenEstadoEnum.DICTAMINAR]: 'Dictaminar Bienes Informáticos',
-    [ActionDictamenEstadoEnum.PENDIENTE_ACUSE]: 'Evidenciar Acuse de Recibido',
-    [ActionDictamenEstadoEnum.INVENTARIAR]: 'Inventariar Bienes Informáticos',
+    [ActionDictamenEstadoEnum.PorDictaminar]: 'Dictaminar Bienes Informáticos',
+    [ActionDictamenEstadoEnum.PendienteAcuse]: 'Evidenciar Acuse de Recibido',
+    [ActionDictamenEstadoEnum.PorInventariar]: 'Inventariar Bienes Informáticos',
 } as const satisfies Record<ActionDictamenEstadoEnum, string>;
 
 const FormActionItemRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>) => {
@@ -51,7 +51,7 @@ const FormActionItemRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>
     );
 }
 
-const CorregirActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormActionDictamen>) => (
+const CorregirActionItemRow = ({ dictamen }: ActionProps<DetailedCorregibleFormActionDictamen>) => (
     <RouterButton
         to={CorregirRoute.to}
         params={{ uuid: dictamen.uuid }}
@@ -63,11 +63,11 @@ const CorregirActionItemRow = ({ dictamen }: ActionProps<DetailedEditableFormAct
     </RouterButton>
 );
 
-const SurtirActionRow = ({ dictamen }: ActionProps<DetailedSurtirDictamen | DetailedSurtidoParcialDictamen>) => {
+const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | DetailedSurtidoParcialDictamen>) => {
     const [open, setOpen] = useState(false);
     const { mutateAsync, status } = useSurtirMutation(dictamen);
     const navigate = useNavigate();
-    const nextState = ActionDictamenEstadoEnum.INVENTARIAR;
+    const nextState = ActionDictamenEstadoEnum.PorInventariar;
 
     return (
         <>
@@ -126,10 +126,10 @@ const estadoColorVariants = cva(
         variants: {
             variant: {
                 default: undefined,
-                [DictamenEstadoEnum.Dictaminar]: "bg-red-400/90",
+                [DictamenEstadoEnum.PorDictaminar]: "bg-red-400/90",
                 [DictamenEstadoEnum.PendienteAcuse]: "bg-orange-300",
-                [DictamenEstadoEnum.Surtir]: "bg-yellow-300/50",
-                [DictamenEstadoEnum.Inventariar]: "bg-yellow-400/70",
+                [DictamenEstadoEnum.PorSurtir]: "bg-yellow-300/50",
+                [DictamenEstadoEnum.PorInventariar]: "bg-yellow-400/70",
                 [DictamenEstadoEnum.Surtido]: "bg-lime-400",
                 [DictamenEstadoEnum.SurtidoParcial]: "bg-lime-400/60",
             }
@@ -196,13 +196,15 @@ const defaultColumns: ColumnDef<DetailedDictamen>[] = [
 
             return (
                 <div className="flex gap-1">
-                    {isDetailedCorregibleFormActionDictamen(dictamen) && (
+                    {esDetailedCorregibleFormActionDictamen(dictamen) && (
                         <CorregirActionItemRow dictamen={dictamen} />
                     )}
-                    {isDetailedActionFormDictamen(dictamen) && (
+                    {esDetailedFormActionDictamen(dictamen) && (
                         <FormActionItemRow dictamen={dictamen} />
                     )}
-                    {(isDetailedSurtirDictamen(dictamen) || isDetailedSurtidoParcialDictamen(dictamen)) && <SurtirActionRow dictamen={dictamen} />}
+                    {(esDetailedPorSurtirDictamen(dictamen) || isDetailedSurtidoParcialDictamen(dictamen)) && (
+                        <SurtirActionRow dictamen={dictamen} />
+                    )}
                     {dictamenVersionHasArchivo(dictamen.version_actual) && (
                         <ArchivoPreviewActionRow
                             archivo={dictamen.version_actual.archivo}

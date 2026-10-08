@@ -1,23 +1,23 @@
 import type { DetailedFormActionDictamen } from "./types";
-import { EvidenciarAcuseDictamenForm as EvidenciarForm } from "../evidenciar-acuse/form";
+import { EvidenciarAcuseDictamenForm } from "../evidenciar-acuse/form";
 import { DictaminarDictamenForm } from "../dictaminar/form";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { InventariarDictamenForm } from "../inventariar/form";
-import { isDetailedDictaminarDictamen, isDetailedInventariarDictamen } from "@/components/features/dictamenes/helpers";
+import { esDetailedPorDictaminarDictamen, esDetailedPorInventariarDictamen } from "@/components/features/dictamenes/guards";
 import { ActionDictamenStates } from "./constants";
 
 function FormAction({ dictamen }: { dictamen: DetailedFormActionDictamen }) {
-    if (isDetailedDictaminarDictamen(dictamen)) {
+    if (esDetailedPorDictaminarDictamen(dictamen)) {
         return <DictaminarDictamenForm dictamen={dictamen} />;
     }
 
-    if (isDetailedInventariarDictamen(dictamen)) {
+    if (esDetailedPorInventariarDictamen(dictamen)) {
         return <InventariarDictamenForm dictamen={dictamen} />;
     }
 
-    return <EvidenciarForm dictamen={dictamen} />;
+    return <EvidenciarAcuseDictamenForm dictamen={dictamen} />;
 }
 
 function useFormActionMutation(dictamen: DetailedFormActionDictamen) {
