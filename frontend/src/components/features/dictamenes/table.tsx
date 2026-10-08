@@ -12,19 +12,19 @@ import { RouterButton } from "@/components/ui/router-button";
 import api from "@/lib/axios";
 
 interface TableFilters {
-    folio: string;
+    id: string;
     estados: string[];
 }
 
 function Table() {
     const { debouncedFilters, filters, setFilters } = useDebouncedFilters<TableFilters>({
-        folio: '',
+        id: '',
         estados: []
     });
 
     const { mutate, isPending: isPreviewing } = useFilePreviewWindowMutation();
 
-    const { data: ESTADOS = [] } = useQuery({
+    const { data: estados = [] } = useQuery({
         queryKey: ['dictamen_estados'],
         queryFn: () => api.get<TResponse<TCatalogo[]>>('api/dictamen_estados')
             .then(r => r.data.data),
@@ -36,20 +36,23 @@ function Table() {
             filter={debouncedFilters}
             url="api/dictamenes"
             queryKey={['dictamenes']}
+            queryOptions={{
+
+            }}
             filterBar={(
                 <>
                     <SearchInput
-                        value={filters.folio}
-                        placeholder="Folio de solicitud"
+                        value={filters.id}
+                        placeholder="No. de Dictamen"
                         onChange={(e) => setFilters(prev => ({
                             ...prev,
-                            folio: e.target.value
+                            id: e.target.value
                         }))}
                     />
 
                     <MultiSelect
                         label="Estado"
-                        options={ESTADOS}
+                        options={estados}
                         onOptionRender={(option) => (
                             <DictamenEstadoBadge estado={option as DictamenEstado} />
                         )}

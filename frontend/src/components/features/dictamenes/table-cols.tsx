@@ -161,6 +161,10 @@ const EstadoBadge = ({
 
 const defaultColumns: ColumnDef<DetailedDictamen>[] = [
     {
+        header: "No.",
+        cell: ({ row }) => row.original.id
+    },
+    {
         header: "Fecha de Solicitud",
         cell: ({ row }) => toLocaleDateFormat(row.original.version_actual.fecha_solicitud)
     },

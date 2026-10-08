@@ -49,7 +49,7 @@ class DictamenController extends Controller
                 'versionActual.archivo'
             ])
             ->allowedFilters(
-                AllowedFilter::partial('folio', 'oficio.folio'),
+                AllowedFilter::partial('id'),
                 AllowedFilter::belongsTo('estado')
             )
             ->paginate($request->query('per_page', 10))
