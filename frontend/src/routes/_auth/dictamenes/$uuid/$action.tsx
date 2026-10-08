@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { Route as IndexRoute } from '@/routes/_auth/dictamenes/index';
-import { esDetailedFormActionDictamen } from '../../../../components/features/dictamenes/guards';
+import { esFormActionDictamen } from '../../../../components/features/dictamenes/guards';
 import { detailedDictamenQueryOptions } from '../../../../components/features/dictamenes/queries';
 import z from 'zod';
 import GoBackButton from '@/components/Goback';
@@ -23,7 +23,7 @@ export const Route = createFileRoute('/_auth/dictamenes/$uuid/$action')({
         const dictamen = await context.queryClient.fetchQuery(detailedDictamenQueryOptions(params.uuid));
 
         // todo mostrar mensaje notificando que no puede realizar esto
-        if (!esDetailedFormActionDictamen(dictamen)) {
+        if (!esFormActionDictamen(dictamen)) {
             throw redirect({ to: IndexRoute.to });
         }
 

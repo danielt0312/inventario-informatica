@@ -131,6 +131,15 @@ class DictamenService
         });
     }
 
+    public function cancelar(Dictamen $dictamen): void
+    {
+        if (! $this->esCancelable($dictamen)) {
+            $this->cancelacionFallida();
+        }
+
+        ($this->cancelarArchivoAction)($dictamen->versionActual->archivo);
+    }
+
     public function corregir(Dictamen $dictamen, CorregirDictamenData $data): void
     {
         DB::transaction(function () use ($dictamen, $data) {
@@ -295,6 +304,19 @@ class DictamenService
     protected function ordenCompraMissingFailure(): void
     {
         throw new LogicException('La orden de compra es requerida.');
+    }
+
+    protected function esCancelable(Dictamen $resguardo): bool
+    {
+        return $resguardo->estado_id !== DictamenEstadoEnum::Cancelado->value;
+    }
+
+    protected function cancelacionFallida(): void
+    {
+        throw new EntityNotEditableException(
+            reason: 'dictamen_ya_cancelado',
+            message: 'El dictamen no puede ser cancelado debido a que ya se encuentra en este estado.'
+        );
     }
 
     public function productoTipoPuedeRequerirNumeroInventario(ProductoTipoEnum $tipo): bool

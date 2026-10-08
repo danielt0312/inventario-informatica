@@ -15,6 +15,7 @@ enum DictamenEstadoEnum: int
     case PorInventariar = 4;
     case Surtido = 5;
     case SurtidoParcial = 6;
+    case Cancelado = 7;
 
     public function formattedLabel(): string
     {

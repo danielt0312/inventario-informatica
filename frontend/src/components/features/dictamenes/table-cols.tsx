@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { dictamenVersionHasArchivo, esDetailedFormActionDictamen, esDetailedCorregibleFormActionDictamen, esDetailedPorSurtirDictamen, isDetailedSurtidoParcialDictamen, isSurtidoDictamen, isSurtidoParcialDictamen } from "@/components/features/dictamenes/guards";
+import { dictamenVersionHasArchivo, esDetailedCorregibleFormActionDictamen, esSurtidoDictamen, esSurtidoParcialDictamen, esSurtibleDictamen, esFormActionDictamen } from "@/components/features/dictamenes/guards";
 import { BadgeCheckIcon, CircleDashedCheckIcon, CircleXIcon, FilePenIcon, PackageOpenIcon, PackagePlusIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as ActionRoute } from "@/routes/_auth/dictamenes/$uuid/$action";
@@ -17,6 +17,7 @@ import { ActionRow } from "@/components/ui/action-row";
 import { RouterButton } from "@/components/ui/router-button";
 import { ActionDictamenEstadoEnum, ActionDictamenStates } from "./form-action/constants";
 import type { DetailedCorregibleFormActionDictamen, DetailedFormActionDictamen } from "./form-action/types";
+import { EmptyValue } from "@/components/ui/empty-value";
 
 const FormActionIcon = {
     [ActionDictamenEstadoEnum.PorDictaminar]: <CircleDashedCheckIcon />,
@@ -121,17 +122,18 @@ interface ActionProps<TDictamen extends DetailedDictamen> {
 }
 
 const estadoColorVariants = cva(
-    "",
+    undefined,
     {
         variants: {
             variant: {
                 default: undefined,
-                [DictamenEstadoEnum.PorDictaminar]: "bg-red-400/90",
-                [DictamenEstadoEnum.PendienteAcuse]: "bg-orange-300",
-                [DictamenEstadoEnum.PorSurtir]: "bg-yellow-300/50",
-                [DictamenEstadoEnum.PorInventariar]: "bg-yellow-400/70",
+                [DictamenEstadoEnum.PorDictaminar]: "bg-yellow-200",
+                [DictamenEstadoEnum.PendienteAcuse]: "bg-yellow-300/70",
+                [DictamenEstadoEnum.PorSurtir]: "bg-yellow-300",
+                [DictamenEstadoEnum.PorInventariar]: "bg-yellow-400",
                 [DictamenEstadoEnum.Surtido]: "bg-lime-400",
                 [DictamenEstadoEnum.SurtidoParcial]: "bg-lime-400/60",
+                [DictamenEstadoEnum.Cancelado]: "bg-red-400/90",
             }
         },
         defaultVariants: {
@@ -175,7 +177,7 @@ const defaultColumns: ColumnDef<DetailedDictamen>[] = [
     {
         header: "Folio de Solicitud",
         cell: ({ row }) => (
-            row.original.oficio?.folio ?? <span className="text-muted-foreground italic">N/A</span>
+            row.original.oficio?.folio ?? <EmptyValue />
         )
     },
     {
@@ -186,7 +188,7 @@ const defaultColumns: ColumnDef<DetailedDictamen>[] = [
             return (
                 <div className="flex flex-col gap-2">
                     <EstadoBadge estado={row.original.estado} />
-                    {((isSurtidoDictamen(dictamen) || isSurtidoParcialDictamen(dictamen)) && dictamen.tiene_observaciones) && (
+                    {((esSurtidoDictamen(dictamen) || esSurtidoParcialDictamen(dictamen)) && dictamen.tiene_observaciones) && (
                         <Badge variant="outline">Tiene observaciones</Badge>
                     )}
                 </div>
@@ -203,10 +205,10 @@ const defaultColumns: ColumnDef<DetailedDictamen>[] = [
                     {esDetailedCorregibleFormActionDictamen(dictamen) && (
                         <CorregirActionItemRow dictamen={dictamen} />
                     )}
-                    {esDetailedFormActionDictamen(dictamen) && (
+                    {esFormActionDictamen(dictamen) && (
                         <FormActionItemRow dictamen={dictamen} />
                     )}
-                    {(esDetailedPorSurtirDictamen(dictamen) || isDetailedSurtidoParcialDictamen(dictamen)) && (
+                    {esSurtibleDictamen(dictamen) && (
                         <SurtirActionRow dictamen={dictamen} />
                     )}
                     {dictamenVersionHasArchivo(dictamen.version_actual) && (

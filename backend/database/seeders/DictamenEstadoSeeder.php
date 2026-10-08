@@ -14,8 +14,6 @@ class DictamenEstadoSeeder extends Seeder
 
     public function run(): void
     {
-        foreach (DictamenEstadoEnum::casesToFormattedCatalog() as $case) {
-            DictamenEstado::insertOrIgnore($case);
-        }
+        DictamenEstado::upsert(DictamenEstadoEnum::casesToFormattedCatalog(), ['id']);
     }
 }

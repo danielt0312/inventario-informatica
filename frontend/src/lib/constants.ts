@@ -21,6 +21,7 @@ export const DictamenEstadoEnum = {
     PorInventariar: 4,
     Surtido: 5,
     SurtidoParcial: 6,
+    Cancelado: 7
 } as const;
 export type DictamenEstadoEnum = (typeof DictamenEstadoEnum)[keyof typeof DictamenEstadoEnum];
 

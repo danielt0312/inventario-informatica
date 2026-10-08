@@ -107,6 +107,13 @@ class DictamenController extends Controller
         return $dictamen->toResourceResponse(201);
     }
 
+    public function cancelar(Dictamen $dictamen)
+    {
+        $this->dictamenService->cancelar($dictamen);
+
+        return response(status: 201);
+    }
+
     public function corregir(CorregirDictamenRequest $request, Dictamen $dictamen)
     {
         $this->dictamenService->corregir(

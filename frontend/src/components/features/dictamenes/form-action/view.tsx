@@ -5,15 +5,15 @@ import { useFormMutation } from "@/hooks/use-form-mutation";
 import { useNavigate } from "@tanstack/react-router";
 import { Route as IndexRoute } from "@/routes/_auth/dictamenes";
 import { InventariarDictamenForm } from "../inventariar/form";
-import { esDetailedPorDictaminarDictamen, esDetailedPorInventariarDictamen } from "@/components/features/dictamenes/guards";
+import { esPorDictaminarDictamen, esPorInventariarDictamen } from "@/components/features/dictamenes/guards";
 import { ActionDictamenStates } from "./constants";
 
 function FormAction({ dictamen }: { dictamen: DetailedFormActionDictamen }) {
-    if (esDetailedPorDictaminarDictamen(dictamen)) {
+    if (esPorDictaminarDictamen(dictamen)) {
         return <DictaminarDictamenForm dictamen={dictamen} />;
     }
 
-    if (esDetailedPorInventariarDictamen(dictamen)) {
+    if (esPorInventariarDictamen(dictamen)) {
         return <InventariarDictamenForm dictamen={dictamen} />;
     }
 
