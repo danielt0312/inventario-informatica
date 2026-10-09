@@ -42,8 +42,10 @@ const validator = z.object({
 
 const dataToComboboxItems = (data: Proveedor[]) =>
     toComboboxItems(data, (proveedor) => ({
-        label: `${proveedor.nombre} — ${proveedor.rfc}`,
-        value: proveedor.id
+        label: `${proveedor.nombre} ${proveedor.rfc}`,
+        value: proveedor.id,
+        nombre: proveedor.nombre,
+        rfc: proveedor.rfc
     }));
 
 type ComboboxItem = InferComboboxItemFromFn<typeof dataToComboboxItems>;
@@ -111,6 +113,17 @@ function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extend
                     form.setFieldValue('nombre', searchValue);
                     setDialogOpen(true);
                 }}
+                renderItem={(item) => (
+                    <>
+                        {item.nombre}<span className="text-muted-foreground">— {item.rfc}</span>
+                    </>
+                )}
+                renderSelectedItem={(item) => (
+                    <>
+                        {item.nombre}<span className="text-muted-foreground"> — {item.rfc}</span>
+                    </>
+                )}
+                renderSelectedItems={(items) => items.map((i) => i.nombre).join(", ")}
                 {...props}
             />
 
