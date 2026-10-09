@@ -7,7 +7,7 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/componen
 import { FacturaField } from "@/components/features/facturas/form-fields";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { ArticuloCostoUnitarioField, ArticuloCuentaContable, ArticuloNumeroSerieField, EsResultadoEsperadoField, ObservacionesField } from "@/components/features/articulos/form-fields";
-import { OrdenCompraField } from "@/components/features/orden_compras/form-fields";
+import { OrdenCompraField } from "@/components/features/orden_compras/field";
 import { inventariarDictamenHasOrdenCompra } from "@/components/features/dictamenes/guards";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRightIcon, CircleXIcon, PackageCheckIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";

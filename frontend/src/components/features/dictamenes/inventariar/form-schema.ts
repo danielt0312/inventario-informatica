@@ -1,6 +1,6 @@
 import type { ArticuloCostoUnitarioFieldType, ArticuloCuentaContableType, ArticuloNumeroSerieFieldType, EsResultadoEsperadoFieldType, ObservacionesFieldType } from "@/components/features/articulos/form-fields";
 import type { FacturaFieldType } from "@/components/features/facturas/form-fields";
-import type { OrdenCompraFieldType } from "@/components/features/orden_compras/form-fields";
+import type { OrdenCompraFieldType } from "@/components/features/orden_compras/field";
 import type { DictamenAdquisicionFieldType } from "./fields";
 import type { DictamenCaracteristicasAdicionalesFieldType } from "../fields";
 import { dictaminarDictamenProductoVarianteFieldsValidator, type DictaminarDictamenProductoVarianteFields } from "../dictaminar/form-schema";

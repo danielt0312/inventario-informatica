@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PaperclipIcon } from "lucide-react";
 import { useFieldContext } from "@/components/ui/form-context";
-import { OrdenCompraTable } from "./partials/table";
-import { ordenCompraInitialTableState } from "./partials/table-cols";
+import { OrdenCompraTable } from "./table";
 import { ArchivoAttachmentField, useArchivoAttachmentFieldState } from "@/components/features/archivos/attachment-field";
 import type { OrdenCompra } from "@/types/orden_compras";
 import React from "react";
+import { ordenCompraInitialTableState } from "./table-cols";
 
 export type OrdenCompraFieldType = number | undefined;
 export const OrdenCompraField = ({
@@ -65,7 +65,6 @@ export const OrdenCompraField = ({
                         }]}
                         tableOptions={{
                             initialState: {
-                                ...ordenCompraInitialTableState,
                                 columnOrder: ['selector', ...ordenCompraInitialTableState.columnOrder ?? []],
                             }
                         }}

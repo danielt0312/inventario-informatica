@@ -152,7 +152,7 @@ function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extend
                             <SubmitButton isSubmitting={isPending} label="Registrar" spinnerLabel="Registrando..." />
 
                             <Button onClick={() => setDialogOpen(false)} variant="outline">
-                                <XCircleIcon /> Cerrar
+                                <XCircleIcon /> Cancelar
                             </Button>
                         </DialogFooter>
                     </FormLayout>
