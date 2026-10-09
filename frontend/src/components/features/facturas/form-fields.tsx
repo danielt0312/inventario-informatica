@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PaperclipIcon } from "lucide-react";
-import { FacturaTable as FacturaTable } from "./partials/table";
+import { FacturaTable as FacturaTable } from "./table";
 import { useFieldContext } from "@/components/ui/form-context";
 import { ArchivoAttachmentField, useArchivoAttachmentFieldState } from "@/components/features/archivos/attachment-field";
-import { facturaTableInitialState } from "./partials/table-cols";
+import { facturaInitialTableState } from "./table-cols";
 import React from "react";
 import type { ProveedorFieldType } from "../proveedores/field";
 
@@ -62,8 +62,8 @@ export const FacturaField = ({
                         }]}
                         tableOptions={{
                             initialState: {
-                                ...facturaTableInitialState,
-                                columnOrder: ['factura.selector', ...(facturaTableInitialState.columnOrder ?? [])]
+                                ...facturaInitialTableState,
+                                columnOrder: ['factura.selector', ...(facturaInitialTableState.columnOrder ?? [])]
                             }
                         }}
                     />

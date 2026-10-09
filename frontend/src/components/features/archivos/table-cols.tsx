@@ -1,7 +1,7 @@
 import type { Archivo } from "@/types/documentos";
 import type { RowDataAccessorFn } from "@/types/generics";
 import type { ColumnDef, InitialTableState, TableMeta } from "@tanstack/react-table";
-import { TooltipButton } from "@/components/ui/tooltip-button";
+import { ActionRow } from "@/components/ui/action-row";
 import { toLocaleDateFormat } from "@/lib/utils";
 import { FileTextIcon } from "lucide-react";
 
@@ -29,19 +29,17 @@ function PreviewActionRow<TRowData>({
     const { uuid, nombre } = archivo;
 
     return (
-        <TooltipButton
+        <ActionRow
             tooltip={{ message: "Ver documento" }}
             disabled={meta?.isPreviewing}
             onClick={() => meta?.previewFile?.(uuid, nombre)}
-            variant="outline"
-            size="icon"
         >
             <FileTextIcon />
-        </TooltipButton>
+        </ActionRow>
     );
 }
 
-const ActionRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
+const ActionsRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
     id: 'actions',
     cell: ({ row, table }) => (
         <PreviewActionRow meta={table.options.meta} archivo={getRowData(row.original)} />
@@ -51,11 +49,19 @@ const ActionRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowD
 const getDefaultColumns = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData>[] => ([
     NombreRow(getRowData),
     FechaSubidaRow(getRowData),
-    ActionRow(getRowData)
+    ActionsRow(getRowData)
 ]);
 
 const initialState: InitialTableState = {
     columnOrder: ['nombre', 'fecha_subida', 'actions'],
 }
 
-export { type AccessorFn as ArchivoRowDataAccessFn, getDefaultColumns as getArchivoDefaultColumns, NombreRow as ArchivoNombreRow, FechaSubidaRow as ArchivoFechaSubidaRow, ActionRow as ArchivoActionRow, PreviewActionRow as ArchivoPreviewActionRow, initialState as archivoTableInitialState }
+export {
+    type AccessorFn as ArchivoRowDataAccessFn,
+    getDefaultColumns as getArchivoDefaultColumns,
+    NombreRow as ArchivoNombreRow,
+    FechaSubidaRow as ArchivoFechaSubidaRow,
+    ActionsRow as ArchivoActionsRow,
+    PreviewActionRow as ArchivoPreviewActionRow,
+    initialState as archivoTableInitialState
+}

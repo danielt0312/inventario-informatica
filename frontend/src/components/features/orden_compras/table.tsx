@@ -69,7 +69,6 @@ function Table({
 
     const [dialogOpen, setDialogOpen] = useState(false);
 
-
     return (
         <QueryDataTable
             queryKey={['orden_compras']}
@@ -117,7 +116,6 @@ function Table({
                                             )}
                                         />
                                     </FieldGroup>
-
 
                                     <form.AppField
                                         name="proveedor_id"

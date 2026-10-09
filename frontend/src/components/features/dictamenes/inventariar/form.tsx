@@ -78,7 +78,7 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
         <>
             <FormLayout form={form}>
                 <form.AppForm>
-                    <div className="max-w-1/3">
+                    <FieldGroup className="grid grid-cols-2">
                         {inventariarDictamenHasOrdenCompra(dictamen) ? (
                             <Field>
                                 <FieldLabel className="font-bold">Orden de Compra</FieldLabel>
@@ -89,7 +89,12 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                         ) : (
                             <form.AppField
                                 name="orden_compra_id"
-                                children={() => <OrdenCompraField onValueChange={setOrdenCompra} fieldLayout={{ required: true }} />}
+                                children={() => (
+                                    <OrdenCompraField
+                                        onValueChange={setOrdenCompra}
+                                        fieldLayout={{ required: true }}
+                                    />
+                                )}
                                 listeners={{
                                     onChange: () =>
                                         form.getFieldValue('adquisiciones')
@@ -99,27 +104,27 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                 }}
                             />
                         )}
-                    </div>
+                    </FieldGroup>
 
                     <form.AppField name="adquisiciones" mode="array">
                         {(field) => (
                             <>
                                 <div className="sticky top-0 z-50 flex flex-row justify-between bg-white pt-6 pb-2 -mt-6 -mb-2">
-                                    <Label className="font-bold text-md">Bienes Informáticos Solicitados</Label>
-                                    <div className="flex flex-row items-center gap-2">
+                                    <Label className="font-bold text-md">
+                                        Bienes Informáticos Solicitados
                                         <Badge variant="secondary">
-                                            {`Total de Registros: ${cantidadRegistrados}/${cantidadTotal}`}
+                                            Total de Registros: {cantidadRegistrados}/{cantidadTotal}
                                         </Badge>
+                                    </Label>
 
-                                        <Button
-                                            disabled={field.state.value.length >= cantidadTotal}
-                                            onClick={() => field.pushValue(inventariarDictamenArticuloFieldsDefaultValues)}
-                                            variant="outline"
-                                            size="sm"
-                                        >
-                                            <PlusCircleIcon /> Añadir
-                                        </Button>
-                                    </div>
+                                    <Button
+                                        disabled={field.state.value.length >= cantidadTotal}
+                                        onClick={() => field.pushValue(inventariarDictamenArticuloFieldsDefaultValues)}
+                                        variant="outline"
+                                        size="sm"
+                                    >
+                                        <PlusCircleIcon /> Añadir
+                                    </Button>
                                 </div>
 
                                 {field.state.value.map((_, index) => (

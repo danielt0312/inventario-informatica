@@ -1,6 +1,6 @@
 import type { OrdenCompra } from "@/types/orden_compras";
 import type { ColumnDef, InitialTableState } from "@tanstack/react-table"
-import { ArchivoActionRow } from "../archivos/table-cols";
+import { ArchivoActionsRow } from "../archivos/table-cols";
 import { toLocaleDateFormat } from "@/lib/utils";
 
 const defaultColumns: ColumnDef<OrdenCompra>[] = [
@@ -19,7 +19,7 @@ const defaultColumns: ColumnDef<OrdenCompra>[] = [
         header: 'Proveedor',
         accessorFn: ({ proveedor }) => `${proveedor.nombre} — ${proveedor.rfc}`
     },
-    ArchivoActionRow<OrdenCompra>((row) => row.archivo),
+    ArchivoActionsRow<OrdenCompra>((row) => row.archivo),
 ];
 
 const initialTableState: InitialTableState = {

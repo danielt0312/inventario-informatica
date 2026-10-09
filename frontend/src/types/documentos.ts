@@ -19,6 +19,7 @@ export type Oficio = {
 
 export type Factura = {
     id: number;
+    folio: string;
     fecha_emision: string;
     archivo: Archivo;
 };
