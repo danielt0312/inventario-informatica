@@ -31,6 +31,7 @@ class DictamenAdquisicionResource extends JsonResource
 
                     return [
                         'producto_variante' => new ProductoVarianteResource($this->productoVariante),
+                        'descripcion' => $this->descripcion
                     ];
                 }
             ),

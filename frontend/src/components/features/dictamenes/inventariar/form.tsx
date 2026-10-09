@@ -38,6 +38,7 @@ import { corregirDictamenProductoVarianteToFieldsValue } from "../corregir/form-
 import { ArticuloInventariabilidadBadge } from "../../articulos/table-cols";
 import { Badge } from "@/components/ui/badge";
 import { useStore } from "@tanstack/react-form";
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 
 function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
     const { mutate, isPending } = useDictamenFormActionMutation(dictamen);
@@ -167,13 +168,30 @@ function Form({ dictamen }: { dictamen: DetailedPorInventariarDictamen }) {
                                                     children={(field) => (
                                                         <DictamenAdquisicionField
                                                             items={adquisicionesAllItems}
-                                                            renderItem={({ cantidad_restante, label }) => (
-                                                                <span>
-                                                                    {cantidad_restante >= 1 && (
-                                                                        <Badge className="rounded-full mr-1" variant="secondary">{`Restantes: ${cantidad_restante}`}</Badge>
-                                                                    )}
-                                                                    {label}
-                                                                </span>
+                                                            renderItem={({ cantidad_restante, descripcion, empleado }) => (
+                                                                <Item size="xs" className="p-0">
+                                                                    <ItemContent>
+                                                                        <ItemTitle>
+                                                                            {descripcion}
+                                                                        </ItemTitle>
+                                                                        <ItemDescription>
+                                                                            {cantidad_restante >= 1 && (
+                                                                                <Badge className="rounded-full mr-1" variant="secondary">{`Restantes: ${cantidad_restante}`}</Badge>
+                                                                            )}
+                                                                            <span>
+                                                                                {empleado?.nombre ?? 'Juan pérez'}
+                                                                            </span>
+                                                                        </ItemDescription>
+                                                                    </ItemContent>
+                                                                </Item>
+                                                            )}
+                                                            renderSelectedItem={({ descripcion, empleado }) => (
+                                                                <>
+                                                                    {descripcion}
+                                                                    <span className="text-muted-foreground">
+                                                                        {' '} — {empleado?.nombre ?? 'Juan pérez'}
+                                                                    </span>
+                                                                </>
                                                             )}
                                                             availableItems={adquisicionesAvailableItems}
                                                             onFieldValueChange={(item) => {

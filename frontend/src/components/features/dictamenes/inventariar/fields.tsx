@@ -1,5 +1,4 @@
 import { toComboboxItems } from "@/components/ui/combobox-layout.shared";
-import { strCompactJoin } from "@/lib/utils";
 import { ComboboxFieldSimple, type ComboboxFieldSimpleProps } from "@/components/ui/combobox-field-simple";
 import { useComboboxFieldContext, useComboboxFieldValue, type ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import type { PorInventariarDictamenAdquisicion } from "@/types/dictamenes";
@@ -8,11 +7,7 @@ import React from "react";
 function useAdquisicionComboboxItems(initialValues: PorInventariarDictamenAdquisicion[]) {
     const initialItems = React.useMemo(() =>
         initialValues
-            .filter((adquisicion) => adquisicion.cantidad_restante > 0)
-            .map((adquisicion) => ({
-                ...adquisicion,
-                descripcion: `${strCompactJoin(adquisicion.producto_variante.tipo.nombre, adquisicion.producto_variante.descripcion, adquisicion.caracteristicas_adicionales)} ― ${adquisicion.empleado?.nombre ?? 'Juan Pérez'}`,
-            })),
+            .filter((adquisicion) => adquisicion.cantidad_restante > 0),
         [initialValues]);
 
     const [items, setItems] = React.useState(initialItems);
@@ -22,7 +17,7 @@ function useAdquisicionComboboxItems(initialValues: PorInventariarDictamenAdquis
         return toComboboxItems(filtered, (item) => ({
             value: item.id,
             label: item.descripcion,
-            cantidad_restante: item.cantidad_restante
+            ...item
         }))
     }, [items]);
 
@@ -30,7 +25,7 @@ function useAdquisicionComboboxItems(initialValues: PorInventariarDictamenAdquis
         () => toComboboxItems(items, (item) => ({
             label: item.descripcion,
             value: item.id,
-            cantidad_restante: item.cantidad_restante
+            ...item
         })),
         [items]
     );
