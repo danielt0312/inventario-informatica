@@ -8,7 +8,7 @@ import { QueryDataTable } from "@/components/ui/query-datatable";
 import { facturaTableInitialState, getFacturaDefaultColumns } from "./table-cols";
 import { useFilePreviewWindowMutation } from "@/hooks/use-file-preview-window-mutation";
 import { formOptions } from "@tanstack/react-form";
-import type { ProveedorFieldType } from "../../proveedores/form-fields";
+import type { ProveedorFieldType } from "../../proveedores/field";
 import React from "react";
 
 interface FacturaFieldProps extends Omit<React.ComponentProps<typeof QueryDataTable<Factura>>, 'queryKey' | 'url'> {

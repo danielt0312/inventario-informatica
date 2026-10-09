@@ -110,6 +110,9 @@ export type InferComboboxItemFromFn<
     T extends (...args: any[]) => readonly ComboboxLayoutItem<any>[]
 > = ReturnType<T>[number]
 
+export type InferComboboxItemValueFromFn<
+    T extends (...args: any[]) => readonly ComboboxLayoutItem<any>[]
+> = InferComboboxItemFromFn<T>['value']
 
 export type InferComboboxGroupFromFn<
     T extends (...args: any[]) => readonly ComboboxLayoutGroup<any>[]

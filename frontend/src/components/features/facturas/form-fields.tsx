@@ -6,7 +6,7 @@ import { useFieldContext } from "@/components/ui/form-context";
 import { ArchivoAttachmentField, useArchivoAttachmentFieldState } from "@/components/features/archivos/attachment-field";
 import { facturaTableInitialState } from "./partials/table-cols";
 import React from "react";
-import type { ProveedorFieldType } from "../proveedores/form-fields";
+import type { ProveedorFieldType } from "../proveedores/field";
 
 export type FacturaFieldType = number | undefined;
 export const FacturaField = ({

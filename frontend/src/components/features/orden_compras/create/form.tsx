@@ -4,7 +4,7 @@ import { defaultValues, validator, type OutputSchema } from "./form-schema";
 import { FormLayout } from "@/components/ui/form-layout";
 import { FieldGroup } from "@/components/ui/field";
 import { OrdenCompraFechaSolicitudField, OrdenCompraNumeroOrdenField } from "./form-fields";
-import { ProveedorField } from "../../proveedores/form-fields";
+import { ProveedorField } from "../../proveedores/field";
 import { ArchivoUploaderField } from "@/components/features/archivos/uploader-field";
 import type { TResponse } from "@/types/generics";
 import type { OrdenCompra } from "@/types/orden_compras";

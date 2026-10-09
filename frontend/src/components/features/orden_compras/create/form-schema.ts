@@ -1,5 +1,5 @@
 import { requiredIsoDateLTEToday, requiredString, selectedNumberOption } from "@/lib/schemas/common";
-import type { ProveedorFieldType } from "../../proveedores/form-fields";
+import type { ProveedorFieldType } from "../../proveedores/field";
 import type { ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
 import type { OrdenCompraFechaSolicitudFieldType, OrdenCompraNumeroOrdenFieldType } from "./form-fields";
 import z from "zod";

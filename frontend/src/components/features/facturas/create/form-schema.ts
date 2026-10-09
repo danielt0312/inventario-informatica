@@ -1,7 +1,7 @@
 import { requiredIsoDateLTEToday, requiredString } from "@/lib/schemas/common";
 import type { ArchivoUploaderFieldType } from "@/components/features/archivos/uploader-field";
 import type { FacturaFechaEmisionFieldType, FacturaFolioFieldType } from "./form-fields";
-import type { ProveedorFieldType } from "../../proveedores/form-fields";
+import type { ProveedorFieldType } from "../../proveedores/field";
 import z from "zod";
 
 type Schema = {
