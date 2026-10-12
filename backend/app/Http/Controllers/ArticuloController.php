@@ -22,10 +22,9 @@ class ArticuloController extends Controller
                 ]
             ])
             ->allowedFilters(
-                AllowedFilter::belongsTo('categoria', 'productoVariante.producto.tipo.categoria'),
+                AllowedFilter::partial('numero_inventario'),
                 AllowedFilter::belongsTo('tipo', 'productoVariante.producto.tipo'),
                 AllowedFilter::belongsTo('marca', 'productoVariante.producto.marca'),
-                AllowedFilter::belongsTo('producto', 'productoVariante.producto'),
                 AllowedFilter::belongsTo('estado'),
             )
             ->paginate($request->query('per_page', 10))
