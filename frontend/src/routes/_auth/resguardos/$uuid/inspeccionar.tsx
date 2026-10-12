@@ -65,15 +65,15 @@ function RouteComponent() {
                     <FieldGroup className="flex-row">
                         <FieldValue
                             label="Resguardante"
-                            value={resguardo.empleado.nombre}
+                            children={resguardo.empleado.nombre}
                         />
                         <FieldValue
                             label="Fecha de Actualización"
-                            value={toLocaleDateFormat(resguardo.fecha_actualizacion)}
+                            children={toLocaleDateFormat(resguardo.fecha_actualizacion)}
                         />
                         <FieldValue
                             label="Fecha de Cancelación"
-                            value={
+                            children={
                                 resguardo.fecha_cancelacion
                                     ? toLocaleDateFormat(resguardo.fecha_cancelacion)
                                     : <EmptyValue />
@@ -82,9 +82,12 @@ function RouteComponent() {
                     </FieldGroup>
 
                     <LinkToFile
-                        label={"Ver Documento"}
-                        title={`${resguardo.archivo.nombre}.${resguardo.archivo.extension}`}
-                        uuid={resguardo.archivo.uuid}
+                        label="Ver Documento"
+                        file={{
+                            title: `${resguardo.archivo.nombre}.${resguardo.archivo.extension}`,
+                            uuid: resguardo.archivo.uuid
+                        }}
+
                     />
 
                     <div className="flex flex-row justify-between">

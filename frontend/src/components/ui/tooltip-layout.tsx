@@ -1,35 +1,29 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
-interface TooltipLayoutProps {
-    children?: React.ReactNode;
-    tooltip?: Omit<React.ComponentProps<typeof Tooltip>, 'children'> & {
-        message?: React.ReactNode;
-        triggerAsChild?: boolean;
-    }
+interface Props extends React.ComponentProps<typeof Tooltip> {
+    content?: React.ReactNode;
+    triggerAsChild?: boolean;
 }
 
-function TooltipLayout({
+const Comp = ({
     children,
-    tooltip = {},
-}: TooltipLayoutProps) {
-    const {
-        message,
-        triggerAsChild = true,
-        ...props
-    } = tooltip;
+    content,
+    triggerAsChild = true,
+    ...props
+}: Props) => (
+    <Tooltip {...props}>
+        {content && (
+            <TooltipContent>
+                {content}
+            </TooltipContent>
+        )}
+        <TooltipTrigger asChild={triggerAsChild}>
+            {children}
+        </TooltipTrigger>
+    </Tooltip>
+);
 
-    return (
-        <Tooltip {...props}>
-            {message && (
-                <TooltipContent>
-                    {message}
-                </TooltipContent>
-            )}
-            <TooltipTrigger asChild={triggerAsChild}>
-                {children}
-            </TooltipTrigger>
-        </Tooltip>
-    );
+export {
+    Comp as TooltipLayout,
+    type Props as TooltipLayoutProps,
 }
-
-export { TooltipLayout }

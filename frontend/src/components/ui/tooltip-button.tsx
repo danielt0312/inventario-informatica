@@ -1,21 +1,23 @@
 import { Button } from "./button";
-import { TooltipLayout } from "./tooltip-layout";
+import { TooltipLayout, type TooltipLayoutProps } from "./tooltip-layout";
 
-interface TooltipButtonProps extends React.ComponentProps<typeof TooltipLayout>, React.ComponentProps<typeof Button> {
+interface Props extends React.ComponentProps<typeof Button> {
+    tooltip?: Omit<TooltipLayoutProps, 'children'>;
 }
 
-function TooltipButton({
+const Comp = ({
     children,
-    tooltip,
+    tooltip: tooltipProps,
     ...props
-}: TooltipButtonProps) {
-    return (
-        <TooltipLayout tooltip={tooltip}>
-            <Button {...props}>
-                {children}
-            </Button>
-        </TooltipLayout>
-    );
-}
+}: Props) => (
+    <TooltipLayout {...tooltipProps}>
+        <Button {...props}>
+            {children}
+        </Button>
+    </TooltipLayout>
+);
 
-export { TooltipButton }
+export {
+    Comp as TooltipButton,
+    type Props as TooltipButtonProps
+}

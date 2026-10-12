@@ -72,7 +72,7 @@ const DestroyAction = ({
                 onClick={() => setAlertOpen(true)}
                 variant="destructive"
                 tooltip={{
-                    message: "Cancelar",
+                    content: "Cancelar",
                 }}
             >
                 <BanIcon />
@@ -139,7 +139,7 @@ const columns: ColumnDef<Resguardo>[] = [
                         size="icon"
                         variant="outline"
                         tooltip={{
-                            message: "Ver más información"
+                            content: "Ver más información"
                         }}
                     >
                         <EyeIcon />

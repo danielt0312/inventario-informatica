@@ -39,7 +39,7 @@ const FormActionItemRow = ({ dictamen }: ActionProps<DetailedFormActionDictamen>
     return (
         <RouterButton
             tooltip={{
-                message: FormActionLabel[estadoId]
+                content: FormActionLabel[estadoId]
             }}
             to={ActionRoute.to}
             params={{
@@ -58,7 +58,7 @@ const CorregirActionItemRow = ({ dictamen }: ActionProps<DetailedCorregibleFormA
     <RouterButton
         to={CorregirRoute.to}
         params={{ uuid: dictamen.uuid }}
-        tooltip={{ message: "Corregir Adquisiciones" }}
+        tooltip={{ content: "Corregir Adquisiciones" }}
         variant="outline"
         size="icon"
     >
@@ -82,7 +82,7 @@ const CancelarActionItemRow = ({ dictamen }: { dictamen: Dictamen }) => {
             <ActionRow
                 variant="destructive"
                 tooltip={{
-                    message: "Cancelar Dictamen"
+                    content: "Cancelar Dictamen"
                 }}
                 onClick={() => setOpenDialog(true)}
             >
@@ -124,7 +124,7 @@ const SurtirActionRow = ({ dictamen }: ActionProps<DetailedPorSurtirDictamen | D
         <>
             <ActionRow
                 onClick={() => setOpen(true)}
-                tooltip={{ message: "Surtir Bienes Informáticos" }}
+                tooltip={{ content: "Surtir Bienes Informáticos" }}
             >
                 <PackagePlusIcon />
             </ActionRow>
@@ -252,14 +252,14 @@ const defaultColumns: ColumnDef<DetailedDictamen>[] = [
 
             return (
                 <div className="flex gap-1">
-                    {esDetailedCorregibleFormActionDictamen(dictamen) && (
-                        <CorregirActionItemRow dictamen={dictamen} />
-                    )}
                     {esFormActionDictamen(dictamen) && (
                         <FormActionItemRow dictamen={dictamen} />
                     )}
                     {esSurtibleDictamen(dictamen) && (
                         <SurtirActionRow dictamen={dictamen} />
+                    )}
+                    {esDetailedCorregibleFormActionDictamen(dictamen) && (
+                        <CorregirActionItemRow dictamen={dictamen} />
                     )}
                     {dictamenVersionHasArchivo(dictamen.version_actual) && (
                         <ArchivoPreviewActionRow

@@ -15,7 +15,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { FieldValue } from "@/components/ui/field-value";
 import { Spinner } from "@/components/ui/spinner";
-import { ShowOficioInfo } from "../common";
+import { DictamenShowOficioInfo } from "../common";
 import { BaseFieldLayout } from "@/components/ui/field-layout";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
@@ -72,7 +72,7 @@ export const DictamenCorregirForm = () => {
                 <FieldGroup className="flex-row">
                     <FieldValue
                         label="Área de Adscripción"
-                        value={dictamen.adscripcion.nombre}
+                        children={dictamen.adscripcion.nombre}
                     />
                     <BaseFieldLayout label="Fecha de solicitud" required disabled>
                         <DatePicker value={new Date} disabled />
@@ -80,7 +80,7 @@ export const DictamenCorregirForm = () => {
 
                     {/* todo cambiar esto por el layout utilizando el field */}
                     {dictamen.oficio && (
-                        <ShowOficioInfo oficio={dictamen.oficio} className="w-full flex flex-col gap-3" />
+                        <DictamenShowOficioInfo oficio={dictamen.oficio} />
                     )}
                 </FieldGroup>
 

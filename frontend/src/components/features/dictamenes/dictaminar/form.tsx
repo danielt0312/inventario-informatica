@@ -48,22 +48,22 @@ function Form({ dictamen }: { dictamen: DetailedPorDictaminarDictamen }) {
                             <div key={index} className="contents">
                                 <Card className='shadow-none'>
                                     <CardContent className="flex flex-col gap-7">
-                                        <FieldGroup className="grid grid-cols-2">
+                                        <FieldGroup className="flex-row">
                                             <FieldValue
                                                 label="Resguardante"
-                                                value={dictamen.version_actual.adquisiciones[index].empleado?.nombre ?? 'Juan Pérez'}
+                                                children={dictamen.version_actual.adquisiciones[index].empleado?.nombre ?? 'Juan Pérez'}
                                             />
 
                                             <FieldValue
                                                 label="Número de Inventario"
-                                                value={dictamen.version_actual.adquisiciones[index].articulo?.numero_inventario ?? <EmptyValue />}
+                                                children={dictamen.version_actual.adquisiciones[index].articulo?.numero_inventario ?? <EmptyValue />}
                                             />
                                         </FieldGroup>
 
                                         <div className="flex flex-row gap-7 grow">
                                             <FieldValue
                                                 label="Cantidad"
-                                                value={dictamen.version_actual.adquisiciones[index].cantidad}
+                                                children={dictamen.version_actual.adquisiciones[index].cantidad}
                                                 className="max-w-min"
                                             />
 

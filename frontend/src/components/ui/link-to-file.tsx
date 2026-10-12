@@ -1,40 +1,39 @@
 import { useFilePreviewWindowMutation, type FilePreviewWindowMutationFn } from "@/hooks/use-file-preview-window-mutation";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
-import { Label } from "./label";
-import { EyeIcon, type LucideProps } from "lucide-react";
+import { FileTextIcon, type LucideProps } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const LinkToFile = ({
-    title,
-    uuid,
-    label,
-    className,
-    iconSize = 14,
-    tooltipMessage = 'Ver documento',
-    ...props
-}: FilePreviewWindowMutationFn & Omit<React.ComponentProps<typeof Label>, 'title' | 'children' | 'onClick'> & {
+interface Props extends Omit<React.ComponentProps<'span'>, 'children'> {
+    file: FilePreviewWindowMutationFn;
     iconSize?: LucideProps['size'];
-    label: string;
-    tooltipMessage?: string;
-}) => {
-    const { mutateAsync } = useFilePreviewWindowMutation();
+    label?: React.ReactNode;
+}
+
+function Comp({
+    file,
+    className,
+    label,
+    iconSize = 14,
+    ...props
+}: Props) {
+    const { mutate } = useFilePreviewWindowMutation();
 
     return (
-        <Tooltip>
-            <TooltipTrigger asChild>
-                <Label
-                    onClick={async () => {
-                        await mutateAsync({ uuid, title });
-                    }}
-                    className={cn("text-sm gap-1 text-blue-400 underline-offset-4 hover:underline w-fit justify-self-start cursor-pointer", className)}
-                    {...props}
-                >
-                    <EyeIcon size={iconSize} />{label}
-                </Label>
-            </TooltipTrigger>
-            <TooltipContent>
-                {tooltipMessage}
-            </TooltipContent>
-        </Tooltip>
+        <span
+            data-slot="link-to-file"
+            onClick={() => mutate(file)}
+            className={cn(
+                "flex items-center gap-1 text-sm text-blue-400 underline-offset-4 hover:underline max-w-fit max-h-fit cursor-pointer",
+                className
+            )}
+            {...props}
+        >
+            <FileTextIcon size={iconSize} />
+            {label}
+        </span>
     );
+}
+
+export {
+    Comp as LinkToFile,
+    type Props as LinkToFileProps
 }

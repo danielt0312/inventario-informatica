@@ -7,6 +7,7 @@ import { DictamenArchivoField, DictamenOficioArchivoField } from "../fields";
 import { evidenciarAcuseFormDefaultValues, evidenciarAcuseFormValidator } from "./form-schema";
 import { useDictamenFormActionMutation } from '../form-action/view';
 import { EmptyValue } from "@/components/ui/empty-value";
+import { FieldValue } from "@/components/ui/field-value";
 
 function useForm(dictamen: DetailedPendienteAcuseDictamen) {
     const { mutate } = useDictamenFormActionMutation(dictamen);
@@ -50,22 +51,18 @@ function Form({ dictamen }: { dictamen: DetailedPendienteAcuseDictamen }) {
                     <Card key={index} className="shadow-none">
                         <CardContent className="flex flex-col gap-6">
                             <div className="flex gap-7">
-                                <div data-slot="label-container" className="w-1/12">
-                                    <Label className="font-bold">Cantidad</Label>
-                                    <Label>{adquisicion.cantidad}</Label>
-                                </div>
-                                <div data-slot="label-container" className="w-6/12">
-                                    <Label className="font-bold">Producto</Label>
-                                    <Label>{`${adquisicion.producto_variante.tipo?.nombre} ${adquisicion.producto_variante.descripcion} ${adquisicion.caracteristicas_adicionales ?? ''}`}</Label>
-                                </div>
-                                <div data-slot="label-container" className="w-3/12">
-                                    <Label className="font-bold">Resguardante</Label>
-                                    <Label>{adquisicion.empleado?.nombre ?? 'Juan Perez'}</Label>
-                                </div>
-                                <div data-slot="label-container" className="min-w-2/12">
-                                    <Label className="font-bold">Numero Inventario</Label>
-                                    <Label>{adquisicion.articulo?.numero_inventario ?? <EmptyValue />}</Label>
-                                </div>
+                                <FieldValue label="Cantidad" className="w-1/12">
+                                    {adquisicion.cantidad}
+                                </FieldValue>
+                                <FieldValue label="Descripción" className="w-6/12">
+                                    {adquisicion.descripcion}
+                                </FieldValue>
+                                <FieldValue label="Resguardante" className="w-3/12">
+                                    {adquisicion.empleado?.nombre ?? 'Juan Perez'}
+                                </FieldValue>
+                                <FieldValue label="No. de Inventario" className="w-2/12">
+                                    {adquisicion.articulo?.numero_inventario ?? <EmptyValue />}
+                                </FieldValue>
                             </div>
                         </CardContent>
                     </Card>

@@ -30,7 +30,7 @@ function PreviewActionRow<TRowData>({
 
     return (
         <ActionRow
-            tooltip={{ message: "Ver documento" }}
+            tooltip={{ content: "Ver Documento" }}
             disabled={meta?.isPreviewing}
             onClick={() => meta?.previewFile?.(uuid, nombre)}
         >

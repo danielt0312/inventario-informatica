@@ -152,7 +152,7 @@ const defaultColumns: ColumnDef<DetailedArticulo>[] = [
                             size="icon"
                             variant="outline"
                             tooltip={{
-                                message: "Actualizar"
+                                content: "Actualizar"
                             }}
                         >
                             <CircleFadingArrowUpIcon />
