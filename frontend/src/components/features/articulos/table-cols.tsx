@@ -1,47 +1,17 @@
 import type { ColumnDef, RowData } from "@tanstack/react-table"
-import type { ArticuloEstado, DetailedArticulo } from "@/types/articulos";
+import type { Articulo, DetailedArticulo } from "@/types/articulos";
 import type { RowDataAccessorFn } from "@/types/generics";
 import { Badge } from "@/components/ui/badge";
-import { ArticuloEstadoEnum, ProductoTipoEnum } from "@/lib/constants";
+import { ProductoTipoEnum } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { RouterButton } from "@/components/ui/router-button";
 import { Route } from "@/routes/_auth/articulos/$uuid/actualizar";
 import { CircleFadingArrowUpIcon } from "lucide-react";
 import { EmptyValue } from "@/components/ui/empty-value";
+import { ArticuloEstadoBadge } from "./estado-badge";
 
-type AccessorFn<TRowData extends RowData> = RowDataAccessorFn<TRowData, DetailedArticulo>;
-
-const estadoColorVariants = cva(
-    undefined,
-    {
-        variants: {
-            variant: {
-                [ArticuloEstadoEnum.Activo]: "text-black bg-lime-400",
-                [ArticuloEstadoEnum.Baja]: "text-black bg-red-400",
-                [ArticuloEstadoEnum.BajaPreventiva]: "text-black bg-red-400/80",
-            }
-        },
-    }
-);
-
-const EstadoBadge = ({
-    estado,
-    className,
-    ...props
-}: React.ComponentProps<typeof Badge> & {
-    estado: ArticuloEstado
-}) => (
-    <Badge
-        {...props}
-        className={cn(
-            estadoColorVariants({ variant: estado.id }),
-            className
-        )}
-    >
-        {estado.nombre}
-    </Badge>
-);
+type AccessorFn<TRowData extends RowData, TArticulo extends Articulo = Articulo> = RowDataAccessorFn<TRowData, TArticulo>;
 
 const NumeroInventarioRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
     id: 'articulo.numero_inventario',
@@ -105,14 +75,14 @@ const InventariabilidadBadge = ({
     </Badge>
 );
 
-const EstadoRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData> => ({
+const EstadoRow = <TRowData, TDetailedArticulo extends DetailedArticulo>(getRowData: AccessorFn<TRowData, TDetailedArticulo>): ColumnDef<TRowData> => ({
     id: 'articulo.estado',
     header: 'Estado',
     cell: ({ row }) => {
         const articulo = getRowData(row.original);
         return (
             <div className="flex flex-col gap-1">
-                <EstadoBadge estado={articulo.estado} />
+                <ArticuloEstadoBadge estado={articulo.estado} />
                 {articulo.es_inventariable !== null && <InventariabilidadBadge variant={articulo.es_inventariable ? 'inventariable' : 'no-inventariable'} />}
                 {articulo.surtimiento?.observaciones && (
                     <Badge className="bg-red-400/80 text-black">
@@ -124,17 +94,17 @@ const EstadoRow = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowD
     }
 });
 
-const defaultColumnsBuilder = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData>[] => ([
+const baseColumnsBuilder = <TRowData,>(getRowData: AccessorFn<TRowData>): ColumnDef<TRowData>[] => ([
     NumeroInventarioRow(getRowData),
     NumeroSerieRow(getRowData),
     DescripcionRow(getRowData),
     MarcaRow(getRowData),
     ModeloRow(getRowData),
-    EstadoRow(getRowData)
 ]);
 
 const defaultColumns: ColumnDef<DetailedArticulo>[] = [
-    ...defaultColumnsBuilder<DetailedArticulo>(row => row),
+    ...baseColumnsBuilder<DetailedArticulo>((row) => row),
+    EstadoRow((row) => row),
     {
         id: "actions",
         cell: ({ row }) => {
@@ -166,9 +136,7 @@ const defaultColumns: ColumnDef<DetailedArticulo>[] = [
 
 export {
     defaultColumns as articuloTableColumns,
-    estadoColorVariants as articuloEstadoColorVariants,
-    EstadoBadge as ArticuloEstadoBadge,
-    defaultColumnsBuilder as articuloDefaultColumnsBuilder,
+    baseColumnsBuilder as articuloBaseColumnsBuilder,
     InventariabilidadBadge as ArticuloInventariabilidadBadge,
     type AccessorFn as ArticuloRowDataAccessorFn
 }

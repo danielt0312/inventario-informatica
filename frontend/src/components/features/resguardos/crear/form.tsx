@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { BaseFieldLayout } from "@/components/ui/field-layout";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/datatable";
-import { articuloDefaultColumnsBuilder } from "@/components/features/articulos/table-cols";
+import { articuloBaseColumnsBuilder } from "@/components/features/articulos/table-cols";
 import { toLocaleDateFormat } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -180,7 +180,7 @@ function ResguardoTablas({ articulosResguardadosPrevios }: { articulosResguardad
                         : <EmptyValue />
                 )
             },
-            ...articuloDefaultColumnsBuilder<ArticuloResguardado>(row => row.articulo),
+            ...articuloBaseColumnsBuilder<ArticuloResguardado>(row => row.articulo),
             {
                 id: "actions",
                 cell: ({ row }) => (
@@ -232,7 +232,7 @@ function ArticulosTable({
     const table = useAppQueryDataTable({
         data: data?.data ?? [],
         columns: [
-            ...articuloDefaultColumnsBuilder<Articulo>(row => row),
+            ...articuloBaseColumnsBuilder<Articulo>(row => row),
             {
                 id: "actions",
                 cell: ({ row }) => {

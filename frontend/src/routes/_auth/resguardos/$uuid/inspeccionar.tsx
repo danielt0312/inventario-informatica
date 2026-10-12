@@ -11,7 +11,7 @@ import { FieldGroup } from '@/components/ui/field';
 import { ResguardoEstadoBadge } from '@/components/features/resguardos/partials/table-cols';
 import { LinkToFile } from '@/components/ui/link-to-file';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { articuloDefaultColumnsBuilder } from '@/components/features/articulos/table-cols';
+import { articuloBaseColumnsBuilder } from '@/components/features/articulos/table-cols';
 import { DataTable } from '@/components/ui/datatable';
 import { Label } from '@/components/ui/label';
 import GoBackButton from '@/components/Goback';
@@ -42,7 +42,7 @@ function RouteComponent() {
                 header: "Fecha de Asignación",
                 cell: ({ row: { original } }) => toLocaleDateFormat(original.fecha_asignacion)
             },
-            ...articuloDefaultColumnsBuilder<(typeof resguardo.articulos_resguardados)[number]>(row => row.articulo),
+            ...articuloBaseColumnsBuilder<(typeof resguardo.articulos_resguardados)[number]>(row => row.articulo),
         ],
         getCoreRowModel: getCoreRowModel()
     });
