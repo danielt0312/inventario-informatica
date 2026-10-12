@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router"
+import { useNavigate } from "@tanstack/react-router"
 import { Route as AuthRoute } from "@/routes/_auth";
 import { Route as InventarioRoute } from "@/routes/_auth/articulos";
 import { Route as DictamenRoute } from "@/routes/_auth/dictamenes";
@@ -6,7 +6,7 @@ import { Route as DocumentosRoute } from "@/routes/_auth/documentos";
 import { Route as ResguardosRoute } from "@/routes/_auth/resguardos";
 import { Route as LoginRoute } from "@/routes/_guest/login";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
+import { RouterButton } from "./ui/router-button";
 import { LogOutIcon } from "lucide-react";
 import api from "@/lib/axios";
 
@@ -14,21 +14,15 @@ function Navbar() {
     const { user } = AuthRoute.useRouteContext()
     const navigate = useNavigate()
 
-    async function logout() {
-        await api.post('logout')
-
-        navigate({ to: LoginRoute.to })
-    }
-
     return (
         <div className="bg-stone-900 flex justify-center">
             <div className="container">
                 <div className="flex flex-row">
                     <div className="flex-1">
-                        <Link to={InventarioRoute.to}><NavbarItem>Inventario</NavbarItem></Link>
-                        <Link to={DictamenRoute.to}><NavbarItem>Dictámenes</NavbarItem></Link>
-                        <Link to={ResguardosRoute.to}><NavbarItem>Resguardos</NavbarItem></Link>
-                        <Link to={DocumentosRoute.to}><NavbarItem>Documentos</NavbarItem></Link>
+                        <NavbarItem to={InventarioRoute.to}>Inventario</NavbarItem>
+                        <NavbarItem to={DictamenRoute.to}>Dictámenes</NavbarItem>
+                        <NavbarItem to={ResguardosRoute.to}>Resguardos</NavbarItem>
+                        <NavbarItem to={DocumentosRoute.to}>Documentos</NavbarItem>
                     </div>
                     <div>
                         <DropdownMenu>
@@ -38,7 +32,12 @@ function Navbar() {
 
                             <DropdownMenuContent align="end">
                                 <DropdownMenuGroup>
-                                    <DropdownMenuItem onClick={logout}>
+                                    <DropdownMenuItem
+                                        onClick={async () => {
+                                            await api.post('logout')
+                                            await navigate({ to: LoginRoute.to })
+                                        }}
+                                    >
                                         Cerrar sessión <LogOutIcon className="text-primary" />
                                     </DropdownMenuItem>
                                 </DropdownMenuGroup>
@@ -51,16 +50,16 @@ function Navbar() {
     )
 }
 
-function NavbarItem({ children, ...props }: React.ComponentProps<"button">) {
-  return (
-    <Button
-      {...props}
-      variant="link"
-      className="min-h-14 px-6 font-bold cursor-pointer text-primary-foreground"
-    >
-      {children}
-    </Button>
-  );
+function NavbarItem({ children, ...props }: React.ComponentProps<typeof RouterButton>) {
+    return (
+        <RouterButton
+            {...props}
+            variant="link"
+            className="min-h-14 px-6 font-bold cursor-pointer text-primary-foreground"
+        >
+            {children}
+        </RouterButton>
+    );
 }
 
 export default Navbar
