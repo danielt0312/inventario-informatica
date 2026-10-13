@@ -72,7 +72,7 @@ export const DictamenCorregirForm = () => {
                 <FieldGroup className="flex-row">
                     <FieldValue
                         label="Área de Adscripción"
-                        children={dictamen.adscripcion.nombre}
+                        children={dictamen.area.nombre}
                     />
                     <BaseFieldLayout label="Fecha de solicitud" required disabled>
                         <DatePicker value={new Date} disabled />
@@ -113,7 +113,7 @@ export const DictamenCorregirForm = () => {
                                                         name={`adquisiciones[${index}].empleado_id`}
                                                         children={() => (
                                                             <EmpleadoField
-                                                                adscripcionId={dictamen.adscripcion.id}
+                                                                areaId={dictamen.area.id}
                                                                 required
                                                             />
                                                         )}

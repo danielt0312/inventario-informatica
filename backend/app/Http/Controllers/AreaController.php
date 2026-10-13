@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Adscripcion;
+use App\Models\Area;
 
-class AdscripcionController extends Controller
+class AreaController extends Controller
 {
     public function index()
     {
         // todo cambiar por consulta real
-        return Adscripcion::factory()
-            ->count(8)
+        return Area::factory()
+            ->count(9)
             ->make()
+            ->sort()
             ->toResourceCollection();
     }
 }

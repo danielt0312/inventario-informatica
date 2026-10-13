@@ -16,11 +16,10 @@ class DictamenAdquisicionResource extends JsonResource
             'cantidad' => $this->cantidad,
             'caracteristicas_adicionales' => $this->caracteristicas_adicionales,
             'articulo' => new ArticuloResource($this->whenLoaded('articulo')),
-            // todo cambiar por resource/data correcto
-            'empleado' => [
-                'id' => 3,
-                'nombre' => 'Juan Perez',
-            ],
+            // debug
+            'empleado' => new EmpleadoResource(\App\Models\Empleado::factory()->make([
+                'id' => $this->empleado_id
+            ])),
             $this->mergeWhen($dictamen->esEstadoPorDictaminar(), [
                 'borrador_producto_variante' => json_decode($this->borrador_producto_variante),
             ]),

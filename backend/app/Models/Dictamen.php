@@ -44,7 +44,7 @@ class Dictamen extends Model
     protected $fillable = [
         'version_actual_id',
         'estado_id',
-        'adscripcion_id',
+        'area_id',
         'oficio_id',
         'orden_compra_id',
         'empleado_id',

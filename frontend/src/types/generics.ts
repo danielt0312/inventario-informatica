@@ -10,7 +10,6 @@ export type TCatalogo<TValue extends React.Key = number> = {
 export type ComboboxCatalogoItem<TItem extends TCatalogo> =
   TItem & ComboboxLayoutItem<TItem["id"]>
 
-
 export type TResponse<T> = {
     data: T;
 }
@@ -27,6 +26,7 @@ export interface PaginatedResponse<T>
         last_page: number;
     }
 }
+
 export type LaravelValidationErrors = Record<string, string[]>
 
 export type WithPrefix<T, P extends string> = {

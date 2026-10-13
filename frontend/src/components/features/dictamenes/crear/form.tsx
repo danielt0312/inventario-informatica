@@ -8,7 +8,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { Card, CardContent } from "@/components/ui/card";
 import { DictamenOficioArchivoField, DictamenCantidadField, DictamenFechaSolicitudField, DictamenFolioField, DictamenCaracteristicasAdicionalesField } from "../fields";
-import { AdscripcionField } from "@/components/features/adscripciones/field";
+import { AreaField } from "@/components/features/areas/field";
 import { EmpleadoField } from '@/components/features/empleados/field';
 import { FormLayout } from "@/components/ui/form-layout";
 import { ProductoTipoField } from '@/components/features/productos/tipo-field';
@@ -59,8 +59,8 @@ function Form() {
                         children={() => <DictamenFechaSolicitudField />}
                     />
                     <form.AppField
-                        name="adscripcion_id"
-                        children={() => <AdscripcionField layout={{ label: "Área de Adscripción solicitante" }} required emptyValue={undefined} />}
+                        name="area_id"
+                        children={() => <AreaField layout={{ label: "Área de Adscripción solicitante" }} required emptyValue={undefined} />}
                     />
                     <form.AppField
                         name="folio"
@@ -92,14 +92,14 @@ function Form() {
                                     <CardContent className="flex gap-7 items-center">
                                         <div className="flex flex-col gap-7 grow">
                                             <FieldGroup className="grid grid-cols-2">
-                                                <form.Subscribe selector={(state) => state.values.adscripcion_id}>
-                                                    {adscripcionId => (
+                                                <form.Subscribe selector={(state) => state.values.area_id}>
+                                                    {(areaId) => (
                                                         <form.AppField
                                                             name={`adquisiciones[${index}].empleado_id`}
                                                             children={() => (
                                                                 <EmpleadoField
-                                                                    adscripcionId={adscripcionId}
-                                                                    disabled={adscripcionId === undefined}
+                                                                    areaId={areaId}
+                                                                    disabled={areaId === undefined}
                                                                     required
                                                                 />
                                                             )}
@@ -129,6 +129,7 @@ function Form() {
                                                             name={`adquisiciones[${index}].borrador_producto_variante.tipo_id`}
                                                             children={() => <ProductoTipoField required />}
                                                         />
+
                                                         <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador_producto_variante.tipo_id}>
                                                             {(productoTipoId) => {
                                                                 switch (productoTipoId) {

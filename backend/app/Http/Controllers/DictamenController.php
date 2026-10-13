@@ -59,7 +59,7 @@ class DictamenController extends Controller
     public function store(StoreDictamenRequest $request)
     {
         $oficioArchivo = null;
-        if (! $this->dictamenService->esAdscripcionInterna($request->validated('adscripcion_id'))) {
+        if (! $this->dictamenService->esAreaInterna($request->validated('area_id'))) {
             $oficioArchivo = $request->getArchivo();
         }
 

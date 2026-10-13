@@ -15,7 +15,7 @@ type Base<TEstado extends BaseEstado = BaseEstado, TOficio extends IncludableOfi
     id: number;
     uuid: string;
     estado: TEstado;
-    adscripcion: TCatalogo;
+    area: TCatalogo;
     oficio: TOficio;
 }
 type BaseVersion = {

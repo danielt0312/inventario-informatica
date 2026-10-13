@@ -2,7 +2,7 @@ import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { ComboboxFieldSimple, type ComboboxFieldSimpleProps } from "@/components/ui/combobox-field-simple";
-import { adscripcionesQueryOptions } from "./queries";
+import { areasQueryOptions } from "./queries";
 import type { ComboboxLayoutItemValue, ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 
 type FieldType<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false, Value extends ComboboxLayoutItemValue = number> = ComboboxFieldType<Empty, Multiple, Value>;
@@ -21,7 +21,7 @@ function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extend
     ...props
 }: FieldProps<Empty, Multiple>) {
     const { data: items = [] } = useQuery({
-        ...adscripcionesQueryOptions,
+        ...areasQueryOptions,
         select: toComboboxCatalogItems
     });
 
@@ -38,6 +38,6 @@ function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extend
 }
 
 export {
-    Field as AdscripcionField,
-    type FieldType as AdscripcionFieldType
+    Field as AreaField,
+    type FieldType as AreaFieldType
 }

@@ -9,7 +9,7 @@ import {
 } from "@/lib/schemas/common";
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/empleados/field";
-import type { AdscripcionFieldType } from "@/components/features/adscripciones/field";
+import type { AreaFieldType } from "@/components/features/areas/field";
 import type { DictamenCantidadFieldType, DictamenCaracteristicasAdicionalesFieldType, DictamenFechaSolicitudFieldType, DictamenFolioFieldType, DictamenOficioArchivoFieldType } from "../fields";
 import type { ProductoMarcaFieldType } from "../../productos/marca-field";
 import type { ProductoModeloFieldType } from "../../productos/variante-spec-field-group";
@@ -111,7 +111,7 @@ const adquisicionFieldsDefaultValues: AdquisicionFields = {
 type Schema = {
     folio: DictamenFolioFieldType;
     fecha_solicitud: DictamenFechaSolicitudFieldType;
-    adscripcion_id: AdscripcionFieldType;
+    area_id: AreaFieldType;
     archivo_uuid: DictamenOficioArchivoFieldType;
     adquisiciones: AdquisicionFields[];
 }
@@ -119,7 +119,7 @@ type Schema = {
 const defaultValues: Schema = {
     folio: undefined,
     fecha_solicitud: undefined,
-    adscripcion_id: undefined,
+    area_id: undefined,
     archivo_uuid: undefined,
     adquisiciones: [adquisicionFieldsDefaultValues]
 } as const;
@@ -136,7 +136,7 @@ const adquisicionFieldsValidator = z
 const validator = z.object({
     folio: requiredString,
     fecha_solicitud: requiredIsoDateLTEToday,
-    adscripcion_id: selectedNumberOption,
+    area_id: selectedNumberOption,
     archivo_uuid: requiredString,
     adquisiciones: requiredArray(adquisicionFieldsValidator)
 });

@@ -49,21 +49,21 @@ class DictamenService
 
     public function crear(StoreDictamenData $data, ?Archivo $oficioArchivo): Dictamen
     {
-        $esAdscripcionInterna = $this->esAdscripcionInterna($data->adscripcionId);
+        $esAreaInterna = $this->esAreaInterna($data->areaId);
 
-        if ($esAdscripcionInterna && $oficioArchivo === null) {
+        if ($esAreaInterna && $oficioArchivo === null) {
             $this->oficioArchivoMissingFailure();
         }
 
-        return DB::transaction(function () use ($data, $oficioArchivo, $esAdscripcionInterna) {
-            $oficio = !$esAdscripcionInterna
+        return DB::transaction(function () use ($data, $oficioArchivo, $esAreaInterna) {
+            $oficio = !$esAreaInterna
                 ? $this->oficioService->create($data->oficio, $oficioArchivo)
                 : null;
 
             $dictamen = Dictamen::create([
                 'estado_id' => DictamenEstadoEnum::PorDictaminar->value,
-                'empleado_id' => 1, // todo obtener jefe de adscripcion interna
-                'adscripcion_id' => $data->adscripcionId,
+                'empleado_id' => 1, // todo obtener jefe de area interna
+                'area_id' => $data->areaId,
                 'oficio_id' => $oficio?->id,
             ]);
 
@@ -293,11 +293,11 @@ class DictamenService
         );
     }
 
-    public function esAdscripcionInterna(int $adscripcionId): bool
+    public function esAreaInterna(int $areaId): bool
     {
-        // todo identificar si el area de adscripcion es la interna
+        // todo identificar si el area de area es la interna
         // todo revisar si mover a otra seccion
-        return $adscripcionId === 2;
+        return $areaId === 2;
     }
 
     protected function oficioArchivoMissingFailure(): void

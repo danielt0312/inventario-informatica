@@ -12,7 +12,7 @@ import { FieldValue } from "@/components/ui/field-value";
 function useForm(dictamen: DetailedPendienteAcuseDictamen) {
     const { mutate } = useDictamenFormActionMutation(dictamen);
 
-    // TODO validar cuando el oficio no existe debido a la adscripcion
+    // TODO validar cuando el oficio no existe debido a la area
     const validator = evidenciarAcuseFormValidator(!(dictamen.oficio && dictamen.oficio.verified_at !== null));
 
     return useAppForm({

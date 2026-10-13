@@ -1,6 +1,6 @@
 import type { ComboboxFieldEmptyType, ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import type { ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
-import type { AdscripcionFieldType } from "../adscripciones/field";
+import type { AreaFieldType } from "../areas/field";
 import type { Empleado } from "@/types/externos";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -19,17 +19,17 @@ type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple exten
     >,
     'items' | 'enabled'
 > & {
-    adscripcionId?: AdscripcionFieldType;
+    areaId?: AreaFieldType;
 };
 
 function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false>({
-    adscripcionId,
+    areaId,
     layout,
     disabled,
     ...props
 }: FieldProps<Empty, Multiple>) {
     const { data: items = [] } = useQuery({
-        ...empleadosQueryOptions(adscripcionId),
+        ...empleadosQueryOptions(areaId),
         enabled: !disabled,
         select: toComboboxCatalogItems
     });

@@ -13,7 +13,7 @@ use Spatie\LaravelData\Attributes\MapInputName;
 class StoreDictamenData extends Data
 {
     public function __construct(
-        public int $adscripcionId,
+        public int $areaId,
         public StoreDictamenVersionData $version,
 
         #[DataCollectionOf(StoreDictamenAdquisicionData::class)]
@@ -27,7 +27,7 @@ class StoreDictamenData extends Data
         $validated = $request->validated();
 
         return new self(
-            adscripcionId: $validated['adscripcion_id'],
+            areaId: $validated['area_id'],
             version: StoreDictamenVersionData::from([
                 'fechaSolicitud' => $validated['fecha_solicitud']
             ]),

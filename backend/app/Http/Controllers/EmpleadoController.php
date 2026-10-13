@@ -10,8 +10,10 @@ class EmpleadoController extends Controller
     {
         // todo cambiar por consulta real
         return Empleado::factory()
-            ->count(8)
+            ->withId()
+            ->count(9)
             ->make()
+            ->sort()
             ->toResourceCollection();
     }
 }

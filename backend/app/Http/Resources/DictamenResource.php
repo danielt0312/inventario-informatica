@@ -13,10 +13,9 @@ class DictamenResource extends JsonResource
             'id' => $this->id,
             'uuid' => $this->uuid,
             //debug
-            'adscripcion' => [
-                'id' => $this->adscripcion_id,
-                'nombre' => fake()->jobTitle()
-            ],
+            'area' => new AreaResource(\App\Models\Area::factory()->make([
+                'id' => $this->area_id
+            ])),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'oficio' => new OficioResource($this->whenLoaded('oficio')),

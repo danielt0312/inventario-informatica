@@ -27,7 +27,7 @@ class ResguardoController extends Controller
                 AllowedFilter::belongsTo('estado'),
                 // TODO realizar filtrados por empleado y adscripción (de empleado)
                 // AllowedFilter::exact('empleado', 'empleado_id'),
-                // AllowedFilter::exact('adscripcion', 'empleado.adscripcion_id'),
+                // AllowedFilter::exact('area', 'empleado.area_id'),
             )
             ->paginate($request->query('per_page', 10))
             ->toResourceCollection();

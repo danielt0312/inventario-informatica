@@ -4,13 +4,19 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AdscripcionFactory extends Factory
+class AreaFactory extends Factory
 {
     public function definition(): array
     {
         return [
-            'id' => fake()->unique()->randomDigitNotNull(),
             'nombre' => fake()->jobTitle()
         ];
+    }
+
+    public function withId(): Factory
+    {
+        return $this->state(fn () => [
+            'id' => fake()->unique()->randomDigitNotNull(),
+        ]);
     }
 }

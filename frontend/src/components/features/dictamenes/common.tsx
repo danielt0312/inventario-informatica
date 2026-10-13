@@ -15,7 +15,7 @@ export const DictamenShowInfo = ({
 }) => (
     <FieldGroup className="grid grid-cols-4">
         <FieldValue label="Área Solicitante" className="col-span-2">
-            {dictamen.adscripcion?.nombre ?? 'Dirección de Tecnologías de la Información'}
+            {dictamen.area.nombre}
         </FieldValue>
         <FieldValue label="Fecha de Solicitud">
             {toLocaleDateFormat(dictamen.version_actual.fecha_solicitud)}

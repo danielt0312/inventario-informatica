@@ -1,15 +1,15 @@
 import { queryOptions } from "@tanstack/react-query";
-import type { AdscripcionFieldType } from "../adscripciones/field";
-import api from "@/lib/axios";
+import type { AreaFieldType } from "../areas/field";
 import type { TResponse } from "@/types/generics";
 import type { Empleado } from "@/types/externos";
+import api from "@/lib/axios";
 
-const options = (adscripcionId: AdscripcionFieldType) => queryOptions({
-    queryKey: ['empleados', adscripcionId],
+const options = (areaId: AreaFieldType) => queryOptions({
+    queryKey: ['empleados', areaId],
     queryFn: () => api.get<TResponse<Empleado[]>>('api/empleados', {
         params: {
             filter: {
-                adscripciones: adscripcionId
+                areas: areaId
             }
         }
     }).then(r => r.data.data),

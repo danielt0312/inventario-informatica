@@ -16,7 +16,7 @@ class StoreDictamenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'adscripcion_id' => [
+            'area_id' => [
                 'required',
                 'integer'
             ],

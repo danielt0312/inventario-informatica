@@ -9,8 +9,14 @@ class EmpleadoFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => fake()->unique()->randomDigitNotNull(),
             'nombre' => fake()->name()
         ];
+    }
+
+    public function withId(): Factory
+    {
+        return $this->state(fn () => [
+            'id' => fake()->unique()->randomDigitNotNull(),
+        ]);
     }
 }

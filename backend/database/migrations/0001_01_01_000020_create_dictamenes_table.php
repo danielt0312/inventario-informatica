@@ -31,7 +31,7 @@ return new class extends Migration
                 ->constrained('orden_compras', indexName: 'fk_dictamenes_orden_compras')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
-            $table->unsignedBigInteger('adscripcion_id'); // todo cambiar por definicion real
+            $table->unsignedBigInteger('area_id'); // todo cambiar por definicion real
             $table->unsignedBigInteger('empleado_id'); // todo cambiar por definicion real
             $table->boolean('tiene_observaciones')
                 ->nullable();

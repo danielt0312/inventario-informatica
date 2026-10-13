@@ -110,7 +110,7 @@ const DestroyAction = ({
 const columns: ColumnDef<Resguardo>[] = [
     {
         header: 'Área de Adscripción',
-        accessorFn: (row) => row.adscripcion.nombre,
+        accessorFn: (row) => row.area.nombre,
     },
     {
         header: 'Resguardante',

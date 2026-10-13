@@ -1,6 +1,6 @@
 import type { ResguardoEstadoEnum } from "@/lib/constants";
 import type { Articulo } from "./articulos";
-import type { Adscripcion, Empleado } from "./externos";
+import type { Area, Empleado } from "./externos";
 import type { Includable, TCatalogo } from "./generics";
 import type { Archivo } from "./documentos";
 
@@ -22,7 +22,7 @@ type Resguardo<TEstado extends BaseEstado = BaseEstado> = {
     fecha_actualizacion: string;
     fecha_cancelacion: string | null;
     empleado: Empleado;
-    adscripcion: Adscripcion;
+    area: Area;
 }
 
 type DetailedResguardo<TArticulo extends IncludableArticulo = IncludableArticulo, TResguardo extends Resguardo = Resguardo> = TResguardo & {
