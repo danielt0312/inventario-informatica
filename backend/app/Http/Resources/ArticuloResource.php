@@ -11,22 +11,21 @@ class ArticuloResource extends JsonResource
     {
         return [
             'uuid' => $this->uuid,
-            'producto' => new ProductoResource($this->whenLoaded('producto')),
-            'estado' => new ArticuloEstadoResource($this->whenLoaded('estado')),
             'numero_serie' => $this->numero_serie,
             'costo_unitario' => $this->costo_unitario,
-            'factura' => new FacturaResource($this->whenLoaded('factura')),
-            'qr_archivo' => new ArchivoResource($this->whenLoaded('qrArchivo')),
             'numero_inventario' => $this->numero_inventario,
             'cuenta_contable' => $this->cuenta_contable,
             'es_inventariable' => $this->es_inventariable,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'producto' => new ProductoResource($this->whenLoaded('producto')),
+            'estado' => new ArticuloEstadoResource($this->whenLoaded('estado')),
+            'factura' => new FacturaResource($this->whenLoaded('factura')),
+            'qr_archivo' => new ArchivoResource($this->whenLoaded('qrArchivo')),
             'producto_variante' => new ProductoVarianteResource($this->whenLoaded('productoVariante')),
-            'surtimiento' => $this->whenLoaded(
-                'surtimiento',
-                fn ($surtimiento) => new DictamenSurtimientoResource($this->surtimiento)
-            )
+            'surtimiento' => new DictamenSurtimientoResource($this->whenLoaded('surtimiento')),
+            'ubicaciones' => ArticuloUbicacionResource::collection($this->whenLoaded('ubicaciones')),
+            'ubicacionActual' => new ArticuloUbicacionResource($this->whenLoaded('ubicacionActual')),
         ];
     }
 }

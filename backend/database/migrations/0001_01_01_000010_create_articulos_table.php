@@ -71,13 +71,13 @@ return new class extends Migration
                 ->constrained('articulos', indexName: 'fk_articulo_ubicaciones_articulos')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
-            $table->unsignedBigInt('area_id');
+            $table->unsignedBigInteger('area_id');
             $table->date('fecha_inicio');
             $table->date('fecha_fin')
                 ->nullable();
             $table->unsignedBigInteger('ubicacion_vigente_marker')
                 ->nullable()
-                ->virtualAs('CASE WHEN fecha_fin IS NULL THEN articulo_id ELSE NULL END')
+                ->virtualAs('CASE WHEN fecha_fin IS NULL THEN articulo_id ELSE NULL END');
             $table->timestamps();
 
             $table->unique('ubicacion_vigente_marker', 'uk_articulo_ubicaciones_vigente');

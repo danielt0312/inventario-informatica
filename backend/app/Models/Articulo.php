@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
-    HasOne
+    HasOne,
+    HasMany
 };
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -42,6 +43,16 @@ class Articulo extends Model
         'dictamen_id' => null,
         'es_inventariable' => null,
     ];
+
+    public function ubicaciones(): HasMany
+    {
+        return $this->hasMany(ArticuloUbicacion::class);
+    }
+
+    public function ubicacionActual(): HasOne
+    {
+        return $this->ubicaciones()->one()->ofMany();
+    }
 
     public function dictamen(): BelongsTo
     {

@@ -41,6 +41,12 @@ class ArticuloController extends Controller
                     'marca'
                 ]
             ])
+            ->allowedIncludes(
+                'qrArchivo',
+                'ubicacionActual',
+                'surtimiento',
+                'ubicaciones',
+            )
             ->where('uuid', $uuid)
             ->firstOrFail()
             ->toResource();
