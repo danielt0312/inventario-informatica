@@ -10,6 +10,7 @@ class AreaController extends Controller
     {
         // todo cambiar por consulta real
         return Area::factory()
+            ->withId()
             ->count(9)
             ->make()
             ->sort()
