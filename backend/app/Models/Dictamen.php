@@ -63,7 +63,7 @@ class Dictamen extends Model
 
     public function versionActual(): HasOne
     {
-        return $this->hasOne(DictamenVersion::class)->latestOfMany('id');
+        return $this->hasOne(DictamenVersion::class)->latestOfMany();
     }
 
     public function archivo(): HasOneDeep

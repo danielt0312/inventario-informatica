@@ -66,6 +66,7 @@ const CorregirActionItemRow = ({ dictamen }: ActionProps<DetailedCorregibleFormA
     </RouterButton>
 );
 
+// TODO establecer si se utilizará o remover
 const CancelarActionItemRow = ({ dictamen }: { dictamen: Dictamen }) => {
     const { mutate, isPending } = useMutation({
         ...cancelarDictamenMutationOptions(dictamen),
@@ -222,7 +223,7 @@ const defaultColumns: ColumnDef<DetailedDictamen>[] = [
     },
     {
         header: "Área Solicitante",
-        accessorKey: "",
+        accessorFn: ({ area }) => area.nombre
     },
     {
         header: "Folio de Solicitud",
