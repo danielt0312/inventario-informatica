@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class ArticuloUbicacion extends Model
+{
+    protected $fillable = [
+        'articulo_id',
+        'area_id',
+        'fecha_inicio'
+        'fecha_fin'
+    ];
+
+    protected $attributes = [
+        'fecha_fin' => NULL
+    ];
+
+    public function articulo(): BelongsTo
+    {
+        return $this->belongsTo(Articulo::class);
+    }
+
+    public function casts(): array
+    {
+        return [
+            'fecha_inicio' => 'date:Y-m-d',
+            'fecha_fin' => 'date:Y-m-d'
+        ];
+    }
+}

@@ -64,10 +64,37 @@ return new class extends Migration
                 ->restrictOnDelete();
             $table->timestamp('created_at');
         });
+
+        Schema::create('articulo_ubicaciones', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('articulo_id')
+                ->constrained('articulos', indexName: 'fk_articulo_ubicaciones_articulos')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+            $table->unsignedBigInt('area_id');
+            $table->date('fecha_inicio');
+            $table->date('fecha_fin')
+                ->nullable();
+            $table->unsignedBigInteger('ubicacion_vigente_marker')
+                ->nullable()
+                ->virtualAs('CASE WHEN fecha_fin IS NULL THEN articulo_id ELSE NULL END')
+            $table->timestamps();
+
+            $table->unique('ubicacion_vigente_marker', 'uk_articulo_ubicaciones_vigente');
+            $table->index(['articulo_id', 'fecha_inicio'], 'idx_articulo_ubicaciones_articulo');
+            // $table->index('area_id', 'idx_articulo_ubicaciones_area');
+        });
+
+        DB::statement(
+            'ALTER TABLE articulo_ubicaciones
+             ADD CONSTRAINT chk_articulo_ubicaciones_fechas
+             CHECK (fecha_fin IS NULL OR fecha_fin >= fecha_inicio)'
+        );
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('articulo_ubicaciones');
         Schema::dropIfExists('articulo_historial');
         Schema::dropIfExists('articulo_recepciones');
         Schema::dropIfExists('articulos');
