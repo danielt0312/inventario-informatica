@@ -44,7 +44,7 @@ class Disco extends Model
 
     public function descripcion(): Attribute
     {
-        return Attribute::make(
+        return Attribute::get(
             fn () => str_compact_join(
                 $this->tipo->nombre,
                 $this->capacidad->nombre,

@@ -30,17 +30,15 @@ class Archivo extends Model
 
     public function fileName(): Attribute
     {
-        return Attribute::make(
-            fn (mixed $value, array $attributes)
-                => "{$attributes['uuid']}.{$attributes['extension']}"
+        return Attribute::get(
+            fn () => "{$this->uuid}.{$this->extension}"
         );
     }
 
     public function relativePath(): Attribute
     {
-        return Attribute::make(
-            fn (mixed $value, array $attributes)
-                => FilePathGenerator::forUuid($attributes['uuid'], $attributes['extension'])
+        return Attribute::get(
+            fn () => FilePathGenerator::forUuid($this->uuid, $this->extension)
         );
     }
 

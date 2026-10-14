@@ -43,7 +43,7 @@ class ProductoVariante extends Model
 
     public function descripcion(): Attribute
     {
-        return Attribute::make(
+        return Attribute::get(
             fn () => str_compact_join(
                 $this->producto->marca->nombre,
                 $this->producto->modelo,

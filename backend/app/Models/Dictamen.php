@@ -108,8 +108,8 @@ class Dictamen extends Model
 
     public function folio(): Attribute
     {
-        return Attribute::make(
-            fn (mixed $value, array $attributes) => "{$this->id}/{$this->versionActual->numero_version}"
+        return Attribute::get(
+            fn () => "{$this->id}/{$this->versionActual->numero_version}"
         );
     }
 

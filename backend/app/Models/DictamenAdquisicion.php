@@ -54,8 +54,8 @@ class DictamenAdquisicion extends Model
 
     public function descripcion(): Attribute
     {
-        return Attribute::make(
-            fn (mixed $value, array $attributes): string | null =>
+        return Attribute::get(
+            fn (mixed $value, array $attributes) =>
                 $attributes['producto_variante_id']
                     ? str_compact_join(
                         $this->productoVariante->producto->tipo->nombre,
