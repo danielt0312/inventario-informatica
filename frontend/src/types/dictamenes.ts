@@ -49,8 +49,10 @@ type VersionActualWithAdquisiciones<TVersionWithAdquisiciones extends VersionWit
 // }
 // export type VersionesWithAdquisiciones<TVersionWithAdquisiciones extends VersionWithAdquisiciones = VersionWithAdquisiciones> = Versiones<TVersionWithAdquisiciones>;
 
-type ActualBase<TDictamen extends Base = Base, TVersionActual extends VersionActual = VersionActual> = TDictamen & TVersionActual;
-type DetailedBase<TDictamen extends Base = Base, TVersionActualWithAdquisiciones extends VersionActualWithAdquisiciones = VersionActualWithAdquisiciones> = ActualBase<TDictamen, TVersionActualWithAdquisiciones>;
+type BaseActual<TDictamen extends Base = Base, TVersionActual extends VersionActual = VersionActual> = TDictamen & TVersionActual & {
+    folio: string;
+};
+type BaseDetailed<TDictamen extends Base = Base, TVersionActualWithAdquisiciones extends VersionActualWithAdquisiciones = VersionActualWithAdquisiciones> = BaseActual<TDictamen, TVersionActualWithAdquisiciones>;
 
 // todo analizar como se quiere aplicar este export type en el feature
 // si se quiere consultar las versiones una vez ya pasado la etapa de `INVENTARIAR`, i.e., `SURTIDO` | `SURTIDO_PARCIAL` | `SURTIDO_CON_OBSERVACIONES`
@@ -64,7 +66,7 @@ type PorDictaminarAdquisicion = BaseAdquisicion & {
     borrador_producto_variante: DictamenBorradorProductoVarianteFields;
 };
 type PorDictaminarVersion = BaseVersion;
-type DetailedPorDictaminar = DetailedBase<PorDictaminar, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PorDictaminarVersion, Adquisiciones<PorDictaminarAdquisicion>>>>;
+type DetailedPorDictaminar = BaseDetailed<PorDictaminar, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PorDictaminarVersion, Adquisiciones<PorDictaminarAdquisicion>>>>;
 
 type BaseDictaminadoAdquisicion = BaseAdquisicion & {
     producto_variante: ProductoVariante;
@@ -78,13 +80,13 @@ type PendienteAcuseEstado = BaseEstado<typeof DictamenEstadoEnum.PendienteAcuse>
 type PendienteAcuse = Base<PendienteAcuseEstado>;
 type PendienteAcuseAdquisicion = BaseDictaminadoAdquisicion
 type PendienteAcuseVersion = BaseDictaminadoVersion;
-type PendienteAcuseEvidenciar = DetailedBase<PendienteAcuse, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PendienteAcuseVersion, Adquisiciones<PendienteAcuseAdquisicion>>>>;
+type PendienteAcuseEvidenciar = BaseDetailed<PendienteAcuse, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PendienteAcuseVersion, Adquisiciones<PendienteAcuseAdquisicion>>>>;
 
 type PorSurtirEstado = BaseEstado<typeof DictamenEstadoEnum.PorSurtir>;
 type PorSurtir = Base<PorSurtirEstado>;
 type PorSurtirAdquisicion = BaseDictaminadoAdquisicion;
 type PorSurtirVersion = BaseDictaminadoVersion;
-type DetailedPorSurtir = DetailedBase<PorSurtir, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PorSurtirVersion, Adquisiciones<PorSurtirAdquisicion>>>>;
+type DetailedPorSurtir = BaseDetailed<PorSurtir, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PorSurtirVersion, Adquisiciones<PorSurtirAdquisicion>>>>;
 
 type PorInventariarEstado = BaseEstado<typeof DictamenEstadoEnum.PorInventariar>;
 type PorInventariar = Base<PorInventariarEstado> & BaseOrdenCompra;
@@ -93,7 +95,7 @@ type PorInventariarAdquisicion = BaseDictaminadoAdquisicion & {
     cantidad_surtida: number;
 }
 type PorInventariarVersion = BaseDictaminadoVersion;
-type DetailedPorInventariar = DetailedBase<PorInventariar, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PorInventariarVersion, Adquisiciones<PorInventariarAdquisicion>>>>;
+type DetailedPorInventariar = BaseDetailed<PorInventariar, VersionActualWithAdquisiciones<VersionWithAdquisiciones<PorInventariarVersion, Adquisiciones<PorInventariarAdquisicion>>>>;
 
 type BaseTieneObservacionesAttribute<TValue extends boolean | null> = {
     tiene_observaciones: TValue;
@@ -103,13 +105,13 @@ type SurtidoEstado = BaseEstado<typeof DictamenEstadoEnum.Surtido>;
 type Surtido = Base<SurtidoEstado> & BaseOrdenCompra<OrdenCompra> & BaseTieneObservacionesAttribute<boolean>;
 type SurtidoAdquisicion = BaseDictaminadoAdquisicion;
 type SurtidoVersion = BaseDictaminadoVersion;
-type DetailedSurtido = DetailedBase<Surtido, VersionActualWithAdquisiciones<VersionWithAdquisiciones<SurtidoVersion, Adquisiciones<SurtidoAdquisicion>>>>;
+type DetailedSurtido = BaseDetailed<Surtido, VersionActualWithAdquisiciones<VersionWithAdquisiciones<SurtidoVersion, Adquisiciones<SurtidoAdquisicion>>>>;
 
 type SurtidoParcialEstado = BaseEstado<typeof DictamenEstadoEnum.SurtidoParcial>;
 type SurtidoParcial = Base<SurtidoParcialEstado> & BaseOrdenCompra<OrdenCompra> & BaseTieneObservacionesAttribute<boolean | null>;
 type SurtidoParcialAdquisicion = BaseDictaminadoAdquisicion;
 type SurtidoParcialVersion = BaseDictaminadoVersion;
-type DetailedSurtidoParcial = DetailedBase<SurtidoParcial, VersionActualWithAdquisiciones<VersionWithAdquisiciones<SurtidoParcialVersion, Adquisiciones<SurtidoParcialAdquisicion>>>>;
+type DetailedSurtidoParcial = BaseDetailed<SurtidoParcial, VersionActualWithAdquisiciones<VersionWithAdquisiciones<SurtidoParcialVersion, Adquisiciones<SurtidoParcialAdquisicion>>>>;
 
 type Dictamen =
     | PorDictaminar

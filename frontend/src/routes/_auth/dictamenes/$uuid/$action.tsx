@@ -5,8 +5,8 @@ import { detailedDictamenQueryOptions } from '../../../../components/features/di
 import z from 'zod';
 import GoBackButton from '@/components/Goback';
 import { CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DictamenShowInfo } from '@/components/features/dictamenes/common';
-import { ShowVersionInfo } from "@/components/features/dictamenes/common";
+import { DictamenData } from '@/components/features/dictamenes/common';
+import { DictamenVersionData } from "@/components/features/dictamenes/common";
 import { ActionDictamenLabels, ActionDictamenStates } from '@/components/features/dictamenes/form-action/constants';
 import { dictamenFormActionGetTitle, DictamenFormActionWizard } from '@/components/features/dictamenes/form-action/wizard-layout';
 import { DictamenFormAction } from '@/components/features/dictamenes/form-action/view';
@@ -56,11 +56,11 @@ function RouteComponent() {
                         {dictamenFormActionGetTitle(dictamen.estado.id).toUpperCase()}
                     </CardTitle>
                     <CardAction>
-                        <ShowVersionInfo dictamen={dictamen} />
+                        <DictamenVersionData dictamen={dictamen} />
                     </CardAction>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-7">
-                    <DictamenShowInfo dictamen={dictamen} />
+                    <DictamenData dictamen={dictamen} />
 
                     <DictamenFormAction dictamen={dictamen} />
                 </CardContent>

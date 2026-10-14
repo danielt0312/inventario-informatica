@@ -21,6 +21,10 @@ class DictamenResource extends JsonResource
             'oficio' => new OficioResource($this->whenLoaded('oficio')),
             'estado' => new DictamenEstadoResource($this->whenLoaded('estado')),
             'version_actual' => new DictamenVersionResource($this->whenLoaded('versionActual')),
+            'folio' => $this->whenLoaded(
+                'versionActual',
+                fn () => $this->folio
+            ),
             'versiones' => DictamenVersionResource::collection($this->whenLoaded('versiones')),
             $this->when(
                 $this->esEstadoPorInventariar() && ! empty($this->orden_compra_id),

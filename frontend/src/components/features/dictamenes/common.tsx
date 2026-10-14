@@ -8,7 +8,7 @@ import { TooltipLayout } from "@/components/ui/tooltip-layout";
 import { FieldValue } from "@/components/ui/field-value";
 import { FieldGroup } from "@/components/ui/field";
 
-export const DictamenShowInfo = ({
+export const DictamenData = ({
     dictamen
 }: {
     dictamen: DetailedDictamen
@@ -20,14 +20,11 @@ export const DictamenShowInfo = ({
         <FieldValue label="Fecha de Solicitud">
             {toLocaleDateFormat(dictamen.version_actual.fecha_solicitud)}
         </FieldValue>
-        {dictamen.oficio && <DictamenShowOficioInfo oficio={dictamen.oficio} />}
+        {dictamen.oficio && <DictamenOficioData oficio={dictamen.oficio} />}
     </FieldGroup>
 );
 
-export const getLabeledVersionTitle = (dictamen: DetailedDictamen) =>
-    `Dictamen No. ${dictamen.id}/${dictamen.version_actual.numero_version}`;
-
-export const DictamenShowOficioInfo = ({
+export const DictamenOficioData = ({
     oficio
 }: {
     oficio: Oficio
@@ -42,12 +39,12 @@ export const DictamenShowOficioInfo = ({
     </FieldValue>
 );
 
-export const ShowVersionInfo = ({
+export const DictamenVersionData = ({
     dictamen
 }: {
     dictamen: DetailedDictamen;
 }) => {
-    const label = getLabeledVersionTitle(dictamen);
+    const label = `Dictamen No. ${dictamen.folio}`;
 
     if (dictamenVersionHasArchivo(dictamen.version_actual)) {
         return (
@@ -64,9 +61,7 @@ export const ShowVersionInfo = ({
     }
 
     return (
-        <Label className="text-sm">
-            {label}
-        </Label>
+        <Label className="text-sm">{label}</Label>
     );
 };
 

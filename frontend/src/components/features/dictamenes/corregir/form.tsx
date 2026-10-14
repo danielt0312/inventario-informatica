@@ -15,7 +15,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useFormMutation } from "@/hooks/use-form-mutation";
 import { FieldValue } from "@/components/ui/field-value";
 import { Spinner } from "@/components/ui/spinner";
-import { DictamenShowOficioInfo } from "../common";
+import { DictamenOficioData } from "../common";
 import { BaseFieldLayout } from "@/components/ui/field-layout";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
@@ -80,7 +80,7 @@ export const DictamenCorregirForm = () => {
 
                     {/* todo cambiar esto por el layout utilizando el field */}
                     {dictamen.oficio && (
-                        <DictamenShowOficioInfo oficio={dictamen.oficio} />
+                        <DictamenOficioData oficio={dictamen.oficio} />
                     )}
                 </FieldGroup>
 
