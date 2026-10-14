@@ -10,8 +10,10 @@ class DiscoFactorFormaSeeder extends Seeder
 {
     public function run(): void
     {
-        DiscoFactorForma::create(['nombre' => '2.5"']);
-        DiscoFactorForma::create(['nombre' => 'M.2 2280']);
-        DiscoFactorForma::create(['nombre' => 'M.2 2230']);
+        DiscoFactorForma::upsert([
+            ['nombre' => '2.5"'],
+            ['nombre' => 'M.2 2280'],
+            ['nombre' => 'M.2 2230']
+        ], ['nombre'], ['nombre']);
     }
 }

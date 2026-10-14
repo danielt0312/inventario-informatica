@@ -12,7 +12,10 @@ class ResguardoEstadoSeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (ResguardoEstadoEnum::casesToFormattedCatalog() as $case)
-            ResguardoEstado::insertOrIgnore($case);
+        ResguardoEstado::upsert(
+            ResguardoEstadoEnum::casesToFormattedCatalog(),
+            ['nombre'],
+            ['nombre']
+        );
     }
 }

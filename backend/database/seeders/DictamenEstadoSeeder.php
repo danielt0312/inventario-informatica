@@ -14,6 +14,10 @@ class DictamenEstadoSeeder extends Seeder
 
     public function run(): void
     {
-        DictamenEstado::upsert(DictamenEstadoEnum::casesToFormattedCatalog(), ['id']);
+        DictamenEstado::upsert(
+            DictamenEstadoEnum::casesToFormattedCatalog(),
+            ['id'],
+            ['nombre']
+        );
     }
 }

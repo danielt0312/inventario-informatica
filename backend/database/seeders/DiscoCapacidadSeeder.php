@@ -10,9 +10,11 @@ class DiscoCapacidadSeeder extends Seeder
 {
     public function run(): void
     {
-        DiscoCapacidad::create(['nombre' => '128 GB']);
-        DiscoCapacidad::create(['nombre' => '256 GB']);
-        DiscoCapacidad::create(['nombre' => '516 GB']);
-        DiscoCapacidad::create(['nombre' => '1 TB']);
+        DiscoCapacidad::upsert([
+            ['nombre' => '128 GB'],
+            ['nombre' => '256 GB'],
+            ['nombre' => '516 GB'],
+            ['nombre' => '1 TB']
+        ], ['nombre'], ['nombre']);
     }
 }

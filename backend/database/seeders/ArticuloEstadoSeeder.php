@@ -12,6 +12,12 @@ class ArticuloEstadoSeeder extends Seeder
 {
     public function run(): void
     {
+        ArticuloEstado::upsert(
+            ArticuloEstadoEnum::casesToFormattedCatalog(),
+            ['id'],
+            ['nombre']
+        );
+
         foreach (ArticuloEstadoEnum::casesToFormattedCatalog() as $case) {
             ArticuloEstado::insertOrIgnore($case);
         }

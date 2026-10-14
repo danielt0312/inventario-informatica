@@ -1,7 +1,7 @@
 export const ArticuloEstadoEnum = {
     Activo: 1,
-    Baja: 2,
-    BajaPreventiva: 3,
+    BajaPreventiva: 2,
+    BajaDefinitiva: 3,
 }
 export type ArticuloEstadoEnum = (typeof ArticuloEstadoEnum)[keyof typeof ArticuloEstadoEnum];
 

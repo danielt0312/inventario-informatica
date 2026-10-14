@@ -10,8 +10,8 @@ const variants = cva(
         variants: {
             variant: {
                 [ArticuloEstadoEnum.Activo]: "text-black bg-lime-400",
-                [ArticuloEstadoEnum.Baja]: "text-black bg-red-400",
                 [ArticuloEstadoEnum.BajaPreventiva]: "text-black bg-red-400/80",
+                [ArticuloEstadoEnum.BajaDefinitiva]: "text-black bg-red-400",
             }
         },
     }

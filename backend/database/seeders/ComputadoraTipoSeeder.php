@@ -11,6 +11,10 @@ class ComputadoraTipoSeeder extends Seeder
 {
     public function run(): void
     {
-        ComputadoraTipo::upsert(ComputadoraTipoEnum::casesToFormattedCatalog(), ['id']);
+        ComputadoraTipo::upsert(
+            ComputadoraTipoEnum::casesToFormattedCatalog(),
+            ['id'],
+            ['nombre']
+        );
     }
 }

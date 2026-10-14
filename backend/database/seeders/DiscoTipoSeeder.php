@@ -10,7 +10,9 @@ class DiscoTipoSeeder extends Seeder
 {
     public function run(): void
     {
-        DiscoTipo::create(['nombre' => 'HDD']);
-        DiscoTipo::create(['nombre' => 'SSD']);
+        DiscoTipo::upsert([
+            ['nombre' => 'HDD'],
+            ['nombre' => 'SSD']
+        ], ['nombre'], ['nombre']);
     }
 }

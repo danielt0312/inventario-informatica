@@ -13,6 +13,10 @@ class LicenciaTipoSeeder extends Seeder
 
     public function run(): void
     {
-        LicenciaTipo::upsert(LicenciaTipoEnum::casesToFormattedCatalog(), ['id']);
+        LicenciaTipo::upsert(
+            LicenciaTipoEnum::casesToFormattedCatalog(),
+            ['id'],
+            ['nombre']
+        );
     }
 }

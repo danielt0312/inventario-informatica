@@ -10,10 +10,12 @@ class RamTipoSeeder extends Seeder
 {
     public function run(): void
     {
-        RamTipo::create(['nombre' => 'SDRAM']);
-        RamTipo::create(['nombre' => 'DDR']);
-        RamTipo::create(['nombre' => 'DDR2']);
-        RamTipo::create(['nombre' => 'DDR3']);
-        RamTipo::create(['nombre' => 'DDR4']);
+        RamTipo::upsert([
+            ['nombre' => 'SDRAM'],
+            ['nombre' => 'DDR'],
+            ['nombre' => 'DDR2'],
+            ['nombre' => 'DDR3'],
+            ['nombre' => 'DDR4']
+        ], ['nombre'], ['nombre']);
     }
 }

@@ -10,10 +10,12 @@ class DiscoInterfazSeeder extends Seeder
 {
     public function run(): void
     {
-        DiscoInterfaz::create(['nombre' => 'SATA I']);
-        DiscoInterfaz::create(['nombre' => 'SATA II']);
-        DiscoInterfaz::create(['nombre' => 'SATA III']);
-        DiscoInterfaz::create(['nombre' => 'SATA']);
-        DiscoInterfaz::create(['nombre' => 'NVMe']);
+        DiscoInterfaz::upsert([
+            ['nombre' => 'SATA I'],
+            ['nombre' => 'SATA II'],
+            ['nombre' => 'SATA III'],
+            ['nombre' => 'SATA'],
+            ['nombre' => 'NVMe']
+        ], ['nombre'], ['nombre']);
     }
 }

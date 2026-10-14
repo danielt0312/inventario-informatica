@@ -11,6 +11,10 @@ class CamaraTipoSeeder extends Seeder
 {
     public function run(): void
     {
-        CamaraTipo::upsert(CamaraTipoEnum::casesToFormattedCatalog(), ['id']);
+        CamaraTipo::upsert(
+            CamaraTipoEnum::casesToFormattedCatalog(),
+            ['id'],
+            ['nombre']
+        );
     }
 }

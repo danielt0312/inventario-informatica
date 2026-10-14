@@ -14,7 +14,10 @@ class DocumentoTipoSeeder extends Seeder
 
     public function run(): void
     {
-        foreach (DocumentoTipoEnum::casesToFormattedCatalog() as $case)
-            DocumentoTipo::insertOrIgnore($case);
+        DocumentoTipo::upsert(
+            DocumentoTipoEnum::casesToFormattedCatalog(),
+            ['nombre'],
+            ['nombre']
+        );
     }
 }
