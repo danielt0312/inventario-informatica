@@ -27,4 +27,11 @@ class DictamenSurtimiento extends Model
     {
         return $this->belongsTo(Articulo::class);
     }
+
+    public function casts(): array
+    {
+        return [
+            'es_resultado_esperado' => 'boolean'
+        ];
+    }
 }

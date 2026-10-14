@@ -3,24 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Traits\Models\Relations\HasProductoVariante;
+use App\Services\CuentaContableService;
+
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
     HasOne,
     HasMany
 };
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use App\Enums\{
-    ArticuloEstadoEnum,
-    ProductoTipoEnum
-};
-use App\Traits\Models\Relations\HasProductoVariante;
-use App\Services\NumeroInventarioService;
 
 class Articulo extends Model
 {
-    use HasFactory, HasUuids, HasProductoVariante;
+    use HasUuids, HasProductoVariante;
 
     protected $fillable = [
         'producto_variante_id',
@@ -31,7 +27,6 @@ class Articulo extends Model
         'qr_archivo_id',
         'cuenta_contable',
         'dictamen_id',
-        'es_inventariable',
     ];
 
     protected $attributes = [
@@ -41,7 +36,6 @@ class Articulo extends Model
         'qr_archivo_id' => null,
         'cuenta_contable' => null,
         'dictamen_id' => null,
-        'es_inventariable' => null,
     ];
 
     public function ubicaciones(): HasMany
@@ -74,9 +68,18 @@ class Articulo extends Model
         return $this->belongsTo(Factura::class);
     }
 
-    public function qr(): BelongsTo
+    public function qrArchivo(): BelongsTo
     {
-        return $this->belongsTo(Archivo::class, 'qr_archivo_id');
+        return $this->belongsTo(Archivo::class);
+    }
+
+    public function esInventariable(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->cuenta_contable === null
+                ? null
+                : CuentaContableService::esInventariable($this->cuenta_contable)
+        );
     }
 
     public function uniqueIds(): array
@@ -87,13 +90,5 @@ class Articulo extends Model
     public function getRouteKeyName(): string
     {
         return 'uuid';
-    }
-
-
-    public function casts(): array {
-        return [
-            'es_inventariable' => 'boolean',
-            'es_resultado_esperado' => 'boolean',
-        ];
     }
 }

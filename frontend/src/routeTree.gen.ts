@@ -22,6 +22,7 @@ import { Route as AuthDictamenesCrearRouteImport } from './routes/_auth/dictamen
 import { Route as AuthResguardosUuidInspeccionarRouteImport } from './routes/_auth/resguardos/$uuid/inspeccionar'
 import { Route as AuthDictamenesUuidCorregirRouteImport } from './routes/_auth/dictamenes/$uuid/corregir'
 import { Route as AuthDictamenesUuidActionRouteImport } from './routes/_auth/dictamenes/$uuid/$action'
+import { Route as AuthArticulosUuidShowRouteImport } from './routes/_auth/articulos/$uuid/show'
 import { Route as AuthArticulosUuidActualizarRouteImport } from './routes/_auth/articulos/$uuid/actualizar'
 
 const GuestRoute = GuestRouteImport.update({
@@ -90,6 +91,11 @@ const AuthDictamenesUuidActionRoute =
     path: '/dictamenes/$uuid/$action',
     getParentRoute: () => AuthRoute,
   } as any)
+const AuthArticulosUuidShowRoute = AuthArticulosUuidShowRouteImport.update({
+  id: '/articulos/$uuid/show',
+  path: '/articulos/$uuid/show',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthArticulosUuidActualizarRoute =
   AuthArticulosUuidActualizarRouteImport.update({
     id: '/articulos/$uuid/actualizar',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/documentos/': typeof AuthDocumentosIndexRoute
   '/resguardos/': typeof AuthResguardosIndexRoute
   '/articulos/$uuid/actualizar': typeof AuthArticulosUuidActualizarRoute
+  '/articulos/$uuid/show': typeof AuthArticulosUuidShowRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
   '/dictamenes/$uuid/corregir': typeof AuthDictamenesUuidCorregirRoute
   '/resguardos/$uuid/inspeccionar': typeof AuthResguardosUuidInspeccionarRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/documentos': typeof AuthDocumentosIndexRoute
   '/resguardos': typeof AuthResguardosIndexRoute
   '/articulos/$uuid/actualizar': typeof AuthArticulosUuidActualizarRoute
+  '/articulos/$uuid/show': typeof AuthArticulosUuidShowRoute
   '/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
   '/dictamenes/$uuid/corregir': typeof AuthDictamenesUuidCorregirRoute
   '/resguardos/$uuid/inspeccionar': typeof AuthResguardosUuidInspeccionarRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/_auth/documentos/': typeof AuthDocumentosIndexRoute
   '/_auth/resguardos/': typeof AuthResguardosIndexRoute
   '/_auth/articulos/$uuid/actualizar': typeof AuthArticulosUuidActualizarRoute
+  '/_auth/articulos/$uuid/show': typeof AuthArticulosUuidShowRoute
   '/_auth/dictamenes/$uuid/$action': typeof AuthDictamenesUuidActionRoute
   '/_auth/dictamenes/$uuid/corregir': typeof AuthDictamenesUuidCorregirRoute
   '/_auth/resguardos/$uuid/inspeccionar': typeof AuthResguardosUuidInspeccionarRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/documentos/'
     | '/resguardos/'
     | '/articulos/$uuid/actualizar'
+    | '/articulos/$uuid/show'
     | '/dictamenes/$uuid/$action'
     | '/dictamenes/$uuid/corregir'
     | '/resguardos/$uuid/inspeccionar'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/documentos'
     | '/resguardos'
     | '/articulos/$uuid/actualizar'
+    | '/articulos/$uuid/show'
     | '/dictamenes/$uuid/$action'
     | '/dictamenes/$uuid/corregir'
     | '/resguardos/$uuid/inspeccionar'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/_auth/documentos/'
     | '/_auth/resguardos/'
     | '/_auth/articulos/$uuid/actualizar'
+    | '/_auth/articulos/$uuid/show'
     | '/_auth/dictamenes/$uuid/$action'
     | '/_auth/dictamenes/$uuid/corregir'
     | '/_auth/resguardos/$uuid/inspeccionar'
@@ -288,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDictamenesUuidActionRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/articulos/$uuid/show': {
+      id: '/_auth/articulos/$uuid/show'
+      path: '/articulos/$uuid/show'
+      fullPath: '/articulos/$uuid/show'
+      preLoaderRoute: typeof AuthArticulosUuidShowRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/articulos/$uuid/actualizar': {
       id: '/_auth/articulos/$uuid/actualizar'
       path: '/articulos/$uuid/actualizar'
@@ -306,6 +325,7 @@ interface AuthRouteChildren {
   AuthDocumentosIndexRoute: typeof AuthDocumentosIndexRoute
   AuthResguardosIndexRoute: typeof AuthResguardosIndexRoute
   AuthArticulosUuidActualizarRoute: typeof AuthArticulosUuidActualizarRoute
+  AuthArticulosUuidShowRoute: typeof AuthArticulosUuidShowRoute
   AuthDictamenesUuidActionRoute: typeof AuthDictamenesUuidActionRoute
   AuthDictamenesUuidCorregirRoute: typeof AuthDictamenesUuidCorregirRoute
   AuthResguardosUuidInspeccionarRoute: typeof AuthResguardosUuidInspeccionarRoute
@@ -319,6 +339,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthDocumentosIndexRoute: AuthDocumentosIndexRoute,
   AuthResguardosIndexRoute: AuthResguardosIndexRoute,
   AuthArticulosUuidActualizarRoute: AuthArticulosUuidActualizarRoute,
+  AuthArticulosUuidShowRoute: AuthArticulosUuidShowRoute,
   AuthDictamenesUuidActionRoute: AuthDictamenesUuidActionRoute,
   AuthDictamenesUuidCorregirRoute: AuthDictamenesUuidCorregirRoute,
   AuthResguardosUuidInspeccionarRoute: AuthResguardosUuidInspeccionarRoute,

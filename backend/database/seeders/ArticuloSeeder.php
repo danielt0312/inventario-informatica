@@ -26,22 +26,18 @@ class ArticuloSeeder extends Seeder
     {
         Computadora::upsert([
             'tipo_id' => ComputadoraTipoEnum::Escritorio->value
-        ], ['id' => 1]);
+        ], ['id']);
 
         ProductoVariante::upsert([
             'producto_id' => 1,
-            'variante_type' => ProductoTipoEnum::Computadora->varianteMorphAlias(),
             'variante_id' => 1,
-        ], [
             'variante_type' => ProductoTipoEnum::Computadora->varianteMorphAlias(),
-            'variante_id' => 1,
-        ]);
+        ], ['variante_id', 'variante_type']);
 
-        Articulo::create([
+        Articulo::upsert([
             'producto_variante_id' => 1,
             'estado_id' => ArticuloEstadoEnum::Activo->value,
-            'es_inventariable' => true,
             'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::ComputoTecnologiaInformacion, 1),
-        ]);
+        ], ['numero_inventario']);
     }
 }

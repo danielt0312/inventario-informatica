@@ -43,12 +43,18 @@ return new class extends Migration
                 ->nullable();
             $table->string('cuenta_contable', 11)
                 ->nullable();
-            $table->boolean('es_inventariable')
-                ->nullable();
             $table->unsignedBigInteger('dictamen_id')
                 ->nullable();
+            $table->string('cuenta_contable_marker', 11)
+                ->nullable()
+                ->virtualAs("CASE WHEN cuenta_contable = '2000' THEN NULL ELSE cuenta_contable END");
             $table->timestamps();
+
+            $table->unique('cuenta_contable_marker', 'uk_articulos_cuenta_contable');
         });
+
+        DB::statement("ALTER TABLE articulos ADD CONSTRAINT chk_articulos_cuenta_contable
+            CHECK (cuenta_contable = '2000' OR cuenta_contable REGEXP '^[0-9]{4}-[0-9]{1}-[0-9]{4}$')");
 
         Schema::create('articulo_historial', function (Blueprint $table) {
             $table->id();
@@ -94,6 +100,8 @@ return new class extends Migration
 
     public function down(): void
     {
+        DB::statement('ALTER TABLE articulos DROP CONSTRAINT chk_articulos_cuenta_contable');
+
         Schema::dropIfExists('articulo_ubicaciones');
         Schema::dropIfExists('articulo_historial');
         Schema::dropIfExists('articulo_recepciones');

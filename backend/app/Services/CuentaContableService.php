@@ -2,11 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\{
-    ArticuloEstadoEnum,
-    ProductoTipoEnum,
-};
-
 class CuentaContableService
 {
     final public const INVENTARIABLE_REGEX = '/^\d{4}-\d{1}-\d{4}$/';

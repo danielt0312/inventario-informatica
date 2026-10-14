@@ -32,16 +32,10 @@ class ArticuloService
             ]);
 
             $articulo->numero_inventario = $this->generateNumeroInventario($clasificador, $articulo->id);
-            $articulo->es_inventariable = $this->esInventariable($articulo->cuenta_contable);
             $articulo->saveQuietly();
 
             return $articulo;
         });
-    }
-
-    public function esInventariable(string $cuentaContable): bool
-    {
-        return CuentaContableService::esInventariable($cuentaContable);
     }
 
     public function generateNumeroInventario(ClasificadorEnum $clasificador, int $articuloId): string
