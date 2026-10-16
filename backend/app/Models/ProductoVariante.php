@@ -7,13 +7,14 @@ use App\Traits\Models\HasResourceResponse;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
+use App\Contracts\ProductoTipoDescriptivo;
 
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
     MorphTo
 };
 
-class ProductoVariante extends Model
+class ProductoVariante extends Model implements ProductoTipoDescriptivo
 {
     use HasResourceResponse;
 
@@ -41,10 +42,24 @@ class ProductoVariante extends Model
         return $query->whereNull('variante_type');
     }
 
+    public function productoTipoDescripcion(): Attribute
+    {
+        return Attribute::get(
+            function () {
+                if ($this->variante instanceof ProductoTipoDescriptivo) {
+                    return $this->variante->productoTipoDescripcion;
+                }
+
+                return $this->producto->tipo->nombre;
+            }
+        );
+    }
+
     public function descripcion(): Attribute
     {
         return Attribute::get(
             fn () => str_compact_join(
+                $this->productoTipoDescripcion,
                 $this->producto->marca->nombre,
                 $this->producto->modelo,
                 $this->variante?->descripcion ?? null

@@ -58,7 +58,6 @@ class DictamenAdquisicion extends Model
             fn (mixed $value, array $attributes) =>
                 $attributes['producto_variante_id']
                     ? str_compact_join(
-                        $this->productoVariante->producto->tipo->nombre,
                         $this->productoVariante->descripcion,
                         $attributes['caracteristicas_adicionales']
                     )
