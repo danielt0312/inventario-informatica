@@ -14,7 +14,7 @@ class ArticuloUbicacion extends Model
     ];
 
     protected $attributes = [
-        'fecha_fin' => NULL
+        'fecha_fin' => null
     ];
 
     public function casts(): array

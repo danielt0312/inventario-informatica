@@ -8,7 +8,9 @@ use Illuminate\Database\Seeder;
 use App\Models\{
     Articulo,
     ProductoVariante,
-    Computadora
+    Computadora,
+    ArticuloComputadora,
+    Procesador
 };
 use App\Enums\{
     ArticuloEstadoEnum,
@@ -24,9 +26,7 @@ class ArticuloSeeder extends Seeder
 
     public function run(): void
     {
-        Computadora::upsert([
-            'tipo_id' => ComputadoraTipoEnum::Escritorio->value
-        ], ['id']);
+        Procesador::upsert([], ['id']);
 
         ProductoVariante::upsert([
             'producto_id' => 1,
@@ -34,10 +34,19 @@ class ArticuloSeeder extends Seeder
             'variante_type' => ProductoTipoEnum::Computadora->varianteMorphAlias(),
         ], ['variante_id', 'variante_type']);
 
+        Computadora::upsert([
+            'tipo_id' => ComputadoraTipoEnum::Escritorio->value
+        ], ['id']);
+
         Articulo::upsert([
             'producto_variante_id' => 1,
             'estado_id' => ArticuloEstadoEnum::Activo->value,
             'numero_inventario' => NumeroInventarioService::generate(ClasificadorEnum::ComputoTecnologiaInformacion, 1),
         ], ['numero_inventario']);
+
+        ArticuloComputadora::upsert([
+            'articulo_id' => 1,
+            'procesador_id' => 1
+        ], ['id']);
     }
 }
