@@ -120,7 +120,7 @@ class DictamenService
                 $dictamen->oficio->update(['verified_at' => now()]);
             }
 
-            ($this->reemplazarArchivoAction)($dictamen->archivo, $dictamenArchivo);
+            ($this->reemplazarArchivoAction)($dictamen->versionActual->archivo, $dictamenArchivo);
 
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::PorSurtir->value
@@ -135,7 +135,7 @@ class DictamenService
         }
 
         DB::transaction(function () use ($dictamen) {
-            ($this->cancelarArchivoAction)($dictamen->archivo);
+            ($this->cancelarArchivoAction)($dictamen->versionActual->archivo);
 
             $dictamen->update([
                 'estado_id' => DictamenEstadoEnum::Cancelado->value
@@ -146,9 +146,9 @@ class DictamenService
     public function corregir(Dictamen $dictamen, CorregirDictamenData $data): void
     {
         DB::transaction(function () use ($dictamen, $data) {
-            ($this->cancelarArchivoAction)($dictamen->archivo);
-
             $dictamen->versionActual->update(['motivo_cambio' => $data->motivoCambio]);
+
+            ($this->cancelarArchivoAction)($dictamen->versionActual->archivo);
 
             $nuevaVersion = $dictamen->versiones()->create([
                 'numero_version' => $dictamen->versionActual->numero_version + 1,
@@ -169,6 +169,7 @@ class DictamenService
 
             $nuevaVersion->adquisiciones()->createMany($adquisiciones);
 
+            $dictamen->refresh();
             $this->generateAndAssociatePdf($dictamen);
 
             $dictamen->update([
@@ -295,7 +296,7 @@ class DictamenService
 
     public function esAreaInterna(int $areaId): bool
     {
-        // todo identificar si el area de area es la interna
+        // todo identificar si el area es la interna
         // todo revisar si mover a otra seccion
         return $areaId === 2;
     }

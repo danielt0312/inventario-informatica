@@ -16,7 +16,7 @@ import { ArticuloNullableNumeroInventarioField } from "@/components/features/art
 import { DictamenAdquisicion } from "@/lib/utils";
 import { Label } from '@/components/ui/label';
 import { ProductoVarianteSpecFieldGroup } from '../../productos/variante-spec-field-group';
-import { ProductoTipoEnum } from '@/lib/constants';
+import { ProductoTipoSpec } from '@/lib/constants';
 import { DiscoTipoField } from '../../discos/tipo-field';
 import { DiscoCapacidadField } from '../../discos/capacidad-field';
 import { DiscoFactorFormaField } from '../../discos/factor-forma-field';
@@ -27,6 +27,7 @@ import { RamVelocidadField } from '../../rams/velocidad-field';
 import { ComputadoraTipoField } from '../../computadoras/tipo-field';
 import { CamaraTipoField } from '../../camaras/tipo-field';
 import { LicenciaTipoField } from '../../licencias/tipo-field';
+import { ProcesadorFrecuenciaMaximaGhzField, ProcesadorHilosField, ProcesadorNucleoField } from '../../procesadores/fields';
 
 function Form() {
     const { mutate } = useFormMutation({
@@ -128,26 +129,29 @@ function Form() {
                                                         <form.AppField
                                                             name={`adquisiciones[${index}].borrador_producto_variante.tipo_id`}
                                                             children={() => <ProductoTipoField required />}
+                                                            listeners={{
+                                                                onChange: () => form.resetField(`adquisiciones[${index}].borrador_producto_variante.spec`)
+                                                            }}
                                                         />
 
                                                         <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador_producto_variante.tipo_id}>
                                                             {(productoTipoId) => {
                                                                 switch (productoTipoId) {
-                                                                    case ProductoTipoEnum.Computadora:
+                                                                    case ProductoTipoSpec.Computadora:
                                                                         return (
                                                                             <form.AppField
                                                                                 name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
                                                                                 children={() => <ComputadoraTipoField emptyValue={undefined} layout={{ label: "Tipo de Computadora" }} />}
                                                                             />
                                                                         );
-                                                                    case ProductoTipoEnum.Camara:
+                                                                    case ProductoTipoSpec.Camara:
                                                                         return (
                                                                             <form.AppField
                                                                                 name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
                                                                                 children={() => <CamaraTipoField emptyValue={undefined} layout={{ label: "Tipo de Cámara" }} />}
                                                                             />
                                                                         );
-                                                                    case ProductoTipoEnum.Licencia:
+                                                                    case ProductoTipoSpec.Licencia:
                                                                         return (
                                                                             <form.AppField
                                                                                 name={`adquisiciones[${index}].borrador_producto_variante.spec.tipo_id`}
@@ -172,7 +176,7 @@ function Form() {
                                                     <form.Subscribe selector={(state) => state.values.adquisiciones[index].borrador_producto_variante.tipo_id}>
                                                         {(productoTipoId) => {
                                                             switch (productoTipoId) {
-                                                                case ProductoTipoEnum.Disco:
+                                                                case ProductoTipoSpec.Disco:
                                                                     return (
                                                                         <FieldGroup className='flex-row'>
                                                                             <form.AppField
@@ -196,7 +200,7 @@ function Form() {
                                                                             />
                                                                         </FieldGroup>
                                                                     );
-                                                                case ProductoTipoEnum.Ram:
+                                                                case ProductoTipoSpec.Ram:
                                                                     return (
                                                                         <FieldGroup className='flex-row'>
                                                                             <form.AppField
@@ -210,6 +214,23 @@ function Form() {
                                                                             <form.AppField
                                                                                 name={`adquisiciones[${index}].borrador_producto_variante.spec.velocidad_id`}
                                                                                 children={() => <RamVelocidadField emptyValue={undefined} />}
+                                                                            />
+                                                                        </FieldGroup>
+                                                                    );
+                                                                case ProductoTipoSpec.Procesador:
+                                                                    return (
+                                                                        <FieldGroup className='flex-row'>
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.nucleos`}
+                                                                                children={() => <ProcesadorNucleoField />}
+                                                                            />
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.hilos`}
+                                                                                children={() => <ProcesadorHilosField />}
+                                                                            />
+                                                                            <form.AppField
+                                                                                name={`adquisiciones[${index}].borrador_producto_variante.spec.frecuencia_maxima_ghz`}
+                                                                                children={() => <ProcesadorFrecuenciaMaximaGhzField />}
                                                                             />
                                                                         </FieldGroup>
                                                                     );

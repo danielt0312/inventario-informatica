@@ -25,7 +25,7 @@ const FormActionIcon = {
     [ActionDictamenEstadoEnum.PorDictaminar]: <CircleDashedCheckIcon />,
     [ActionDictamenEstadoEnum.PendienteAcuse]: <BadgeCheckIcon />,
     [ActionDictamenEstadoEnum.PorInventariar]: <PackageOpenIcon />,
-} as const satisfies Record<ActionDictamenEstadoEnum, JSX.Element>;
+} as const satisfies Record<ActionDictamenEstadoEnum, React.ReactElement>;
 
 const FormActionLabel = {
     [ActionDictamenEstadoEnum.PorDictaminar]: 'Dictaminar Adquisiciones',

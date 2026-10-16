@@ -8,7 +8,7 @@ import { useDictamenFormActionMutation } from '../form-action/view';
 import { FieldError, FieldGroup } from '@/components/ui/field';
 import { FieldValue } from '@/components/ui/field-value';
 import { ProductoTipoField } from '../../productos/tipo-field';
-import { ProductoTipoEnum } from '@/lib/constants';
+import { ProductoTipoSpec } from '@/lib/constants';
 import { ComputadoraTipoField } from '../../computadoras/tipo-field';
 import { CamaraTipoField } from '../../camaras/tipo-field';
 import { LicenciaTipoField } from '../../licencias/tipo-field';
@@ -22,6 +22,7 @@ import { RamCapacidadField } from '../../rams/capacidad-field';
 import { RamVelocidadField } from '../../rams/velocidad-field';
 import { DictamenCaracteristicasAdicionalesField } from '../fields';
 import { EmptyValue } from "@/components/ui/empty-value";
+import { ProcesadorFrecuenciaMaximaGhzField, ProcesadorHilosField, ProcesadorNucleoField } from "../../procesadores/fields";
 
 function Form({ dictamen }: { dictamen: DetailedPorDictaminarDictamen }) {
     const { mutate } = useDictamenFormActionMutation(dictamen);
@@ -77,21 +78,21 @@ function Form({ dictamen }: { dictamen: DetailedPorDictaminarDictamen }) {
                                                     <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_variante.tipo_id}>
                                                         {(productoTipoId) => {
                                                             switch (productoTipoId) {
-                                                                case ProductoTipoEnum.Computadora:
+                                                                case ProductoTipoSpec.Computadora:
                                                                     return (
                                                                         <form.AppField
                                                                             name={`adquisiciones[${index}].producto_variante.spec.tipo_id`}
                                                                             children={() => <ComputadoraTipoField layout={{ label: "Tipo de Computadora" }} required />}
                                                                         />
                                                                     );
-                                                                case ProductoTipoEnum.Camara:
+                                                                case ProductoTipoSpec.Camara:
                                                                     return (
                                                                         <form.AppField
                                                                             name={`adquisiciones[${index}].producto_variante.spec.tipo_id`}
                                                                             children={() => <CamaraTipoField layout={{ label: "Tipo de Cámara" }} required />}
                                                                         />
                                                                     );
-                                                                case ProductoTipoEnum.Licencia:
+                                                                case ProductoTipoSpec.Licencia:
                                                                     return (
                                                                         <form.AppField
                                                                             name={`adquisiciones[${index}].producto_variante.spec.tipo_id`}
@@ -120,7 +121,7 @@ function Form({ dictamen }: { dictamen: DetailedPorDictaminarDictamen }) {
                                                 <form.Subscribe selector={(state) => state.values.adquisiciones[index].producto_variante.tipo_id}>
                                                     {(productoTipoId) => {
                                                         switch (productoTipoId) {
-                                                            case ProductoTipoEnum.Disco:
+                                                            case ProductoTipoSpec.Disco:
                                                                 return (
                                                                     <FieldGroup className='flex-row'>
                                                                         <form.AppField
@@ -144,7 +145,7 @@ function Form({ dictamen }: { dictamen: DetailedPorDictaminarDictamen }) {
                                                                         />
                                                                     </FieldGroup>
                                                                 );
-                                                            case ProductoTipoEnum.Ram:
+                                                            case ProductoTipoSpec.Ram:
                                                                 return (
                                                                     <FieldGroup className='flex-row'>
                                                                         <form.AppField
@@ -158,6 +159,23 @@ function Form({ dictamen }: { dictamen: DetailedPorDictaminarDictamen }) {
                                                                         <form.AppField
                                                                             name={`adquisiciones[${index}].producto_variante.spec.velocidad_id`}
                                                                             children={() => <RamVelocidadField emptyValue={null} />}
+                                                                        />
+                                                                    </FieldGroup>
+                                                                );
+                                                            case ProductoTipoSpec.Procesador:
+                                                                return (
+                                                                    <FieldGroup className='flex-row'>
+                                                                        <form.AppField
+                                                                            name={`adquisiciones[${index}].producto_variante.spec.nucleos`}
+                                                                            children={() => <ProcesadorNucleoField />}
+                                                                        />
+                                                                        <form.AppField
+                                                                            name={`adquisiciones[${index}].producto_variante.spec.hilos`}
+                                                                            children={() => <ProcesadorHilosField />}
+                                                                        />
+                                                                        <form.AppField
+                                                                            name={`adquisiciones[${index}].producto_variante.spec.frecuencia_maxima_ghz`}
+                                                                            children={() => <ProcesadorFrecuenciaMaximaGhzField />}
                                                                         />
                                                                     </FieldGroup>
                                                                 );

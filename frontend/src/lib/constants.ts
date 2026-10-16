@@ -93,6 +93,7 @@ const {
     Ram,
     Camara,
     Licencia,
+    Procesador,
     ...ProductoTipoGenericos
 } = ProductoTipoEnum;
 
@@ -101,7 +102,8 @@ export const ProductoTipoSpec = {
     Disco,
     Ram,
     Camara,
-    Licencia
+    Licencia,
+    Procesador
 }
 export type ProductoTipoSpec = (typeof ProductoTipoSpec)[keyof typeof ProductoTipoSpec];
 

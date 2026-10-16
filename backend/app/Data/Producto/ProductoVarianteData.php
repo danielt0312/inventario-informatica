@@ -11,6 +11,7 @@ use App\Data\Ram\StoreRamData;
 use App\Data\Computadora\StoreComputadoraData;
 use App\Data\Licencia\StoreLicenciaData;
 use App\Data\Camara\StoreCamaraData;
+use App\Data\Procesador\StoreProcesadorData;
 
 use Spatie\LaravelData\Attributes\{
     MapInputName,
@@ -56,6 +57,7 @@ abstract class ProductoVarianteData extends Data implements PropertyMorphableDat
             ProductoTipoEnum::Computadora   => StoreComputadoraData::class,
             ProductoTipoEnum::Licencia      => StoreLicenciaData::class,
             ProductoTipoEnum::Camara        => StoreCamaraData::class,
+            ProductoTipoEnum::Procesador    => StoreProcesadorData::class,
             default                         => ProductoGenericoData::class,
         };
     }

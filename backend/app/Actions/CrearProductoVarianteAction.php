@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use LogicException;
 use Illuminate\Container\Container;
 use App\Services\ProductoService;
 use App\Models\ProductoVariante;
@@ -10,6 +11,8 @@ use App\Data\Ram\StoreRamData;
 use App\Data\Computadora\StoreComputadoraData;
 use App\Data\Licencia\StoreLicenciaData;
 use App\Data\Camara\StoreCamaraData;
+use App\Data\Procesador\StoreProcesadorData;
+
 use App\Data\Producto\{
     ProductoData,
     ProductoVarianteData,
@@ -24,6 +27,7 @@ final class CrearProductoVarianteAction
         StoreComputadoraData::class => CrearComputadoraAction::class,
         StoreLicenciaData::class    => CrearLicenciaAction::class,
         StoreCamaraData::class      => CrearCamaraAction::class,
+        StoreProcesadorData::class  => CrearProcesadorAction::class,
     ];
 
     public function __construct(
@@ -40,7 +44,7 @@ final class CrearProductoVarianteAction
         }
 
         $accion = self::ACCIONES[$data::class]
-            ?? throw new LogicException('Sin acción para '.$data::class);
+            ?? throw new LogicException('Sin acción para `'.$data::class.'`');
 
         return $this->container->make($accion)($data);
     }

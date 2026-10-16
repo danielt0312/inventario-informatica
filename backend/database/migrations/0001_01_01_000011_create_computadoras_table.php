@@ -29,8 +29,8 @@ return new class extends Migration
                 ->constrained('articulos', indexName: 'fk_articulo_computadoras_articulos')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
-            $table->foreignId('cpu_producto_id')
-                ->constrained('productos', indexName: 'fk_articulo_computadoras_productos_cpu')
+            $table->foreignId('procesador_id')
+                ->constrained('producto_variantes', indexName: 'fk_articulo_computadoras_producto_variantes')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
         });

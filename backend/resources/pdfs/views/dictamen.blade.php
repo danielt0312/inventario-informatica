@@ -1,5 +1,3 @@
-@use('App\Enums\DocumentoTipoEnum')
-
 {{--
 /**
  * @var \App\Models\Dictamen $dictamen

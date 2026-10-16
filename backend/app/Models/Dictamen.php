@@ -12,7 +12,6 @@ use App\Traits\Models\HasResourceResponse;
 use Staudenmeir\EloquentHasManyDeep\{
     HasRelationships,
     HasManyDeep,
-    HasOneDeep
 };
 
 use Illuminate\Database\Eloquent\Relations\{
@@ -63,15 +62,7 @@ class Dictamen extends Model
 
     public function versionActual(): HasOne
     {
-        return $this->hasOne(DictamenVersion::class)->latestOfMany();
-    }
-
-    public function archivo(): HasOneDeep
-    {
-        return $this->hasOneDeepFromRelations(
-            $this->versionActual(),
-            (new DictamenVersion)->archivo()
-        );
+        return $this->hasOne(DictamenVersion::class)->latestOfMany('numero_version');
     }
 
     public function ordenCompra(): BelongsTo

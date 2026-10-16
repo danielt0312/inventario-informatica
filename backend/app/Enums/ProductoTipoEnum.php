@@ -11,7 +11,8 @@ use App\Models\{
     Ram,
     Licencia,
     Computadora,
-    Camara
+    Camara,
+    Procesador
 };
 
 use App\Http\Resources\{
@@ -19,7 +20,8 @@ use App\Http\Resources\{
     RamResource,
     LicenciaResource,
     ComputadoraResource,
-    CamaraResource
+    CamaraResource,
+    ProcesadorResource
 };
 
 enum ProductoTipoEnum: int
@@ -155,6 +157,7 @@ enum ProductoTipoEnum: int
             self::Computadora   => Computadora::class,
             self::Camara        => Camara::class,
             self::Ram           => Ram::class,
+            self::Procesador    => Procesador::class,
             default             => null
         };
     }
@@ -167,6 +170,7 @@ enum ProductoTipoEnum: int
             self::Computadora   => ComputadoraResource::class,
             self::Camara        => CamaraResource::class,
             self::Ram           => RamResource::class,
+            self::Procesador    => ProcesadorResource::class,
             default             => null
         };
     }
@@ -179,6 +183,7 @@ enum ProductoTipoEnum: int
             self::Computadora   => 'computadora',
             self::Camara        => 'camara',
             self::Ram           => 'ram',
+            self::Procesador    => 'procesador',
             default             => null
         };
     }
@@ -191,6 +196,7 @@ enum ProductoTipoEnum: int
             $model instanceof Computadora   => self::Computadora,
             $model instanceof Camara        => self::Camara,
             $model instanceof Ram           => self::Ram,
+            $model instanceof Procesador    => self::Procesador,
             default => null,
         };
     }

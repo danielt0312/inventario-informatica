@@ -86,6 +86,9 @@ export const boolean = (
 
 export const selectedBooleanOption = z.boolean('Debes de seleccionar una opción');
 
+export const validNumber = z
+    .number('Debes de ingresar un número válido');
+
 export const selectedNumberOption = z
     .number('Debes de seleccionar una opción');
 
@@ -95,6 +98,5 @@ export const integer = z
 export const positiveInteger = integer
     .positive('Debes de ingresar un número mayor que 0');
 
-export const nullableNumber = z
-    .number()
+export const nullableNumber = validNumber
     .nullable();

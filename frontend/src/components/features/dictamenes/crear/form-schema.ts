@@ -6,6 +6,7 @@ import {
     requiredString,
     nullableString,
     trimmedString,
+    validNumber,
 } from "@/lib/schemas/common";
 import type { ArticuloNullableNumeroInventarioFieldType } from "@/components/features/articulos/form-fields";
 import type { EmpleadoFieldType } from "@/components/features/empleados/field";
@@ -13,17 +14,8 @@ import type { AreaFieldType } from "@/components/features/areas/field";
 import type { DictamenCantidadFieldType, DictamenCaracteristicasAdicionalesFieldType, DictamenFechaSolicitudFieldType, DictamenFolioFieldType, DictamenOficioArchivoFieldType } from "../fields";
 import type { ProductoMarcaFieldType } from "../../productos/marca-field";
 import type { ProductoModeloFieldType } from "../../productos/variante-spec-field-group";
-import { ProductoTipoEnum } from "@/lib/constants";
+import { ProductoTipoEnum, ProductoTipoGenericos, ProductoTipoSpec } from "@/lib/constants";
 import z from "zod";
-
-const {
-    Computadora,
-    Disco,
-    Ram,
-    Camara,
-    Licencia,
-    ...otrosProductoTipo
-} = ProductoTipoEnum;
 
 type SchemaBase = {
     marca_id?: ProductoMarcaFieldType<undefined, false>;
@@ -31,19 +23,21 @@ type SchemaBase = {
 }
 
 type BorradorFields = SchemaBase & (
-    | { tipo_id: typeof Computadora; spec?: z.input<typeof specComputadoraValidator> }
-    | { tipo_id: typeof Disco; spec?: z.input<typeof specDiscoValidator> }
-    | { tipo_id: typeof Ram; spec?: z.input<typeof specRamValidator> }
-    | { tipo_id: typeof Camara; spec?: z.input<typeof specCamaraValidator> }
-    | { tipo_id: typeof Licencia; spec?: z.input<typeof specLicenciaValidator> }
+    | { tipo_id: typeof ProductoTipoSpec.Computadora; spec?: z.input<typeof specComputadoraValidator> }
+    | { tipo_id: typeof ProductoTipoSpec.Disco; spec?: z.input<typeof specDiscoValidator> }
+    | { tipo_id: typeof ProductoTipoSpec.Ram; spec?: z.input<typeof specRamValidator> }
+    | { tipo_id: typeof ProductoTipoSpec.Camara; spec?: z.input<typeof specCamaraValidator> }
+    | { tipo_id: typeof ProductoTipoSpec.Licencia; spec?: z.input<typeof specLicenciaValidator> }
+    | { tipo_id: typeof ProductoTipoSpec.Procesador; spec?: z.input<typeof specProcesadorValidator> }
     | {
         tipo_id: Exclude<
             ProductoTipoEnum,
-            | typeof Computadora
-            | typeof Disco
-            | typeof Ram
-            | typeof Camara
-            | typeof Licencia
+            | typeof ProductoTipoSpec.Computadora
+            | typeof ProductoTipoSpec.Disco
+            | typeof ProductoTipoSpec.Ram
+            | typeof ProductoTipoSpec.Camara
+            | typeof ProductoTipoSpec.Licencia
+            | typeof ProductoTipoSpec.Procesador
         > | undefined
         spec?: undefined;
     }
@@ -52,6 +46,12 @@ type BorradorFields = SchemaBase & (
 const borradorDefaultFieldsValues: BorradorFields = {
     tipo_id: undefined
 }
+
+const specProcesadorValidator = z.object({
+    nucleos: positiveInteger,
+    hilos: positiveInteger,
+    frecuencia_maxima_ghz: validNumber
+}).partial();
 
 const specLicenciaValidator = z.object({
     tipo_id: selectedNumberOption,
@@ -84,12 +84,13 @@ const validatorBase = {
 }
 
 const borradorFieldsValidator = z.discriminatedUnion("tipo_id", [
-    z.object({ ...validatorBase, tipo_id: z.literal(Computadora), spec: specComputadoraValidator.optional() }),
-    z.object({ ...validatorBase, tipo_id: z.literal(Disco), spec: specDiscoValidator.optional() }),
-    z.object({ ...validatorBase, tipo_id: z.literal(Ram), spec: specRamValidator.optional() }),
-    z.object({ ...validatorBase, tipo_id: z.literal(Camara), spec: specCamaraValidator.optional() }),
-    z.object({ ...validatorBase, tipo_id: z.literal(Licencia), spec: specLicenciaValidator.optional() }),
-    z.object({ ...validatorBase, tipo_id: z.literal(Object.values(otrosProductoTipo)) }),
+    z.object({ ...validatorBase, tipo_id: z.literal(ProductoTipoSpec.Computadora), spec: specComputadoraValidator.optional() }),
+    z.object({ ...validatorBase, tipo_id: z.literal(ProductoTipoSpec.Disco), spec: specDiscoValidator.optional() }),
+    z.object({ ...validatorBase, tipo_id: z.literal(ProductoTipoSpec.Ram), spec: specRamValidator.optional() }),
+    z.object({ ...validatorBase, tipo_id: z.literal(ProductoTipoSpec.Camara), spec: specCamaraValidator.optional() }),
+    z.object({ ...validatorBase, tipo_id: z.literal(ProductoTipoSpec.Licencia), spec: specLicenciaValidator.optional() }),
+    z.object({ ...validatorBase, tipo_id: z.literal(ProductoTipoSpec.Procesador), spec: specProcesadorValidator.optional() }),
+    z.object({ ...validatorBase, tipo_id: z.literal(Object.values(ProductoTipoGenericos)) }),
 ], { error: "Debes de seleccionar un tipo de producto válido" });
 
 type AdquisicionFields = {

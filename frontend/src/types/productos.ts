@@ -5,6 +5,7 @@ import type { Ram } from "./articulos/rams";
 import type { Licencia } from "./licencias";
 import type { Computadora } from "./computadoras";
 import type { Camara } from "./camaras";
+import type { Procesador } from "./procesadores";
 
 type BaseMarca = TCatalogo;
 type BaseCategoria = TCatalogo;
@@ -28,6 +29,7 @@ type BaseVarianteSpec =
     | { tipo: BaseTipo<typeof ProductoTipoSpec.Licencia>; spec: Licencia }
     | { tipo: BaseTipo<typeof ProductoTipoSpec.Computadora>; spec: Computadora }
     | { tipo: BaseTipo<typeof ProductoTipoSpec.Camara>; spec: Camara }
+    | { tipo: BaseTipo<typeof ProductoTipoSpec.Procesador>; spec: Procesador }
     | { tipo: BaseTipo<ProductoTipoGenericos>; spec?: never }
 
 type BaseVarianteGenerica = {

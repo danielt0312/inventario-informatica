@@ -106,7 +106,7 @@ type NullableNumberInputFieldType = number | null;
 function NullableNumberInputField(props: CoreInputFieldProps) {
     const field = useFieldContext<NullableNumberInputFieldType>();
     const [rawValue, setRawValue] = React.useState(
-        field.state.value === null ? '' : String(field.state.value)
+        (field.state.value === null || field.state.value === undefined) ? '' : String(field.state.value)
     );
 
     return (

@@ -1,7 +1,7 @@
 import type { ComboboxLayoutMultiple, InferComboboxItemFromFn } from "@/components/ui/combobox-layout.shared";
 import type { TResponse } from "@/types/generics";
 import type { ProductoMarca } from "@/types/productos";
-import { defaultFieldValueFromItem, useComboboxFieldContext, type ComboboxFieldEmptyType, type ComboboxFieldType } from "@/components/ui/combobox-field.shared";
+import { useComboboxFieldContext, type ComboboxFieldEmptyType, type ComboboxFieldType } from "@/components/ui/combobox-field.shared";
 import { CreatableComboboxFieldSimple, type CreatableComboboxFieldSimpleProps } from "@/components/ui/creatable-combobox-field-simple";
 import { toComboboxCatalogItems } from "@/lib/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -25,7 +25,6 @@ type Schema = { nombre: InputFieldType; }
 const defaultValues: Schema = { nombre: undefined }
 const validator = z.object({ nombre: requiredString });
 
-
 type FieldProps<Empty extends ComboboxFieldEmptyType = undefined, Multiple extends ComboboxLayoutMultiple = false> = Omit<
     CreatableComboboxFieldSimpleProps<
         Empty,
@@ -39,10 +38,6 @@ function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extend
     layout,
     ...props
 }: FieldProps<Empty, Multiple>) {
-    const {
-        onFieldValueChange = defaultFieldValueFromItem(props.emptyValue),
-    } = props
-
     const { queryKey } = productoMarcaQueryOptions;
 
     const { data: items = [] } = useQuery({
@@ -58,7 +53,10 @@ function Field<Empty extends ComboboxFieldEmptyType = undefined, Multiple extend
         url: "api/producto_marcas",
         onSuccess: async (data, _, __, { client }) => {
             const marca = data.data.data;
-            field.handleChange(onFieldValueChange(marca as never) as never);
+            field.handleChange((props.multiple
+                ? (prev = []) => [...prev, marca.id]
+                : marca.id
+            ) as FieldType<Empty, Multiple>);
             client.setQueryData(queryKey, (prev = []) => [...prev, marca]);
             await client.invalidateQueries({ queryKey });
             setOpen(false);
